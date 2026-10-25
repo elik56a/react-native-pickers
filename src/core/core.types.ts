@@ -12,3 +12,12 @@ export interface ThemableProps {
   /** Component-level theme override, merged on top of the provider theme */
   theme?: DeepPartial<PickerTheme>;
 }
+
+export interface SearchInputProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder: string;
+  autoFocus?: boolean;
+  theme: PickerTheme;
+  style?: StyleProp<TextStyle>;
+}

@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { SelectListProps, SelectPickerProps } from '../index';
 
-// Type-level regression test: ts-jest fails this file if `onChange={setState}` stops compiling.
+// Type-level regression test: `pnpm typecheck` fails this file if `onChange={setState}` stops compiling.
 const picker = <T>(props: SelectPickerProps<T>) => props;
 const list = <T>(props: SelectListProps<T>) => props;
 

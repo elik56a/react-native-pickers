@@ -58,7 +58,7 @@
     "docs": "pnpm --filter pickers-website start",
     "docs:build": "pnpm --filter pickers-website build",
     "lint": "biome check .",
-    "format": "biome check --write .",
+    "format": "node scripts/expand-returned-objects.js && biome check --write .",
     "typecheck": "tsc -p tsconfig.json",
     "test": "jest",
     "build": "rm -rf lib && tsc -p tsconfig.build.json",

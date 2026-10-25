@@ -1,5 +1,5 @@
 import { findEmoji, getAllEmojis, searchEmojis, withSkinTone } from '../emoji/emojis';
-import { defaultFilter } from '../select/filter';
+import { defaultFilter } from '../select/select.utils';
 
 describe('emoji data', () => {
   test('parses all categories', () => {
