@@ -260,6 +260,16 @@ npm run example:web # bundles example/App.tsx for React Native Web → example/w
 npm run gen:emoji   # regenerate emoji data from emojibase-data
 ```
 
+### Running the example on iOS / Android
+
+[`example/native`](example/native) is an Expo app that renders [`example/App.tsx`](example/App.tsx) against the library source, so edits in `src/` hot-reload.
+
+```sh
+cd example/native
+npm install
+npx expo start      # press i for the iOS Simulator, a for the Android emulator
+```
+
 Emoji data comes from [emojibase](https://emojibase.dev) (MIT).
 
 ## License
