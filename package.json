@@ -63,7 +63,8 @@
     "test": "jest",
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "gen:emoji": "node scripts/build-emoji-data.js",
-    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -71,6 +72,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.3",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@react-native/babel-preset": "0.88.0",
     "@react-native/jest-preset": "0.88.0",
     "@testing-library/react-native": "14.1.0",
