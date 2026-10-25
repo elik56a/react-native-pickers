@@ -35,7 +35,8 @@ export const buildRows = <T>(
     const group = option.group ?? '';
     groups.set(group, [...(groups.get(group) ?? []), option]);
   }
-  return [...groups].flatMap(([group, members]) => [
+  // Array.from, not spread: Babel's loose mode (e.g. Docusaurus) compiles `[...map]` to `[map]`.
+  return Array.from(groups).flatMap(([group, members]) => [
     ...(group ? [{ type: 'header' as const, group }] : []),
     ...members.map((option) => ({
       type: 'option' as const,
