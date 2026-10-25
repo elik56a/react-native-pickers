@@ -1,6 +1,6 @@
+import * as Pickers from '@elik56a/react-native-pickers';
 import React from 'react';
 import * as RN from 'react-native';
-import * as Pickers from '@elik56a/react-native-pickers';
 
 const { View, Text, Pressable, StyleSheet, ScrollView, TextInput, Switch, Image, Platform, I18nManager } = RN;
 

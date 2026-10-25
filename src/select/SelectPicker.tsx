@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import type React from 'react';
+import { useMemo, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { PickerSheet } from '../sheet/PickerSheet';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { SheetChromeProps } from '../sheet/PickerSheet';
+import { PickerSheet } from '../sheet/PickerSheet';
 import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles } from '../types';
-import { SelectList } from './SelectList';
 import type { SelectListBaseProps, SelectOption, SelectSlot, SelectValueProps } from './SelectList';
+import { SelectList } from './SelectList';
 
 export type SelectTriggerSlot = 'trigger' | 'triggerText' | 'placeholder' | 'label' | 'chip' | 'chipText' | 'chevron' | 'clear';
 
@@ -66,7 +67,7 @@ export function SelectPicker<T>(props: SelectPickerProps<T>) {
   const [open, setOpen] = useState(false);
 
   const selected = useMemo(() => {
-    const vals: T[] = props.multiple ? props.value ?? [] : props.value !== undefined && props.value !== null ? [props.value] : [];
+    const vals: T[] = props.multiple ? (props.value ?? []) : props.value !== undefined && props.value !== null ? [props.value] : [];
     return vals.map((v) => options.find((o) => isEqual(o.value, v))).filter((o): o is SelectOption<T> => !!o);
   }, [isEqual, options, props.multiple, props.value]);
 
@@ -90,7 +91,10 @@ export function SelectPicker<T>(props: SelectPickerProps<T>) {
   const removeChip = (o: SelectOption<T>) => {
     if (!props.multiple) return;
     const next = (props.value ?? []).filter((v) => !isEqual(v, o.value));
-    props.onChange?.(next, selected.filter((s) => !isEqual(s.value, o.value)));
+    props.onChange?.(
+      next,
+      selected.filter((s) => !isEqual(s.value, o.value))
+    );
   };
 
   const [pressed, setPressed] = useState(false);
@@ -138,7 +142,7 @@ export function SelectPicker<T>(props: SelectPickerProps<T>) {
                 accessibilityLabel={`Remove ${o.label}`}
                 style={[s.chip, { backgroundColor: c.primaryMuted, borderRadius: theme.radius.full }, slots?.chip]}
               >
-                <Text style={[textStyle(theme, 'sm', 'medium'), { color: c.primary }, slots?.chipText]}>{o.label}  ×</Text>
+                <Text style={[textStyle(theme, 'sm', 'medium'), { color: c.primary }, slots?.chipText]}>{o.label} ×</Text>
               </Pressable>
             ))}
           </View>
@@ -164,13 +168,17 @@ export function SelectPicker<T>(props: SelectPickerProps<T>) {
           <Text style={[textStyle(theme, 'lg'), { color: c.textSecondary, paddingHorizontal: 6 }, slots?.clear]}>×</Text>
         </Pressable>
       ) : null}
-      <Text pointerEvents="none" style={[textStyle(theme, 'sm'), { color: c.textSecondary, marginStart: 4 }, slots?.chevron]}>▾</Text>
+      <Text pointerEvents="none" style={[textStyle(theme, 'sm'), { color: c.textSecondary, marginStart: 4 }, slots?.chevron]}>
+        ▾
+      </Text>
     </View>
   );
 
   return (
     <View style={style}>
-      {label ? <Text style={[textStyle(theme, 'sm', 'medium'), { color: c.textSecondary, marginBottom: 6 }, slots?.label]}>{label}</Text> : null}
+      {label ? (
+        <Text style={[textStyle(theme, 'sm', 'medium'), { color: c.textSecondary, marginBottom: 6 }, slots?.label]}>{label}</Text>
+      ) : null}
       {trigger}
       <PickerSheet
         visible={open}
@@ -183,7 +191,12 @@ export function SelectPicker<T>(props: SelectPickerProps<T>) {
       >
         <SelectList<T>
           {...(listProps as SelectListBaseProps<T>)}
-          {...({ multiple: props.multiple, value: props.value, onChange, maxSelected: (props as { maxSelected?: number }).maxSelected } as SelectValueProps<T>)}
+          {...({
+            multiple: props.multiple,
+            value: props.value,
+            onChange,
+            maxSelected: (props as { maxSelected?: number }).maxSelected,
+          } as SelectValueProps<T>)}
           options={options}
           isEqual={isEqual}
           theme={themeOverride}

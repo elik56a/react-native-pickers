@@ -1,7 +1,15 @@
+import type { DateRange } from '@elik56a/react-native-pickers';
+import {
+  DatePicker,
+  EmojiPicker,
+  PickersProvider,
+  SelectList,
+  TimePicker,
+  usePickerTheme,
+  WheelPicker,
+} from '@elik56a/react-native-pickers';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { DatePicker, EmojiPicker, PickersProvider, SelectList, TimePicker, WheelPicker, usePickerTheme } from '@elik56a/react-native-pickers';
-import type { DateRange } from '@elik56a/react-native-pickers';
 
 const TABS = [
   { key: 'date', label: 'Date', title: 'Book your stay', subtitle: 'Tap check-in, then check-out' },
@@ -14,7 +22,10 @@ const TABS = [
 type Tab = (typeof TABS)[number]['key'];
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-const CITIES = ['Amsterdam', 'Berlin', 'Lisbon', 'London', 'New York', 'Paris', 'Rome', 'Tel Aviv', 'Tokyo'].map((c) => ({ label: c, value: c }));
+const CITIES = ['Amsterdam', 'Berlin', 'Lisbon', 'London', 'New York', 'Paris', 'Rome', 'Tel Aviv', 'Tokyo'].map((c) => ({
+  label: c,
+  value: c,
+}));
 
 function Screen() {
   const { colors } = usePickerTheme();
@@ -39,7 +50,9 @@ function Screen() {
         {tab === 'date' && <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} dayHeight={48} />}
         {tab === 'time' && <TimePicker value={time} onChange={setTime} minuteInterval={5} />}
         {tab === 'wheel' && <WheelPicker items={SIZES} value={size} onChange={setSize} loop />}
-        {tab === 'select' && <SelectList multiple searchable options={CITIES} value={cities} onChange={setCities} maxSelected={4} listHeight={360} />}
+        {tab === 'select' && (
+          <SelectList multiple searchable options={CITIES} value={cities} onChange={setCities} maxSelected={4} listHeight={360} />
+        )}
         {tab === 'emoji' && <EmojiPicker height={300} columns={7} onSelect={setEmoji} showSkinTones={false} />}
       </View>
       <View accessibilityRole="tablist" style={[s.segmented, { backgroundColor: colors.surface }]}>

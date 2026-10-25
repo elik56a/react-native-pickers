@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { ScrollView } from 'react-native';
 
 // Absent on react-native-web.

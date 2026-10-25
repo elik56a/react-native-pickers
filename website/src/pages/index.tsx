@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
-import Layout from '@theme/Layout';
-import Link from '@docusaurus/Link';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import CodeBlock from '@theme/CodeBlock';
+import Link from '@docusaurus/Link';
 import { useColorMode } from '@docusaurus/theme-common';
+import CodeBlock from '@theme/CodeBlock';
+import Layout from '@theme/Layout';
 import clsx from 'clsx';
+import type React from 'react';
+import { useState } from 'react';
 import styles from './index.module.css';
 
 const INSTALL = 'npm install @elik56a/react-native-pickers';
 
 const FEATURES = [
-  { title: 'Zero native code', body: 'Pure JavaScript. Runs in Expo Go, bare React Native and React Native Web with no pod install or rebuild.' },
-  { title: 'Themeable to the pixel', body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control.' },
-  { title: 'Ranges, built in', body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.' },
-  { title: 'Any locale, RTL', body: 'Month, weekday and AM/PM names, the 12/24h clock, week start and date order all come from Intl. Layouts mirror for RTL.' },
-  { title: 'Accessible', body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, and selected and disabled states everywhere.' },
+  {
+    title: 'Zero native code',
+    body: 'Pure JavaScript. Runs in Expo Go, bare React Native and React Native Web with no pod install or rebuild.',
+  },
+  {
+    title: 'Themeable to the pixel',
+    body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control.',
+  },
+  {
+    title: 'Ranges, built in',
+    body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.',
+  },
+  {
+    title: 'Any locale, RTL',
+    body: 'Month, weekday and AM/PM names, the 12/24h clock, week start and date order all come from Intl. Layouts mirror for RTL.',
+  },
+  {
+    title: 'Accessible',
+    body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, and selected and disabled states everywhere.',
+  },
   { title: 'Fast', body: 'Native-driver animations, virtualized fixed-layout lists and memoized rows keep it at 60 fps.' },
 ];
 
@@ -164,8 +180,8 @@ export default function Home() {
               <span className="accent-text">React Native</span> app needs.
             </h1>
             <p className={styles.subtitle}>
-              Wheel, time, date, range, select and emoji pickers, plus the bottom sheets to put them in. Beautiful by default, themeable to the pixel,
-              and <strong>100% JavaScript</strong> with zero native code.
+              Wheel, time, date, range, select and emoji pickers, plus the bottom sheets to put them in. Beautiful by default, themeable to
+              the pixel, and <strong>100% JavaScript</strong> with zero native code.
             </p>
             <CopyInstall />
             <div className={styles.ctas}>
@@ -210,8 +226,8 @@ export default function Home() {
           <div>
             <h2 className={styles.h2Left}>Feels native. Isn&apos;t.</h2>
             <p className={styles.lead}>
-              The same <code>value</code> / <code>onChange</code> API everywhere, typed down to the selection mode. Sheets keep a draft and commit on
-              Done, just like the system pickers, but they match your design on every platform.
+              The same <code>value</code> / <code>onChange</code> API everywhere, typed down to the selection mode. Sheets keep a draft and
+              commit on Done, just like the system pickers, but they match your design on every platform.
             </p>
             <ul className={styles.checks}>
               <li>Controlled or uncontrolled</li>
@@ -228,7 +244,8 @@ export default function Home() {
           <h2 className={styles.h2}>Docs your AI can read, too</h2>
           <p className={styles.lead}>
             The whole API is available as <Link to="pathname:///llms.txt">llms.txt</Link> and{' '}
-            <Link to="pathname:///llms-full.txt">llms-full.txt</Link>. Drop it into Cursor, Claude or Copilot and get correct code on the first try.
+            <Link to="pathname:///llms-full.txt">llms-full.txt</Link>. Drop it into Cursor, Claude or Copilot and get correct code on the
+            first try.
           </p>
         </section>
       </main>

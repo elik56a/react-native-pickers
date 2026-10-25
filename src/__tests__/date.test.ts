@@ -1,4 +1,15 @@
-import { addMonths, buildMonthGrid, clampDate, daysInMonth, isBetweenDays, isOutOfRange, toDateKey, uses12HourClock, getFirstDayOfWeek, getMonthNames } from '../utils/date';
+import {
+  addMonths,
+  buildMonthGrid,
+  clampDate,
+  daysInMonth,
+  getFirstDayOfWeek,
+  getMonthNames,
+  isBetweenDays,
+  isOutOfRange,
+  toDateKey,
+  uses12HourClock,
+} from '../utils/date';
 
 describe('date utils', () => {
   test('daysInMonth handles leap years', () => {
@@ -20,7 +31,8 @@ describe('date utils', () => {
     expect(mon).toHaveLength(5);
   });
   test('range helpers', () => {
-    const a = new Date(2026, 9, 10), b = new Date(2026, 9, 20);
+    const a = new Date(2026, 9, 10),
+      b = new Date(2026, 9, 20);
     expect(isBetweenDays(new Date(2026, 9, 15, 23), a, b)).toBe(true);
     expect(isBetweenDays(a, a, b)).toBe(false);
     expect(isOutOfRange(new Date(2026, 9, 9), a, b)).toBe(true);

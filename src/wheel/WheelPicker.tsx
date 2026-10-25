@@ -1,18 +1,9 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Animated,
-  FlatList,
-  Keyboard,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import type React from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AccessibilityActionEvent, NativeScrollEvent, NativeSyntheticEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
+import { Animated, type FlatList, Keyboard, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { PickerTheme } from '../theme';
+import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
 import { OwnScroll } from '../utils/OwnScroll';
 import { canExtend, matchLabel } from './typeToSelect';
@@ -391,7 +382,12 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
       {typing && (
         <>
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { justifyContent: 'center' }]}>
-            <View style={[s.typingRing, { height: h, borderRadius: theme.radius.md, borderColor: theme.colors.primary, marginHorizontal: theme.spacing.xs }]} />
+            <View
+              style={[
+                s.typingRing,
+                { height: h, borderRadius: theme.radius.md, borderColor: theme.colors.primary, marginHorizontal: theme.spacing.xs },
+              ]}
+            />
           </View>
           <TextInput
             autoFocus
@@ -510,9 +506,7 @@ function WheelRowImpl<T>({
 
   return (
     <Pressable onPress={onPress && !item.disabled ? () => onPress(dataIndex) : undefined} accessible={false}>
-      <Animated.View
-        style={[{ height: h, justifyContent: 'center', paddingHorizontal: theme.spacing.sm }, animatedStyle, slots?.item]}
-      >
+      <Animated.View style={[{ height: h, justifyContent: 'center', paddingHorizontal: theme.spacing.sm }, animatedStyle, slots?.item]}>
         {content}
       </Animated.View>
     </Pressable>

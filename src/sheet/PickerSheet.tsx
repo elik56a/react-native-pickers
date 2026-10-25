@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Pressable, Text } from 'react-native';
-import { BottomSheet } from './BottomSheet';
-import type { BottomSheetProps } from './BottomSheet';
 import { textStyle, usePickerTheme } from '../theme';
 import type { ThemableProps } from '../types';
+import type { BottomSheetProps } from './BottomSheet';
+import { BottomSheet } from './BottomSheet';
 
 export interface SheetChromeProps extends ThemableProps {
   visible: boolean;

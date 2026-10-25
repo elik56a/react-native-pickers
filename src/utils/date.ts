@@ -74,7 +74,20 @@ function fmt(locale: string | undefined, opts: Intl.DateTimeFormatOptions) {
   return f;
 }
 
-const EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const EN_MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 const EN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function safe<T>(fn: () => T, fallback: T): T {
@@ -87,7 +100,9 @@ function safe<T>(fn: () => T, fallback: T): T {
 }
 
 export function getMonthNames(locale?: string, width: 'long' | 'short' = 'long'): string[] {
-  return EN_MONTHS.map((en, m) => safe(() => fmt(locale, { month: width }).format(new Date(2021, m, 1)), width === 'long' ? en : en.slice(0, 3)));
+  return EN_MONTHS.map((en, m) =>
+    safe(() => fmt(locale, { month: width }).format(new Date(2021, m, 1)), width === 'long' ? en : en.slice(0, 3))
+  );
 }
 
 /** Weekday names indexed by JS day (0 = Sunday). */
@@ -100,7 +115,11 @@ export function formatMonthYear(d: Date, locale?: string) {
   return safe(() => fmt(locale, { month: 'long', year: 'numeric' }).format(d), `${EN_MONTHS[d.getMonth()]} ${d.getFullYear()}`);
 }
 
-export function formatDate(d: Date, locale?: string, opts: Intl.DateTimeFormatOptions = { dateStyle: 'medium' } as Intl.DateTimeFormatOptions) {
+export function formatDate(
+  d: Date,
+  locale?: string,
+  opts: Intl.DateTimeFormatOptions = { dateStyle: 'medium' } as Intl.DateTimeFormatOptions
+) {
   return safe(() => fmt(locale, opts).format(d), toDateKey(d));
 }
 
@@ -126,6 +145,12 @@ export function getFirstDayOfWeek(locale?: string): number {
 
 export function getDayPeriods(locale?: string): [string, string] {
   const get = (h: number, fb: string) =>
-    safe(() => fmt(locale, { hour: 'numeric', hour12: true }).formatToParts(new Date(2021, 0, 1, h)).find((p) => p.type === 'dayPeriod')?.value ?? fb, fb);
+    safe(
+      () =>
+        fmt(locale, { hour: 'numeric', hour12: true })
+          .formatToParts(new Date(2021, 0, 1, h))
+          .find((p) => p.type === 'dayPeriod')?.value ?? fb,
+      fb
+    );
   return [get(9, 'AM'), get(15, 'PM')];
 }

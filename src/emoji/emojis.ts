@@ -1,15 +1,6 @@
 import { RAW_EMOJI_DATA } from './data';
 
-export type EmojiCategory =
-  | 'smileys'
-  | 'people'
-  | 'animals'
-  | 'food'
-  | 'travel'
-  | 'activities'
-  | 'objects'
-  | 'symbols'
-  | 'flags';
+export type EmojiCategory = 'smileys' | 'people' | 'animals' | 'food' | 'travel' | 'activities' | 'objects' | 'symbols' | 'flags';
 
 export interface Emoji {
   emoji: string;
@@ -22,7 +13,17 @@ export interface Emoji {
   skins?: string[];
 }
 
-export const EMOJI_CATEGORIES: EmojiCategory[] = ['smileys', 'people', 'animals', 'food', 'travel', 'activities', 'objects', 'symbols', 'flags'];
+export const EMOJI_CATEGORIES: EmojiCategory[] = [
+  'smileys',
+  'people',
+  'animals',
+  'food',
+  'travel',
+  'activities',
+  'objects',
+  'symbols',
+  'flags',
+];
 
 export const DEFAULT_CATEGORY_LABELS: Record<EmojiCategory | 'recent' | 'search', string> = {
   recent: 'Recently used',
@@ -91,7 +92,7 @@ export function findEmoji(char: string): Emoji | undefined {
     byChar = new Map();
     for (const e of getAllEmojis()) {
       byChar.set(stripVS(e.emoji), e);
-      e.skins?.forEach((s) => byChar!.set(stripVS(s), e));
+      for (const s of e.skins ?? []) byChar.set(stripVS(s), e);
     }
   }
   return byChar.get(stripVS(char));
@@ -101,7 +102,7 @@ export function findEmoji(char: string): Emoji | undefined {
 export type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
 
 export function withSkinTone(e: Emoji, tone: SkinTone): string {
-  return tone > 0 && e.skins ? e.skins[tone - 1] ?? e.emoji : e.emoji;
+  return tone > 0 && e.skins ? (e.skins[tone - 1] ?? e.emoji) : e.emoji;
 }
 
 export function searchEmojis(query: string, list: Emoji[] = getAllEmojis()): Emoji[] {

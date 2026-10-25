@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Easing,
@@ -9,8 +10,8 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
   useWindowDimensions,
+  View,
 } from 'react-native';
 import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
@@ -121,10 +122,7 @@ export function BottomSheet({
 
   if (!mounted) return null;
 
-  const translateY = Animated.add(
-    progress.interpolate({ inputRange: [0, 1], outputRange: [windowHeight, 0] }),
-    drag
-  );
+  const translateY = Animated.add(progress.interpolate({ inputRange: [0, 1], outputRange: [windowHeight, 0] }), drag);
   const resolvedHeight = height === undefined ? undefined : height <= 1 ? windowHeight * height : height;
 
   return (
@@ -177,7 +175,9 @@ export function BottomSheet({
               )}
             </View>
             <View style={[resolvedHeight ? s.flex : s.shrink, slots?.content]}>{children}</View>
-            {footer ? <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md }, slots?.footer]}>{footer}</View> : null}
+            {footer ? (
+              <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md }, slots?.footer]}>{footer}</View>
+            ) : null}
           </Animated.View>
         </View>
       </KeyboardAvoidingView>

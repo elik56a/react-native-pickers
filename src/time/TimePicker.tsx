@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
-import type { MultiWheelSlot } from '../wheel/MultiWheelPicker';
-import type { WheelColumn, } from '../wheel/MultiWheelPicker';
-import type { WheelItem } from '../wheel/WheelPicker';
-import { getDayPeriods, uses12HourClock } from '../utils/date';
 import type { SlotStyles, ThemableProps } from '../types';
+import { getDayPeriods, uses12HourClock } from '../utils/date';
+import type { MultiWheelSlot, WheelColumn } from '../wheel/MultiWheelPicker';
+import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
+import type { WheelItem } from '../wheel/WheelPicker';
 
 export interface TimePickerProps extends ThemableProps {
   /** Selected time (the date part is preserved). */
@@ -89,7 +89,7 @@ export function TimePicker({
   const build = useCallback(
     (patch: { h24?: number; m?: number; s?: number }) => {
       const d = new Date(date);
-      d.setHours(patch.h24 ?? h24, patch.m ?? minute, showSeconds ? patch.s ?? second : 0, 0);
+      d.setHours(patch.h24 ?? h24, patch.m ?? minute, showSeconds ? (patch.s ?? second) : 0, 0);
       return d;
     },
     [date, h24, minute, second, showSeconds]
@@ -172,7 +172,25 @@ export function TimePicker({
     }
     if (is12 && !dayPeriodFirst) cols.push(periodCol);
     return cols;
-  }, [build, commit, dayPeriodFirst, h24, is12, isPM, loop, maxS, minS, minute, minuteInterval, onValueChanging, padH, periods, second, secondInterval, showSeconds]);
+  }, [
+    build,
+    commit,
+    dayPeriodFirst,
+    h24,
+    is12,
+    isPM,
+    loop,
+    maxS,
+    minS,
+    minute,
+    minuteInterval,
+    onValueChanging,
+    padH,
+    periods,
+    second,
+    secondInterval,
+    showSeconds,
+  ]);
 
   const sep = useCallback(
     (left: number) => {

@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { PickerTheme } from '../theme';
+import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
 import { defaultFilter } from './filter';
 
@@ -99,7 +100,7 @@ export function SelectList<T>(props: SelectListProps<T>) {
   const [query, setQuery] = useState('');
   const showSearch = searchable ?? options.length > 8;
 
-  const selectedValues: T[] = props.multiple ? props.value ?? [] : props.value !== undefined && props.value !== null ? [props.value] : [];
+  const selectedValues: T[] = props.multiple ? (props.value ?? []) : props.value !== undefined && props.value !== null ? [props.value] : [];
   const isSelected = useCallback((v: T) => selectedValues.some((s) => isEqual(s, v)), [isEqual, selectedValues]);
 
   const rows = useMemo<Row<T>[]>(() => {
@@ -132,10 +133,7 @@ export function SelectList<T>(props: SelectListProps<T>) {
       const has = cur.some((v) => isEqual(v, o.value));
       if (!has && props.maxSelected !== undefined && cur.length >= props.maxSelected) return;
       const next = has ? cur.filter((v) => !isEqual(v, o.value)) : [...cur, o.value];
-      props.onChange?.(
-        next,
-        next.map((v) => options.find((x) => isEqual(x.value, v))!).filter(Boolean)
-      );
+      props.onChange?.(next, next.map((v) => options.find((x) => isEqual(x.value, v))!).filter(Boolean));
     },
     [isEqual, options, props]
   );
@@ -147,8 +145,19 @@ export function SelectList<T>(props: SelectListProps<T>) {
       return renderGroupHeader ? (
         <>{renderGroupHeader(item.group, theme)}</>
       ) : (
-        <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md, paddingBottom: theme.spacing.xs }, slots?.groupHeader]}>
-          <Text style={[textStyle(theme, 'xs', 'bold'), { color: c.textSecondary, textTransform: 'uppercase', letterSpacing: 0.6 }, slots?.groupHeaderText]}>
+        <View
+          style={[
+            { paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md, paddingBottom: theme.spacing.xs },
+            slots?.groupHeader,
+          ]}
+        >
+          <Text
+            style={[
+              textStyle(theme, 'xs', 'bold'),
+              { color: c.textSecondary, textTransform: 'uppercase', letterSpacing: 0.6 },
+              slots?.groupHeaderText,
+            ]}
+          >
             {item.group}
           </Text>
         </View>
@@ -184,12 +193,19 @@ export function SelectList<T>(props: SelectListProps<T>) {
             <View style={s.flex}>
               <Text
                 numberOfLines={1}
-                style={[textStyle(theme, 'md', selected ? 'medium' : 'regular'), slots?.optionLabel, selected && slots?.selectedOptionLabel]}
+                style={[
+                  textStyle(theme, 'md', selected ? 'medium' : 'regular'),
+                  slots?.optionLabel,
+                  selected && slots?.selectedOptionLabel,
+                ]}
               >
                 {o.label}
               </Text>
               {o.description ? (
-                <Text numberOfLines={2} style={[textStyle(theme, 'sm'), { color: c.textSecondary, marginTop: 2 }, slots?.optionDescription]}>
+                <Text
+                  numberOfLines={2}
+                  style={[textStyle(theme, 'sm'), { color: c.textSecondary, marginTop: 2 }, slots?.optionDescription]}
+                >
                   {o.description}
                 </Text>
               ) : null}
@@ -250,7 +266,12 @@ function Check({ selected, multiple, theme, style }: { selected: boolean; multip
     <View
       style={[
         s.box,
-        { marginStart: theme.spacing.md, borderRadius: 6, borderColor: selected ? c.primary : c.border, backgroundColor: selected ? c.primary : 'transparent' },
+        {
+          marginStart: theme.spacing.md,
+          borderRadius: 6,
+          borderColor: selected ? c.primary : c.border,
+          backgroundColor: selected ? c.primary : 'transparent',
+        },
         style,
       ]}
     >

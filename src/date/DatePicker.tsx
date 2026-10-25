@@ -1,11 +1,9 @@
-import { Calendar } from './Calendar';
 import type { CalendarProps } from './Calendar';
-import { DateWheelPicker } from './DateWheelPicker';
+import { Calendar } from './Calendar';
 import type { DateWheelPickerProps } from './DateWheelPicker';
+import { DateWheelPicker } from './DateWheelPicker';
 
-export type DatePickerProps =
-  | ({ display?: 'calendar' } & CalendarProps)
-  | ({ display: 'wheel' } & DateWheelPickerProps);
+export type DatePickerProps = ({ display?: 'calendar' } & CalendarProps) | ({ display: 'wheel' } & DateWheelPickerProps);
 
 /**
  * Date picker.

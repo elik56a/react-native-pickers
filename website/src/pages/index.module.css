@@ -34,7 +34,7 @@
 }
 
 .badge::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -126,7 +126,7 @@
   transition: max-width 0.3s ease;
 }
 
-:global([data-theme='dark']) .device {
+:global([data-theme="dark"]) .device {
   --screen-bg: #181612;
   --screen-fg: #f5f2ec;
 }
@@ -164,12 +164,12 @@
   color: var(--ifm-font-color-base);
 }
 
-.platformTab[aria-selected='true'] {
+.platformTab[aria-selected="true"] {
   background: var(--brand-ink);
   color: #f5f2ec;
 }
 
-:global([data-theme='dark']) .platformTab[aria-selected='true'] {
+:global([data-theme="dark"]) .platformTab[aria-selected="true"] {
   background: var(--brand-signal);
   color: var(--brand-ink);
 }
@@ -461,7 +461,7 @@
 }
 
 .checks li::before {
-  content: '✓';
+  content: "✓";
   margin-right: 0.6rem;
   font-weight: 800;
   color: var(--ifm-color-primary);

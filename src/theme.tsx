@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useMemo } from 'react';
-import { useColorScheme } from 'react-native';
+import type React from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import type { TextStyle } from 'react-native';
+import { useColorScheme } from 'react-native';
 
 export interface PickerTheme {
   dark: boolean;
@@ -145,16 +146,20 @@ export function usePickerTheme(override?: DeepPartial<PickerTheme>): PickerTheme
   const system = useColorScheme();
   const scheme = ctx?.colorScheme ?? 'auto';
   const isDark = scheme === 'auto' ? system === 'dark' : scheme === 'dark';
-  const base = isDark ? ctx?.dark ?? darkTheme : ctx?.light ?? lightTheme;
+  const base = isDark ? (ctx?.dark ?? darkTheme) : (ctx?.light ?? lightTheme);
   return useMemo(() => mergeTheme(base, override), [base, override]);
 }
 
 /** Text style helper used across components. */
-export function textStyle(theme: PickerTheme, size: keyof PickerTheme['typography']['sizes'], weight: 'regular' | 'medium' | 'bold' = 'regular'): TextStyle {
+export function textStyle(
+  theme: PickerTheme,
+  size: keyof PickerTheme['typography']['sizes'],
+  weight: 'regular' | 'medium' | 'bold' = 'regular'
+): TextStyle {
   return {
     fontSize: theme.typography.sizes[size],
     fontWeight: theme.typography.weights[weight],
-    fontFamily: weight === 'regular' ? theme.typography.fontFamily : theme.typography.fontFamilyMedium ?? theme.typography.fontFamily,
+    fontFamily: weight === 'regular' ? theme.typography.fontFamily : (theme.typography.fontFamilyMedium ?? theme.typography.fontFamily),
     color: theme.colors.text,
   };
 }

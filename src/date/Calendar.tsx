@@ -1,8 +1,9 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, I18nManager, PanResponder, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import type React from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
+import { Animated, I18nManager, PanResponder, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { PickerTheme } from '../theme';
+import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
 import {
   addMonths,
@@ -160,7 +161,9 @@ export function Calendar(props: CalendarProps) {
 
   // ----- selection state (controlled or uncontrolled) -----
   const [innerSingle, setInnerSingle] = useState<Date | null>(mode === 'single' ? ((props as any).defaultValue ?? null) : null);
-  const [innerRange, setInnerRange] = useState<DateRange>(mode === 'range' ? ((props as any).defaultValue ?? { start: null, end: null }) : { start: null, end: null });
+  const [innerRange, setInnerRange] = useState<DateRange>(
+    mode === 'range' ? ((props as any).defaultValue ?? { start: null, end: null }) : { start: null, end: null }
+  );
   const [innerMulti, setInnerMulti] = useState<Date[]>(mode === 'multiple' ? ((props as any).defaultValue ?? []) : []);
   const single: Date | null = mode === 'single' ? (props.value !== undefined ? (props.value as Date | null) : innerSingle) : null;
   const range: DateRange = mode === 'range' ? ((props.value as DateRange | undefined) ?? innerRange) : { start: null, end: null };
@@ -285,8 +288,7 @@ export function Calendar(props: CalendarProps) {
       </Pressable>
       <View style={s.arrows}>
         {(['prev', 'next'] as const).map((dir) => {
-          const disabled =
-            view === 'days' ? (dir === 'prev' ? !canPrev : !canNext) : false;
+          const disabled = view === 'days' ? (dir === 'prev' ? !canPrev : !canNext) : false;
           const onPress = () => {
             const delta = dir === 'prev' ? -1 : 1;
             if (view === 'days') goMonth(delta);
@@ -341,28 +343,43 @@ export function Calendar(props: CalendarProps) {
           const d = new Date(month.getFullYear(), m, 1);
           const disabled =
             (!!minDate && compareDay(new Date(month.getFullYear(), m + 1, 0), minDate) < 0) || (!!maxDate && compareDay(d, maxDate) > 0);
-          return { key: String(m), label, selected: m === month.getMonth(), disabled, onPress: () => {
-            setMonth(d);
-            onMonthChange?.(d);
-            setView('days');
-          } };
+          return {
+            key: String(m),
+            label,
+            selected: m === month.getMonth(),
+            disabled,
+            onPress: () => {
+              setMonth(d);
+              onMonthChange?.(d);
+              setView('days');
+            },
+          };
         })}
         height={dayHeight * (fixedWeeks ? 6 : 5) + (showWeekdays ? 28 : 0)}
       />
     );
   } else if (view === 'years') {
     const y0 = Math.floor(month.getFullYear() / 12) * 12;
-    const [minY, maxY] = yearRange ?? [minDate?.getFullYear() ?? today.getFullYear() - 100, maxDate?.getFullYear() ?? today.getFullYear() + 100];
+    const [minY, maxY] = yearRange ?? [
+      minDate?.getFullYear() ?? today.getFullYear() - 100,
+      maxDate?.getFullYear() ?? today.getFullYear() + 100,
+    ];
     body = (
       <QuickGrid
         theme={theme}
         slots={slots}
         cells={Array.from({ length: 12 }, (_, i) => {
           const y = y0 + i;
-          return { key: String(y), label: String(y), selected: y === month.getFullYear(), disabled: y < minY || y > maxY, onPress: () => {
-            setMonth(new Date(y, month.getMonth(), 1));
-            setView('months');
-          } };
+          return {
+            key: String(y),
+            label: String(y),
+            selected: y === month.getFullYear(),
+            disabled: y < minY || y > maxY,
+            onPress: () => {
+              setMonth(new Date(y, month.getMonth(), 1));
+              setView('months');
+            },
+          };
         })}
         height={dayHeight * (fixedWeeks ? 6 : 5) + (showWeekdays ? 28 : 0)}
       />
@@ -374,7 +391,9 @@ export function Calendar(props: CalendarProps) {
           <View style={[s.week, { marginBottom: 4 }, slots?.weekdays]}>
             {weekdayNames.map((w, i) => (
               <View key={i} style={s.cell}>
-                <Text style={[textStyle(theme, 'xs', 'medium'), { color: theme.colors.textSecondary, textAlign: 'center' }, slots?.weekdayText]}>
+                <Text
+                  style={[textStyle(theme, 'xs', 'medium'), { color: theme.colors.textSecondary, textAlign: 'center' }, slots?.weekdayText]}
+                >
                   {w}
                 </Text>
               </View>
@@ -421,7 +440,10 @@ export function Calendar(props: CalendarProps) {
   }
 
   return (
-    <View style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style, slots?.container]} testID={testID}>
+    <View
+      style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style, slots?.container]}
+      testID={testID}
+    >
       {header}
       {body}
     </View>
@@ -455,7 +477,7 @@ const DayCell = memo(function DayCell({ state, hidden, hasRangeEnd, theme, slots
     ? c.onPrimary
     : disabled
       ? c.textDisabled
-      : marking?.textColor ?? (outside ? c.textDisabled : today ? c.primary : c.text);
+      : (marking?.textColor ?? (outside ? c.textDisabled : today ? c.primary : c.text));
 
   return (
     <Pressable
@@ -506,7 +528,10 @@ const DayCell = memo(function DayCell({ state, hidden, hasRangeEnd, theme, slots
                 {date.getDate()}
               </Text>
               {marking?.label ? (
-                <Text style={[{ fontSize: 9, color: selected ? c.onPrimary : c.textSecondary, marginTop: -2 }, slots?.dayLabel]} numberOfLines={1}>
+                <Text
+                  style={[{ fontSize: 9, color: selected ? c.onPrimary : c.textSecondary, marginTop: -2 }, slots?.dayLabel]}
+                  numberOfLines={1}
+                >
                   {marking.label}
                 </Text>
               ) : null}
@@ -533,7 +558,17 @@ interface QuickCell {
   onPress: () => void;
 }
 
-function QuickGrid({ cells, theme, slots, height }: { cells: QuickCell[]; theme: PickerTheme; slots?: SlotStyles<CalendarSlot>; height: number }) {
+function QuickGrid({
+  cells,
+  theme,
+  slots,
+  height,
+}: {
+  cells: QuickCell[];
+  theme: PickerTheme;
+  slots?: SlotStyles<CalendarSlot>;
+  height: number;
+}) {
   const rows = [cells.slice(0, 3), cells.slice(3, 6), cells.slice(6, 9), cells.slice(9, 12)];
   return (
     <View style={{ height, justifyContent: 'space-evenly', paddingHorizontal: theme.spacing.sm }}>

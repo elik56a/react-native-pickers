@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
-import { WheelPicker } from './WheelPicker';
 import type { WheelPickerProps, WheelPickerSlot } from './WheelPicker';
+import { WheelPicker } from './WheelPicker';
 
 export type WheelColumn<T = any> = Omit<WheelPickerProps<T>, 'itemHeight' | 'visibleItems' | 'variant' | 'showIndicator' | 'theme'> & {
   key: string;
@@ -47,7 +47,12 @@ export function MultiWheelPicker({
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { justifyContent: 'center' }]}>
         <View
           style={[
-            { height: itemHeight, borderRadius: theme.radius.md, backgroundColor: theme.colors.indicator, marginHorizontal: theme.spacing.xs },
+            {
+              height: itemHeight,
+              borderRadius: theme.radius.md,
+              backgroundColor: theme.colors.indicator,
+              marginHorizontal: theme.spacing.xs,
+            },
             slots?.indicator,
           ]}
         />
@@ -59,11 +64,7 @@ export function MultiWheelPicker({
             <React.Fragment key={key}>
               {sep !== null && sep !== undefined && sep !== false ? (
                 <View style={s.sep} pointerEvents="none">
-                  {typeof sep === 'string' ? (
-                    <Text style={[textStyle(theme, 'lg', 'bold'), slots?.separator]}>{sep}</Text>
-                  ) : (
-                    sep
-                  )}
+                  {typeof sep === 'string' ? <Text style={[textStyle(theme, 'lg', 'bold'), slots?.separator]}>{sep}</Text> : sep}
                 </View>
               ) : null}
               <WheelPicker

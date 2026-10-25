@@ -1,9 +1,12 @@
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import type React from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import type { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { PickerTheme } from '../theme';
+import { textStyle, usePickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
+import { OwnScroll } from '../utils/OwnScroll';
+import type { Emoji, EmojiCategory, SkinTone } from './emojis';
 import {
   DEFAULT_CATEGORY_ICONS,
   DEFAULT_CATEGORY_LABELS,
@@ -13,8 +16,6 @@ import {
   searchEmojis,
   withSkinTone,
 } from './emojis';
-import type { Emoji, EmojiCategory, SkinTone } from './emojis';
-import { OwnScroll } from '../utils/OwnScroll';
 
 type SectionKey = EmojiCategory | 'recent' | 'search';
 
@@ -136,10 +137,7 @@ export function EmojiPicker({
     );
   }, [categories, exclude, maxEmojiVersion]);
 
-  const recentEmojis = useMemo(
-    () => recent.map((ch) => findEmoji(ch)).filter((e): e is Emoji => !!e && pool.includes(e)),
-    [pool, recent]
-  );
+  const recentEmojis = useMemo(() => recent.map((ch) => findEmoji(ch)).filter((e): e is Emoji => !!e && pool.includes(e)), [pool, recent]);
 
   const sections = useMemo(() => {
     if (query.trim()) return [{ key: 'search' as SectionKey, items: searchEmojis(query, pool) }];
@@ -256,7 +254,14 @@ export function EmojiPicker({
   };
 
   const categoryBar = showCategoryBar && !query && (
-    <View style={[s.bar, { borderColor: c.border }, categoryBarPosition === 'top' ? { borderBottomWidth: StyleSheet.hairlineWidth } : { borderTopWidth: StyleSheet.hairlineWidth }, slots?.categoryBar]}>
+    <View
+      style={[
+        s.bar,
+        { borderColor: c.border },
+        categoryBarPosition === 'top' ? { borderBottomWidth: StyleSheet.hairlineWidth } : { borderTopWidth: StyleSheet.hairlineWidth },
+        slots?.categoryBar,
+      ]}
+    >
       {(['recent', ...categories] as const)
         .filter((k) => headerIndex.has(k))
         .map((k) => {
@@ -288,7 +293,9 @@ export function EmojiPicker({
   return (
     <View style={[{ height, backgroundColor: c.background }, style, slots?.container]} testID={testID}>
       {(searchable || showSkinTones) && (
-        <View style={[s.header, { paddingHorizontal: theme.spacing.sm, paddingTop: theme.spacing.sm, gap: theme.spacing.sm }, slots?.header]}>
+        <View
+          style={[s.header, { paddingHorizontal: theme.spacing.sm, paddingTop: theme.spacing.sm, gap: theme.spacing.sm }, slots?.header]}
+        >
           {searchable ? (
             <TextInput
               value={query}
@@ -325,7 +332,13 @@ export function EmojiPicker({
         </View>
       )}
       {toneMenu && (
-        <View style={[s.toneMenu, { marginHorizontal: theme.spacing.sm, backgroundColor: c.surface, borderRadius: theme.radius.md }, slots?.skinToneMenu]}>
+        <View
+          style={[
+            s.toneMenu,
+            { marginHorizontal: theme.spacing.sm, backgroundColor: c.surface, borderRadius: theme.radius.md },
+            slots?.skinToneMenu,
+          ]}
+        >
           {TONE_SWATCH.map((sw, i) => (
             <Pressable
               key={i}

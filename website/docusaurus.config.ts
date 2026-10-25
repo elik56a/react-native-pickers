@@ -1,7 +1,7 @@
+import type * as Preset from '@docusaurus/preset-classic';
+import type { Config } from '@docusaurus/types';
 import path from 'path';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
 
 const PACKAGE = '@elik56a/react-native-pickers';
 const REPO = 'https://github.com/elik56a/react-native-pickers';
@@ -71,9 +71,7 @@ const config: Config = {
               [`${PACKAGE}$`]: path.resolve(__dirname, '../src/index.ts'),
             },
           },
-          plugins: [
-            new utils.currentBundler.instance.DefinePlugin({ __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production') }),
-          ],
+          plugins: [new utils.currentBundler.instance.DefinePlugin({ __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production') })],
         };
       },
     }),
@@ -85,7 +83,18 @@ const config: Config = {
         excludeImports: true,
         removeDuplicateHeadings: true,
         generateMarkdownFiles: true,
-        includeOrder: ['intro.mdx', 'resources/ai.mdx', 'getting-started/installation.mdx', 'getting-started/quick-start.mdx', 'getting-started/**', 'components/**', 'api/**', 'guides/**', 'recipes/**', 'resources/**'],
+        includeOrder: [
+          'intro.mdx',
+          'resources/ai.mdx',
+          'getting-started/installation.mdx',
+          'getting-started/quick-start.mdx',
+          'getting-started/**',
+          'components/**',
+          'api/**',
+          'guides/**',
+          'recipes/**',
+          'resources/**',
+        ],
       },
     ],
   ],
@@ -93,7 +102,12 @@ const config: Config = {
   themeConfig: {
     image: 'img/social-card.svg',
     colorMode: { defaultMode: 'light', respectPrefersColorScheme: true },
-    metadata: [{ name: 'description', content: 'Pure-JS pickers for React Native: wheel, time, date, calendar, range, select, emoji, bottom sheets.' }],
+    metadata: [
+      {
+        name: 'description',
+        content: 'Pure-JS pickers for React Native: wheel, time, date, calendar, range, select, emoji, bottom sheets.',
+      },
+    ],
     announcementBar: {
       id: 'llms',
       content: `Using an AI assistant? Point it at <a href="/react-native-pickers/llms-full.txt">llms-full.txt</a> — the whole API in one file.`,

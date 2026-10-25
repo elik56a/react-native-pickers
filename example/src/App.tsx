@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
   DatePickerSheet,
   EmojiPicker,
   EmojiPickerSheet,
+  formatDate,
   PickersProvider,
   SelectPicker,
   TimePicker,
   TimePickerSheet,
-  WheelPicker,
-  formatDate,
   usePickerTheme,
+  WheelPicker,
 } from '@elik56a/react-native-pickers';
-import type { DateRange } from '@elik56a/react-native-pickers';
+import type React from 'react';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const TABS = [
   { key: 'wheel', label: 'Wheel', icon: '🎡' },
@@ -112,7 +113,10 @@ function Demo({ insets }: { insets: Insets }) {
           {tab === 'date' && (
             <Section title="Date">
               <DatePicker value={date} onChange={setDate} minDate={new Date()} />
-              <Button title={`Range: ${range.start ? formatDate(range.start) : '—'} → ${range.end ? formatDate(range.end) : '—'}`} onPress={() => setSheet('range')} />
+              <Button
+                title={`Range: ${range.start ? formatDate(range.start) : '—'} → ${range.end ? formatDate(range.end) : '—'}`}
+                onPress={() => setSheet('range')}
+              />
               <Button title="Birthday (wheel sheet)" onPress={() => setSheet('date')} />
             </Section>
           )}
@@ -147,8 +151,23 @@ function Demo({ insets }: { insets: Insets }) {
       </View>
 
       <TimePickerSheet visible={sheet === 'time'} onClose={() => setSheet(null)} title="Pick a time" value={time} onConfirm={setTime} />
-      <DatePickerSheet visible={sheet === 'range'} onClose={() => setSheet(null)} title="Dates" mode="range" value={range} onConfirm={setRange} minDate={new Date()} />
-      <DatePickerSheet visible={sheet === 'date'} onClose={() => setSheet(null)} title="Birthday" display="wheel" value={date} onConfirm={setDate} />
+      <DatePickerSheet
+        visible={sheet === 'range'}
+        onClose={() => setSheet(null)}
+        title="Dates"
+        mode="range"
+        value={range}
+        onConfirm={setRange}
+        minDate={new Date()}
+      />
+      <DatePickerSheet
+        visible={sheet === 'date'}
+        onClose={() => setSheet(null)}
+        title="Birthday"
+        display="wheel"
+        value={date}
+        onConfirm={setDate}
+      />
       <EmojiPickerSheet visible={sheet === 'emoji'} onClose={() => setSheet(null)} onSelect={(e) => setEmoji((s) => s + e)} />
     </>
   );
