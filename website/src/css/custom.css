@@ -224,6 +224,10 @@ div[class*="playgroundPreview"] > div:first-child,
 div[class*="playgroundPreview"] > div[class^="css-"] {
   max-width: 400px;
   margin: 0 auto;
+  /* Lay examples out like a React Native root view, so a <Text> stretches and its textAlign applies. */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 div[class*="playgroundEditor"] {

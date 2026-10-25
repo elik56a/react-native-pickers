@@ -41,6 +41,7 @@ const COMPONENTS = [
   { to: '/docs/components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
   { to: '/docs/components/time-picker', name: 'TimePicker', body: '12/24h from locale, intervals, min/max' },
   { to: '/docs/components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
+  { to: '/docs/components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheel, or calendar + time' },
   { to: '/docs/components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
   { to: '/docs/components/select-picker', name: 'SelectPicker', body: 'Search, groups, icons, multi-select chips' },
   { to: '/docs/components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
@@ -56,7 +57,7 @@ const CHIPS = [
 ];
 
 const STATS = [
-  { value: 8, label: 'components' },
+  { value: COMPONENTS.length, label: 'components' },
   { value: 0, label: 'native modules' },
   { value: 1906, label: 'emojis' },
   { value: 100, suffix: '%', label: 'TypeScript' },
