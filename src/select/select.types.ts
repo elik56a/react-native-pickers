@@ -52,7 +52,7 @@ export type SelectValueProps<T> =
 
 export type SelectListBaseProps<T> = ThemableProps & {
   options: ReadonlyArray<SelectOption<T>>;
-  /** Show a search field. Default: true */
+  /** Show a search field. Default: true when there are more than 8 options */
   searchable?: boolean;
   searchPlaceholder?: string;
   /** Custom filter. Default: case/diacritics-insensitive match on label, description and keywords */

@@ -8,6 +8,7 @@ import {
   isAtMax,
   isOptionDisabled,
   resolveSelectPresentation,
+  shouldShowSearch,
   toggleValue,
   toValueList,
 } from './select.utils';
@@ -33,6 +34,15 @@ describe('defaultFilter', () => {
   it('requires every word to match', () => {
     expect(defaultFilter(option('New York'), 'york new')).toBe(true);
     expect(defaultFilter(option('New York'), 'new jersey')).toBe(false);
+  });
+});
+
+describe('shouldShowSearch', () => {
+  it('searches long lists unless told otherwise', () => {
+    expect(shouldShowSearch(undefined, 8)).toBe(false);
+    expect(shouldShowSearch(undefined, 9)).toBe(true);
+    expect(shouldShowSearch(false, 50)).toBe(false);
+    expect(shouldShowSearch(true, 2)).toBe(true);
   });
 });
 

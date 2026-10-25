@@ -60,7 +60,7 @@ const countries = [
 
 export default function Example() {
   const [country, setCountry] = useState<string | null>('FR');
-  return <SelectPicker label="Ship to" options={countries} value={country} onChange={setCountry} />;
+  return <SelectPicker label="Ship to" options={countries} value={country} onChange={setCountry} searchable />;
 }
 ```
 
@@ -97,7 +97,7 @@ Set `chips={false}` to show a comma-separated list instead of chips.
 
 ## Search
 
-The search field is on by default; hide it with `searchable={false}`. The default filter:
+The search field appears automatically when there are **more than 8 options**; force it with `searchable` / `searchable={false}`. The default filter:
 
 - matches `label`, `description` and `keywords`
 - is case-insensitive and **accent-insensitive** (`creme` finds `Crème`), and ignores Hebrew niqqud
@@ -336,7 +336,7 @@ Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets
 | `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
 | `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |
 | `onOpen` / `onClose` | `() => void` | — | Sheet open / close. |
-| `searchable` | `boolean` | `true` | Show the search field. |
+| `searchable` | `boolean` | `options.length > 8` | Show the search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint. |
 | `filterOption` | `(option, query) => boolean` | `defaultFilter` | Custom search. |
 | `emptyText` | `string` | `'No results'` | Shown when nothing matches. |

@@ -1,3 +1,4 @@
+import { SEARCH_THRESHOLD } from './select.constants';
 import type { SelectOption, SelectPresentation, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
@@ -11,6 +12,8 @@ export const defaultFilter = <T>(option: SelectOption<T>, query: string): boolea
     .filter(Boolean)
     .every((term) => haystack.includes(term));
 };
+
+export const shouldShowSearch = (searchable: boolean | undefined, optionCount: number) => searchable ?? optionCount > SEARCH_THRESHOLD;
 
 /** The selected values as a list, whatever the mode. */
 export const toValueList = <T>(multiple: boolean | undefined, value: T | T[] | null | undefined): T[] => {

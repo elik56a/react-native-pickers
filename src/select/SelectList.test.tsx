@@ -54,7 +54,7 @@ describe('SelectList', () => {
   });
 
   it('filters by search and shows the empty text', async () => {
-    await render(<SelectList options={countries} emptyText="Nothing here" />);
+    await render(<SelectList options={countries} searchable emptyText="Nothing here" />);
     await fireEvent.changeText(screen.getByLabelText('Search'), 'ישראל');
     expect(screen.getByText('Israel')).toBeTruthy();
     expect(screen.queryByText('France')).toBeNull();
@@ -62,10 +62,8 @@ describe('SelectList', () => {
     expect(screen.getByText('Nothing here')).toBeTruthy();
   });
 
-  it('shows search by default, even for short lists, and hides it with searchable={false}', async () => {
-    const { rerender } = await render(<SelectList options={tags} />);
-    expect(screen.getByLabelText('Search')).toBeTruthy();
-    await rerender(<SelectList options={tags} searchable={false} />);
+  it('only shows search by default for long lists', async () => {
+    await render(<SelectList options={tags} />);
     expect(screen.queryByLabelText('Search')).toBeNull();
   });
 });
