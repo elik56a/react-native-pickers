@@ -1,0 +1,70 @@
+---
+title: Contributing
+description: Set up the repo, run the example app on web, iOS and Android, and follow the project structure and conventions.
+---
+
+# Contributing
+
+The repo is a pnpm workspace: the library at the root, an Expo example app in `example/` that renders against the library source (edits hot-reload), and this docs site in `website/`.
+
+## Setup
+
+```sh
+git clone https://github.com/elik56a/react-native-pickers.git
+cd react-native-pickers
+pnpm install   # also installs the git hooks
+```
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `pnpm web` | Example app in the browser |
+| `pnpm ios` | Example app in the iOS Simulator |
+| `pnpm android` | Example app in the Android emulator |
+| `pnpm docs` | This site at `localhost:3000` |
+| `pnpm test` | Jest + React Native Testing Library |
+| `pnpm lint` | Biome: lint, format and import order |
+| `pnpm format` | Fix whatever lint can fix |
+| `pnpm typecheck` | TypeScript, including tests |
+| `pnpm build` | Compile to `lib/` (ESM + `.d.ts`) |
+| `pnpm gen:emoji` | Regenerate the emoji data from emojibase |
+
+## Project structure
+
+Each picker has its own folder under `src/`: `wheel`, `time`, `calendar`, `date`, `select` and `emoji`. They build on `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports only flow one way: feature → `sheet` → `core`.
+
+Every folder has the same layout:
+
+```
+src/select/
+├─ SelectPicker.tsx        components render only
+├─ components/             smaller render-only parts
+├─ hooks/                  state and event handling
+├─ select.utils.ts         pure logic
+├─ select.utils.test.ts    unit tests for every util
+├─ select.types.ts
+├─ select.constants.ts
+├─ select.styles.ts
+├─ SelectPicker.test.tsx   interaction tests
+└─ index.ts                the folder's public API
+```
+
+Where new code goes:
+
+- **Pure logic** (calculations, filtering, date math) goes in `<feature>.utils.ts`, with a unit test next to it.
+- **State and event handling** goes in a hook under `hooks/`.
+- **Components** only render: they call hooks and utils, with no inline logic.
+- **Types, constants and styles** go in their own `<feature>.*.ts` files, never inside components.
+
+## Conventions
+
+- Tests sit next to the file they test.
+- Use arrow functions: `export const fn = () =>`, not `export function`.
+- Returned objects with two or more properties go one property per line. A Biome plugin enforces it, and `pnpm format` fixes it.
+- Imports come in three blocks separated by a blank line: React and React Native, other packages, then our own code.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fix:`, `refactor(select):`, `docs:` and so on.
+
+## Checks
+
+The pre-commit hook formats and lints the staged files and runs typecheck, and the commit-msg hook checks the message. On every pull request, CI runs lint, typecheck, tests and the build, and checks every commit message.
