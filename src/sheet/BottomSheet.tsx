@@ -46,7 +46,7 @@ export const BottomSheet = ({
   const resize = useSheetResize({
     active: mounted && visible,
     drag,
-    draggable: draggable && !dialog,
+    draggable: !dialog,
     expandable: expandable && !dialog,
     swipeToClose: enableSwipeToClose && !dialog,
     expandedHeight: expandedPx,
@@ -89,15 +89,17 @@ export const BottomSheet = ({
               ]}
               accessibilityViewIsModal
             >
-              {/* Not flattened away, so a touch anywhere on the header strip reaches the drag handlers, not just the handle bar or title */}
-              <View {...resize.panHandlers} collapsable={false} style={dialog && styles.dialogHeader}>
+              {/* collapsable={false}: not flattened away, so a touch anywhere on the strip reaches the drag handlers */}
+              <View style={dialog && styles.dialogHeader}>
                 {!dialog && (
-                  <View style={styles.handleArea}>
+                  <View {...resize.panHandlers} collapsable={false} style={styles.handleArea}>
                     <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
                   </View>
                 )}
                 {(title || headerLeft || headerRight) && (
-                  <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
+                  <View {...(draggable && !dialog ? resize.panHandlers : null)} collapsable={false}>
+                    <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
+                  </View>
                 )}
               </View>
               <View style={[resolvedHeight || resize.sized ? styles.flex : styles.shrink, slots?.content]}>{children}</View>

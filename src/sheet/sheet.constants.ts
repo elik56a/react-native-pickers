@@ -20,7 +20,7 @@ export const DISMISS_HEIGHT_RATIO = 0.3;
 export const DISMISS_VELOCITY = 0.9;
 export const SNAP_BACK_BOUNCINESS = 4;
 
-/** Mouse drags select text on the web, so sheets resize with the wheel there instead. */
+/** Mouse drags on the header would select its text on the web, so there only the handle drags by default. */
 export const DEFAULT_DRAGGABLE = Platform.OS !== 'web';
 /** Room kept above an expanded sheet for the status bar. */
 export const EXPANDED_TOP_INSET = Platform.select({ ios: 54, android: StatusBar.currentHeight ?? 24, default: 0 });

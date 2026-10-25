@@ -108,11 +108,11 @@ The sheet can grow past its content height to `expandedHeight` (default: the who
 | | Expand | Collapse, then close |
 | --- | --- | --- |
 | **iOS / Android** | Drag the handle or header up | Drag it down |
-| **Web** | Wheel up over the sheet | Wheel down over the sheet |
+| **Web** | Wheel up over the sheet, or drag the handle up | Wheel down, or drag the handle down |
 
 Released past halfway, or with a flick, the sheet snaps to the expanded height; otherwise it settles back. A list or scroll view inside keeps the wheel until it reaches its top or bottom, then the sheet takes over.
 
-Mouse drags select text on the web, so dragging is off there by default (`draggable={false}`); pass `draggable` to turn it on. `expandable={false}` keeps the sheet at its content height on every platform.
+The handle always drags. On the web the header row doesn't by default (`draggable={false}`), so mouse drags there still select text; pass `draggable` to make the whole header a drag area. `expandable={false}` keeps the sheet at its content height on every platform.
 
 Try it: open the sheet, then scroll the wheel up over it (or drag the header, since this example turns `draggable` on). Wide web windows show a centered modal by default, so the examples here force `presentation="bottomSheet"`:
 
@@ -194,7 +194,7 @@ On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside s
 | `footer` | `ReactNode` | — | Content pinned below the children. |
 | `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal; `auto` is a modal on wide web windows. |
 | `enableSwipeToClose` | `boolean` | `true` | Drag down (wheel down on the web) to dismiss (bottom sheet only). |
-| `draggable` | `boolean` | `true` native / `false` web | Drag the handle or header to resize or close. |
+| `draggable` | `boolean` | `true` native / `false` web | The header row drags too, not just the handle. |
 | `expandable` | `boolean` | `true` | Grow to `expandedHeight`: drag up on native, wheel up on the web. |
 | `expandedHeight` | `number` | window − status bar | Expanded height: fraction (≤ 1) or px. |
 | `closeOnBackdropPress` | `boolean` | `true` | Tap outside to dismiss. |

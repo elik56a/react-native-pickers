@@ -20,9 +20,9 @@ export interface BottomSheetProps extends ThemableProps {
   footer?: React.ReactNode;
   /** Drag the sheet down (wheel down on the web) to dismiss. Default: true */
   enableSwipeToClose?: boolean;
-  /** Drag the handle or header to resize or close the sheet. Default: true on native, false on the web */
+  /** The header row is a drag area too, not just the handle. Default: true on native, false on the web (where mouse drags there would select text) */
   draggable?: boolean;
-  /** Let the sheet grow to `expandedHeight`: drag it up on native, wheel up on the web. Default: true */
+  /** Let the sheet grow to `expandedHeight`: drag the handle up, or wheel up on the web. Default: true */
   expandable?: boolean;
   /** Expanded height (px, or a fraction of the window when <= 1). Default: the window below the status bar */
   expandedHeight?: number;
