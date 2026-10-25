@@ -63,7 +63,7 @@ export default function Example() {
 `BottomSheet` is fully controlled: render it with `visible` and change `visible` in `onClose`. `onClose` is called when the user:
 
 - taps the backdrop (`closeOnBackdropPress`, default `true`)
-- drags the sheet down past about 30% of its height (max 140 px), or flicks it down (`enableSwipeToClose`, default `true`)
+- drags the sheet down past about 30% of its height (max 140 px), or flicks it down; on the web, scrolls the wheel down over it (`enableSwipeToClose`, default `true`)
 - presses Android's back button
 
 When `visible` turns `false`, the sheet animates out and then unmounts its children. `onOpened` and `onClosed` fire when the animations finish, which is handy for focusing inputs or running work after the sheet is gone.
@@ -101,6 +101,82 @@ const insets = useSafeAreaInsets();
 
 On tablets and the web the sheet is centred with a maximum width of 640.
 
+## Expanding to full screen
+
+The sheet can grow past its content height to `expandedHeight` (default: the whole window below the status bar), and collapse back:
+
+| | Expand | Collapse, then close |
+| --- | --- | --- |
+| **iOS / Android** | Drag the handle or header up | Drag it down |
+| **Web** | Wheel up over the sheet | Wheel down over the sheet |
+
+Released past halfway, or with a flick, the sheet snaps to the expanded height; otherwise it settles back. A list or scroll view inside keeps the wheel until it reaches its top or bottom, then the sheet takes over.
+
+Mouse drags select text on the web, so dragging is off there by default (`draggable={false}`); pass `draggable` to turn it on. `expandable={false}` keeps the sheet at its content height on every platform.
+
+Try it: open the sheet, then scroll the wheel up over it (or drag the header, since this example turns `draggable` on). Wide web windows show a centered modal by default, so the examples here force `presentation="bottomSheet"`:
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { BottomSheet } from '@elik56a/react-native-pickers';
+
+const comments = Array.from({ length: 30 }, (_, i) => `Comment #${i + 1}: looks great!`);
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}>
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>Open comments</Text>
+      </Pressable>
+      <BottomSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Comments"
+        presentation="bottomSheet"
+        draggable
+        height={0.45}
+        expandedHeight={0.9}
+      >
+        <ScrollView contentContainerStyle={{ padding: 16, gap: 14 }}>
+          {comments.map((c) => (
+            <Text key={c} style={{ fontSize: 15 }}>{c}</Text>
+          ))}
+        </ScrollView>
+      </BottomSheet>
+    </>
+  );
+}
+```
+
+The list scrolls first; once it's back at the top, wheeling up expands the sheet, and wheeling down at the bottom collapses it, then closes it.
+
+### Configuring it
+
+```tsx
+// Expand to 85% of the window instead of full screen
+<BottomSheet expandedHeight={0.85} … />
+
+// Expand to a fixed height in px
+<BottomSheet expandedHeight={600} … />
+
+// Mouse dragging on the web too
+<BottomSheet draggable … />
+
+// No expanding: drag (or wheel) down still closes it
+<BottomSheet expandable={false} … />
+
+// Fixed at its height: no expanding, no swipe or wheel to close
+<BottomSheet expandable={false} enableSwipeToClose={false} … />
+```
+
+Every picker sheet takes the same props through `sheetProps`:
+
+```tsx
+<DatePickerSheet visible={open} onClose={close} sheetProps={{ expandedHeight: 0.8 }} … />
+```
+
 ## Keyboard
 
 On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside stay visible above the keyboard.
@@ -117,7 +193,10 @@ On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside s
 | `headerRight` | `ReactNode` | — | Right side of the header. |
 | `footer` | `ReactNode` | — | Content pinned below the children. |
 | `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal; `auto` is a modal on wide web windows. |
-| `enableSwipeToClose` | `boolean` | `true` | Drag down to dismiss (bottom sheet only). |
+| `enableSwipeToClose` | `boolean` | `true` | Drag down (wheel down on the web) to dismiss (bottom sheet only). |
+| `draggable` | `boolean` | `true` native / `false` web | Drag the handle or header to resize or close. |
+| `expandable` | `boolean` | `true` | Grow to `expandedHeight`: drag up on native, wheel up on the web. |
+| `expandedHeight` | `number` | window − status bar | Expanded height: fraction (≤ 1) or px. |
 | `closeOnBackdropPress` | `boolean` | `true` | Tap outside to dismiss. |
 | `maxHeightRatio` | `number` | `0.9` | Max height as a fraction of the window. |
 | `height` | `number` | content | Fixed height: fraction (≤ 1) or px. |

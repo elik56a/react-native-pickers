@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { Animated } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 
@@ -16,8 +17,14 @@ export interface BottomSheetProps extends ThemableProps {
   headerRight?: React.ReactNode;
   headerLeft?: React.ReactNode;
   footer?: React.ReactNode;
-  /** Drag the sheet down to dismiss. Default: true */
+  /** Drag the sheet down (wheel down on the web) to dismiss. Default: true */
   enableSwipeToClose?: boolean;
+  /** Drag the handle or header to resize or close the sheet. Default: true on native, false on the web */
+  draggable?: boolean;
+  /** Let the sheet grow to `expandedHeight`: drag it up on native, wheel up on the web. Default: true */
+  expandable?: boolean;
+  /** Expanded height (px, or a fraction of the window when <= 1). Default: the window below the status bar */
+  expandedHeight?: number;
   /** Tap the backdrop to dismiss. Default: true */
   closeOnBackdropPress?: boolean;
   /** Max sheet height as a fraction of the window. Default: 0.9 */
@@ -76,6 +83,46 @@ export interface SheetButtonProps {
   primary?: boolean;
   disabled?: boolean;
   theme: PickerTheme;
+}
+
+/** Where a drag or a wheel gesture leaves the sheet. */
+export type SheetSnap = 'base' | 'expanded' | 'close';
+
+export interface SheetDragFrame {
+  height: number;
+  /** How far the sheet is pulled below its base height, towards closing. */
+  offset: number;
+}
+
+export interface SheetResizeOptions {
+  /** True while the sheet is shown. */
+  active: boolean;
+  drag: Animated.Value;
+  draggable: boolean;
+  expandable: boolean;
+  swipeToClose: boolean;
+  expandedHeight: number;
+  duration: number;
+  onClose: () => void;
+}
+
+/** The parts of a DOM element the web wheel handling reads; the library builds without DOM typings. */
+export interface ScrollNode {
+  parentElement: ScrollNode | null;
+  scrollTop: number;
+  scrollHeight: number;
+  clientHeight: number;
+}
+
+export interface WheelEventLike {
+  deltaY: number;
+  target: ScrollNode | null;
+  preventDefault: () => void;
+}
+
+export interface WheelHost extends ScrollNode {
+  addEventListener: (type: 'wheel', listener: (e: WheelEventLike) => void, options: { passive: boolean }) => void;
+  removeEventListener: (type: 'wheel', listener: (e: WheelEventLike) => void) => void;
 }
 
 export interface SheetAnimationOptions {

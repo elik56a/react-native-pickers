@@ -125,7 +125,7 @@ const usePortalsInside = (frameRef: RefObject<HTMLDivElement | null>, enabled: b
   }, [frameRef, enabled]);
 };
 
-function Showcase({ platform }: { platform: Platform }) {
+function Showcase({ platform, phoneHeight }: { platform: Platform; phoneHeight?: number }) {
   const { colorMode } = useColorMode();
   return (
     <BrowserOnly fallback={null}>
@@ -133,8 +133,9 @@ function Showcase({ platform }: { platform: Platform }) {
         const Demo = require('../components/HeroDemo').default as React.ComponentType<{
           colorMode: 'light' | 'dark';
           platform: Platform;
+          phoneHeight?: number;
         }>;
-        return <Demo colorMode={colorMode} platform={platform} />;
+        return <Demo colorMode={colorMode} platform={platform} phoneHeight={phoneHeight} />;
       }}
     </BrowserOnly>
   );
@@ -164,7 +165,11 @@ function StatusIcons() {
 function Device() {
   const [platform, setPlatform] = useState<Platform>('ios');
   const frameRef = useRef<HTMLDivElement>(null);
+  const [phoneHeight, setPhoneHeight] = useState<number>();
   usePortalsInside(frameRef, platform !== 'web');
+  // Sheets size against the browser window; inside the mock phone they must stop at its screen.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: each platform has its own frame, so it's re-measured on switch
+  useEffect(() => setPhoneHeight(frameRef.current?.clientHeight), [platform]);
   return (
     <div className={clsx(styles.device, platform === 'web' && styles.deviceWide)}>
       <div role="tablist" aria-label="Preview platform" className={styles.platformTabs}>
@@ -199,7 +204,7 @@ function Device() {
           </div>
         )}
         <div className={styles.screen}>
-          <Showcase platform={platform} />
+          <Showcase platform={platform} phoneHeight={phoneHeight} />
         </div>
         {platform !== 'web' && <span className={styles.homeIndicator} aria-hidden />}
       </div>

@@ -1,4 +1,15 @@
-import { getDropdownFrame, isSwipeDown, resolvePresentation, resolveSheetHeight, shouldDismiss } from './sheet.utils';
+import type { ScrollNode } from './sheet.types';
+import {
+  canScrollWithin,
+  getDragFrame,
+  getDropdownFrame,
+  getReleaseTarget,
+  getWheelTarget,
+  isVerticalDrag,
+  resolvePresentation,
+  resolveSheetHeight,
+  shouldDismiss,
+} from './sheet.utils';
 
 describe('resolveSheetHeight', () => {
   it('treats values up to 1 as a window fraction', () => {
@@ -9,12 +20,95 @@ describe('resolveSheetHeight', () => {
   });
 });
 
-describe('isSwipeDown', () => {
-  it('needs a mostly vertical downward drag past the start distance', () => {
-    expect(isSwipeDown(0, 10)).toBe(true);
-    expect(isSwipeDown(0, 5)).toBe(false);
-    expect(isSwipeDown(20, 10)).toBe(false);
-    expect(isSwipeDown(0, -10)).toBe(false);
+describe('isVerticalDrag', () => {
+  it('needs a mostly vertical drag past the start distance, either way', () => {
+    expect(isVerticalDrag(0, 10)).toBe(true);
+    expect(isVerticalDrag(0, -10)).toBe(true);
+    expect(isVerticalDrag(0, 5)).toBe(false);
+    expect(isVerticalDrag(20, 10)).toBe(false);
+  });
+});
+
+describe('getDragFrame', () => {
+  it('grows up to the max height when dragged up', () => {
+    expect(getDragFrame(400, -100, 400, 760, true)).toEqual({ height: 500, offset: 0 });
+    expect(getDragFrame(400, -900, 400, 760, true)).toEqual({ height: 760, offset: 0 });
+  });
+
+  it('pulls below the base height towards closing, only when closing is allowed', () => {
+    expect(getDragFrame(400, 120, 400, 760, true)).toEqual({ height: 400, offset: 120 });
+    expect(getDragFrame(400, 120, 400, 760, false)).toEqual({ height: 400, offset: 0 });
+  });
+
+  it('collapses an expanded sheet first, then pulls it down', () => {
+    expect(getDragFrame(760, 200, 400, 760, true)).toEqual({ height: 560, offset: 0 });
+    expect(getDragFrame(760, 400, 400, 760, true)).toEqual({ height: 400, offset: 40 });
+  });
+});
+
+describe('getReleaseTarget', () => {
+  it('snaps to the nearer height when released slowly', () => {
+    expect(getReleaseTarget({ height: 600, offset: 0 }, 0, 400, 760, true)).toBe('expanded');
+    expect(getReleaseTarget({ height: 550, offset: 0 }, 0, 400, 760, true)).toBe('base');
+  });
+
+  it('follows a flick', () => {
+    expect(getReleaseTarget({ height: 420, offset: 0 }, -1, 400, 760, true)).toBe('expanded');
+    expect(getReleaseTarget({ height: 740, offset: 0 }, 1, 400, 760, true)).toBe('base');
+  });
+
+  it('closes past the dismiss distance below the base height', () => {
+    expect(getReleaseTarget({ height: 400, offset: 150 }, 0, 400, 760, true)).toBe('close');
+    expect(getReleaseTarget({ height: 400, offset: 30 }, 0, 400, 760, true)).toBe('base');
+    expect(getReleaseTarget({ height: 400, offset: 150 }, 0, 400, 760, false)).toBe('base');
+  });
+
+  it('stays at the base height when it cannot expand', () => {
+    expect(getReleaseTarget({ height: 400, offset: 0 }, -2, 400, 400, true)).toBe('base');
+  });
+});
+
+describe('getWheelTarget', () => {
+  it('expands on wheel up', () => {
+    expect(getWheelTarget(-50, false, true, true)).toBe('expanded');
+    expect(getWheelTarget(-50, true, true, true)).toBeNull();
+    expect(getWheelTarget(-50, false, false, true)).toBeNull();
+  });
+
+  it('collapses, then closes, on wheel down', () => {
+    expect(getWheelTarget(50, true, true, true)).toBe('base');
+    expect(getWheelTarget(50, false, true, true)).toBe('close');
+    expect(getWheelTarget(50, false, true, false)).toBeNull();
+  });
+});
+
+describe('canScrollWithin', () => {
+  const node = (scrollTop: number, parentElement: ScrollNode | null = null): ScrollNode => ({
+    parentElement,
+    scrollTop,
+    scrollHeight: 1000,
+    clientHeight: 300,
+  });
+  const root = node(0);
+  const overflow = (scrollable: ScrollNode) => (n: ScrollNode) => (n === scrollable ? 'auto' : 'visible');
+
+  it('lets a list that can still scroll keep the wheel', () => {
+    const list = node(200, root);
+    const row = node(0, list);
+    expect(canScrollWithin(row, root, -10, overflow(list))).toBe(true);
+    expect(canScrollWithin(row, root, 10, overflow(list))).toBe(true);
+  });
+
+  it('hands the wheel to the sheet at the scroll ends', () => {
+    const top = node(0, root);
+    const bottom = node(700, root);
+    expect(canScrollWithin(top, root, -10, overflow(top))).toBe(false);
+    expect(canScrollWithin(bottom, root, 10, overflow(bottom))).toBe(false);
+  });
+
+  it('ignores elements that clip rather than scroll', () => {
+    const clipped = node(200, root);
+    expect(canScrollWithin(clipped, root, -10, () => 'hidden')).toBe(false);
   });
 });
 

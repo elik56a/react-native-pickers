@@ -300,6 +300,37 @@ Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets
 />
 ```
 
+### Expanding the sheet
+
+Long lists open at their content height and can grow to full screen: drag the header up on iOS and Android, or scroll the wheel up over the sheet on the web. The list grows with the sheet. Set the expanded height through `sheet.sheetProps`:
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const countries = [
+  'Argentina', 'Australia', 'Austria', 'Belgium', 'Brazil', 'Canada', 'Chile', 'China', 'Denmark', 'Egypt',
+  'Finland', 'France', 'Germany', 'Greece', 'India', 'Ireland', 'Israel', 'Italy', 'Japan', 'Mexico',
+  'Netherlands', 'Norway', 'Poland', 'Portugal', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'United Kingdom', 'United States',
+].map((c) => ({ label: c, value: c }));
+
+export default function Example() {
+  const [country, setCountry] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Country"
+      options={countries}
+      value={country}
+      onChange={setCountry}
+      presentation="bottomSheet"
+      sheet={{ sheetProps: { expandedHeight: 0.9, draggable: true } }}
+    />
+  );
+}
+```
+
+`expandable: false` keeps the sheet at its content height; `draggable: false` turns off dragging on native. See [BottomSheet](./bottom-sheet#expanding-to-full-screen) for all the options.
+
 ## Props
 
 ### Value

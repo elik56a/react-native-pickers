@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
 export const DEFAULT_CONFIRM_LABEL = 'Done';
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
@@ -19,6 +19,24 @@ export const DISMISS_HEIGHT_RATIO = 0.3;
 /** A flick faster than this (px/ms) closes the sheet regardless of distance. */
 export const DISMISS_VELOCITY = 0.9;
 export const SNAP_BACK_BOUNCINESS = 4;
+
+/** Mouse drags select text on the web, so sheets resize with the wheel there instead. */
+export const DEFAULT_DRAGGABLE = Platform.OS !== 'web';
+/** Room kept above an expanded sheet for the status bar. */
+export const EXPANDED_TOP_INSET = Platform.select({ ios: 54, android: StatusBar.currentHeight ?? 24, default: 0 });
+/** A flick faster than this (px/ms) snaps an expandable sheet up or down regardless of distance. */
+export const EXPAND_FLICK_VELOCITY = 0.5;
+/** Expanding and collapsing run quicker than opening, as a fraction of the theme's animation duration. */
+export const RESIZE_DURATION_RATIO = 0.6;
+/** Spring speed for the sheet settling back after a drag. */
+export const SNAP_BACK_SPEED = 20;
+
+export const IS_WEB = Platform.OS === 'web';
+/** Wheel distance (px) that expands, collapses or closes the sheet. */
+export const WHEEL_THRESHOLD = 40;
+/** A wheel gesture (and trackpad momentum) counts as over after this long without events. */
+export const WHEEL_IDLE_MS = 180;
+export const SCROLLABLE_OVERFLOW = ['auto', 'scroll'];
 
 export const SHEET_MAX_WIDTH = 640;
 /** Space kept around the dialog on wide web windows. */

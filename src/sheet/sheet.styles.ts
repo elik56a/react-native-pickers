@@ -5,7 +5,8 @@ import { DIALOG_MARGIN, SHEET_MAX_WIDTH } from './sheet.constants';
 export const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'flex-end' },
   dialogContainer: { flex: 1, justifyContent: 'center', padding: DIALOG_MARGIN },
-  sheet: { width: '100%', alignSelf: 'center', maxWidth: SHEET_MAX_WIDTH, overflow: 'hidden' },
+  sheetFrame: { width: '100%', alignSelf: 'center', maxWidth: SHEET_MAX_WIDTH },
+  sheet: { width: '100%', overflow: 'hidden' },
   dialogHeader: { paddingTop: 12 },
   handleArea: { alignItems: 'center', paddingTop: 8, paddingBottom: 6 },
   handle: { width: 40, height: 5, borderRadius: 3 },

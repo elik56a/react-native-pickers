@@ -42,7 +42,7 @@ SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,key
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
 SelectList<T>      same list inline: options value onChange multiple listHeight
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange
-BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose
+BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(native:true web:false) expandable expandedHeight
 Sheets (draft; commit on Done):
   DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect
   TimePickerSheet  visible onClose value onConfirm + TimePicker props

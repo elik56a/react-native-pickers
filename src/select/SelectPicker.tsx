@@ -49,7 +49,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}
-      style={picker.presentation === 'dropdown' ? styles.dropdownList : undefined}
+      style={picker.presentation === 'dropdown' ? styles.dropdownList : styles.sheetList}
     />
   );
 

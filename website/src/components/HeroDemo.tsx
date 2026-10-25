@@ -24,6 +24,8 @@ type Tab = (typeof TABS)[number]['key'];
 
 export type DemoPlatform = 'ios' | 'android' | 'web';
 
+/** Keeps an expanded sheet below the mock status bar. */
+const PHONE_STATUS_BAR = 52;
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const CITIES = ['Amsterdam', 'Berlin', 'Lisbon', 'London', 'New York', 'Paris', 'Rome', 'Tel Aviv', 'Tokyo'].map((c) => ({
   label: c,
@@ -34,7 +36,7 @@ const CABINS = ['Economy', 'Premium', 'Business', 'First'].map((c) => ({
   value: c,
 }));
 
-function Screen({ platform }: { platform: DemoPlatform }) {
+function Screen({ platform, phoneHeight }: { platform: DemoPlatform; phoneHeight?: number }) {
   const { colors } = usePickerTheme();
   const [tab, setTab] = useState<Tab>('date');
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
@@ -44,7 +46,13 @@ function Screen({ platform }: { platform: DemoPlatform }) {
   const [cabin, setCabin] = useState<string | null>('Economy');
   const [emoji, setEmoji] = useState('🎉');
   const presentation = platform === 'web' ? 'dropdown' : 'bottomSheet';
-  const sheet = { sheetProps: { bottomInset: platform === 'ios' ? 30 : 16 } };
+  const sheet = {
+    sheetProps: {
+      bottomInset: platform === 'ios' ? 30 : 16,
+      draggable: true,
+      expandedHeight: phoneHeight ? phoneHeight - PHONE_STATUS_BAR : undefined,
+    },
+  };
   const active = TABS.find((t) => t.key === tab) ?? TABS[0];
 
   return (
@@ -99,10 +107,18 @@ function Screen({ platform }: { platform: DemoPlatform }) {
   );
 }
 
-export default function HeroDemo({ colorMode, platform }: { colorMode: 'light' | 'dark'; platform: DemoPlatform }) {
+export default function HeroDemo({
+  colorMode,
+  platform,
+  phoneHeight,
+}: {
+  colorMode: 'light' | 'dark';
+  platform: DemoPlatform;
+  phoneHeight?: number;
+}) {
   return (
     <PickersProvider colorScheme={colorMode}>
-      <Screen platform={platform} />
+      <Screen platform={platform} phoneHeight={phoneHeight} />
     </PickersProvider>
   );
 }

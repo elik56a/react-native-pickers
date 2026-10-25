@@ -20,4 +20,5 @@ export const styles = StyleSheet.create({
   chevron: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginStart: 4 },
   chevronMark: { width: 8, height: 8, borderRightWidth: 1.75, borderBottomWidth: 1.75, marginTop: -4, transform: [{ rotate: '45deg' }] },
   dropdownList: { flexShrink: 1 },
+  sheetList: { flexGrow: 1, flexShrink: 1 },
 });

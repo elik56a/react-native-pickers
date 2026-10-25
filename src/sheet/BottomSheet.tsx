@@ -3,8 +3,8 @@ import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet,
 import { usePickerTheme } from '../core';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
-import { useSwipeToClose } from './hooks/useSwipeToClose';
-import { DEFAULT_BOTTOM_INSET, DEFAULT_MAX_HEIGHT_RATIO, DIALOG_RISE } from './sheet.constants';
+import { useSheetResize } from './hooks/useSheetResize';
+import { DEFAULT_BOTTOM_INSET, DEFAULT_DRAGGABLE, DEFAULT_MAX_HEIGHT_RATIO, DIALOG_RISE, EXPANDED_TOP_INSET } from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { BottomSheetProps } from './sheet.types';
 import { resolvePresentation, resolveSheetHeight } from './sheet.utils';
@@ -18,6 +18,9 @@ export const BottomSheet = ({
   headerRight,
   footer,
   enableSwipeToClose = true,
+  draggable = DEFAULT_DRAGGABLE,
+  expandable = true,
+  expandedHeight,
   closeOnBackdropPress = true,
   maxHeightRatio = DEFAULT_MAX_HEIGHT_RATIO,
   height,
@@ -39,7 +42,17 @@ export const BottomSheet = ({
     onOpened,
     onClosed,
   });
-  const swipe = useSwipeToClose(drag, enableSwipeToClose && !dialog, onClose);
+  const expandedPx = resolveSheetHeight(expandedHeight, windowHeight) ?? windowHeight - EXPANDED_TOP_INSET;
+  const resize = useSheetResize({
+    active: mounted && visible,
+    drag,
+    draggable: draggable && !dialog,
+    expandable: expandable && !dialog,
+    swipeToClose: enableSwipeToClose && !dialog,
+    expandedHeight: expandedPx,
+    duration: theme.animation.duration,
+    onClose,
+  });
   const radius = theme.radius.sheet;
 
   if (!mounted) return null;
@@ -57,37 +70,41 @@ export const BottomSheet = ({
           />
         </Animated.View>
         <View style={dialog ? styles.dialogContainer : styles.container} pointerEvents="box-none">
-          <Animated.View
-            onLayout={swipe.onLayout}
-            style={[
-              styles.sheet,
-              {
-                backgroundColor: theme.colors.sheet,
-                maxHeight: windowHeight * maxHeightRatio,
-                height: resolvedHeight,
-                transform: [{ translateY }],
-              },
-              dialog
-                ? { borderRadius: radius, paddingBottom: theme.spacing.md, opacity: progress }
-                : { borderTopLeftRadius: radius, borderTopRightRadius: radius, paddingBottom: bottomInset },
-              slots?.sheet,
-            ]}
-            accessibilityViewIsModal
-          >
-            <View {...swipe.panHandlers} style={dialog && styles.dialogHeader}>
-              {!dialog && (
-                <View style={styles.handleArea}>
-                  <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
-                </View>
-              )}
-              {(title || headerLeft || headerRight) && (
-                <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
-              )}
-            </View>
-            <View style={[resolvedHeight ? styles.flex : styles.shrink, slots?.content]}>{children}</View>
-            {footer ? (
-              <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md }, slots?.footer]}>{footer}</View>
-            ) : null}
+          {/* Two layers: the slide runs on the native driver, the height can't, and one view can't mix both */}
+          <Animated.View style={[styles.sheetFrame, { transform: [{ translateY }] }, dialog && { opacity: progress }]}>
+            <Animated.View
+              ref={resize.sheetRef}
+              onLayout={resize.onLayout}
+              style={[
+                styles.sheet,
+                {
+                  backgroundColor: theme.colors.sheet,
+                  maxHeight: resize.sized ? expandedPx : windowHeight * maxHeightRatio,
+                  height: resize.sized ? resize.height : resolvedHeight,
+                },
+                dialog
+                  ? { borderRadius: radius, paddingBottom: theme.spacing.md }
+                  : { borderTopLeftRadius: radius, borderTopRightRadius: radius, paddingBottom: bottomInset },
+                slots?.sheet,
+              ]}
+              accessibilityViewIsModal
+            >
+              {/* Not flattened away, so a touch anywhere on the header strip reaches the drag handlers, not just the handle bar or title */}
+              <View {...resize.panHandlers} collapsable={false} style={dialog && styles.dialogHeader}>
+                {!dialog && (
+                  <View style={styles.handleArea}>
+                    <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
+                  </View>
+                )}
+                {(title || headerLeft || headerRight) && (
+                  <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
+                )}
+              </View>
+              <View style={[resolvedHeight || resize.sized ? styles.flex : styles.shrink, slots?.content]}>{children}</View>
+              {footer ? (
+                <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md }, slots?.footer]}>{footer}</View>
+              ) : null}
+            </Animated.View>
           </Animated.View>
         </View>
       </KeyboardAvoidingView>

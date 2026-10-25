@@ -238,7 +238,7 @@ Use the same sheet for your own content:
 </BottomSheet>
 ```
 
-Props: `title`, `headerLeft`, `headerRight`, `footer`, `presentation`, `enableSwipeToClose`, `closeOnBackdropPress`, `height`, `maxHeightRatio`, `bottomInset`, `styles`.
+Props: `title`, `headerLeft`, `headerRight`, `footer`, `presentation`, `enableSwipeToClose`, `draggable`, `expandable`, `expandedHeight`, `closeOnBackdropPress`, `height`, `maxHeightRatio`, `bottomInset`, `styles`.
 
 ---
 
