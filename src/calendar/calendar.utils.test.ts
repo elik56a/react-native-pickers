@@ -1,0 +1,240 @@
+import { lightTheme } from '../core';
+import { buildMonthGrid, toDateKey } from '../core/utils/date.utils';
+import { EMPTY_RANGE } from './calendar.constants';
+import type { CalendarSelection, DayState } from './calendar.types';
+import {
+  canGoToMonth,
+  chunkRows,
+  getAnchorMonth,
+  getArrowGlyph,
+  getDayState,
+  getDayTextColor,
+  getHeaderLabel,
+  getMonthCells,
+  getQuickGridHeight,
+  getSwipeDelta,
+  getWeekStates,
+  getYearBounds,
+  getYearCells,
+  getYearPageLabel,
+  isDayDisabled,
+  isHorizontalSwipe,
+  nextRange,
+  orderWeekdays,
+  rangeCrossesDisabled,
+  shiftMonthForView,
+  showsRangeBand,
+  toggleMultiple,
+} from './calendar.utils';
+
+const day = (d: number, m = 9, y = 2026) => new Date(y, m, d);
+const keys = (dates: Date[]) => dates.map(toDateKey);
+const none = () => false;
+const selection = (patch: Partial<CalendarSelection>): CalendarSelection => ({
+  mode: 'single',
+  single: null,
+  range: EMPTY_RANGE,
+  multiple: [],
+  ...patch,
+});
+
+describe('isDayDisabled', () => {
+  it('combines min/max, the callback and marked dates', () => {
+    const rules = {
+      minDate: day(5),
+      maxDate: day(25),
+      isDateDisabled: (d: Date) => d.getDay() === 6,
+      markedDates: { '2026-10-14': { disabled: true } },
+    };
+    expect(isDayDisabled(day(4), rules)).toBe(true);
+    expect(isDayDisabled(day(26), rules)).toBe(true);
+    expect(isDayDisabled(day(10), rules)).toBe(true); // Saturday
+    expect(isDayDisabled(day(14), rules)).toBe(true);
+    expect(isDayDisabled(day(13), rules)).toBe(false);
+  });
+});
+
+describe('rangeCrossesDisabled', () => {
+  it('checks every day before the end', () => {
+    const blocked = (d: Date) => d.getDate() === 12;
+    expect(rangeCrossesDisabled(day(10), day(14), blocked)).toBe(true);
+    expect(rangeCrossesDisabled(day(10), day(12), blocked)).toBe(false);
+  });
+});
+
+describe('nextRange', () => {
+  const open = { start: day(10), end: null };
+
+  it('starts a range from nothing, after a complete range, or before the start', () => {
+    expect(nextRange(EMPTY_RANGE, day(10), {}, none)).toEqual({ start: day(10), end: null });
+    expect(nextRange({ start: day(1), end: day(3) }, day(10), {}, none)).toEqual({ start: day(10), end: null });
+    expect(nextRange(open, day(8), {}, none)).toEqual({ start: day(8), end: null });
+  });
+  it('completes an open range', () => {
+    expect(nextRange(open, day(14), {}, none)).toEqual({ start: day(10), end: day(14) });
+  });
+  it('allows a single-day range unless turned off', () => {
+    expect(nextRange(open, day(10), {}, none)).toEqual({ start: day(10), end: day(10) });
+    expect(nextRange(open, day(10), { allowSingleDayRange: false }, none)).toBeNull();
+  });
+  it('ignores ends that are too close', () => {
+    expect(nextRange(open, day(11), { minRangeDays: 2 }, none)).toBeNull();
+    expect(nextRange(open, day(12), { minRangeDays: 2 }, none)).toEqual({ start: day(10), end: day(12) });
+  });
+  it('restarts when the range would be too long', () => {
+    expect(nextRange(open, day(20), { maxRangeDays: 7 }, none)).toEqual({ start: day(20), end: null });
+  });
+  it('restarts when the range would cross a disabled day', () => {
+    expect(nextRange(open, day(14), {}, (d) => d.getDate() === 12)).toEqual({ start: day(14), end: null });
+  });
+});
+
+describe('toggleMultiple', () => {
+  it('adds in date order and removes existing days', () => {
+    expect(keys(toggleMultiple([day(20)], day(5)) ?? [])).toEqual(['2026-10-05', '2026-10-20']);
+    expect(keys(toggleMultiple([day(5), day(20)], day(5)) ?? [])).toEqual(['2026-10-20']);
+  });
+  it('refuses to add past the maximum but still removes', () => {
+    expect(toggleMultiple([day(1), day(2)], day(3), 2)).toBeNull();
+    expect(keys(toggleMultiple([day(1), day(2)], day(2), 2) ?? [])).toEqual(['2026-10-01']);
+  });
+});
+
+describe('getAnchorMonth', () => {
+  it('prefers initialMonth, then the selection', () => {
+    expect(getAnchorMonth(day(20, 2), selection({ single: day(5) }))).toEqual(day(1, 2));
+    expect(getAnchorMonth(undefined, selection({ single: day(5, 4) }))).toEqual(day(1, 4));
+    expect(getAnchorMonth(undefined, selection({ range: { start: day(5, 6), end: null } }))).toEqual(day(1, 6));
+    expect(getAnchorMonth(undefined, selection({ multiple: [day(5, 7)] }))).toEqual(day(1, 7));
+  });
+});
+
+describe('getDayState / getWeekStates', () => {
+  const base = { month: day(1), today: day(15), isDisabled: none };
+
+  it('marks single selection, today and outside days', () => {
+    const sel = selection({ single: day(15) });
+    expect(getDayState({ ...base, selection: sel, date: day(15) })).toMatchObject({ selected: true, today: true, outside: false });
+    expect(getDayState({ ...base, selection: sel, date: day(30, 8) }).outside).toBe(true);
+  });
+  it('marks range ends and the days between', () => {
+    const sel = selection({ mode: 'range', range: { start: day(10), end: day(13) } });
+    expect(getDayState({ ...base, selection: sel, date: day(10) })).toMatchObject({ selected: true, rangeStart: true, inRange: false });
+    expect(getDayState({ ...base, selection: sel, date: day(11) })).toMatchObject({ selected: false, inRange: true });
+    expect(getDayState({ ...base, selection: sel, date: day(13) })).toMatchObject({ selected: true, rangeEnd: true });
+  });
+  it('marks every day in multiple mode and attaches markings', () => {
+    const sel = selection({ mode: 'multiple', multiple: [day(3), day(9)] });
+    const marked = { '2026-10-09': { label: '$89' } };
+    expect(getDayState({ ...base, selection: sel, date: day(9), markedDates: marked })).toMatchObject({
+      selected: true,
+      marking: { label: '$89' },
+    });
+  });
+  it('maps a whole month grid', () => {
+    const weeks = getWeekStates(buildMonthGrid(2026, 9, 0), { ...base, selection: selection({}) });
+    expect(weeks).toHaveLength(6);
+    expect(weeks.flat().filter((s) => s.today)).toHaveLength(1);
+  });
+});
+
+describe('showsRangeBand / getDayTextColor', () => {
+  const state = (patch: Partial<DayState>): DayState => ({
+    date: day(1),
+    selected: false,
+    rangeStart: false,
+    rangeEnd: false,
+    inRange: false,
+    today: false,
+    disabled: false,
+    outside: false,
+    ...patch,
+  });
+  const c = lightTheme.colors;
+
+  it('paints the band inside and at the ends of a complete range only', () => {
+    expect(showsRangeBand(state({ inRange: true }), true)).toBe(true);
+    expect(showsRangeBand(state({ rangeStart: true }), true)).toBe(true);
+    expect(showsRangeBand(state({ rangeStart: true }), false)).toBe(false);
+    expect(showsRangeBand(state({ rangeStart: true, rangeEnd: true }), true)).toBe(false);
+  });
+  it('picks the day text colour by priority', () => {
+    expect(getDayTextColor(state({ selected: true, disabled: true }), c)).toBe(c.onPrimary);
+    expect(getDayTextColor(state({ disabled: true, marking: { textColor: 'red' } }), c)).toBe(c.textDisabled);
+    expect(getDayTextColor(state({ outside: true, marking: { textColor: 'red' } }), c)).toBe('red');
+    expect(getDayTextColor(state({ outside: true }), c)).toBe(c.textDisabled);
+    expect(getDayTextColor(state({ today: true }), c)).toBe(c.primary);
+    expect(getDayTextColor(state({}), c)).toBe(c.text);
+  });
+});
+
+describe('navigation helpers', () => {
+  it('orders weekday names from the first day of the week', () => {
+    const weekdays = orderWeekdays(['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], 1);
+    expect(weekdays.map((w) => w.label)).toEqual(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']);
+    expect(weekdays.map((w) => w.key)).toEqual([1, 2, 3, 4, 5, 6, 0]);
+  });
+  it('points arrows the right way in LTR and RTL', () => {
+    expect(getArrowGlyph('prev', false)).toBe('‹');
+    expect(getArrowGlyph('next', false)).toBe('›');
+    expect(getArrowGlyph('prev', true)).toBe('›');
+  });
+  it('blocks months outside min/max', () => {
+    expect(canGoToMonth(day(1), -1, day(20))).toBe(false);
+    expect(canGoToMonth(day(1), -1, day(20, 8))).toBe(true);
+    expect(canGoToMonth(day(1), 1, undefined, day(31))).toBe(false);
+    expect(canGoToMonth(day(1), 1, undefined, day(1, 10))).toBe(true);
+  });
+  it('pages by a year in the month view and by 12 years in the year view', () => {
+    expect(shiftMonthForView('months', day(15), 1)).toEqual(day(1, 9, 2027));
+    expect(shiftMonthForView('years', day(15), -1)).toEqual(day(1, 9, 2014));
+  });
+  it('labels the header for each view', () => {
+    expect(getHeaderLabel('days', day(1), 'October 2026')).toBe('October 2026');
+    expect(getHeaderLabel('months', day(1), 'October 2026')).toBe('2026');
+    expect(getHeaderLabel('years', day(1), 'October 2026')).toBe('2016 – 2027');
+    expect(getYearPageLabel(2016)).toBe('2016 – 2027');
+  });
+});
+
+describe('quick grid cells', () => {
+  const names = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+
+  it('disables months entirely outside min/max', () => {
+    const cells = getMonthCells(day(15), names, day(15, 2), day(1, 10));
+    expect(cells.map((c) => c.disabled)).toEqual([true, true, false, false, false, false, false, false, false, false, false, true]);
+    expect(cells.find((c) => c.selected)?.value).toBe(9);
+  });
+  it('lists a page of 12 years within bounds', () => {
+    const cells = getYearCells(day(1), [2020, 2030]);
+    expect(cells.map((c) => c.value)).toEqual([2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027]);
+    expect(cells.filter((c) => c.disabled).map((c) => c.value)).toEqual([2016, 2017, 2018, 2019]);
+    expect(cells.find((c) => c.selected)?.value).toBe(2026);
+  });
+  it('bounds years by yearRange, else min/max, else ±100 years', () => {
+    expect(getYearBounds(day(1), [2000, 2010], day(1, 0, 1990))).toEqual([2000, 2010]);
+    expect(getYearBounds(day(1), undefined, day(1, 0, 1990))).toEqual([1990, 2126]);
+  });
+  it('splits cells into rows of three', () => {
+    expect(chunkRows([1, 2, 3, 4, 5, 6, 7])).toEqual([[1, 2, 3], [4, 5, 6], [7]]);
+  });
+  it('matches the day grid height', () => {
+    expect(getQuickGridHeight(44, true, true)).toBe(44 * 6 + 28);
+    expect(getQuickGridHeight(44, false, false)).toBe(44 * 5);
+  });
+});
+
+describe('swipe', () => {
+  it('claims clearly horizontal moves only', () => {
+    expect(isHorizontalSwipe(20, 5)).toBe(true);
+    expect(isHorizontalSwipe(20, 15)).toBe(false);
+    expect(isHorizontalSwipe(10, 0)).toBe(false);
+  });
+  it('turns a long or fast swipe into a month step, mirrored in RTL', () => {
+    expect(getSwipeDelta(-60, 0, false)).toBe(1);
+    expect(getSwipeDelta(60, 0, false)).toBe(-1);
+    expect(getSwipeDelta(-20, -0.8, false)).toBe(1);
+    expect(getSwipeDelta(-60, 0, true)).toBe(-1);
+    expect(getSwipeDelta(-20, -0.1, false)).toBe(0);
+  });
+});

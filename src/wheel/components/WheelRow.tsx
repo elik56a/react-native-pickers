@@ -21,7 +21,7 @@ const WheelRowImpl = <T,>({
   textAlign,
   slots,
   renderItem,
-  onPress,
+  onSelect,
 }: WheelRowProps<T>) => {
   const animatedStyle = useMemo(() => {
     const frames = getRowFrames({ dataIndex, itemHeight, visibleItems, variant, rotation, fadeTo });
@@ -48,7 +48,7 @@ const WheelRowImpl = <T,>({
   const color = item.disabled ? theme.colors.textDisabled : selected ? theme.colors.text : theme.colors.textSecondary;
 
   return (
-    <Pressable onPress={onPress && !item.disabled ? () => onPress(dataIndex) : undefined} accessible={false}>
+    <Pressable onPress={onSelect && !item.disabled ? () => onSelect(dataIndex) : undefined} accessible={false}>
       <Animated.View style={[styles.row, { height: itemHeight, paddingHorizontal: theme.spacing.sm }, animatedStyle, slots?.item]}>
         {renderItem ? (
           renderItem({ item, index: logicalIndex, selected, theme })

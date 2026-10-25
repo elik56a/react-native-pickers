@@ -107,7 +107,7 @@ export interface WheelRowProps<T> {
   textAlign: TextStyle['textAlign'];
   slots?: SlotStyles<WheelPickerSlot>;
   renderItem?: (info: WheelRenderItemInfo<T>) => React.ReactNode;
-  onPress?: (dataIndex: number) => void;
+  onSelect?: (dataIndex: number) => void;
 }
 
 /** A looping wheel repeats the items `copies` times; `middle` is where the centre copy starts. */

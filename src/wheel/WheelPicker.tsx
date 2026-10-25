@@ -99,7 +99,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
           textAlign={textAlign}
           slots={slots}
           renderItem={renderItem}
-          onPress={disabled ? undefined : onRowPress}
+          onSelect={disabled ? undefined : onRowPress}
         />
       );
     },
