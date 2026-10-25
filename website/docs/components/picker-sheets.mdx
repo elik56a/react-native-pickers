@@ -7,6 +7,22 @@ description: Ready-made React Native bottom-sheet pickers — DatePickerSheet, T
 
 Every picker is also available inside a [`BottomSheet`](./bottom-sheet) with a **Cancel / Done** header. They all share the same "chrome" props and the same draft behaviour.
 
+## Inline, bottom sheet or modal
+
+Every picker can be shown three ways:
+
+- **Inline:** the plain component (`WheelPicker`, `TimePicker`, `DatePicker`, `SelectList`, `EmojiPicker`) renders in place.
+- **Bottom sheet:** slides up from the bottom and can be dragged down to dismiss.
+- **Modal:** a centered dialog.
+
+The sheets take `presentation`: `'auto'` (default), `'bottomSheet'` or `'modal'`. `auto` is a modal on web windows wider than the sheet, where a bottom sheet would look cut off, and a bottom sheet on phones and native.
+
+```tsx
+<TimePickerSheet presentation="modal" visible={open} onClose={close} value={time} onConfirm={setTime} />
+```
+
+[`SelectPicker`](./select-picker#presentation) also supports `'dropdown'`, which opens under the field. It's `SelectPicker`'s default on the web.
+
 ```tsx
 import { DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, PickerSheet, useDraft } from '@elik56a/react-native-pickers';
 ```
@@ -32,6 +48,7 @@ All sheets accept these (`SheetChromeProps`):
 | `confirmLabel` | `string` | `'Done'` | Confirm button text. |
 | `cancelLabel` | `string` | `'Cancel'` | Cancel button text. |
 | `showCancel` | `boolean` | `true` (`false` for emoji) | Show the Cancel button. |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. `auto`: modal on wide web windows, bottom sheet elsewhere. |
 | `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [BottomSheet](./bottom-sheet#props) (`height`, `bottomInset`, `styles`, `enableSwipeToClose`…). |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme for the sheet and the picker. |
 

@@ -17,4 +17,5 @@ export const styles = StyleSheet.create({
   chip: { paddingHorizontal: 10, paddingVertical: 4 },
   clear: { paddingHorizontal: 6 },
   chevron: { marginStart: 4 },
+  dropdownList: { flexShrink: 1 },
 });

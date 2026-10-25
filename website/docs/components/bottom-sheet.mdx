@@ -44,6 +44,20 @@ export default function Example() {
 }
 ```
 
+## Bottom sheet or modal
+
+`presentation` switches between a bottom sheet and a centered modal:
+
+- `'auto'` (default): a modal on web windows wider than the sheet (688 px), a bottom sheet everywhere else.
+- `'bottomSheet'`: always slides up from the bottom, with a drag handle.
+- `'modal'`: always a centered dialog that fades in, with no drag handle or swipe-to-close.
+
+```tsx
+<BottomSheet presentation="modal" visible={open} onClose={close} title="Confirm">
+  …
+</BottomSheet>
+```
+
 ## Opening and closing
 
 `BottomSheet` is fully controlled: render it with `visible` and change `visible` in `onClose`. `onClose` is called when the user:
@@ -102,7 +116,8 @@ On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside s
 | `headerLeft` | `ReactNode` | — | Left side of the header. |
 | `headerRight` | `ReactNode` | — | Right side of the header. |
 | `footer` | `ReactNode` | — | Content pinned below the children. |
-| `enableSwipeToClose` | `boolean` | `true` | Drag down to dismiss. |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal; `auto` is a modal on wide web windows. |
+| `enableSwipeToClose` | `boolean` | `true` | Drag down to dismiss (bottom sheet only). |
 | `closeOnBackdropPress` | `boolean` | `true` | Tap outside to dismiss. |
 | `maxHeightRatio` | `number` | `0.9` | Max height as a fraction of the window. |
 | `height` | `number` | content | Fixed height: fraction (≤ 1) or px. |

@@ -91,6 +91,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [time, setTime] = useState(new Date());
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
+  const [framework, setFramework] = useState<string | null>(null);
   const [emoji, setEmoji] = useState('');
   const [sheet, setSheet] = useState<'date' | 'range' | 'time' | 'emoji' | null>(null);
 
@@ -135,6 +136,17 @@ function Demo({ insets }: { insets: Insets }) {
                   { label: 'Français', value: 'fr' },
                   { label: 'العربية', value: 'ar', keywords: ['arabic'] },
                 ]}
+              />
+              <SelectPicker
+                label="Framework (dropdown)"
+                placeholder="Choose a framework"
+                presentation="dropdown"
+                value={framework}
+                onChange={(v) => setFramework(v)}
+                options={['Expo', 'React Native CLI', 'React Native Web', 'Next.js', 'Remix', 'Vite'].map((label) => ({
+                  label,
+                  value: label,
+                }))}
               />
             </Section>
           )}

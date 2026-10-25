@@ -1,7 +1,10 @@
+import type { ComponentRef } from 'react';
+import { useRef } from 'react';
 import { Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
 import { PickerSheet } from '../sheet';
+import { Dropdown } from '../sheet/Dropdown';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
@@ -21,6 +24,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     renderTrigger,
     sheetTitle,
     sheet,
+    presentation: _presentation,
     onOpen: _onOpen,
     onClose: _onClose,
     style,
@@ -33,49 +37,63 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     ...listProps
   } = props;
   const theme = usePickerTheme(themeOverride);
-  const picker = useSelectPicker(props, isEqual);
+  const anchorRef = useRef<ComponentRef<typeof View>>(null);
+  const picker = useSelectPicker(props, isEqual, anchorRef);
+  const list = (
+    <SelectList<T>
+      {...(listProps as Omit<SelectListBaseProps<T>, 'isEqual' | 'theme' | 'styles'>)}
+      {...picker.valueProps}
+      isEqual={isEqual}
+      theme={themeOverride}
+      styles={slots}
+      style={picker.presentation === 'dropdown' ? styles.dropdownList : undefined}
+    />
+  );
 
   return (
     <View style={style}>
       {label ? (
         <Text style={[textStyle(theme, 'sm', 'medium'), styles.label, { color: theme.colors.textSecondary }, slots?.label]}>{label}</Text>
       ) : null}
-      {renderTrigger ? (
-        renderTrigger({ open: picker.show, selected: picker.selected, disabled })
+      <View ref={anchorRef} collapsable={false}>
+        {renderTrigger ? (
+          renderTrigger({ open: picker.show, selected: picker.selected, disabled })
+        ) : (
+          <SelectTrigger
+            selected={picker.selected}
+            multiple={!!props.multiple}
+            chips={chips}
+            placeholder={placeholder}
+            label={label}
+            open={picker.open}
+            disabled={disabled}
+            clearable={clearable}
+            onOpen={picker.show}
+            onRemove={picker.removeOption}
+            onClear={picker.clear}
+            theme={theme}
+            slots={slots}
+          />
+        )}
+      </View>
+      {picker.presentation === 'dropdown' ? (
+        <Dropdown visible={picker.open} anchor={picker.anchor} onClose={picker.hide} theme={themeOverride}>
+          {list}
+        </Dropdown>
       ) : (
-        <SelectTrigger
-          selected={picker.selected}
-          multiple={!!props.multiple}
-          chips={chips}
-          placeholder={placeholder}
-          label={label}
-          open={picker.open}
-          disabled={disabled}
-          clearable={clearable}
-          onOpen={picker.show}
-          onRemove={picker.removeOption}
-          onClear={picker.clear}
-          theme={theme}
-          slots={slots}
-        />
-      )}
-      <PickerSheet
-        visible={picker.open}
-        onClose={picker.hide}
-        title={sheetTitle ?? label}
-        theme={themeOverride}
-        showCancel={false}
-        onConfirm={props.multiple || !closeOnSelect ? picker.hide : undefined}
-        {...sheet}
-      >
-        <SelectList<T>
-          {...(listProps as Omit<SelectListBaseProps<T>, 'isEqual' | 'theme' | 'styles'>)}
-          {...picker.valueProps}
-          isEqual={isEqual}
+        <PickerSheet
+          visible={picker.open}
+          onClose={picker.hide}
+          title={sheetTitle ?? label}
           theme={themeOverride}
-          styles={slots}
-        />
-      </PickerSheet>
+          presentation={picker.presentation}
+          showCancel={false}
+          onConfirm={props.multiple || !closeOnSelect ? picker.hide : undefined}
+          {...sheet}
+        >
+          {list}
+        </PickerSheet>
+      )}
     </View>
   );
 };

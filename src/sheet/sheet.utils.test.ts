@@ -1,4 +1,4 @@
-import { isSwipeDown, resolveSheetHeight, shouldDismiss } from './sheet.utils';
+import { getDropdownFrame, isSwipeDown, resolvePresentation, resolveSheetHeight, shouldDismiss } from './sheet.utils';
 
 describe('resolveSheetHeight', () => {
   it('treats values up to 1 as a window fraction', () => {
@@ -28,5 +28,40 @@ describe('shouldDismiss', () => {
 
   it('closes on a fast flick', () => {
     expect(shouldDismiss(10, 1, 1000)).toBe(true);
+  });
+});
+
+describe('resolvePresentation', () => {
+  it('picks a modal for auto only on web windows wider than the sheet', () => {
+    expect(resolvePresentation('auto', 'web', 1440)).toBe('modal');
+    expect(resolvePresentation('auto', 'web', 688)).toBe('modal');
+    expect(resolvePresentation('auto', 'web', 687)).toBe('bottomSheet');
+    expect(resolvePresentation('auto', 'ios', 1024)).toBe('bottomSheet');
+  });
+
+  it('keeps an explicit choice on every platform', () => {
+    expect(resolvePresentation('modal', 'ios', 390)).toBe('modal');
+    expect(resolvePresentation('bottomSheet', 'web', 1440)).toBe('bottomSheet');
+  });
+});
+
+describe('getDropdownFrame', () => {
+  const field = (y: number) => ({
+    x: 16,
+    y,
+    width: 300,
+    height: 48,
+  });
+
+  it('opens below the field with its width', () => {
+    expect(getDropdownFrame(field(100), 800, 320)).toEqual({ left: 16, width: 300, top: 152, maxHeight: 320 });
+  });
+
+  it('flips above when there is more room there', () => {
+    expect(getDropdownFrame(field(600), 800, 320)).toEqual({ left: 16, width: 300, bottom: 204, maxHeight: 320 });
+  });
+
+  it('stays below and shrinks when below still has more room', () => {
+    expect(getDropdownFrame(field(300), 800, 500)).toEqual({ left: 16, width: 300, top: 352, maxHeight: 440 });
   });
 });

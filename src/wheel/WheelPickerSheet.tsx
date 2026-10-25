@@ -11,6 +11,7 @@ export const WheelPickerSheet = <T,>({
   confirmLabel,
   cancelLabel,
   showCancel,
+  presentation,
   sheetProps,
   theme,
   value,
@@ -20,7 +21,7 @@ export const WheelPickerSheet = <T,>({
   const [draft, setDraft] = useDraft<T>(value ?? (firstItemValue(rest.items) as T), visible);
   return (
     <PickerSheet
-      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}
+      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
         onConfirm(draft);
         onClose();

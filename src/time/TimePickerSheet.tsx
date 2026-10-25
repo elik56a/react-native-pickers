@@ -10,6 +10,7 @@ export const TimePickerSheet = ({
   confirmLabel,
   cancelLabel,
   showCancel,
+  presentation,
   sheetProps,
   theme,
   value,
@@ -19,7 +20,7 @@ export const TimePickerSheet = ({
   const [draft, setDraft] = useDraft(value ?? new Date(), visible);
   return (
     <PickerSheet
-      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}
+      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
         onConfirm(draft);
         onClose();

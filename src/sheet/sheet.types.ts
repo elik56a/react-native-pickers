@@ -2,6 +2,9 @@ import type React from 'react';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 
+/** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
+export type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
+
 export type BottomSheetSlot = 'backdrop' | 'sheet' | 'handle' | 'header' | 'title' | 'content' | 'footer';
 
 export interface BottomSheetProps extends ThemableProps {
@@ -23,6 +26,8 @@ export interface BottomSheetProps extends ThemableProps {
   height?: number;
   /** Extra bottom padding for home indicators. Default: 24 on iOS, 12 elsewhere */
   bottomInset?: number;
+  /** Default: 'auto' */
+  presentation?: SheetPresentation;
   styles?: SlotStyles<BottomSheetSlot>;
   onOpened?: () => void;
   onClosed?: () => void;
@@ -39,6 +44,8 @@ export interface SheetChromeProps extends ThemableProps {
   cancelLabel?: string;
   /** Show the cancel button. Default: true */
   showCancel?: boolean;
+  /** Bottom sheet or centered modal. Default: 'auto' (modal on wide web windows) */
+  presentation?: SheetPresentation;
   /** Passed through to the underlying BottomSheet */
   sheetProps?: Partial<Omit<BottomSheetProps, 'visible' | 'onClose' | 'children'>>;
 }
@@ -74,7 +81,34 @@ export interface SheetButtonProps {
 export interface SheetAnimationOptions {
   visible: boolean;
   duration: number;
-  windowHeight: number;
+  /** How far the sheet travels while opening: the window height for a bottom sheet, a short rise for a dialog. */
+  slideDistance: number;
   onOpened?: () => void;
   onClosed?: () => void;
+}
+
+/** A view's position in window coordinates, from `measureInWindow`. */
+export interface AnchorRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface DropdownFrame {
+  left: number;
+  width: number;
+  top?: number;
+  bottom?: number;
+  maxHeight: number;
+}
+
+export interface DropdownProps extends ThemableProps {
+  visible: boolean;
+  /** The field the dropdown opens from; nothing renders until it's measured. */
+  anchor: AnchorRect | null;
+  onClose: () => void;
+  children: React.ReactNode;
+  maxHeight?: number;
+  testID?: string;
 }

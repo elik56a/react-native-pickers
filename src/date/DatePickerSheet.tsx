@@ -14,6 +14,7 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
     confirmLabel,
     cancelLabel,
     showCancel,
+    presentation,
     sheetProps,
     theme,
     display = 'calendar',
@@ -52,7 +53,7 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
 
   return (
     <PickerSheet
-      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}
+      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={confirmsOnSelect ? undefined : confirm}
       confirmDisabled={!ready}
     >

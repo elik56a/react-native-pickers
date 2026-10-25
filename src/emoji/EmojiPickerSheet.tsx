@@ -10,6 +10,7 @@ export const EmojiPickerSheet = ({
   confirmLabel,
   cancelLabel,
   showCancel = false,
+  presentation,
   sheetProps,
   theme,
   closeOnSelect = true,
@@ -17,7 +18,7 @@ export const EmojiPickerSheet = ({
   height = DEFAULT_SHEET_HEIGHT,
   ...rest
 }: EmojiPickerSheetProps) => (
-  <PickerSheet {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}>
+  <PickerSheet {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}>
     <EmojiPicker
       {...rest}
       height={height}

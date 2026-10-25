@@ -5,6 +5,7 @@ export type {
   SelectListProps,
   SelectOption,
   SelectPickerProps,
+  SelectPresentation,
   SelectRenderOptionInfo,
   SelectSlot,
   SelectTriggerInfo,

@@ -14,6 +14,7 @@ export const PickerSheet = ({
   confirmLabel = DEFAULT_CONFIRM_LABEL,
   cancelLabel = DEFAULT_CANCEL_LABEL,
   showCancel = true,
+  presentation,
   sheetProps,
   theme: themeOverride,
   children,
@@ -24,6 +25,7 @@ export const PickerSheet = ({
       visible={visible}
       onClose={onClose}
       title={title}
+      presentation={presentation}
       theme={themeOverride}
       headerLeft={showCancel ? <SheetButton label={cancelLabel} onPress={onClose} theme={theme} /> : undefined}
       headerRight={

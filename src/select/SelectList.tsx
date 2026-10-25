@@ -2,6 +2,7 @@ import { FlatList, Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
 import { SearchInput } from '../core/components/SearchInput';
+import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { GroupHeader } from './components/GroupHeader';
 import { OptionRow } from './components/OptionRow';
 import { useSelectList } from './hooks/useSelectList';
@@ -68,6 +69,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
       <FlatList
         data={rows}
         keyExtractor={getRowKey}
+        showsVerticalScrollIndicator={SHOWS_SCROLL_INDICATOR}
         renderItem={renderRow}
         keyboardShouldPersistTaps="handled"
         style={[listHeight !== undefined ? { height: listHeight } : null, slots?.list]}
