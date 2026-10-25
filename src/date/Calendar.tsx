@@ -125,6 +125,7 @@ export type CalendarSelectionProps =
 export type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
 
 type View3 = 'days' | 'months' | 'years';
+const NEXT_VIEW: Record<View3, View3> = { days: 'months', months: 'years', years: 'days' };
 const DAY_MS = 86400000;
 
 export function Calendar(props: CalendarProps) {
@@ -270,7 +271,7 @@ export function Calendar(props: CalendarProps) {
   const header = (
     <View style={[s.header, { paddingHorizontal: theme.spacing.sm, marginBottom: theme.spacing.sm }, slots?.header]}>
       <Pressable
-        onPress={enableQuickJump ? () => setView(view === 'days' ? 'months' : 'days') : undefined}
+        onPress={enableQuickJump ? () => setView(NEXT_VIEW[view]) : undefined}
         style={({ pressed }) => [s.titleBtn, { borderRadius: theme.radius.sm, opacity: pressed ? 0.6 : 1 }]}
         accessibilityRole={enableQuickJump ? 'button' : 'header'}
         accessibilityLabel={title}
@@ -346,7 +347,6 @@ export function Calendar(props: CalendarProps) {
             setView('days');
           } };
         })}
-        onTitle={() => setView('years')}
         height={dayHeight * (fixedWeeks ? 6 : 5) + (showWeekdays ? 28 : 0)}
       />
     );
@@ -533,7 +533,7 @@ interface QuickCell {
   onPress: () => void;
 }
 
-function QuickGrid({ cells, theme, slots, height }: { cells: QuickCell[]; theme: PickerTheme; slots?: SlotStyles<CalendarSlot>; height: number; onTitle?: () => void }) {
+function QuickGrid({ cells, theme, slots, height }: { cells: QuickCell[]; theme: PickerTheme; slots?: SlotStyles<CalendarSlot>; height: number }) {
   const rows = [cells.slice(0, 3), cells.slice(3, 6), cells.slice(6, 9), cells.slice(9, 12)];
   return (
     <View style={{ height, justifyContent: 'space-evenly', paddingHorizontal: theme.spacing.sm }}>

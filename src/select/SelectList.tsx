@@ -44,9 +44,12 @@ export interface SelectRenderOptionInfo<T> {
   theme: PickerTheme;
 }
 
+/** Blocks inference from `onChange`, so `onChange={setState}` doesn't infer `T` as `SetStateAction<…>`. Works before TS 5.4's built-in NoInfer. */
+type NoInferValue<T> = [T][T extends unknown ? 0 : never];
+
 export type SelectValueProps<T> =
-  | { multiple?: false; value?: T | null; onChange?: (value: T, option: SelectOption<T>) => void }
-  | { multiple: true; value?: T[]; onChange?: (value: T[], options: SelectOption<T>[]) => void; maxSelected?: number };
+  | { multiple?: false; value?: T | null; onChange?: (value: NoInferValue<T>, option: SelectOption<T>) => void }
+  | { multiple: true; value?: T[]; onChange?: (value: NoInferValue<T>[], options: SelectOption<T>[]) => void; maxSelected?: number };
 
 export type SelectListBaseProps<T> = ThemableProps & {
   options: ReadonlyArray<SelectOption<T>>;

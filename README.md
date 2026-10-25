@@ -52,7 +52,7 @@ Bottom sheets keep a draft and only commit on **Done**:
 />
 ```
 
-Every picker works **controlled** (`value` + `onChange`) or **uncontrolled** (`defaultValue`).
+Wheel, time, date and emoji pickers work **controlled** (`value` + `onChange`) or **uncontrolled** (`defaultValue`). `SelectPicker` and `SelectList` are controlled-only: always pass `value` and update it in `onChange`.
 
 ---
 
