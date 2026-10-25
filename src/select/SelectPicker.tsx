@@ -5,10 +5,11 @@ import { Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../core';
 import { PickerSheet } from '../sheet';
 import { Dropdown } from '../sheet/Dropdown';
+import { SelectSearchField } from './components/SelectSearchField';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
-import { DEFAULT_PLACEHOLDER } from './select.constants';
+import { DEFAULT_PLACEHOLDER, DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
@@ -44,6 +45,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     <SelectList<T>
       {...(listProps as Omit<SelectListBaseProps<T>, 'isEqual' | 'theme' | 'styles'>)}
       {...picker.valueProps}
+      query={picker.searchInField ? picker.query : undefined}
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}
@@ -79,7 +81,24 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
         )}
       </View>
       {picker.presentation === 'dropdown' ? (
-        <Dropdown visible={picker.open} anchor={picker.anchor} onClose={picker.hide} theme={themeOverride}>
+        <Dropdown
+          visible={picker.open}
+          anchor={picker.anchor}
+          onClose={picker.hide}
+          theme={themeOverride}
+          overlay={
+            picker.searchInField ? (
+              <SelectSearchField
+                query={picker.query}
+                onChangeQuery={picker.setQuery}
+                placeholder={(!props.multiple && picker.selected[0]?.label) || listProps.searchPlaceholder || DEFAULT_SEARCH_PLACEHOLDER}
+                renderChevron={renderChevron}
+                theme={theme}
+                slots={slots}
+              />
+            ) : null
+          }
+        >
           {list}
         </Dropdown>
       ) : (

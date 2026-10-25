@@ -69,6 +69,7 @@ export default function Example() {
 | `onChange` | `(value: T, option) => void` · `(values: T[], options) => void` | — | Single · multiple. |
 | `maxSelected` | `number` | — | Multiple only. |
 | `searchable` | `boolean` | `options.length > 8` | Show the search field. |
+| `query` | `string` | — | Controlled search query, for filtering from your own input. Hides the built-in search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint and its accessibility label. |
 | `filterOption` | `(option: SelectOption<T>, query: string) => boolean` | `defaultFilter` | Custom filter. |
 | `renderOption` | `(info: SelectRenderOptionInfo<T>) => ReactNode` | — | Custom row content. |

@@ -96,6 +96,25 @@ describe('SelectPicker', () => {
       expect(screen.queryByLabelText('Expo')).toBeNull();
     });
 
+    it('filters as the user types in the field, and clears the query on close', async () => {
+      const onChange = jest.fn();
+      await render(<SelectPicker label="Stack" presentation="dropdown" options={options} value="react" onChange={onChange} />);
+      await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+      await fireEvent.changeText(screen.getByPlaceholderText('React'), 'type');
+      expect(screen.queryByLabelText('Expo')).toBeNull();
+      await fireEvent.press(screen.getByLabelText('TypeScript'));
+      expect(onChange).toHaveBeenCalledWith('typescript', options[1]);
+      await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+      expect(screen.getByLabelText('Expo')).toBeTruthy();
+    });
+
+    it('keeps the field read-only with searchable={false}', async () => {
+      await render(<SelectPicker label="Stack" presentation="dropdown" searchable={false} options={options} />);
+      await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+      expect(screen.queryByPlaceholderText('Search')).toBeNull();
+      expect(screen.getByLabelText('Expo')).toBeTruthy();
+    });
+
     it('closes on a tap outside without changing the value', async () => {
       const onChange = jest.fn();
       await render(<SelectPicker label="Stack" presentation="dropdown" multiple options={options} onChange={onChange} />);

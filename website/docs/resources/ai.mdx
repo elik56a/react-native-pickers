@@ -39,7 +39,7 @@ DatePicker         display 'calendar'(default)|'wheel'
 DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFormat 'long'|'short'|'numeric'  min/maxDate
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips
-                   label placeholder searchable(>8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
+                   label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
 SelectList<T>      same list inline: options value onChange multiple listHeight
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose

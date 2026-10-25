@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
   flex: { flex: 1 },
   shrink: { flexShrink: 1 },
   button: { paddingVertical: 6 },
+  dropdownOverlay: { position: 'absolute' },
   dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
   content: { paddingHorizontal: 16, paddingBottom: 8 },
   compactContent: { paddingHorizontal: 8 },

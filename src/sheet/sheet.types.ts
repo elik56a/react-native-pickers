@@ -109,6 +109,8 @@ export interface DropdownProps extends ThemableProps {
   anchor: AnchorRect | null;
   onClose: () => void;
   children: React.ReactNode;
+  /** Drawn exactly over the anchor field, e.g. an input that stands in for it while open */
+  overlay?: React.ReactNode;
   maxHeight?: number;
   testID?: string;
 }

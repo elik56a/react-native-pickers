@@ -16,8 +16,10 @@ export const useSelectPicker = <T>(
   const { options, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<AnchorRect | null>(null);
+  const [query, setQuery] = useState('');
   const presentation = resolveSelectPresentation(props.presentation ?? 'auto', Platform.OS);
   const dropdown = presentation === 'dropdown';
+  const searchInField = dropdown && props.searchable !== false;
 
   const selected = useMemo(
     () => findOptions(toValueList(props.multiple, props.value), options, isEqual),
@@ -42,6 +44,7 @@ export const useSelectPicker = <T>(
 
   const hide = useCallback(() => {
     setOpen(false);
+    setQuery('');
     onClose?.();
   }, [onClose]);
 
@@ -77,6 +80,9 @@ export const useSelectPicker = <T>(
   return {
     open,
     presentation,
+    searchInField,
+    query,
+    setQuery,
     anchor,
     show,
     hide,

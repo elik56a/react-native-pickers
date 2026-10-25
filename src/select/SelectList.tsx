@@ -54,7 +54,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
 
   return (
     <View style={[style, slots?.container]} testID={testID}>
-      {shouldShowSearch(searchable, options.length) && (
+      {props.query === undefined && shouldShowSearch(searchable, options.length) && (
         <View style={[{ paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.sm }, slots?.search]}>
           <SearchInput
             value={query}

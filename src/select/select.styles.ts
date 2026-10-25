@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   label: { marginBottom: 6 },
   trigger: { flexDirection: 'row', alignItems: 'center', minHeight: 48, borderWidth: 1, paddingVertical: 6 },
   row: { flexDirection: 'row', alignItems: 'center' },
+  searchField: { height: '100%' },
   triggerIcon: { marginEnd: 8 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chip: { paddingHorizontal: 10, paddingVertical: 4 },

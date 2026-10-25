@@ -12,6 +12,7 @@ export const Dropdown = ({
   anchor,
   onClose,
   children,
+  overlay,
   maxHeight = DROPDOWN_MAX_HEIGHT,
   theme: themeOverride,
   testID,
@@ -23,6 +24,21 @@ export const Dropdown = ({
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onClose} testID={testID}>
       <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
+      {overlay ? (
+        <View
+          style={[
+            styles.dropdownOverlay,
+            {
+              left: anchor.x,
+              top: anchor.y,
+              width: anchor.width,
+              height: anchor.height,
+            },
+          ]}
+        >
+          {overlay}
+        </View>
+      ) : null}
       <View
         style={[
           styles.dropdown,

@@ -55,6 +55,8 @@ export type SelectListBaseProps<T> = ThemableProps & {
   /** Show a search field. Default: true when there are more than 8 options */
   searchable?: boolean;
   searchPlaceholder?: string;
+  /** Controlled search query, for filtering from your own input. Hides the built-in search field */
+  query?: string;
   /** Custom filter. Default: case/diacritics-insensitive match on label, description and keywords */
   filterOption?: (option: SelectOption<T>, query: string) => boolean;
   renderOption?: (info: SelectRenderOptionInfo<T>) => React.ReactNode;
@@ -105,7 +107,7 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
     /** Sheet title. Default: `label` */
     sheetTitle?: string;
-    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (dropdown on the web, bottom sheet on native) */
+    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (dropdown on the web, bottom sheet on native). As a dropdown, `searchable` (default: true) lets the user type in the field itself */
     presentation?: SelectPresentation;
     sheet?: Partial<Omit<SheetChromeProps, 'visible' | 'onClose' | 'theme' | 'presentation'>>;
     onOpen?: () => void;
@@ -154,6 +156,15 @@ export interface SelectTriggerProps<T> {
   onOpen: () => void;
   onRemove: (option: SelectOption<T>) => void;
   onClear: () => void;
+  renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
+  theme: PickerTheme;
+  slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
+}
+
+export interface SelectSearchFieldProps {
+  query: string;
+  onChangeQuery: (query: string) => void;
+  placeholder: string;
   renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
   theme: PickerTheme;
   slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
