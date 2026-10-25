@@ -1,0 +1,24 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": { "includes": ["**", "!src/emoji/data.ts", "!website/static"] },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 140 },
+  "javascript": { "formatter": { "quoteStyle": "single", "trailingCommas": "es5" } },
+  "linter": { "rules": { "recommended": true } },
+  "overrides": [
+    {
+      "includes": ["website/src/css/**"],
+      "linter": { "rules": { "complexity": { "noImportantStyles": "off" } } }
+    },
+    {
+      "includes": ["src/**"],
+      "linter": {
+        "rules": {
+          "correctness": { "useExhaustiveDependencies": "warn" },
+          "style": { "noNonNullAssertion": "warn" },
+          "suspicious": { "noExplicitAny": "warn", "noArrayIndexKey": "warn" }
+        }
+      }
+    }
+  ]
+}

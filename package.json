@@ -28,6 +28,8 @@
   "files": [
     "lib",
     "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx",
     "!src/__tests__",
     "README.md",
     "LICENSE"
@@ -49,31 +51,36 @@
     "bottom-sheet"
   ],
   "scripts": {
-    "build": "rm -rf lib && tsc -p tsconfig.json",
-    "typecheck": "tsc --noEmit -p tsconfig.json && tsc -p tsconfig.test.json",
-    "test": "jest",
-    "gen:emoji": "node scripts/build-emoji-data.js",
-    "example:web": "node example/web/build.js App.tsx",
-    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
-    "example": "pnpm --filter pickers-example start",
+    "start": "pnpm --filter pickers-example start",
+    "web": "pnpm --filter pickers-example web",
+    "ios": "pnpm --filter pickers-example ios",
+    "android": "pnpm --filter pickers-example android",
     "docs": "pnpm --filter pickers-website start",
-    "docs:build": "pnpm --filter pickers-website build"
+    "docs:build": "pnpm --filter pickers-website build",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "jest",
+    "build": "rm -rf lib && tsc -p tsconfig.build.json",
+    "gen:emoji": "node scripts/build-emoji-data.js",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-native": ">=0.72"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
+    "@biomejs/biome": "2.6.3",
+    "@react-native/babel-preset": "0.88.0",
+    "@react-native/jest-preset": "0.88.0",
+    "@testing-library/react-native": "14.1.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.3.0",
     "emojibase-data": "^16.0.3",
-    "esbuild": "^0.28.2",
-    "jest": "^29.7.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-native": "^0.81.6",
-    "react-native-web": "^0.21.4",
-    "ts-jest": "^29.4.15",
+    "jest": "^30.5.2",
+    "react": "19.3.0",
+    "react-native": "^0.88.0",
+    "test-renderer": "^1.3.1",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.33.2",

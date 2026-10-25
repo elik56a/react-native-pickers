@@ -1,5 +1,5 @@
 packages:
-  - example/native
+  - example
   - website
 
 onlyBuiltDependencies:

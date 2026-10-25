@@ -12,8 +12,8 @@ import {
   WheelPicker,
   formatDate,
   usePickerTheme,
-} from '../src';
-import type { DateRange } from '../src';
+} from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
 
 const TABS = [
   { key: 'wheel', label: 'Wheel', icon: '🎡' },
