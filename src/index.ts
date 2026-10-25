@@ -8,5 +8,5 @@ export * from './select/SelectPicker';
 export * from './sheet/BottomSheet';
 export * from './sheet/PickerSheet';
 export * from './sheet/sheets';
-export * from './time/TimePicker';
+export * from './time';
 export * from './wheel';

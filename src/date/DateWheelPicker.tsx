@@ -40,10 +40,11 @@ export const DateWheelPicker = ({
     const dateWith = (part: keyof typeof specs, v: number) => buildWheelDate(date, { [part]: v }, minDate, maxDate);
     return (order ?? getLocaleDateOrder(locale)).map((part) => ({
       ...specs[part],
+      testID: testID ? `${testID}-${part}` : undefined,
       onChange: (v: number) => commit(dateWith(part, v)),
       onValueChanging: onValueChanging ? (v: number) => onValueChanging(dateWith(part, v)) : undefined,
     }));
-  }, [commit, date, locale, loop, maxDate, minDate, monthFormat, onValueChanging, order, yearRange]);
+  }, [commit, date, locale, loop, maxDate, minDate, monthFormat, onValueChanging, order, testID, yearRange]);
 
   return (
     <MultiWheelPicker

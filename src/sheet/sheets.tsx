@@ -1,45 +1,7 @@
 import type { EmojiPickerProps } from '../emoji/EmojiPicker';
 import { EmojiPicker } from '../emoji/EmojiPicker';
-import type { TimePickerProps } from '../time/TimePicker';
-import { TimePicker } from '../time/TimePicker';
 import type { SheetChromeProps } from './PickerSheet';
-import { PickerSheet, useDraft } from './PickerSheet';
-import { SheetContent } from './SheetContent';
-
-export type TimePickerSheetProps = SheetChromeProps &
-  Omit<TimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
-    value?: Date;
-    onConfirm: (date: Date) => void;
-  };
-
-export function TimePickerSheet({
-  visible,
-  onClose,
-  title,
-  confirmLabel,
-  cancelLabel,
-  showCancel,
-  sheetProps,
-  theme,
-  value,
-  onConfirm,
-  ...rest
-}: TimePickerSheetProps) {
-  const [draft, setDraft] = useDraft(value ?? new Date(), visible);
-  return (
-    <PickerSheet
-      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}
-      onConfirm={() => {
-        onConfirm(draft);
-        onClose();
-      }}
-    >
-      <SheetContent>
-        <TimePicker {...rest} theme={theme} value={draft} onChange={setDraft} />
-      </SheetContent>
-    </PickerSheet>
-  );
-}
+import { PickerSheet } from './PickerSheet';
 
 export type EmojiPickerSheetProps = SheetChromeProps &
   Omit<EmojiPickerProps, 'theme'> & {
