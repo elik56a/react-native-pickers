@@ -1,0 +1,1 @@
+{ "extends": "./tsconfig.json", "compilerOptions": { "types": ["jest"], "noEmit": true, "module": "CommonJS", "moduleResolution": "Node", "jsx": "react-jsx" }, "include": ["src"], "exclude": [] }
