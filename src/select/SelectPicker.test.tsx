@@ -66,4 +66,35 @@ describe('SelectPicker', () => {
     await fireEvent.press(screen.getByText('1 selected'));
     expect(onOpen).toHaveBeenCalled();
   });
+
+  describe('dropdown', () => {
+    // The preset's View mock shares these instance methods; measureInWindow never calls back unless told to.
+    const { measureInWindow }: { measureInWindow: jest.Mock } = jest.requireActual(
+      '@react-native/jest-preset/jest/MockNativeMethods'
+    ).default;
+    beforeEach(() => measureInWindow.mockImplementation((callback: (...rect: number[]) => void) => callback(16, 100, 300, 48)));
+    afterEach(() => measureInWindow.mockReset());
+
+    it('opens under the field, selects and closes', async () => {
+      const onChange = jest.fn();
+      const onClose = jest.fn();
+      await render(<SelectPicker label="Stack" presentation="dropdown" options={options} onChange={onChange} onClose={onClose} />);
+      expect(screen.queryByLabelText('Expo')).toBeNull();
+      await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+      await fireEvent.press(screen.getByLabelText('Expo'));
+      expect(onChange).toHaveBeenCalledWith('expo', options[2]);
+      expect(onClose).toHaveBeenCalled();
+      expect(screen.queryByLabelText('Expo')).toBeNull();
+    });
+
+    it('closes on a tap outside without changing the value', async () => {
+      const onChange = jest.fn();
+      await render(<SelectPicker label="Stack" presentation="dropdown" multiple options={options} onChange={onChange} />);
+      await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+      expect(screen.getByLabelText('React')).toBeTruthy();
+      await fireEvent.press(screen.getByLabelText('Close'));
+      expect(screen.queryByLabelText('React')).toBeNull();
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
 });

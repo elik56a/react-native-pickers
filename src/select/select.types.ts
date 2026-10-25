@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, SheetPresentation } from '../sheet';
 
 export interface SelectOption<T> {
   label: string;
@@ -95,7 +95,9 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
     /** Sheet title. Default: `label` */
     sheetTitle?: string;
-    sheet?: Partial<Omit<SheetChromeProps, 'visible' | 'onClose' | 'theme'>>;
+    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (modal on wide web windows, bottom sheet elsewhere) */
+    presentation?: SheetPresentation | 'dropdown';
+    sheet?: Partial<Omit<SheetChromeProps, 'visible' | 'onClose' | 'theme' | 'presentation'>>;
     onOpen?: () => void;
     onClose?: () => void;
     style?: StyleProp<ViewStyle>;
