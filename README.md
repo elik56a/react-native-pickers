@@ -10,10 +10,11 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 | 🎡 **WheelPicker** | iOS-style 3D wheel, infinite loop, disabled items, multi-column |
 | ⏰ **TimePicker** | 12h / 24h (auto from locale), minute & second intervals, min/max time |
 | 📅 **DatePicker** | Calendar (single · range · multiple) or wheel, min/max, disabled days, marked dates, i18n |
+| 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS-style) or a calendar with time wheels, min/max moments |
 | 📋 **SelectPicker** | Field + bottom sheet, search, groups, multi-select with chips, icons |
 | 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
 
-Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
+Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
 
 ```sh
 npm install @elik56a/react-native-pickers

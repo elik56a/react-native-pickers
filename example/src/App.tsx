@@ -6,6 +6,8 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
   DatePickerSheet,
+  DateTimePicker,
+  DateTimePickerSheet,
   EmojiPicker,
   EmojiPickerSheet,
   formatDate,
@@ -21,6 +23,7 @@ const TABS = [
   { key: 'wheel', label: 'Wheel', icon: '🎡' },
   { key: 'time', label: 'Time', icon: '🕐' },
   { key: 'date', label: 'Date', icon: '📅' },
+  { key: 'datetime', label: 'Date & time', icon: '🗓️' },
   { key: 'select', label: 'Select', icon: '🔽' },
   { key: 'emoji', label: 'Emoji', icon: '😀' },
 ] as const;
@@ -89,11 +92,12 @@ function Demo({ insets }: { insets: Insets }) {
   const [date, setDate] = useState<Date>(new Date());
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   const [time, setTime] = useState(new Date());
+  const [meeting, setMeeting] = useState(new Date());
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
   const [emoji, setEmoji] = useState('');
-  const [sheet, setSheet] = useState<'date' | 'range' | 'time' | 'emoji' | null>(null);
+  const [sheet, setSheet] = useState<'date' | 'range' | 'time' | 'datetime' | 'emoji' | null>(null);
 
   return (
     <>
@@ -120,6 +124,13 @@ function Demo({ insets }: { insets: Insets }) {
                 onPress={() => setSheet('range')}
               />
               <Button title="Birthday (wheel sheet)" onPress={() => setSheet('date')} />
+            </Section>
+          )}
+
+          {tab === 'datetime' && (
+            <Section title="Date & time">
+              <DateTimePicker value={meeting} onChange={setMeeting} minDate={new Date()} minuteInterval={5} />
+              <Button title="Open calendar sheet" onPress={() => setSheet('datetime')} />
             </Section>
           )}
 
@@ -164,6 +175,16 @@ function Demo({ insets }: { insets: Insets }) {
       </View>
 
       <TimePickerSheet visible={sheet === 'time'} onClose={() => setSheet(null)} title="Pick a time" value={time} onConfirm={setTime} />
+      <DateTimePickerSheet
+        visible={sheet === 'datetime'}
+        onClose={() => setSheet(null)}
+        title="Meeting"
+        display="calendar"
+        value={meeting}
+        onConfirm={setMeeting}
+        minDate={new Date()}
+        minuteInterval={5}
+      />
       <DatePickerSheet
         visible={sheet === 'range'}
         onClose={() => setSheet(null)}

@@ -20,6 +20,7 @@ const sidebars: SidebarsConfig = {
         'components/date-picker',
         'components/date-range-picker',
         'components/date-wheel-picker',
+        'components/date-time-picker',
         'components/select-picker',
         'components/select-list',
         'components/emoji-picker',

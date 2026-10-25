@@ -43,6 +43,17 @@ export interface TimePickerProps extends ThemableProps {
   testID?: string;
 }
 
+/** The TimePicker props that shape its wheels, without the visual ones. */
+export type TimeOptions = Omit<
+  TimePickerProps,
+  'value' | 'defaultValue' | 'onChange' | 'itemHeight' | 'visibleItems' | 'variant' | 'style' | 'styles' | 'theme'
+>;
+
+export type TimeColumnsOptions = TimeOptions & {
+  date: Date;
+  onChange: (date: Date) => void;
+};
+
 export type TimePickerSheetProps = SheetChromeProps &
   Omit<TimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
     value?: Date;
