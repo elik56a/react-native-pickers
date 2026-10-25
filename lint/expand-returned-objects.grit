@@ -1,0 +1,15 @@
+language js
+
+// Returned object literals with 2+ members must not sit on one line.
+// Specific branches come first: `or` binds $obj on the first branch that matches.
+or {
+  JsReturnStatement(argument=TsAsExpression(expression=$obj)),
+  JsArrowFunctionExpression(body=JsParenthesizedExpression(expression=TsAsExpression(expression=$obj))),
+  JsReturnStatement(argument=$obj),
+  JsArrowFunctionExpression(body=JsParenthesizedExpression(expression=$obj))
+} where {
+  $obj <: JsObjectExpression(members=$members),
+  $members <: [$_, $_, ...],
+  $obj <: r"\{[^\n]*\}",
+  register_diagnostic(span=$obj, message="Returned objects with 2+ properties go one property per line. Put a line break after `{` and Biome keeps it expanded.", severity="error")
+}

@@ -6,7 +6,10 @@ type Disableable = { disabled?: boolean };
 
 export const normalizeItem = <T>(input: WheelItemInput<T>): WheelItem<T> => {
   if (typeof input === 'object' && input !== null && 'value' in input) return input as WheelItem<T>;
-  return { label: String(input), value: input as unknown as T };
+  return {
+    label: String(input),
+    value: input as unknown as T,
+  };
 };
 
 export const firstItemValue = <T>(items: ReadonlyArray<WheelItemInput<T>>): T | undefined => {
@@ -31,7 +34,11 @@ export const firstEnabled = (items: ReadonlyArray<Disableable>, from: number) =>
 
 export const getLoopLayout = (count: number, loop: boolean): WheelLayout => {
   const copies = loop && count > 0 ? Math.max(LOOP_MIN_COPIES, 2 * Math.ceil(LOOP_MIN_ROWS / count) + 1) : 1;
-  return { copies, middle: Math.floor(copies / 2) * count, total: count * copies };
+  return {
+    copies,
+    middle: Math.floor(copies / 2) * count,
+    total: count * copies,
+  };
 };
 
 export const offsetToIndex = (y: number, itemHeight: number, total: number) => Math.min(total - 1, Math.max(0, Math.round(y / itemHeight)));
@@ -61,9 +68,17 @@ export const getSettleResult = (params: {
 
   if (items[logicalIndex]?.disabled) {
     const target = nearestEnabled(items, logicalIndex);
-    if (target !== logicalIndex) return { kind: 'snap', dataIndex: dataIndex + (target - logicalIndex) };
+    if (target !== logicalIndex)
+      return {
+        kind: 'snap',
+        dataIndex: dataIndex + (target - logicalIndex),
+      };
   }
-  if (Math.abs(y - dataIndex * itemHeight) > ALIGN_TOLERANCE_PX) return { kind: 'snap', dataIndex };
+  if (Math.abs(y - dataIndex * itemHeight) > ALIGN_TOLERANCE_PX)
+    return {
+      kind: 'snap',
+      dataIndex,
+    };
 
   const nearLoopEdge = loop && (dataIndex < count || dataIndex >= layout.total - count);
   return {
@@ -95,7 +110,11 @@ export const getRowFrames = (params: {
   const opacity = ks.map((k) => 1 - (1 - fadeTo) * Math.min(1, Math.abs(k) / range));
 
   if (variant === 'flat') {
-    return { inputRange, opacity, scale: ks.map((k) => (k === 0 ? 1 : FLAT_UNSELECTED_SCALE)) };
+    return {
+      inputRange,
+      opacity,
+      scale: ks.map((k) => (k === 0 ? 1 : FLAT_UNSELECTED_SCALE)),
+    };
   }
 
   const step = (rotation * Math.PI) / 180;

@@ -31,5 +31,12 @@ export const useTypeToSelect = <T>(items: WheelItem<T>[], onMatch: (logicalIndex
     return () => sub.remove();
   }, [typing, stopTyping]);
 
-  return { typed, typing, numeric, onType, stopTyping, toggleTyping };
+  return {
+    typed,
+    typing,
+    numeric,
+    onType,
+    stopTyping,
+    toggleTyping,
+  };
 };

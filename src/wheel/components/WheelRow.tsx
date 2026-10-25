@@ -29,7 +29,11 @@ const WheelRowImpl = <T,>({
       scrollY.interpolate<V>({ inputRange: frames.inputRange, outputRange, extrapolate: 'clamp' });
     const opacity = interpolate(frames.opacity);
     const scale = interpolate(frames.scale);
-    if (!frames.translateY || !frames.rotateX) return { opacity, transform: [{ scale }] };
+    if (!frames.translateY || !frames.rotateX)
+      return {
+        opacity,
+        transform: [{ scale }],
+      };
     return {
       opacity,
       transform: [

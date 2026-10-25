@@ -1,22 +1,55 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "includes": ["**", "!src/emoji/data.ts", "!website/static", "!**/*.md", "!**/*.mdx", "!**/*.yaml", "!**/*.yml"] },
-  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 140 },
-  "javascript": { "formatter": { "quoteStyle": "single", "trailingCommas": "es5" } },
-  "linter": { "rules": { "preset": "recommended" } },
+  "plugins": ["./lint/expand-returned-objects.grit"],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": ["**", "!src/emoji/data.ts", "!website/static", "!**/*.md", "!**/*.mdx", "!**/*.yaml", "!**/*.yml"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 140
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5"
+    }
+  },
+  "linter": {
+    "rules": {
+      "preset": "recommended"
+    }
+  },
   "overrides": [
     {
       "includes": ["website/src/css/**"],
-      "linter": { "rules": { "complexity": { "noImportantStyles": "off" } } }
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noImportantStyles": "off"
+          }
+        }
+      }
     },
     {
       "includes": ["src/**"],
       "linter": {
         "rules": {
-          "correctness": { "useExhaustiveDependencies": "warn" },
-          "style": { "noNonNullAssertion": "warn" },
-          "suspicious": { "noExplicitAny": "warn", "noArrayIndexKey": "warn" }
+          "correctness": {
+            "useExhaustiveDependencies": "warn"
+          },
+          "style": {
+            "noNonNullAssertion": "warn"
+          },
+          "suspicious": {
+            "noExplicitAny": "warn",
+            "noArrayIndexKey": "warn"
+          }
         }
       }
     }

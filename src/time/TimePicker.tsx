@@ -115,13 +115,25 @@ export function TimePicker({
       ? range(12).map((i) => {
           const display = i === 0 ? 12 : i;
           const real = (isPM ? 12 : 0) + i;
-          return { value: i, label: padH ? pad2(display) : String(display), disabled: hourOutOfRange(real) };
+          return {
+            value: i,
+            label: padH ? pad2(display) : String(display),
+            disabled: hourOutOfRange(real),
+          };
         })
-      : range(24).map((h) => ({ value: h, label: padH ? pad2(h) : String(h), disabled: hourOutOfRange(h) }));
+      : range(24).map((h) => ({
+          value: h,
+          label: padH ? pad2(h) : String(h),
+          disabled: hourOutOfRange(h),
+        }));
 
     const minuteItems: WheelItem<number>[] = range(60, minuteInterval).map((m) => {
       const t = h24 * 3600 + m * 60;
-      return { value: m, label: pad2(m), disabled: t + 59 < minS || t > maxS };
+      return {
+        value: m,
+        label: pad2(m),
+        disabled: t + 59 < minS || t > maxS,
+      };
     });
 
     const toH24 = (hv: number, pm: boolean) => (is12 ? (pm ? 12 : 0) + hv : hv);
@@ -161,7 +173,10 @@ export function TimePicker({
     if (showSeconds) {
       cols.push({
         key: 'second',
-        items: range(60, secondInterval).map((sv) => ({ value: sv, label: pad2(sv) })),
+        items: range(60, secondInterval).map((sv) => ({
+          value: sv,
+          label: pad2(sv),
+        })),
         value: second,
         loop,
         flex: 1,

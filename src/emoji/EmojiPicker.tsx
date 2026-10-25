@@ -170,7 +170,11 @@ export function EmojiPicker({
         y += cell;
       }
     }
-    return { rows, offsets, headerIndex };
+    return {
+      rows,
+      offsets,
+      headerIndex,
+    };
   }, [cell, columns, sections, showSectionHeaders]);
 
   const rowLength = useCallback((r: Row) => (r.type === 'header' ? HEADER_H : cell), [cell]);
@@ -357,7 +361,11 @@ export function EmojiPicker({
               data={rows}
               renderItem={renderRow}
               keyExtractor={(r, i) => (r.type === 'header' ? `h-${r.key}` : `r-${r.section}-${i}`)}
-              getItemLayout={(_, i) => ({ index: i, length: rows[i] ? rowLength(rows[i]!) : cell, offset: offsets[i] ?? 0 })}
+              getItemLayout={(_, i) => ({
+                index: i,
+                length: rows[i] ? rowLength(rows[i]!) : cell,
+                offset: offsets[i] ?? 0,
+              })}
               onScroll={onScroll}
               scrollEventThrottle={32}
               keyboardShouldPersistTaps="handled"

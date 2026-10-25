@@ -47,7 +47,10 @@ export function PickerSheet({
       hitSlop={10}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
-      style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1, paddingVertical: 6 })}
+      style={({ pressed }) => ({
+        opacity: pressed ? 0.5 : 1,
+        paddingVertical: 6,
+      })}
     >
       <Text
         style={[

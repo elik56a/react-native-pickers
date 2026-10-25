@@ -143,7 +143,11 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
           keyExtractor={(dataIndex: number) => String(dataIndex)}
           renderItem={renderRow}
           extraData={active}
-          getItemLayout={(_: unknown, index: number) => ({ length: itemHeight, offset: padding + itemHeight * index, index })}
+          getItemLayout={(_: unknown, index: number) => ({
+            length: itemHeight,
+            offset: padding + itemHeight * index,
+            index,
+          })}
           contentContainerStyle={{ paddingVertical: padding }}
           contentOffset={{ x: 0, y: wheel.initialDataIndex * itemHeight }}
           // iOS applies contentOffset without a scroll event, so the list would only render rows from 0.
