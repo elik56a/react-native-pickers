@@ -48,6 +48,22 @@ const COMPONENTS = [
   { to: '/docs/components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet with Done' },
 ];
 
+const CHIPS = [
+  { icon: '📦', text: 'Zero native deps' },
+  { icon: '🌙', text: 'Dark mode built in' },
+  { icon: '⚡', text: '60 fps wheels' },
+  { icon: '🌍', text: 'Any locale, RTL' },
+];
+
+const STATS = [
+  { value: 8, label: 'components' },
+  { value: 0, label: 'native modules' },
+  { value: 1906, label: 'emojis' },
+  { value: 100, suffix: '%', label: 'TypeScript' },
+];
+
+const COUNT_UP_MS = 1400;
+
 const SAMPLE = `import { DatePicker, DatePickerSheet } from '@elik56a/react-native-pickers';
 
 // inline calendar
@@ -82,6 +98,30 @@ function CopyInstall() {
   );
 }
 
+const easeOut = (t: number) => 1 - (1 - t) ** 3;
+
+function CountUp({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const [shown, setShown] = useState(value);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let frame = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / COUNT_UP_MS);
+      setShown(Math.round(value * easeOut(t)));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [value]);
+  return (
+    <>
+      {shown.toLocaleString('en-US')}
+      {suffix}
+    </>
+  );
+}
+
 const PLATFORMS = [
   { key: 'ios', label: 'iOS' },
   { key: 'android', label: 'Android' },
@@ -89,6 +129,8 @@ const PLATFORMS = [
 ] as const;
 
 type Platform = (typeof PLATFORMS)[number]['key'];
+
+const pillAt = (index: number) => ({ '--index': index }) as React.CSSProperties;
 
 const pinOver = (host: HTMLElement, frame: HTMLElement) => {
   const rect = frame.getBoundingClientRect();
@@ -172,7 +214,13 @@ function Device() {
   useEffect(() => setPhoneHeight(frameRef.current?.clientHeight), [platform]);
   return (
     <div className={clsx(styles.device, platform === 'web' && styles.deviceWide)}>
-      <div role="tablist" aria-label="Preview platform" className={styles.platformTabs}>
+      <div
+        role="tablist"
+        aria-label="Preview platform"
+        className={styles.platformTabs}
+        style={pillAt(PLATFORMS.findIndex((p) => p.key === platform))}
+      >
+        <span className={styles.platformPill} aria-hidden />
         {PLATFORMS.map((p) => (
           <button
             key={p.key}
@@ -212,6 +260,8 @@ function Device() {
   );
 }
 
+const delay = (step: number) => ({ '--delay': `${step * 90}ms` }) as React.CSSProperties;
+
 export default function Home() {
   return (
     <Layout
@@ -219,29 +269,56 @@ export default function Home() {
       description="Wheel, time, date, calendar, range, select and emoji pickers for React Native, with bottom sheets. 100% JavaScript, zero native code. Expo Go, bare RN and React Native Web."
     >
       <header className={styles.hero}>
+        <div className={styles.aurora} aria-hidden>
+          <span />
+          <span />
+          <span />
+        </div>
         <div className={clsx('container', styles.heroInner)}>
           <div className={styles.heroText}>
-            <span className={styles.badge}>Expo Go · iOS · Android · Web</span>
-            <h1 className={styles.title}>
+            <span className={clsx(styles.badge, styles.reveal)} style={delay(0)}>
+              Expo Go · iOS · Android · Web
+            </span>
+            <h1 className={clsx(styles.title, styles.reveal)} style={delay(1)}>
               Every picker your
               <br />
-              <span className="accent-text">React Native</span> app needs.
+              <span className={styles.shine}>React Native</span> app needs.
             </h1>
-            <p className={styles.subtitle}>
+            <p className={clsx(styles.subtitle, styles.reveal)} style={delay(2)}>
               Wheel, time, date, range, select and emoji pickers, plus the bottom sheets to put them in. Beautiful by default, themeable to
               the pixel, and <strong>100% JavaScript</strong> with zero native code.
             </p>
-            <CopyInstall />
-            <div className={styles.ctas}>
-              <Link className="button button--primary button--lg" to="/docs/getting-started/quick-start">
+            <div className={styles.reveal} style={delay(3)}>
+              <CopyInstall />
+            </div>
+            <div className={clsx(styles.ctas, styles.reveal)} style={delay(4)}>
+              <Link className={clsx('button button--primary button--lg', styles.cta)} to="/docs/getting-started/quick-start">
                 Get started →
               </Link>
               <Link className="button button--secondary button--lg" to="/docs/intro">
                 Why this library
               </Link>
             </div>
+            <dl className={clsx(styles.stats, styles.reveal)} style={delay(5)}>
+              {STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt>{stat.label}</dt>
+                  <dd>
+                    <CountUp value={stat.value} suffix={stat.suffix} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <Device />
+          <div className={styles.stageWrap}>
+            {CHIPS.map((chip, i) => (
+              <span key={chip.text} className={styles.chip} style={delay(6 + i * 2)} aria-hidden>
+                <span>{chip.icon}</span>
+                {chip.text}
+              </span>
+            ))}
+            <Device />
+          </div>
         </div>
       </header>
 
