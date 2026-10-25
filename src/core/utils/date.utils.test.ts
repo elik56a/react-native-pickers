@@ -9,7 +9,7 @@ import {
   isOutOfRange,
   toDateKey,
   uses12HourClock,
-} from '../utils/date';
+} from './date.utils';
 
 describe('date utils', () => {
   test('daysInMonth handles leap years', () => {

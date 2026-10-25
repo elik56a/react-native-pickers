@@ -2,10 +2,10 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import type { SlotStyles } from '../core';
+import { textStyle, usePickerTheme } from '../core';
 import type { SheetChromeProps } from '../sheet/PickerSheet';
 import { PickerSheet } from '../sheet/PickerSheet';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles } from '../types';
 import type { SelectListBaseProps, SelectOption, SelectSlot, SelectValueProps } from './SelectList';
 import { SelectList } from './SelectList';
 

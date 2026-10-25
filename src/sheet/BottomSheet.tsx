@@ -13,8 +13,8 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
+import type { SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
 
 export type BottomSheetSlot = 'backdrop' | 'sheet' | 'handle' | 'header' | 'title' | 'content' | 'footer';
 

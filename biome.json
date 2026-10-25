@@ -4,7 +4,7 @@
   "files": { "includes": ["**", "!src/emoji/data.ts", "!website/static", "!**/*.md", "!**/*.mdx", "!**/*.yaml", "!**/*.yml"] },
   "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 140 },
   "javascript": { "formatter": { "quoteStyle": "single", "trailingCommas": "es5" } },
-  "linter": { "rules": { "recommended": true } },
+  "linter": { "rules": { "preset": "recommended" } },
   "overrides": [
     {
       "includes": ["website/src/css/**"],

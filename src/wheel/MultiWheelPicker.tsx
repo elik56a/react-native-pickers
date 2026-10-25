@@ -1,8 +1,8 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
+import type { SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
 import type { WheelPickerProps, WheelPickerSlot } from './WheelPicker';
 import { WheelPicker } from './WheelPicker';
 

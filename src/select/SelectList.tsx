@@ -2,9 +2,8 @@ import type React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import type { PickerTheme } from '../theme';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
+import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
 import { defaultFilter } from './filter';
 
 export { defaultFilter };

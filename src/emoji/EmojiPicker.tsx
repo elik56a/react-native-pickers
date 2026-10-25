@@ -2,10 +2,10 @@ import type React from 'react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import type { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import type { PickerTheme } from '../theme';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
-import { OwnScroll } from '../utils/OwnScroll';
+import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
+import { OwnScroll } from '../core/components/OwnScroll';
+import { useControllableState } from '../core/hooks/useControllableState';
 import type { Emoji, EmojiCategory, SkinTone } from './emojis';
 import {
   DEFAULT_CATEGORY_ICONS,
@@ -116,10 +116,8 @@ export function EmojiPicker({
   const [width, setWidth] = useState(0);
   const [query, setQuery] = useState('');
   const [toneMenu, setToneMenu] = useState(false);
-  const [innerTone, setInnerTone] = useState<SkinTone>(defaultSkinTone);
-  const tone = skinToneProp ?? innerTone;
-  const [innerRecent, setInnerRecent] = useState<string[]>(defaultRecent);
-  const recent = recentProp ?? innerRecent;
+  const [tone, setSkinTone] = useControllableState(skinToneProp, defaultSkinTone, onSkinToneChange);
+  const [recent, setRecent] = useControllableState(recentProp, defaultRecent, onRecentChange);
   const [active, setActive] = useState<SectionKey>(categories[0] ?? 'smileys');
   const listRef = useRef<FlatList<Row>>(null);
   const jumping = useRef(false);
@@ -183,16 +181,14 @@ export function EmojiPicker({
       onSelect(ch, e);
       if (showRecent) {
         const next = [e.emoji, ...recent.filter((r) => findEmoji(r) !== e)].slice(0, maxRecent);
-        if (recentProp === undefined) setInnerRecent(next);
-        onRecentChange?.(next);
+        setRecent(next);
       }
     },
-    [maxRecent, onRecentChange, onSelect, recent, recentProp, showRecent, tone]
+    [maxRecent, onSelect, recent, setRecent, showRecent, tone]
   );
 
   const setTone = (t: SkinTone) => {
-    if (skinToneProp === undefined) setInnerTone(t);
-    onSkinToneChange?.(t);
+    setSkinTone(t);
     setToneMenu(false);
   };
 

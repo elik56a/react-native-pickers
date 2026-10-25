@@ -2,10 +2,9 @@ import type React from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AccessibilityActionEvent, NativeScrollEvent, NativeSyntheticEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { Animated, type FlatList, Keyboard, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import type { PickerTheme } from '../theme';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
-import { OwnScroll } from '../utils/OwnScroll';
+import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
+import { OwnScroll } from '../core/components/OwnScroll';
 import { canExtend, matchLabel } from './typeToSelect';
 
 export interface WheelItem<T> {

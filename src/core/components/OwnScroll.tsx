@@ -9,6 +9,6 @@ const ParentScrollContext = (ScrollView as unknown as { Context?: React.Context<
  * ScrollView, so hiding that parent silences VirtualizedList's "should never be nested" warning
  * (the context is only read for that warning).
  */
-export function OwnScroll({ children }: { children: React.ReactNode }) {
+export const OwnScroll = ({ children }: { children: React.ReactNode }) => {
   return ParentScrollContext ? <ParentScrollContext.Provider value={null}>{children}</ParentScrollContext.Provider> : <>{children}</>;
-}
+};

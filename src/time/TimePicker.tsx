@@ -1,8 +1,9 @@
 import type React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { SlotStyles, ThemableProps } from '../types';
-import { getDayPeriods, uses12HourClock } from '../utils/date';
+import type { SlotStyles, ThemableProps } from '../core';
+import { useControllableState } from '../core/hooks/useControllableState';
+import { getDayPeriods, uses12HourClock } from '../core/utils/date.utils';
 import type { MultiWheelSlot, WheelColumn } from '../wheel/MultiWheelPicker';
 import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
 import type { WheelItem } from '../wheel/WheelPicker';
@@ -72,8 +73,7 @@ export function TimePicker({
   theme,
   testID,
 }: TimePickerProps) {
-  const [inner, setInner] = useState<Date>(() => value ?? defaultValue ?? new Date());
-  const date = value ?? inner;
+  const [date, setDate] = useControllableState(value, () => defaultValue ?? new Date(), onChange);
   const is12 = format === 'auto' ? uses12HourClock(locale) : format === '12h';
   const periods = useMemo(() => dayPeriodLabels ?? getDayPeriods(locale), [dayPeriodLabels, locale]);
   const padH = padHours ?? !is12;
@@ -104,10 +104,9 @@ export function TimePicker({
         d = new Date(d);
         d.setHours(Math.floor(target / 3600), Math.floor((target % 3600) / 60), showSeconds ? target % 60 : 0, 0);
       }
-      if (value === undefined) setInner(d);
-      onChange?.(d);
+      setDate(d);
     },
-    [maxS, minS, onChange, showSeconds, value]
+    [maxS, minS, setDate, showSeconds]
   );
 
   const columns = useMemo(() => {

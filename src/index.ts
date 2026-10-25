@@ -1,3 +1,4 @@
+export * from './core';
 export * from './date/Calendar';
 export * from './date/DatePicker';
 export * from './date/DateWheelPicker';
@@ -8,9 +9,6 @@ export * from './select/SelectPicker';
 export * from './sheet/BottomSheet';
 export * from './sheet/PickerSheet';
 export * from './sheet/sheets';
-export * from './theme';
 export * from './time/TimePicker';
-export * from './types';
-export * from './utils/date';
 export * from './wheel/MultiWheelPicker';
 export * from './wheel/WheelPicker';

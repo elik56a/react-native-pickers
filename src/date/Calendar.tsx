@@ -2,9 +2,8 @@ import type React from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { Animated, I18nManager, PanResponder, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import type { PickerTheme } from '../theme';
-import { textStyle, usePickerTheme } from '../theme';
-import type { SlotStyles, ThemableProps } from '../types';
+import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import { textStyle, usePickerTheme } from '../core';
 import {
   addMonths,
   buildMonthGrid,
@@ -19,7 +18,7 @@ import {
   isSameDay,
   startOfMonth,
   toDateKey,
-} from '../utils/date';
+} from '../core/utils/date.utils';
 
 export interface DateRange {
   start: Date | null;

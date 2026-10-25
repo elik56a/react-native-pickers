@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { SlotStyles, ThemableProps } from '../types';
-import { clampDate, daysInMonth, getMonthNames, isOutOfRange } from '../utils/date';
+import type { SlotStyles, ThemableProps } from '../core';
+import { useControllableState } from '../core/hooks/useControllableState';
+import { clampDate, daysInMonth, getMonthNames, isOutOfRange } from '../core/utils/date.utils';
 import type { MultiWheelSlot, WheelColumn } from '../wheel/MultiWheelPicker';
 import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
 
@@ -62,8 +63,7 @@ export function DateWheelPicker({
   theme,
   testID,
 }: DateWheelPickerProps) {
-  const [inner, setInner] = useState<Date>(() => clampDate(value ?? defaultValue ?? new Date(), minDate, maxDate));
-  const date = value ?? inner;
+  const [date, commit] = useControllableState(value, () => clampDate(defaultValue ?? new Date(), minDate, maxDate), onChange);
   const y = date.getFullYear();
   const m = date.getMonth();
   const d = date.getDate();
@@ -82,14 +82,6 @@ export function DateWheelPicker({
       return clampDate(out, minDate, maxDate);
     },
     [d, date, m, maxDate, minDate, y]
-  );
-
-  const commit = useCallback(
-    (next: Date) => {
-      if (value === undefined) setInner(next);
-      onChange?.(next);
-    },
-    [onChange, value]
   );
 
   const columns = useMemo(() => {
