@@ -3,6 +3,9 @@ title: DatePicker & Calendar
 description: React Native calendar date picker with min/max dates, disabled days, marked dates (dots, prices), locale-aware month and weekday names, first day of week, swipe between months and quick month jump. Pure JS.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
 # DatePicker & Calendar
 
 A month calendar for picking dates. It supports **single**, **range** and **multiple** selection, min / max dates, disabled days, dots and labels under days, swipe navigation, a quick month jump and any locale.
@@ -31,6 +34,25 @@ export default function Example() {
 ```
 
 This page covers single selection and everything the calendar shares. **Range** and **multiple** selection are on the [Date range & multiple](./date-range-picker) page.
+
+## Try the props
+
+<PropPlayground
+  name="DatePicker"
+  component={DatePicker}
+  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
+  code="value={value} onChange={setValue}"
+  controls={[
+    { prop: 'display', options: ['calendar', 'wheel'] },
+    { prop: 'mode', options: ['single', 'range', 'multiple'] },
+    { prop: 'weekdayFormat', options: ['short', 'narrow'] },
+    { prop: 'firstDayOfWeek', options: [0, 1, 6], default: null, initial: 0 },
+    { prop: 'showOutsideDays', options: [true, false] },
+    { prop: 'fixedWeeks', options: [true, false] },
+    { prop: 'showWeekdays', options: [true, false] },
+    { prop: 'enableQuickJump', options: [true, false] },
+  ]}
+/>
 
 ## Min and max dates
 

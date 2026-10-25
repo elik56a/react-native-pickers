@@ -3,6 +3,9 @@ title: Date range & multiple
 description: React Native date range picker (check-in / check-out) with min/max nights, disabled-day aware ranges, and multiple date selection with a maximum. Pure JS calendar.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
 # Date range & multiple dates
 
 `DatePicker` (and `Calendar`) switch selection model with `mode`. TypeScript narrows `value` and `onChange` for each mode.
@@ -12,6 +15,21 @@ description: React Native date range picker (check-in / check-out) with min/max 
 | `'single'` (default) | `Date \| null` | `(date: Date) => void` | — |
 | `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 | `'multiple'` | `Date[]` | `(dates: Date[]) => void` | `maxSelections` |
+
+## Try the props
+
+<PropPlayground
+  name="DatePicker"
+  component={DatePicker}
+  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
+  code="value={value} onChange={setValue}"
+  controls={[
+    { prop: 'mode', options: ['single', 'range', 'multiple'], initial: 'range' },
+    { prop: 'allowSingleDayRange', options: [true, false] },
+    { prop: 'maxRangeDays', options: [7, 14, 30], default: null, initial: 14 },
+    { prop: 'maxSelections', options: [3, 5, 10], default: null, initial: 5 },
+  ]}
+/>
 
 ## Range
 

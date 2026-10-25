@@ -3,6 +3,9 @@ title: WheelPicker
 description: iOS-style 3D wheel picker for React Native with infinite loop, disabled items, tap-to-type keyboard input, flat variant, custom rows and haptics hooks. Pure JS.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
 # WheelPicker
 
 An iOS-style scrolling wheel. Rows curve away on a 3D cylinder (or stay flat), snap into the selection band, and can loop forever. Works the same on iOS, Android and web.
@@ -20,6 +23,25 @@ export default function Example() {
   return <WheelPicker items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onChange={setSize} />;
 }
 ```
+
+## Try the props
+
+<PropPlayground
+  name="WheelPicker"
+  component={WheelPicker}
+  props={{ items: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] }}
+  value="M"
+  code="items={sizes} value={size} onChange={setSize}"
+  controls={[
+    { prop: 'variant', options: ['3d', 'flat'] },
+    { prop: 'loop', options: [false, true] },
+    { prop: 'visibleItems', options: [3, 5, 7], default: 5 },
+    { prop: 'textAlign', options: ['center', 'left', 'right'] },
+    { prop: 'showIndicator', options: [true, false] },
+    { prop: 'keyboardInput', options: [true, false] },
+    { prop: 'disabled', options: [false, true] },
+  ]}
+/>
 
 ## Items
 

@@ -3,6 +3,9 @@ title: EmojiPicker
 description: React Native emoji picker with 1,906 emojis, categories, keyword search, skin tones, recently used, Emoji-version filtering for older Android, custom icons and labels. Pure JS, no fonts or images.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
 # EmojiPicker
 
 A full emoji keyboard: 1,906 emojis in 9 categories, keyword search, skin tones, recently used, a category bar, and filtering by Emoji version so older devices never show empty boxes. Emojis render with the system font; no images or fonts are bundled.
@@ -26,6 +29,24 @@ export default function Example() {
   );
 }
 ```
+
+## Try the props
+
+<PropPlayground
+  name="EmojiPicker"
+  component={EmojiPicker}
+  props={{ onSelect: () => {} }}
+  code="onSelect={insert}"
+  controls={[
+    { prop: 'categoryBarPosition', options: ['top', 'bottom'] },
+    { prop: 'columns', options: [6, 8, 10], default: 8 },
+    { prop: 'searchable', options: [true, false] },
+    { prop: 'showCategoryBar', options: [true, false] },
+    { prop: 'showSectionHeaders', options: [true, false] },
+    { prop: 'showSkinTones', options: [true, false] },
+    { prop: 'showRecent', options: [true, false] },
+  ]}
+/>
 
 ## `onSelect`
 
