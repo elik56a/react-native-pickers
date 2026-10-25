@@ -160,6 +160,14 @@ pre {
   box-shadow: none;
 }
 
+[data-theme='light'] .theme-code-block {
+  --prism-background-color: var(--site-surface) !important;
+}
+
+[data-theme='light'] .theme-code-block pre {
+  background-color: var(--site-surface) !important;
+}
+
 .menu__link {
   font-size: 0.92rem;
 }
