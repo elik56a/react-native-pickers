@@ -1,4 +1,4 @@
-import { PickerSheet, useDraft } from '../sheet/PickerSheet';
+import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { WheelPicker } from './WheelPicker';
 import type { WheelPickerSheetProps } from './wheel.types';

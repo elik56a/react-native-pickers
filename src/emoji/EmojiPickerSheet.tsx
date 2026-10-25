@@ -1,4 +1,4 @@
-import { PickerSheet } from '../sheet/PickerSheet';
+import { PickerSheet } from '../sheet';
 import { EmojiPicker } from './EmojiPicker';
 import { DEFAULT_SHEET_HEIGHT } from './emoji.constants';
 import type { EmojiPickerSheetProps } from './emoji.types';

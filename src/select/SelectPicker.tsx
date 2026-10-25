@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
-import { PickerSheet } from '../sheet/PickerSheet';
+import { PickerSheet } from '../sheet';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
