@@ -50,6 +50,8 @@ const config: Config = {
     ],
   ],
 
+  clientModules: [require.resolve('./src/clientModules/searchEventCompat.ts')],
+
   themes: [
     '@docusaurus/theme-live-codeblock',
     [
