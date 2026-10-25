@@ -264,6 +264,15 @@ npm run gen:emoji   # regenerate emoji data from emojibase-data
 pnpm docs           # docs site at localhost:3000 (website/, Docusaurus)
 ```
 
+### Releasing
+
+Releases are published to npm by CI ([`.github/workflows/release.yml`](.github/workflows/release.yml)) when a version tag is pushed:
+
+```sh
+npm version patch                     # or minor / major: bumps package.json, commits, tags vX.Y.Z
+git push origin master --follow-tags  # tag → typecheck, test, build, npm publish; master → docs deploy
+```
+
 ### Running the example on iOS / Android
 
 [`example/native`](example/native) is an Expo app that renders [`example/App.tsx`](example/App.tsx) against the library source, so edits in `src/` hot-reload.
