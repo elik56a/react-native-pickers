@@ -14,7 +14,7 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 Every picker also ships as a **bottom sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`), with drag-to-dismiss and Cancel / Done.
 
 ```sh
-npm install @eliyahu/react-native-pickers
+npm install @elik56a/react-native-pickers
 ```
 
 No other dependencies. Requires `react >= 18` and `react-native >= 0.72`.
@@ -24,7 +24,7 @@ No other dependencies. Requires `react >= 18` and `react-native >= 0.72`.
 ## Quick start
 
 ```tsx
-import { DatePicker, TimePicker, SelectPicker, EmojiPicker, WheelPicker } from '@eliyahu/react-native-pickers';
+import { DatePicker, TimePicker, SelectPicker, EmojiPicker, WheelPicker } from '@elik56a/react-native-pickers';
 
 <WheelPicker items={['S', 'M', 'L', 'XL']} value={size} onChange={setSize} />
 
@@ -61,7 +61,7 @@ Every picker works **controlled** (`value` + `onChange`) or **uncontrolled** (`d
 Wrap your app (optional — sensible light & dark defaults apply without it):
 
 ```tsx
-import { PickersProvider } from '@eliyahu/react-native-pickers';
+import { PickersProvider } from '@elik56a/react-native-pickers';
 
 <PickersProvider
   colorScheme="auto" // 'auto' | 'light' | 'dark'
@@ -265,9 +265,8 @@ npm run gen:emoji   # regenerate emoji data from emojibase-data
 [`example/native`](example/native) is an Expo app that renders [`example/App.tsx`](example/App.tsx) against the library source, so edits in `src/` hot-reload.
 
 ```sh
-cd example/native
-npm install
-npx expo start      # press i for the iOS Simulator, a for the Android emulator
+pnpm install        # from the repo root (pnpm workspace)
+pnpm example        # press i for the iOS Simulator, a for the Android emulator
 ```
 
 Emoji data comes from [emojibase](https://emojibase.dev) (MIT).
