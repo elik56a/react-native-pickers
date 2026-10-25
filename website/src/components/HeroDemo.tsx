@@ -6,7 +6,7 @@ import {
   DatePicker,
   EmojiPicker,
   PickersProvider,
-  SelectList,
+  SelectPicker,
   TimePicker,
   usePickerTheme,
   WheelPicker,
@@ -16,26 +16,35 @@ const TABS = [
   { key: 'date', label: 'Date', title: 'Book your stay', subtitle: 'Tap check-in, then check-out' },
   { key: 'time', label: 'Time', title: 'Wake me at', subtitle: '5-minute steps, locale clock' },
   { key: 'wheel', label: 'Wheel', title: 'Pick a size', subtitle: 'Looping 3D wheel' },
-  { key: 'select', label: 'Select', title: 'Trip cities', subtitle: 'Search and pick up to 4' },
+  { key: 'select', label: 'Select', title: 'Plan a trip', subtitle: 'Tap a field to pick' },
   { key: 'emoji', label: 'Emoji', title: 'React', subtitle: '1,906 emojis with search' },
 ] as const;
 
 type Tab = (typeof TABS)[number]['key'];
+
+export type DemoPlatform = 'ios' | 'android' | 'web';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const CITIES = ['Amsterdam', 'Berlin', 'Lisbon', 'London', 'New York', 'Paris', 'Rome', 'Tel Aviv', 'Tokyo'].map((c) => ({
   label: c,
   value: c,
 }));
+const CABINS = ['Economy', 'Premium', 'Business', 'First'].map((c) => ({
+  label: c,
+  value: c,
+}));
 
-function Screen() {
+function Screen({ platform }: { platform: DemoPlatform }) {
   const { colors } = usePickerTheme();
   const [tab, setTab] = useState<Tab>('date');
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   const [time, setTime] = useState(new Date());
   const [size, setSize] = useState('M');
   const [cities, setCities] = useState<string[]>(['Lisbon', 'Tokyo']);
+  const [cabin, setCabin] = useState<string | null>('Economy');
   const [emoji, setEmoji] = useState('🎉');
+  const presentation = platform === 'web' ? 'dropdown' : 'bottomSheet';
+  const sheet = { sheetProps: { bottomInset: platform === 'ios' ? 30 : 16 } };
   const active = TABS.find((t) => t.key === tab) ?? TABS[0];
 
   return (
@@ -52,7 +61,21 @@ function Screen() {
         {tab === 'time' && <TimePicker value={time} onChange={setTime} minuteInterval={5} />}
         {tab === 'wheel' && <WheelPicker items={SIZES} value={size} onChange={setSize} loop />}
         {tab === 'select' && (
-          <SelectList multiple searchable options={CITIES} value={cities} onChange={setCities} maxSelected={4} listHeight={360} />
+          <View style={s.form}>
+            <SelectPicker
+              label="Cities"
+              multiple
+              searchable
+              options={CITIES}
+              value={cities}
+              onChange={setCities}
+              maxSelected={4}
+              listHeight={240}
+              presentation={presentation}
+              sheet={sheet}
+            />
+            <SelectPicker label="Cabin" options={CABINS} value={cabin} onChange={setCabin} presentation={presentation} sheet={sheet} />
+          </View>
         )}
         {tab === 'emoji' && <EmojiPicker height={300} columns={7} onSelect={setEmoji} showSkinTones={false} />}
       </View>
@@ -76,10 +99,10 @@ function Screen() {
   );
 }
 
-export default function HeroDemo({ colorMode }: { colorMode: 'light' | 'dark' }) {
+export default function HeroDemo({ colorMode, platform }: { colorMode: 'light' | 'dark'; platform: DemoPlatform }) {
   return (
     <PickersProvider colorScheme={colorMode}>
-      <Screen />
+      <Screen platform={platform} />
     </PickersProvider>
   );
 }
@@ -90,6 +113,7 @@ const s = StyleSheet.create({
   title: { fontSize: 26, fontWeight: '800', letterSpacing: -0.6 },
   subtitle: { fontSize: 13 },
   body: { flex: 1, justifyContent: 'center' },
+  form: { flex: 1, gap: 16, paddingTop: 12 },
   segmented: { flexDirection: 'row', borderRadius: 999, padding: 4, marginTop: 8 },
   segment: { flex: 1, alignItems: 'center', paddingVertical: 8, borderRadius: 999 },
   segmentLabel: { fontSize: 12, fontWeight: '600' },

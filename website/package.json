@@ -2,7 +2,7 @@
   "name": "pickers-website",
   "private": true,
   "scripts": {
-    "start": "docusaurus start",
+    "start": "docusaurus start --port 3001",
     "build": "docusaurus build",
     "serve": "docusaurus serve",
     "clear": "docusaurus clear",

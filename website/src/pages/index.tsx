@@ -1,5 +1,6 @@
 import type React from 'react';
-import { useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Link from '@docusaurus/Link';
@@ -89,13 +90,51 @@ const PLATFORMS = [
 
 type Platform = (typeof PLATFORMS)[number]['key'];
 
-function Showcase() {
+const pinOver = (host: HTMLElement, frame: HTMLElement) => {
+  const rect = frame.getBoundingClientRect();
+  Object.assign(host.style, {
+    position: 'absolute',
+    left: `${rect.left + frame.clientLeft + window.scrollX}px`,
+    top: `${rect.top + frame.clientTop + window.scrollY}px`,
+    width: `${frame.clientWidth}px`,
+    height: `${frame.clientHeight}px`,
+    borderRadius: `${Number.parseFloat(getComputedStyle(frame).borderTopLeftRadius) - frame.clientLeft}px`,
+    overflow: 'hidden',
+    transform: 'translateZ(0)',
+    zIndex: '1',
+  });
+};
+
+/**
+ * react-native-web portals every Modal into a bare <div> appended to <body>. Pinning those over the phone (the transform makes the
+ * modal's `position: fixed` relative to it) opens sheets inside the device instead of over the whole page.
+ */
+// ponytail: the pin is measured once on open, so resizing the window while a sheet is open leaves it misplaced until it reopens
+const usePortalsInside = (frameRef: RefObject<HTMLDivElement | null>, enabled: boolean) => {
+  useEffect(() => {
+    if (!enabled) return;
+    const observer = new MutationObserver((mutations) => {
+      const frame = frameRef.current;
+      if (!frame) return;
+      for (const node of mutations.flatMap((m) => Array.from(m.addedNodes))) {
+        if (node instanceof HTMLDivElement && !node.attributes.length) pinOver(node, frame);
+      }
+    });
+    observer.observe(document.body, { childList: true });
+    return () => observer.disconnect();
+  }, [frameRef, enabled]);
+};
+
+function Showcase({ platform }: { platform: Platform }) {
   const { colorMode } = useColorMode();
   return (
     <BrowserOnly fallback={null}>
       {() => {
-        const Demo = require('../components/HeroDemo').default as React.ComponentType<{ colorMode: 'light' | 'dark' }>;
-        return <Demo colorMode={colorMode} />;
+        const Demo = require('../components/HeroDemo').default as React.ComponentType<{
+          colorMode: 'light' | 'dark';
+          platform: Platform;
+        }>;
+        return <Demo colorMode={colorMode} platform={platform} />;
       }}
     </BrowserOnly>
   );
@@ -124,6 +163,8 @@ function StatusIcons() {
 
 function Device() {
   const [platform, setPlatform] = useState<Platform>('ios');
+  const frameRef = useRef<HTMLDivElement>(null);
+  usePortalsInside(frameRef, platform !== 'web');
   return (
     <div className={clsx(styles.device, platform === 'web' && styles.deviceWide)}>
       <div role="tablist" aria-label="Preview platform" className={styles.platformTabs}>
@@ -140,7 +181,7 @@ function Device() {
           </button>
         ))}
       </div>
-      <div className={clsx(styles.frame, styles[platform])}>
+      <div ref={frameRef} className={clsx(styles.frame, styles[platform])}>
         {platform === 'web' ? (
           <div className={styles.browserBar} aria-hidden>
             <span className={styles.trafficLights}>
@@ -158,7 +199,7 @@ function Device() {
           </div>
         )}
         <div className={styles.screen}>
-          <Showcase />
+          <Showcase platform={platform} />
         </div>
         {platform !== 'web' && <span className={styles.homeIndicator} aria-hidden />}
       </div>
