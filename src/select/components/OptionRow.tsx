@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { coreStyles } from '../../core/core.styles';
 import { DISABLED_OPTION_OPACITY } from '../select.constants';
 import { styles } from '../select.styles';
 import type { OptionRowProps } from '../select.types';
@@ -45,14 +46,25 @@ export const OptionRow = <T,>({
           <View style={styles.flex}>
             <Text
               numberOfLines={1}
-              style={[textStyle(theme, 'md', selected ? 'medium' : 'regular'), slots?.optionLabel, selected && slots?.selectedOptionLabel]}
+              style={[
+                textStyle(theme, 'md', selected ? 'medium' : 'regular'),
+                coreStyles.startAligned,
+                slots?.optionLabel,
+                selected && slots?.selectedOptionLabel,
+              ]}
             >
               {option.label}
             </Text>
             {option.description ? (
               <Text
                 numberOfLines={2}
-                style={[textStyle(theme, 'sm'), styles.description, { color: c.textSecondary }, slots?.optionDescription]}
+                style={[
+                  textStyle(theme, 'sm'),
+                  coreStyles.startAligned,
+                  styles.description,
+                  { color: c.textSecondary },
+                  slots?.optionDescription,
+                ]}
               >
                 {option.description}
               </Text>

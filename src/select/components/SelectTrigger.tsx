@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { coreStyles } from '../../core/core.styles';
 import { DISABLED_TRIGGER_OPACITY, PRESSED_TRIGGER_OPACITY } from '../select.constants';
 import { styles } from '../select.styles';
 import type { SelectTriggerProps } from '../select.types';
@@ -55,7 +56,11 @@ export const SelectTrigger = <T,>({
       />
       <View style={styles.flex} pointerEvents="box-none">
         {selected.length === 0 ? (
-          <Text pointerEvents="none" style={[textStyle(theme, 'md'), { color: c.textSecondary }, slots?.placeholder]} numberOfLines={1}>
+          <Text
+            pointerEvents="none"
+            style={[textStyle(theme, 'md'), coreStyles.startAligned, { color: c.textSecondary }, slots?.placeholder]}
+            numberOfLines={1}
+          >
             {placeholder}
           </Text>
         ) : multiple && chips ? (
@@ -76,7 +81,7 @@ export const SelectTrigger = <T,>({
         ) : (
           <View style={styles.row} pointerEvents="none">
             {!multiple && first?.icon ? <View style={styles.triggerIcon}>{first.icon}</View> : null}
-            <Text style={[textStyle(theme, 'md'), slots?.triggerText]} numberOfLines={1}>
+            <Text style={[textStyle(theme, 'md'), coreStyles.startAligned, slots?.triggerText]} numberOfLines={1}>
               {getSelectedLabel(selected)}
             </Text>
           </View>
