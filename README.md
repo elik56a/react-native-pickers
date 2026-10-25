@@ -189,7 +189,7 @@ multiple: true     value: T[]        onChange(values, options)   maxSelected
 
 | Prop | Default | |
 |---|---|---|
-| `searchable` | `> 8 options` | Accent- and niqqud-insensitive |
+| `searchable` | `true` | Accent- and niqqud-insensitive |
 | `filterOption` | | Custom search |
 | `placeholder` / `label` / `sheetTitle` | | |
 | `clearable` | `false` | |

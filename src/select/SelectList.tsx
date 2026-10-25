@@ -9,12 +9,11 @@ import { useSelectList } from './hooks/useSelectList';
 import { DEFAULT_EMPTY_TEXT, DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListProps, SelectRow } from './select.types';
-import { defaultFilter, getRowKey, isOptionDisabled, shouldShowSearch } from './select.utils';
+import { defaultFilter, getRowKey, isOptionDisabled } from './select.utils';
 
 export const SelectList = <T,>(props: SelectListProps<T>) => {
   const {
-    options,
-    searchable,
+    searchable = true,
     searchPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
     filterOption = defaultFilter,
     renderOption,
@@ -54,7 +53,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
 
   return (
     <View style={[style, slots?.container]} testID={testID}>
-      {shouldShowSearch(searchable, options.length) && (
+      {searchable && (
         <View style={[{ paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.sm }, slots?.search]}>
           <SearchInput
             value={query}
