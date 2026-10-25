@@ -1,5 +1,5 @@
 import { SEARCH_THRESHOLD } from './select.constants';
-import type { SelectOption, SelectRow } from './select.types';
+import type { SelectOption, SelectPresentation, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
 const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-֑ͯ-ׇ]/g, '');
@@ -62,3 +62,7 @@ export const isOptionDisabled = <T>(option: SelectOption<T>, selected: boolean, 
   !!option.disabled || (atMax && !selected);
 
 export const getSelectedLabel = <T>(selected: SelectOption<T>[]) => selected.map((o) => o.label).join(', ');
+
+/** `auto` is a dropdown on the web, where options are expected under the field, and a bottom sheet on native. */
+export const resolveSelectPresentation = (presentation: SelectPresentation, platform: string): SelectPresentation =>
+  presentation === 'auto' && platform === 'web' ? 'dropdown' : presentation;

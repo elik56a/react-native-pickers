@@ -24,7 +24,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     renderTrigger,
     sheetTitle,
     sheet,
-    presentation = 'auto',
+    presentation: _presentation,
     onOpen: _onOpen,
     onClose: _onClose,
     style,
@@ -46,7 +46,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}
-      style={presentation === 'dropdown' ? styles.dropdownList : undefined}
+      style={picker.presentation === 'dropdown' ? styles.dropdownList : undefined}
     />
   );
 
@@ -76,7 +76,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
           />
         )}
       </View>
-      {presentation === 'dropdown' ? (
+      {picker.presentation === 'dropdown' ? (
         <Dropdown visible={picker.open} anchor={picker.anchor} onClose={picker.hide} theme={themeOverride}>
           {list}
         </Dropdown>
@@ -86,7 +86,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
           onClose={picker.hide}
           title={sheetTitle ?? label}
           theme={themeOverride}
-          presentation={presentation}
+          presentation={picker.presentation}
           showCancel={false}
           onConfirm={props.multiple || !closeOnSelect ? picker.hide : undefined}
           {...sheet}

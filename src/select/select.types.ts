@@ -17,6 +17,9 @@ export interface SelectOption<T> {
   keywords?: string[];
 }
 
+/** A sheet presentation, or a dropdown under the field. */
+export type SelectPresentation = SheetPresentation | 'dropdown';
+
 export type SelectSlot =
   | 'container'
   | 'search'
@@ -95,8 +98,8 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
     /** Sheet title. Default: `label` */
     sheetTitle?: string;
-    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (modal on wide web windows, bottom sheet elsewhere) */
-    presentation?: SheetPresentation | 'dropdown';
+    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (dropdown on the web, bottom sheet on native) */
+    presentation?: SelectPresentation;
     sheet?: Partial<Omit<SheetChromeProps, 'visible' | 'onClose' | 'theme' | 'presentation'>>;
     onOpen?: () => void;
     onClose?: () => void;

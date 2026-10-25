@@ -7,6 +7,7 @@ import {
   getSelectedLabel,
   isAtMax,
   isOptionDisabled,
+  resolveSelectPresentation,
   shouldShowSearch,
   toggleValue,
   toValueList,
@@ -104,5 +105,14 @@ describe('toggleValue / isAtMax / isOptionDisabled', () => {
 describe('getSelectedLabel', () => {
   it('joins labels', () => {
     expect(getSelectedLabel([option('A'), option('B')])).toBe('A, B');
+  });
+});
+
+describe('resolveSelectPresentation', () => {
+  it('turns auto into a dropdown on the web only', () => {
+    expect(resolveSelectPresentation('auto', 'web')).toBe('dropdown');
+    expect(resolveSelectPresentation('auto', 'ios')).toBe('auto');
+    expect(resolveSelectPresentation('modal', 'web')).toBe('modal');
+    expect(resolveSelectPresentation('bottomSheet', 'web')).toBe('bottomSheet');
   });
 });

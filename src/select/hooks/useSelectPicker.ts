@@ -1,10 +1,11 @@
 import type { RefObject } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import type { HostInstance } from 'react-native';
+import { Platform } from 'react-native';
 
 import type { AnchorRect } from '../../sheet/sheet.types';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
-import { findOptions, toValueList } from '../select.utils';
+import { findOptions, resolveSelectPresentation, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
 export const useSelectPicker = <T>(
@@ -15,7 +16,8 @@ export const useSelectPicker = <T>(
   const { options, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<AnchorRect | null>(null);
-  const dropdown = props.presentation === 'dropdown';
+  const presentation = resolveSelectPresentation(props.presentation ?? 'auto', Platform.OS);
+  const dropdown = presentation === 'dropdown';
 
   const selected = useMemo(
     () => findOptions(toValueList(props.multiple, props.value), options, isEqual),
@@ -74,6 +76,7 @@ export const useSelectPicker = <T>(
 
   return {
     open,
+    presentation,
     anchor,
     show,
     hide,
