@@ -4,9 +4,8 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { SlotStyles, ThemableProps } from '../core';
 import { useControllableState } from '../core/hooks/useControllableState';
 import { getDayPeriods, uses12HourClock } from '../core/utils/date.utils';
-import type { MultiWheelSlot, WheelColumn } from '../wheel/MultiWheelPicker';
-import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
-import type { WheelItem } from '../wheel/WheelPicker';
+import type { MultiWheelSlot, WheelColumn, WheelItem } from '../wheel';
+import { MultiWheelPicker } from '../wheel';
 
 export interface TimePickerProps extends ThemableProps {
   /** Selected time (the date part is preserved). */

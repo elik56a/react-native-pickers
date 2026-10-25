@@ -1,97 +1,60 @@
-import React from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
-import type { SlotStyles, ThemableProps } from '../core';
+import { Fragment } from 'react';
+import { Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../core';
-import type { WheelPickerProps, WheelPickerSlot } from './WheelPicker';
+import { WheelIndicator } from './components/WheelIndicator';
 import { WheelPicker } from './WheelPicker';
-
-export type WheelColumn<T = any> = Omit<WheelPickerProps<T>, 'itemHeight' | 'visibleItems' | 'variant' | 'showIndicator' | 'theme'> & {
-  key: string;
-  /** Flex weight of the column. Default: 1 */
-  flex?: number;
-  /** Fixed column width */
-  width?: number;
-};
-
-export type MultiWheelSlot = 'container' | 'indicator' | 'separator' | WheelPickerSlot;
-
-export interface MultiWheelPickerProps extends ThemableProps {
-  columns: WheelColumn[];
-  /** Text/node rendered between columns, e.g. ':' for time */
-  separator?: React.ReactNode | ((leftIndex: number) => React.ReactNode);
-  itemHeight?: number;
-  visibleItems?: number;
-  variant?: '3d' | 'flat';
-  style?: StyleProp<ViewStyle>;
-  styles?: SlotStyles<MultiWheelSlot>;
-  testID?: string;
-}
+import { DEFAULT_ITEM_HEIGHT, DEFAULT_VISIBLE_ITEMS } from './wheel.constants';
+import { styles } from './wheel.styles';
+import type { MultiWheelPickerProps } from './wheel.types';
+import { resolveSeparator, toOddCount } from './wheel.utils';
 
 /** Several wheels sharing one selection band (time, date, units...). */
-export function MultiWheelPicker({
+export const MultiWheelPicker = ({
   columns,
   separator,
-  itemHeight = 40,
-  visibleItems = 5,
+  itemHeight = DEFAULT_ITEM_HEIGHT,
+  visibleItems = DEFAULT_VISIBLE_ITEMS,
   variant = '3d',
   style,
   styles: slots,
   theme: themeOverride,
   testID,
-}: MultiWheelPickerProps) {
+}: MultiWheelPickerProps) => {
   const theme = usePickerTheme(themeOverride);
-  const vis = visibleItems % 2 === 0 ? visibleItems + 1 : visibleItems;
+  const visible = toOddCount(visibleItems);
   return (
-    <View style={[{ height: itemHeight * vis }, style, slots?.container]} testID={testID}>
-      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { justifyContent: 'center' }]}>
-        <View
-          style={[
-            {
-              height: itemHeight,
-              borderRadius: theme.radius.md,
-              backgroundColor: theme.colors.indicator,
-              marginHorizontal: theme.spacing.xs,
-            },
-            slots?.indicator,
-          ]}
-        />
-      </View>
-      <View style={s.row}>
-        {columns.map(({ key, flex, width, styles: colSlots, ...col }, i) => {
-          const sep = i > 0 && separator !== undefined ? (typeof separator === 'function' ? separator(i - 1) : separator) : null;
+    <View style={[{ height: itemHeight * visible }, style, slots?.container]} testID={testID}>
+      <WheelIndicator itemHeight={itemHeight} theme={theme} style={slots?.indicator} />
+      <View style={styles.columns}>
+        {columns.map(({ key, flex, width, styles: columnSlots, ...column }, i) => {
+          const sep = resolveSeparator(separator, i);
           return (
-            <React.Fragment key={key}>
-              {sep !== null && sep !== undefined && sep !== false ? (
-                <View style={s.sep} pointerEvents="none">
+            <Fragment key={key}>
+              {sep !== null && (
+                <View style={styles.separator} pointerEvents="none">
                   {typeof sep === 'string' ? <Text style={[textStyle(theme, 'lg', 'bold'), slots?.separator]}>{sep}</Text> : sep}
                 </View>
-              ) : null}
+              )}
               <WheelPicker
-                {...col}
+                {...column}
                 theme={themeOverride}
                 itemHeight={itemHeight}
-                visibleItems={vis}
+                visibleItems={visible}
                 variant={variant}
                 showIndicator={false}
-                style={[width !== undefined ? { width } : { flex: flex ?? 1 }, col.style]}
+                style={[width !== undefined ? { width } : { flex: flex ?? 1 }, column.style]}
                 styles={{
                   item: slots?.item,
                   itemText: slots?.itemText,
                   selectedItemText: slots?.selectedItemText,
                   disabledItemText: slots?.disabledItemText,
-                  ...colSlots,
+                  ...columnSlots,
                 }}
               />
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </View>
     </View>
   );
-}
-
-const s = StyleSheet.create({
-  row: { flexDirection: 'row', flex: 1 },
-  sep: { justifyContent: 'center', paddingHorizontal: 2 },
-});
+};

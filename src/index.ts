@@ -10,5 +10,4 @@ export * from './sheet/BottomSheet';
 export * from './sheet/PickerSheet';
 export * from './sheet/sheets';
 export * from './time/TimePicker';
-export * from './wheel/MultiWheelPicker';
-export * from './wheel/WheelPicker';
+export * from './wheel';

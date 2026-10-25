@@ -1,4 +1,4 @@
-import { canExtend, matchLabel } from '../wheel/typeToSelect';
+import { canExtend, matchLabel } from './typeToSelect';
 
 const labels = (...l: string[]) => l.map((label) => ({ label }));
 const minutes = labels('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55');

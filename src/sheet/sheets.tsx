@@ -1,5 +1,3 @@
-import type React from 'react';
-import { View } from 'react-native';
 import type { CalendarBaseProps, DateRange } from '../date/Calendar';
 import { Calendar } from '../date/Calendar';
 import type { DateWheelPickerProps } from '../date/DateWheelPicker';
@@ -8,14 +6,9 @@ import type { EmojiPickerProps } from '../emoji/EmojiPicker';
 import { EmojiPicker } from '../emoji/EmojiPicker';
 import type { TimePickerProps } from '../time/TimePicker';
 import { TimePicker } from '../time/TimePicker';
-import type { WheelPickerProps } from '../wheel/WheelPicker';
-import { WheelPicker } from '../wheel/WheelPicker';
 import type { SheetChromeProps } from './PickerSheet';
 import { PickerSheet, useDraft } from './PickerSheet';
-
-const pad = (children: React.ReactNode, h = 16) => <View style={{ paddingHorizontal: h, paddingBottom: 8 }}>{children}</View>;
-
-// ---------- Date ----------
+import { SheetContent } from './SheetContent';
 
 type DateSheetSelection =
   | { mode?: 'single'; value?: Date | null; onConfirm: (date: Date) => void }
@@ -74,41 +67,40 @@ export function DatePickerSheet(props: DatePickerSheetProps) {
       onConfirm={confirmOnSelect && mode === 'single' && display === 'calendar' ? undefined : confirm}
       confirmDisabled={!ready}
     >
-      {display === 'wheel'
-        ? pad(
-            <DateWheelPicker
-              {...wheelProps}
-              locale={calendarProps.locale}
-              minDate={calendarProps.minDate}
-              maxDate={calendarProps.maxDate}
-              theme={theme}
-              value={draft as Date}
-              onChange={setDraft}
-            />
-          )
-        : pad(
-            <Calendar
-              {...(calendarProps as CalendarBaseProps)}
-              theme={theme}
-              {...({
-                mode,
-                value: draft,
-                onChange: (v: unknown) => {
-                  setDraft(v);
-                  if (confirmOnSelect && mode === 'single') {
-                    onConfirm(v);
-                    onClose();
-                  }
-                },
-              } as object)}
-            />,
-            8
-          )}
+      {display === 'wheel' ? (
+        <SheetContent>
+          <DateWheelPicker
+            {...wheelProps}
+            locale={calendarProps.locale}
+            minDate={calendarProps.minDate}
+            maxDate={calendarProps.maxDate}
+            theme={theme}
+            value={draft as Date}
+            onChange={setDraft}
+          />
+        </SheetContent>
+      ) : (
+        <SheetContent compact>
+          <Calendar
+            {...(calendarProps as CalendarBaseProps)}
+            theme={theme}
+            {...({
+              mode,
+              value: draft,
+              onChange: (v: unknown) => {
+                setDraft(v);
+                if (confirmOnSelect && mode === 'single') {
+                  onConfirm(v);
+                  onClose();
+                }
+              },
+            } as object)}
+          />
+        </SheetContent>
+      )}
     </PickerSheet>
   );
 }
-
-// ---------- Time ----------
 
 export type TimePickerSheetProps = SheetChromeProps &
   Omit<TimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
@@ -138,49 +130,12 @@ export function TimePickerSheet({
         onClose();
       }}
     >
-      {pad(<TimePicker {...rest} theme={theme} value={draft} onChange={setDraft} />)}
+      <SheetContent>
+        <TimePicker {...rest} theme={theme} value={draft} onChange={setDraft} />
+      </SheetContent>
     </PickerSheet>
   );
 }
-
-// ---------- Generic wheel ----------
-
-export type WheelPickerSheetProps<T> = SheetChromeProps &
-  Omit<WheelPickerProps<T>, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
-    value?: T;
-    onConfirm: (value: T) => void;
-  };
-
-export function WheelPickerSheet<T>({
-  visible,
-  onClose,
-  title,
-  confirmLabel,
-  cancelLabel,
-  showCancel,
-  sheetProps,
-  theme,
-  value,
-  onConfirm,
-  ...rest
-}: WheelPickerSheetProps<T>) {
-  const first = rest.items[0] as unknown;
-  const firstValue = (first && typeof first === 'object' && 'value' in (first as object) ? (first as { value: T }).value : first) as T;
-  const [draft, setDraft] = useDraft<T>(value ?? firstValue, visible);
-  return (
-    <PickerSheet
-      {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, sheetProps, theme }}
-      onConfirm={() => {
-        onConfirm(draft);
-        onClose();
-      }}
-    >
-      {pad(<WheelPicker<T> {...rest} theme={theme} value={draft} onChange={setDraft} />)}
-    </PickerSheet>
-  );
-}
-
-// ---------- Emoji ----------
 
 export type EmojiPickerSheetProps = SheetChromeProps &
   Omit<EmojiPickerProps, 'theme'> & {

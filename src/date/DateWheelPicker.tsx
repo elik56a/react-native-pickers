@@ -3,8 +3,8 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { SlotStyles, ThemableProps } from '../core';
 import { useControllableState } from '../core/hooks/useControllableState';
 import { clampDate, daysInMonth, getMonthNames, isOutOfRange } from '../core/utils/date.utils';
-import type { MultiWheelSlot, WheelColumn } from '../wheel/MultiWheelPicker';
-import { MultiWheelPicker } from '../wheel/MultiWheelPicker';
+import type { MultiWheelSlot, WheelColumn } from '../wheel';
+import { MultiWheelPicker } from '../wheel';
 
 export type DatePart = 'day' | 'month' | 'year';
 
