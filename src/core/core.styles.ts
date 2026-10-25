@@ -6,4 +6,6 @@ export const coreStyles = StyleSheet.create({
    * ponytail: pinned left because RN Web has no RTL layout flag; RTL web apps override it through the slot styles.
    */
   startAligned: Platform.select({ web: { textAlign: 'left' }, default: {} }),
+  /** Drops the browser's focus ring; inputs show focus with a theme-colored border instead. */
+  noOutline: Platform.select({ web: { outlineStyle: 'solid', outlineWidth: 0 }, default: {} }),
 });

@@ -2,6 +2,7 @@ import { FlatList, Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
+import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { CategoryBar } from './components/CategoryBar';
 import { EmojiGridRow } from './components/EmojiGridRow';
 import { EmojiHeader } from './components/EmojiHeader';
@@ -118,6 +119,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
             <FlatList
               ref={grid.listRef}
               data={grid.rows}
+              showsVerticalScrollIndicator={SHOWS_SCROLL_INDICATOR}
               renderItem={renderRow}
               keyExtractor={getRowKey}
               getItemLayout={grid.getItemLayout}
