@@ -24,7 +24,7 @@ export default function Example() {
   return (
     <>
       <DatePicker value={date} onChange={setDate} />
-      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>{date ? formatDate(date, undefined, { dateStyle: 'full' }) : 'No date selected'}</Text>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{date ? formatDate(date, undefined, { dateStyle: 'full' }) : 'No date selected'}</Text>
     </>
   );
 }
@@ -229,7 +229,7 @@ export default function Example() {
       onChange={setDate}
       theme={{ colors: { primary: '#059669', primaryMuted: 'rgba(5,150,105,0.12)' } }}
       styles={{
-        container: { borderRadius: 20, borderWidth: 1, borderColor: '#E6E7EC', paddingHorizontal: 8 },
+        container: { borderRadius: 20, borderWidth: 1, borderColor: '#E8E4DC', paddingHorizontal: 8 },
         headerTitle: { fontSize: 20, fontWeight: '800' },
         weekdayText: { textTransform: 'uppercase', fontSize: 10, letterSpacing: 1 },
         selectedDay: { borderRadius: 10 },

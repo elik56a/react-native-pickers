@@ -49,8 +49,8 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 
 function Field({ label, value, onPress }: { label: string; value: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={{ borderWidth: 1, borderColor: '#E6E7EC', borderRadius: 12, padding: 14 }}>
-      <Text style={{ fontSize: 12, color: '#6B6F7B' }}>{label}</Text>
+    <Pressable onPress={onPress} style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 12, padding: 14 }}>
+      <Text style={{ fontSize: 12, color: '#6E685E' }}>{label}</Text>
       <Text style={{ fontSize: 16, marginTop: 2 }}>{value}</Text>
     </Pressable>
   );
@@ -117,7 +117,7 @@ export default function Example() {
     <>
       <Pressable onPress={() => setOpen(true)} style={{ alignItems: 'center', padding: 12 }}>
         <Text style={{ fontSize: 48, fontWeight: '200' }}>{time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
-        <Text style={{ color: '#4F46E5' }}>Change</Text>
+        <Text style={{ color: '#C8460D' }}>Change</Text>
       </Pressable>
       <TimePickerSheet visible={open} onClose={() => setOpen(false)} title="Wake up" value={time} onConfirm={setTime} minuteInterval={5} />
     </>
@@ -148,7 +148,7 @@ export default function Example() {
   const [count, setCount] = useState(2);
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ borderWidth: 1, borderColor: '#E6E7EC', borderRadius: 12, padding: 14 }}>
+      <Pressable onPress={() => setOpen(true)} style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 12, padding: 14 }}>
         <Text>👥 {guests[count - 1].label}</Text>
       </Pressable>
       <WheelPickerSheet visible={open} onClose={() => setOpen(false)} title="Guests" items={guests} value={count} onConfirm={setCount} />
@@ -181,9 +181,9 @@ export default function Example() {
   return (
     <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
       {reactions.map((r, i) => (
-        <Text key={i} style={{ fontSize: 22, backgroundColor: '#F2F3F7', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 }}>{r}</Text>
+        <Text key={i} style={{ fontSize: 22, backgroundColor: '#F4F2EE', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 }}>{r}</Text>
       ))}
-      <Pressable onPress={() => setOpen(true)} style={{ borderRadius: 999, borderWidth: 1, borderColor: '#E6E7EC', paddingHorizontal: 12, justifyContent: 'center' }}>
+      <Pressable onPress={() => setOpen(true)} style={{ borderRadius: 999, borderWidth: 1, borderColor: '#E8E4DC', paddingHorizontal: 12, justifyContent: 'center' }}>
         <Text>＋</Text>
       </Pressable>
       <EmojiPickerSheet visible={open} onClose={() => setOpen(false)} title="React" onSelect={(e) => setReactions((r) => [...r, e])} />
@@ -219,7 +219,7 @@ export default function Example() {
   const [draft, setDraft] = useDraft(prefs, open);
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ padding: 14, borderRadius: 12, backgroundColor: '#F2F3F7' }}>
+      <Pressable onPress={() => setOpen(true)} style={{ padding: 14, borderRadius: 12, backgroundColor: '#F4F2EE' }}>
         <Text>Notifications: {[prefs.push && 'push', prefs.email && 'email'].filter(Boolean).join(' + ') || 'off'}</Text>
       </Pressable>
       <PickerSheet

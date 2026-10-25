@@ -10,12 +10,12 @@ import styles from './index.module.css';
 const INSTALL = 'npm install @elik56a/react-native-pickers';
 
 const FEATURES = [
-  { icon: '🧩', title: 'Zero native code', body: 'Pure JavaScript. Runs in Expo Go, bare React Native and React Native Web with no pod install or rebuild.' },
-  { icon: '🎨', title: 'Themeable to the pixel', body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control.' },
-  { icon: '📅', title: 'Ranges, built in', body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.' },
-  { icon: '🌍', title: 'Any locale, RTL', body: 'Month, weekday and AM/PM names, the 12/24h clock, week start and date order all come from Intl. Layouts mirror for RTL.' },
-  { icon: '♿️', title: 'Accessible', body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, and selected and disabled states everywhere.' },
-  { icon: '⚡️', title: 'Fast', body: 'Native-driver animations, virtualized fixed-layout lists and memoized rows keep it at 60 fps.' },
+  { title: 'Zero native code', body: 'Pure JavaScript. Runs in Expo Go, bare React Native and React Native Web with no pod install or rebuild.' },
+  { title: 'Themeable to the pixel', body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control.' },
+  { title: 'Ranges, built in', body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.' },
+  { title: 'Any locale, RTL', body: 'Month, weekday and AM/PM names, the 12/24h clock, week start and date order all come from Intl. Layouts mirror for RTL.' },
+  { title: 'Accessible', body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, and selected and disabled states everywhere.' },
+  { title: 'Fast', body: 'Native-driver animations, virtualized fixed-layout lists and memoized rows keep it at 60 fps.' },
 ];
 
 const COMPONENTS = [
@@ -63,15 +63,88 @@ function CopyInstall() {
   );
 }
 
+const PLATFORMS = [
+  { key: 'ios', label: 'iOS' },
+  { key: 'android', label: 'Android' },
+  { key: 'web', label: 'Web' },
+] as const;
+
+type Platform = (typeof PLATFORMS)[number]['key'];
+
 function Showcase() {
   const { colorMode } = useColorMode();
   return (
-    <BrowserOnly fallback={<div className={styles.phoneScreen} />}>
+    <BrowserOnly fallback={null}>
       {() => {
         const Demo = require('../components/HeroDemo').default as React.ComponentType<{ colorMode: 'light' | 'dark' }>;
         return <Demo colorMode={colorMode} />;
       }}
     </BrowserOnly>
+  );
+}
+
+function StatusIcons() {
+  return (
+    <span className={styles.statusIcons} aria-hidden>
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+        <rect x="0" y="7" width="3" height="4" rx="1" />
+        <rect x="4.5" y="5" width="3" height="6" rx="1" />
+        <rect x="9" y="2.5" width="3" height="8.5" rx="1" />
+        <rect x="13.5" y="0" width="3" height="11" rx="1" />
+      </svg>
+      <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+        <path d="M8 2.5c2.3 0 4.4.9 6 2.4l1-1A9.9 9.9 0 0 0 8 1 9.9 9.9 0 0 0 1 3.9l1 1A8.5 8.5 0 0 1 8 2.5Zm0 3c1.5 0 2.9.6 3.9 1.5l1-1A7 7 0 0 0 8 4 7 7 0 0 0 3.1 6l1 1A5.6 5.6 0 0 1 8 5.5Zm0 3c.7 0 1.3.3 1.8.7L8 11 6.2 9.2c.5-.4 1.1-.7 1.8-.7Z" />
+      </svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor">
+        <rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4" />
+        <rect x="2" y="2" width="16" height="8" rx="1.6" />
+        <path d="M23 4v4c.8-.3 1.3-1.1 1.3-2S23.8 4.3 23 4Z" opacity=".4" />
+      </svg>
+    </span>
+  );
+}
+
+function Device() {
+  const [platform, setPlatform] = useState<Platform>('ios');
+  return (
+    <div className={clsx(styles.device, platform === 'web' && styles.deviceWide)}>
+      <div role="tablist" aria-label="Preview platform" className={styles.platformTabs}>
+        {PLATFORMS.map((p) => (
+          <button
+            key={p.key}
+            type="button"
+            role="tab"
+            aria-selected={p.key === platform}
+            className={styles.platformTab}
+            onClick={() => setPlatform(p.key)}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+      <div className={clsx(styles.frame, styles[platform])}>
+        {platform === 'web' ? (
+          <div className={styles.browserBar} aria-hidden>
+            <span className={styles.trafficLights}>
+              <i />
+              <i />
+              <i />
+            </span>
+            <span className={styles.url}>localhost:8081</span>
+          </div>
+        ) : (
+          <div className={styles.statusBar} aria-hidden>
+            <span>9:41</span>
+            <span className={styles.camera} />
+            <StatusIcons />
+          </div>
+        )}
+        <div className={styles.screen}>
+          <Showcase />
+        </div>
+        {platform !== 'web' && <span className={styles.homeIndicator} aria-hidden />}
+      </div>
+    </div>
   );
 }
 
@@ -88,7 +161,7 @@ export default function Home() {
             <h1 className={styles.title}>
               Every picker your
               <br />
-              <span className="gradient-text">React Native</span> app needs.
+              <span className="accent-text">React Native</span> app needs.
             </h1>
             <p className={styles.subtitle}>
               Wheel, time, date, range, select and emoji pickers, plus the bottom sheets to put them in. Beautiful by default, themeable to the pixel,
@@ -104,10 +177,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className={styles.phone}>
-            <div className={styles.phoneNotch} />
-            <Showcase />
-          </div>
+          <Device />
         </div>
       </header>
 
@@ -126,9 +196,9 @@ export default function Home() {
 
         <section className={clsx('container', styles.section)}>
           <div className={styles.features}>
-            {FEATURES.map((f) => (
+            {FEATURES.map((f, i) => (
               <div key={f.title} className={styles.feature}>
-                <div className={styles.featureIcon}>{f.icon}</div>
+                <div className={styles.featureIndex}>{String(i + 1).padStart(2, '0')}</div>
                 <h3>{f.title}</h3>
                 <p>{f.body}</p>
               </div>

@@ -2,9 +2,10 @@
   position: relative;
   overflow: hidden;
   padding: 5rem 0 4rem;
+  border-bottom: 1px solid var(--site-border);
   background:
-    radial-gradient(50% 60% at 85% 20%, rgba(168, 85, 247, 0.18), transparent 70%),
-    radial-gradient(45% 55% at 10% 10%, rgba(79, 70, 229, 0.16), transparent 70%),
+    radial-gradient(40% 50% at 78% 45%, rgba(255, 91, 20, 0.12), transparent 70%),
+    radial-gradient(circle at 1px 1px, var(--site-grid) 1px, transparent 0) 0 0 / 22px 22px,
     var(--ifm-background-color);
 }
 
@@ -25,12 +26,26 @@
   border-radius: 999px;
   border: 1px solid var(--site-border);
   background: var(--site-surface);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--ifm-color-emphasis-700);
 }
 
+.badge::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--brand-signal);
+  vertical-align: 1px;
+}
+
 .title {
+  font-family: var(--ifm-heading-font-family);
   margin: 1.25rem 0 1rem;
   font-size: clamp(2.3rem, 5.2vw, 4rem);
   font-weight: 800;
@@ -98,38 +113,235 @@
   gap: 0.75rem;
 }
 
-.phone {
-  position: relative;
+.device {
+  --screen-bg: #ffffff;
+  --screen-fg: #17150f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
   justify-self: center;
   width: 100%;
-  max-width: 380px;
-  padding: 14px;
-  border-radius: 44px;
-  background: linear-gradient(160deg, #1f2030, #0b0b12);
-  box-shadow:
-    0 40px 80px -30px rgba(79, 70, 229, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  max-width: 372px;
+  transition: max-width 0.3s ease;
 }
 
-.phoneNotch {
-  position: absolute;
-  top: 22px;
-  left: 50%;
-  z-index: 2;
-  width: 90px;
-  height: 24px;
+:global([data-theme='dark']) .device {
+  --screen-bg: #181612;
+  --screen-fg: #f5f2ec;
+}
+
+.deviceWide {
+  max-width: 520px;
+}
+
+.platformTabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--site-border);
   border-radius: 999px;
+  background: var(--site-surface);
+}
+
+.platformTab {
+  min-width: 5.5rem;
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-700);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.platformTab:hover {
+  color: var(--ifm-font-color-base);
+}
+
+.platformTab[aria-selected='true'] {
+  background: var(--brand-ink);
+  color: #f5f2ec;
+}
+
+:global([data-theme='dark']) .platformTab[aria-selected='true'] {
+  background: var(--brand-signal);
+  color: var(--brand-ink);
+}
+
+.platformTab:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  background: var(--screen-bg);
+  color: var(--screen-fg);
+  transition: border-radius 0.3s ease;
+}
+
+.ios {
+  border: 11px solid #0c0b08;
+  border-radius: 56px;
+  box-shadow:
+    0 0 0 2px #4a453c,
+    0 0 0 3px #1f1c17,
+    0 50px 80px -40px rgba(23, 21, 15, 0.55);
+}
+
+.android {
+  border: 9px solid #0c0b08;
+  border-radius: 38px;
+  box-shadow:
+    0 0 0 2px #2f2b24,
+    0 50px 80px -40px rgba(23, 21, 15, 0.55);
+}
+
+.web {
+  border: 1px solid var(--site-border);
+  border-radius: 14px;
+  box-shadow: var(--site-shadow);
+}
+
+.statusBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.ios .statusBar {
+  height: 52px;
+  padding: 0 30px 0 36px;
+  font-size: 15px;
+}
+
+.android .statusBar {
+  height: 36px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.statusIcons {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.camera {
+  position: absolute;
+  left: 50%;
   background: #000;
   transform: translateX(-50%);
 }
 
-.phone > div:last-child,
-.phoneScreen {
-  min-height: 560px;
-  overflow: hidden;
-  border-radius: 32px;
-  padding-top: 32px;
+.ios .camera {
+  top: 11px;
+  width: 112px;
+  height: 32px;
+  border-radius: 20px;
+}
+
+.android .camera {
+  top: 11px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+.browserBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 44px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--site-border);
+  background: var(--site-surface);
+}
+
+.trafficLights {
+  display: inline-flex;
+  gap: 7px;
+}
+
+.trafficLights i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.trafficLights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.trafficLights i:nth-child(3) {
+  background: #28c840;
+}
+
+.url {
+  flex: 1;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
   background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-700);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.screen {
+  height: 590px;
+}
+
+.web .screen {
+  height: 560px;
+}
+
+.screen > div {
+  height: 100%;
+}
+
+.homeIndicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  height: 5px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.85;
+  transform: translateX(-50%);
+}
+
+.ios .homeIndicator {
+  width: 128px;
+}
+
+.android .homeIndicator {
+  width: 96px;
+  height: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device,
+  .frame,
+  .platformTab {
+    transition: none;
+  }
 }
 
 .section {
@@ -137,6 +349,7 @@
 }
 
 .h2 {
+  font-family: var(--ifm-heading-font-family);
   margin-bottom: 2rem;
   text-align: center;
   font-size: clamp(1.7rem, 3.5vw, 2.4rem);
@@ -144,6 +357,7 @@
 }
 
 .h2Left {
+  font-family: var(--ifm-heading-font-family);
   font-size: clamp(1.7rem, 3.5vw, 2.4rem);
   font-weight: 800;
 }
@@ -180,7 +394,7 @@
 .componentCard:hover {
   transform: translateY(-2px);
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 12px 30px -16px rgba(79, 70, 229, 0.45);
+  box-shadow: var(--site-shadow);
   color: inherit;
   text-decoration: none;
 }
@@ -204,6 +418,7 @@
 .feature {
   padding: 1.5rem;
   border-radius: 18px;
+  border: 1px solid var(--site-border);
   background: var(--site-surface);
 }
 
@@ -218,8 +433,11 @@
   line-height: 1.6;
 }
 
-.featureIcon {
-  font-size: 1.6rem;
+.featureIndex {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ifm-color-primary);
 }
 
 .split {

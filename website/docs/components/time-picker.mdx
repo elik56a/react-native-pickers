@@ -21,7 +21,7 @@ export default function Example() {
   return (
     <>
       <TimePicker value={time} onChange={setTime} />
-      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>{time.toLocaleTimeString()}</Text>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{time.toLocaleTimeString()}</Text>
     </>
   );
 }
@@ -96,7 +96,7 @@ export default function Example() {
   const [time, setTime] = useState(at(12));
   return (
     <>
-      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6B6F7B' }}>Opening hours: 09:00 – 17:30</Text>
+      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6E685E' }}>Opening hours: 09:00 – 17:30</Text>
       <TimePicker value={time} onChange={setTime} minTime={at(9)} maxTime={at(17, 30)} minuteInterval={15} format="24h" />
     </>
   );

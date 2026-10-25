@@ -60,7 +60,7 @@ export default function Example() {
   return (
     <>
       <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
-      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
         {range.start ? formatDate(range.start) : '—'} → {range.end ? formatDate(range.end) : '—'}
       </Text>
     </>
@@ -135,7 +135,7 @@ export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#4F46E5', padding: 14, borderRadius: 12 }}>
+      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}>
         <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
           {range.start && range.end ? `${formatDate(range.start)} → ${formatDate(range.end)}` : 'Pick dates'}
         </Text>

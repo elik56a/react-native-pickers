@@ -20,7 +20,7 @@ export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#4F46E5', padding: 14, borderRadius: 12 }}>
+      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}>
         <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>Open sheet</Text>
       </Pressable>
       <BottomSheet
@@ -28,7 +28,7 @@ export default function Example() {
         onClose={() => setOpen(false)}
         title="Share"
         footer={
-          <Pressable onPress={() => setOpen(false)} style={{ backgroundColor: '#F2F3F7', padding: 14, borderRadius: 12 }}>
+          <Pressable onPress={() => setOpen(false)} style={{ backgroundColor: '#F4F2EE', padding: 14, borderRadius: 12 }}>
             <Text style={{ textAlign: 'center', fontWeight: '600' }}>Close</Text>
           </Pressable>
         }

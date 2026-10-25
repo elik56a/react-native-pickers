@@ -27,7 +27,7 @@ export default function Example() {
   return (
     <>
       <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
-      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
         {range.start ? formatDate(range.start) : 'Check-in'} → {range.end ? formatDate(range.end) : 'Check-out'}
         {nights ? `  ·  ${nights} night${nights > 1 ? 's' : ''}` : ''}
       </Text>
@@ -89,7 +89,7 @@ export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <Text style={{ textAlign: 'center', marginBottom: 4, color: '#6B6F7B' }}>Stay 2 – 7 nights</Text>
+      <Text style={{ textAlign: 'center', marginBottom: 4, color: '#6E685E' }}>Stay 2 – 7 nights</Text>
       <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} minRangeDays={2} maxRangeDays={7} allowSingleDayRange={false} />
     </>
   );
@@ -132,7 +132,7 @@ export default function Example() {
   return (
     <>
       <DatePicker mode="multiple" value={dates} onChange={setDates} maxSelections={5} minDate={new Date()} />
-      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
         {dates.length ? dates.map((d) => formatDate(d, undefined, { day: 'numeric', month: 'short' })).join(', ') : 'Pick up to 5 days'}
       </Text>
     </>
