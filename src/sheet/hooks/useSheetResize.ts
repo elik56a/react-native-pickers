@@ -1,6 +1,5 @@
-import type { ComponentRef } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { GestureResponderHandlers, LayoutChangeEvent, View } from 'react-native';
+import type { GestureResponderHandlers, HostInstance, LayoutChangeEvent } from 'react-native';
 import { Animated, Easing, PanResponder } from 'react-native';
 
 import {
@@ -12,7 +11,7 @@ import {
   WHEEL_IDLE_MS,
   WHEEL_THRESHOLD,
 } from '../sheet.constants';
-import type { ScrollNode, SheetResizeOptions, SheetSnap, WheelEventLike, WheelHost } from '../sheet.types';
+import type { ScrollNode, SheetResize, SheetResizeOptions, SheetSnap, WheelEventLike, WheelHost } from '../sheet.types';
 import { canScrollWithin, getDragFrame, getReleaseTarget, getWheelTarget, isVerticalDrag } from '../sheet.utils';
 
 const overflowOf = (node: ScrollNode) =>
@@ -22,14 +21,14 @@ const overflowOf = (node: ScrollNode) =>
  * Drag the header up to expand the sheet and down to collapse or close it; on the web the wheel does the same over the sheet.
  * `height` drives the sheet only while `sized` (dragging or expanded), so at rest it keeps sizing to its content.
  */
-export const useSheetResize = (options: SheetResizeOptions) => {
+export const useSheetResize = (options: SheetResizeOptions): SheetResize => {
   const { active, drag } = options;
   const height = useRef(new Animated.Value(0)).current;
   const [sized, setSized] = useState(false);
   const sizedRef = useRef(false);
   const base = useRef(0);
   const expanded = useRef(false);
-  const sheetRef = useRef<ComponentRef<typeof View>>(null);
+  const sheetRef = useRef<HostInstance>(null);
   const latest = useRef(options);
   latest.current = options;
 

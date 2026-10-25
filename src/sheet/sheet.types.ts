@@ -1,5 +1,6 @@
 import type React from 'react';
-import type { Animated } from 'react-native';
+import type { RefObject } from 'react';
+import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEvent } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 
@@ -104,6 +105,16 @@ export interface SheetResizeOptions {
   expandedHeight: number;
   duration: number;
   onClose: () => void;
+}
+
+export interface SheetResize {
+  sheetRef: RefObject<HostInstance | null>;
+  panHandlers: GestureResponderHandlers;
+  onLayout: (e: LayoutChangeEvent) => void;
+  /** The sheet's height while `sized`. */
+  height: Animated.Value;
+  /** True while dragging or expanded: `height` drives the sheet instead of its content. */
+  sized: boolean;
 }
 
 /** The parts of a DOM element the web wheel handling reads; the library builds without DOM typings. */
