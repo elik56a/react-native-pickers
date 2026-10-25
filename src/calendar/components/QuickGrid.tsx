@@ -1,6 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { Touchable } from '../../core/components/Touchable';
 import { styles } from '../calendar.styles';
 import type { QuickGridProps } from '../calendar.types';
 import { chunkRows } from '../calendar.utils';
@@ -11,14 +12,16 @@ export const QuickGrid = ({ cells, height, onSelect, theme, slots }: QuickGridPr
     {chunkRows(cells).map((row) => (
       <View key={row[0]?.key} style={styles.week}>
         {row.map((cell) => (
-          <Pressable
+          <Touchable
             key={cell.key}
-            onPress={cell.disabled ? undefined : () => onSelect(cell.value)}
-            style={({ pressed }) => [
+            theme={theme}
+            disabled={cell.disabled}
+            onPress={() => onSelect(cell.value)}
+            style={[
               styles.quickCell,
               {
                 borderRadius: theme.radius.full,
-                backgroundColor: cell.selected ? theme.colors.primary : pressed ? theme.colors.surface : 'transparent',
+                backgroundColor: cell.selected ? theme.colors.primary : 'transparent',
               },
               slots?.gridCell,
             ]}
@@ -34,7 +37,7 @@ export const QuickGrid = ({ cells, height, onSelect, theme, slots }: QuickGridPr
             >
               {cell.label}
             </Text>
-          </Pressable>
+          </Touchable>
         ))}
       </View>
     ))}

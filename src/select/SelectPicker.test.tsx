@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
 import { SelectPicker } from './SelectPicker';
 import type { SelectOption } from './select.types';
@@ -27,7 +27,7 @@ describe('SelectPicker', () => {
     expect(onOpen).toHaveBeenCalled();
     await fireEvent.press(screen.getByLabelText('TypeScript'));
     expect(onChange).toHaveBeenCalledWith('typescript', options[1]);
-    expect(onClose).toHaveBeenCalled();
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
   });
 
   it('does not open when disabled', async () => {
@@ -92,7 +92,7 @@ describe('SelectPicker', () => {
       await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
       await fireEvent.press(screen.getByLabelText('Expo'));
       expect(onChange).toHaveBeenCalledWith('expo', options[2]);
-      expect(onClose).toHaveBeenCalled();
+      await waitFor(() => expect(onClose).toHaveBeenCalled());
       expect(screen.queryByLabelText('Expo')).toBeNull();
     });
 
@@ -104,6 +104,7 @@ describe('SelectPicker', () => {
       expect(screen.queryByLabelText('Expo')).toBeNull();
       await fireEvent.press(screen.getByLabelText('TypeScript'));
       expect(onChange).toHaveBeenCalledWith('typescript', options[1]);
+      await waitFor(() => expect(screen.queryByLabelText('TypeScript')).toBeNull());
       await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
       expect(screen.getByLabelText('Expo')).toBeTruthy();
     });

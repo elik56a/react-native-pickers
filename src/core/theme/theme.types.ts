@@ -24,6 +24,10 @@ export interface PickerTheme {
     /** Wheel selection band */
     indicator: string;
     handle: string;
+    /** Tint over anything pressable while the pointer is over it (web and pointer devices). 'transparent' turns it off */
+    hover: string;
+    /** The ripple that spreads from the touch point on press. 'transparent' turns it off */
+    ripple: string;
   };
   radius: { sm: number; md: number; lg: number; full: number; sheet: number };
   spacing: { xs: number; sm: number; md: number; lg: number; xl: number };

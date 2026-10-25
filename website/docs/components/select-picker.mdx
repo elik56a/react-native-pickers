@@ -154,7 +154,34 @@ export default function Example() {
 
 ## Closing behaviour
 
-In single mode, the sheet closes as soon as an option is tapped (`closeOnSelect`, default `true`). With `closeOnSelect={false}` the sheet stays open and shows a **Done** button. Multiple mode always shows Done. `onOpen` and `onClose` fire when the sheet opens and closes.
+In single mode, the value changes as soon as an option is tapped and the sheet or dropdown closes a moment later, once the row's ripple has played (`closeOnSelect`, default `true`). With `closeOnSelect={false}` the sheet stays open and shows a **Done** button. Multiple mode always shows Done. `onOpen` and `onClose` fire when the sheet opens and closes.
+
+## Hover and ripple
+
+Rows tint while the pointer is over them and ripple from the touch point when picked; in single mode the list closes right after the ripple plays. The field tints on hover but doesn't ripple. Both colours come from the theme, so a brand tint is one prop:
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const frameworks = ['Expo', 'React Native CLI', 'React Native Web', 'Next.js', 'Remix', 'Vite'].map((f) => ({ label: f, value: f }));
+
+export default function Example() {
+  const [framework, setFramework] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Framework"
+      placeholder="Choose a framework"
+      options={frameworks}
+      value={framework}
+      onChange={setFramework}
+      theme={{ colors: { hover: 'rgba(200,70,13,0.08)', ripple: 'rgba(200,70,13,0.24)' } }}
+    />
+  );
+}
+```
+
+See [Theming → Hover and ripple](../guides/theming#hover-and-ripple) to change them everywhere or turn them off.
 
 ## Custom trigger
 

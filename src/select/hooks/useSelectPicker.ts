@@ -1,9 +1,10 @@
 import type { RefObject } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { HostInstance } from 'react-native';
 import { Platform } from 'react-native';
 
 import type { AnchorRect } from '../../sheet/sheet.types';
+import { CLOSE_AFTER_SELECT_MS } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
 import { findOptions, resolveSelectPresentation, toValueList } from '../select.utils';
 
@@ -17,6 +18,7 @@ export const useSelectPicker = <T>(
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<AnchorRect | null>(null);
   const [query, setQuery] = useState('');
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const presentation = resolveSelectPresentation(props.presentation ?? 'auto', Platform.OS);
   const dropdown = presentation === 'dropdown';
   const searchInField = dropdown && props.searchable !== false;
@@ -26,8 +28,11 @@ export const useSelectPicker = <T>(
     [isEqual, options, props.multiple, props.value]
   );
 
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
   const show = useCallback(() => {
     if (disabled) return;
+    clearTimeout(closeTimer.current);
     if (dropdown) {
       anchorRef.current?.measureInWindow((x, y, width, height) =>
         setAnchor({
@@ -60,7 +65,7 @@ export const useSelectPicker = <T>(
         value: props.value,
         onChange: (value, option) => {
           props.onChange?.(value, option);
-          if (closeOnSelect) hide();
+          if (closeOnSelect) closeTimer.current = setTimeout(hide, CLOSE_AFTER_SELECT_MS);
         },
       };
 

@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
-import { DISABLED_TRIGGER_OPACITY, PRESSED_TRIGGER_OPACITY } from '../select.constants';
+import { DISABLED_TRIGGER_OPACITY } from '../select.constants';
 import { styles } from '../select.styles';
 import type { SelectTriggerProps } from '../select.types';
 import { getSelectedLabel } from '../select.utils';
@@ -27,7 +27,6 @@ export const SelectTrigger = <T,>({
   slots,
 }: SelectTriggerProps<T>) => {
   const c = theme.colors;
-  const [pressed, setPressed] = useState(false);
   const first = selected[0];
 
   return (
@@ -39,17 +38,17 @@ export const SelectTrigger = <T,>({
           borderColor: open ? c.primary : c.border,
           borderRadius: theme.radius.md,
           paddingHorizontal: theme.spacing.md,
-          opacity: disabled ? DISABLED_TRIGGER_OPACITY : pressed ? PRESSED_TRIGGER_OPACITY : 1,
+          opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1,
         },
         slots?.trigger,
       ]}
     >
       {/* Full-size press target behind the content, so chips and clear stay sibling buttons */}
-      <Pressable
-        style={StyleSheet.absoluteFill}
+      <Touchable
+        theme={theme}
+        ripple={false}
+        style={[StyleSheet.absoluteFill, { borderRadius: theme.radius.md }]}
         onPress={onOpen}
-        onPressIn={() => setPressed(true)}
-        onPressOut={() => setPressed(false)}
         disabled={disabled}
         accessibilityRole="button"
         accessibilityLabel={label ?? placeholder}
@@ -68,8 +67,9 @@ export const SelectTrigger = <T,>({
         ) : multiple && chips ? (
           <View style={styles.chips} pointerEvents="box-none">
             {selected.map((option) => (
-              <Pressable
+              <Touchable
                 key={option.label}
+                theme={theme}
                 onPress={() => onRemove(option)}
                 disabled={disabled}
                 accessibilityRole="button"
@@ -77,7 +77,7 @@ export const SelectTrigger = <T,>({
                 style={[styles.chip, { backgroundColor: c.primaryMuted, borderRadius: theme.radius.full }, slots?.chip]}
               >
                 <Text style={[textStyle(theme, 'sm', 'medium'), { color: c.primary }, slots?.chipText]}>{option.label} ×</Text>
-              </Pressable>
+              </Touchable>
             ))}
           </View>
         ) : (
@@ -90,9 +90,16 @@ export const SelectTrigger = <T,>({
         )}
       </View>
       {clearable && selected.length > 0 && !disabled ? (
-        <Pressable hitSlop={10} onPress={onClear} accessibilityRole="button" accessibilityLabel="Clear">
+        <Touchable
+          theme={theme}
+          hitSlop={10}
+          onPress={onClear}
+          accessibilityRole="button"
+          accessibilityLabel="Clear"
+          style={[styles.clearButton, { borderRadius: theme.radius.full }]}
+        >
           <Text style={[textStyle(theme, 'lg'), styles.clear, { color: c.textSecondary }, slots?.clear]}>×</Text>
-        </Pressable>
+        </Touchable>
       ) : null}
       <SelectChevron open={open} renderChevron={renderChevron} theme={theme} style={slots?.chevron} />
     </View>

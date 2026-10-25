@@ -26,6 +26,8 @@ export const lightTheme: PickerTheme = {
     backdrop: 'rgba(23,21,15,0.45)',
     indicator: 'rgba(23,21,15,0.06)',
     handle: '#D8D3C9',
+    hover: 'rgba(23,21,15,0.05)',
+    ripple: 'rgba(23,21,15,0.18)',
   },
   ...SHARED_TOKENS,
 };
@@ -46,6 +48,8 @@ export const darkTheme: PickerTheme = {
     backdrop: 'rgba(0,0,0,0.6)',
     indicator: 'rgba(255,255,255,0.07)',
     handle: '#3D3930',
+    hover: 'rgba(255,255,255,0.06)',
+    ripple: 'rgba(255,255,255,0.2)',
   },
   ...SHARED_TOKENS,
 };

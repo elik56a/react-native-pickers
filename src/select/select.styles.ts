@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chip: { paddingHorizontal: 10, paddingVertical: 4 },
   clear: { paddingHorizontal: 6 },
+  clearButton: { justifyContent: 'center' },
   chevron: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginStart: 4 },
   chevronMark: { width: 8, height: 8, borderRightWidth: 1.75, borderBottomWidth: 1.75, marginTop: -4, transform: [{ rotate: '45deg' }] },
   dropdownList: { flexShrink: 1 },

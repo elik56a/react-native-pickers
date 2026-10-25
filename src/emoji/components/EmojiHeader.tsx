@@ -1,6 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { SearchInput } from '../../core/components/SearchInput';
+import { Touchable } from '../../core/components/Touchable';
 import { TONE_SWATCHES } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { EmojiHeaderProps } from '../emoji.types';
@@ -31,14 +32,15 @@ export const EmojiHeader = ({
       <View style={styles.flex} />
     )}
     {showSkinTones && (
-      <Pressable
+      <Touchable
+        theme={theme}
         onPress={onToneButtonPress}
         accessibilityRole="button"
         accessibilityLabel="Skin tone"
         style={[styles.toneButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }, slots?.skinToneButton]}
       >
         <Text style={styles.toneButtonText}>{TONE_SWATCHES[tone]}</Text>
-      </Pressable>
+      </Touchable>
     )}
   </View>
 );

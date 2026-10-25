@@ -16,7 +16,8 @@ export const styles = StyleSheet.create({
   headerCenter: { flex: 2, alignItems: 'center' },
   flex: { flex: 1 },
   shrink: { flexShrink: 1 },
-  button: { paddingVertical: 6 },
+  /** Padded for a comfortable hover and ripple area; the negative margin keeps the label lined up with the edge. */
+  button: { paddingVertical: 6, paddingHorizontal: 8, marginHorizontal: -8 },
   dropdownOverlay: { position: 'absolute' },
   dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
   content: { paddingHorizontal: 16, paddingBottom: 8 },

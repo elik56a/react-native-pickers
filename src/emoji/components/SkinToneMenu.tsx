@@ -1,5 +1,6 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { Touchable } from '../../core/components/Touchable';
 import { TONE_SWATCHES } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { SkinTone, SkinToneMenuProps } from '../emoji.types';
@@ -13,8 +14,9 @@ export const SkinToneMenu = ({ tone, onSelect, theme, slots }: SkinToneMenuProps
     ]}
   >
     {TONE_SWATCHES.map((swatch, i) => (
-      <Pressable
+      <Touchable
         key={swatch}
+        theme={theme}
         onPress={() => onSelect(i as SkinTone)}
         accessibilityRole="button"
         accessibilityLabel={`Skin tone ${i}`}
@@ -25,7 +27,7 @@ export const SkinToneMenu = ({ tone, onSelect, theme, slots }: SkinToneMenuProps
         ]}
       >
         <Text style={styles.toneOptionText}>{swatch}</Text>
-      </Pressable>
+      </Touchable>
     ))}
   </View>
 );

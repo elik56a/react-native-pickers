@@ -104,6 +104,8 @@ interface PickerTheme {
     backdrop: string;      // sheet overlay
     indicator: string;     // wheel selection band
     handle: string;        // sheet grab handle
+    hover: string;         // tint while the pointer is over anything pressable
+    ripple: string;        // ripple that spreads from the touch point on press
   };
   radius: { sm: number; md: number; lg: number; full: number; sheet: number };
   spacing: { xs: number; sm: number; md: number; lg: number; xl: number };
@@ -134,6 +136,8 @@ interface PickerTheme {
 | `colors.backdrop` | `rgba(23,21,15,0.45)` | `rgba(0,0,0,0.6)` |
 | `colors.indicator` | `rgba(23,21,15,0.06)` | `rgba(255,255,255,0.07)` |
 | `colors.handle` | `#D8D3C9` | `#3D3930` |
+| `colors.hover` | `rgba(23,21,15,0.05)` | `rgba(255,255,255,0.06)` |
+| `colors.ripple` | `rgba(23,21,15,0.18)` | `rgba(255,255,255,0.2)` |
 
 | Token | Value (both) |
 | --- | --- |
@@ -150,9 +154,83 @@ interface PickerTheme {
 | `primary` | Selected day, today ring, calendar arrows, check marks, chips text, Done button, category underline, tap-to-type ring |
 | `primaryMuted` | Range band, selected select row, chips background, selected skin tone |
 | `indicator` | Wheel selection band |
-| `surface` | Search inputs, pressed rows/days, skin-tone button |
+| `surface` | Search inputs, skin-tone button |
+| `hover` | Every pressable while the pointer is over it: field, rows, days, wheel rows, emoji, buttons |
+| `ripple` | The same elements on press, on every platform, except the select field and wheel rows |
 | `textSecondary` | Unselected wheel rows, weekday names, placeholders, descriptions, Cancel |
 | `textDisabled` | Disabled days / rows, outside-month days |
+
+## Hover and ripple
+
+Everything you can press (the select field, list and dropdown rows, calendar days, wheel rows, emoji, sheet buttons) tints while a pointer is over it. Items also ripple from the touch point when pressed; the select field and wheel rows don't, since the field opens a list and a wheel row scrolls into place. Hover only happens with a mouse or trackpad, so phones get just the ripple. Both are theme colours, so they follow light and dark mode:
+
+```tsx live
+import { useState } from 'react';
+import { SelectList } from '@elik56a/react-native-pickers';
+
+const fruits = ['Apple', 'Banana', 'Cherry', 'Mango'].map((f) => ({ label: f, value: f }));
+
+export default function Example() {
+  const [fruit, setFruit] = useState<string | null>('Banana');
+  return (
+    <SelectList
+      options={fruits}
+      value={fruit}
+      onChange={setFruit}
+      theme={{ colors: { hover: 'rgba(200,70,13,0.08)', ripple: 'rgba(200,70,13,0.22)' } }}
+    />
+  );
+}
+```
+
+Set either to `'transparent'` to turn that effect off. Hover and press both lists to compare:
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { SelectList } from '@elik56a/react-native-pickers';
+
+const sizes = ['Small', 'Medium', 'Large'].map((s) => ({ label: s, value: s }));
+
+export default function Example() {
+  const [a, setA] = useState<string | null>('Medium');
+  const [b, setB] = useState<string | null>('Medium');
+  return (
+    <View style={{ flexDirection: 'row', gap: 16 }}>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontWeight: '600', marginBottom: 8 }}>Default</Text>
+        <SelectList options={sizes} value={a} onChange={setA} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontWeight: '600', marginBottom: 8 }}>Turned off</Text>
+        <SelectList
+          options={sizes}
+          value={b}
+          onChange={setB}
+          theme={{ colors: { hover: 'transparent', ripple: 'transparent' } }}
+        />
+      </View>
+    </View>
+  );
+}
+```
+
+For the whole app, set them once on the provider:
+
+```tsx
+<PickersProvider theme={{ colors: { hover: 'transparent', ripple: 'transparent' } }}>…</PickersProvider>
+```
+
+Dark mode has its own defaults (a light tint instead of a dark one); override them through `darkTheme`:
+
+```tsx
+<PickersProvider
+  theme={{ colors: { hover: 'rgba(14,165,233,0.08)', ripple: 'rgba(14,165,233,0.2)' } }}
+  darkTheme={{ colors: { hover: 'rgba(56,189,248,0.12)', ripple: 'rgba(56,189,248,0.25)' } }}
+>
+  …
+</PickersProvider>
+```
 
 ## Building a theme in code
 

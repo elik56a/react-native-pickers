@@ -1,6 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { Touchable } from '../../core/components/Touchable';
 import { ARROW_DIRECTIONS, ARROW_LABELS } from '../calendar.constants';
 import { styles } from '../calendar.styles';
 import type { CalendarHeaderProps } from '../calendar.types';
@@ -20,9 +21,11 @@ export const CalendarHeader = ({
   slots,
 }: CalendarHeaderProps) => (
   <View style={[styles.header, { paddingHorizontal: theme.spacing.sm, marginBottom: theme.spacing.sm }, slots?.header]}>
-    <Pressable
-      onPress={enableQuickJump ? onTitlePress : undefined}
-      style={({ pressed }) => [styles.titleButton, { borderRadius: theme.radius.sm, opacity: pressed ? 0.6 : 1 }]}
+    <Touchable
+      theme={theme}
+      disabled={!enableQuickJump}
+      onPress={onTitlePress}
+      style={[styles.titleButton, { borderRadius: theme.radius.sm }]}
       accessibilityRole={enableQuickJump ? 'button' : 'header'}
       accessibilityLabel={accessibilityLabel}
     >
@@ -30,20 +33,18 @@ export const CalendarHeader = ({
       {enableQuickJump && (
         <Text style={[textStyle(theme, 'sm', 'bold'), styles.caret, { color: theme.colors.primary }]}>{view === 'days' ? '▾' : '▴'}</Text>
       )}
-    </Pressable>
+    </Touchable>
     <View style={styles.arrows}>
       {ARROW_DIRECTIONS.map((direction) => {
         const disabled = isArrowDisabled(direction);
         return (
-          <Pressable
+          <Touchable
             key={direction}
-            onPress={disabled ? undefined : () => onArrowPress(direction)}
+            theme={theme}
+            disabled={disabled}
+            onPress={() => onArrowPress(direction)}
             hitSlop={8}
-            style={({ pressed }) => [
-              styles.arrow,
-              { borderRadius: theme.radius.full, backgroundColor: pressed ? theme.colors.surface : 'transparent' },
-              slots?.arrow,
-            ]}
+            style={[styles.arrow, { borderRadius: theme.radius.full }, slots?.arrow]}
             accessibilityRole="button"
             accessibilityLabel={ARROW_LABELS[direction]}
             accessibilityState={{ disabled }}
@@ -62,7 +63,7 @@ export const CalendarHeader = ({
                 {getArrowGlyph(direction, rtl)}
               </Text>
             )}
-          </Pressable>
+          </Touchable>
         );
       })}
     </View>

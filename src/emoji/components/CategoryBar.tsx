@@ -1,5 +1,6 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { Touchable } from '../../core/components/Touchable';
 import { INACTIVE_TAB_OPACITY } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { CategoryBarProps } from '../emoji.types';
@@ -12,13 +13,14 @@ export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, t
       const selected = active === key;
       const icon = icons[key];
       return (
-        <Pressable
+        <Touchable
           key={key}
+          theme={theme}
           onPress={() => onSelect(key)}
           accessibilityRole="tab"
           accessibilityLabel={labels[key]}
           accessibilityState={{ selected }}
-          style={[styles.tab, slots?.categoryTab, selected && slots?.activeCategoryTab]}
+          style={[styles.tab, { borderRadius: theme.radius.sm }, slots?.categoryTab, selected && slots?.activeCategoryTab]}
         >
           {typeof icon === 'string' ? <Text style={[styles.tabIcon, { opacity: selected ? 1 : INACTIVE_TAB_OPACITY }]}>{icon}</Text> : icon}
           <View
@@ -29,7 +31,7 @@ export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, t
               slots?.categoryIndicator,
             ]}
           />
-        </Pressable>
+        </Touchable>
       );
     })}
   </View>

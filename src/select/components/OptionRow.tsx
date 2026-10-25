@@ -1,6 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
 import { DISABLED_OPTION_OPACITY } from '../select.constants';
 import { styles } from '../select.styles';
@@ -20,18 +21,20 @@ export const OptionRow = <T,>({
 }: OptionRowProps<T>) => {
   const c = theme.colors;
   return (
-    <Pressable
-      onPress={disabled ? undefined : () => onToggle(option)}
+    <Touchable
+      theme={theme}
+      disabled={disabled}
+      onPress={() => onToggle(option)}
       accessibilityRole={multiple ? 'checkbox' : 'button'}
       accessibilityState={{ selected, checked: multiple ? selected : undefined, disabled }}
       accessibilityLabel={option.label}
-      style={({ pressed }) => [
+      style={[
         styles.option,
         {
           paddingHorizontal: theme.spacing.lg,
           marginHorizontal: theme.spacing.sm,
           borderRadius: theme.radius.md,
-          backgroundColor: selected ? c.primaryMuted : pressed ? c.surface : 'transparent',
+          backgroundColor: selected ? c.primaryMuted : 'transparent',
           opacity: disabled ? DISABLED_OPTION_OPACITY : 1,
         },
         slots?.option,
@@ -75,6 +78,6 @@ export const OptionRow = <T,>({
           ) : null}
         </>
       )}
-    </Pressable>
+    </Touchable>
   );
 };

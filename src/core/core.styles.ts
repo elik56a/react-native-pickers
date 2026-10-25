@@ -8,4 +8,6 @@ export const coreStyles = StyleSheet.create({
   startAligned: Platform.select({ web: { textAlign: 'left' }, default: {} }),
   /** Drops the browser's focus ring; inputs show focus with a theme-colored border instead. */
   noOutline: Platform.select({ web: { outlineStyle: 'solid', outlineWidth: 0 }, default: {} }),
+  clip: { overflow: 'hidden' },
+  ripple: { position: 'absolute' },
 });

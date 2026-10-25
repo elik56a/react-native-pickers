@@ -2,6 +2,8 @@ import { memo, useMemo } from 'react';
 import { Animated, Pressable, Text } from 'react-native';
 
 import { textStyle } from '../../core';
+import { TouchFeedback } from '../../core/components/TouchFeedback';
+import { useTouchFeedback } from '../../core/hooks/useTouchFeedback';
 import { PERSPECTIVE } from '../wheel.constants';
 import { styles } from '../wheel.styles';
 import type { WheelRowProps } from '../wheel.types';
@@ -47,10 +49,17 @@ const WheelRowImpl = <T,>({
   }, [dataIndex, fadeTo, itemHeight, rotation, scrollY, variant, visibleItems]);
 
   const color = item.disabled ? theme.colors.textDisabled : selected ? theme.colors.text : theme.colors.textSecondary;
+  const pressable = !!onSelect && !item.disabled;
+  const touch = useTouchFeedback(theme, !pressable, false);
 
   return (
-    <Pressable onPress={onSelect && !item.disabled ? () => onSelect(dataIndex) : undefined} accessible={false}>
-      <Animated.View style={[styles.row, { height: itemHeight, paddingHorizontal: theme.spacing.sm }, animatedStyle, slots?.item]}>
+    <Pressable {...touch.handlers} onPress={pressable ? () => onSelect?.(dataIndex) : undefined} accessible={false}>
+      {/* Hover only, no ripple: the hover tint lives inside the animated row, so it rotates and fades with it */}
+      <Animated.View
+        ref={touch.ref}
+        style={[styles.row, { height: itemHeight, paddingHorizontal: theme.spacing.sm }, animatedStyle, slots?.item]}
+      >
+        <TouchFeedback {...touch.feedback} borderRadius={theme.radius.md} />
         {renderItem ? (
           renderItem({ item, index: logicalIndex, selected, theme })
         ) : (
