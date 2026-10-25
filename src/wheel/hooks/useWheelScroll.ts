@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import { Animated, Platform } from 'react-native';
+import { Animated } from 'react-native';
 
+import { USE_NATIVE_DRIVER } from '../../core/core.constants';
+import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
 import { SETTLE_DELAY } from '../wheel.constants';
 import type { WheelItem } from '../wheel.types';
 import { alignToLap, firstEnabled, getLoopLayout, getSettleResult, offsetToIndex, wrapIndex } from '../wheel.utils';
-
-const NATIVE = Platform.OS !== 'web';
 
 interface UseWheelScrollParams<T> {
   items: WheelItem<T>[];
@@ -48,7 +48,7 @@ export const useWheelScroll = <T>({
   const initialDataIndex = (loop ? layout.middle : 0) + firstEnabled(items, initialLogical);
 
   const listRef = useRef<FlatList<number>>(null);
-  const scrollY = useRef(new Animated.Value(initialDataIndex * h)).current;
+  const scrollY = useAnimatedValue(initialDataIndex * h);
   const [active, setActive] = useState(initialDataIndex);
   const st = useRef({
     tick: initialDataIndex,
@@ -113,7 +113,7 @@ export const useWheelScroll = <T>({
   const onScroll = useMemo(
     () =>
       Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-        useNativeDriver: NATIVE,
+        useNativeDriver: USE_NATIVE_DRIVER,
         listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
           const y = e.nativeEvent.contentOffset.y;
           st.y = y;
@@ -125,7 +125,7 @@ export const useWheelScroll = <T>({
             const item = items[logicalIndex];
             if (item && !item.disabled) callbacks.current.onValueChanging?.(item.value, logicalIndex);
           }
-          scheduleSettle(NATIVE ? SETTLE_DELAY.scrollNative : SETTLE_DELAY.scrollWeb);
+          scheduleSettle(USE_NATIVE_DRIVER ? SETTLE_DELAY.scrollNative : SETTLE_DELAY.scrollWeb);
         },
       }),
     [count, h, items, layout.total, scheduleSettle, scrollY, st]

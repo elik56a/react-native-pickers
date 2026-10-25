@@ -1,10 +1,17 @@
-import { Platform } from 'react-native';
+import { Easing, Platform } from 'react-native';
 
 /** Desktop browsers can draw a permanent scrollbar track, which looks out of place in phone-style lists. */
 export const SHOWS_SCROLL_INDICATOR = Platform.select({ web: false, default: true });
 
-/** react-native-web has no native animated module. */
+/** react-native-web has no native animated module. Layout props (height) never run on it, whatever the platform. */
 export const USE_NATIVE_DRIVER = Platform.OS !== 'web';
+
+/** Things arriving decelerate into place; things leaving accelerate away. */
+export const EASE_OUT = Easing.out(Easing.cubic);
+export const EASE_IN = Easing.in(Easing.cubic);
+
+/** A text field can't hold the hover tint as a child view, so an inset shadow this wide paints it over the background, under the text. */
+export const HOVER_FILL_SPREAD = 999;
 
 /** The ripple grows over this multiple of the theme's animation duration, and fades out over the other. */
 export const RIPPLE_GROW_RATIO = 1.5;

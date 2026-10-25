@@ -1,16 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { GestureResponderHandlers, HostInstance, LayoutChangeEvent } from 'react-native';
-import { Animated, Easing, PanResponder } from 'react-native';
+import { PanResponder } from 'react-native';
 
-import {
-  IS_WEB,
-  RESIZE_DURATION_RATIO,
-  SNAP_BACK_BOUNCINESS,
-  SNAP_BACK_SPEED,
-  USE_NATIVE_DRIVER,
-  WHEEL_IDLE_MS,
-  WHEEL_THRESHOLD,
-} from '../sheet.constants';
+import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
+import { spring, timing } from '../../core/utils/animation.utils';
+import { IS_WEB, RESIZE_DURATION_RATIO, SNAP_BACK_BOUNCINESS, SNAP_BACK_SPEED, WHEEL_IDLE_MS, WHEEL_THRESHOLD } from '../sheet.constants';
 import type { ScrollNode, SheetResize, SheetResizeOptions, SheetSnap, WheelEventLike, WheelHost } from '../sheet.types';
 import { canScrollWithin, getDragFrame, getReleaseTarget, getWheelTarget, isVerticalDrag } from '../sheet.utils';
 
@@ -23,7 +17,7 @@ const overflowOf = (node: ScrollNode) =>
  */
 export const useSheetResize = (options: SheetResizeOptions): SheetResize => {
   const { active, drag } = options;
-  const height = useRef(new Animated.Value(0)).current;
+  const height = useAnimatedValue(0);
   const [sized, setSized] = useState(false);
   const sizedRef = useRef(false);
   const base = useRef(0);
@@ -54,17 +48,10 @@ export const useSheetResize = (options: SheetResizeOptions): SheetResize => {
       if (!sizedRef.current) height.setValue(base.current);
       expanded.current = toExpanded;
       setSizedBoth(true);
-      Animated.spring(drag, {
-        toValue: 0,
-        useNativeDriver: USE_NATIVE_DRIVER,
-        bounciness: SNAP_BACK_BOUNCINESS,
-        speed: SNAP_BACK_SPEED,
-      }).start();
-      Animated.timing(height, {
-        toValue: toExpanded ? expandedHeight : base.current,
+      spring(drag, 0, { bounciness: SNAP_BACK_BOUNCINESS, speed: SNAP_BACK_SPEED }).start();
+      timing(height, toExpanded ? expandedHeight : base.current, {
         duration: duration * RESIZE_DURATION_RATIO,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
+        native: false,
       }).start(({ finished }) => {
         if (finished && !expanded.current) setSizedBoth(false);
       });

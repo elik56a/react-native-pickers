@@ -5,8 +5,6 @@ export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;
 export const DEFAULT_BOTTOM_INSET = Platform.OS === 'ios' ? 24 : 12;
 
-export { USE_NATIVE_DRIVER } from '../core/core.constants';
-
 /** Opening runs a little longer than closing so the sheet settles instead of snapping in. */
 export const OPEN_EXTRA_DURATION_MS = 60;
 
