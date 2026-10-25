@@ -3,13 +3,21 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump
+        type: choice
+        options: [patch, minor, major]
+        default: patch
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
   publish:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +28,14 @@ jobs:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      - name: Bump version and tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npm version ${{ inputs.bump }} -m "Release v%s"
       - name: Check tag matches package.json version
+        if: github.event_name == 'push'
         run: |
           VERSION=$(node -p "require('./package.json').version")
           if [ "${GITHUB_REF_NAME}" != "v${VERSION}" ]; then
@@ -31,5 +46,9 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # Push the bump only after checks pass, so a failed run leaves no orphan tag.
+      - name: Push version commit and tag
+        if: github.event_name == 'workflow_dispatch'
+        run: git push --follow-tags
       # Checks already ran above, so skip the duplicate prepublishOnly run.
       - run: npm publish --ignore-scripts
