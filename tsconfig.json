@@ -10,13 +10,8 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "lib",
-    "rootDir": "src",
-    "types": []
+    "noEmit": true,
+    "types": ["jest"]
   },
-  "include": ["src"],
-  "exclude": ["**/__tests__/**"]
+  "include": ["src"]
 }

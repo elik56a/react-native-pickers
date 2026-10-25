@@ -1,0 +1,19 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.{js,ts,tsx}"
+      run: node scripts/expand-returned-objects.js {staged_files} && pnpm exec biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+    biome:
+      glob: "*.{json,jsonc,css}"
+      run: pnpm exec biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: pnpm typecheck
+
+commit-msg:
+  commands:
+    conventional:
+      run: pnpm exec commitlint --edit {1}

@@ -82,6 +82,16 @@ I18nManager.allowRTL(true);
 I18nManager.forceRTL(true); // requires an app reload
 ```
 
+### On the web
+
+React Native Web has no RTL layout flag, and the browser aligns each label by its own script, so a list mixing Hebrew and English would zigzag. Select labels are therefore pinned to the left edge on the web. For an RTL web app, align them right through the slot styles:
+
+```tsx
+const rtl = { textAlign: 'right' } as const;
+
+<SelectPicker styles={{ optionLabel: rtl, optionDescription: rtl, groupHeaderText: rtl, triggerText: rtl, placeholder: rtl }} … />
+```
+
 ## Search in any language
 
 The select search folds case and **diacritics** (`é` → `e`) and strips **Hebrew niqqud**, so users don't need to type accents. Use `keywords` to make options findable in other languages or by synonyms:

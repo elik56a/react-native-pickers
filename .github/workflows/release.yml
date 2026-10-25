@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npm version ${{ inputs.bump }} -m "Release v%s"
+          npm version ${{ inputs.bump }} -m "chore(release): v%s"
       - name: Check tag matches package.json version
         if: github.event_name == 'push'
         run: |
@@ -43,6 +43,7 @@ jobs:
             exit 1
           fi
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

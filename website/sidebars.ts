@@ -65,7 +65,14 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Resources',
-      items: ['resources/comparison', 'resources/migration', 'resources/faq', 'resources/troubleshooting', 'resources/ai'],
+      items: [
+        'resources/comparison',
+        'resources/migration',
+        'resources/faq',
+        'resources/troubleshooting',
+        'resources/ai',
+        'resources/contributing',
+      ],
     },
   ],
 };

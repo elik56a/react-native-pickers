@@ -1,0 +1,24 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  titleButton: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6, paddingHorizontal: 8 },
+  caret: { marginStart: 6 },
+  arrows: { flexDirection: 'row', gap: 4 },
+  arrow: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  arrowText: { lineHeight: 22 },
+  week: { flexDirection: 'row' },
+  weekdays: { marginBottom: 4 },
+  weekdayText: { textAlign: 'center' },
+  cell: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  dayInner: { alignItems: 'center', justifyContent: 'center' },
+  todayRing: { borderWidth: 1.5 },
+  band: { position: 'absolute', start: 0, end: 0 },
+  bandFromCenter: { start: '50%' },
+  bandToCenter: { end: '50%' },
+  dayLabel: { fontSize: 9, marginTop: -2 },
+  dots: { flexDirection: 'row', gap: 2, position: 'absolute', bottom: 4 },
+  dot: { width: 4, height: 4, borderRadius: 2 },
+  quickGrid: { justifyContent: 'space-evenly' },
+  quickCell: { flex: 1, marginHorizontal: 6, height: 44, alignItems: 'center', justifyContent: 'center' },
+});

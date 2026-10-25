@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 :root {
   --brand-ink: #17150f;
@@ -12,9 +12,9 @@
   --ifm-color-primary-lighter: #e9550f;
   --ifm-color-primary-lightest: #f26a2c;
   --ifm-color-secondary: #ebe6dc;
-  --ifm-font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --ifm-heading-font-family: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
-  --ifm-font-family-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ifm-heading-font-family: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --ifm-font-color-base: #17150f;
   --ifm-heading-color: #17150f;
   --ifm-heading-font-weight: 700;
@@ -33,7 +33,7 @@
   --site-shadow: 0 1px 2px rgba(23, 21, 15, 0.05), 0 16px 32px -16px rgba(23, 21, 15, 0.18);
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #ff7a3d;
   --ifm-color-primary-dark: #ff6620;
   --ifm-color-primary-darker: #ff5b12;
@@ -57,7 +57,7 @@
   --site-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
-div[class*='announcementBar_'] {
+div[class*="announcementBar_"] {
   background-color: var(--brand-ink) !important;
   color: #f5f2ec !important;
   border-bottom: none;
@@ -70,7 +70,7 @@ div[class*='announcementBar_'] {
 
 body {
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: 'cv11', 'ss01';
+  font-feature-settings: "cv11", "ss01";
 }
 
 h1,
@@ -85,7 +85,7 @@ h3 {
   box-shadow: none;
 }
 
-[data-theme='light'] .navbar {
+[data-theme="light"] .navbar {
   background-color: rgba(252, 251, 248, 0.82);
 }
 
@@ -160,11 +160,11 @@ pre {
   box-shadow: none;
 }
 
-[data-theme='light'] .theme-code-block {
+[data-theme="light"] .theme-code-block {
   --prism-background-color: var(--site-surface) !important;
 }
 
-[data-theme='light'] .theme-code-block pre {
+[data-theme="light"] .theme-code-block pre {
   background-color: var(--site-surface) !important;
 }
 
@@ -190,13 +190,13 @@ pre {
   --ifm-button-color: #fff;
 }
 
-[data-theme='dark'] .button--primary {
+[data-theme="dark"] .button--primary {
   --ifm-button-color: var(--brand-ink);
 }
 
 /* ----- live playground: render the result like a phone screen ----- */
 
-div[class*='playgroundContainer'] {
+div[class*="playgroundContainer"] {
   border: 1px solid var(--site-border);
   border-radius: 16px;
   overflow: hidden;
@@ -204,7 +204,7 @@ div[class*='playgroundContainer'] {
   box-shadow: var(--site-shadow);
 }
 
-div[class*='playgroundHeader'] {
+div[class*="playgroundHeader"] {
   background: var(--site-surface);
   color: var(--ifm-color-emphasis-700);
   font-size: 0.72rem;
@@ -215,18 +215,18 @@ div[class*='playgroundHeader'] {
   border-bottom: 1px solid var(--site-border);
 }
 
-div[class*='playgroundPreview'] {
+div[class*="playgroundPreview"] {
   background: var(--site-glow), var(--ifm-background-color);
   padding: 1.75rem 1rem;
 }
 
-div[class*='playgroundPreview'] > div:first-child,
-div[class*='playgroundPreview'] > div[class^='css-'] {
+div[class*="playgroundPreview"] > div:first-child,
+div[class*="playgroundPreview"] > div[class^="css-"] {
   max-width: 400px;
   margin: 0 auto;
 }
 
-div[class*='playgroundEditor'] {
+div[class*="playgroundEditor"] {
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.85rem;
 }

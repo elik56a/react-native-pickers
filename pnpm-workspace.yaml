@@ -1,6 +1,7 @@
 packages:
-  - example/native
+  - example
   - website
 
 onlyBuiltDependencies:
   - esbuild
+  - lefthook

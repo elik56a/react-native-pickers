@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+    # `edited` re-runs the title check when the PR is renamed.
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # PRs are squash-merged, so the title becomes the commit message on master.
+      - name: Check PR title follows Conventional Commits
+        if: github.event_name == 'pull_request'
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$TITLE" | pnpm exec commitlint
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build

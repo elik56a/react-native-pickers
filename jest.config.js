@@ -1,7 +1,6 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  preset: '@react-native/jest-preset',
   roots: ['<rootDir>/src', '<rootDir>/website/src/live'],
-  transform: { '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.test.json', diagnostics: { ignoreCodes: [151001] } }] },
-  moduleNameMapper: { '^react-native$': '<rootDir>/scripts/rn-stub.js' },
+  // pnpm nests packages under node_modules/.pnpm/<id>/node_modules, which the preset's default pattern doesn't expect.
+  transformIgnorePatterns: ['node_modules/(?!(\\.pnpm/[^/]+/node_modules/)?((jest-)?react-native|@react-native(-community)?)/)'],
 };

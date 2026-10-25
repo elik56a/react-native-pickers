@@ -245,6 +245,8 @@ Props: `title`, `headerLeft`, `headerRight`, `footer`, `enableSwipeToClose`, `cl
 
 Layouts use logical `start` / `end`, so they flip automatically with `I18nManager.isRTL`; calendar arrows and swipe direction follow. All month, weekday, and AM/PM names come from `Intl` (Hermes supports it), with English fallbacks. Every user-facing string (Done, Cancel, Search, empty states, category labels) is a prop.
 
+On React Native Web, select labels are pinned to the left edge so options in different scripts line up (the browser would otherwise align Hebrew or Arabic labels right). For an RTL web app, set `textAlign: 'right'` through the `optionLabel`, `triggerText` and `placeholder` slot styles.
+
 ## Accessibility
 
 Wheels are `adjustable` with increment / decrement actions for VoiceOver and TalkBack. Days announce their full date, and selected / disabled states are exposed everywhere.
@@ -255,31 +257,55 @@ Animations run on the native driver. Wheels and the emoji grid are virtualized `
 
 ## Development
 
+A pnpm workspace: the library at the root, an Expo example app in [`example/`](example) that renders against `src/` (edits hot-reload), and the docs site in [`website/`](website).
+
 ```sh
-npm test            # unit tests
-npm run typecheck
-npm run build       # lib/ (ESM + .d.ts)
-npm run example:web # bundles example/App.tsx for React Native Web → example/web/dist
-npm run gen:emoji   # regenerate emoji data from emojibase-data
-pnpm docs           # docs site at localhost:3000 (website/, Docusaurus)
+pnpm install        # also installs the git hooks (lefthook)
+
+pnpm web            # example app in the browser
+pnpm ios            # example app in the iOS Simulator
+pnpm android        # example app in the Android emulator
+pnpm docs           # docs site at localhost:3000
+
+pnpm test           # Jest + React Native Testing Library
+pnpm lint           # Biome: lint, format and import order
+pnpm format         # fix whatever lint can fix
+pnpm typecheck
+pnpm build          # lib/ (ESM + .d.ts)
+pnpm gen:emoji      # regenerate emoji data from emojibase-data
 ```
+
+### Project structure
+
+Each picker lives in its own folder under `src/` (`wheel`, `time`, `calendar`, `date`, `select`, `emoji`), on top of `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports flow feature → `sheet` → `core`, and every folder has the same layout:
+
+```
+src/select/
+├─ SelectPicker.tsx        components render only
+├─ components/             smaller render-only parts
+├─ hooks/                  state and event handling
+├─ select.utils.ts         pure logic, with select.utils.test.ts next to it
+├─ select.types.ts · select.constants.ts · select.styles.ts
+├─ SelectPicker.test.tsx   interaction tests (React Native Testing Library)
+└─ index.ts                the folder's public API
+```
+
+### Conventions
+
+- Tests sit next to the file they test.
+- Arrow functions (`export const fn = () =>`), and returned objects with 2+ properties go one property per line. A Biome plugin in [`lint/`](lint) enforces this, and `pnpm format` fixes it.
+- Imports come in three blocks: React and React Native, other packages, then our own code.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) (`feat:`, `fix:`, `refactor(select):` …). The commit hook checks each commit, and CI checks the PR title, since PRs are squash-merged.
+
+The pre-commit hook formats and lints the staged files and runs typecheck. CI runs lint, typecheck, tests and the build on every pull request.
 
 ### Releasing
 
-Releases are published to npm by CI ([`.github/workflows/release.yml`](.github/workflows/release.yml)) when a version tag is pushed:
+CI publishes to npm ([`.github/workflows/release.yml`](.github/workflows/release.yml)). Either run **Release** from the Actions tab and pick patch / minor / major, or push a version tag yourself:
 
 ```sh
-npm version patch                     # or minor / major: bumps package.json, commits, tags vX.Y.Z
-git push origin master --follow-tags  # tag → typecheck, test, build, npm publish; master → docs deploy
-```
-
-### Running the example on iOS / Android
-
-[`example/native`](example/native) is an Expo app that renders [`example/App.tsx`](example/App.tsx) against the library source, so edits in `src/` hot-reload.
-
-```sh
-pnpm install        # from the repo root (pnpm workspace)
-pnpm example        # press i for the iOS Simulator, a for the Android emulator
+npm version patch -m "chore(release): v%s"  # or minor / major: bumps package.json, commits, tags vX.Y.Z
+git push origin master --follow-tags        # tag → lint, typecheck, test, build, npm publish; master → docs deploy
 ```
 
 Emoji data comes from [emojibase](https://emojibase.dev) (MIT).

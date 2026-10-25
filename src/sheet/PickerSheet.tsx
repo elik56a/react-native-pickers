@@ -1,86 +1,37 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Pressable, Text } from 'react-native';
+import { usePickerTheme } from '../core';
 import { BottomSheet } from './BottomSheet';
-import type { BottomSheetProps } from './BottomSheet';
-import { textStyle, usePickerTheme } from '../theme';
-import type { ThemableProps } from '../types';
-
-export interface SheetChromeProps extends ThemableProps {
-  visible: boolean;
-  onClose: () => void;
-  title?: React.ReactNode;
-  /** Default: 'Done' */
-  confirmLabel?: string;
-  /** Default: 'Cancel' */
-  cancelLabel?: string;
-  /** Show the cancel button. Default: true */
-  showCancel?: boolean;
-  /** Passed through to the underlying BottomSheet */
-  sheetProps?: Partial<Omit<BottomSheetProps, 'visible' | 'onClose' | 'children'>>;
-}
-
-export interface PickerSheetProps extends SheetChromeProps {
-  onConfirm?: () => void;
-  confirmDisabled?: boolean;
-  children: React.ReactNode;
-}
+import { SheetButton } from './components/SheetButton';
+import { DEFAULT_CANCEL_LABEL, DEFAULT_CONFIRM_LABEL } from './sheet.constants';
+import type { PickerSheetProps } from './sheet.types';
 
 /** BottomSheet with Cancel / Done header buttons. */
-export function PickerSheet({
+export const PickerSheet = ({
   visible,
   onClose,
   onConfirm,
   confirmDisabled,
   title,
-  confirmLabel = 'Done',
-  cancelLabel = 'Cancel',
+  confirmLabel = DEFAULT_CONFIRM_LABEL,
+  cancelLabel = DEFAULT_CANCEL_LABEL,
   showCancel = true,
   sheetProps,
   theme: themeOverride,
   children,
-}: PickerSheetProps) {
+}: PickerSheetProps) => {
   const theme = usePickerTheme(themeOverride);
-  const btn = (label: string, onPress: () => void, primary: boolean, disabled?: boolean) => (
-    <Pressable
-      onPress={disabled ? undefined : onPress}
-      hitSlop={10}
-      accessibilityRole="button"
-      accessibilityState={{ disabled }}
-      style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1, paddingVertical: 6 })}
-    >
-      <Text
-        style={[
-          textStyle(theme, 'md', primary ? 'bold' : 'regular'),
-          { color: disabled ? theme.colors.textDisabled : primary ? theme.colors.primary : theme.colors.textSecondary },
-        ]}
-      >
-        {label}
-      </Text>
-    </Pressable>
-  );
   return (
     <BottomSheet
       visible={visible}
       onClose={onClose}
       title={title}
       theme={themeOverride}
-      headerLeft={showCancel ? btn(cancelLabel, onClose, false) : undefined}
-      headerRight={onConfirm ? btn(confirmLabel, onConfirm, true, confirmDisabled) : undefined}
+      headerLeft={showCancel ? <SheetButton label={cancelLabel} onPress={onClose} theme={theme} /> : undefined}
+      headerRight={
+        onConfirm ? <SheetButton label={confirmLabel} onPress={onConfirm} primary disabled={confirmDisabled} theme={theme} /> : undefined
+      }
       {...sheetProps}
     >
       {children}
     </BottomSheet>
   );
-}
-
-/** Draft state that resets to `value` every time the sheet opens. */
-export function useDraft<V>(value: V, visible: boolean): [V, (v: V) => void] {
-  const [draft, setDraft] = useState(value);
-  const wasVisible = useRef(visible);
-  useEffect(() => {
-    if (visible && !wasVisible.current) setDraft(value);
-    wasVisible.current = visible;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
-  return [draft, setDraft];
-}
+};
