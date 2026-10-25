@@ -295,7 +295,7 @@ src/select/
 - Tests sit next to the file they test.
 - Arrow functions (`export const fn = () =>`), and returned objects with 2+ properties go one property per line. A Biome plugin in [`lint/`](lint) enforces this, and `pnpm format` fixes it.
 - Imports come in three blocks: React and React Native, other packages, then our own code.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) (`feat:`, `fix:`, `refactor(select):` …). The commit hook and CI check them.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) (`feat:`, `fix:`, `refactor(select):` …). The commit hook checks each commit, and CI checks the PR title, since PRs are squash-merged.
 
 The pre-commit hook formats and lints the staged files and runs typecheck. CI runs lint, typecheck, tests and the build on every pull request.
 

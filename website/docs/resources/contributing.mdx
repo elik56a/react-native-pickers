@@ -67,4 +67,4 @@ Where new code goes:
 
 ## Checks
 
-The pre-commit hook formats and lints the staged files and runs typecheck, and the commit-msg hook checks the message. On every pull request, CI runs lint, typecheck, tests and the build, and checks every commit message.
+The pre-commit hook formats and lints the staged files and runs typecheck, and the commit-msg hook checks the message. On every pull request, CI runs lint, typecheck, tests and the build. Pull requests are squash-merged, so CI also checks that the PR title is a Conventional Commit: it becomes the commit message on `master`.
