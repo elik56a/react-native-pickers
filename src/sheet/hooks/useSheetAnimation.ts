@@ -5,7 +5,7 @@ import { OPEN_EXTRA_DURATION_MS, USE_NATIVE_DRIVER } from '../sheet.constants';
 import type { SheetAnimationOptions } from '../sheet.types';
 
 /** Slides the sheet in when `visible` turns on and unmounts it after sliding out; `drag` offsets it while swiping. */
-export const useSheetAnimation = ({ visible, duration, windowHeight, onOpened, onClosed }: SheetAnimationOptions) => {
+export const useSheetAnimation = ({ visible, duration, slideDistance, onOpened, onClosed }: SheetAnimationOptions) => {
   const [mounted, setMounted] = useState(visible);
   const progress = useRef(new Animated.Value(0)).current;
   const drag = useRef(new Animated.Value(0)).current;
@@ -41,8 +41,8 @@ export const useSheetAnimation = ({ visible, duration, windowHeight, onOpened, o
   }, [drag, duration, progress, visible]);
 
   const translateY = useMemo(
-    () => Animated.add(progress.interpolate({ inputRange: [0, 1], outputRange: [windowHeight, 0] }), drag),
-    [drag, progress, windowHeight]
+    () => Animated.add(progress.interpolate({ inputRange: [0, 1], outputRange: [slideDistance, 0] }), drag),
+    [drag, progress, slideDistance]
   );
 
   return {

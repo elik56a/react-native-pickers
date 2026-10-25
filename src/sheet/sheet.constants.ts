@@ -20,5 +20,17 @@ export const DISMISS_HEIGHT_RATIO = 0.3;
 export const DISMISS_VELOCITY = 0.9;
 export const SNAP_BACK_BOUNCINESS = 4;
 
+export const SHEET_MAX_WIDTH = 640;
+/** Space kept around the dialog on wide web windows. */
+export const DIALOG_MARGIN = 24;
+/** The dialog rises this far while fading in, instead of sliding up from the bottom edge. */
+export const DIALOG_RISE = 24;
+
+export const DROPDOWN_MAX_HEIGHT = 320;
+/** Space between the field and the dropdown. */
+export const DROPDOWN_GAP = 4;
+/** Space kept between the dropdown and the window edge. */
+export const DROPDOWN_EDGE_MARGIN = 8;
+
 export const BUTTON_HIT_SLOP = 10;
 export const PRESSED_BUTTON_OPACITY = 0.5;

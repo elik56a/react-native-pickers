@@ -4,10 +4,10 @@ import { usePickerTheme } from '../core';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSwipeToClose } from './hooks/useSwipeToClose';
-import { DEFAULT_BOTTOM_INSET, DEFAULT_MAX_HEIGHT_RATIO } from './sheet.constants';
+import { DEFAULT_BOTTOM_INSET, DEFAULT_MAX_HEIGHT_RATIO, DIALOG_RISE } from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { BottomSheetProps } from './sheet.types';
-import { resolveSheetHeight } from './sheet.utils';
+import { resolvePresentation, resolveSheetHeight } from './sheet.utils';
 
 export const BottomSheet = ({
   visible,
@@ -22,6 +22,7 @@ export const BottomSheet = ({
   maxHeightRatio = DEFAULT_MAX_HEIGHT_RATIO,
   height,
   bottomInset = DEFAULT_BOTTOM_INSET,
+  presentation = 'auto',
   styles: slots,
   theme: themeOverride,
   onOpened,
@@ -29,15 +30,17 @@ export const BottomSheet = ({
   testID,
 }: BottomSheetProps) => {
   const theme = usePickerTheme(themeOverride);
-  const { height: windowHeight } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const dialog = resolvePresentation(presentation, Platform.OS, windowWidth) === 'modal';
   const { mounted, progress, drag, translateY } = useSheetAnimation({
     visible,
     duration: theme.animation.duration,
-    windowHeight,
+    slideDistance: dialog ? DIALOG_RISE : windowHeight,
     onOpened,
     onClosed,
   });
-  const swipe = useSwipeToClose(drag, enableSwipeToClose, onClose);
+  const swipe = useSwipeToClose(drag, enableSwipeToClose && !dialog, onClose);
+  const radius = theme.radius.sheet;
 
   if (!mounted) return null;
   const resolvedHeight = resolveSheetHeight(height, windowHeight);
@@ -53,28 +56,30 @@ export const BottomSheet = ({
             accessibilityLabel="Close"
           />
         </Animated.View>
-        <View style={styles.container} pointerEvents="box-none">
+        <View style={dialog ? styles.dialogContainer : styles.container} pointerEvents="box-none">
           <Animated.View
             onLayout={swipe.onLayout}
             style={[
               styles.sheet,
               {
                 backgroundColor: theme.colors.sheet,
-                borderTopLeftRadius: theme.radius.sheet,
-                borderTopRightRadius: theme.radius.sheet,
                 maxHeight: windowHeight * maxHeightRatio,
                 height: resolvedHeight,
-                paddingBottom: bottomInset,
                 transform: [{ translateY }],
               },
+              dialog
+                ? { borderRadius: radius, paddingBottom: theme.spacing.md, opacity: progress }
+                : { borderTopLeftRadius: radius, borderTopRightRadius: radius, paddingBottom: bottomInset },
               slots?.sheet,
             ]}
             accessibilityViewIsModal
           >
-            <View {...swipe.panHandlers}>
-              <View style={styles.handleArea}>
-                <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
-              </View>
+            <View {...swipe.panHandlers} style={dialog && styles.dialogHeader}>
+              {!dialog && (
+                <View style={styles.handleArea}>
+                  <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
+                </View>
+              )}
               {(title || headerLeft || headerRight) && (
                 <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
               )}
