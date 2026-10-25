@@ -318,6 +318,8 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
         getItemLayout={(_: unknown, index: number) => ({ length: h, offset: pad + h * index, index })}
         contentContainerStyle={{ paddingVertical: pad }}
         contentOffset={{ x: 0, y: initialData * h }}
+        // iOS applies contentOffset without a scroll event, so the list would only render rows from 0.
+        initialScrollIndex={Math.max(0, initialData - (visible - 1) / 2)}
         showsVerticalScrollIndicator={false}
         snapToInterval={h}
         decelerationRate="fast"
