@@ -14,6 +14,7 @@ import {
   withSkinTone,
 } from './emojis';
 import type { Emoji, EmojiCategory, SkinTone } from './emojis';
+import { OwnScroll } from '../utils/OwnScroll';
 
 type SectionKey = EmojiCategory | 'recent' | 'search';
 
@@ -341,24 +342,26 @@ export function EmojiPicker({
       {categoryBarPosition === 'top' && categoryBar}
       <View style={[s.flex, { paddingHorizontal: theme.spacing.xs }]} onLayout={onLayout}>
         {width > 0 && (
-          <FlatList
-            ref={listRef}
-            data={rows}
-            renderItem={renderRow}
-            keyExtractor={(r, i) => (r.type === 'header' ? `h-${r.key}` : `r-${r.section}-${i}`)}
-            getItemLayout={(_, i) => ({ index: i, length: rows[i] ? rowLength(rows[i]!) : cell, offset: offsets[i] ?? 0 })}
-            onScroll={onScroll}
-            scrollEventThrottle={32}
-            keyboardShouldPersistTaps="handled"
-            initialNumToRender={Math.ceil(height / cell) + 2}
-            maxToRenderPerBatch={8}
-            windowSize={7}
-            ListEmptyComponent={
-              <View style={[{ padding: theme.spacing.xl, alignItems: 'center' }, slots?.empty]}>
-                <Text style={[textStyle(theme, 'md'), { color: c.textSecondary }, slots?.emptyText]}>{emptyText}</Text>
-              </View>
-            }
-          />
+          <OwnScroll>
+            <FlatList
+              ref={listRef}
+              data={rows}
+              renderItem={renderRow}
+              keyExtractor={(r, i) => (r.type === 'header' ? `h-${r.key}` : `r-${r.section}-${i}`)}
+              getItemLayout={(_, i) => ({ index: i, length: rows[i] ? rowLength(rows[i]!) : cell, offset: offsets[i] ?? 0 })}
+              onScroll={onScroll}
+              scrollEventThrottle={32}
+              keyboardShouldPersistTaps="handled"
+              initialNumToRender={Math.ceil(height / cell) + 2}
+              maxToRenderPerBatch={8}
+              windowSize={7}
+              ListEmptyComponent={
+                <View style={[{ padding: theme.spacing.xl, alignItems: 'center' }, slots?.empty]}>
+                  <Text style={[textStyle(theme, 'md'), { color: c.textSecondary }, slots?.emptyText]}>{emptyText}</Text>
+                </View>
+              }
+            />
+          </OwnScroll>
         )}
       </View>
       {categoryBarPosition === 'bottom' && categoryBar}

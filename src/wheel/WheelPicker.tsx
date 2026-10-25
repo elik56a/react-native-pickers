@@ -2,16 +2,20 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import {
   Animated,
   FlatList,
+  Keyboard,
   Platform,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import type { AccessibilityActionEvent, NativeScrollEvent, NativeSyntheticEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { textStyle, usePickerTheme } from '../theme';
 import type { PickerTheme } from '../theme';
 import type { SlotStyles, ThemableProps } from '../types';
+import { OwnScroll } from '../utils/OwnScroll';
+import { canExtend, matchLabel } from './typeToSelect';
 
 export interface WheelItem<T> {
   label: string;
@@ -48,6 +52,8 @@ export interface WheelPickerProps<T> extends ThemableProps {
   visibleItems?: number;
   /** Infinite wheel. Default: false */
   loop?: boolean;
+  /** Tap the selected row to type a value; the wheel jumps to the first matching label. Default: true */
+  keyboardInput?: boolean;
   /** '3d' cylinder or 'flat' list. Default: '3d' */
   variant?: '3d' | 'flat';
   /** Degrees between rows on the 3d cylinder. Default: 20 */
@@ -86,6 +92,7 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
     itemHeight: h = 40,
     visibleItems = 5,
     loop = false,
+    keyboardInput = true,
     variant = '3d',
     rotation = 20,
     fadeTo = 0.3,
@@ -247,6 +254,38 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
     [loop, n, scrollToData, st]
   );
 
+  // Typing only scrolls; settle() commits the value like a drag would.
+  const [typed, setTyped] = useState<string | null>(null);
+  const typing = typed !== null;
+  const numeric = useMemo(() => n > 0 && items.every((it) => /^\d+$/.test(it.label)), [items, n]);
+  const stopTyping = useCallback(() => setTyped(null), []);
+
+  const onType = useCallback(
+    (text: string) => {
+      const q = text.trim().toLowerCase();
+      if (!q) return setTyped('');
+      const li = matchLabel(items, q, numeric);
+      if (li < 0) return;
+      scrollToData(loop ? st.tick - logical(st.tick) + li : li, true);
+      setTyped(canExtend(items, q) ? text : null);
+    },
+    [items, logical, loop, numeric, scrollToData, st]
+  );
+
+  useEffect(() => {
+    if (!typing) return;
+    const sub = Keyboard.addListener('keyboardDidHide', stopTyping);
+    return () => sub.remove();
+  }, [typing, stopTyping]);
+
+  const onRowPress = useCallback(
+    (dataIndex: number) => {
+      if (keyboardInput && dataIndex === st.tick) setTyped((t) => (t === null ? '' : null));
+      else scrollToData(dataIndex, true);
+    },
+    [keyboardInput, scrollToData, st]
+  );
+
   const onA11yAction = useCallback(
     (e: AccessibilityActionEvent) => {
       if (e.nativeEvent.actionName === 'increment') move(1);
@@ -274,11 +313,11 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
           textAlign={textAlign}
           slots={slots}
           renderItem={renderItem}
-          onPress={disabled ? undefined : (i: number) => scrollToData(i, true)}
+          onPress={disabled ? undefined : onRowPress}
         />
       );
     },
-    [active, disabled, fadeTo, h, items, logical, renderItem, rotation, scrollToData, scrollY, slots, textAlign, theme, variant, visible]
+    [active, disabled, fadeTo, h, items, logical, onRowPress, renderItem, rotation, scrollY, slots, textAlign, theme, variant, visible]
   );
 
   const current = items[logical(active)];
@@ -309,46 +348,75 @@ export function WheelPicker<T>(props: WheelPickerProps<T>) {
           )}
         </View>
       )}
-      <Animated.FlatList
-        ref={listRef as React.Ref<FlatList<number>>}
-        data={data}
-        keyExtractor={(i: number) => String(i)}
-        renderItem={renderRow}
-        extraData={active}
-        getItemLayout={(_: unknown, index: number) => ({ length: h, offset: pad + h * index, index })}
-        contentContainerStyle={{ paddingVertical: pad }}
-        contentOffset={{ x: 0, y: initialData * h }}
-        // iOS applies contentOffset without a scroll event, so the list would only render rows from 0.
-        initialScrollIndex={Math.max(0, initialData - (visible - 1) / 2)}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={h}
-        decelerationRate="fast"
-        scrollEnabled={!disabled}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        onScrollBeginDrag={() => {
-          st.dragging = true;
-        }}
-        onScrollEndDrag={() => {
-          st.dragging = false;
-          scheduleSettle(140);
-        }}
-        onMomentumScrollBegin={() => {
-          st.momentum = true;
-        }}
-        onMomentumScrollEnd={() => {
-          st.momentum = false;
-          scheduleSettle(16);
-        }}
-        initialNumToRender={visible + 4}
-        windowSize={5}
-        maxToRenderPerBatch={visible * 2}
-        removeClippedSubviews={false}
-        nestedScrollEnabled
-      />
+      <OwnScroll>
+        <Animated.FlatList
+          ref={listRef as React.Ref<FlatList<number>>}
+          data={data}
+          keyExtractor={(i: number) => String(i)}
+          renderItem={renderRow}
+          extraData={active}
+          getItemLayout={(_: unknown, index: number) => ({ length: h, offset: pad + h * index, index })}
+          contentContainerStyle={{ paddingVertical: pad }}
+          contentOffset={{ x: 0, y: initialData * h }}
+          // iOS applies contentOffset without a scroll event, so the list would only render rows from 0.
+          initialScrollIndex={Math.max(0, initialData - (visible - 1) / 2)}
+          showsVerticalScrollIndicator={false}
+          snapToInterval={h}
+          decelerationRate="fast"
+          scrollEnabled={!disabled}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          onScrollBeginDrag={() => {
+            st.dragging = true;
+            stopTyping();
+          }}
+          onScrollEndDrag={() => {
+            st.dragging = false;
+            scheduleSettle(140);
+          }}
+          onMomentumScrollBegin={() => {
+            st.momentum = true;
+          }}
+          onMomentumScrollEnd={() => {
+            st.momentum = false;
+            scheduleSettle(16);
+          }}
+          initialNumToRender={visible + 4}
+          windowSize={5}
+          maxToRenderPerBatch={visible * 2}
+          removeClippedSubviews={false}
+          nestedScrollEnabled
+        />
+      </OwnScroll>
+      {typing && (
+        <>
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { justifyContent: 'center' }]}>
+            <View style={[s.typingRing, { height: h, borderRadius: theme.radius.md, borderColor: theme.colors.primary, marginHorizontal: theme.spacing.xs }]} />
+          </View>
+          <TextInput
+            autoFocus
+            value={typed ?? ''}
+            onChangeText={onType}
+            onSubmitEditing={stopTyping}
+            onBlur={stopTyping}
+            keyboardType={numeric ? (Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'number-pad') : 'default'}
+            returnKeyType="done"
+            autoCorrect={false}
+            autoCapitalize="none"
+            caretHidden
+            style={s.hiddenInput}
+            accessibilityLabel={accessibilityLabel}
+          />
+        </>
+      )}
     </View>
   );
 }
+
+const s = StyleSheet.create({
+  hiddenInput: { position: 'absolute', width: 1, height: 1, opacity: 0 },
+  typingRing: { borderWidth: 2 },
+});
 
 interface RowProps<T> {
   dataIndex: number;

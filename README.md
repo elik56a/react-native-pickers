@@ -114,6 +114,7 @@ For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `rende
 | `itemHeight` | `number` | `40` | |
 | `visibleItems` | `number` (odd) | `5` | |
 | `loop` | `boolean` | `false` | Infinite wheel |
+| `keyboardInput` | `boolean` | `true` | Tap the selected row to type a value; the wheel jumps to the first matching label |
 | `variant` | `'3d' \| 'flat'` | `'3d'` | |
 | `rotation` | `number` | `20` | Degrees between rows (3d) |
 | `fadeTo` | `number` | `0.3` | Opacity of the farthest rows |
