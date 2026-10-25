@@ -7,6 +7,7 @@ import { DISABLED_TRIGGER_OPACITY, PRESSED_TRIGGER_OPACITY } from '../select.con
 import { styles } from '../select.styles';
 import type { SelectTriggerProps } from '../select.types';
 import { getSelectedLabel } from '../select.utils';
+import { SelectChevron } from './SelectChevron';
 
 /** The field that opens the sheet: placeholder, selected label or removable chips, clear button and chevron. */
 export const SelectTrigger = <T,>({
@@ -21,6 +22,7 @@ export const SelectTrigger = <T,>({
   onOpen,
   onRemove,
   onClear,
+  renderChevron,
   theme,
   slots,
 }: SelectTriggerProps<T>) => {
@@ -92,9 +94,7 @@ export const SelectTrigger = <T,>({
           <Text style={[textStyle(theme, 'lg'), styles.clear, { color: c.textSecondary }, slots?.clear]}>×</Text>
         </Pressable>
       ) : null}
-      <Text pointerEvents="none" style={[textStyle(theme, 'sm'), styles.chevron, { color: c.textSecondary }, slots?.chevron]}>
-        ▾
-      </Text>
+      <SelectChevron open={open} renderChevron={renderChevron} theme={theme} style={slots?.chevron} />
     </View>
   );
 };

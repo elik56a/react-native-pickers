@@ -190,6 +190,31 @@ export default function Example() {
 }
 ```
 
+## Custom chevron
+
+The field's chevron rotates when it opens and closes. `renderChevron` swaps the icon and keeps the rotation, so any icon works, an SVG included:
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const sizes = ['Small', 'Medium', 'Large'].map((s) => ({ label: s, value: s }));
+
+export default function Example() {
+  const [size, setSize] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Size"
+      options={sizes}
+      value={size}
+      onChange={setSize}
+      renderChevron={({ theme }) => <Text style={{ color: theme.colors.primary, fontSize: 16 }}>⌄</Text>}
+    />
+  );
+}
+```
+
 ## Custom options
 
 `renderOption` replaces each row's content (taps, selection background and accessibility are still handled). `renderGroupHeader` replaces section headers.
@@ -298,6 +323,7 @@ Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets
 | `clearable` | `boolean` | `false` | Show a × button when something is selected. |
 | `onClear` | `() => void` | — | Called by ×. In single mode, reset `value` here. |
 | `chips` | `boolean` | `true` | Multiple: show selections as removable chips. |
+| `renderChevron` | `(info: { open, theme }) => ReactNode` | — | Custom chevron icon (an SVG, an icon font…). It still rotates on open and close. |
 | `renderTrigger` | `(info: { open, selected, disabled }) => ReactNode` | — | Replace the field entirely. |
 | `style` | `StyleProp<ViewStyle>` | — | Wrapper style (label + field). |
 
@@ -334,7 +360,7 @@ Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets
 | `triggerText` | Selected label(s) |
 | `placeholder` | Placeholder text |
 | `chip` / `chipText` | Multi-select chips |
-| `chevron` | ▾ indicator |
+| `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size) |
 | `clear` | × button text |
 
 **List**: see [SelectList slots](./select-list#slots).

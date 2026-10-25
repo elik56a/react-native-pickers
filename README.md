@@ -99,7 +99,7 @@ Every visual part is reachable through `styles`, so you never have to fork:
 
 ### Render props
 
-For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderTrigger` / `renderGroupHeader` (select), `renderEmoji` (emoji).
+For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderTrigger` / `renderChevron` / `renderGroupHeader` (select), `renderEmoji` (emoji).
 
 ---
 

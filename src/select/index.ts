@@ -1,6 +1,7 @@
 export { SelectList } from './SelectList';
 export { SelectPicker } from './SelectPicker';
 export type {
+  SelectChevronInfo,
   SelectListBaseProps,
   SelectListProps,
   SelectOption,

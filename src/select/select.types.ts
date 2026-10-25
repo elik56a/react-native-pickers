@@ -75,6 +75,11 @@ export type SelectListProps<T> = SelectListBaseProps<T> & SelectValueProps<T>;
 
 export type SelectTriggerSlot = 'trigger' | 'triggerText' | 'placeholder' | 'label' | 'chip' | 'chipText' | 'chevron' | 'clear';
 
+export interface SelectChevronInfo {
+  open: boolean;
+  theme: PickerTheme;
+}
+
 export interface SelectTriggerInfo<T> {
   open: () => void;
   selected: SelectOption<T>[];
@@ -94,6 +99,8 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     chips?: boolean;
     /** Single mode: close the sheet on select. Default: true */
     closeOnSelect?: boolean;
+    /** Custom chevron icon; it still rotates as the field opens and closes */
+    renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
     /** Custom trigger: render anything and call `open()` */
     renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
     /** Sheet title. Default: `label` */
@@ -147,6 +154,14 @@ export interface SelectTriggerProps<T> {
   onOpen: () => void;
   onRemove: (option: SelectOption<T>) => void;
   onClear: () => void;
+  renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
   theme: PickerTheme;
   slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
+}
+
+export interface SelectChevronProps {
+  open: boolean;
+  renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
+  theme: PickerTheme;
+  style?: StyleProp<ViewStyle>;
 }

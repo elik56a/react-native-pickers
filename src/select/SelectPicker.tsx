@@ -22,6 +22,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     chips = true,
     closeOnSelect = true,
     renderTrigger,
+    renderChevron,
     sheetTitle,
     sheet,
     presentation: _presentation,
@@ -71,6 +72,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
             onOpen={picker.show}
             onRemove={picker.removeOption}
             onClear={picker.clear}
+            renderChevron={renderChevron}
             theme={theme}
             slots={slots}
           />

@@ -67,6 +67,15 @@ describe('SelectPicker', () => {
     expect(onOpen).toHaveBeenCalled();
   });
 
+  it('passes the open state to a custom chevron', async () => {
+    await render(
+      <SelectPicker label="Stack" options={options} renderChevron={({ open }) => <Text>{open ? 'chevron open' : 'chevron closed'}</Text>} />
+    );
+    expect(screen.getByText('chevron closed')).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+    expect(screen.getByText('chevron open')).toBeTruthy();
+  });
+
   describe('dropdown', () => {
     // The preset's View mock shares these instance methods; measureInWindow never calls back unless told to.
     const { measureInWindow }: { measureInWindow: jest.Mock } = jest.requireActual(
