@@ -24,10 +24,10 @@ describe('date utils', () => {
   test('month grid starts on the requested weekday', () => {
     const sun = buildMonthGrid(2026, 9, 0); // Oct 2026, Oct 1 is Thursday
     expect(sun).toHaveLength(6);
-    expect(sun[0]![0]!.getDay()).toBe(0);
-    expect(toDateKey(sun[0]![4]!)).toBe('2026-10-01');
+    expect(sun[0]?.[0]?.getDay()).toBe(0);
+    expect(sun[0]?.[4] && toDateKey(sun[0][4])).toBe('2026-10-01');
     const mon = buildMonthGrid(2026, 9, 1, false);
-    expect(mon[0]![0]!.getDay()).toBe(1);
+    expect(mon[0]?.[0]?.getDay()).toBe(1);
     expect(mon).toHaveLength(5);
   });
   test('range helpers', () => {

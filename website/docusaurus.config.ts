@@ -1,6 +1,6 @@
+import path from 'node:path';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
-import path from 'path';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 const PACKAGE = '@elik56a/react-native-pickers';

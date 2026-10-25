@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+
 import { EmojiPicker } from './EmojiPicker';
 import { EmojiPickerSheet } from './EmojiPickerSheet';
 import { findEmoji } from './emojis';

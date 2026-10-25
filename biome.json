@@ -31,7 +31,12 @@
         "organizeImports": {
           "level": "on",
           "options": {
-            "groups": [["react", "react/**", "react-native", "react-native/**"], ":BLANK_LINE:"]
+            "groups": [
+              ["react", "react/**", "react-native", "react-native/**"],
+              ":BLANK_LINE:",
+              [":NODE:", ":BUN:", ":PACKAGE_WITH_PROTOCOL:", ":PACKAGE:", "!@elik56a/**"],
+              ":BLANK_LINE:"
+            ]
           }
         }
       }
@@ -44,23 +49,6 @@
         "rules": {
           "complexity": {
             "noImportantStyles": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/**"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "useExhaustiveDependencies": "warn"
-          },
-          "style": {
-            "noNonNullAssertion": "warn"
-          },
-          "suspicious": {
-            "noExplicitAny": "warn",
-            "noArrayIndexKey": "warn"
           }
         }
       }

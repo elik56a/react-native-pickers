@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-native';
+
 import { useControllableState } from './useControllableState';
 
 describe('useControllableState', () => {

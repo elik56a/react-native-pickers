@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+
 import { toDateKey } from '../core/utils/date.utils';
 import { Calendar } from './Calendar';
 import type { DateRange } from './calendar.types';

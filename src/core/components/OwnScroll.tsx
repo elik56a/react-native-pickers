@@ -10,5 +10,5 @@ const ParentScrollContext = (ScrollView as unknown as { Context?: React.Context<
  * (the context is only read for that warning).
  */
 export const OwnScroll = ({ children }: { children: React.ReactNode }) => {
-  return ParentScrollContext ? <ParentScrollContext.Provider value={null}>{children}</ParentScrollContext.Provider> : <>{children}</>;
+  return ParentScrollContext ? <ParentScrollContext.Provider value={null}>{children}</ParentScrollContext.Provider> : children;
 };

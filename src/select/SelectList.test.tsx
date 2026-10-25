@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+
 import { SelectList } from './SelectList';
 import type { SelectOption } from './select.types';
 

@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
+
 import { TimePicker } from './TimePicker';
 
 const H = 40;
