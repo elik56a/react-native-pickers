@@ -76,6 +76,9 @@ interface WheelItem<T> { label: string; value: T; disabled?: boolean; key?: stri
 
 type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
 
+/** Every sheet's `presentation`; SelectPicker also accepts 'dropdown'. */
+type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
+
 type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 
 interface ThemableProps { theme?: DeepPartial<PickerTheme> }

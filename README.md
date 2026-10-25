@@ -13,7 +13,7 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 | 📋 **SelectPicker** | Field + bottom sheet, search, groups, multi-select with chips, icons |
 | 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
 
-Every picker also ships as a **bottom sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`), with drag-to-dismiss and Cancel / Done.
+Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field.
 
 ```sh
 npm install @elik56a/react-native-pickers
@@ -179,7 +179,7 @@ Wheel mode: `order` (`['day','month','year']`, defaults from locale), `monthForm
 
 ### SelectPicker / SelectList
 
-`SelectPicker` is a field that opens a sheet; `SelectList` is the inline list.
+`SelectPicker` is a field that opens a bottom sheet, a modal or a dropdown (`presentation`); `SelectList` is the inline list.
 
 ```ts
 options: { label, value, description?, icon?, group?, disabled?, keywords? }[]
@@ -194,6 +194,7 @@ multiple: true     value: T[]        onChange(values, options)   maxSelected
 | `placeholder` / `label` / `sheetTitle` | | |
 | `clearable` | `false` | |
 | `chips` | `true` | Removable chips in multi mode |
+| `presentation` | `'auto'` | `'bottomSheet'`, `'modal'` or `'dropdown'` (under the field). `auto`: modal on wide web windows, bottom sheet elsewhere |
 | `closeOnSelect` | `true` | Single mode |
 | `disabled` | `false` | |
 
@@ -237,7 +238,7 @@ Use the same sheet for your own content:
 </BottomSheet>
 ```
 
-Props: `title`, `headerLeft`, `headerRight`, `footer`, `enableSwipeToClose`, `closeOnBackdropPress`, `height`, `maxHeightRatio`, `bottomInset`, `styles`.
+Props: `title`, `headerLeft`, `headerRight`, `footer`, `presentation`, `enableSwipeToClose`, `closeOnBackdropPress`, `height`, `maxHeightRatio`, `bottomInset`, `styles`.
 
 ---
 

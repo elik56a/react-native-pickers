@@ -233,6 +233,33 @@ export default function Example() {
 }
 ```
 
+## Presentation
+
+`presentation` picks how the options open:
+
+- `'auto'` (default): a centered modal on web windows wider than the sheet, a bottom sheet everywhere else.
+- `'bottomSheet'`: always a bottom sheet.
+- `'modal'`: always a centered modal.
+- `'dropdown'`: a popover under the field, as wide as the field. It flips above the field when there's more room there, and a tap outside closes it.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [value, setValue] = useState(null);
+  return (
+    <SelectPicker
+      label="Framework"
+      presentation="dropdown"
+      value={value}
+      onChange={setValue}
+      options={['Expo', 'React Native CLI', 'Next.js', 'Vite'].map((label) => ({ label, value: label }))}
+    />
+  );
+}
+```
+
 ## Sheet options
 
 Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets#pickersheet) props such as `confirmLabel` and `sheetProps` (passed through to [`BottomSheet`](./bottom-sheet)):
@@ -279,6 +306,7 @@ Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown'` | `'auto'` | How the options open. `auto`: modal on wide web windows, bottom sheet elsewhere. |
 | `sheetTitle` | `string` | `label` | Sheet header title. |
 | `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
 | `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |
