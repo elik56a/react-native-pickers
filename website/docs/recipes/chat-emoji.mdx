@@ -1,0 +1,74 @@
+---
+title: Chat input with emoji
+description: React Native chat composer with an emoji keyboard toggle, inserting emojis at the cursor position, persisted recents and skin tone.
+---
+
+# Chat input with emoji
+
+A message composer with an emoji button that toggles an inline emoji panel, and emojis inserted **at the cursor**, not just appended.
+
+```tsx live
+import { useRef, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+import type { SkinTone } from '@elik56a/react-native-pickers';
+
+export default function Composer() {
+  const [text, setText] = useState('');
+  const [showEmoji, setShowEmoji] = useState(true);
+  const [tone, setTone] = useState<SkinTone>(0);
+  const [recent, setRecent] = useState<string[]>(['😂', '❤️', '👍']);
+  const selection = useRef({ start: 0, end: 0 });
+
+  const insert = (emoji: string) => {
+    const { start, end } = selection.current;
+    setText((t) => t.slice(0, start) + emoji + t.slice(end));
+    const caret = start + emoji.length;
+    selection.current = { start: caret, end: caret };
+  };
+
+  return (
+    <View style={styles.root}>
+      <View style={styles.bar}>
+        <Pressable onPress={() => setShowEmoji((v) => !v)} accessibilityLabel="Emoji" style={styles.icon}>
+          <Text style={styles.iconText}>{showEmoji ? '⌨️' : '😊'}</Text>
+        </Pressable>
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          onSelectionChange={(e) => (selection.current = e.nativeEvent.selection)}
+          placeholder="Message"
+          style={styles.input}
+          multiline
+        />
+      </View>
+      {showEmoji && (
+        <EmojiPicker
+          height={300}
+          onSelect={insert}
+          skinTone={tone}
+          onSkinToneChange={setTone}
+          recent={recent}
+          onRecentChange={setRecent}
+          categoryBarPosition="bottom"
+        />
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { gap: 8 },
+  bar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
+  icon: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 22 },
+  input: { flex: 1, minHeight: 40, maxHeight: 120, borderWidth: 1, borderColor: '#E6E7EC', borderRadius: 20, paddingHorizontal: 14, paddingVertical: 9, fontSize: 16 },
+});
+```
+
+## In production
+
+- Persist `recent` and `tone` (AsyncStorage, MMKV) so they survive restarts; see [Recently used](../components/emoji-picker#recently-used).
+- When the panel opens, dismiss the keyboard with `Keyboard.dismiss()`. When the input is focused, hide the panel.
+- Size the panel to the last keyboard height (`Keyboard.addListener('keyboardDidShow', e => …)`) so switching doesn't jump.
+- On older Android, set `maxEmojiVersion` to avoid emojis the device can't render.

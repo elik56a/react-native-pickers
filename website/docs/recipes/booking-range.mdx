@@ -1,0 +1,94 @@
+---
+title: Hotel booking range
+description: Build an Airbnb-style check-in / check-out date range picker in React Native with nightly prices, booked days, minimum stay and a confirm sheet.
+---
+
+# Hotel booking range
+
+Check-in / check-out with nightly prices under each day, booked nights that ranges can't cross, a 2-night minimum and a live total.
+
+```tsx live
+import { useMemo, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { DatePicker, addDays, formatDate, toDateKey } from '@elik56a/react-native-pickers';
+import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
+
+const MIN_NIGHTS = 2;
+const nightly = (d: Date) => (d.getDay() === 5 || d.getDay() === 6 ? 189 : 129);
+
+export default function Booking() {
+  const today = useMemo(() => new Date(), []);
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+
+  const marks = useMemo(() => {
+    const out: Record<string, MarkedDate> = {};
+    for (let i = 0; i < 90; i++) {
+      const d = addDays(today, i);
+      out[toDateKey(d)] = i % 11 === 6 || i % 11 === 7 ? { disabled: true, label: '—' } : { label: `$${nightly(d)}` };
+    }
+    return out;
+  }, [today]);
+
+  const nights = range.start && range.end ? Math.round((+range.end - +range.start) / 864e5) : 0;
+  let total = 0;
+  for (let i = 0; i < nights; i++) total += nightly(addDays(range.start!, i));
+
+  return (
+    <View style={styles.card}>
+      <DatePicker
+        mode="range"
+        value={range}
+        onChange={setRange}
+        minDate={today}
+        maxDate={addDays(today, 89)}
+        minRangeDays={MIN_NIGHTS}
+        markedDates={marks}
+        dayHeight={50}
+      />
+      <View style={styles.summary}>
+        <Text style={styles.dates}>
+          {range.start ? formatDate(range.start, undefined, { day: 'numeric', month: 'short' }) : 'Check-in'}
+          {'  →  '}
+          {range.end ? formatDate(range.end, undefined, { day: 'numeric', month: 'short' }) : 'Check-out'}
+        </Text>
+        <Text style={styles.total}>{nights ? `${nights} nights · $${total}` : `Min. ${MIN_NIGHTS} nights`}</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: { gap: 8 },
+  summary: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8 },
+  dates: { fontSize: 15, fontWeight: '600', color: '#6B6F7B' },
+  total: { fontSize: 15, fontWeight: '700', color: '#4F46E5' },
+});
+```
+
+## What's going on
+
+- **`markedDates`** puts the price under each day and marks booked days `disabled`. Range selection [never crosses a disabled day](../components/date-range-picker#ranges-never-cross-disabled-days): tapping past one starts a new range.
+- **`minRangeDays`** ignores a check-out tap that's too close to check-in.
+- **`dayHeight={50}`** leaves room for the label.
+- Prices are summed per night with `addDays`, which is DST-safe.
+
+## As a sheet with Done
+
+On phones, open the calendar from a summary bar. **Done** stays disabled until both dates are chosen:
+
+```tsx
+<DatePickerSheet
+  visible={open}
+  onClose={() => setOpen(false)}
+  title="Select dates"
+  confirmLabel="Save dates"
+  mode="range"
+  value={range}
+  onConfirm={setRange}
+  minDate={today}
+  minRangeDays={MIN_NIGHTS}
+  markedDates={marks}
+  dayHeight={50}
+  sheetProps={{ height: 0.75 }}
+/>
+```

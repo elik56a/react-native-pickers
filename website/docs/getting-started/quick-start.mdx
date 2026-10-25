@@ -1,0 +1,160 @@
+---
+title: Quick start
+description: Every picker in React Native Pickers in five minutes, with live, editable examples.
+---
+
+# Quick start
+
+Each block below is a complete, runnable component. Edit it, and copy it straight into your app when you're done.
+
+## Wheel
+
+Pass primitives or `{ label, value }` objects.
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [size, setSize] = useState('M');
+  return <WheelPicker items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onChange={setSize} />;
+}
+```
+
+## Time
+
+The 12h / 24h format comes from the locale automatically.
+
+```tsx live
+import { useState } from 'react';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date());
+  return <TimePicker value={time} onChange={setTime} minuteInterval={5} />;
+}
+```
+
+## Date (calendar)
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(null);
+  return <DatePicker value={date} onChange={setDate} minDate={new Date()} />;
+}
+```
+
+## Date range
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker, formatDate } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <>
+      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+        {range.start ? formatDate(range.start) : '—'} → {range.end ? formatDate(range.end) : '—'}
+      </Text>
+    </>
+  );
+}
+```
+
+## Date (wheel)
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [birthday, setBirthday] = useState(new Date(1990, 4, 17));
+  return <DatePicker display="wheel" value={birthday} onChange={setBirthday} maxDate={new Date()} />;
+}
+```
+
+## Select
+
+Tap the field to open a searchable bottom sheet.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const languages = [
+  { label: 'English', value: 'en' },
+  { label: 'Español', value: 'es' },
+  { label: 'Français', value: 'fr' },
+  { label: 'Deutsch', value: 'de' },
+  { label: 'עברית', value: 'he', keywords: ['hebrew'] },
+];
+
+export default function Example() {
+  const [lang, setLang] = useState<string | null>(null);
+  return <SelectPicker label="Language" placeholder="Choose a language" options={languages} value={lang} onChange={setLang} />;
+}
+```
+
+## Emoji
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [text, setText] = useState('');
+  return (
+    <>
+      <Text style={{ fontSize: 28, minHeight: 40 }}>{text}</Text>
+      <EmojiPicker height={320} onSelect={(emoji) => setText((t) => t + emoji)} />
+    </>
+  );
+}
+```
+
+## In a bottom sheet
+
+Every picker also ships as a sheet. The sheet keeps a **draft** and only calls `onConfirm` when the user taps **Done**; **Cancel**, a backdrop tap or a swipe down discards it.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { DatePickerSheet, formatDate } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <>
+      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#4F46E5', padding: 14, borderRadius: 12 }}>
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
+          {range.start && range.end ? `${formatDate(range.start)} → ${formatDate(range.end)}` : 'Pick dates'}
+        </Text>
+      </Pressable>
+      <DatePickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Check-in / Check-out"
+        mode="range"
+        value={range}
+        onConfirm={setRange}
+        minDate={new Date()}
+      />
+    </>
+  );
+}
+```
+
+## Next
+
+- [Core concepts](./core-concepts): the few ideas every component shares
+- [Components](../components/wheel-picker): full props for each picker

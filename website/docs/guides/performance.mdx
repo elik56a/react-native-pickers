@@ -1,0 +1,40 @@
+---
+title: Performance
+description: How React Native Pickers stay at 60 fps — native-driver animations, virtualized fixed-layout lists, memoized rows — and how to keep your usage fast.
+---
+
+# Performance
+
+## What the library does
+
+- **Native-driver animations.** Wheel 3D transforms, fades, month slides and sheet transitions run on the UI thread on iOS and Android.
+- **Virtualized lists.** Wheels and the emoji grid are `FlatList`s with `getItemLayout`, so only visible rows exist and scrolling never measures.
+- **Memoized rows.** While a wheel scrolls, only the two rows whose selected state flips re-render. Calendar days and emoji cells are memoized too.
+- **Lazy emoji data.** The 1,906-emoji table is parsed on first use and cached.
+- **Formatter cache.** `Intl.DateTimeFormat` instances are cached per locale and options.
+
+## What you can do
+
+**Keep `items` / `options` stable.** Define them outside the component or `useMemo` them. New arrays every render make wheels re-normalize their items.
+
+```tsx
+// ✅ stable
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
+function Example() {
+  return <WheelPicker items={HOURS} … />;
+}
+```
+
+**Memoize `theme` and `styles` objects**, especially on wheels:
+
+```tsx
+const theme = useMemo(() => ({ colors: { primary: brand } }), [brand]);
+```
+
+**Keep callbacks light.** `onValueChanging` fires on every row crossing; do haptics or cheap updates there, not network calls. Save in `onChange`.
+
+**Keep `isDateDisabled` fast.** It runs for up to 42 days per render. Precompute a `Set` of `toDateKey`s.
+
+**Mount sheets once.** Keep `<DatePickerSheet visible={open} … />` in the tree and toggle `visible`. It renders nothing while closed.
+
+**Long select lists.** `SelectList` is virtualized. For thousands of options, give it a `listHeight` so the FlatList can window.

@@ -1,0 +1,10 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": { "@elik56a/react-native-pickers": ["../src/index.ts"] }
+  },
+  "include": ["src", "docusaurus.config.ts", "sidebars.ts"]
+}

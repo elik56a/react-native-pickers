@@ -1,9 +1,17 @@
 {
   "name": "@elik56a/react-native-pickers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Beautiful, fully customizable pickers for React Native in pure JS: wheel, time, date (calendar + wheel + range), select and emoji. No native code, works with Expo and React Native Web.",
   "license": "MIT",
   "author": "Eliyahu Kriel <elik56a@gmail.com>",
+  "homepage": "https://elik56a.github.io/react-native-pickers/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elik56a/react-native-pickers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elik56a/react-native-pickers/issues"
+  },
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -47,7 +55,9 @@
     "gen:emoji": "node scripts/build-emoji-data.js",
     "example:web": "node example/web/build.js App.tsx",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
-    "example": "pnpm --filter pickers-example start"
+    "example": "pnpm --filter pickers-example start",
+    "docs": "pnpm --filter pickers-website start",
+    "docs:build": "pnpm --filter pickers-website build"
   },
   "peerDependencies": {
     "react": ">=18",

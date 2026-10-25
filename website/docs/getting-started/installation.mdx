@@ -1,0 +1,106 @@
+---
+title: Installation
+description: Install @elik56a/react-native-pickers in Expo, bare React Native or React Native Web. No native linking required.
+---
+
+# Installation
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="pm">
+  <TabItem value="npm" label="npm">
+
+```bash
+npm install @elik56a/react-native-pickers
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+
+```bash
+yarn add @elik56a/react-native-pickers
+```
+
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm add @elik56a/react-native-pickers
+```
+
+  </TabItem>
+  <TabItem value="expo" label="Expo">
+
+```bash
+npx expo install @elik56a/react-native-pickers
+```
+
+  </TabItem>
+</Tabs>
+
+That's it. The package is pure JavaScript, so there is:
+
+- no `pod install`
+- no native rebuild — it works in **Expo Go**
+- no Babel plugin, Metro config or config plugin
+- no other dependency (no Reanimated, Gesture Handler or SVG)
+
+Peer dependencies are `react >= 18` and `react-native >= 0.72`, which your app already has.
+
+## Optional: add the theme provider
+
+Every component works with sensible light and dark defaults that follow the OS appearance. To use your brand colours everywhere, wrap your app once:
+
+```tsx title="App.tsx"
+import { PickersProvider } from '@elik56a/react-native-pickers';
+
+export default function App() {
+  return (
+    <PickersProvider theme={{ colors: { primary: '#FF5A5F' } }}>
+      <RootNavigator />
+    </PickersProvider>
+  );
+}
+```
+
+See [Theming](../guides/theming) for every token.
+
+## React Native Web
+
+Nothing extra is needed beyond a standard `react-native-web` setup (Expo web already has one). If you bundle manually, alias `react-native` to `react-native-web`:
+
+```js title="webpack.config.js"
+module.exports = {
+  resolve: { alias: { 'react-native$': 'react-native-web' } },
+};
+```
+
+This documentation site is itself built this way: every live example is the real library running on React Native Web.
+
+## Importing
+
+Everything is a named export from the package root:
+
+```tsx
+import {
+  WheelPicker,
+  MultiWheelPicker,
+  TimePicker,
+  DatePicker,
+  Calendar,
+  DateWheelPicker,
+  SelectPicker,
+  SelectList,
+  EmojiPicker,
+  BottomSheet,
+  PickerSheet,
+  DatePickerSheet,
+  TimePickerSheet,
+  WheelPickerSheet,
+  EmojiPickerSheet,
+  PickersProvider,
+} from '@elik56a/react-native-pickers';
+```
+
+The package is marked `sideEffects: false`, so bundlers that tree-shake (web) drop what you don't import. On native, Metro resolves the TypeScript source through the `react-native` export condition.

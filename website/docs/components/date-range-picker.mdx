@@ -1,0 +1,190 @@
+---
+title: Date range & multiple
+description: React Native date range picker (check-in / check-out) with min/max nights, disabled-day aware ranges, and multiple date selection with a maximum. Pure JS calendar.
+---
+
+# Date range & multiple dates
+
+`DatePicker` (and `Calendar`) switch selection model with `mode`. TypeScript narrows `value` and `onChange` for each mode.
+
+| `mode` | `value` | `onChange` | Extra props |
+| --- | --- | --- | --- |
+| `'single'` (default) | `Date \| null` | `(date: Date) => void` | — |
+| `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
+| `'multiple'` | `Date[]` | `(dates: Date[]) => void` | `maxSelections` |
+
+## Range
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker, formatDate } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  const nights = range.start && range.end ? Math.round((+range.end - +range.start) / 864e5) : 0;
+  return (
+    <>
+      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+        {range.start ? formatDate(range.start) : 'Check-in'} → {range.end ? formatDate(range.end) : 'Check-out'}
+        {nights ? `  ·  ${nights} night${nights > 1 ? 's' : ''}` : ''}
+      </Text>
+    </>
+  );
+}
+```
+
+### How taps work
+
+1. **First tap** sets the start: `onChange({ start: day, end: null })`.
+2. **Second tap** on or after the start sets the end: `onChange({ start, end: day })`.
+3. A tap **before** the start, or any tap **after a complete range**, starts a new range from that day.
+
+The band between start and end uses `primaryMuted`; the ends use `primary`.
+
+### Ranges never cross disabled days
+
+If the days between start and the tapped day include a disabled one (from `minDate`/`maxDate`, `isDateDisabled` or `markedDates`), the tap starts a **new range** instead of producing a range that spans an unavailable night. That's exactly what booking flows need:
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, toDateKey, addDays } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const today = new Date();
+  const booked = new Set([toDateKey(addDays(today, 4)), toDateKey(addDays(today, 5)), toDateKey(addDays(today, 12))]);
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <DatePicker
+      mode="range"
+      value={range}
+      onChange={setRange}
+      minDate={today}
+      isDateDisabled={(d) => booked.has(toDateKey(d))}
+    />
+  );
+}
+```
+
+### Minimum and maximum length
+
+Length is measured in **days between start and end** (nights): a range from the 10th to the 13th is 3.
+
+| Prop | Effect when violated |
+| --- | --- |
+| `minRangeDays` | A second tap that would be too short is **ignored**; the start stays selected |
+| `maxRangeDays` | A second tap that would be too long **starts a new range** from that day |
+| `allowSingleDayRange={false}` | Tapping the start again is ignored (by default it makes a one-day range, `start === end`) |
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <>
+      <Text style={{ textAlign: 'center', marginBottom: 4, color: '#6B6F7B' }}>Stay 2 – 7 nights</Text>
+      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} minRangeDays={2} maxRangeDays={7} allowSingleDayRange={false} />
+    </>
+  );
+}
+```
+
+### Range styling
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, addDays } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const t = new Date();
+  const [range, setRange] = useState<DateRange>({ start: addDays(t, 2), end: addDays(t, 6) });
+  return (
+    <DatePicker
+      mode="range"
+      value={range}
+      onChange={setRange}
+      theme={{ colors: { primary: '#E11D48', primaryMuted: '#FFE4E6' } }}
+      styles={{ selectedDay: { borderRadius: 10 }, rangeBand: { borderRadius: 0 } }}
+    />
+  );
+}
+```
+
+## Multiple
+
+Tap days to toggle them. `onChange` always receives the dates **sorted ascending**. With `maxSelections`, further taps on unselected days are ignored once the limit is reached (deselecting still works).
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker, formatDate } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [dates, setDates] = useState<Date[]>([]);
+  return (
+    <>
+      <DatePicker mode="multiple" value={dates} onChange={setDates} maxSelections={5} minDate={new Date()} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+        {dates.length ? dates.map((d) => formatDate(d, undefined, { day: 'numeric', month: 'short' })).join(', ') : 'Pick up to 5 days'}
+      </Text>
+    </>
+  );
+}
+```
+
+## Uncontrolled
+
+```tsx
+<DatePicker mode="range" defaultValue={{ start: new Date(), end: null }} onChange={(r) => console.log(r)} />
+<DatePicker mode="multiple" defaultValue={[]} onChange={(d) => console.log(d)} />
+```
+
+## In a sheet
+
+`DatePickerSheet` disables **Done** until the range is complete (both `start` and `end`).
+
+```tsx
+<DatePickerSheet
+  visible={open}
+  onClose={() => setOpen(false)}
+  title="Your stay"
+  mode="range"
+  value={range}
+  onConfirm={setRange}
+  minDate={new Date()}
+  minRangeDays={1}
+/>
+```
+
+→ [DatePickerSheet](./picker-sheets#datepickersheet)
+
+## Props
+
+All [calendar props](./date-picker#calendar) apply. Mode-specific props:
+
+| Prop | Mode | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `minRangeDays` | `range` | `number` | — | Minimum nights (end − start in days). Shorter second taps are ignored. |
+| `maxRangeDays` | `range` | `number` | — | Maximum nights. Longer second taps start a new range. |
+| `allowSingleDayRange` | `range` | `boolean` | `true` | Allow `start === end`. |
+| `maxSelections` | `multiple` | `number` | — | Maximum number of selected days. |
+
+## Working with ranges
+
+The [date utilities](../api/date-utils) make common range checks one-liners:
+
+```ts
+import { isBetweenDays, isSameDay, compareDay, addDays } from '@elik56a/react-native-pickers';
+
+const nights = Math.round((range.end!.getTime() - range.start!.getTime()) / 86_400_000);
+const includesToday = isSameDay(range.start, new Date()) || isBetweenDays(new Date(), range.start, range.end);
+const isFuture = compareDay(range.start!, new Date()) > 0;
+```

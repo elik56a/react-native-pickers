@@ -1,0 +1,135 @@
+---
+title: BottomSheet
+description: Lightweight animated React Native bottom sheet with drag-to-dismiss, backdrop, header, footer, fixed or content height, keyboard avoidance and Android back handling. No Reanimated or Gesture Handler.
+---
+
+# BottomSheet
+
+The sheet every picker sheet is built on, exported so your own content can use it: filters, menus, confirmations, forms. It slides up over a dimmed backdrop, can be dragged down to dismiss, and is built on React Native's `Modal`, `Animated` and `PanResponder` only.
+
+```tsx
+import { BottomSheet } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { BottomSheet } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#4F46E5', padding: 14, borderRadius: 12 }}>
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>Open sheet</Text>
+      </Pressable>
+      <BottomSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Share"
+        footer={
+          <Pressable onPress={() => setOpen(false)} style={{ backgroundColor: '#F2F3F7', padding: 14, borderRadius: 12 }}>
+            <Text style={{ textAlign: 'center', fontWeight: '600' }}>Close</Text>
+          </Pressable>
+        }
+      >
+        <View style={{ padding: 16, gap: 12 }}>
+          {['Copy link', 'Send via message', 'Share to…'].map((a) => (
+            <Text key={a} style={{ fontSize: 16 }}>{a}</Text>
+          ))}
+        </View>
+      </BottomSheet>
+    </>
+  );
+}
+```
+
+## Opening and closing
+
+`BottomSheet` is fully controlled: render it with `visible` and change `visible` in `onClose`. `onClose` is called when the user:
+
+- taps the backdrop (`closeOnBackdropPress`, default `true`)
+- drags the sheet down past about 30% of its height (max 140 px), or flicks it down (`enableSwipeToClose`, default `true`)
+- presses Android's back button
+
+When `visible` turns `false`, the sheet animates out and then unmounts its children. `onOpened` and `onClosed` fire when the animations finish, which is handy for focusing inputs or running work after the sheet is gone.
+
+## Header
+
+The header row shows when you pass `title`, `headerLeft` or `headerRight`. A string `title` is styled for you (use the `title` slot); a node is rendered as-is. The drag handle and header are both drag areas.
+
+```tsx
+<BottomSheet
+  visible={open}
+  onClose={close}
+  title="Filters"
+  headerLeft={<Button title="Reset" onPress={reset} />}
+  headerRight={<Button title="Apply" onPress={apply} />}
+>
+  …
+</BottomSheet>
+```
+
+## Height
+
+- **Default**: the sheet sizes to its content, up to `maxHeightRatio` (default `0.9`) of the window.
+- **`height` ≤ 1**: a fraction of the window height (`height={0.6}` → 60%).
+- **`height` > 1**: pixels.
+
+With a fixed height, the content area becomes `flex: 1`, so a `FlatList` or `ScrollView` inside fills it and scrolls.
+
+`bottomInset` adds bottom padding for the home indicator (default 24 on iOS, 12 elsewhere). Pass your safe-area inset for pixel-perfect results:
+
+```tsx
+const insets = useSafeAreaInsets();
+<BottomSheet bottomInset={insets.bottom + 8} … />
+```
+
+On tablets and the web the sheet is centred with a maximum width of 640.
+
+## Keyboard
+
+On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside stay visible above the keyboard.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `visible` | `boolean` | **required** | Show or hide (animated). |
+| `onClose` | `() => void` | **required** | Requested close: backdrop, swipe, Android back. |
+| `children` | `ReactNode` | **required** | Sheet content. |
+| `title` | `ReactNode` | — | Header title; strings get the title style. |
+| `headerLeft` | `ReactNode` | — | Left side of the header. |
+| `headerRight` | `ReactNode` | — | Right side of the header. |
+| `footer` | `ReactNode` | — | Content pinned below the children. |
+| `enableSwipeToClose` | `boolean` | `true` | Drag down to dismiss. |
+| `closeOnBackdropPress` | `boolean` | `true` | Tap outside to dismiss. |
+| `maxHeightRatio` | `number` | `0.9` | Max height as a fraction of the window. |
+| `height` | `number` | content | Fixed height: fraction (≤ 1) or px. |
+| `bottomInset` | `number` | `24` iOS / `12` | Bottom padding. |
+| `onOpened` | `() => void` | — | Open animation finished. |
+| `onClosed` | `() => void` | — | Close animation finished (content unmounted). |
+| `styles` | `SlotStyles<BottomSheetSlot>` | — | Slots below. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override (`sheet`, `backdrop`, `handle`, `radius.sheet`…). |
+| `testID` | `string` | — | Test ID on the modal. |
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `backdrop` | Dimmed overlay |
+| `sheet` | The sheet surface |
+| `handle` | Grab handle |
+| `header` | Header row |
+| `title` | String title text |
+| `content` | Children wrapper |
+| `footer` | Footer wrapper |
+
+### Theme tokens used
+
+`colors.sheet` (background), `colors.backdrop`, `colors.handle`, `radius.sheet` (top corners), `animation.duration`.
+
+## Related
+
+- [PickerSheet](./picker-sheets#pickersheet): a BottomSheet with Cancel / Done buttons
+- [Filters sheet recipe](../recipes/filters-sheet)

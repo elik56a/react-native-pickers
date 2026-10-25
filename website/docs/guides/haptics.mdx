@@ -1,0 +1,60 @@
+---
+title: Haptics
+description: Add iOS-style selection haptics to React Native wheel, time and date pickers with onValueChanging and expo-haptics or react-native-haptic-feedback.
+---
+
+# Haptics
+
+Native wheels tick under your finger. Get the same feel with `onValueChanging`, which fires on **every row crossing** while scrolling. The library has no haptics dependency, so bring the one you already use.
+
+## expo-haptics
+
+```bash
+npx expo install expo-haptics
+```
+
+```tsx
+import * as Haptics from 'expo-haptics';
+import { WheelPicker, TimePicker, DatePicker } from '@elik56a/react-native-pickers';
+
+const tick = () => Haptics.selectionAsync();
+
+<WheelPicker items={items} value={v} onChange={setV} onValueChanging={tick} />
+<TimePicker value={t} onChange={setT} onValueChanging={tick} />
+<DatePicker display="wheel" value={d} onChange={setD} onValueChanging={tick} />
+```
+
+## react-native-haptic-feedback
+
+```tsx
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+
+const tick = () => ReactNativeHapticFeedback.trigger('selection', { enableVibrateFallback: false });
+<WheelPicker onValueChanging={tick} … />
+```
+
+## Confirm haptics
+
+For a stronger buzz when a value is confirmed, use `onChange` or a sheet's `onConfirm`:
+
+```tsx
+<DatePickerSheet
+  …
+  onConfirm={(range) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setRange(range);
+  }}
+/>
+```
+
+## Which components support `onValueChanging`
+
+| Component | Callback argument |
+| --- | --- |
+| `WheelPicker` | `(value, index)` |
+| `MultiWheelPicker` columns | `(value, index)` per column |
+| `TimePicker` / `TimePickerSheet` | `(date)` |
+| `DateWheelPicker` / `DatePicker display="wheel"` | `(date)` |
+| `WheelPickerSheet` | `(value, index)` |
+
+Disabled rows don't trigger `onValueChanging`.

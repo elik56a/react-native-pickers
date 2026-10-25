@@ -1,0 +1,65 @@
+---
+title: Alarm & reminder time
+description: React Native alarm / reminder time picker with a big clock display, 5-minute steps, a time sheet and weekday selection.
+---
+
+# Alarm & reminder time
+
+A big clock you tap to change, with repeat days chosen through a multi-select list.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { TimePickerSheet, SelectList, getWeekdayNames } from '@elik56a/react-native-pickers';
+
+const days = getWeekdayNames(undefined, 'long').map((label, value) => ({ label, value }));
+
+export default function Alarm() {
+  const [open, setOpen] = useState(false);
+  const [time, setTime] = useState(() => {
+    const d = new Date();
+    d.setHours(7, 30, 0, 0);
+    return d;
+  });
+  const [repeat, setRepeat] = useState<number[]>([1, 2, 3, 4, 5]);
+
+  return (
+    <View style={styles.root}>
+      <Pressable onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel="Change alarm time">
+        <Text style={styles.clock}>{time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
+      </Pressable>
+      <Text style={styles.caption}>Repeat</Text>
+      <SelectList multiple options={days} value={repeat} onChange={setRepeat} />
+      <TimePickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Alarm"
+        confirmLabel="Set"
+        value={time}
+        onConfirm={setTime}
+        minuteInterval={5}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { gap: 8 },
+  clock: { fontSize: 64, fontWeight: '200', textAlign: 'center', fontVariant: ['tabular-nums'] },
+  caption: { fontSize: 12, fontWeight: '700', color: '#6B6F7B', textTransform: 'uppercase', marginTop: 8, marginStart: 16 },
+});
+```
+
+## Next occurrence
+
+To schedule a notification, compute the next matching weekday:
+
+```ts
+function nextAlarm(time: Date, repeat: number[], from = new Date()): Date {
+  for (let i = 0; i < 8; i++) {
+    const d = new Date(from.getFullYear(), from.getMonth(), from.getDate() + i, time.getHours(), time.getMinutes());
+    if (d > from && (repeat.length === 0 || repeat.includes(d.getDay()))) return d;
+  }
+  return from;
+}
+```

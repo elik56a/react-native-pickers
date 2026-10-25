@@ -3,3 +3,5 @@ lib/
 example/web/dist/
 *.log
 .DS_Store
+website/build/
+website/.docusaurus/

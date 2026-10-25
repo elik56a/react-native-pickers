@@ -1,0 +1,163 @@
+---
+title: Date utilities
+description: Pure, immutable, local-time date helpers exported by React Native Pickers — toDateKey, addDays, addMonths, isSameDay, compareDay, formatDate, getMonthNames, uses12HourClock and more.
+---
+
+# Date utilities
+
+The helpers the pickers use internally, exported for your own code. All of them:
+
+- work in **local time** (no UTC surprises)
+- **never mutate** their inputs
+- fall back to English names if `Intl` is missing or a locale is invalid
+
+```ts
+import { toDateKey, addDays, isSameDay, formatDate } from '@elik56a/react-native-pickers';
+```
+
+## Arithmetic
+
+### `startOfDay`
+
+```ts
+startOfDay(d: Date): Date
+```
+Same day at 00:00:00.000.
+
+### `startOfMonth`
+
+```ts
+startOfMonth(d: Date): Date
+```
+First day of the month at 00:00.
+
+### `daysInMonth`
+
+```ts
+daysInMonth(year: number, month: number): number   // month is 0-based
+daysInMonth(2028, 1) // 29
+```
+
+### `addDays`
+
+```ts
+addDays(d: Date, days: number): Date
+```
+Adds calendar days (negative to subtract), keeping hours and minutes (seconds and milliseconds are reset). DST-safe, because it works on date parts rather than milliseconds.
+
+### `addMonths`
+
+```ts
+addMonths(d: Date, months: number): Date
+addMonths(new Date(2026, 0, 31), 1) // Feb 28 2026 (clamped)
+```
+Clamps the day to the target month's length and keeps the time.
+
+### `clampDate`
+
+```ts
+clampDate(d: Date, min?: Date | null, max?: Date | null): Date
+```
+Returns a copy of `min` / `max` when `d` is outside them (by exact time), else `d`.
+
+## Comparison
+
+### `isSameDay`
+
+```ts
+isSameDay(a?: Date | null, b?: Date | null): boolean
+```
+Same calendar day; `false` if either is null.
+
+### `isSameMonth`
+
+```ts
+isSameMonth(a: Date, b: Date): boolean
+```
+
+### `compareDay`
+
+```ts
+compareDay(a: Date, b: Date): number   // < 0, 0, > 0
+```
+Compares calendar days, ignoring time. Use it as a sort comparator: `dates.sort(compareDay)`.
+
+### `isBetweenDays`
+
+```ts
+isBetweenDays(d: Date, start?: Date | null, end?: Date | null): boolean
+```
+`true` when `d` is **strictly** between `start` and `end` (exclusive), by day.
+
+### `isOutOfRange`
+
+```ts
+isOutOfRange(d: Date, min?: Date | null, max?: Date | null): boolean
+```
+`true` when `d`'s day is before `min`'s day or after `max`'s day.
+
+## Keys and grids
+
+### `toDateKey`
+
+```ts
+toDateKey(d: Date): string   // 'YYYY-MM-DD' in local time
+```
+The key format of `markedDates`. Use it instead of `toISOString().slice(0, 10)`, which converts to UTC and can be off by a day.
+
+### `buildMonthGrid`
+
+```ts
+buildMonthGrid(year: number, month: number, firstDayOfWeek = 0, fixedWeeks = true): Date[][]
+```
+Weeks × 7 days for a month view, including leading and trailing days of neighbouring months. 6 weeks when `fixedWeeks`, else only as many as needed. Handy for custom calendars and heatmaps.
+
+## Locale
+
+### `getMonthNames`
+
+```ts
+getMonthNames(locale?: string, width: 'long' | 'short' = 'long'): string[]   // 12 names
+```
+
+### `getWeekdayNames`
+
+```ts
+getWeekdayNames(locale?: string, width: 'long' | 'short' | 'narrow' = 'short'): string[]
+```
+7 names indexed by JS day: **0 = Sunday**.
+
+### `formatMonthYear`
+
+```ts
+formatMonthYear(d: Date, locale?: string): string   // 'October 2026'
+```
+
+### `formatDate`
+
+```ts
+formatDate(d: Date, locale?: string, opts: Intl.DateTimeFormatOptions = { dateStyle: 'medium' }): string
+formatDate(new Date(2026, 9, 14))                          // 'Oct 14, 2026'
+formatDate(new Date(2026, 9, 14), 'de-DE', { dateStyle: 'full' }) // 'Mittwoch, 14. Oktober 2026'
+```
+Cached `Intl.DateTimeFormat`, falling back to `YYYY-MM-DD`.
+
+### `uses12HourClock`
+
+```ts
+uses12HourClock(locale?: string): boolean
+```
+`true` when the locale formats hours with AM/PM.
+
+### `getFirstDayOfWeek`
+
+```ts
+getFirstDayOfWeek(locale?: string): number   // 0 = Sunday … 6 = Saturday
+```
+From `Intl.Locale` week info when the runtime supports it; otherwise `0`. Returns `0` when no `locale` is given.
+
+### `getDayPeriods`
+
+```ts
+getDayPeriods(locale?: string): [string, string]   // ['AM', 'PM'], ['午前', '午後'], …
+```

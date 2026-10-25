@@ -1,0 +1,119 @@
+---
+title: Core concepts
+description: The shared ideas behind every component — controlled vs uncontrolled state, onChange vs onValueChanging, sheets and drafts, theming, slot styles and render props.
+---
+
+# Core concepts
+
+Every component follows the same handful of conventions. Learn them once and you know the whole library.
+
+## Controlled and uncontrolled
+
+Wheels, time, date and emoji state can be used either way:
+
+```tsx
+// Controlled: you own the state
+const [date, setDate] = useState(new Date());
+<TimePicker value={date} onChange={setDate} />
+
+// Uncontrolled: the component owns it; you only listen
+<TimePicker defaultValue={new Date()} onChange={(d) => console.log(d)} />
+```
+
+| Component | Controlled | Uncontrolled |
+| --- | --- | --- |
+| `WheelPicker` | `value` | `defaultValue` |
+| `TimePicker` | `value` | `defaultValue` (default: now) |
+| `DatePicker` / `Calendar` | `value` | `defaultValue` |
+| `DateWheelPicker` | `value` | `defaultValue` (default: today) |
+| `EmojiPicker` skin tone | `skinTone` | `defaultSkinTone` |
+| `EmojiPicker` recents | `recent` | `defaultRecent` |
+| `SelectPicker` / `SelectList` | `value` | — (always controlled) |
+
+:::caution Select is controlled-only
+`SelectPicker` and `SelectList` don't keep their own selection. Always pass `value` and update it in `onChange`.
+:::
+
+Setting `value` from outside (for example, a "Reset" button) moves the component **without** firing `onChange`. `onChange` only reports changes the user made.
+
+## `onChange` vs `onValueChanging`
+
+Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `DateWheelPicker`) fire two callbacks:
+
+| Callback | When | Use it for |
+| --- | --- | --- |
+| `onChange` | Once, after the wheel **settles** on a new value | Updating state, saving |
+| `onValueChanging` | On **every row crossing** while scrolling | Haptics, live previews |
+
+```tsx
+<WheelPicker
+  items={items}
+  value={value}
+  onChange={setValue}
+  onValueChanging={() => Haptics.selectionAsync()}
+/>
+```
+
+## Sheets and drafts
+
+`DatePickerSheet`, `TimePickerSheet` and `WheelPickerSheet` wrap a picker in a [`BottomSheet`](../components/bottom-sheet) with **Cancel** and **Done**:
+
+- The sheet copies `value` into a **draft** each time it opens.
+- Scrolling or tapping changes only the draft.
+- **Done** calls `onConfirm(draft)`, then `onClose()`.
+- **Cancel**, a backdrop tap, a swipe down or Android back calls `onClose()` only, so the draft is discarded.
+
+```tsx
+<TimePickerSheet visible={open} onClose={() => setOpen(false)} value={time} onConfirm={setTime} />
+```
+
+`EmojiPickerSheet` has no Done button: picking an emoji calls `onSelect` and (by default) closes the sheet. `SelectPicker` opens its own sheet; you don't manage `visible`.
+
+## Theming
+
+Three layers, each merged on top of the previous one:
+
+1. Built-in `lightTheme` / `darkTheme`, chosen from the OS appearance
+2. `<PickersProvider theme={…} darkTheme={…}>` for your whole app
+3. The `theme` prop on any single component
+
+```tsx
+<PickersProvider theme={{ colors: { primary: '#0EA5E9' }, radius: { md: 6 } }}>
+  <DatePicker theme={{ colors: { primary: '#22C55E' } }} />  {/* green only here */}
+</PickersProvider>
+```
+
+→ [Theming guide](../guides/theming)
+
+## Slot styles
+
+Every visual part of a component has a named **slot**. Pass styles for any of them through `styles`:
+
+```tsx
+<DatePicker
+  styles={{
+    selectedDay: { borderRadius: 8 },
+    headerTitle: { fontSize: 20 },
+    rangeBand: { backgroundColor: '#FFE4E6' },
+  }}
+/>
+```
+
+Slot names are typed, so your editor autocompletes them. Each component page lists its slots. → [Styling guide](../guides/styling)
+
+## Render props
+
+When styles aren't enough, replace a part entirely:
+
+| Component | Render props |
+| --- | --- |
+| `WheelPicker` | `renderItem`, `renderIndicator` |
+| `DatePicker` / `Calendar` | `renderDay`, `renderArrow`, `formatTitle` |
+| `SelectPicker` / `SelectList` | `renderTrigger`, `renderOption`, `renderGroupHeader` |
+| `EmojiPicker` | `renderEmoji`, `categoryIcons` |
+
+→ [Render props guide](../guides/render-props)
+
+## Strings and i18n
+
+No component hard-codes a user-facing string you can't change. Done, Cancel, placeholders, search hints, empty states and category labels are all props. Month, weekday and AM/PM names come from `Intl` for whatever `locale` you pass. → [i18n & RTL](../guides/i18n-rtl)

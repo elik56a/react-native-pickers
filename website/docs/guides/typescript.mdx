@@ -1,0 +1,81 @@
+---
+title: TypeScript
+description: Type-safe React Native pickers — generic value types, mode-discriminated date selection, typed slot names and exported prop types.
+---
+
+# TypeScript
+
+The library is written in TypeScript and ships its own declarations. No `@types` package is needed.
+
+## Generic values
+
+`WheelPicker`, `SelectPicker`, `SelectList` and `WheelPickerSheet` infer `T` from `items` / `options`:
+
+```tsx
+type Plan = 'free' | 'pro' | 'team';
+const plans: SelectOption<Plan>[] = [
+  { label: 'Free', value: 'free' },
+  { label: 'Pro', value: 'pro' },
+];
+
+const [plan, setPlan] = useState<Plan | null>(null);
+<SelectPicker options={plans} value={plan} onChange={setPlan} />; // onChange: (value: Plan, option: SelectOption<Plan>) => void
+```
+
+Or pass it explicitly: `<WheelPicker<number> items={…} />`.
+
+## Discriminated selection modes
+
+`mode` narrows `value` and `onChange`:
+
+```tsx
+<DatePicker value={date} onChange={(d) => d} />                 // d: Date
+<DatePicker mode="range" value={range} onChange={(r) => r} />   // r: DateRange
+<DatePicker mode="multiple" value={dates} onChange={(ds) => ds} /> // ds: Date[]
+
+<SelectPicker multiple options={o} value={tags} onChange={(values, options) => {}} /> // values: T[]
+```
+
+Passing a `DateRange` without `mode="range"` is a type error.
+
+## Exported types
+
+```ts
+import type {
+  // theme
+  PickerTheme, DeepPartial, PickersProviderProps, ThemableProps, SlotStyles,
+  // wheel
+  WheelPickerProps, WheelItem, WheelItemInput, WheelPickerSlot, WheelRenderItemInfo,
+  MultiWheelPickerProps, WheelColumn, MultiWheelSlot,
+  // time / date
+  TimePickerProps,
+  DatePickerProps, CalendarProps, CalendarBaseProps, CalendarSelectionProps, CalendarSlot,
+  DateRange, MarkedDate, DayState, DateWheelPickerProps, DatePart,
+  // select
+  SelectPickerProps, SelectListProps, SelectListBaseProps, SelectValueProps,
+  SelectOption, SelectSlot, SelectTriggerSlot, SelectTriggerInfo, SelectRenderOptionInfo,
+  // emoji
+  EmojiPickerProps, EmojiPickerSlot, Emoji, EmojiCategory, SkinTone,
+  // sheets
+  BottomSheetProps, BottomSheetSlot, SheetChromeProps, PickerSheetProps,
+  DatePickerSheetProps, TimePickerSheetProps, WheelPickerSheetProps, EmojiPickerSheetProps,
+} from '@elik56a/react-native-pickers';
+```
+
+## Wrapping components
+
+Extend the prop types to build your own pre-configured pickers:
+
+```tsx
+import { DatePicker } from '@elik56a/react-native-pickers';
+import type { CalendarBaseProps, DateRange } from '@elik56a/react-native-pickers';
+
+type StayPickerProps = Omit<CalendarBaseProps, 'minDate'> & {
+  value: DateRange;
+  onChange: (r: DateRange) => void;
+};
+
+export function StayPicker(props: StayPickerProps) {
+  return <DatePicker mode="range" minDate={new Date()} minRangeDays={1} {...props} />;
+}
+```

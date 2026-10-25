@@ -1,0 +1,53 @@
+---
+title: Troubleshooting
+description: Fixes for common React Native Pickers issues — wheel not showing the selected value, object values, days off by one, sheet behind the keyboard, empty emoji boxes.
+---
+
+# Troubleshooting
+
+### The wheel doesn't show my selected value
+
+- Values are matched with `Object.is`. If `value` is an object (or a `Date`) re-created each render, pass `isEqual`:
+  `isEqual={(a, b) => a.id === b.id}`.
+- Check that `value` is the **value** of an item, not its label or index.
+- If `value` points at a **disabled** item, the nearest enabled one is shown.
+
+### `onChange` fires with the wrong type
+
+Primitive `items` (`['S', 'M']`, `[1, 2, 3]`) give you the primitive. With objects (`{ label, value }`), you get `value`. Mixing number and string items gives you a union.
+
+### Selected day is off by one
+
+You probably built a date from an ISO string or key: `new Date('2026-10-14')` is **UTC midnight**, which is the previous day in the Americas. Use `new Date(2026, 9, 14)`, or parse `YYYY-MM-DD` into parts. When saving, use `toDateKey(date)` rather than `toISOString().slice(0, 10)`.
+
+### `markedDates` don't show
+
+Keys must be **local** `YYYY-MM-DD` with zero padding (`2026-03-05`, not `2026-3-5`). Build them with `toDateKey`.
+
+### SelectPicker shows nothing after selecting
+
+`SelectPicker` is controlled-only: you must update `value` in `onChange`.
+
+### The calendar doesn't jump to my new `value`
+
+In single mode it follows `value` changes. In range / multiple mode it doesn't move automatically; remount with a `key` or set `initialMonth` when you need to show a specific month.
+
+### Sheet content is hidden by the keyboard (Android)
+
+The sheet uses `KeyboardAvoidingView` on iOS. On Android, set `android:windowSoftInputMode="adjustResize"` (the Expo default), or give the sheet a fixed `height` via `sheetProps`.
+
+### The sheet is hidden behind the home indicator
+
+Pass the safe-area inset: `sheetProps={{ bottomInset: insets.bottom + 8 }}` (or `bottomInset` on `BottomSheet`).
+
+### Emojis render as empty boxes
+
+The device font doesn't support those emojis (older Android). Set `maxEmojiVersion`, for example `12` for Android 10.
+
+### Wheel feels sluggish in development
+
+Debug builds run JS without optimizations. Try a release build, and make sure `items`, `theme` and `styles` are stable references (see [Performance](../guides/performance)).
+
+### Still stuck?
+
+[Open an issue](https://github.com/elik56a/react-native-pickers/issues) with a minimal reproduction. A snippet from this site's live editor is perfect.

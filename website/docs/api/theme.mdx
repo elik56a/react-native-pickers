@@ -1,0 +1,73 @@
+---
+title: Theme API
+description: PickersProvider, usePickerTheme, createTheme, mergeTheme, lightTheme, darkTheme and textStyle — signatures and behaviour.
+---
+
+# Theme API
+
+For concepts and the full token table, see the [Theming guide](../guides/theming).
+
+## `PickersProvider`
+
+```ts
+function PickersProvider(props: {
+  children: React.ReactNode;
+  colorScheme?: 'auto' | 'light' | 'dark'; // default 'auto'
+  theme?: DeepPartial<PickerTheme>;        // merged onto lightTheme (and onto darkTheme if `darkTheme` is omitted)
+  darkTheme?: DeepPartial<PickerTheme>;    // merged onto darkTheme
+}): JSX.Element;
+```
+
+Optional. Without a provider, components use `lightTheme` / `darkTheme` following `useColorScheme()`.
+
+## `usePickerTheme`
+
+```ts
+function usePickerTheme(override?: DeepPartial<PickerTheme>): PickerTheme;
+```
+
+Returns the active theme: provider (or built-in) light/dark based on the colour scheme, with `override` merged on top. Use it in your own components to match the pickers.
+
+## `createTheme`
+
+```ts
+function createTheme(overrides: DeepPartial<PickerTheme>, base?: PickerTheme): PickerTheme;
+```
+
+Builds a complete theme. Without `base`, starts from `darkTheme` if `overrides.dark` is `true`, else `lightTheme`.
+
+## `mergeTheme`
+
+```ts
+function mergeTheme<T>(base: T, override?: DeepPartial<T>): T;
+```
+
+Deep merge without mutating. Plain objects merge recursively; arrays, functions and primitives in `override` replace the base value.
+
+## `lightTheme` / `darkTheme`
+
+```ts
+const lightTheme: PickerTheme;
+const darkTheme: PickerTheme;
+```
+
+The built-in themes. See [default values](../guides/theming#defaults).
+
+## `textStyle`
+
+```ts
+function textStyle(
+  theme: PickerTheme,
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl',
+  weight?: 'regular' | 'medium' | 'bold', // default 'regular'
+): TextStyle; // { fontSize, fontWeight, fontFamily, color: theme.colors.text }
+```
+
+`medium` and `bold` use `typography.fontFamilyMedium`, falling back to `fontFamily`.
+
+## Types
+
+```ts
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? (T[K] extends Function ? T[K] : DeepPartial<T[K]>) : T[K] };
+interface ThemableProps { theme?: DeepPartial<PickerTheme> }
+```

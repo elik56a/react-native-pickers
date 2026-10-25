@@ -1,0 +1,142 @@
+---
+title: Migration
+description: Migrate to React Native Pickers from @react-native-community/datetimepicker, react-native-modal-datetime-picker, react-native-calendars and react-native-picker-select, with prop mapping tables.
+---
+
+# Migration
+
+Prop-by-prop mappings from popular packages. Most migrations are a rename plus switching callbacks to `(value) => …`.
+
+## From `@react-native-community/datetimepicker`
+
+```diff
+- import DateTimePicker from '@react-native-community/datetimepicker';
++ import { DatePicker, TimePicker } from '@elik56a/react-native-pickers';
+
+- <DateTimePicker mode="date" value={date} onChange={(event, d) => d && setDate(d)} minimumDate={min} />
++ <DatePicker value={date} onChange={setDate} minDate={min} />
+
+- <DateTimePicker mode="time" value={time} is24Hour onChange={(e, d) => d && setTime(d)} minuteInterval={5} />
++ <TimePicker value={time} onChange={setTime} format="24h" minuteInterval={5} />
+```
+
+| datetimepicker | React Native Pickers |
+| --- | --- |
+| `mode="date"` | `DatePicker` (calendar) or `DatePicker display="wheel"` |
+| `mode="time"` | `TimePicker` |
+| `mode="datetime"` | `DatePicker` + `TimePicker` sharing one `Date` (the time picker keeps the date part) |
+| `display="spinner"` | `DatePicker display="wheel"` |
+| `display="calendar"` / `"inline"` | `DatePicker` |
+| `value` | `value` |
+| `onChange(event, date)` | `onChange(date)` (no event, never `undefined`) |
+| `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+| `minuteInterval` | `minuteInterval` |
+| `is24Hour` | `format="24h"` (default `'auto'` from locale) |
+| `locale` | `locale` |
+| `firstDayOfWeek` (Android) | `firstDayOfWeek` (0 = Sunday) |
+| `themeVariant` | `PickersProvider colorScheme` |
+| `accentColor` / `textColor` | `theme={{ colors: { primary, text } }}` |
+| Android dialog (shown on mount) | `DatePickerSheet` / `TimePickerSheet` with `visible` |
+
+## From `react-native-modal-datetime-picker`
+
+```diff
+- <DateTimePickerModal isVisible={open} mode="date" date={date} onConfirm={setDate} onCancel={close} />
++ <DatePickerSheet visible={open} value={date} onConfirm={setDate} onClose={close} />
+```
+
+| modal-datetime-picker | React Native Pickers |
+| --- | --- |
+| `isVisible` | `visible` |
+| `mode="date" \| "time"` | `DatePickerSheet` · `TimePickerSheet` |
+| `date` | `value` |
+| `onConfirm(date)` | `onConfirm(date)` (`onClose` is called right after) |
+| `onCancel` | `onClose` |
+| `confirmTextIOS` / `cancelTextIOS` | `confirmLabel` / `cancelLabel` |
+| `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+
+## From `react-native-calendars`
+
+```diff
+- <Calendar
+-   current="2026-10-01"
+-   minDate="2026-10-05"
+-   onDayPress={(day) => setSelected(day.dateString)}
+-   markedDates={{ [selected]: { selected: true }, '2026-10-22': { marked: true, dotColor: 'green' } }}
+-   firstDay={1}
+- />
++ <DatePicker
++   initialMonth={new Date(2026, 9, 1)}
++   minDate={new Date(2026, 9, 5)}
++   value={selected}
++   onChange={setSelected}
++   markedDates={{ '2026-10-22': { dots: ['green'] } }}
++   firstDayOfWeek={1}
++ />
+```
+
+| react-native-calendars | React Native Pickers |
+| --- | --- |
+| `current` (string) | `initialMonth` (`Date`) |
+| `minDate` / `maxDate` (strings) | `minDate` / `maxDate` (`Date`) |
+| `onDayPress(day)` | `onChange(date)`; selection is managed for you |
+| `markedDates[k].selected` | `value` (no manual marking) |
+| `markingType="period"` + manual start/end marking | `mode="range"` |
+| `markedDates[k].marked` + `dotColor` | `markedDates[k].dots: [color]` |
+| `markingType="multi-dot"` `dots: [{ color }]` | `dots: ['#hex', …]` (max 3) |
+| `markedDates[k].disabled` / `disableTouchEvent` | `markedDates[k].disabled` or `isDateDisabled` |
+| `firstDay` | `firstDayOfWeek` |
+| `onMonthChange` | `onMonthChange(month: Date)` |
+| `hideExtraDays` | `showOutsideDays={false}` |
+| `enableSwipeMonths` | `enableSwipe` (on by default) |
+| `dayComponent` | `renderDay(state, theme)` |
+| `renderArrow(direction)` | `renderArrow(direction, disabled)` |
+| `theme={{ selectedDayBackgroundColor, todayTextColor, … }}` | `theme={{ colors: { primary, … } }}` + `styles` slots |
+| `LocaleConfig` | `locale="fr-FR"` (names from `Intl`) |
+
+## From `react-native-picker-select`
+
+```diff
+- <RNPickerSelect
+-   items={[{ label: 'Football', value: 'football' }]}
+-   onValueChange={setSport}
+-   value={sport}
+-   placeholder={{ label: 'Select a sport…', value: null }}
+- />
++ <SelectPicker
++   options={[{ label: 'Football', value: 'football' }]}
++   onChange={setSport}
++   value={sport}
++   placeholder="Select a sport…"
++ />
+```
+
+| react-native-picker-select | React Native Pickers |
+| --- | --- |
+| `items` | `options` (adds `description`, `icon`, `group`, `keywords`) |
+| `onValueChange(value, index)` | `onChange(value, option)` |
+| `value` | `value` |
+| `placeholder={{ label }}` | `placeholder="…"` |
+| `disabled` | `disabled` |
+| `onOpen` / `onClose` | `onOpen` / `onClose` |
+| `doneText` | `sheet={{ confirmLabel }}` (Done shown with `closeOnSelect={false}` / multiple) |
+| `style={{ inputIOS, inputAndroid }}` | `styles={{ trigger, triggerText, placeholder }}` |
+| — | `multiple`, `searchable`, `clearable`, `maxSelected`, `renderTrigger`, `renderOption` |
+
+Want an iOS-style wheel instead of a list? Use [`WheelPickerSheet`](../components/picker-sheets#wheelpickersheet).
+
+## From `@react-native-picker/picker`
+
+```diff
+- <Picker selectedValue={lang} onValueChange={setLang}>
+-   <Picker.Item label="Java" value="java" />
+-   <Picker.Item label="JavaScript" value="js" />
+- </Picker>
++ <WheelPicker
++   items={[{ label: 'Java', value: 'java' }, { label: 'JavaScript', value: 'js' }]}
++   value={lang}
++   onChange={setLang}
++ />
+```
+
+`Picker.Item enabled={false}` → `{ disabled: true }`. Android `mode="dropdown"` → [`SelectPicker`](../components/select-picker).

@@ -1,0 +1,45 @@
+---
+title: Comparison
+description: How React Native Pickers compares to native date/time pickers, calendar libraries, select/dropdown libraries, emoji keyboards and bottom-sheet libraries — and when to choose each.
+---
+
+# Comparison
+
+React Native apps usually combine several single-purpose packages for pickers. This page shows how one pure-JS package compares with each category, and when another tool is the better choice.
+
+## At a glance
+
+| | **React Native Pickers** | Native OS pickers¹ | Calendar libraries² | Select wrappers³ |
+| --- | --- | --- | --- | --- |
+| Wheel picker (any data) | ✅ | ✅ iOS · ⚠️ Android dropdown | ❌ | ✅ (native) |
+| Time picker | ✅ | ✅ | ❌ | ❌ |
+| Calendar | ✅ | ⚠️ OS dialog | ✅ | ❌ |
+| Date **range** selection | ✅ built in | ❌ | ⚠️ via manual marking | ❌ |
+| Multiple dates | ✅ | ❌ | ⚠️ manual | ❌ |
+| Searchable select / multi-select | ✅ | ❌ | ❌ | ⚠️ varies |
+| Emoji picker | ✅ | ❌ | ❌ | ❌ |
+| Bottom sheets | ✅ built in | ❌ | ❌ | ❌ |
+| Identical UI on iOS / Android / web | ✅ | ❌ | ✅ | ❌ |
+| Full theming + dark mode | ✅ tokens + slots | ⚠️ limited | ✅ | ⚠️ limited |
+| Native code | **None** | Yes | Usually none | Yes |
+| Extra peer dependencies | **None** | — | Varies | Native picker module |
+
+¹ e.g. `@react-native-community/datetimepicker`, `@react-native-picker/picker`. ² e.g. `react-native-calendars`. ³ e.g. `react-native-picker-select`.
+
+## Choose React Native Pickers when
+
+- you want **one consistent design** across iOS, Android and web, matching your brand
+- you need **ranges, multiple dates, marked dates or prices** in a calendar
+- you need **several kinds of pickers** and want one API, one theme and one dependency
+- you ship through **Expo Go / OTA updates** or want to avoid native modules
+- you want **sheets** without pulling in Reanimated and Gesture Handler
+
+## Choose something else when
+
+- **You must use the OS-native UI**, for example for strict platform conformance. Use `@react-native-community/datetimepicker` or `@react-native-picker/picker`.
+- **You need an agenda / timeline / week calendar** with events laid out by hour. That's a scheduling component, not a picker.
+- **You need a full-featured gesture bottom sheet** (snap points, scrollable content interplay, detents) for non-picker screens. A dedicated sheet library such as `@gorhom/bottom-sheet` fits that; our `BottomSheet` covers simple modal sheets.
+
+## Migrating
+
+See [Migration](./migration) for side-by-side prop mappings from the most common packages.

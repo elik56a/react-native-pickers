@@ -1,0 +1,54 @@
+---
+title: Expo, bare RN & web
+description: Platform support for React Native Pickers — Expo Go, development builds, bare React Native, React Native Web, Next.js, the New Architecture and Hermes.
+---
+
+# Platforms
+
+| Platform | Support | Notes |
+| --- | --- | --- |
+| **Expo Go** | ✅ | No native code, so nothing to prebuild |
+| **Expo dev builds / EAS** | ✅ | |
+| **Bare React Native** (iOS, Android) | ✅ | `react-native >= 0.72` |
+| **New Architecture** (Fabric) | ✅ | Uses only core components |
+| **Hermes** / JSC | ✅ | `Intl` names fall back to English where unsupported |
+| **React Native Web** | ✅ | This site runs the library on RNW |
+| **Expo Router web / Next.js** | ✅ | Via `react-native-web` |
+| **react-native-windows / macos** | Untested | Core components only, so likely to work |
+
+## Why pure JS matters
+
+- **Same look everywhere.** Native date pickers look different on every OS version, and Android's calendar dialog can't be themed much. These pickers look exactly like your design on iOS, Android and web.
+- **No native build.** Add the package and reload. Works in Expo Go and in OTA updates.
+- **One code path.** No platform-specific bugs to chase, and tests run in Jest without native mocks.
+
+## How it's built
+
+Only React Native core APIs: `FlatList`, `Animated` (native driver on iOS/Android), `PanResponder`, `Modal`, `Pressable`, `TextInput` and `Intl`. No Reanimated, Gesture Handler, SVG or vector icons.
+
+## Web specifics
+
+- The wheel snaps to the nearest row once scrolling stops. Mouse wheel, trackpad and touch all work.
+- `Modal` (used by sheets) renders into a portal on the web.
+- Animations run on the JS driver on the web, because the native driver isn't available there.
+
+### Next.js / SSR
+
+Render pickers on the client. They measure layout and animate, so wrap them in a client component:
+
+```tsx
+'use client';
+import { DatePicker } from '@elik56a/react-native-pickers';
+```
+
+and alias `react-native` to `react-native-web` in your bundler config (Expo's and Next's RNW guides cover this).
+
+## Testing
+
+Components render in Jest with the `react-native` preset. Use `testID` props to find them:
+
+```tsx
+render(<SelectPicker testID="country" options={opts} value={null} onChange={onChange} />);
+```
+
+Wheels settle with timers, so use fake timers (`jest.useFakeTimers()` + `jest.runAllTimers()`) when asserting on `onChange` after a scroll event.

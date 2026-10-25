@@ -1,0 +1,208 @@
+---
+title: Theming
+description: Theme every React Native picker with PickersProvider — colours, radius, spacing, typography and animation tokens, automatic light/dark mode, per-component overrides and createTheme.
+---
+
+# Theming
+
+Pickers ship with a polished light and dark theme that follow the OS appearance automatically. Change any token for the whole app with `PickersProvider`, or for one component with its `theme` prop.
+
+## PickersProvider
+
+```tsx title="App.tsx"
+import { PickersProvider } from '@elik56a/react-native-pickers';
+
+export default function App() {
+  return (
+    <PickersProvider
+      colorScheme="auto"
+      theme={{
+        colors: { primary: '#FF5A5F', primaryMuted: 'rgba(255,90,95,0.12)' },
+        radius: { md: 8, sheet: 16 },
+        typography: { fontFamily: 'Inter-Regular', fontFamilyMedium: 'Inter-SemiBold' },
+      }}
+      darkTheme={{
+        colors: { primary: '#FF8A8E', background: '#000000', sheet: '#111111' },
+      }}
+    >
+      <Navigation />
+    </PickersProvider>
+  );
+}
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `colorScheme` | `'auto' \| 'light' \| 'dark'` | `'auto'` | `'auto'` follows `useColorScheme()`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `lightTheme`. **Also applied to dark mode when `darkTheme` is not given.** |
+| `darkTheme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `darkTheme`. |
+| `children` | `ReactNode` | **required** | |
+
+:::caution Light overrides leak into dark mode
+If you pass only `theme`, the same overrides are applied on top of the dark base too. That's right for brand colours and fonts, but wrong for backgrounds. Pass `darkTheme` whenever you override surface colours.
+:::
+
+Providers can be nested; the innermost one wins. That's an easy way to force one area dark:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { PickersProvider, DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(new Date());
+  return (
+    <PickersProvider colorScheme="dark">
+      <View style={{ backgroundColor: '#16171C', borderRadius: 20, padding: 8 }}>
+        <DatePicker value={date} onChange={setDate} />
+      </View>
+    </PickersProvider>
+  );
+}
+```
+
+## Per-component `theme`
+
+Every component accepts `theme`, merged on top of the provider's theme for that component only:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [t, setT] = useState(new Date());
+  return (
+    <View style={{ gap: 16 }}>
+      <TimePicker value={t} onChange={setT} theme={{ colors: { indicator: 'rgba(16,185,129,0.15)' }, typography: { sizes: { lg: 24 } } }} />
+      <TimePicker value={t} onChange={setT} theme={{ colors: { indicator: 'rgba(244,63,94,0.12)', text: '#E11D48' }, radius: { md: 0 } }} />
+    </View>
+  );
+}
+```
+
+:::tip Memoize theme objects
+Pass a constant or `useMemo`'d object rather than an inline literal, so the merged theme isn't recomputed every render. It matters most on wheels.
+:::
+
+## Tokens
+
+```ts
+interface PickerTheme {
+  dark: boolean;
+  colors: {
+    background: string;    // picker surfaces
+    surface: string;       // search inputs, chips, pressed rows
+    sheet: string;         // bottom sheet background
+    text: string;
+    textSecondary: string; // labels, unselected wheel rows, placeholders
+    textDisabled: string;
+    primary: string;       // selected day, check marks, buttons, accents
+    onPrimary: string;     // text on primary
+    primaryMuted: string;  // range band, selected list row, chips
+    border: string;
+    backdrop: string;      // sheet overlay
+    indicator: string;     // wheel selection band
+    handle: string;        // sheet grab handle
+  };
+  radius: { sm: number; md: number; lg: number; full: number; sheet: number };
+  spacing: { xs: number; sm: number; md: number; lg: number; xl: number };
+  typography: {
+    fontFamily?: string;
+    fontFamilyMedium?: string; // used for medium and bold weights; falls back to fontFamily
+    sizes: { xs: number; sm: number; md: number; lg: number; xl: number };
+    weights: { regular: TextStyle['fontWeight']; medium: TextStyle['fontWeight']; bold: TextStyle['fontWeight'] };
+  };
+  animation: { duration: number }; // ms: month slide, sheet open (+60) / close
+}
+```
+
+### Defaults
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `colors.background` | `#FFFFFF` | `#16171C` |
+| `colors.surface` | `#F2F3F7` | `#22242B` |
+| `colors.sheet` | `#FFFFFF` | `#1B1C22` |
+| `colors.text` | `#14151A` | `#F3F4F7` |
+| `colors.textSecondary` | `#6B6F7B` | `#9A9EAA` |
+| `colors.textDisabled` | `#B9BCC6` | `#4E515B` |
+| `colors.primary` | `#4F46E5` | `#8B85FF` |
+| `colors.onPrimary` | `#FFFFFF` | `#0E0E14` |
+| `colors.primaryMuted` | `rgba(79,70,229,0.12)` | `rgba(139,133,255,0.18)` |
+| `colors.border` | `#E6E7EC` | `#2C2E36` |
+| `colors.backdrop` | `rgba(10,11,16,0.45)` | `rgba(0,0,0,0.6)` |
+| `colors.indicator` | `rgba(20,21,26,0.06)` | `rgba(255,255,255,0.07)` |
+| `colors.handle` | `#D5D7DE` | `#3A3D47` |
+
+| Token | Value (both) |
+| --- | --- |
+| `radius` | `sm 8 · md 12 · lg 16 · full 999 · sheet 24` |
+| `spacing` | `xs 4 · sm 8 · md 12 · lg 16 · xl 24` |
+| `typography.sizes` | `xs 11 · sm 13 · md 16 · lg 19 · xl 22` |
+| `typography.weights` | `regular '400' · medium '500' · bold '600'` |
+| `animation.duration` | `240` |
+
+### Where each colour is used
+
+| Token | Used by |
+| --- | --- |
+| `primary` | Selected day, today ring, calendar arrows, check marks, chips text, Done button, category underline, tap-to-type ring |
+| `primaryMuted` | Range band, selected select row, chips background, selected skin tone |
+| `indicator` | Wheel selection band |
+| `surface` | Search inputs, pressed rows/days, skin-tone button |
+| `textSecondary` | Unselected wheel rows, weekday names, placeholders, descriptions, Cancel |
+| `textDisabled` | Disabled days / rows, outside-month days |
+
+## Building a theme in code
+
+```ts
+import { createTheme, mergeTheme, lightTheme, darkTheme } from '@elik56a/react-native-pickers';
+
+// Full theme from overrides on top of light (or dark when overrides.dark is true)
+const brand = createTheme({ colors: { primary: '#0EA5E9' } });
+
+// Explicit base
+const brandDark = createTheme({ colors: { primary: '#38BDF8' } }, darkTheme);
+
+// Generic deep merge (objects are merged, arrays and primitives replaced)
+const tweaked = mergeTheme(lightTheme, { radius: { md: 4 } });
+```
+
+## Using the theme in your own components
+
+`usePickerTheme()` returns the active, resolved theme, so your buttons and fields can match the pickers:
+
+```tsx
+import { usePickerTheme, textStyle } from '@elik56a/react-native-pickers';
+
+function DoneButton({ onPress }: { onPress: () => void }) {
+  const theme = usePickerTheme();
+  return (
+    <Pressable onPress={onPress} style={{ backgroundColor: theme.colors.primary, borderRadius: theme.radius.md, padding: theme.spacing.md }}>
+      <Text style={[textStyle(theme, 'md', 'bold'), { color: theme.colors.onPrimary }]}>Done</Text>
+    </Pressable>
+  );
+}
+```
+
+`textStyle(theme, size, weight?)` returns `{ fontSize, fontWeight, fontFamily, color }` from the tokens.
+
+## Matching your design system
+
+Map your existing tokens once:
+
+```tsx
+import { colors, radii, fonts } from './design-system';
+
+const pickerTheme = {
+  colors: { primary: colors.brand500, primaryMuted: colors.brand50, text: colors.gray900, textSecondary: colors.gray500, border: colors.gray200 },
+  radius: { md: radii.md, sheet: radii.xl },
+  typography: { fontFamily: fonts.regular, fontFamilyMedium: fonts.semibold },
+};
+const pickerDarkTheme = { colors: { primary: colors.brand300, background: colors.gray950, sheet: colors.gray900 } };
+
+<PickersProvider theme={pickerTheme} darkTheme={pickerDarkTheme}>…</PickersProvider>
+```
+
+→ For per-part tweaks beyond tokens, see [Styling](./styling).

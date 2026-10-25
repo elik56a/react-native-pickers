@@ -3,6 +3,8 @@
 Beautiful, fully customizable pickers for React Native — **100% JavaScript, zero native code.**
 Works with Expo Go, bare React Native, and React Native Web out of the box.
 
+**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
+
 | | |
 |---|---|
 | 🎡 **WheelPicker** | iOS-style 3D wheel, infinite loop, disabled items, multi-column |
@@ -259,6 +261,7 @@ npm run typecheck
 npm run build       # lib/ (ESM + .d.ts)
 npm run example:web # bundles example/App.tsx for React Native Web → example/web/dist
 npm run gen:emoji   # regenerate emoji data from emojibase-data
+pnpm docs           # docs site at localhost:3000 (website/, Docusaurus)
 ```
 
 ### Running the example on iOS / Android

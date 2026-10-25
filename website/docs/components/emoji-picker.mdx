@@ -1,0 +1,264 @@
+---
+title: EmojiPicker
+description: React Native emoji picker with 1,906 emojis, categories, keyword search, skin tones, recently used, Emoji-version filtering for older Android, custom icons and labels. Pure JS, no fonts or images.
+---
+
+# EmojiPicker
+
+A full emoji keyboard: 1,906 emojis in 9 categories, keyword search, skin tones, recently used, a category bar, and filtering by Emoji version so older devices never show empty boxes. Emojis render with the system font; no images or fonts are bundled.
+
+```tsx
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [text, setText] = useState('Hello ');
+  return (
+    <>
+      <Text style={{ fontSize: 24, minHeight: 36, marginBottom: 8 }}>{text}</Text>
+      <EmojiPicker onSelect={(emoji) => setText((t) => t + emoji)} />
+    </>
+  );
+}
+```
+
+## `onSelect`
+
+```ts
+onSelect: (emoji: string, data: Emoji) => void
+```
+
+`emoji` is the character to insert, **with the current skin tone applied**. `data` is the base emoji's metadata:
+
+```ts
+interface Emoji {
+  emoji: string;          // base character, e.g. '👍'
+  name: string;           // 'thumbs up'
+  keywords: string[];     // search tags
+  category: EmojiCategory;
+  version: number;        // Emoji version it was introduced in, e.g. 13.1
+  skins?: string[];       // 5 skin-tone variants (light → dark) when supported
+}
+```
+
+## Categories
+
+```ts
+type EmojiCategory = 'smileys' | 'people' | 'animals' | 'food' | 'travel' | 'activities' | 'objects' | 'symbols' | 'flags';
+```
+
+`categories` filters **and** orders the sections and the category bar:
+
+```tsx live
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return <EmojiPicker height={300} categories={['food', 'animals', 'activities']} onSelect={() => {}} showSkinTones={false} />;
+}
+```
+
+Hide specific characters with `exclude={['🖕', '🍆']}`.
+
+## Search
+
+The search field matches names and keywords, ranks name-prefix matches first, and requires every word to match (`cat face` → 🐱). Search across a custom list in your own UI with [`searchEmojis`](../api/emoji-utils#searchemojis).
+
+## Skin tones
+
+The ✋ button next to search opens a tone menu. Tones are numbers:
+
+```ts
+type SkinTone = 0 | 1 | 2 | 3 | 4 | 5; // 0 = default yellow, 1–5 = light → dark
+```
+
+Tones apply to every emoji that supports them, in the grid and in what `onSelect` returns. Control or persist the tone:
+
+```tsx
+const [tone, setTone] = useState<SkinTone>(0);
+<EmojiPicker skinTone={tone} onSkinToneChange={setTone} onSelect={insert} />
+```
+
+Use `defaultSkinTone` for uncontrolled, or `showSkinTones={false}` to hide the button.
+
+## Recently used
+
+Picked emojis go to a **Recently used** section at the top (up to `maxRecent`, default 24, most recent first). The list stores **base** emojis, so they re-render in whatever tone is current.
+
+The picker keeps recents in memory by default. To persist them across launches, control them:
+
+```tsx title="Persisting recents with AsyncStorage"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+function Picker({ onPick }: { onPick: (e: string) => void }) {
+  const [recent, setRecent] = useState<string[]>([]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('emoji-recent').then((v) => v && setRecent(JSON.parse(v)));
+  }, []);
+
+  return (
+    <EmojiPicker
+      recent={recent}
+      onRecentChange={(next) => {
+        setRecent(next);
+        AsyncStorage.setItem('emoji-recent', JSON.stringify(next));
+      }}
+      onSelect={onPick}
+    />
+  );
+}
+```
+
+Seed a starter set with `defaultRecent={['👍', '❤️', '😂']}`, or turn the section off with `showRecent={false}`.
+
+## Older devices: `maxEmojiVersion`
+
+Emojis newer than the device's font render as empty boxes (common on older Android). Hide them by version:
+
+```tsx
+import { Platform } from 'react-native';
+
+<EmojiPicker
+  maxEmojiVersion={Platform.OS === 'android' && Platform.Version < 30 ? 12 : undefined}
+  onSelect={insert}
+/>
+```
+
+## Layout
+
+```tsx live
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return (
+    <EmojiPicker
+      height={340}
+      columns={7}
+      emojiSize={30}
+      categoryBarPosition="bottom"
+      showSectionHeaders={false}
+      onSelect={() => {}}
+    />
+  );
+}
+```
+
+- `columns` (default 8) sets emojis per row. Cells are square and fill the width.
+- `emojiSize` sets the font size (default about 62% of the cell).
+- `height` (default 380) is the total height including search and category bar.
+- `categoryBarPosition`: `'top'` (default) or `'bottom'`. Hide the bar with `showCategoryBar={false}`.
+- `showSectionHeaders={false}` removes the "Smileys & Emotion" style headers.
+
+## Translating labels and icons
+
+Every label is replaceable. The `categoryLabels` keys are the categories plus `recent` and `search`. Icons can be strings (rendered as text) or any React node:
+
+```tsx live
+import { EmojiPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return (
+    <EmojiPicker
+      height={320}
+      searchPlaceholder="Rechercher"
+      emptyText="Aucun emoji"
+      categoryLabels={{
+        recent: 'Récents',
+        smileys: 'Smileys et émotions',
+        people: 'Personnes',
+        animals: 'Animaux et nature',
+        food: 'Nourriture',
+        travel: 'Voyages',
+        activities: 'Activités',
+        objects: 'Objets',
+        symbols: 'Symboles',
+        flags: 'Drapeaux',
+        search: 'Résultats',
+      }}
+      categoryIcons={{ smileys: '🙂', food: '🥐' }}
+      onSelect={() => {}}
+    />
+  );
+}
+```
+
+## Custom emoji cells
+
+`renderEmoji(emoji, data, size)` replaces the character, for example to render a custom image set like Twemoji:
+
+```tsx
+<EmojiPicker
+  renderEmoji={(emoji, data, size) => <Image source={{ uri: twemojiUrl(emoji) }} style={{ width: size, height: size }} />}
+  onSelect={insert}
+/>
+```
+
+## In a sheet
+
+```tsx
+<EmojiPickerSheet visible={open} onClose={() => setOpen(false)} onSelect={(e) => setText((t) => t + e)} />
+```
+
+The sheet closes after each pick by default (`closeOnSelect={false}` to keep it open). → [EmojiPickerSheet](./picker-sheets#emojipickersheet)
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onSelect` | `(emoji: string, data: Emoji) => void` | **required** | Called with the toned character and its metadata. |
+| `columns` | `number` | `8` | Emojis per row. |
+| `emojiSize` | `number` | ~62% of cell | Emoji font size. |
+| `height` | `number` | `380` | Total height. |
+| `categories` | `EmojiCategory[]` | all 9 | Which categories to show, in order. |
+| `exclude` | `string[]` | — | Characters to hide. |
+| `maxEmojiVersion` | `number` | — | Hide emojis newer than this Emoji version. |
+| `searchable` | `boolean` | `true` | Show the search field. |
+| `searchPlaceholder` | `string` | `'Search emoji'` | Search hint. |
+| `emptyText` | `string` | `'No emoji found'` | Empty search result text. |
+| `showCategoryBar` | `boolean` | `true` | Show the category tabs. |
+| `categoryBarPosition` | `'top' \| 'bottom'` | `'top'` | Tab bar position. |
+| `showSectionHeaders` | `boolean` | `true` | Section title rows. |
+| `categoryLabels` | `Partial<Record<EmojiCategory \| 'recent' \| 'search', string>>` | English | Section and tab labels. |
+| `categoryIcons` | `Partial<Record<EmojiCategory \| 'recent', ReactNode>>` | emoji icons | Tab icons. |
+| `skinTone` | `SkinTone` | — | Controlled tone. |
+| `defaultSkinTone` | `SkinTone` | `0` | Initial tone. |
+| `onSkinToneChange` | `(tone: SkinTone) => void` | — | Tone picked in the menu. |
+| `showSkinTones` | `boolean` | `true` | Show the tone button. |
+| `recent` | `string[]` | — | Controlled recents (base characters). |
+| `defaultRecent` | `string[]` | `[]` | Initial recents. |
+| `onRecentChange` | `(recent: string[]) => void` | — | New recents after each pick. |
+| `showRecent` | `boolean` | `true` | Show and update recents. |
+| `maxRecent` | `number` | `24` | Recents kept. |
+| `renderEmoji` | `(emoji: string, data: Emoji, size: number) => ReactNode` | — | Custom cell content. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<EmojiPickerSlot>` | — | Slots below. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID. |
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `container` | Outer view |
+| `header` | Search + tone row |
+| `searchInput` | Search `TextInput` |
+| `skinToneButton` / `skinToneMenu` | Tone button / menu |
+| `categoryBar` | Tab bar |
+| `categoryTab` / `activeCategoryTab` | Tabs |
+| `categoryIndicator` | Active-tab underline |
+| `sectionHeader` / `sectionHeaderText` | Section titles |
+| `emojiCell` / `emojiText` | Grid cells |
+| `empty` / `emptyText` | No search results |
+
+## Data and utilities
+
+The emoji data comes from [emojibase](https://emojibase.dev) (MIT) and is parsed lazily on first use. The helpers are exported for your own UIs (reactions bars, `:shortcode` autocomplete): `getAllEmojis`, `searchEmojis`, `findEmoji`, `withSkinTone`, `EMOJI_CATEGORIES`, `DEFAULT_CATEGORY_LABELS`, `DEFAULT_CATEGORY_ICONS`. → [Emoji utilities](../api/emoji-utils)
+
+## Related
+
+- [Chat input recipe](../recipes/chat-emoji)

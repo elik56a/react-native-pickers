@@ -1,0 +1,67 @@
+---
+title: Country selector
+description: Searchable React Native country picker with flag emojis, regions as groups, multilingual keywords and a phone-code variant, built with SelectPicker.
+---
+
+# Country selector
+
+Flags generated from ISO codes, grouped by region, searchable in several languages.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const flag = (code: string) => String.fromCodePoint(...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+
+const COUNTRIES = [
+  ['US', 'United States', 'Americas', '+1', ['usa', 'america']],
+  ['CA', 'Canada', 'Americas', '+1', []],
+  ['BR', 'Brazil', 'Americas', '+55', ['brasil']],
+  ['GB', 'United Kingdom', 'Europe', '+44', ['uk', 'britain', 'england']],
+  ['DE', 'Germany', 'Europe', '+49', ['deutschland']],
+  ['FR', 'France', 'Europe', '+33', []],
+  ['ES', 'Spain', 'Europe', '+34', ['españa']],
+  ['IL', 'Israel', 'Middle East', '+972', ['ישראל']],
+  ['AE', 'United Arab Emirates', 'Middle East', '+971', ['uae', 'dubai']],
+  ['IN', 'India', 'Asia', '+91', ['bharat']],
+  ['JP', 'Japan', 'Asia', '+81', ['nippon', '日本']],
+  ['AU', 'Australia', 'Oceania', '+61', []],
+] as const;
+
+const options = COUNTRIES.map(([code, name, region, dial, keywords]) => ({
+  label: name,
+  value: code,
+  group: region,
+  description: dial,
+  keywords: [code, dial, ...keywords],
+  icon: <Text style={{ fontSize: 22 }}>{flag(code)}</Text>,
+}));
+
+export default function CountrySelect() {
+  const [country, setCountry] = useState<string | null>('IL');
+  return (
+    <SelectPicker
+      label="Country"
+      placeholder="Select a country"
+      sheetTitle="Choose your country"
+      searchPlaceholder="Search name, code or +dial"
+      options={options}
+      value={country}
+      onChange={setCountry}
+      searchable
+      autoFocusSearch
+      sheet={{ sheetProps: { height: 0.8 } }}
+    />
+  );
+}
+```
+
+Try searching `deutsch`, `+44`, `uae` or `日本`.
+
+## Tips
+
+- Use `keywords` for ISO codes, dialing codes and native names. Search matches them all, accent-insensitively.
+- `group` + `options` order controls the sections: sort by region, then name.
+- For phone inputs, use `renderTrigger` to show just `🇮🇱 +972` next to your `TextInput`.
+- For all ~250 countries, the list is virtualized; give the sheet a fixed height (`sheetProps.height`) so it opens at a consistent size.

@@ -1,0 +1,117 @@
+---
+title: API reference
+description: Every export of @elik56a/react-native-pickers — components, sheets, hooks, theme helpers, date and emoji utilities and types — on one page.
+---
+
+# API reference
+
+Every export from `@elik56a/react-native-pickers`, grouped. Each name links to its full documentation.
+
+## Components
+
+| Export | Description |
+| --- | --- |
+| [`WheelPicker<T>`](../components/wheel-picker) | Single scrolling wheel |
+| [`MultiWheelPicker`](../components/multi-wheel-picker) | Several wheels in one band |
+| [`TimePicker`](../components/time-picker) | Hour / minute / second / AM-PM wheels |
+| [`DatePicker`](../components/date-picker) | Calendar (`display="calendar"`) or wheel (`display="wheel"`) |
+| [`Calendar`](../components/date-picker) | Month calendar: single / range / multiple |
+| [`DateWheelPicker`](../components/date-wheel-picker) | Day / month / year wheels |
+| [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
+| [`SelectList<T>`](../components/select-list) | Inline searchable list |
+| [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
+| [`BottomSheet`](../components/bottom-sheet) | Animated sheet |
+
+## Sheets
+
+| Export | Description |
+| --- | --- |
+| [`PickerSheet`](../components/picker-sheets#pickersheet) | BottomSheet with Cancel / Done |
+| [`DatePickerSheet`](../components/picker-sheets#datepickersheet) | Calendar or date wheel in a sheet |
+| [`TimePickerSheet`](../components/picker-sheets#timepickersheet) | TimePicker in a sheet |
+| [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
+| [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
+| [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
+
+## Theme
+
+| Export | Description |
+| --- | --- |
+| [`PickersProvider`](../guides/theming#pickersprovider) | App-wide theme and colour scheme |
+| [`usePickerTheme(override?)`](./theme#usepickertheme) | Resolved active theme |
+| [`createTheme(overrides, base?)`](./theme#createtheme) | Full theme from overrides |
+| [`mergeTheme(base, override?)`](./theme#mergetheme) | Deep merge |
+| [`lightTheme`](./theme#lighttheme--darktheme) / [`darkTheme`](./theme#lighttheme--darktheme) | Built-in themes |
+| [`textStyle(theme, size, weight?)`](./theme#textstyle) | Text style from tokens |
+
+## Date utilities
+
+[`startOfDay`](./date-utils#startofday) · [`startOfMonth`](./date-utils#startofmonth) · [`daysInMonth`](./date-utils#daysinmonth) · [`addDays`](./date-utils#adddays) · [`addMonths`](./date-utils#addmonths) · [`isSameDay`](./date-utils#issameday) · [`isSameMonth`](./date-utils#issamemonth) · [`compareDay`](./date-utils#compareday) · [`isBetweenDays`](./date-utils#isbetweendays) · [`isOutOfRange`](./date-utils#isoutofrange) · [`clampDate`](./date-utils#clampdate) · [`toDateKey`](./date-utils#todatekey) · [`buildMonthGrid`](./date-utils#buildmonthgrid) · [`getMonthNames`](./date-utils#getmonthnames) · [`getWeekdayNames`](./date-utils#getweekdaynames) · [`formatMonthYear`](./date-utils#formatmonthyear) · [`formatDate`](./date-utils#formatdate) · [`uses12HourClock`](./date-utils#uses12hourclock) · [`getFirstDayOfWeek`](./date-utils#getfirstdayofweek) · [`getDayPeriods`](./date-utils#getdayperiods)
+
+## Emoji utilities
+
+[`getAllEmojis`](./emoji-utils#getallemojis) · [`searchEmojis`](./emoji-utils#searchemojis) · [`findEmoji`](./emoji-utils#findemoji) · [`withSkinTone`](./emoji-utils#withskintone) · [`EMOJI_CATEGORIES`](./emoji-utils#constants) · [`DEFAULT_CATEGORY_LABELS`](./emoji-utils#constants) · [`DEFAULT_CATEGORY_ICONS`](./emoji-utils#constants)
+
+## Select utilities
+
+| Export | Description |
+| --- | --- |
+| [`defaultFilter(option, query)`](../components/select-picker#search) | The default search: case-, accent- and niqqud-insensitive; every word must match label, description or keywords |
+
+## Types
+
+See [TypeScript](../guides/typescript#exported-types) for the full list. The most used:
+
+```ts
+interface DateRange { start: Date | null; end: Date | null }
+
+interface MarkedDate { dots?: string[]; disabled?: boolean; label?: string; textColor?: string }
+
+interface SelectOption<T> {
+  label: string; value: T; description?: string; disabled?: boolean;
+  icon?: React.ReactNode; group?: string; keywords?: string[];
+}
+
+interface WheelItem<T> { label: string; value: T; disabled?: boolean; key?: string }
+
+type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
+
+type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
+
+interface ThemableProps { theme?: DeepPartial<PickerTheme> }
+```
+
+## Default strings
+
+| Where | Prop | Default |
+| --- | --- | --- |
+| Sheets | `confirmLabel` / `cancelLabel` | `Done` / `Cancel` |
+| SelectPicker | `placeholder` | `Select…` |
+| SelectList | `searchPlaceholder` / `emptyText` | `Search` / `No results` |
+| EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
+| TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
+
+## Default values at a glance
+
+| Prop | Default | Components |
+| --- | --- | --- |
+| `itemHeight` | `40` | wheels |
+| `visibleItems` | `5` | wheels |
+| `variant` | `'3d'` | wheels |
+| `rotation` / `fadeTo` | `20` / `0.3` | WheelPicker |
+| `loop` | `false` WheelPicker · `true` TimePicker, DateWheelPicker | wheels |
+| `keyboardInput` | `true` | WheelPicker |
+| `minuteInterval` / `secondInterval` | `1` | TimePicker |
+| `format` | `'auto'` | TimePicker |
+| `dayHeight` | `44` | Calendar |
+| `fixedWeeks` / `showOutsideDays` | `true` | Calendar |
+| `enableSwipe` / `enableQuickJump` | `true` | Calendar |
+| `weekdayFormat` | `'short'` | Calendar |
+| `monthFormat` | `'long'` | DateWheelPicker |
+| `searchable` | `options.length > 8` · `true` emoji | Select, Emoji |
+| `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |
+| `chips` | `true` | SelectPicker |
+| `columns` / `height` | `8` / `380` (`420` in sheet) | EmojiPicker |
+| `maxRecent` | `24` | EmojiPicker |
+| `maxHeightRatio` | `0.9` | BottomSheet |
+| `bottomInset` | `24` iOS · `12` other | BottomSheet |

@@ -1,0 +1,117 @@
+---
+title: Styling with slots
+description: Style any visual part of every React Native picker through typed slot styles — no forking, no !important. Complete slot list per component.
+---
+
+# Styling with slots
+
+Theme tokens set colours and sizes everywhere. **Slots** let you style one specific part of one component. Every component takes a `styles` prop: an object of slot name → style.
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [v, setV] = useState('Wed');
+  return (
+    <WheelPicker
+      items={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+      value={v}
+      onChange={setV}
+      styles={{
+        indicator: { backgroundColor: '#111827', borderRadius: 999 },
+        selectedItemText: { color: '#FFFFFF', fontWeight: '800', letterSpacing: 1 },
+        itemText: { fontSize: 17 },
+      }}
+    />
+  );
+}
+```
+
+## Rules
+
+- **Slot styles are merged last**, after the built-in and theme styles, so they always win.
+- **State slots stack** on top of base slots: `selectedItemText` is applied after `itemText`, and `selectedDay` after `dayInner`.
+- Slots accept any `StyleProp`: objects, arrays or `StyleSheet.create` entries.
+- Types are exact. `SlotStyles<CalendarSlot>` autocompletes valid names and flags typos.
+- `style` (singular) styles the outer container; `styles` (plural) are the slots.
+
+```ts
+type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
+```
+
+## All slots
+
+| Component | Slots |
+| --- | --- |
+| [WheelPicker](../components/wheel-picker#slots) | `container` `item` `itemText` `selectedItemText` `disabledItemText` `indicator` |
+| [MultiWheelPicker / TimePicker / DateWheelPicker](../components/multi-wheel-picker#slots) | `container` `indicator` `separator` `item` `itemText` `selectedItemText` `disabledItemText` |
+| [Calendar / DatePicker](../components/date-picker#slots) | `container` `header` `headerTitle` `arrow` `arrowText` `weekdays` `weekdayText` `week` `day` `dayInner` `dayText` `selectedDay` `selectedDayText` `todayDay` `todayDayText` `disabledDayText` `outsideDayText` `rangeBand` `dot` `dayLabel` `gridCell` `gridCellText` |
+| [SelectList](../components/select-list#slots) | `container` `search` `searchInput` `list` `groupHeader` `groupHeaderText` `option` `selectedOption` `optionLabel` `selectedOptionLabel` `optionDescription` `check` `empty` `emptyText` |
+| [SelectPicker](../components/select-picker#slots) | all SelectList slots + `trigger` `triggerText` `placeholder` `label` `chip` `chipText` `chevron` `clear` |
+| [EmojiPicker](../components/emoji-picker#slots) | `container` `header` `searchInput` `skinToneButton` `skinToneMenu` `categoryBar` `categoryTab` `activeCategoryTab` `categoryIndicator` `sectionHeader` `sectionHeaderText` `emojiCell` `emojiText` `empty` `emptyText` |
+| [BottomSheet](../components/bottom-sheet#slots) | `backdrop` `sheet` `handle` `header` `title` `content` `footer` |
+
+Picker sheets style their `BottomSheet` through `sheetProps={{ styles: { … } }}` and their picker through the picker's own `styles`.
+
+## Example: square calendar
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, addDays } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+const square = {
+  dayInner: { borderRadius: 6 },
+  selectedDay: { borderRadius: 6 },
+  todayDay: { borderRadius: 6, borderStyle: 'dashed' as const },
+  rangeBand: { borderRadius: 0 },
+  headerTitle: { fontWeight: '800' as const, fontSize: 18 },
+  arrow: { borderRadius: 6 },
+};
+
+export default function Example() {
+  const t = new Date();
+  const [r, setR] = useState<DateRange>({ start: addDays(t, 1), end: addDays(t, 4) });
+  return <DatePicker mode="range" value={r} onChange={setR} styles={square} />;
+}
+```
+
+## Example: outlined select field
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [v, setV] = useState<string[]>(['design']);
+  return (
+    <SelectPicker
+      multiple
+      label="TEAMS"
+      options={['Design', 'Engineering', 'Marketing', 'Sales'].map((t) => ({ label: t, value: t.toLowerCase() }))}
+      value={v}
+      onChange={setV}
+      styles={{
+        label: { fontSize: 11, letterSpacing: 1.2, fontWeight: '700' },
+        trigger: { borderWidth: 2, borderRadius: 4, minHeight: 56 },
+        chip: { borderRadius: 4, backgroundColor: '#111827' },
+        chipText: { color: '#FFFFFF' },
+      }}
+    />
+  );
+}
+```
+
+## Reusing styles
+
+Define slot objects once and share them app-wide:
+
+```ts title="pickerStyles.ts"
+import type { SlotStyles, CalendarSlot, SelectSlot, SelectTriggerSlot } from '@elik56a/react-native-pickers';
+
+export const calendarStyles: SlotStyles<CalendarSlot> = { headerTitle: { fontFamily: 'Inter-Bold' } };
+export const selectStyles: SlotStyles<SelectSlot | SelectTriggerSlot> = { trigger: { minHeight: 52 } };
+```
+
+→ When a slot isn't enough, [replace the part with a render prop](./render-props).

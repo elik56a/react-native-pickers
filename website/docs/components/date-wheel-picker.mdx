@@ -1,0 +1,121 @@
+---
+title: DateWheelPicker
+description: React Native date wheel picker (day / month / year) with locale-aware column order and month names, min/max dates and automatic day clamping. Ideal for birthdays.
+---
+
+# DateWheelPicker
+
+Day, month and year wheels, the classic iOS date picker. Best for dates far from today (birthdays, expiry dates) where a calendar would need many taps.
+
+```tsx
+import { DateWheelPicker } from '@elik56a/react-native-pickers';
+// or: <DatePicker display="wheel" … />
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DateWheelPicker, formatDate } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [birthday, setBirthday] = useState(new Date(1990, 4, 17));
+  return (
+    <>
+      <DateWheelPicker value={birthday} onChange={setBirthday} maxDate={new Date()} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>{formatDate(birthday, undefined, { dateStyle: 'long' })}</Text>
+    </>
+  );
+}
+```
+
+`<DatePicker display="wheel" />` renders exactly this component with the same props.
+
+## Column order from the locale
+
+The order of the wheels follows the locale's date format: month / day / year for `en-US`, day / month / year for `en-GB`, `de`, `he`, `fr`, and year / month / day for `ja`, `zh`, `ko`. Override it with `order`.
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { DateWheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [d, setD] = useState(new Date(2000, 0, 31));
+  return (
+    <View style={{ gap: 12 }}>
+      <Text style={{ fontWeight: '600' }}>en-GB</Text>
+      <DateWheelPicker value={d} onChange={setD} locale="en-GB" visibleItems={3} />
+      <Text style={{ fontWeight: '600' }}>ja-JP</Text>
+      <DateWheelPicker value={d} onChange={setD} locale="ja-JP" visibleItems={3} />
+      <Text style={{ fontWeight: '600' }}>Custom order, numeric months</Text>
+      <DateWheelPicker value={d} onChange={setD} order={['year', 'month', 'day']} monthFormat="numeric" visibleItems={3} />
+    </View>
+  );
+}
+```
+
+## Month format
+
+| `monthFormat` | Example |
+| --- | --- |
+| `'long'` (default) | January |
+| `'short'` | Jan |
+| `'numeric'` | 01 (days are zero-padded too) |
+
+## Day clamping
+
+When the month or year changes to one with fewer days, the day is clamped automatically: Jan 31 → February becomes Feb 28 (or 29 in leap years). The day wheel always shows exactly the days in the selected month.
+
+## Min, max and year range
+
+`minDate` and `maxDate` limit the selection; days and months outside the range are disabled and the value is clamped into the range. The year wheel spans `minDate`'s year to `maxDate`'s year. Without them it uses `yearRange` (default: 100 years before and after today).
+
+```tsx live
+import { useState } from 'react';
+import { DateWheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [expiry, setExpiry] = useState(new Date(2028, 5, 1));
+  return <DateWheelPicker value={expiry} onChange={setExpiry} order={['month', 'year']} monthFormat="numeric" yearRange={[2026, 2040]} loop={false} />;
+}
+```
+
+:::tip Month + year only
+Pass only the columns you need in `order`, for example `['month', 'year']` for card expiry dates. The day is kept from `value`, and clamped if needed.
+:::
+
+## Looping
+
+The day and month wheels loop by default (`loop`); the year wheel never loops.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `Date` | — | Selected date (controlled). Time of day is preserved. |
+| `defaultValue` | `Date` | today | Initial date when uncontrolled (clamped to min/max). |
+| `onChange` | `(date: Date) => void` | — | Fires when a wheel settles. |
+| `onValueChanging` | `(date: Date) => void` | — | Fires on every tick (haptics). |
+| `locale` | `string` | device | Month names and default column order. |
+| `minDate` | `Date` | — | Earliest selectable date. |
+| `maxDate` | `Date` | — | Latest selectable date. |
+| `order` | `('day' \| 'month' \| 'year')[]` | from locale | Columns and their order. |
+| `monthFormat` | `'long' \| 'short' \| 'numeric'` | `'long'` | Month labels. |
+| `yearRange` | `[number, number]` | today ±100 | Years when no min/max is set. |
+| `loop` | `boolean` | `true` | Loop day and month wheels. |
+| `itemHeight` | `number` | `40` | Row height. |
+| `visibleItems` | `number` | `5` | Visible rows. |
+| `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID. |
+
+```ts
+type DatePart = 'day' | 'month' | 'year';
+```
+
+## Related
+
+- [Birthday recipe](../recipes/birthday)
+- [DatePickerSheet with `display="wheel"`](./picker-sheets#datepickersheet)

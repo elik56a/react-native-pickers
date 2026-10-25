@@ -1,0 +1,60 @@
+---
+title: Tag & multi-select
+description: React Native multi-select tag picker with chips, maximum selections, grouped options and a clear button using SelectPicker multiple mode.
+---
+
+# Tags & multi-select
+
+Pick up to 3 interests from grouped options. They show as removable chips, with a clear-all button.
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const INTERESTS: Record<string, string[]> = {
+  Sports: ['Running', 'Cycling', 'Climbing', 'Surfing'],
+  Arts: ['Photography', 'Painting', 'Music', 'Film'],
+  Tech: ['AI', 'Mobile', 'Web', 'Hardware'],
+};
+
+const options = Object.entries(INTERESTS).flatMap(([group, items]) =>
+  items.map((label) => ({ label, value: label.toLowerCase(), group }))
+);
+
+const MAX = 3;
+
+export default function Tags() {
+  const [tags, setTags] = useState<string[]>(['climbing', 'ai']);
+  return (
+    <View style={{ gap: 6 }}>
+      <SelectPicker
+        multiple
+        label="Interests"
+        placeholder="Add interests"
+        sheetTitle={`Pick up to ${MAX}`}
+        options={options}
+        value={tags}
+        onChange={setTags}
+        maxSelected={MAX}
+        clearable
+      />
+      <Text style={{ fontSize: 12, color: '#6B6F7B' }}>{tags.length}/{MAX} selected · tap a chip to remove it</Text>
+    </View>
+  );
+}
+```
+
+## Behaviour
+
+- `maxSelected` disables the remaining options once the limit is hit; deselecting re-enables them.
+- Chip taps call `onChange` with the chip removed.
+- In multiple mode, × calls `onChange([], [])` for you.
+- `onChange`'s second argument gives the full `SelectOption` objects, which is useful when you need labels:
+
+```tsx
+onChange={(values, selected) => {
+  setTags(values);
+  analytics.track('Interests Changed', { labels: selected.map((o) => o.label) });
+}}
+```

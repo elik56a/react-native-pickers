@@ -1,0 +1,317 @@
+---
+title: WheelPicker
+description: iOS-style 3D wheel picker for React Native with infinite loop, disabled items, tap-to-type keyboard input, flat variant, custom rows and haptics hooks. Pure JS.
+---
+
+# WheelPicker
+
+An iOS-style scrolling wheel. Rows curve away on a 3D cylinder (or stay flat), snap into the selection band, and can loop forever. Works the same on iOS, Android and web.
+
+```tsx
+import { WheelPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [size, setSize] = useState('M');
+  return <WheelPicker items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onChange={setSize} />;
+}
+```
+
+## Items
+
+`items` accepts **primitives** (strings or numbers) or **objects**. Mix freely, but objects are the way to add labels, disabled rows or non-primitive values.
+
+```ts
+type WheelItem<T> = {
+  label: string;      // text shown on the row
+  value: T;           // what onChange gives you
+  disabled?: boolean; // rendered dimmed; the wheel never settles on it
+  key?: string;
+};
+
+items: ReadonlyArray<WheelItem<T> | T>   // T must be string | number for the shorthand
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const plans = [
+  { label: 'Free', value: { id: 'free', price: 0 } },
+  { label: 'Pro — $9', value: { id: 'pro', price: 9 } },
+  { label: 'Team — $29', value: { id: 'team', price: 29 } },
+  { label: 'Enterprise (contact us)', value: { id: 'ent', price: -1 }, disabled: true },
+];
+
+export default function Example() {
+  const [plan, setPlan] = useState(plans[1].value);
+  return (
+    <>
+      <WheelPicker
+        items={plans}
+        value={plan}
+        onChange={setPlan}
+        isEqual={(a, b) => a.id === b.id}
+      />
+      <Text style={{ textAlign: 'center', marginTop: 8, color: '#6B6F7B' }}>Selected: {plan.id}</Text>
+    </>
+  );
+}
+```
+
+:::info Object values need `isEqual`
+Selection is matched with `Object.is` by default. If your values are objects that may be re-created between renders, pass `isEqual` so the wheel can find the selected row.
+:::
+
+## Infinite loop
+
+`loop` makes the wheel wrap around: scroll past the last item to reach the first. Internally the list is repeated and silently re-centred when it settles, so the user can never hit an end.
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const minutes = Array.from({ length: 60 }, (_, i) => ({ label: String(i).padStart(2, '0'), value: i }));
+
+export default function Example() {
+  const [minute, setMinute] = useState(30);
+  return <WheelPicker items={minutes} value={minute} onChange={setMinute} loop />;
+}
+```
+
+## Disabled items
+
+Disabled rows are shown dimmed and are never selected. If the user lets go on one, the wheel springs to the nearest enabled row. If the initial `value` points at a disabled row, the nearest enabled row is shown.
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const slots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00'].map((t, i) => ({
+  label: i % 3 === 1 ? `${t} · booked` : t,
+  value: t,
+  disabled: i % 3 === 1,
+}));
+
+export default function Example() {
+  const [slot, setSlot] = useState('10:00');
+  return <WheelPicker items={slots} value={slot} onChange={setSlot} />;
+}
+```
+
+## Flat variant and the 3D look
+
+`variant="flat"` turns off the cylinder; rows just fade and scale slightly. For the 3D wheel, `rotation` sets how sharply it curves (degrees between rows) and `fadeTo` sets the opacity of the outermost rows.
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const items = Array.from({ length: 20 }, (_, i) => i + 1);
+
+export default function Example() {
+  const [a, setA] = useState(5);
+  const [b, setB] = useState(5);
+  const [c, setC] = useState(5);
+  return (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <WheelPicker style={{ flex: 1 }} items={items} value={a} onChange={setA} />
+      <WheelPicker style={{ flex: 1 }} items={items} value={b} onChange={setB} rotation={32} fadeTo={0.1} />
+      <WheelPicker style={{ flex: 1 }} items={items} value={c} onChange={setC} variant="flat" />
+    </View>
+  );
+}
+```
+
+## Size: `itemHeight` and `visibleItems`
+
+The wheel is exactly `itemHeight × visibleItems` tall. `visibleItems` should be odd so one row sits in the middle; an even number is rounded up.
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [v, setV] = useState('Medium');
+  return (
+    <WheelPicker
+      items={['Tiny', 'Small', 'Medium', 'Large', 'Huge']}
+      value={v}
+      onChange={setV}
+      itemHeight={52}
+      visibleItems={3}
+      styles={{ itemText: { fontSize: 24 } }}
+    />
+  );
+}
+```
+
+## Tap-to-type
+
+With `keyboardInput` (on by default), tapping the **selected** row opens the keyboard. As the user types, the wheel jumps to the first matching label, and the value is committed when the wheel settles, exactly as if they had scrolled.
+
+- **Numeric wheels** (every label is digits) match by number, so typing `5` finds `05`, and the numeric keyboard is shown.
+- **Text wheels** match by case-insensitive prefix (`ju` → `June`).
+- Typing continues while more characters could still narrow the match, then the keyboard closes.
+
+Tap the selected row below, then type:
+
+```tsx live
+import { useState } from 'react';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const years = Array.from({ length: 101 }, (_, i) => 1930 + i);
+
+export default function Example() {
+  const [year, setYear] = useState(1990);
+  return <WheelPicker items={years} value={year} onChange={setYear} />;
+}
+```
+
+Set `keyboardInput={false}` to disable it. Tapping a non-selected row always scrolls to that row.
+
+## Custom rows
+
+`renderItem` replaces the row content. You get the item, its index, whether it's selected and the active theme.
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const currencies = [
+  { label: 'USD', value: 'USD', flag: '🇺🇸', name: 'US Dollar' },
+  { label: 'EUR', value: 'EUR', flag: '🇪🇺', name: 'Euro' },
+  { label: 'GBP', value: 'GBP', flag: '🇬🇧', name: 'Pound' },
+  { label: 'JPY', value: 'JPY', flag: '🇯🇵', name: 'Yen' },
+  { label: 'ILS', value: 'ILS', flag: '🇮🇱', name: 'Shekel' },
+];
+
+export default function Example() {
+  const [cur, setCur] = useState('EUR');
+  return (
+    <WheelPicker
+      items={currencies}
+      value={cur}
+      onChange={setCur}
+      itemHeight={48}
+      renderItem={({ item, selected, theme }) => {
+        const c = currencies.find((x) => x.value === item.value)!;
+        return (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <Text style={{ fontSize: 22 }}>{c.flag}</Text>
+            <Text style={{ fontSize: 18, fontWeight: selected ? '700' : '400', color: selected ? theme.colors.text : theme.colors.textSecondary }}>
+              {c.label}
+            </Text>
+            {selected && <Text style={{ color: theme.colors.textSecondary }}>{c.name}</Text>}
+          </View>
+        );
+      }}
+    />
+  );
+}
+```
+
+`renderIndicator` replaces the selection band (the grey pill behind the selected row), and `showIndicator={false}` removes it:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [v, setV] = useState(3);
+  return (
+    <WheelPicker
+      items={[1, 2, 3, 4, 5, 6, 7]}
+      value={v}
+      onChange={setV}
+      renderIndicator={(theme) => (
+        <View style={{ height: 40, borderTopWidth: 2, borderBottomWidth: 2, borderColor: theme.colors.primary, marginHorizontal: 24 }} />
+      )}
+    />
+  );
+}
+```
+
+## Haptics
+
+`onValueChanging` fires on every row crossing, the perfect hook for a selection tick. The library imposes no haptics dependency; use whichever you like:
+
+```tsx
+import * as Haptics from 'expo-haptics';
+
+<WheelPicker items={items} value={value} onChange={setValue} onValueChanging={() => Haptics.selectionAsync()} />
+```
+
+→ [Haptics guide](../guides/haptics)
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` | `ReadonlyArray<WheelItem<T> \| T>` | **required** | Rows. Primitives (`string \| number`) or `{ label, value, disabled?, key? }`. |
+| `value` | `T` | — | Selected value (controlled). Changing it scrolls the wheel without firing `onChange`. |
+| `defaultValue` | `T` | first enabled item | Initial value when uncontrolled. |
+| `onChange` | `(value: T, index: number) => void` | — | Fires once the wheel settles on a **new** value. `index` is the position in `items`. |
+| `onValueChanging` | `(value: T, index: number) => void` | — | Fires on every row crossing while scrolling (skips disabled rows). Use for haptics. |
+| `itemHeight` | `number` | `40` | Row height in px. |
+| `visibleItems` | `number` | `5` | Visible rows. Odd numbers; even values are rounded up. |
+| `loop` | `boolean` | `false` | Infinite wheel that wraps around. |
+| `keyboardInput` | `boolean` | `true` | Tap the selected row to type a value. |
+| `variant` | `'3d' \| 'flat'` | `'3d'` | Cylinder or flat list. |
+| `rotation` | `number` | `20` | Degrees between rows on the 3D cylinder. Higher = sharper curve. |
+| `fadeTo` | `number` | `0.3` | Opacity of the farthest visible rows (0–1). |
+| `renderItem` | `(info: WheelRenderItemInfo<T>) => ReactNode` | — | Custom row content. `info = { item, index, selected, theme }`. |
+| `showIndicator` | `boolean` | `true` | Show the selection band. |
+| `renderIndicator` | `(theme: PickerTheme) => ReactNode` | — | Custom selection band, vertically centred. |
+| `textAlign` | `TextStyle['textAlign']` | `'center'` | Alignment of the default row label. |
+| `disabled` | `boolean` | `false` | Disable scrolling and taps. |
+| `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Equality used to find the selected row. |
+| `style` | `StyleProp<ViewStyle>` | — | Outer container style (e.g. `flex`, `width`). |
+| `styles` | `SlotStyles<WheelPickerSlot>` | — | Per-slot styles; see below. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Component-level theme override. |
+| `accessibilityLabel` | `string` | — | Label announced by screen readers. |
+| `testID` | `string` | — | Test ID on the container. |
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `container` | Outer view (fixed height `itemHeight × visibleItems`) |
+| `item` | Each row's animated wrapper |
+| `itemText` | Every row label |
+| `selectedItemText` | Label of the row in the band (merged after `itemText`) |
+| `disabledItemText` | Labels of disabled rows |
+| `indicator` | The selection band |
+
+### Types
+
+```ts
+interface WheelItem<T> { label: string; value: T; disabled?: boolean; key?: string }
+type WheelItemInput<T> = WheelItem<T> | (T extends string | number ? T : never);
+type WheelPickerSlot = 'container' | 'item' | 'itemText' | 'selectedItemText' | 'disabledItemText' | 'indicator';
+interface WheelRenderItemInfo<T> { item: WheelItem<T>; index: number; selected: boolean; theme: PickerTheme }
+```
+
+## Behaviour notes
+
+- `onChange` fires only when the settled value **differs** from the last committed one. Scrolling away and back doesn't fire it.
+- Scrolling with momentum fires `onChange` once, after momentum ends.
+- A wheel with `loop` and very few items repeats the list enough times (at least 7 copies, about 240 rows) for smooth flinging.
+- Rows are memoized; while scrolling only the two rows whose selected state changes re-render.
+
+## Accessibility
+
+The wheel is a single `adjustable` element. VoiceOver and TalkBack users swipe up / down to move one row (the `increment` / `decrement` actions), and the current label is announced as the value. Pass `accessibilityLabel` to name it ("Size").
+
+## Related
+
+- [MultiWheelPicker](./multi-wheel-picker): several wheels in one band
+- [WheelPickerSheet](./picker-sheets#wheelpickersheet): the wheel in a bottom sheet

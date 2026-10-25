@@ -1,0 +1,105 @@
+---
+title: Emoji utilities
+description: getAllEmojis, searchEmojis, findEmoji, withSkinTone and emoji category constants for building reaction bars, shortcode autocomplete and custom emoji UIs in React Native.
+---
+
+# Emoji utilities
+
+The data and search behind `EmojiPicker`, for your own UIs.
+
+```ts
+import { getAllEmojis, searchEmojis, findEmoji, withSkinTone } from '@elik56a/react-native-pickers';
+```
+
+## `getAllEmojis`
+
+```ts
+getAllEmojis(): Emoji[]
+```
+All 1,906 emojis in display order. Parsed on the first call, then cached.
+
+```ts
+interface Emoji {
+  emoji: string;
+  name: string;
+  keywords: string[];
+  category: EmojiCategory;
+  version: number;   // Emoji version, e.g. 0.6, 11, 15.1
+  skins?: string[];  // 5 variants, light → dark
+}
+```
+
+## `searchEmojis`
+
+```ts
+searchEmojis(query: string, list: Emoji[] = getAllEmojis()): Emoji[]
+```
+
+Every word of the query must match. Results are ranked by:
+
+1. name starts with the word (3 points)
+2. a word of the name starts with it (2)
+3. a keyword starts with it (1)
+4. the name contains it (0.5)
+
+Returns `[]` for an empty query.
+
+```tsx live
+import { useState } from 'react';
+import { Text, TextInput, View } from 'react-native';
+import { searchEmojis } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [q, setQ] = useState('heart');
+  const results = searchEmojis(q).slice(0, 24);
+  return (
+    <View style={{ gap: 12 }}>
+      <TextInput value={q} onChangeText={setQ} placeholder=":shortcode" style={{ borderWidth: 1, borderColor: '#E6E7EC', borderRadius: 10, padding: 10 }} />
+      <Text style={{ fontSize: 28, lineHeight: 40 }}>{results.map((e) => e.emoji).join(' ')}</Text>
+    </View>
+  );
+}
+```
+
+## `findEmoji`
+
+```ts
+findEmoji(char: string): Emoji | undefined
+```
+Looks up an emoji by character. Matches skin-tone variants too (`findEmoji('👍🏽')` returns 👍's data) and ignores the U+FE0F variation selector.
+
+## `withSkinTone`
+
+```ts
+withSkinTone(e: Emoji, tone: SkinTone): string
+withSkinTone(findEmoji('👋')!, 3) // '👋🏽'
+```
+Returns the variant for tone 1–5, or the base emoji for tone 0 or emojis without skins.
+
+## Constants
+
+```ts
+EMOJI_CATEGORIES: EmojiCategory[]
+// ['smileys', 'people', 'animals', 'food', 'travel', 'activities', 'objects', 'symbols', 'flags']
+
+DEFAULT_CATEGORY_LABELS: Record<EmojiCategory | 'recent' | 'search', string>
+// { recent: 'Recently used', search: 'Search results', smileys: 'Smileys & Emotion', … }
+
+DEFAULT_CATEGORY_ICONS: Record<EmojiCategory | 'recent', string>
+// { recent: '🕘', smileys: '😀', people: '👋', animals: '🐻', food: '🍔', travel: '✈️', activities: '⚽', objects: '💡', symbols: '❤️', flags: '🏳️' }
+```
+
+## Example: quick reactions
+
+```tsx
+const QUICK = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+const [tone] = useState<SkinTone>(2);
+
+<View style={{ flexDirection: 'row' }}>
+  {QUICK.map((ch) => {
+    const e = findEmoji(ch)!;
+    const toned = withSkinTone(e, tone);
+    return <Pressable key={ch} onPress={() => react(toned)}><Text style={{ fontSize: 28 }}>{toned}</Text></Pressable>;
+  })}
+</View>
+```

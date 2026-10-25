@@ -1,0 +1,159 @@
+---
+title: TimePicker
+description: React Native time picker wheel with 12h/24h auto-detected from locale, minute and second intervals, min/max time, AM/PM labels and looping. Pure JS, no native module.
+---
+
+# TimePicker
+
+Hour, minute (and optionally second and AM/PM) wheels. The 12h or 24h clock and the AM/PM labels come from the locale automatically.
+
+```tsx
+import { TimePicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date());
+  return (
+    <>
+      <TimePicker value={time} onChange={setTime} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>{time.toLocaleTimeString()}</Text>
+    </>
+  );
+}
+```
+
+## The value is a `Date`
+
+`value` and `onChange` use a JavaScript `Date`. Only the hours, minutes and seconds are changed; **the date part is preserved**, so you can pass a full appointment `Date` and get the same day back with a new time. When `showSeconds` is off, seconds and milliseconds are set to `0`.
+
+## 12h / 24h
+
+`format` is `'auto'` by default and is resolved from `locale` (or the device locale). Force it with `'12h'` or `'24h'`.
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date(2026, 0, 1, 14, 45));
+  return (
+    <View style={{ gap: 16 }}>
+      <Text style={{ fontWeight: '600' }}>en-US (12h)</Text>
+      <TimePicker value={time} onChange={setTime} locale="en-US" />
+      <Text style={{ fontWeight: '600' }}>de-DE (24h)</Text>
+      <TimePicker value={time} onChange={setTime} locale="de-DE" />
+    </View>
+  );
+}
+```
+
+AM/PM labels come from the locale too (`AM`/`PM`, `a.m.`/`p.m.`, `午前`/`午後`…). Override them with `dayPeriodLabels`, and use `dayPeriodFirst` for languages that put the period before the hour (Chinese, Korean, Japanese):
+
+```tsx live
+import { useState } from 'react';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date(2026, 0, 1, 9, 30));
+  return <TimePicker value={time} onChange={setTime} format="12h" locale="ko-KR" dayPeriodFirst />;
+}
+```
+
+Hours are zero-padded in 24h mode (`09`) and not in 12h mode (`9`); change that with `padHours`.
+
+## Intervals
+
+`minuteInterval` shows only every n-th minute (5, 10, 15, 30…). `showSeconds` adds a seconds wheel with its own `secondInterval`. A value whose minutes don't fall on the interval is shown rounded **down** (10:07 with a 5-minute step shows 10:05).
+
+```tsx live
+import { useState } from 'react';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date(2026, 0, 1, 0, 2, 30));
+  return <TimePicker value={time} onChange={setTime} format="24h" showSeconds secondInterval={5} minuteInterval={1} />;
+}
+```
+
+## Min and max time
+
+`minTime` and `maxTime` limit the selectable **time of day** (their date part is ignored). Hours and minutes outside the range are disabled, and a combination that ends up out of range (for example, changing the hour while sitting on a late minute) is clamped into the range when committed.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+const at = (h: number, m = 0) => new Date(2026, 0, 1, h, m);
+
+export default function Example() {
+  const [time, setTime] = useState(at(12));
+  return (
+    <>
+      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6B6F7B' }}>Opening hours: 09:00 – 17:30</Text>
+      <TimePicker value={time} onChange={setTime} minTime={at(9)} maxTime={at(17, 30)} minuteInterval={15} format="24h" />
+    </>
+  );
+}
+```
+
+## Looping
+
+Hour, minute and second wheels loop by default. Set `loop={false}` for wheels that stop at the ends. The AM/PM wheel never loops.
+
+## Uncontrolled
+
+```tsx
+<TimePicker defaultValue={new Date()} onChange={(d) => save(d)} />
+```
+
+Without `value` or `defaultValue`, the picker starts at the current time.
+
+## In a sheet
+
+```tsx
+import { TimePickerSheet } from '@elik56a/react-native-pickers';
+
+<TimePickerSheet visible={open} onClose={() => setOpen(false)} title="Alarm" value={time} onConfirm={setTime} minuteInterval={5} />
+```
+
+→ [TimePickerSheet](./picker-sheets#timepickersheet)
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `Date` | — | Selected time (controlled). The date part is preserved. |
+| `defaultValue` | `Date` | now | Initial time when uncontrolled. |
+| `onChange` | `(date: Date) => void` | — | Fires when any wheel settles. Receives a **new** `Date`. |
+| `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
+| `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` | Clock format; `'auto'` reads it from `locale`. |
+| `locale` | `string` | device | BCP 47 locale, e.g. `'en-US'`, `'he-IL'`. |
+| `minuteInterval` | `number` | `1` | Minute step: 1, 5, 10, 15, 30… |
+| `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
+| `secondInterval` | `number` | `1` | Second step. |
+| `minTime` | `Date` | — | Earliest selectable time of day. |
+| `maxTime` | `Date` | — | Latest selectable time of day. |
+| `loop` | `boolean` | `true` | Loop the hour / minute / second wheels. |
+| `padHours` | `boolean` | `true` for 24h, `false` for 12h | Zero-pad the hour labels. |
+| `dayPeriodLabels` | `[string, string]` | from locale | `[am, pm]` labels. |
+| `dayPeriodFirst` | `boolean` | `false` | Put the AM/PM wheel before the hours. |
+| `separator` | `ReactNode` | `':'` | Shown between hours, minutes and seconds (not next to AM/PM). |
+| `itemHeight` | `number` | `40` | Row height. |
+| `visibleItems` | `number` | `5` | Visible rows. |
+| `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID. |
+
+## Related
+
+- [Alarm recipe](../recipes/alarm-time)
+- [Duration picker](../recipes/duration): for lengths of time rather than a time of day, use `MultiWheelPicker`

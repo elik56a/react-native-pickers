@@ -1,0 +1,87 @@
+---
+title: Filters bottom sheet
+description: Build a React Native filters bottom sheet combining a date range, select fields and an Apply footer with draft state using BottomSheet and useDraft.
+---
+
+# Filters bottom sheet
+
+A "Filters" sheet with a category select, a date range and Reset / Apply, all applied at once. It uses `BottomSheet` for the layout and `useDraft` so nothing changes until **Apply**.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { BottomSheet, DatePicker, SelectList, useDraft, formatDate } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+type Filters = { status: string[]; dates: DateRange };
+const EMPTY: Filters = { status: [], dates: { start: null, end: null } };
+const STATUSES = ['Open', 'In progress', 'Blocked', 'Done'].map((s) => ({ label: s, value: s }));
+
+function Button({ title, onPress, primary }: { title: string; onPress: () => void; primary?: boolean }) {
+  return (
+    <Pressable onPress={onPress} style={[styles.btn, primary && styles.btnPrimary]}>
+      <Text style={[styles.btnText, primary && styles.btnTextPrimary]}>{title}</Text>
+    </Pressable>
+  );
+}
+
+export default function FiltersExample() {
+  const [open, setOpen] = useState(false);
+  const [filters, setFilters] = useState<Filters>(EMPTY);
+  const [draft, setDraft] = useDraft(filters, open);
+  const count = filters.status.length + (filters.dates.start ? 1 : 0);
+
+  return (
+    <>
+      <Button title={`Filters${count ? ` · ${count}` : ''}`} onPress={() => setOpen(true)} />
+      <Text style={styles.summary}>
+        {filters.status.join(', ') || 'Any status'} ·{' '}
+        {filters.dates.start && filters.dates.end ? `${formatDate(filters.dates.start)} → ${formatDate(filters.dates.end)}` : 'Any date'}
+      </Text>
+
+      <BottomSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Filters"
+        height={0.85}
+        headerRight={<Button title="Reset" onPress={() => setDraft(EMPTY)} />}
+        footer={
+          <Button
+            primary
+            title="Apply"
+            onPress={() => {
+              setFilters(draft);
+              setOpen(false);
+            }}
+          />
+        }
+      >
+        <View style={styles.body}>
+          <Text style={styles.h}>Status</Text>
+          <SelectList multiple options={STATUSES} value={draft.status} onChange={(status) => setDraft({ ...draft, status })} />
+          <Text style={styles.h}>Created</Text>
+          <DatePicker mode="range" value={draft.dates} onChange={(dates) => setDraft({ ...draft, dates })} maxDate={new Date()} dayHeight={38} />
+        </View>
+      </BottomSheet>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  body: { paddingHorizontal: 8 },
+  h: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', color: '#6B6F7B', marginTop: 12, marginBottom: 4, marginStart: 12 },
+  summary: { marginTop: 8, color: '#6B6F7B', textAlign: 'center' },
+  btn: { paddingVertical: 12, paddingHorizontal: 16, borderRadius: 12, backgroundColor: '#F2F3F7', alignItems: 'center' },
+  btnPrimary: { backgroundColor: '#4F46E5' },
+  btnText: { fontWeight: '600', color: '#14151A' },
+  btnTextPrimary: { color: '#FFFFFF' },
+});
+```
+
+## Why `useDraft`
+
+`useDraft(filters, open)` copies `filters` into `draft` each time the sheet opens. Edits change only the draft; **Apply** commits it, and closing any other way discards it. It's the same mechanism the built-in picker sheets use.
+
+:::tip Scrolling content
+With a fixed `height`, the sheet's content area is `flex: 1`. If your filters are taller than the sheet, wrap the body in a `ScrollView`.
+:::

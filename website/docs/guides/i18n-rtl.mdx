@@ -1,0 +1,91 @@
+---
+title: i18n & RTL
+description: Localize React Native pickers — Intl-based month, weekday and AM/PM names, 12/24h clock, first day of week, date column order, translatable strings, and automatic right-to-left layout.
+---
+
+# Internationalization & RTL
+
+Every name the pickers display comes from the JavaScript `Intl` API for the `locale` you pass (or the device default), and every UI string is a prop.
+
+## What `locale` controls
+
+| Component | Derived from `locale` |
+| --- | --- |
+| `Calendar` / `DatePicker` | Month title, weekday names, first day of week, day accessibility labels |
+| `DateWheelPicker` | Month names, column order (D/M/Y vs M/D/Y vs Y/M/D) |
+| `TimePicker` | 12h vs 24h, AM/PM labels |
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { DatePicker, TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [d, setD] = useState<Date | null>(new Date());
+  const [t, setT] = useState(new Date());
+  return (
+    <View style={{ gap: 12 }}>
+      <Text style={{ fontWeight: '600' }}>he-IL</Text>
+      <DatePicker value={d} onChange={setD} locale="he-IL" />
+      <Text style={{ fontWeight: '600' }}>ar-EG</Text>
+      <TimePicker value={t} onChange={setT} locale="ar-EG" />
+    </View>
+  );
+}
+```
+
+Pass your app's language, for example from `expo-localization` or `i18next`:
+
+```tsx
+import { getLocales } from 'expo-localization';
+const locale = getLocales()[0]?.languageTag; // 'fr-CA'
+
+<DatePicker locale={locale} … />
+```
+
+### Hermes and `Intl`
+
+Hermes (the default engine) supports `Intl.DateTimeFormat` on iOS and Android. If a locale or feature is missing at runtime, every helper falls back to English names instead of throwing. `firstDayOfWeek` uses `Intl.Locale` week info where available; otherwise it defaults to Sunday, so pass `firstDayOfWeek={1}` explicitly if you need Monday everywhere.
+
+## Translating UI strings
+
+| Component | String props (defaults) |
+| --- | --- |
+| Picker sheets | `confirmLabel` (`Done`), `cancelLabel` (`Cancel`), `title` |
+| `SelectPicker` | `placeholder` (`Select…`), `label`, `sheetTitle`, `searchPlaceholder` (`Search`), `emptyText` (`No results`) |
+| `SelectList` | `searchPlaceholder`, `emptyText` |
+| `EmojiPicker` | `searchPlaceholder` (`Search emoji`), `emptyText` (`No emoji found`), `categoryLabels` |
+| `TimePicker` | `dayPeriodLabels` (`[am, pm]`) |
+| `Calendar` | `formatTitle` |
+
+```tsx
+const { t } = useTranslation();
+
+<DatePickerSheet confirmLabel={t('done')} cancelLabel={t('cancel')} title={t('pickDate')} … />
+<SelectPicker placeholder={t('select')} searchPlaceholder={t('search')} emptyText={t('noResults')} … />
+```
+
+## Right-to-left
+
+All layouts use logical `start` / `end` properties, so they mirror automatically when `I18nManager.isRTL` is true:
+
+- Calendar arrows swap direction, and swipe direction follows.
+- The range band grows from the correct side.
+- Select check marks, icons and chips sit on the logical end / start.
+- Multi-wheel columns follow the row direction.
+
+Enable RTL the standard React Native way:
+
+```ts
+import { I18nManager } from 'react-native';
+I18nManager.allowRTL(true);
+I18nManager.forceRTL(true); // requires an app reload
+```
+
+## Search in any language
+
+The select search folds case and **diacritics** (`é` → `e`) and strips **Hebrew niqqud**, so users don't need to type accents. Use `keywords` to make options findable in other languages or by synonyms:
+
+```ts
+{ label: 'Germany', value: 'DE', keywords: ['Deutschland', 'Allemagne', 'גרמניה'] }
+```

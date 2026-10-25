@@ -1,0 +1,173 @@
+---
+title: MultiWheelPicker
+description: Several React Native wheel pickers side by side sharing one selection band — for durations, measurements, compound values and custom date/time layouts.
+---
+
+# MultiWheelPicker
+
+Several [`WheelPicker`](./wheel-picker)s side by side sharing **one** selection band, the way iOS shows time and date wheels. `TimePicker` and `DateWheelPicker` are built on it. Use it for durations, heights, weights, currency + amount, or anything multi-column.
+
+```tsx
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+
+const range = (n: number) => Array.from({ length: n }, (_, i) => ({ label: String(i).padStart(2, '0'), value: i }));
+
+export default function Example() {
+  const [h, setH] = useState(1);
+  const [m, setM] = useState(30);
+  const [s, setS] = useState(0);
+  return (
+    <MultiWheelPicker
+      separator=":"
+      columns={[
+        { key: 'h', items: range(24), value: h, onChange: setH },
+        { key: 'm', items: range(60), value: m, onChange: setM, loop: true },
+        { key: 's', items: range(60), value: s, onChange: setS, loop: true },
+      ]}
+    />
+  );
+}
+```
+
+## Columns
+
+Each entry in `columns` is a `WheelPicker`'s props (minus the shared ones below) plus layout keys:
+
+```ts
+type WheelColumn<T> = Omit<WheelPickerProps<T>, 'itemHeight' | 'visibleItems' | 'variant' | 'showIndicator' | 'theme'> & {
+  key: string;     // React key, required
+  flex?: number;   // flex weight, default 1
+  width?: number;  // fixed width instead of flex
+};
+```
+
+So every column has its own `items`, `value`, `onChange`, `onValueChanging`, `loop`, `renderItem`, `keyboardInput`, `isEqual`, `textAlign`, `disabled`, `styles` and so on. `itemHeight`, `visibleItems`, `variant` and `theme` are set once on the `MultiWheelPicker` so all columns line up.
+
+## Labels and separators
+
+`separator` is placed between every pair of columns. A string is rendered as bold text (style it with the `separator` slot), and any React node is rendered as-is. Pass a function to choose per gap: it gets the index of the column on the left and can return `null` to skip that gap.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+
+const feet = [3, 4, 5, 6, 7].map((v) => ({ label: `${v} ft`, value: v }));
+const inches = Array.from({ length: 12 }, (_, i) => ({ label: `${i} in`, value: i }));
+
+export default function Example() {
+  const [ft, setFt] = useState(5);
+  const [inch, setInch] = useState(9);
+  return (
+    <>
+      <MultiWheelPicker
+        columns={[
+          { key: 'ft', items: feet, value: ft, onChange: setFt, textAlign: 'right' },
+          { key: 'in', items: inches, value: inch, onChange: setInch, textAlign: 'left' },
+        ]}
+      />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>
+        {ft}′{inch}″ = {Math.round((ft * 12 + inch) * 2.54)} cm
+      </Text>
+    </>
+  );
+}
+```
+
+## Column widths
+
+Use `flex` for proportional columns and `width` for fixed ones:
+
+```tsx live
+import { useState } from 'react';
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+
+const amounts = Array.from({ length: 100 }, (_, i) => (i + 1) * 10);
+
+export default function Example() {
+  const [cur, setCur] = useState('USD');
+  const [amount, setAmount] = useState(250);
+  return (
+    <MultiWheelPicker
+      variant="flat"
+      columns={[
+        { key: 'cur', items: ['USD', 'EUR', 'GBP', 'ILS'], value: cur, onChange: setCur, width: 90 },
+        { key: 'amount', items: amounts, value: amount, onChange: setAmount, flex: 2 },
+      ]}
+    />
+  );
+}
+```
+
+## Dependent columns
+
+Columns are plain props, so derive one from another in render. Here the model list depends on the brand:
+
+```tsx live
+import { useState } from 'react';
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+
+const models: Record<string, string[]> = {
+  Apple: ['iPhone 15', 'iPhone 16', 'iPhone 17'],
+  Google: ['Pixel 8', 'Pixel 9', 'Pixel 10'],
+  Samsung: ['Galaxy S24', 'Galaxy S25', 'Galaxy Z Fold'],
+};
+
+export default function Example() {
+  const [brand, setBrand] = useState('Google');
+  const [model, setModel] = useState('Pixel 9');
+  return (
+    <MultiWheelPicker
+      columns={[
+        {
+          key: 'brand',
+          items: Object.keys(models),
+          value: brand,
+          onChange: (b) => {
+            setBrand(b);
+            setModel(models[b][0]);
+          },
+        },
+        { key: 'model', items: models[brand], value: model, onChange: setModel, flex: 1.4 },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` | `WheelColumn[]` | **required** | One entry per wheel; see [Columns](#columns). |
+| `separator` | `ReactNode \| ((leftIndex: number) => ReactNode)` | — | Content between columns. Strings use the `separator` slot style. |
+| `itemHeight` | `number` | `40` | Row height shared by all columns. |
+| `visibleItems` | `number` | `5` | Visible rows (odd) shared by all columns. |
+| `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style for all columns. |
+| `style` | `StyleProp<ViewStyle>` | — | Outer container style. |
+| `styles` | `SlotStyles<MultiWheelSlot>` | — | Slot styles, applied to every column (a column's own `styles` win). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override for all columns. |
+| `testID` | `string` | — | Test ID on the container. |
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `container` | Outer view |
+| `indicator` | The shared selection band |
+| `separator` | String separators |
+| `item`, `itemText`, `selectedItemText`, `disabledItemText` | Forwarded to every column's wheel |
+
+```ts
+type MultiWheelSlot = 'container' | 'indicator' | 'separator' | WheelPickerSlot;
+```
+
+## Related
+
+- [TimePicker](./time-picker) and [DateWheelPicker](./date-wheel-picker) are pre-built `MultiWheelPicker`s
+- [Duration recipe](../recipes/duration)

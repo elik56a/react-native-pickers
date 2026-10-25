@@ -1,0 +1,68 @@
+---
+title: Birthday picker
+description: React Native birthday / date-of-birth picker with a date wheel, minimum age validation and a localized display field.
+---
+
+# Birthday picker
+
+A date-of-birth field that opens a wheel sheet, enforces a minimum age of 13, and shows the age.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { DatePickerSheet, formatDate } from '@elik56a/react-native-pickers';
+
+const MIN_AGE = 13;
+
+const yearsAgo = (n: number) => {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - n);
+  return d;
+};
+
+const ageOf = (b: Date) => {
+  const now = new Date();
+  const hadBirthday = now.getMonth() > b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() >= b.getDate());
+  return now.getFullYear() - b.getFullYear() - (hadBirthday ? 0 : 1);
+};
+
+export default function Birthday() {
+  const [open, setOpen] = useState(false);
+  const [birthday, setBirthday] = useState<Date | null>(null);
+  return (
+    <View>
+      <Text style={styles.label}>Date of birth</Text>
+      <Pressable onPress={() => setOpen(true)} style={styles.field}>
+        <Text style={birthday ? styles.value : styles.placeholder}>
+          {birthday ? formatDate(birthday, undefined, { dateStyle: 'long' }) : 'Select your birthday'}
+        </Text>
+        {birthday && <Text style={styles.age}>{ageOf(birthday)} y/o</Text>}
+      </Pressable>
+      <DatePickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Birthday"
+        display="wheel"
+        value={birthday ?? new Date(2000, 0, 1)}
+        onConfirm={setBirthday}
+        minDate={yearsAgo(110)}
+        maxDate={yearsAgo(MIN_AGE)}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  label: { fontSize: 13, fontWeight: '500', color: '#6B6F7B', marginBottom: 6 },
+  field: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: '#E6E7EC', borderRadius: 12, padding: 14 },
+  value: { fontSize: 16 },
+  placeholder: { fontSize: 16, color: '#6B6F7B' },
+  age: { color: '#4F46E5', fontWeight: '600' },
+});
+```
+
+## Notes
+
+- `maxDate` 13 years ago disables later days and months on the wheel and clamps the value, so under-13 dates can't be confirmed.
+- The wheel's column order follows the locale (M/D/Y in the US, D/M/Y in most of the world). Pass `wheelProps={{ order: ['day', 'month', 'year'] }}` to force one.
+- Store birthdays as `toDateKey(birthday)` (`YYYY-MM-DD`). They're calendar days, not instants.

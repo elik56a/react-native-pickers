@@ -1,0 +1,103 @@
+---
+title: Render props
+description: Replace any part of a React Native picker — wheel rows, selection band, calendar days and arrows, select trigger, options, group headers and emoji cells — while keeping behaviour and accessibility.
+---
+
+# Render props
+
+When tokens and slots aren't enough, render props let you draw a part yourself. The component still handles touches, selection, scrolling and accessibility; you only render the visuals.
+
+| Component | Prop | Signature |
+| --- | --- | --- |
+| `WheelPicker` | `renderItem` | `({ item, index, selected, theme }) => ReactNode` |
+| `WheelPicker` | `renderIndicator` | `(theme) => ReactNode` |
+| `Calendar` / `DatePicker` | `renderDay` | `(state: DayState, theme) => ReactNode` |
+| `Calendar` / `DatePicker` | `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` |
+| `Calendar` / `DatePicker` | `formatTitle` | `(month: Date, locale?: string) => string` |
+| `SelectPicker` | `renderTrigger` | `({ open, selected, disabled }) => ReactNode` |
+| `SelectPicker` / `SelectList` | `renderOption` | `({ option, selected, disabled, theme }) => ReactNode` |
+| `SelectPicker` / `SelectList` | `renderGroupHeader` | `(group: string, theme) => ReactNode` |
+| `EmojiPicker` | `renderEmoji` | `(emoji: string, data: Emoji, size: number) => ReactNode` |
+| `MultiWheelPicker` | `separator` | `ReactNode \| (leftIndex) => ReactNode` |
+| `BottomSheet` | `title`, `headerLeft`, `headerRight`, `footer` | `ReactNode` |
+
+Every render prop receives the resolved `theme`, so custom parts stay correct in dark mode.
+
+## Calendar with availability prices
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { DatePicker } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+const price = (d: Date) => 80 + ((d.getDate() * 37) % 90);
+
+export default function Example() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <DatePicker
+      mode="range"
+      value={range}
+      onChange={setRange}
+      minDate={new Date()}
+      dayHeight={52}
+      renderDay={(s, theme) => {
+        const on = s.selected;
+        const p = price(s.date);
+        return (
+          <View style={{ width: 44, height: 46, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? theme.colors.primary : 'transparent' }}>
+            <Text style={{ fontWeight: '600', color: on ? theme.colors.onPrimary : s.disabled || s.outside ? theme.colors.textDisabled : theme.colors.text }}>
+              {s.date.getDate()}
+            </Text>
+            {!s.disabled && !s.outside && (
+              <Text style={{ fontSize: 9, color: on ? theme.colors.onPrimary : p < 100 ? '#16A34A' : theme.colors.textSecondary }}>${p}</Text>
+            )}
+          </View>
+        );
+      }}
+    />
+  );
+}
+```
+
+## Wheel with icons
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { WheelPicker } from '@elik56a/react-native-pickers';
+
+const moods = [
+  { label: 'Awful', value: 1, icon: '😫' },
+  { label: 'Bad', value: 2, icon: '😕' },
+  { label: 'Okay', value: 3, icon: '😐' },
+  { label: 'Good', value: 4, icon: '🙂' },
+  { label: 'Great', value: 5, icon: '🤩' },
+];
+
+export default function Example() {
+  const [mood, setMood] = useState(4);
+  return (
+    <WheelPicker
+      items={moods}
+      value={mood}
+      onChange={setMood}
+      itemHeight={56}
+      variant="flat"
+      renderItem={({ item, selected, theme }) => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <Text style={{ fontSize: selected ? 34 : 24 }}>{moods[item.value - 1].icon}</Text>
+          <Text style={{ fontSize: 18, fontWeight: selected ? '700' : '400', color: selected ? theme.colors.text : theme.colors.textSecondary }}>{item.label}</Text>
+        </View>
+      )}
+    />
+  );
+}
+```
+
+## Tips
+
+- Keep render functions cheap. Wheels render a few rows, but they re-render as the selection moves.
+- Don't add your own `Pressable` around the whole of `renderDay` / `renderOption` / `renderItem` content. The cell is already pressable, and a nested pressable swallows the tap.
+- Read colours from the `theme` argument instead of hard-coding them, so dark mode keeps working.

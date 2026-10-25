@@ -1,0 +1,323 @@
+---
+title: SelectPicker
+description: React Native select / dropdown field that opens a searchable bottom sheet. Single or multi-select with chips, groups, icons, descriptions, max selections, clear button and custom triggers.
+---
+
+# SelectPicker
+
+A form field that opens a bottom sheet with a searchable list: a dropdown / select that feels native on phones. Single or multiple selection, with groups, icons, descriptions, chips and a clear button.
+
+```tsx
+import { SelectPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const fruits = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Peach', 'Pear', 'Plum', 'Strawberry', 'Watermelon'].map((f) => ({
+  label: f,
+  value: f.toLowerCase(),
+}));
+
+export default function Example() {
+  const [fruit, setFruit] = useState<string | null>(null);
+  return <SelectPicker label="Favourite fruit" placeholder="Pick one" options={fruits} value={fruit} onChange={setFruit} />;
+}
+```
+
+:::caution Always controlled
+`SelectPicker` doesn't store the selection itself. Pass `value` and update it from `onChange`.
+:::
+
+## Options
+
+```ts
+interface SelectOption<T> {
+  label: string;           // row text, and what search matches first
+  value: T;                // any type; compared with isEqual (default Object.is)
+  description?: string;    // second line, also searchable
+  icon?: React.ReactNode;  // leading element: flag, avatar, icon
+  group?: string;          // section header
+  disabled?: boolean;
+  keywords?: string[];     // extra search terms, e.g. other languages or synonyms
+}
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const countries = [
+  { label: 'Israel', value: 'IL', icon: <Text>🇮🇱</Text>, group: 'Middle East', keywords: ['ישראל'] },
+  { label: 'Jordan', value: 'JO', icon: <Text>🇯🇴</Text>, group: 'Middle East' },
+  { label: 'France', value: 'FR', icon: <Text>🇫🇷</Text>, group: 'Europe', description: 'République française' },
+  { label: 'Germany', value: 'DE', icon: <Text>🇩🇪</Text>, group: 'Europe', keywords: ['deutschland'] },
+  { label: 'Spain', value: 'ES', icon: <Text>🇪🇸</Text>, group: 'Europe', disabled: true, description: 'Not shipping yet' },
+  { label: 'Japan', value: 'JP', icon: <Text>🇯🇵</Text>, group: 'Asia', keywords: ['nippon'] },
+];
+
+export default function Example() {
+  const [country, setCountry] = useState<string | null>('FR');
+  return <SelectPicker label="Ship to" options={countries} value={country} onChange={setCountry} searchable />;
+}
+```
+
+Groups appear in the order their first option appears in `options`. Options without a `group` are listed together without a header.
+
+## Multiple selection
+
+`multiple` switches `value` to an array and `onChange` to `(values, options)`. The sheet gets checkboxes and a **Done** button, and the field shows removable **chips** (tap a chip to remove it). `maxSelected` caps the selection; once reached, the remaining options are disabled.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const skills = ['React', 'React Native', 'TypeScript', 'Expo', 'Node.js', 'GraphQL', 'Swift', 'Kotlin'].map((s) => ({ label: s, value: s }));
+
+export default function Example() {
+  const [picked, setPicked] = useState<string[]>(['React Native', 'TypeScript']);
+  return (
+    <SelectPicker
+      multiple
+      label="Skills (max 4)"
+      placeholder="Add skills"
+      options={skills}
+      value={picked}
+      onChange={setPicked}
+      maxSelected={4}
+      clearable
+    />
+  );
+}
+```
+
+Set `chips={false}` to show a comma-separated list instead of chips.
+
+## Search
+
+The search field appears automatically when there are **more than 8 options**; force it with `searchable` / `searchable={false}`. The default filter:
+
+- matches `label`, `description` and `keywords`
+- is case-insensitive and **accent-insensitive** (`creme` finds `Crème`), and ignores Hebrew niqqud
+- splits the query on spaces and requires **every** word to match (`new yo` finds `New York`)
+
+Provide `filterOption` for your own logic, for example matching only from the start of the label:
+
+```tsx
+<SelectPicker
+  options={options}
+  value={value}
+  onChange={setValue}
+  filterOption={(option, query) => option.label.toLowerCase().startsWith(query.toLowerCase())}
+/>
+```
+
+The default is exported as `defaultFilter`, so you can extend it:
+
+```tsx
+import { defaultFilter } from '@elik56a/react-native-pickers';
+
+filterOption={(o, q) => defaultFilter(o, q) || o.value === q.toUpperCase()}
+```
+
+## Clearing
+
+`clearable` shows a × in the field when something is selected.
+
+- In **multiple** mode, × calls `onChange([], [])` and then `onClear`.
+- In **single** mode, × calls **only** `onClear`. Reset your state there:
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [v, setV] = useState<string | null>('b');
+  return (
+    <SelectPicker
+      label="Priority"
+      clearable
+      onClear={() => setV(null)}
+      options={[
+        { label: 'Low', value: 'a' },
+        { label: 'Medium', value: 'b' },
+        { label: 'High', value: 'c', description: 'Pages on-call' },
+      ]}
+      value={v}
+      onChange={setV}
+    />
+  );
+}
+```
+
+## Closing behaviour
+
+In single mode, the sheet closes as soon as an option is tapped (`closeOnSelect`, default `true`). With `closeOnSelect={false}` the sheet stays open and shows a **Done** button. Multiple mode always shows Done. `onOpen` and `onClose` fire when the sheet opens and closes.
+
+## Custom trigger
+
+`renderTrigger` replaces the field. Call `open()` to show the sheet:
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const sorts = [
+  { label: 'Most relevant', value: 'relevance' },
+  { label: 'Newest first', value: 'newest' },
+  { label: 'Price: low to high', value: 'price_asc' },
+  { label: 'Price: high to low', value: 'price_desc' },
+];
+
+export default function Example() {
+  const [sort, setSort] = useState<string | null>('relevance');
+  return (
+    <SelectPicker
+      options={sorts}
+      value={sort}
+      onChange={setSort}
+      sheetTitle="Sort by"
+      renderTrigger={({ open, selected }) => (
+        <Pressable onPress={open} style={{ alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 14, borderRadius: 999, backgroundColor: '#EEF2FF' }}>
+          <Text style={{ color: '#4F46E5', fontWeight: '600' }}>↕ {selected[0]?.label ?? 'Sort'}</Text>
+        </Pressable>
+      )}
+    />
+  );
+}
+```
+
+## Custom options
+
+`renderOption` replaces each row's content (taps, selection background and accessibility are still handled). `renderGroupHeader` replaces section headers.
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const people = [
+  { label: 'Ada Lovelace', value: 'ada', description: 'Mathematician', color: '#F59E0B' },
+  { label: 'Alan Turing', value: 'alan', description: 'Computer scientist', color: '#10B981' },
+  { label: 'Grace Hopper', value: 'grace', description: 'Rear admiral', color: '#6366F1' },
+];
+
+export default function Example() {
+  const [who, setWho] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Assignee"
+      options={people}
+      value={who}
+      onChange={setWho}
+      renderOption={({ option, selected, theme }) => {
+        const p = people.find((x) => x.value === option.value)!;
+        return (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: p.color, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ color: 'white', fontWeight: '700' }}>{p.label[0]}</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: theme.colors.text, fontWeight: selected ? '700' : '500' }}>{p.label}</Text>
+              <Text style={{ color: theme.colors.textSecondary, fontSize: 12 }}>{p.description}</Text>
+            </View>
+            {selected && <Text style={{ color: theme.colors.primary }}>●</Text>}
+          </View>
+        );
+      }}
+    />
+  );
+}
+```
+
+## Sheet options
+
+Customise the sheet through `sheet`, which takes [`PickerSheet`](./picker-sheets#pickersheet) props such as `confirmLabel` and `sheetProps` (passed through to [`BottomSheet`](./bottom-sheet)):
+
+```tsx
+<SelectPicker
+  options={options}
+  value={value}
+  onChange={setValue}
+  sheetTitle="Choose a city"
+  sheet={{ confirmLabel: 'Apply', sheetProps: { height: 0.7, enableSwipeToClose: false } }}
+  listHeight={400}
+  autoFocusSearch
+/>
+```
+
+## Props
+
+### Value
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `ReadonlyArray<SelectOption<T>>` | **required** | The options. |
+| `multiple` | `boolean` | `false` | Multi-select mode. |
+| `value` | `T \| null` · `T[]` | — | Selected value(s). |
+| `onChange` | `(value: T, option: SelectOption<T>) => void` · `(values: T[], options: SelectOption<T>[]) => void` | — | Single · multiple. |
+| `maxSelected` | `number` | — | Multiple only: maximum selected options. |
+| `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
+
+### Field
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | — | Label above the field; also the default sheet title. |
+| `placeholder` | `string` | `'Select…'` | Shown when nothing is selected. |
+| `disabled` | `boolean` | `false` | Disable the field. |
+| `clearable` | `boolean` | `false` | Show a × button when something is selected. |
+| `onClear` | `() => void` | — | Called by ×. In single mode, reset `value` here. |
+| `chips` | `boolean` | `true` | Multiple: show selections as removable chips. |
+| `renderTrigger` | `(info: { open, selected, disabled }) => ReactNode` | — | Replace the field entirely. |
+| `style` | `StyleProp<ViewStyle>` | — | Wrapper style (label + field). |
+
+### Sheet & list
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sheetTitle` | `string` | `label` | Sheet header title. |
+| `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
+| `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |
+| `onOpen` / `onClose` | `() => void` | — | Sheet open / close. |
+| `searchable` | `boolean` | `options.length > 8` | Show the search field. |
+| `searchPlaceholder` | `string` | `'Search'` | Search hint. |
+| `filterOption` | `(option, query) => boolean` | `defaultFilter` | Custom search. |
+| `emptyText` | `string` | `'No results'` | Shown when nothing matches. |
+| `showCheckmarks` | `boolean` | `true` | Check marks / checkboxes on rows. |
+| `renderOption` | `(info: { option, selected, disabled, theme }) => ReactNode` | — | Custom row content. |
+| `renderGroupHeader` | `(group: string, theme) => ReactNode` | — | Custom section header. |
+| `listHeight` | `number` | grows with content | Fixed list height. |
+| `autoFocusSearch` | `boolean` | `false` | Focus search when the sheet opens. |
+| `styles` | `SlotStyles<SelectSlot \| SelectTriggerSlot>` | — | Slots for both the field and the list. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID on the list. |
+
+### Slots
+
+**Field** (`SelectTriggerSlot`):
+
+| Slot | Element |
+| --- | --- |
+| `label` | Label text above the field |
+| `trigger` | The field box |
+| `triggerText` | Selected label(s) |
+| `placeholder` | Placeholder text |
+| `chip` / `chipText` | Multi-select chips |
+| `chevron` | ▾ indicator |
+| `clear` | × button text |
+
+**List**: see [SelectList slots](./select-list#slots).
+
+## Accessibility
+
+The field is a button labelled with `label` (or the placeholder), with the current selection as its hint and an `expanded` state. Options are `button`s (single) or `checkbox`es (multiple) with `selected` / `checked` / `disabled` states, and chips announce `Remove {label}`.
+
+## Related
+
+- [SelectList](./select-list): the list without the field and sheet
+- [Country select recipe](../recipes/country-select)
+- [Tag picker recipe](../recipes/tags)

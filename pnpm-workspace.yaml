@@ -1,5 +1,6 @@
 packages:
   - example/native
+  - website
 
 onlyBuiltDependencies:
   - esbuild

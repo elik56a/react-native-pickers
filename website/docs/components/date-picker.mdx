@@ -1,0 +1,330 @@
+---
+title: DatePicker & Calendar
+description: React Native calendar date picker with min/max dates, disabled days, marked dates (dots, prices), locale-aware month and weekday names, first day of week, swipe between months and quick month jump. Pure JS.
+---
+
+# DatePicker & Calendar
+
+A month calendar for picking dates. It supports **single**, **range** and **multiple** selection, min / max dates, disabled days, dots and labels under days, swipe navigation, a quick month jump and any locale.
+
+```tsx
+import { DatePicker, Calendar } from '@elik56a/react-native-pickers';
+```
+
+- **`DatePicker`** is the entry point. With `display="calendar"` (the default) it renders a `Calendar`, and with `display="wheel"` it renders a [`DateWheelPicker`](./date-wheel-picker).
+- **`Calendar`** is the calendar component itself, with the same props as `DatePicker` minus `display`.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker, formatDate } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <>
+      <DatePicker value={date} onChange={setDate} />
+      <Text style={{ textAlign: 'center', color: '#6B6F7B' }}>{date ? formatDate(date, undefined, { dateStyle: 'full' }) : 'No date selected'}</Text>
+    </>
+  );
+}
+```
+
+This page covers single selection and everything the calendar shares. **Range** and **multiple** selection are on the [Date range & multiple](./date-range-picker) page.
+
+## Min and max dates
+
+Days outside `[minDate, maxDate]` are disabled (struck through). The arrows stop at the first and last allowed months, and the month grid greys out months outside the range. Only the **day** matters; the time of day is ignored.
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, addDays } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const today = new Date();
+  const [date, setDate] = useState<Date | null>(addDays(today, 2));
+  return <DatePicker value={date} onChange={setDate} minDate={today} maxDate={addDays(today, 45)} />;
+}
+```
+
+## Disabling days
+
+`isDateDisabled` runs for every visible day. Return `true` to disable it.
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, toDateKey } from '@elik56a/react-native-pickers';
+
+const holidays = new Set(['2026-12-25', '2026-12-26', '2027-01-01']);
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <DatePicker
+      value={date}
+      onChange={setDate}
+      initialMonth={new Date(2026, 11, 1)}
+      isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6 || holidays.has(toDateKey(d))}
+    />
+  );
+}
+```
+
+You can also disable specific days through `markedDates` with `disabled: true`.
+
+:::tip Keep it cheap
+`isDateDisabled` is called up to 42 times per render. Avoid heavy work inside it; precompute a `Set` of disabled keys and check it with [`toDateKey`](../api/date-utils#todatekey).
+:::
+
+## Marked dates: dots, labels and colours
+
+`markedDates` is keyed by `YYYY-MM-DD` (local time; build keys with [`toDateKey`](../api/date-utils#todatekey)). Each entry can have:
+
+| Field | Type | Effect |
+| --- | --- | --- |
+| `dots` | `string[]` | Up to 3 coloured dots under the number (events, statuses) |
+| `label` | `string` | Small text under the number (prices, counts) |
+| `textColor` | `string` | Colour of the day number |
+| `disabled` | `boolean` | Disable the day |
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, toDateKey, addDays } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const today = new Date();
+  const [date, setDate] = useState<Date | null>(null);
+  const marks = {
+    [toDateKey(addDays(today, 1))]: { dots: ['#22C55E'] },
+    [toDateKey(addDays(today, 3))]: { dots: ['#22C55E', '#F59E0B', '#EF4444'] },
+    [toDateKey(addDays(today, 5))]: { label: '$89' },
+    [toDateKey(addDays(today, 6))]: { label: '$129', textColor: '#EF4444' },
+    [toDateKey(addDays(today, 8))]: { disabled: true, label: 'Full' },
+  };
+  return <DatePicker value={date} onChange={setDate} markedDates={marks} />;
+}
+```
+
+## Locale and first day of week
+
+Month and weekday names come from `Intl.DateTimeFormat` for the `locale` you pass. `firstDayOfWeek` (0 = Sunday … 6 = Saturday) defaults to the locale's first day when `Intl.Locale` week info is available, else Sunday.
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(new Date());
+  return (
+    <View style={{ gap: 24 }}>
+      <DatePicker value={date} onChange={setDate} locale="fr-FR" firstDayOfWeek={1} />
+      <DatePicker value={date} onChange={setDate} locale="ja-JP" weekdayFormat="narrow" />
+    </View>
+  );
+}
+```
+
+## Navigation
+
+- **Arrows** step one month. They're disabled at `minDate` / `maxDate`.
+- **Swipe** left / right on the days to change month (`enableSwipe`, on by default). The direction flips in RTL.
+- **Quick jump**: tap the month title to open a grid of months (the arrows step by year), tap the title again for a grid of years (the arrows step by 12 years), and tap it once more to go back to days. Picking a year opens its months, and picking a month opens its days (`enableQuickJump`, on by default). The year grid is limited to `yearRange`, which defaults to the `minDate` / `maxDate` years or 100 years either side of today.
+- `initialMonth` sets the first month shown. By default it's the month of the selected date (or range start, or first multiple date), else today.
+- `onMonthChange(month)` fires with the first day of the newly shown month.
+
+In single mode, when `value` changes from outside to a date in another month, the calendar follows it.
+
+## Layout
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(new Date());
+  return (
+    <DatePicker
+      value={date}
+      onChange={setDate}
+      showOutsideDays={false}
+      fixedWeeks={false}
+      dayHeight={38}
+      formatTitle={(month) => month.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
+    />
+  );
+}
+```
+
+- `fixedWeeks` (default `true`) always renders 6 rows so the height never jumps between months. Set it to `false` to render only the weeks the month needs.
+- `showOutsideDays` (default `true`) shows the trailing and leading days of neighbouring months (tappable, dimmed).
+- `dayHeight` (default `44`) is the row height; the selection circle is `min(dayHeight − 4, 40)`.
+- `showWeekdays={false}` hides the weekday header row.
+
+## Custom days and arrows
+
+`renderDay(state, theme)` fully replaces a day cell's content (taps and the range band are still handled for you). `renderArrow(direction, disabled)` replaces the arrows.
+
+```tsx live
+import { useState } from 'react';
+import { View, Text } from 'react-native';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(new Date());
+  return (
+    <DatePicker
+      value={date}
+      onChange={setDate}
+      renderArrow={(dir, disabled) => <Text style={{ fontSize: 16, opacity: disabled ? 0.3 : 1 }}>{dir === 'prev' ? '⬅️' : '➡️'}</Text>}
+      renderDay={(s, theme) => (
+        <View
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: s.selected ? theme.colors.primary : s.today ? theme.colors.primaryMuted : 'transparent',
+            opacity: s.outside ? 0.35 : 1,
+          }}
+        >
+          <Text style={{ color: s.selected ? theme.colors.onPrimary : s.disabled ? theme.colors.textDisabled : theme.colors.text, fontWeight: '600' }}>
+            {s.date.getDate()}
+          </Text>
+        </View>
+      )}
+    />
+  );
+}
+```
+
+`DayState` passed to `renderDay`:
+
+```ts
+interface DayState {
+  date: Date;
+  selected: boolean;   // the selected day, a range end, or one of multiple
+  rangeStart: boolean;
+  rangeEnd: boolean;
+  inRange: boolean;    // strictly between start and end
+  today: boolean;
+  disabled: boolean;
+  outside: boolean;    // belongs to the previous / next month
+  marking?: MarkedDate;
+}
+```
+
+## Styling
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [date, setDate] = useState<Date | null>(new Date());
+  return (
+    <DatePicker
+      value={date}
+      onChange={setDate}
+      theme={{ colors: { primary: '#059669', primaryMuted: 'rgba(5,150,105,0.12)' } }}
+      styles={{
+        container: { borderRadius: 20, borderWidth: 1, borderColor: '#E6E7EC', paddingHorizontal: 8 },
+        headerTitle: { fontSize: 20, fontWeight: '800' },
+        weekdayText: { textTransform: 'uppercase', fontSize: 10, letterSpacing: 1 },
+        selectedDay: { borderRadius: 10 },
+        todayDay: { borderRadius: 10 },
+      }}
+    />
+  );
+}
+```
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `container` | Outer view |
+| `header` | Title + arrows row |
+| `headerTitle` | Month / year title text |
+| `arrow` | Arrow button |
+| `arrowText` | Default arrow glyph |
+| `weekdays` | Weekday header row |
+| `weekdayText` | Weekday labels |
+| `week` | Each week row |
+| `day` | Day cell (pressable, full width of the column) |
+| `dayInner` | The circle inside the cell |
+| `dayText` | Day number |
+| `selectedDay` / `selectedDayText` | Selected circle / number |
+| `todayDay` / `todayDayText` | Today's circle / number |
+| `disabledDayText` | Disabled day numbers |
+| `outsideDayText` | Days from neighbouring months |
+| `rangeBand` | Range highlight band |
+| `dot` | Marked-date dots |
+| `dayLabel` | Marked-date label text |
+| `gridCell` / `gridCellText` | Month and year grid cells (quick jump) |
+
+## Props
+
+`DatePicker` accepts everything below plus `display`. With `display="wheel"`, see [DateWheelPicker](./date-wheel-picker) instead.
+
+### Selection
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `display` | `'calendar' \| 'wheel'` | `'calendar'` | `DatePicker` only. |
+| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Selection mode; changes the type of `value`. |
+| `value` | `Date \| null` · `DateRange` · `Date[]` | — | Selection (controlled), typed by `mode`. |
+| `defaultValue` | same as `value` | `null` · `{start:null,end:null}` · `[]` | Initial selection when uncontrolled. |
+| `onChange` | `(date: Date) => void` · `(range: DateRange) => void` · `(dates: Date[]) => void` | — | Fires on every tap that changes the selection. |
+| `minRangeDays` | `number` | — | `range` only. See [range](./date-range-picker#props). |
+| `maxRangeDays` | `number` | — | `range` only. |
+| `allowSingleDayRange` | `boolean` | `true` | `range` only. |
+| `maxSelections` | `number` | — | `multiple` only. |
+
+### Calendar
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `minDate` | `Date` | — | Earliest selectable day. |
+| `maxDate` | `Date` | — | Latest selectable day. |
+| `isDateDisabled` | `(date: Date) => boolean` | — | Return `true` to disable a day. |
+| `markedDates` | `Record<string, MarkedDate>` | — | Keyed by `YYYY-MM-DD`: `{ dots?, label?, textColor?, disabled? }`. |
+| `locale` | `string` | device | Month / weekday names and default first day. |
+| `firstDayOfWeek` | `number` (0–6) | from locale, else `0` | 0 = Sunday … 6 = Saturday. |
+| `initialMonth` | `Date` | selected date or today | Month shown first. |
+| `onMonthChange` | `(month: Date) => void` | — | Fires with the first day of the new month. |
+| `showOutsideDays` | `boolean` | `true` | Show neighbouring months' days. |
+| `fixedWeeks` | `boolean` | `true` | Always 6 rows. |
+| `enableSwipe` | `boolean` | `true` | Swipe horizontally to change months. |
+| `enableQuickJump` | `boolean` | `true` | Tap the title to cycle days → months → years. |
+| `weekdayFormat` | `'short' \| 'narrow'` | `'short'` | `Mon` vs `M`. |
+| `showWeekdays` | `boolean` | `true` | Show the weekday header. |
+| `formatTitle` | `(month: Date, locale?: string) => string` | `"October 2026"` | Custom title text. |
+| `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Custom day cell content. |
+| `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` | — | Custom arrows. |
+| `yearRange` | `[number, number]` | min/max or ±100 years | Years available in the year grid. |
+| `dayHeight` | `number` | `44` | Height of a day row. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<CalendarSlot>` | — | See [slots](#slots). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID. |
+
+### Types
+
+```ts
+interface DateRange { start: Date | null; end: Date | null }
+interface MarkedDate { dots?: string[]; disabled?: boolean; label?: string; textColor?: string }
+type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
+type DatePickerProps = ({ display?: 'calendar' } & CalendarProps) | ({ display: 'wheel' } & DateWheelPickerProps);
+```
+
+## Accessibility
+
+Each day is a button whose label is the full date ("Wednesday, October 14, 2026") with `selected` / `disabled` state. The arrows are labelled "Previous" / "Next", and the title is a button when quick jump is on.
+
+## Related
+
+- [Date range & multiple](./date-range-picker)
+- [DatePickerSheet](./picker-sheets#datepickersheet)
+- [Booking recipe](../recipes/booking-range)

@@ -1,0 +1,50 @@
+---
+title: Duration & timer picker
+description: React Native duration / countdown timer picker with hours, minutes and seconds wheels and inline unit labels, built with MultiWheelPicker.
+---
+
+# Duration & timer picker
+
+`TimePicker` picks a time of day. For a **length of time** (timer, workout, cooking), use `MultiWheelPicker` with unit labels.
+
+```tsx live
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { MultiWheelPicker } from '@elik56a/react-native-pickers';
+
+const range = (n: number) => Array.from({ length: n }, (_, i) => i);
+const HOURS = range(24);
+const SIXTY = range(60);
+
+function Unit({ children }: { children: string }) {
+  return <Text style={styles.unit}>{children}</Text>;
+}
+
+export default function Timer() {
+  const [h, setH] = useState(0);
+  const [m, setM] = useState(25);
+  const [s, setS] = useState(0);
+  const total = h * 3600 + m * 60 + s;
+
+  return (
+    <View>
+      <MultiWheelPicker
+        separator={(left) => <Unit>{['hours', 'min', 'sec'][left]}</Unit>}
+        columns={[
+          { key: 'h', items: HOURS, value: h, onChange: setH, accessibilityLabel: 'Hours', textAlign: 'right' },
+          { key: 'm', items: SIXTY, value: m, onChange: setM, loop: true, accessibilityLabel: 'Minutes', textAlign: 'right' },
+          { key: 's', items: SIXTY, value: s, onChange: setS, loop: true, accessibilityLabel: 'Seconds', textAlign: 'right' },
+        ]}
+      />
+      <Text style={styles.summary}>{total ? `Timer: ${total.toLocaleString()} seconds` : 'Pick a duration'}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  unit: { fontSize: 14, fontWeight: '600', color: '#6B6F7B', width: 44 },
+  summary: { textAlign: 'center', color: '#6B6F7B', marginTop: 8 },
+});
+```
+
+The `separator` function receives the index of the column on its **left**, so each gap gets that column's unit. Add a trailing "sec" label after the last column with a fixed-`width` column or an absolutely positioned label.

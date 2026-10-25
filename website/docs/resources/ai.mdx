@@ -1,0 +1,86 @@
+---
+title: For AI assistants
+description: Machine-readable documentation for React Native Pickers — llms.txt, llms-full.txt and per-page Markdown — plus a compact usage cheat sheet for code generation.
+---
+
+# For AI assistants
+
+This documentation is published in machine-readable form, following the [llms.txt](https://llmstxt.org) convention:
+
+| File | Contents |
+| --- | --- |
+| [`/llms.txt`](pathname:///llms.txt) | Index of every page with a one-line summary |
+| [`/llms-full.txt`](pathname:///llms-full.txt) | **The entire documentation in one Markdown file**: every component, prop table and example |
+| `/docs/**/*.md` | Each page as plain Markdown |
+
+Paste `llms-full.txt` into your assistant's context, or point Cursor / Claude / Copilot at the URL.
+
+## Cheat sheet
+
+```text
+Package: @elik56a/react-native-pickers   (npm i @elik56a/react-native-pickers)
+Pure JS, zero native code, no peer deps besides react >=18 and react-native >=0.72.
+Works in Expo Go, bare RN, React Native Web. All exports are named exports from the package root.
+
+Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList are controlled-only.
+onChange fires on user changes only (not when value is set programmatically). Wheels fire onChange when they settle;
+onValueChanging fires on every row crossing (use for haptics).
+
+WheelPicker<T>     items: (T | {label, value, disabled?})[]  value  onChange(value, index)  loop  itemHeight=40  visibleItems=5
+                   variant '3d'|'flat'  keyboardInput=true  isEqual  renderItem({item,index,selected,theme})  styles
+MultiWheelPicker   columns: [{ key, items, value, onChange, flex?, width?, loop? }]  separator: node | (leftIndex)=>node
+TimePicker         value: Date  onChange(date)  format '12h'|'24h'|'auto'  minuteInterval  showSeconds  minTime/maxTime  locale
+DatePicker         display 'calendar'(default)|'wheel'
+  mode 'single'    value: Date|null       onChange(date)
+  mode 'range'     value: {start,end}     onChange(range)   minRangeDays maxRangeDays allowSingleDayRange
+  mode 'multiple'  value: Date[]          onChange(dates)   maxSelections
+  minDate maxDate isDateDisabled(date) markedDates{'YYYY-MM-DD':{dots?,label?,textColor?,disabled?}}
+  locale firstDayOfWeek(0=Sun) initialMonth onMonthChange renderDay(state,theme) dayHeight=44
+DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFormat 'long'|'short'|'numeric'  min/maxDate
+SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
+                   multiple → value T[], onChange(values, options), maxSelected, chips
+                   label placeholder searchable(>8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected})
+SelectList<T>      same list inline: options value onChange multiple listHeight
+EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange
+BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose
+Sheets (draft; commit on Done):
+  DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect
+  TimePickerSheet  visible onClose value onConfirm + TimePicker props
+  WheelPickerSheet visible onClose items value onConfirm
+  EmojiPickerSheet visible onClose onSelect closeOnSelect=true
+  PickerSheet      visible onClose onConfirm children  +  useDraft(value, visible)
+Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...}>; per-component `theme` prop.
+  tokens: colors{background,surface,sheet,text,textSecondary,textDisabled,primary,onPrimary,primaryMuted,border,backdrop,indicator,handle}
+          radius{sm,md,lg,full,sheet} spacing{xs..xl} typography{fontFamily,fontFamilyMedium,sizes,weights} animation{duration}
+Slots: every component takes `styles={{ slotName: style }}`.
+Utils: toDateKey(d) 'YYYY-MM-DD' local; addDays addMonths isSameDay compareDay isBetweenDays formatDate(d, locale, opts)
+       searchEmojis findEmoji withSkinTone getAllEmojis; defaultFilter for select search.
+```
+
+## Canonical examples
+
+```tsx
+import { useState } from 'react';
+import { DatePicker, DatePickerSheet, SelectPicker, TimePicker, WheelPicker } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+function Examples() {
+  const [size, setSize] = useState('M');
+  const [time, setTime] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(null);
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  const [country, setCountry] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <WheelPicker items={['S', 'M', 'L']} value={size} onChange={setSize} />
+      <TimePicker value={time} onChange={setTime} minuteInterval={5} />
+      <DatePicker value={date} onChange={setDate} minDate={new Date()} />
+      <DatePicker mode="range" value={range} onChange={setRange} />
+      <SelectPicker label="Country" options={[{ label: 'Israel', value: 'IL' }]} value={country} onChange={setCountry} />
+      <DatePickerSheet visible={open} onClose={() => setOpen(false)} mode="range" value={range} onConfirm={setRange} />
+    </>
+  );
+}
+```
