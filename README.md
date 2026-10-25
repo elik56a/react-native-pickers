@@ -13,7 +13,7 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 | 📋 **SelectPicker** | Field + bottom sheet, search, groups, multi-select with chips, icons |
 | 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
 
-Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field.
+Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
 
 ```sh
 npm install @elik56a/react-native-pickers
@@ -194,7 +194,7 @@ multiple: true     value: T[]        onChange(values, options)   maxSelected
 | `placeholder` / `label` / `sheetTitle` | | |
 | `clearable` | `false` | |
 | `chips` | `true` | Removable chips in multi mode |
-| `presentation` | `'auto'` | `'bottomSheet'`, `'modal'` or `'dropdown'` (under the field). `auto`: modal on wide web windows, bottom sheet elsewhere |
+| `presentation` | `'auto'` | `'bottomSheet'`, `'modal'` or `'dropdown'` (under the field). `auto`: dropdown on the web, bottom sheet on native |
 | `closeOnSelect` | `true` | Single mode |
 | `disabled` | `false` | |
 
