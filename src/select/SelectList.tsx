@@ -1,4 +1,5 @@
 import { FlatList, Text, View } from 'react-native';
+
 import { textStyle, usePickerTheme } from '../core';
 import { SearchInput } from '../core/components/SearchInput';
 import { GroupHeader } from './components/GroupHeader';

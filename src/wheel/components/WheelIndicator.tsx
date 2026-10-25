@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+
 import { styles } from '../wheel.styles';
 import type { WheelIndicatorProps } from '../wheel.types';
 

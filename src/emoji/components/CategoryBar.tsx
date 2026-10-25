@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+
 import { INACTIVE_TAB_OPACITY } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { CategoryBarProps } from '../emoji.types';

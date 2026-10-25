@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
+
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet/PickerSheet';
 

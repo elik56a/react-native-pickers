@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { Animated, Platform } from 'react-native';
+
 import { SETTLE_DELAY } from '../wheel.constants';
 import type { WheelItem } from '../wheel.types';
 import { alignToLap, firstEnabled, getLoopLayout, getSettleResult, offsetToIndex, wrapIndex } from '../wheel.utils';

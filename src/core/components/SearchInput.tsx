@@ -1,4 +1,5 @@
 import { StyleSheet, TextInput } from 'react-native';
+
 import type { SearchInputProps } from '../core.types';
 import { textStyle } from '../theme/theme.utils';
 

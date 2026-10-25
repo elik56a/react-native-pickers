@@ -25,6 +25,18 @@
       "preset": "recommended"
     }
   },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [["react", "react/**", "react-native", "react-native/**"], ":BLANK_LINE:"]
+          }
+        }
+      }
+    }
+  },
   "overrides": [
     {
       "includes": ["website/src/css/**"],

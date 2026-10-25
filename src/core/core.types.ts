@@ -1,4 +1,5 @@
 import type { StyleProp, TextStyle } from 'react-native';
+
 import type { PickerTheme } from './theme/theme.types';
 
 export type DeepPartial<T> = {

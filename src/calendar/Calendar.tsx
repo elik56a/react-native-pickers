@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { Animated, View } from 'react-native';
+
 import { usePickerTheme } from '../core';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
 import { DEFAULT_DAY_HEIGHT } from './calendar.constants';

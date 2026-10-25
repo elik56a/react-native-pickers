@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
+
 import type { SelectListProps, SelectPickerProps } from '../index';
 
 // Type-level regression test: `pnpm typecheck` fails this file if `onChange={setState}` stops compiling.

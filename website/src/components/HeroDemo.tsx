@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
@@ -8,8 +11,6 @@ import {
   usePickerTheme,
   WheelPicker,
 } from '@elik56a/react-native-pickers';
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const TABS = [
   { key: 'date', label: 'Date', title: 'Book your stay', subtitle: 'Tap check-in, then check-out' },

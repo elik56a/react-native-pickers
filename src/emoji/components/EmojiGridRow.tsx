@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+
 import { styles } from '../emoji.styles';
 import type { EmojiGridRowProps } from '../emoji.types';
 import { withSkinTone } from '../emoji.utils';

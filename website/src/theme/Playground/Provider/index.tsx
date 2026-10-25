@@ -1,7 +1,8 @@
+import type React from 'react';
+
 import { useColorMode } from '@docusaurus/theme-common';
 import { PickersProvider } from '@elik56a/react-native-pickers';
 import Provider from '@theme-original/Playground/Provider';
-import type React from 'react';
 import { toRunnable } from '../../../live/toRunnable';
 
 type Props = React.ComponentProps<typeof Provider>;

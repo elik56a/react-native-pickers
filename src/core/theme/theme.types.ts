@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { TextStyle } from 'react-native';
+
 import type { DeepPartial } from '../core.types';
 
 export interface PickerTheme {

@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
 import { Animated, Pressable, Text } from 'react-native';
+
 import { textStyle } from '../../core';
 import { PERSPECTIVE } from '../wheel.constants';
 import { styles } from '../wheel.styles';

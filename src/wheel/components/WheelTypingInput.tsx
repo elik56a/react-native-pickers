@@ -1,4 +1,5 @@
 import { TextInput, View } from 'react-native';
+
 import { NUMERIC_KEYBOARD_TYPE } from '../wheel.constants';
 import { styles } from '../wheel.styles';
 import type { WheelTypingInputProps } from '../wheel.types';

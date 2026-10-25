@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { FlatList, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+
 import { JUMP_LOCK_MS, SCROLL_PROBE_OFFSET } from '../emoji.constants';
 import type { EmojiGridOptions, EmojiRow, EmojiSectionKey } from '../emoji.types';
 import {

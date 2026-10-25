@@ -1,5 +1,6 @@
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { FlatList } from 'react-native';
+
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { WheelPicker } from './WheelPicker';
 
 const H = 40;

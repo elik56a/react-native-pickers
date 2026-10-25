@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
+
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import { SelectPicker } from './SelectPicker';
 import type { SelectOption } from './select.types';
 

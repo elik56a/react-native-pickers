@@ -13,6 +13,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+
 import type { SlotStyles, ThemableProps } from '../core';
 import { textStyle, usePickerTheme } from '../core';
 

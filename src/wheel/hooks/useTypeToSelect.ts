@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Keyboard } from 'react-native';
+
 import { canExtend, matchLabel } from '../typeToSelect';
 import type { WheelItem } from '../wheel.types';
 import { isNumericWheel } from '../wheel.utils';

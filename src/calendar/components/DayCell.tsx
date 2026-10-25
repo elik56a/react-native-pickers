@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Pressable, Text, View } from 'react-native';
+
 import { textStyle } from '../../core';
 import { formatDate } from '../../core/utils/date.utils';
 import { MAX_MARKING_DOTS } from '../calendar.constants';

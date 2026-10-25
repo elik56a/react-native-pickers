@@ -1,4 +1,5 @@
 import type { TextStyle } from 'react-native';
+
 import type { DeepPartial } from '../core.types';
 import { darkTheme, lightTheme } from './theme.constants';
 import type { PickerTheme, TextSize, TextWeight } from './theme.types';

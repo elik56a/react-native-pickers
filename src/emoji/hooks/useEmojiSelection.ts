@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import { useControllableState } from '../../core/hooks/useControllableState';
 import type { Emoji, EmojiPickerProps, SkinTone } from '../emoji.types';
 import { addRecent, withSkinTone } from '../emoji.utils';

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+
 import type { SelectListProps, SelectOption } from '../select.types';
 import { buildRows, findOptions, isAtMax, toggleValue, toValueList } from '../select.utils';
 

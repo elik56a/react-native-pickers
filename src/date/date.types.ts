@@ -1,4 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
+
 import type { CalendarBaseProps, CalendarProps, DateRange } from '../calendar/calendar.types';
 import type { SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet/PickerSheet';

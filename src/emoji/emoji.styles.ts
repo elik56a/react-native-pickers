@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import { SECTION_HEADER_HEIGHT } from './emoji.constants';
 
 export const styles = StyleSheet.create({

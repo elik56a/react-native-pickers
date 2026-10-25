@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+
 import { textStyle } from '../../core';
 import { CHECK_MARK } from '../select.constants';
 import { styles } from '../select.styles';

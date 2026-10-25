@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, Text } from 'react-native';
+
 import type { ThemableProps } from '../core';
 import { textStyle, usePickerTheme } from '../core';
 import type { BottomSheetProps } from './BottomSheet';

@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+
 import { SearchInput } from '../../core/components/SearchInput';
 import { TONE_SWATCHES } from '../emoji.constants';
 import { styles } from '../emoji.styles';

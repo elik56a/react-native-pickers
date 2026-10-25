@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+
 import type { SheetContentProps } from './sheet.types';
 
 export const SheetContent = ({ children, compact }: SheetContentProps) => (

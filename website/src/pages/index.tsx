@@ -1,11 +1,12 @@
+import type React from 'react';
+import { useState } from 'react';
+
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Link from '@docusaurus/Link';
 import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
-import type React from 'react';
-import { useState } from 'react';
 import styles from './index.module.css';
 
 const INSTALL = 'npm install @elik56a/react-native-pickers';

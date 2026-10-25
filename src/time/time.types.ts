@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+
 import type { SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet/PickerSheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';

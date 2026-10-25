@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 
 export interface DateRange {

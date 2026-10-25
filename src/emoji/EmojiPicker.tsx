@@ -1,4 +1,5 @@
 import { FlatList, Text, View } from 'react-native';
+
 import { textStyle, usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
 import { CategoryBar } from './components/CategoryBar';

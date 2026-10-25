@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+
 import { textStyle } from '../../core';
 import { DISABLED_OPTION_OPACITY } from '../select.constants';
 import { styles } from '../select.styles';

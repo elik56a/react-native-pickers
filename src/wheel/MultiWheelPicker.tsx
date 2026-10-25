@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Text, View } from 'react-native';
+
 import { textStyle, usePickerTheme } from '../core';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelPicker } from './WheelPicker';

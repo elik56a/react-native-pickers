@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+
 import { textStyle } from '../../core';
 import { styles } from '../calendar.styles';
 import type { QuickGridProps } from '../calendar.types';

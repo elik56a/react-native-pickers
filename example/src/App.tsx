@@ -1,3 +1,7 @@
+import type React from 'react';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
@@ -12,9 +16,6 @@ import {
   usePickerTheme,
   WheelPicker,
 } from '@elik56a/react-native-pickers';
-import type React from 'react';
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const TABS = [
   { key: 'wheel', label: 'Wheel', icon: '🎡' },

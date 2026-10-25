@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+
 import { textStyle } from '../../core';
 import { styles } from '../calendar.styles';
 import type { DayGridProps } from '../calendar.types';

@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Pressable, Text } from 'react-native';
+
 import { styles } from '../emoji.styles';
 import type { EmojiCellProps } from '../emoji.types';
 
