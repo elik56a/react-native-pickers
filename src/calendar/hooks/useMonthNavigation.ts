@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { GestureResponderHandlers } from 'react-native';
-import { Animated, I18nManager, PanResponder, Platform } from 'react-native';
+import type { Animated, GestureResponderHandlers } from 'react-native';
+import { I18nManager, PanResponder } from 'react-native';
 
+import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
+import { timing } from '../../core/utils/animation.utils';
 import { addMonths, isSameMonth, startOfMonth, toDateKey } from '../../core/utils/date.utils';
 import { NEXT_VIEW, SLIDE_DISTANCE } from '../calendar.constants';
 import type { ArrowDirection, CalendarView } from '../calendar.types';
 import { canGoToMonth, getSwipeDelta, isHorizontalSwipe, shiftMonthForView } from '../calendar.utils';
-
-const NATIVE = Platform.OS !== 'web';
 
 interface UseMonthNavigationParams {
   anchor: Date;
@@ -31,7 +31,7 @@ export const useMonthNavigation = ({
   const rtl = !!I18nManager.isRTL;
   const [month, setMonth] = useState(anchor);
   const [view, setView] = useState<CalendarView>('days');
-  const slide = useRef(new Animated.Value(0)).current;
+  const slide: Animated.Value = useAnimatedValue(0);
 
   const canPrev = canGoToMonth(month, -1, minDate, maxDate);
   const canNext = canGoToMonth(month, 1, minDate, maxDate);
@@ -49,11 +49,7 @@ export const useMonthNavigation = ({
       setMonth(next);
       onMonthChange?.(next);
       slide.setValue(delta * (rtl ? -1 : 1));
-      Animated.timing(slide, {
-        toValue: 0,
-        duration: animationDuration,
-        useNativeDriver: NATIVE,
-      }).start();
+      timing(slide, 0, { duration: animationDuration }).start();
     },
     [animationDuration, canNext, canPrev, month, onMonthChange, rtl, slide]
   );

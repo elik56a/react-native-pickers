@@ -93,7 +93,7 @@ describe('SelectPicker', () => {
       await fireEvent.press(screen.getByLabelText('Expo'));
       expect(onChange).toHaveBeenCalledWith('expo', options[2]);
       await waitFor(() => expect(onClose).toHaveBeenCalled());
-      expect(screen.queryByLabelText('Expo')).toBeNull();
+      await waitFor(() => expect(screen.queryByLabelText('Expo')).toBeNull());
     });
 
     it('filters as the user types in the field, and clears the query on close', async () => {
@@ -122,7 +122,7 @@ describe('SelectPicker', () => {
       await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
       expect(screen.getByLabelText('React')).toBeTruthy();
       await fireEvent.press(screen.getByLabelText('Close'));
-      expect(screen.queryByLabelText('React')).toBeNull();
+      await waitFor(() => expect(screen.queryByLabelText('React')).toBeNull());
       expect(onChange).not.toHaveBeenCalled();
     });
   });

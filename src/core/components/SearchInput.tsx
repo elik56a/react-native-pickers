@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
+import { HOVER_FILL_SPREAD } from '../core.constants';
 import { coreStyles } from '../core.styles';
 import type { SearchInputProps } from '../core.types';
 import { useFocus } from '../hooks/useFocus';
@@ -7,10 +9,13 @@ import { textStyle } from '../theme/theme.utils';
 
 export const SearchInput = ({ value, onChangeText, placeholder, autoFocus, theme, style }: SearchInputProps) => {
   const { focused, onFocus, onBlur } = useFocus();
+  const [hovered, setHovered] = useState(false);
   return (
     <TextInput
       onFocus={onFocus}
       onBlur={onBlur}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
@@ -29,6 +34,7 @@ export const SearchInput = ({ value, onChangeText, placeholder, autoFocus, theme
           borderColor: focused ? theme.colors.primary : 'transparent',
           borderRadius: theme.radius.md,
           paddingHorizontal: theme.spacing.md,
+          boxShadow: hovered && !focused ? `inset 0 0 0 ${HOVER_FILL_SPREAD}px ${theme.colors.hover}` : undefined,
         },
         style,
       ]}

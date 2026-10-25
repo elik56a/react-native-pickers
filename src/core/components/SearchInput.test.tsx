@@ -16,4 +16,17 @@ describe('SearchInput', () => {
     await fireEvent(screen.getByLabelText('Search'), 'blur');
     expect(borderColor()).toBe('transparent');
   });
+
+  it('tints on hover, but not while focused', async () => {
+    const boxShadow = () => StyleSheet.flatten(screen.getByLabelText('Search').props.style).boxShadow;
+    await render(<SearchInput value="" onChangeText={jest.fn()} placeholder="Search" theme={lightTheme} />);
+    expect(boxShadow()).toBeUndefined();
+    await fireEvent(screen.getByLabelText('Search'), 'pointerEnter');
+    expect(boxShadow()).toContain(lightTheme.colors.hover);
+    await fireEvent(screen.getByLabelText('Search'), 'focus');
+    expect(boxShadow()).toBeUndefined();
+    await fireEvent(screen.getByLabelText('Search'), 'blur');
+    await fireEvent(screen.getByLabelText('Search'), 'pointerLeave');
+    expect(boxShadow()).toBeUndefined();
+  });
 });

@@ -1,12 +1,13 @@
-import { Modal, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Animated, Modal, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { usePresence } from '../core/hooks/usePresence';
 import { DROPDOWN_MAX_HEIGHT } from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { DropdownProps } from './sheet.types';
 import { getDropdownFrame } from './sheet.utils';
 
-/** A popover anchored to a field; a tap outside closes it. */
+/** A popover anchored to a field; a tap outside closes it. It fades out, so a row's ripple can finish as it closes. */
 export const Dropdown = ({
   visible,
   anchor,
@@ -19,15 +20,23 @@ export const Dropdown = ({
 }: DropdownProps) => {
   const theme = usePickerTheme(themeOverride);
   const { height: windowHeight } = useWindowDimensions();
-  if (!visible || !anchor) return null;
+  const { mounted, progress } = usePresence({ visible, duration: theme.animation.duration });
+  if (!mounted || !anchor) return null;
 
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose} testID={testID}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
+    <Modal visible transparent animationType="none" onRequestClose={onClose} testID={testID}>
+      <Pressable
+        style={StyleSheet.absoluteFill}
+        onPress={onClose}
+        disabled={!visible}
+        accessibilityRole="button"
+        accessibilityLabel="Close"
+      />
       {overlay ? (
-        <View
+        <Animated.View
           style={[
             styles.dropdownOverlay,
+            { opacity: progress },
             {
               left: anchor.x,
               top: anchor.y,
@@ -37,11 +46,13 @@ export const Dropdown = ({
           ]}
         >
           {overlay}
-        </View>
+        </Animated.View>
       ) : null}
-      <View
+      <Animated.View
+        pointerEvents={visible ? 'auto' : 'none'}
         style={[
           styles.dropdown,
+          { opacity: progress },
           getDropdownFrame(anchor, windowHeight, maxHeight),
           {
             backgroundColor: theme.colors.sheet,
@@ -52,7 +63,7 @@ export const Dropdown = ({
         ]}
       >
         {children}
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

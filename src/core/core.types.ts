@@ -69,3 +69,35 @@ export type TouchableProps = Omit<PressableProps, 'style' | 'children'> & {
   style?: StyleProp<ViewStyle> | ((state: PressableStateCallbackType) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: PressableStateCallbackType) => React.ReactNode);
 };
+
+export interface TimingOptions {
+  duration: number;
+  /** Default: `EASE_OUT` */
+  easing?: (value: number) => number;
+  delay?: number;
+  /** Default: `USE_NATIVE_DRIVER`. Pass `false` for layout props such as `height`. */
+  native?: boolean;
+}
+
+export interface SpringOptions {
+  bounciness?: number;
+  speed?: number;
+  /** Default: `USE_NATIVE_DRIVER` */
+  native?: boolean;
+}
+
+export interface PresenceOptions {
+  visible: boolean;
+  /** Exit duration, and the entry duration unless `enterDuration` is set. */
+  duration: number;
+  enterDuration?: number;
+  onShown?: () => void;
+  onHidden?: () => void;
+}
+
+export interface Presence {
+  /** Stays true until the exit animation finishes, so the content can animate out before it unmounts. */
+  mounted: boolean;
+  /** 0 hidden → 1 shown. */
+  progress: Animated.Value;
+}
