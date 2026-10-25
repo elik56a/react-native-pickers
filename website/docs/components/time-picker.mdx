@@ -3,6 +3,9 @@ title: TimePicker
 description: React Native time picker wheel with 12h/24h auto-detected from locale, minute and second intervals, min/max time, AM/PM labels and looping. Pure JS, no native module.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
 # TimePicker
 
 Hour, minute (and optionally second and AM/PM) wheels. The 12h or 24h clock and the AM/PM labels come from the locale automatically.
@@ -26,6 +29,23 @@ export default function Example() {
   );
 }
 ```
+
+## Try the props
+
+<PropPlayground
+  name="TimePicker"
+  component={TimePicker}
+  value={new Date(2026, 9, 26, 9, 41, 0)}
+  code="value={time} onChange={setTime}"
+  controls={[
+    { prop: 'format', options: ['auto', '12h', '24h'] },
+    { prop: 'showSeconds', options: [false, true] },
+    { prop: 'minuteInterval', options: [1, 5, 15, 30] },
+    { prop: 'dayPeriodFirst', options: [false, true] },
+    { prop: 'loop', options: [true, false] },
+    { prop: 'variant', options: ['3d', 'flat'] },
+  ]}
+/>
 
 ## The value is a `Date`
 

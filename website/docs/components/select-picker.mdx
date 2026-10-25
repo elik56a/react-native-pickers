@@ -3,6 +3,9 @@ title: SelectPicker
 description: React Native select / dropdown field that opens a searchable bottom sheet. Single or multi-select with chips, groups, icons, descriptions, max selections, clear button and custom triggers.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
 # SelectPicker
 
 A form field that opens a bottom sheet with a searchable list: a dropdown / select that feels native on phones. Single or multiple selection, with groups, icons, descriptions, chips and a clear button.
@@ -29,6 +32,30 @@ export default function Example() {
 :::caution Always controlled
 `SelectPicker` doesn't store the selection itself. Pass `value` and update it from `onChange`.
 :::
+
+## Try the props
+
+<PropPlayground
+  name="SelectPicker"
+  component={SelectPicker}
+  props={{
+    label: 'Fruit',
+    options: ['Apple', 'Banana', 'Cherry', 'Grape', 'Mango', 'Orange', 'Peach', 'Pear', 'Plum'].map((f) => ({ label: f, value: f })),
+  }}
+  value={(p) => (p.multiple ? ['Banana'] : 'Banana')}
+  resetProp="onClear"
+  code="label=&quot;Fruit&quot; options={fruits} value={value} onChange={setValue}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'multiple', options: [false, true] },
+    { prop: 'clearable', options: [false, true] },
+    { prop: 'searchable', options: [true, false], default: null },
+    { prop: 'chips', options: [true, false] },
+    { prop: 'closeOnSelect', options: [true, false] },
+    { prop: 'showCheckmarks', options: [true, false] },
+    { prop: 'disabled', options: [false, true] },
+  ]}
+/>
 
 ## Options
 

@@ -3,6 +3,9 @@ title: DateWheelPicker
 description: React Native date wheel picker (day / month / year) with locale-aware column order and month names, min/max dates and automatic day clamping. Ideal for birthdays.
 ---
 
+import PropPlayground from '@site/src/components/PropPlayground';
+import { DateWheelPicker } from '@elik56a/react-native-pickers';
+
 # DateWheelPicker
 
 Day, month and year wheels, the classic iOS date picker. Best for dates far from today (birthdays, expiry dates) where a calendar would need many taps.
@@ -29,6 +32,21 @@ export default function Example() {
 ```
 
 `<DatePicker display="wheel" />` renders exactly this component with the same props.
+
+## Try the props
+
+<PropPlayground
+  name="DateWheelPicker"
+  component={DateWheelPicker}
+  value={new Date(1990, 4, 17)}
+  code="value={date} onChange={setDate}"
+  controls={[
+    { prop: 'order', options: [['day', 'month', 'year'], ['month', 'day', 'year'], ['year', 'month', 'day']], default: null },
+    { prop: 'monthFormat', options: ['long', 'short', 'numeric'] },
+    { prop: 'loop', options: [true, false] },
+    { prop: 'variant', options: ['3d', 'flat'] },
+  ]}
+/>
 
 ## Column order from the locale
 
