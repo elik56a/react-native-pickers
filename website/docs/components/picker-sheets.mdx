@@ -1,7 +1,7 @@
 ---
 title: React Native Bottom Sheet Pickers
 sidebar_label: Picker sheets
-description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet and useDraft."
+description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -11,6 +11,10 @@ import { DatePickerSheet } from '@elik56a/react-native-pickers';
 
 Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with a **Cancel / Done** header. They all share the same "chrome" props and the same draft behaviour.
 
+:::tip Opening a sheet from a form field?
+You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
+:::
+
 ## Inline, bottom sheet or modal
 
 Every picker can be shown three ways:
@@ -18,6 +22,8 @@ Every picker can be shown three ways:
 - **Inline:** the plain component (`WheelPicker`, `TimePicker`, `DatePicker`, `SelectList`, `EmojiPicker`) renders in place.
 - **Bottom sheet:** slides up from the bottom and can be dragged down to dismiss.
 - **Modal:** a centered dialog.
+
+Each sheet can also open from a [field](./picker-fields) that shows the picked value.
 
 The sheets take `presentation`: `'auto'` (default), `'bottomSheet'` or `'modal'`. `auto` is a modal on web windows wider than the sheet, where a bottom sheet would look cut off, and a bottom sheet on phones and native.
 

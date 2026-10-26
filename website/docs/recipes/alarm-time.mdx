@@ -5,17 +5,16 @@ description: React Native alarm / reminder time picker with a big clock display,
 
 # Alarm & reminder time
 
-A big clock you tap to change, with repeat days chosen through a multi-select list.
+A big clock you tap to change, with repeat days chosen through a multi-select list. The clock is the `renderTrigger` of a [`TimePickerField`](../components/picker-fields#custom-trigger), so the field handles the sheet and formats the time.
 
 ```tsx live
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { TimePickerSheet, SelectList, getWeekdayNames } from '@elik56a/react-native-pickers';
+import { TimePickerField, SelectList, getWeekdayNames } from '@elik56a/react-native-pickers';
 
 const days = getWeekdayNames(undefined, 'long').map((label, value) => ({ label, value }));
 
 export default function Alarm() {
-  const [open, setOpen] = useState(false);
   const [time, setTime] = useState(() => {
     const d = new Date();
     d.setHours(7, 30, 0, 0);
@@ -25,20 +24,20 @@ export default function Alarm() {
 
   return (
     <View style={styles.root}>
-      <Pressable onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel="Change alarm time">
-        <Text style={styles.clock}>{time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
-      </Pressable>
-      <Text style={styles.caption}>Repeat</Text>
-      <SelectList multiple options={days} value={repeat} onChange={setRepeat} />
-      <TimePickerSheet
-        visible={open}
-        onClose={() => setOpen(false)}
+      <TimePickerField
         title="Alarm"
         confirmLabel="Set"
         value={time}
         onConfirm={setTime}
         minuteInterval={5}
+        renderTrigger={({ open, displayValue }) => (
+          <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="Change alarm time" accessibilityHint={displayValue}>
+            <Text style={styles.clock}>{displayValue}</Text>
+          </Pressable>
+        )}
       />
+      <Text style={styles.caption}>Repeat</Text>
+      <SelectList multiple options={days} value={repeat} onChange={setRepeat} />
     </View>
   );
 }

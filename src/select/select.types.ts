@@ -2,7 +2,8 @@ import type React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps, SheetPresentation } from '../sheet';
+import type { ChevronInfo, PickerFieldSlot, SheetChromeProps, SheetPresentation } from '../sheet';
+import type { FieldTriggerProps } from '../sheet/sheet.types';
 
 export interface SelectOption<T> {
   label: string;
@@ -75,12 +76,9 @@ export type SelectListBaseProps<T> = ThemableProps & {
 
 export type SelectListProps<T> = SelectListBaseProps<T> & SelectValueProps<T>;
 
-export type SelectTriggerSlot = 'trigger' | 'triggerText' | 'placeholder' | 'label' | 'chip' | 'chipText' | 'chevron' | 'clear';
+export type SelectTriggerSlot = PickerFieldSlot | 'chip' | 'chipText';
 
-export interface SelectChevronInfo {
-  open: boolean;
-  theme: PickerTheme;
-}
+export type SelectChevronInfo = ChevronInfo;
 
 export interface SelectTriggerInfo<T> {
   open: () => void;
@@ -144,22 +142,13 @@ export interface CheckProps {
   style?: StyleProp<TextStyle>;
 }
 
-export interface SelectTriggerProps<T> {
+export type SelectTriggerProps<T> = Omit<FieldTriggerProps, 'displayValue' | 'icon' | 'children' | 'slots'> & {
   selected: SelectOption<T>[];
   multiple: boolean;
   chips: boolean;
-  placeholder: string;
-  label?: string;
-  open: boolean;
-  disabled: boolean;
-  clearable: boolean;
-  onOpen: () => void;
   onRemove: (option: SelectOption<T>) => void;
-  onClear: () => void;
-  renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
-  theme: PickerTheme;
   slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
-}
+};
 
 export interface SelectSearchFieldProps {
   query: string;
@@ -168,11 +157,4 @@ export interface SelectSearchFieldProps {
   renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
   theme: PickerTheme;
   slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
-}
-
-export interface SelectChevronProps {
-  open: boolean;
-  renderChevron?: (info: SelectChevronInfo) => React.ReactNode;
-  theme: PickerTheme;
-  style?: StyleProp<ViewStyle>;
 }

@@ -5,12 +5,11 @@ description: React Native birthday / date-of-birth picker with a date wheel, min
 
 # Birthday picker
 
-A date-of-birth field that opens a wheel sheet, enforces a minimum age of 13, and shows the age.
+A date-of-birth [field](../components/picker-fields) that opens a wheel sheet, enforces a minimum age of 13, and shows the age.
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { DatePickerSheet, formatDate } from '@elik56a/react-native-pickers';
+import { DatePickerField, formatDate } from '@elik56a/react-native-pickers';
 
 const MIN_AGE = 13;
 
@@ -27,42 +26,26 @@ const ageOf = (b: Date) => {
 };
 
 export default function Birthday() {
-  const [open, setOpen] = useState(false);
   const [birthday, setBirthday] = useState<Date | null>(null);
   return (
-    <View>
-      <Text style={styles.label}>Date of birth</Text>
-      <Pressable onPress={() => setOpen(true)} style={styles.field}>
-        <Text style={birthday ? styles.value : styles.placeholder}>
-          {birthday ? formatDate(birthday, undefined, { dateStyle: 'long' }) : 'Select your birthday'}
-        </Text>
-        {birthday && <Text style={styles.age}>{ageOf(birthday)} y/o</Text>}
-      </Pressable>
-      <DatePickerSheet
-        visible={open}
-        onClose={() => setOpen(false)}
-        title="Birthday"
-        display="wheel"
-        value={birthday ?? new Date(2000, 0, 1)}
-        onConfirm={setBirthday}
-        minDate={yearsAgo(110)}
-        maxDate={yearsAgo(MIN_AGE)}
-      />
-    </View>
+    <DatePickerField
+      label="Date of birth"
+      title="Birthday"
+      placeholder="Select your birthday"
+      display="wheel"
+      value={birthday ?? new Date(2000, 0, 1)}
+      displayValue={birthday ? `${formatDate(birthday, undefined, { dateStyle: 'long' })} · ${ageOf(birthday)} y/o` : ''}
+      onConfirm={setBirthday}
+      minDate={yearsAgo(110)}
+      maxDate={yearsAgo(MIN_AGE)}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  label: { fontSize: 13, fontWeight: '500', color: '#6E685E', marginBottom: 6 },
-  field: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 12, padding: 14 },
-  value: { fontSize: 16 },
-  placeholder: { fontSize: 16, color: '#6E685E' },
-  age: { color: '#C8460D', fontWeight: '600' },
-});
 ```
 
 ## Notes
 
+- `value` starts the wheel on 2000 before anything is picked, so `displayValue` is what keeps the placeholder showing until the user confirms.
 - `maxDate` 13 years ago disables later days and months on the wheel and clamps the value, so under-13 dates can't be confirmed.
 - The wheel's column order follows the locale (M/D/Y in the US, D/M/Y in most of the world). Pass `wheelProps={{ order: ['day', 'month', 'year'] }}` to force one.
 - Store birthdays as `toDateKey(birthday)` (`YYYY-MM-DD`). They're calendar days, not instants.

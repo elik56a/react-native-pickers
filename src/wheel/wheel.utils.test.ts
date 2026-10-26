@@ -2,6 +2,7 @@ import {
   alignToLap,
   firstEnabled,
   firstItemValue,
+  getItemLabel,
   getLoopLayout,
   getRowFrames,
   getSettleResult,
@@ -170,5 +171,23 @@ describe('resolveSeparator', () => {
     expect(resolveSeparator(() => false, 1)).toBeNull();
     expect(resolveSeparator(() => undefined, 1)).toBeNull();
     expect(resolveSeparator('/', 1)).toBe('/');
+  });
+});
+
+describe('getItemLabel', () => {
+  it('finds the label of the selected item', () => {
+    expect(getItemLabel([1, 2, 3], 2)).toBe('2');
+    expect(getItemLabel([{ label: 'Small', value: 's' }], 's')).toBe('Small');
+  });
+
+  it('compares with isEqual', () => {
+    const items = [{ label: 'Kyiv', value: { id: 1 } }];
+    expect(getItemLabel(items, { id: 1 }, (a, b) => a.id === b.id)).toBe('Kyiv');
+  });
+
+  it('is empty when nothing matches', () => {
+    expect(getItemLabel([1, 2], undefined)).toBe('');
+    expect(getItemLabel([{ label: 'Kyiv', value: { id: 1 } }], undefined, (a, b) => a.id === b.id)).toBe('');
+    expect(getItemLabel([1, 2], 9)).toBe('');
   });
 });

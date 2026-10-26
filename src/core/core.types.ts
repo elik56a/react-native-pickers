@@ -17,6 +17,9 @@ export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
 
+/** `Omit` that keeps a union a union, so discriminated props (like a sheet's `mode`) still narrow. */
+export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+
 /** A BCP 47 language tag passed to `Intl`, e.g. `'en-US'` or `'he'`. Default: the device locale. */
 export type Locale = string;
 

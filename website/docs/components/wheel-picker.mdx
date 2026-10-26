@@ -275,6 +275,24 @@ import * as Haptics from 'expo-haptics';
 
 → [Haptics guide](../guides/haptics)
 
+## In a form field
+
+`WheelPickerField` opens the wheel in a sheet from a field, and shows the confirmed item's `label`:
+
+```tsx live
+import { useState } from 'react';
+import { WheelPickerField } from '@elik56a/react-native-pickers';
+
+const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+
+export default function Example() {
+  const [size, setSize] = useState<string | undefined>();
+  return <WheelPickerField label="Size" placeholder="Choose a size" items={sizes} value={size} onConfirm={setSize} />;
+}
+```
+
+→ [Picker fields](./picker-fields)
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -338,3 +356,4 @@ The wheel is a single `adjustable` element. VoiceOver and TalkBack users swipe u
 
 - [MultiWheelPicker](./multi-wheel-picker): several wheels in one band
 - [WheelPickerSheet](./picker-sheets#wheelpickersheet): the wheel in a bottom sheet
+- [WheelPickerField](./picker-fields): the wheel behind a form field

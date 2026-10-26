@@ -1,5 +1,5 @@
 import { toDateKey } from '../core/utils/date.utils';
-import { formatDayLabel, getDayItems, getDayTimeBounds, getDayWheelBounds, withDay } from './datetime.utils';
+import { formatDateTimeValue, formatDayLabel, getDayItems, getDayTimeBounds, getDayWheelBounds, withDay } from './datetime.utils';
 
 const at = (d: number, h = 0, m = 0) => new Date(2026, 9, d, h, m);
 
@@ -50,5 +50,12 @@ describe('day labels', () => {
   it('lists every day inclusively', () => {
     const items = getDayItems([at(30).getTime(), new Date(2026, 10, 2).getTime()], (d) => toDateKey(d));
     expect(items.map((item) => item.label)).toEqual(['2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02']);
+  });
+});
+
+describe('formatDateTimeValue', () => {
+  it('shows the date and the time in the chosen format', () => {
+    expect(formatDateTimeValue(at(26, 21, 5), { format: '24h', locale: 'en-US' })).toBe('Oct 26, 2026, 21:05');
+    expect(formatDateTimeValue(at(26, 21, 5), { locale: 'en-US' })).toMatch(/^Oct 26, 2026, 9:05\sPM$/);
   });
 });

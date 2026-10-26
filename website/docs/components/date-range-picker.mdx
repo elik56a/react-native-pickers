@@ -185,6 +185,16 @@ export default function Example() {
 
 → [DatePickerSheet](./picker-sheets#datepickersheet)
 
+## In a form field
+
+`DatePickerField` takes the same props without `visible`, and shows the confirmed range (`Oct 5, 2026 – Oct 9, 2026`) or dates in the field:
+
+```tsx
+<DatePickerField label="Your stay" placeholder="Add dates" mode="range" value={range} onConfirm={setRange} minDate={new Date()} />
+```
+
+→ [Picker fields](./picker-fields)
+
 ## Props
 
 All [calendar props](./date-picker#calendar) apply. Mode-specific props:

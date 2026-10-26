@@ -69,6 +69,14 @@ Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `D
 
 `EmojiPickerSheet` has no Done button: picking an emoji calls `onSelect` and (by default) closes the sheet. `SelectPicker` opens its own sheet; you don't manage `visible`.
 
+## Fields
+
+In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field.
+
+```tsx
+<TimePickerField label="Alarm" value={time} onConfirm={setTime} />
+```
+
 ## Theming
 
 Three layers, each merged on top of the previous one:
@@ -111,6 +119,7 @@ When styles aren't enough, replace a part entirely:
 | `DatePicker` / `Calendar` | `renderDay`, `renderArrow`, `formatTitle` |
 | `SelectPicker` / `SelectList` | `renderTrigger`, `renderOption`, `renderGroupHeader` |
 | `EmojiPicker` | `renderEmoji`, `categoryIcons` |
+| `*PickerField` / `PickerField` | `renderTrigger`, `renderChevron` |
 
 → [Render props guide](../guides/render-props)
 

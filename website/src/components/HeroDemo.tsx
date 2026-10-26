@@ -4,6 +4,7 @@ import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
+  DatePickerField,
   EmojiPicker,
   PickersProvider,
   SelectPicker,
@@ -136,6 +137,15 @@ function Screen({ platform, phoneHeight }: { platform: DemoPlatform; phoneHeight
               sheet={sheet}
             />
             <SelectPicker label="Cabin" options={CABINS} value={cabin} onChange={setCabin} presentation={presentation} sheet={sheet} />
+            <DatePickerField
+              label="Dates"
+              mode="range"
+              value={range}
+              onConfirm={setRange}
+              minDate={new Date()}
+              presentation={platform === 'web' ? 'modal' : 'bottomSheet'}
+              {...sheet}
+            />
           </View>
         )}
         {tab === 'emoji' && <EmojiPicker height={300} columns={7} onSelect={setEmoji} showSkinTones={false} />}

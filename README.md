@@ -25,6 +25,8 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 
 Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
 
+In a form, use the **field** version (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`): it looks like `SelectPicker`'s field, opens the sheet on tap, and shows the confirmed value once it closes. Pass `renderTrigger` for your own trigger, or wrap any sheet in `PickerField`.
+
 ```sh
 npm install @elik56a/react-native-pickers
 ```
@@ -66,6 +68,14 @@ Bottom sheets keep a draft and only commit on **Done**:
   value={range}
   onConfirm={setRange}
 />
+```
+
+Or skip the open state and let a field own it. It shows the formatted value for `locale`:
+
+```tsx
+<DatePickerField label="Check-in / Check-out" mode="range" value={range} onConfirm={setRange} placeholder="Add dates" />
+<TimePickerField label="Alarm" value={alarm} onConfirm={setAlarm} minuteInterval={5} />
+<WheelPickerField label="Size" items={['S', 'M', 'L', 'XL']} value={size} onConfirm={setSize} />
 ```
 
 Wheel, time, date and emoji pickers work **controlled** (`value` + `onChange`) or **uncontrolled** (`defaultValue`). `SelectPicker` and `SelectList` are controlled-only: always pass `value` and update it in `onChange`.
@@ -113,7 +123,7 @@ Every visual part is reachable through `styles`, so you never have to fork:
 
 ### Render props
 
-For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderTrigger` / `renderChevron` / `renderGroupHeader` (select), `renderEmoji` (emoji).
+For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderTrigger` / `renderChevron` / `renderGroupHeader` (select), `renderEmoji` (emoji), `renderTrigger` / `renderChevron` (fields).
 
 ---
 
@@ -242,6 +252,30 @@ useEffect(() => { AsyncStorage.getItem('recent').then((v) => v && setRecent(JSON
 
 Utilities: `getAllEmojis()`, `searchEmojis(query)`, `findEmoji(char)`, `withSkinTone(emoji, tone)`.
 
+### Picker fields
+
+`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField` and `EmojiPickerField` take their sheet's props without `visible` (`value`, `onConfirm` or `onSelect`, `mode`, `locale`, `title`…), plus:
+
+| Prop | Default | |
+|---|---|---|
+| `label` | | Above the field, and the sheet title unless `title` is set |
+| `placeholder` | `'Select…'` | |
+| `displayValue` | the value, formatted for `locale` | Text shown in the field |
+| `clearable` / `onClear` | `false` | × button while there's a value; reset your value in `onClear` |
+| `disabled` | `false` | |
+| `renderTrigger` | | `({ open, displayValue, disabled }) => node`: your own trigger |
+| `renderChevron` | | `({ open, theme }) => node` |
+| `onOpen` / `onClose` | | |
+| `style` / `styles` | | `styles` takes the field slots (`label trigger triggerText placeholder chevron clear`) and the picker's |
+
+`EmojiPickerField` also takes `value`, the emoji to show. `PickerField` is the field on its own, for any sheet:
+
+```tsx
+<PickerField label="Filters" displayValue={summary}>
+  {(sheet) => <BottomSheet {...sheet} title="Filters">…</BottomSheet>}
+</PickerField>
+```
+
 ### BottomSheet
 
 Use the same sheet for your own content:
@@ -292,7 +326,7 @@ pnpm gen:emoji      # regenerate emoji data from emojibase-data
 
 ### Project structure
 
-Each picker lives in its own folder under `src/` (`wheel`, `time`, `calendar`, `date`, `select`, `emoji`), on top of `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports flow feature → `sheet` → `core`, and every folder has the same layout:
+Each picker lives in its own folder under `src/` (`wheel`, `time`, `calendar`, `date`, `datetime`, `select`, `emoji`), on top of `sheet` (bottom sheets and fields) and `core` (theme, shared hooks and utils). Imports flow feature → `sheet` → `core`, and every folder has the same layout:
 
 ```
 src/select/

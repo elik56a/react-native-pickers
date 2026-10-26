@@ -146,6 +146,18 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 
 → [TimePickerSheet](./picker-sheets#timepickersheet)
 
+## In a form field
+
+`TimePickerField` is a field that opens the sheet and shows the confirmed time (`9:30 AM` or `09:30`, from `format` and `locale`):
+
+```tsx
+import { TimePickerField } from '@elik56a/react-native-pickers';
+
+<TimePickerField label="Alarm" placeholder="Set a time" value={time} onConfirm={setTime} minuteInterval={5} />
+```
+
+→ [Picker fields](./picker-fields)
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -177,4 +189,5 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 ## Related
 
 - [Alarm recipe](../recipes/alarm-time)
+- [TimePickerField](./picker-fields): the picker behind a form field
 - [Duration picker](../recipes/duration): for lengths of time rather than a time of day, use `MultiWheelPicker`

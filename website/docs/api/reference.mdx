@@ -1,6 +1,6 @@
 ---
 title: API reference
-description: Every export of @elik56a/react-native-pickers — components, sheets, hooks, theme helpers, date and emoji utilities and types — on one page.
+description: Every export of @elik56a/react-native-pickers — components, sheets, fields, hooks, theme helpers, date and emoji utilities and types — on one page.
 ---
 
 # API reference
@@ -34,6 +34,17 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
 | [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
 | [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
+
+## Fields
+
+| Export | Description |
+| --- | --- |
+| [`PickerField`](../components/picker-fields#your-own-sheet-pickerfield) | Labelled field that opens the sheet its child renders |
+| [`DatePickerField`](../components/picker-fields) | Field + DatePickerSheet; shows the date, range or dates |
+| [`TimePickerField`](../components/picker-fields) | Field + TimePickerSheet; shows the time |
+| [`DateTimePickerField`](../components/picker-fields) | Field + DateTimePickerSheet; shows the date and time |
+| [`WheelPickerField<T>`](../components/picker-fields) | Field + WheelPickerSheet; shows the item's label |
+| [`EmojiPickerField`](../components/picker-fields) | Field + EmojiPickerSheet; shows `value` |
 
 ## Theme
 
@@ -84,6 +95,9 @@ type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
 /** SelectPicker's `presentation`; its `auto` is a dropdown on the web. */
 type SelectPresentation = SheetPresentation | 'dropdown';
 
+/** The field slots every `*PickerField` and `PickerField` takes in `styles`. */
+type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';
+
 type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 
 interface ThemableProps { theme?: DeepPartial<PickerTheme> }
@@ -94,7 +108,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | Where | Prop | Default |
 | --- | --- | --- |
 | Sheets | `confirmLabel` / `cancelLabel` | `Done` / `Cancel` |
-| SelectPicker | `placeholder` | `Select…` |
+| SelectPicker, fields | `placeholder` | `Select…` |
 | SelectList | `searchPlaceholder` / `emptyText` | `Search` / `No results` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
@@ -119,6 +133,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `searchable` | `options.length > 8` · `true` emoji | Select, Emoji |
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |
 | `chips` | `true` | SelectPicker |
+| `clearable` / `disabled` | `false` | SelectPicker, fields |
 | `columns` / `height` | `8` / `380` (`420` in sheet) | EmojiPicker |
 | `maxRecent` | `24` | EmojiPicker |
 | `maxHeightRatio` | `0.9` | BottomSheet |

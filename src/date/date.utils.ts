@@ -1,6 +1,14 @@
 import type { DateRange } from '../calendar/calendar.types';
-import { clampDate, daysInMonth, getMonthNames, isOutOfRange } from '../core/utils/date.utils';
-import { COLUMN_FLEX, DEFAULT_WHEEL_YEAR_SPAN, FALLBACK_DATE_ORDER, ORDER_PROBE_DATE } from './date.constants';
+import type { Locale } from '../core';
+import { clampDate, daysInMonth, formatDate, getMonthNames, isOutOfRange } from '../core/utils/date.utils';
+import {
+  COLUMN_FLEX,
+  DEFAULT_WHEEL_YEAR_SPAN,
+  FALLBACK_DATE_ORDER,
+  ORDER_PROBE_DATE,
+  VALUE_LIST_SEPARATOR,
+  VALUE_RANGE_SEPARATOR,
+} from './date.constants';
 import type { DateColumnSpec, DateDraft, DatePart, DateSheetMode, MonthFormat } from './date.types';
 
 const isDatePart = (type: string): type is DatePart => type === 'day' || type === 'month' || type === 'year';
@@ -98,4 +106,15 @@ export const isDraftReady = (mode: DateSheetMode, draft: DateDraft) => {
   if (mode === 'single') return draft instanceof Date;
   if (mode === 'range') return !!(draft as DateRange | null)?.start && !!(draft as DateRange | null)?.end;
   return true;
+};
+
+/** A date sheet's value as field text: one date, a range (just its start until it has an end) or a list. */
+export const formatDateValue = (value: DateDraft | undefined, locale?: Locale): string => {
+  if (!value) return '';
+  if (value instanceof Date) return formatDate(value, locale);
+  if (Array.isArray(value)) return value.map((d) => formatDate(d, locale)).join(VALUE_LIST_SEPARATOR);
+  return [value.start, value.end]
+    .filter((d): d is Date => !!d)
+    .map((d) => formatDate(d, locale))
+    .join(VALUE_RANGE_SEPARATOR);
 };

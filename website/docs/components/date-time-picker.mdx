@@ -105,6 +105,18 @@ import { DateTimePickerSheet } from '@elik56a/react-native-pickers';
 
 It takes the same props as `DateTimePicker`, plus the [sheet props](./picker-sheets). The picked value is only reported when the user taps **Done**.
 
+## In a form field
+
+`DateTimePickerField` opens the same sheet from a field, and shows the confirmed moment (`Oct 26, 2026, 9:30 AM`):
+
+```tsx
+import { DateTimePickerField } from '@elik56a/react-native-pickers';
+
+<DateTimePickerField label="Reminder" placeholder="Set a reminder" value={date} onConfirm={setDate} minDate={new Date()} />
+```
+
+→ [Picker fields](./picker-fields)
+
 ## Props
 
 All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minuteInterval`, `showSeconds`, `secondInterval`, `loop`, `padHours`, `dayPeriodLabels`, `dayPeriodFirst`, `separator`.

@@ -1,5 +1,13 @@
 import { toDateKey } from '../core/utils/date.utils';
-import { buildWheelDate, getDateColumnSpecs, getEmptyDraft, getLocaleDateOrder, getWheelYearBounds, isDraftReady } from './date.utils';
+import {
+  buildWheelDate,
+  formatDateValue,
+  getDateColumnSpecs,
+  getEmptyDraft,
+  getLocaleDateOrder,
+  getWheelYearBounds,
+  isDraftReady,
+} from './date.utils';
 
 const day = (d: number, m: number, y = 2026) => new Date(y, m, d);
 
@@ -82,5 +90,24 @@ describe('date sheet drafts', () => {
     expect(isDraftReady('range', { start: new Date(), end: null })).toBe(false);
     expect(isDraftReady('range', { start: new Date(), end: new Date() })).toBe(true);
     expect(isDraftReady('multiple', [])).toBe(true);
+  });
+});
+
+describe('formatDateValue', () => {
+  it('formats a date, a range and a list', () => {
+    expect(formatDateValue(day(5, 9), 'en-US')).toBe('Oct 5, 2026');
+    expect(formatDateValue({ start: day(5, 9), end: day(9, 9) }, 'en-US')).toBe('Oct 5, 2026 – Oct 9, 2026');
+    expect(formatDateValue([day(5, 9), day(7, 9)], 'en-US')).toBe('Oct 5, 2026, Oct 7, 2026');
+  });
+
+  it('shows a range start before its end is picked', () => {
+    expect(formatDateValue({ start: day(5, 9), end: null }, 'en-US')).toBe('Oct 5, 2026');
+  });
+
+  it('is empty without a value', () => {
+    expect(formatDateValue(null)).toBe('');
+    expect(formatDateValue(undefined)).toBe('');
+    expect(formatDateValue({ start: null, end: null })).toBe('');
+    expect(formatDateValue([])).toBe('');
   });
 });

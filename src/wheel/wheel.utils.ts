@@ -137,3 +137,10 @@ export const resolveSeparator = (separator: MultiWheelPickerProps['separator'], 
   const node = typeof separator === 'function' ? separator(columnIndex - 1) : separator;
   return node === undefined || node === false ? null : node;
 };
+
+/** Label of the item holding `value`, or '' when none does. */
+export const getItemLabel = <T>(
+  items: ReadonlyArray<WheelItemInput<T>>,
+  value: T | undefined,
+  isEqual: (a: T, b: T) => boolean = Object.is
+) => (value === undefined ? '' : (items.map(normalizeItem).find((item) => isEqual(item.value, value))?.label ?? ''));

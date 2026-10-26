@@ -1,3 +1,4 @@
+import type { DistributiveOmit } from '../core/core.types';
 import {
   DIALOG_MARGIN,
   DISMISS_DISTANCE,
@@ -7,10 +8,19 @@ import {
   DROPDOWN_EDGE_MARGIN,
   DROPDOWN_GAP,
   EXPAND_FLICK_VELOCITY,
+  FIELD_PROP_KEYS,
   SCROLLABLE_OVERFLOW,
   SHEET_MAX_WIDTH,
 } from './sheet.constants';
-import type { AnchorRect, DropdownFrame, ScrollNode, SheetDragFrame, SheetPresentation, SheetSnap } from './sheet.types';
+import type {
+  AnchorRect,
+  DropdownFrame,
+  PickerFieldBaseProps,
+  ScrollNode,
+  SheetDragFrame,
+  SheetPresentation,
+  SheetSnap,
+} from './sheet.types';
 
 /** `height` is px, or a fraction of the window when <= 1. */
 export const resolveSheetHeight = (height: number | undefined, windowHeight: number) =>
@@ -82,5 +92,24 @@ export const getDropdownFrame = (anchor: AnchorRect, windowHeight: number, prefe
     width: anchor.width,
     top: anchor.y + anchor.height + DROPDOWN_GAP,
     maxHeight: Math.min(preferredHeight, below),
+  };
+};
+
+type FieldPropKey = (typeof FIELD_PROP_KEYS)[number];
+
+/** Splits a `*PickerField`'s props into the field's and its sheet's; both get `theme` and `styles`. */
+export const splitFieldProps = <P extends PickerFieldBaseProps<string>>(props: P) => {
+  const field: Partial<Record<FieldPropKey | 'theme' | 'styles', unknown>> = {
+    theme: props.theme,
+    styles: props.styles,
+  };
+  const sheet: Record<string, unknown> = { ...(props as object) };
+  for (const key of FIELD_PROP_KEYS) {
+    field[key] = props[key];
+    delete sheet[key];
+  }
+  return {
+    field: field as Pick<PickerFieldBaseProps<string>, FieldPropKey | 'theme' | 'styles'>,
+    sheet: sheet as DistributiveOmit<P, FieldPropKey>,
   };
 };

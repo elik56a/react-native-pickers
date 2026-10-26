@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, WithPickerField } from '../sheet';
 
 export type EmojiCategory = 'smileys' | 'people' | 'animals' | 'food' | 'travel' | 'activities' | 'objects' | 'symbols' | 'flags';
 
@@ -87,6 +87,11 @@ export type EmojiPickerSheetProps = SheetChromeProps &
     /** Close after picking an emoji. Default: true */
     closeOnSelect?: boolean;
   };
+
+export type EmojiPickerFieldProps = WithPickerField<EmojiPickerSheetProps, EmojiPickerSlot> & {
+  /** The picked emoji, shown in the field */
+  value?: string;
+};
 
 export interface EmojiSection {
   key: EmojiSectionKey;

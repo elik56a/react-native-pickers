@@ -1,4 +1,6 @@
 import { addDays, clampDate, formatDate, isSameDay, startOfDay } from '../core/utils/date.utils';
+import type { TimeOptions } from '../time/time.types';
+import { is12HourFormat } from '../time/time.utils';
 import type { WheelItem } from '../wheel/wheel.types';
 import { DAY_LABEL_FORMAT, DEFAULT_DAY_SPAN, FALLBACK_TODAY_LABEL } from './datetime.constants';
 
@@ -50,3 +52,17 @@ export const getDayItems = (
   }
   return items;
 };
+
+export const formatDateTimeValue = (
+  date: Date,
+  { format = 'auto', locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
+) =>
+  formatDate(date, locale, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: showSeconds ? '2-digit' : undefined,
+    hour12: is12HourFormat(format, locale),
+  });

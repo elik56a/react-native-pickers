@@ -48,6 +48,7 @@ const COMPONENTS = [
   { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
   { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet with Done' },
+  { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a form field, pick, see the value' },
 ];
 
 const CHIPS = [

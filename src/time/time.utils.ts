@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { uses12HourClock } from '../core/utils/date.utils';
+import { formatDate, uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
 import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './time.constants';
 import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeOptions, TimeParts } from './time.types';
@@ -157,3 +157,14 @@ export const getTimeColumnSpecs = (params: {
 /** No separator next to the AM/PM column. */
 export const getTimeSeparator = (columnKeys: TimeColumnKey[], leftIndex: number, separator: React.ReactNode) =>
   columnKeys[leftIndex] === 'period' || columnKeys[leftIndex + 1] === 'period' ? null : separator;
+
+export const formatTimeValue = (
+  date: Date,
+  { format = 'auto', locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
+) =>
+  formatDate(date, locale, {
+    hour: 'numeric',
+    minute: '2-digit',
+    second: showSeconds ? '2-digit' : undefined,
+    hour12: is12HourFormat(format, locale),
+  });
