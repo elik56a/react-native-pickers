@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/elik56a/react-native-pickers/compare/v0.5.0...v0.6.0) (2026-10-26)
+
+
+### ✨ Features
+
+* **core:** add Locale type for locale props ([0819580](https://github.com/elik56a/react-native-pickers/commit/0819580467e4d747eb8ba9ba816b8e7f2b212e49))
+
 ## [0.5.0](https://github.com/elik56a/react-native-pickers/compare/v0.4.1...v0.5.0) (2026-10-26)
 
 
