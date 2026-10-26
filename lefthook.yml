@@ -2,7 +2,7 @@ pre-commit:
   parallel: true
   commands:
     format:
-      glob: "*.{js,ts,tsx}"
+      glob: "*.{js,ts,tsx,mts}"
       run: node scripts/expand-returned-objects.js {staged_files} && pnpm exec biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
     biome:

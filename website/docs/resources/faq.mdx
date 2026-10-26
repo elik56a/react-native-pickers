@@ -1,43 +1,44 @@
 ---
-title: FAQ
+title: React Native Pickers FAQ
+sidebar_label: FAQ
 description: Frequently asked questions about React Native Pickers — Expo Go, native code, time zones, null values, controlled state, sizes, fonts and more.
 ---
 
 # FAQ
 
-### Does it work in Expo Go?
+## Does it work in Expo Go?
 
 Yes. There's no native code, so it runs in Expo Go, dev builds, bare React Native and the web without a rebuild.
 
-### Does it need Reanimated or Gesture Handler?
+## Does it need Reanimated or Gesture Handler?
 
 No. It uses only React Native core: `Animated` (native driver), `PanResponder`, `FlatList` and `Modal`.
 
-### How do I clear a date?
+## How do I clear a date?
 
 Set `value` to `null` (single mode) or `{ start: null, end: null }` (range). The calendar shows no selection.
 
-### How do I clear a single SelectPicker with the × button?
+## How do I clear a single SelectPicker with the × button?
 
 Single mode × calls only `onClear`, so reset your state there: `clearable onClear={() => setValue(null)}`. Multiple mode clears for you.
 
-### Why doesn't `onChange` fire when I set `value`?
+## Why doesn't `onChange` fire when I set `value`?
 
 By design: `onChange` reports **user** changes only. Programmatic changes to `value` move the picker silently, which avoids feedback loops.
 
-### Why doesn't `onChange` fire while the wheel is spinning?
+## Why doesn't `onChange` fire while the wheel is spinning?
 
 `onChange` fires once the wheel settles. Use `onValueChanging` for per-row updates (haptics, live labels).
 
-### What time zone are dates in?
+## What time zone are dates in?
 
 Local time, the same as `new Date()`. Calendar days are compared by local year / month / day, so time zones never shift a selected day. Serialize days with [`toDateKey`](../api/date-utils#todatekey), not `toISOString()`.
 
-### Does `TimePicker` change the date?
+## Does `TimePicker` change the date?
 
 No. It only changes hours, minutes and seconds, and the date part of `value` is preserved.
 
-### Can I select a date and a time together?
+## Can I select a date and a time together?
 
 Use one `Date` in state for both:
 
@@ -46,26 +47,26 @@ Use one `Date` in state for both:
 <TimePicker value={when} onChange={setWhen} />
 ```
 
-### How big is it?
+## How big is it?
 
 There are no dependencies. The emoji table (about 134 KB of source text) is the largest part. On the web it's dropped by tree-shaking if you don't import `EmojiPicker` or the emoji utilities.
 
-### Can I use custom fonts?
+## Can I use custom fonts?
 
 Yes: `theme={{ typography: { fontFamily: 'Inter-Regular', fontFamilyMedium: 'Inter-SemiBold' } }}` on `PickersProvider`.
 
-### How do I make the wheel bigger?
+## How do I make the wheel bigger?
 
 `itemHeight` sets the row height, `visibleItems` the row count, and `styles.itemText` the font size. The wheel's height is `itemHeight × visibleItems`.
 
-### How do I use it in a ScrollView?
+## How do I use it in a ScrollView?
 
 Just place it there. Wheels and the emoji grid scroll independently and don't trigger the "VirtualizedLists should never be nested" warning. For `SelectList` inside a `ScrollView`, set `listHeight`.
 
-### Is it accessible?
+## Is it accessible?
 
 Yes. Wheels are `adjustable` with increment / decrement actions, days announce full dates, and states are exposed throughout. See [Accessibility](../guides/accessibility).
 
-### Does it support RTL?
+## Does it support RTL?
 
 Yes, automatically through `I18nManager.isRTL`. See [i18n & RTL](../guides/i18n-rtl).

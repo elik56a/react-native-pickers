@@ -5,6 +5,13 @@
 Beautiful, fully customizable pickers for React Native — **100% JavaScript, zero native code.**
 Works with Expo Go, bare React Native, and React Native Web out of the box.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/showcase-dark.png">
+    <img alt="React Native date range picker, emoji picker, time picker and date-time picker from react-native-pickers" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/showcase-light.png" width="640">
+  </picture>
+</p>
+
 **📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [Changelog](CHANGELOG.md) · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
 
 | | |

@@ -57,7 +57,8 @@ const writeVersions = () => {
 
 const writeChangelog = () => {
   const changelog = fs.readFileSync(path.join(site, '../CHANGELOG.md'), 'utf8');
-  const frontMatter = '---\ntitle: Changelog\ndescription: Every release of @elik56a/react-native-pickers.\n---\n\n';
+  const frontMatter =
+    '---\ntitle: Changelog\ndescription: "Release notes for every version of React Native Pickers: new pickers, features, bug fixes and breaking changes, generated from each release."\n---\n\n';
   fs.writeFileSync(path.join(site, 'src/pages/changelog.md'), frontMatter + changelog);
 };
 
