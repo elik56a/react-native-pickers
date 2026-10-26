@@ -1,6 +1,17 @@
 import type { KeyboardTypeOptions } from 'react-native';
 import { Platform } from 'react-native';
 
+export const WHEEL_VARIANT = {
+  threeD: '3d',
+  flat: 'flat',
+} as const;
+
+/** How a scroll settles: snap to a row, or rest on the one it stopped at. */
+export const SETTLE_KIND = {
+  snap: 'snap',
+  rest: 'rest',
+} as const;
+
 export const DEFAULT_ITEM_HEIGHT = 40;
 export const DEFAULT_VISIBLE_ITEMS = 5;
 export const DEFAULT_ROTATION_DEG = 20;

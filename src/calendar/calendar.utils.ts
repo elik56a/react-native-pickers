@@ -1,8 +1,12 @@
 import type { PickerTheme } from '../core';
 import { addMonths, compareDay, isBetweenDays, isOutOfRange, isSameDay, startOfMonth, toDateKey } from '../core/utils/date.utils';
 import {
+  ARROW_DIRECTION,
+  CALENDAR_MODE,
+  CALENDAR_VIEW,
   DAY_MS,
   DEFAULT_YEAR_SPAN,
+  EMPTY_RANGE,
   MAX_DAY_SIZE,
   QUICK_GRID_COLUMNS,
   SWIPE,
@@ -63,8 +67,52 @@ export const toggleMultiple = (dates: Date[], day: Date, maxSelections?: number)
   return [...dates, day].sort((a, b) => a.getTime() - b.getTime());
 };
 
+/** True when `day` is the start or end of `range`, or falls between them. */
+export const rangeContains = (range: DateRange, day: Date) =>
+  isSameDay(day, range.start) || isSameDay(day, range.end) || isBetweenDays(day, range.start, range.end);
+
+/**
+ * The ranges after tapping `day`, sorted by start, or null when the tap should be ignored.
+ * Tapping a finished range removes it; any other tap builds the open range like `nextRange`.
+ * Finished ranges count as disabled days, so ranges never overlap.
+ */
+export const nextRanges = (
+  ranges: DateRange[],
+  day: Date,
+  rules: RangeRules & { maxRanges?: number },
+  isDisabled: (day: Date) => boolean
+): DateRange[] | null => {
+  const finished = ranges.filter((r) => r.end);
+  const tapped = finished.find((r) => rangeContains(r, day));
+  if (tapped) return ranges.filter((r) => r !== tapped);
+
+  const open = ranges.find((r) => !r.end);
+  if (!open && rules.maxRanges !== undefined && finished.length >= rules.maxRanges) return null;
+  const next = nextRange(open ?? EMPTY_RANGE, day, rules, (d) => isDisabled(d) || finished.some((r) => rangeContains(r, d)));
+  if (!next) return null;
+  return [...finished, next].sort((a, b) => (a.start?.getTime() ?? 0) - (b.start?.getTime() ?? 0));
+};
+
 export const getAnchorMonth = (initialMonth: Date | undefined, selection: CalendarSelection) =>
-  startOfMonth(initialMonth ?? selection.single ?? selection.range.start ?? selection.multiple[0] ?? new Date());
+  startOfMonth(
+    initialMonth ?? selection.single ?? selection.range.start ?? selection.multiple[0] ?? selection.ranges[0]?.start ?? new Date()
+  );
+
+/**
+ * The range a day draws its ends and band from. In ranges mode that is the finished range holding the day,
+ * so a range still waiting for its end shows only a selected start, never a band.
+ */
+const getDayRange = ({ mode, range, ranges }: CalendarSelection, day: Date) => {
+  if (mode === CALENDAR_MODE.range) return range;
+  if (mode === CALENDAR_MODE.ranges) return ranges.find((r) => r.end && rangeContains(r, day)) ?? EMPTY_RANGE;
+  return EMPTY_RANGE;
+};
+
+const isDaySelected = ({ mode, single, multiple, ranges }: CalendarSelection, day: Date, dayRange: DateRange) => {
+  if (mode === CALENDAR_MODE.single) return isSameDay(day, single);
+  if (mode === CALENDAR_MODE.multiple) return multiple.some((d) => isSameDay(d, day));
+  return isSameDay(day, dayRange.start) || isSameDay(day, dayRange.end) || ranges.some((r) => !r.end && isSameDay(day, r.start));
+};
 
 export const getDayState = (params: {
   date: Date;
@@ -75,23 +123,22 @@ export const getDayState = (params: {
   markedDates?: Record<string, MarkedDate>;
 }): DayState => {
   const { date, month, today, selection, isDisabled, markedDates } = params;
-  const { mode, single, range, multiple } = selection;
-  const rangeStart = mode === 'range' && isSameDay(date, range.start);
-  const rangeEnd = mode === 'range' && isSameDay(date, range.end);
-  const selected =
-    mode === 'single' ? isSameDay(date, single) : mode === 'range' ? rangeStart || rangeEnd : multiple.some((d) => isSameDay(d, date));
+  const dayRange = getDayRange(selection, date);
   return {
     date,
     outside: date.getMonth() !== month.getMonth(),
     today: isSameDay(date, today),
     disabled: isDisabled(date),
-    rangeStart,
-    rangeEnd,
-    inRange: mode === 'range' && isBetweenDays(date, range.start, range.end),
-    selected,
+    rangeStart: isSameDay(date, dayRange.start),
+    rangeEnd: isSameDay(date, dayRange.end),
+    inRange: isBetweenDays(date, dayRange.start, dayRange.end),
+    selected: isDaySelected(selection, date, dayRange),
     marking: markedDates?.[toDateKey(date)],
   };
 };
+
+/** Only an open range in range mode hides the band; every range drawn in ranges mode is finished. */
+export const hasRangeEnd = ({ mode, range }: CalendarSelection) => mode === CALENDAR_MODE.ranges || !!range.end;
 
 export const getWeekStates = (grid: Date[][], params: Omit<Parameters<typeof getDayState>[0], 'date'>) =>
   grid.map((week) => week.map((date) => getDayState({ ...params, date })));
@@ -121,7 +168,7 @@ export const orderWeekdays = (names: string[], firstDayOfWeek: number): Weekday[
   });
 
 /** ‹ points to the previous month, mirrored in RTL. */
-export const getArrowGlyph = (direction: ArrowDirection, rtl: boolean) => ((direction === 'prev') !== rtl ? '‹' : '›');
+export const getArrowGlyph = (direction: ArrowDirection, rtl: boolean) => ((direction === ARROW_DIRECTION.prev) !== rtl ? '‹' : '›');
 
 export const canGoToMonth = (month: Date, delta: number, minDate?: Date, maxDate?: Date) => {
   const target = addMonths(month, delta);
@@ -130,8 +177,8 @@ export const canGoToMonth = (month: Date, delta: number, minDate?: Date, maxDate
 };
 
 /** Arrows page by month in the day view, by year in the month view and by 12 years in the year view. */
-export const shiftMonthForView = (view: Exclude<CalendarView, 'days'>, month: Date, delta: number) => {
-  const years = view === 'months' ? delta : delta * YEARS_PER_PAGE;
+export const shiftMonthForView = (view: Exclude<CalendarView, typeof CALENDAR_VIEW.days>, month: Date, delta: number) => {
+  const years = view === CALENDAR_VIEW.months ? delta : delta * YEARS_PER_PAGE;
   return new Date(month.getFullYear() + years, month.getMonth(), 1);
 };
 
@@ -143,8 +190,8 @@ export const getYearPageLabel = (year: number) => {
 };
 
 export const getHeaderLabel = (view: CalendarView, month: Date, title: string) => {
-  if (view === 'years') return getYearPageLabel(month.getFullYear());
-  if (view === 'months') return String(month.getFullYear());
+  if (view === CALENDAR_VIEW.years) return getYearPageLabel(month.getFullYear());
+  if (view === CALENDAR_VIEW.months) return String(month.getFullYear());
   return title;
 };
 

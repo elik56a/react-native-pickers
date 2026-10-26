@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
 import { getDayPeriods } from '../../core/utils/date.utils';
-import { DEFAULT_TIME_SEPARATOR } from '../time.constants';
+import { DEFAULT_TIME_SEPARATOR, TIME_FORMAT } from '../time.constants';
 import type { TimeColumnsOptions } from '../time.types';
 import {
   buildTime,
@@ -18,7 +18,7 @@ export const useTimeColumns = ({
   date,
   onChange,
   onValueChanging,
-  format = 'auto',
+  format = TIME_FORMAT.auto,
   locale,
   minuteInterval = 1,
   showSeconds = false,

@@ -1,4 +1,11 @@
-import { EMOJI_TO_CELL_RATIO, FALLBACK_CELL_SIZE, INITIAL_ROW_BUFFER, SECTION_HEADER_HEIGHT } from './emoji.constants';
+import {
+  EMOJI_ROW_TYPE,
+  EMOJI_SECTION,
+  EMOJI_TO_CELL_RATIO,
+  FALLBACK_CELL_SIZE,
+  INITIAL_ROW_BUFFER,
+  SECTION_HEADER_HEIGHT,
+} from './emoji.constants';
 import type {
   Emoji,
   EmojiCategory,
@@ -79,9 +86,9 @@ export const addRecent = (recent: string[], e: Emoji, max: number): string[] =>
 export const buildSections = ({ query, pool, recent, showRecent, categories }: EmojiSectionsOptions): EmojiSection[] => {
   if (query.trim()) {
     const items = searchEmojis(query, pool);
-    return items.length ? [{ key: 'search', items }] : [];
+    return items.length ? [{ key: EMOJI_SECTION.search, items }] : [];
   }
-  const sections: EmojiSection[] = showRecent && recent.length ? [{ key: 'recent', items: recent }] : [];
+  const sections: EmojiSection[] = showRecent && recent.length ? [{ key: EMOJI_SECTION.recent, items: recent }] : [];
   for (const key of categories) {
     const items = pool.filter((e) => e.category === key);
     if (items.length) sections.push({ key, items });
@@ -102,9 +109,9 @@ export const buildLayout = (sections: EmojiSection[], columns: number, cellSize:
   };
   for (const section of sections) {
     headerIndex.set(section.key, rows.length);
-    if (showSectionHeaders) push({ type: 'header', key: section.key }, SECTION_HEADER_HEIGHT);
+    if (showSectionHeaders) push({ type: EMOJI_ROW_TYPE.header, key: section.key }, SECTION_HEADER_HEIGHT);
     for (let i = 0; i < section.items.length; i += columns) {
-      push({ type: 'emojis', items: section.items.slice(i, i + columns), section: section.key }, cellSize);
+      push({ type: EMOJI_ROW_TYPE.emojis, items: section.items.slice(i, i + columns), section: section.key }, cellSize);
     }
   }
   return {
@@ -126,11 +133,13 @@ export const rowIndexAtOffset = (offsets: number[], y: number): number => {
   return lo;
 };
 
-export const sectionOfRow = (row: EmojiRow): EmojiSectionKey => (row.type === 'header' ? row.key : row.section);
+export const sectionOfRow = (row: EmojiRow): EmojiSectionKey => (row.type === EMOJI_ROW_TYPE.header ? row.key : row.section);
 
-export const getRowHeight = (row: EmojiRow | undefined, cellSize: number) => (row?.type === 'header' ? SECTION_HEADER_HEIGHT : cellSize);
+export const getRowHeight = (row: EmojiRow | undefined, cellSize: number) =>
+  row?.type === EMOJI_ROW_TYPE.header ? SECTION_HEADER_HEIGHT : cellSize;
 
-export const getRowKey = (row: EmojiRow, index: number) => (row.type === 'header' ? `h-${row.key}` : `r-${row.section}-${index}`);
+export const getRowKey = (row: EmojiRow, index: number) =>
+  row.type === EMOJI_ROW_TYPE.header ? `h-${row.key}` : `r-${row.section}-${index}`;
 
 export const getCellSize = (width: number, columns: number) => (width > 0 ? Math.floor(width / columns) : FALLBACK_CELL_SIZE);
 
@@ -140,4 +149,4 @@ export const getInitialRowCount = (height: number, cellSize: number) => Math.cei
 
 /** Category bar tabs: recent first, then the categories that have a section. */
 export const getVisibleTabs = (categories: EmojiCategory[], headerIndex: Map<EmojiSectionKey, number>): EmojiTabKey[] =>
-  (['recent', ...categories] as EmojiTabKey[]).filter((key) => headerIndex.has(key));
+  ([EMOJI_SECTION.recent, ...categories] as EmojiTabKey[]).filter((key) => headerIndex.has(key));

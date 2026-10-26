@@ -296,14 +296,15 @@ export default function Example() {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `display` | `'calendar' \| 'wheel'` | `'calendar'` | `DatePicker` only. |
-| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Selection mode; changes the type of `value`. |
-| `value` | `Date \| null` · `DateRange` · `Date[]` | — | Selection (controlled), typed by `mode`. |
-| `defaultValue` | same as `value` | `null` · `{start:null,end:null}` · `[]` | Initial selection when uncontrolled. |
-| `onChange` | `(date: Date) => void` · `(range: DateRange) => void` · `(dates: Date[]) => void` | — | Fires on every tap that changes the selection. |
-| `minRangeDays` | `number` | — | `range` only. See [range](./date-range-picker#props). |
-| `maxRangeDays` | `number` | — | `range` only. |
-| `allowSingleDayRange` | `boolean` | `true` | `range` only. |
+| `mode` | `'single' \| 'range' \| 'multiple' \| 'ranges'` | `'single'` | Selection mode; changes the type of `value`. |
+| `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Selection (controlled), typed by `mode`. |
+| `defaultValue` | same as `value` | `null` · `{start:null,end:null}` · `[]` · `[]` | Initial selection when uncontrolled. |
+| `onChange` | `(date: Date) => void` · `(range: DateRange) => void` · `(dates: Date[]) => void` · `(ranges: DateRange[]) => void` | — | Fires on every tap that changes the selection. |
+| `minRangeDays` | `number` | — | `range` and `ranges`. See [range](./date-range-picker#props). |
+| `maxRangeDays` | `number` | — | `range` and `ranges`. |
+| `allowSingleDayRange` | `boolean` | `true` | `range` and `ranges`. |
 | `maxSelections` | `number` | — | `multiple` only. |
+| `maxRanges` | `number` | — | `ranges` only. |
 
 ### Calendar
 

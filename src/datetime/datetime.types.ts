@@ -2,11 +2,12 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CalendarBaseProps } from '../calendar/calendar.types';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
+import type { PickerDisplay } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { TimeOptions } from '../time/time.types';
 import type { MultiWheelSlot, WheelVariant } from '../wheel/wheel.types';
 
-export type DateTimeDisplay = 'wheel' | 'calendar';
+export type DateTimeDisplay = PickerDisplay;
 
 export type DateTimeCalendarProps = Omit<CalendarBaseProps, 'locale' | 'minDate' | 'maxDate' | 'theme' | 'testID'>;
 

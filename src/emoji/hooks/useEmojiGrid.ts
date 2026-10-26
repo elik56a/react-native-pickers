@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { FlatList, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
-import { JUMP_LOCK_MS, SCROLL_PROBE_OFFSET } from '../emoji.constants';
+import { EMOJI_CATEGORY, JUMP_LOCK_MS, SCROLL_PROBE_OFFSET } from '../emoji.constants';
 import type { EmojiGridOptions, EmojiRow, EmojiSectionKey } from '../emoji.types';
 import {
   buildLayout,
@@ -27,7 +27,7 @@ export const useEmojiGrid = ({
 }: EmojiGridOptions) => {
   const [width, setWidth] = useState(0);
   const [query, setQuery] = useState('');
-  const [active, setActive] = useState<EmojiSectionKey>(categories[0] ?? 'smileys');
+  const [active, setActive] = useState<EmojiSectionKey>(categories[0] ?? EMOJI_CATEGORY.smileys);
   const listRef = useRef<FlatList<EmojiRow>>(null);
   const jumping = useRef(false);
   const cellSize = getCellSize(width, columns);

@@ -2,7 +2,7 @@ import type React from 'react';
 
 import { formatDate, uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
-import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './time.constants';
+import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TIME_COLUMN, TIME_FORMAT } from './time.constants';
 import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeOptions, TimeParts } from './time.types';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -12,7 +12,8 @@ export const steps = (count: number, step = 1) => Array.from({ length: Math.ceil
 
 export const secondsOfDay = (d: Date) => d.getHours() * SECONDS_PER_HOUR + d.getMinutes() * SECONDS_PER_MINUTE + d.getSeconds();
 
-export const is12HourFormat = (format: TimeFormat, locale?: string) => (format === 'auto' ? uses12HourClock(locale) : format === '12h');
+export const is12HourFormat = (format: TimeFormat, locale?: string) =>
+  format === TIME_FORMAT.auto ? uses12HourClock(locale) : format === TIME_FORMAT.twelveHour;
 
 export const getTimeBounds = (minTime?: Date, maxTime?: Date): TimeBounds => [
   minTime ? secondsOfDay(minTime) : 0,
@@ -118,14 +119,14 @@ export const getTimeColumnSpecs = (params: {
   const isPM = parts.hours >= 12;
 
   const period: TimeColumnSpec = {
-    key: 'period',
+    key: TIME_COLUMN.period,
     items: getPeriodItems(periods, bounds),
     value: isPM ? 1 : 0,
     flex: 1,
     toPatch: (pm) => ({ hours: (parts.hours % 12) + (pm ? 12 : 0) }),
   };
   const hour: TimeColumnSpec = {
-    key: 'hour',
+    key: TIME_COLUMN.hour,
     items: getHourItems({ is12, isPM, padHours, bounds }),
     value: is12 ? parts.hours % 12 : parts.hours,
     loop,
@@ -133,7 +134,7 @@ export const getTimeColumnSpecs = (params: {
     toPatch: (h) => ({ hours: is12 ? (isPM ? 12 : 0) + h : h }),
   };
   const minute: TimeColumnSpec = {
-    key: 'minute',
+    key: TIME_COLUMN.minute,
     items: getMinuteItems(parts.hours, minuteInterval, bounds),
     value: parts.minutes,
     loop,
@@ -141,7 +142,7 @@ export const getTimeColumnSpecs = (params: {
     toPatch: (m) => ({ minutes: m }),
   };
   const second: TimeColumnSpec = {
-    key: 'second',
+    key: TIME_COLUMN.second,
     items: getSecondItems(secondInterval),
     value: parts.seconds,
     loop,
@@ -156,11 +157,11 @@ export const getTimeColumnSpecs = (params: {
 
 /** No separator next to the AM/PM column. */
 export const getTimeSeparator = (columnKeys: TimeColumnKey[], leftIndex: number, separator: React.ReactNode) =>
-  columnKeys[leftIndex] === 'period' || columnKeys[leftIndex + 1] === 'period' ? null : separator;
+  columnKeys[leftIndex] === TIME_COLUMN.period || columnKeys[leftIndex + 1] === TIME_COLUMN.period ? null : separator;
 
 export const formatTimeValue = (
   date: Date,
-  { format = 'auto', locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
+  { format = TIME_FORMAT.auto, locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
 ) =>
   formatDate(date, locale, {
     hour: 'numeric',

@@ -29,6 +29,21 @@ describe('Calendar', () => {
     ]);
   });
 
+  it('builds several ranges and removes one when tapped', async () => {
+    const onChange = jest.fn();
+    await render(<Calendar mode="ranges" initialMonth={OCTOBER} onChange={onChange} />);
+    await pressDay(3);
+    await pressDay(5);
+    await pressDay(20);
+    await pressDay(22);
+    expect(onChange.mock.calls[3][0].map(rangeKeys)).toEqual([
+      ['2026-10-03', '2026-10-05'],
+      ['2026-10-20', '2026-10-22'],
+    ]);
+    await pressDay(4);
+    expect(onChange.mock.calls[4][0].map(rangeKeys)).toEqual([['2026-10-20', '2026-10-22']]);
+  });
+
   it('stops adding days at maxSelections in multiple mode', async () => {
     const onChange = jest.fn();
     await render(<Calendar mode="multiple" maxSelections={2} initialMonth={OCTOBER} onChange={onChange} />);

@@ -11,6 +11,8 @@ import {
   FIELD_PROP_KEYS,
   SCROLLABLE_OVERFLOW,
   SHEET_MAX_WIDTH,
+  SHEET_PRESENTATION,
+  SHEET_SNAP,
 } from './sheet.constants';
 import type {
   AnchorRect,
@@ -41,18 +43,18 @@ export const getDragFrame = (startHeight: number, dy: number, base: number, max:
 };
 
 export const getReleaseTarget = (frame: SheetDragFrame, vy: number, base: number, max: number, canClose: boolean): SheetSnap => {
-  if (frame.offset > 0) return canClose && shouldDismiss(frame.offset, vy, base) ? 'close' : 'base';
-  if (max <= base) return 'base';
-  if (vy < -EXPAND_FLICK_VELOCITY) return 'expanded';
-  if (vy > EXPAND_FLICK_VELOCITY) return 'base';
-  return frame.height - base > (max - base) / 2 ? 'expanded' : 'base';
+  if (frame.offset > 0) return canClose && shouldDismiss(frame.offset, vy, base) ? SHEET_SNAP.close : SHEET_SNAP.base;
+  if (max <= base) return SHEET_SNAP.base;
+  if (vy < -EXPAND_FLICK_VELOCITY) return SHEET_SNAP.expanded;
+  if (vy > EXPAND_FLICK_VELOCITY) return SHEET_SNAP.base;
+  return frame.height - base > (max - base) / 2 ? SHEET_SNAP.expanded : SHEET_SNAP.base;
 };
 
 /** Wheel up expands, wheel down collapses an expanded sheet or closes one at its base height. */
 export const getWheelTarget = (deltaY: number, expanded: boolean, expandable: boolean, canClose: boolean): SheetSnap | null => {
-  if (deltaY < 0) return expandable && !expanded ? 'expanded' : null;
-  if (expanded) return 'base';
-  return canClose ? 'close' : null;
+  if (deltaY < 0) return expandable && !expanded ? SHEET_SNAP.expanded : null;
+  if (expanded) return SHEET_SNAP.base;
+  return canClose ? SHEET_SNAP.close : null;
 };
 
 /** Whether a scroll container between `target` and `root` can still scroll that way, so the wheel belongs to it. */
@@ -70,9 +72,15 @@ export const canScrollWithin = (
 };
 
 /** `auto` picks a modal on web windows wider than the sheet, where a bottom sheet looks cut off. */
-export const resolvePresentation = (presentation: SheetPresentation, platform: string, windowWidth: number): 'bottomSheet' | 'modal' => {
-  if (presentation !== 'auto') return presentation;
-  return platform === 'web' && windowWidth >= SHEET_MAX_WIDTH + DIALOG_MARGIN * 2 ? 'modal' : 'bottomSheet';
+export const resolvePresentation = (
+  presentation: SheetPresentation,
+  platform: string,
+  windowWidth: number
+): Exclude<SheetPresentation, typeof SHEET_PRESENTATION.auto> => {
+  if (presentation !== SHEET_PRESENTATION.auto) return presentation;
+  return platform === 'web' && windowWidth >= SHEET_MAX_WIDTH + DIALOG_MARGIN * 2
+    ? SHEET_PRESENTATION.modal
+    : SHEET_PRESENTATION.bottomSheet;
 };
 
 /** Opens below the anchor, or above it when there's more room there and not enough below. */

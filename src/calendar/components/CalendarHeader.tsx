@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { Touchable } from '../../core/components/Touchable';
-import { ARROW_DIRECTIONS, ARROW_LABELS } from '../calendar.constants';
+import { ARROW_DIRECTIONS, ARROW_LABELS, CALENDAR_VIEW } from '../calendar.constants';
 import { styles } from '../calendar.styles';
 import type { CalendarHeaderProps } from '../calendar.types';
 import { getArrowGlyph } from '../calendar.utils';
@@ -31,7 +31,9 @@ export const CalendarHeader = ({
     >
       <Text style={[textStyle(theme, 'md', 'bold'), slots?.headerTitle]}>{label}</Text>
       {enableQuickJump && (
-        <Text style={[textStyle(theme, 'sm', 'bold'), styles.caret, { color: theme.colors.primary }]}>{view === 'days' ? '▾' : '▴'}</Text>
+        <Text style={[textStyle(theme, 'sm', 'bold'), styles.caret, { color: theme.colors.primary }]}>
+          {view === CALENDAR_VIEW.days ? '▾' : '▴'}
+        </Text>
       )}
     </Touchable>
     <View style={styles.arrows}>

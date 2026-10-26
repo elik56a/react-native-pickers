@@ -2,8 +2,10 @@ import type React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { ChevronInfo, PickerFieldSlot, SheetChromeProps, SheetPresentation } from '../sheet';
+import type { ValueOf } from '../core/core.types';
+import type { ChevronInfo, PickerFieldSlot, SheetChromeProps } from '../sheet';
 import type { FieldTriggerProps } from '../sheet/sheet.types';
+import type { SELECT_PRESENTATION, SELECT_ROW_TYPE } from './select.constants';
 
 export interface SelectOption<T> {
   label: string;
@@ -19,7 +21,7 @@ export interface SelectOption<T> {
 }
 
 /** A sheet presentation, or a dropdown under the field. */
-export type SelectPresentation = SheetPresentation | 'dropdown';
+export type SelectPresentation = ValueOf<typeof SELECT_PRESENTATION>;
 
 export type SelectSlot =
   | 'container'
@@ -114,7 +116,9 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     styles?: SlotStyles<SelectSlot | SelectTriggerSlot>;
   };
 
-export type SelectRow<T> = { type: 'header'; group: string } | { type: 'option'; option: SelectOption<T> };
+export type SelectRow<T> =
+  | { type: typeof SELECT_ROW_TYPE.header; group: string }
+  | { type: typeof SELECT_ROW_TYPE.option; option: SelectOption<T> };
 
 export interface GroupHeaderProps {
   group: string;

@@ -1,16 +1,34 @@
 import type { EmojiCategory, EmojiSectionKey, EmojiTabKey } from './emoji.types';
 
-export const EMOJI_CATEGORIES: EmojiCategory[] = [
-  'smileys',
-  'people',
-  'animals',
-  'food',
-  'travel',
-  'activities',
-  'objects',
-  'symbols',
-  'flags',
-];
+export const EMOJI_CATEGORY = {
+  smileys: 'smileys',
+  people: 'people',
+  animals: 'animals',
+  food: 'food',
+  travel: 'travel',
+  activities: 'activities',
+  objects: 'objects',
+  symbols: 'symbols',
+  flags: 'flags',
+} as const;
+
+/** Sections that aren't categories: recently used, and search results while searching. */
+export const EMOJI_SECTION = {
+  recent: 'recent',
+  search: 'search',
+} as const;
+
+export const CATEGORY_BAR_POSITION = {
+  top: 'top',
+  bottom: 'bottom',
+} as const;
+
+export const EMOJI_ROW_TYPE = {
+  header: 'header',
+  emojis: 'emojis',
+} as const;
+
+export const EMOJI_CATEGORIES: EmojiCategory[] = Object.values(EMOJI_CATEGORY);
 
 export const DEFAULT_CATEGORY_LABELS: Record<EmojiSectionKey, string> = {
   recent: 'Recently used',
@@ -41,15 +59,15 @@ export const DEFAULT_CATEGORY_ICONS: Record<EmojiTabKey, string> = {
 
 /** Emojibase group number → category. Group 2 (components: skin tones, hair) is not shipped. */
 export const GROUP_TO_CATEGORY: Record<string, EmojiCategory> = {
-  '0': 'smileys',
-  '1': 'people',
-  '3': 'animals',
-  '4': 'food',
-  '5': 'travel',
-  '6': 'activities',
-  '7': 'objects',
-  '8': 'symbols',
-  '9': 'flags',
+  '0': EMOJI_CATEGORY.smileys,
+  '1': EMOJI_CATEGORY.people,
+  '3': EMOJI_CATEGORY.animals,
+  '4': EMOJI_CATEGORY.food,
+  '5': EMOJI_CATEGORY.travel,
+  '6': EMOJI_CATEGORY.activities,
+  '7': EMOJI_CATEGORY.objects,
+  '8': EMOJI_CATEGORY.symbols,
+  '9': EMOJI_CATEGORY.flags,
 };
 
 /** Index = skin tone. */

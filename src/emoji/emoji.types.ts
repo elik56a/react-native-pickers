@@ -2,9 +2,13 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import type { ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
+import type { CATEGORY_BAR_POSITION, EMOJI_CATEGORY, EMOJI_ROW_TYPE, EMOJI_SECTION } from './emoji.constants';
 
-export type EmojiCategory = 'smileys' | 'people' | 'animals' | 'food' | 'travel' | 'activities' | 'objects' | 'symbols' | 'flags';
+export type EmojiCategory = ValueOf<typeof EMOJI_CATEGORY>;
+
+export type CategoryBarPosition = ValueOf<typeof CATEGORY_BAR_POSITION>;
 
 export interface Emoji {
   emoji: string;
@@ -20,9 +24,9 @@ export interface Emoji {
 /** Skin tone: 0 = default (yellow), 1–5 = light → dark */
 export type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
 
-export type EmojiTabKey = EmojiCategory | 'recent';
+export type EmojiTabKey = EmojiCategory | typeof EMOJI_SECTION.recent;
 
-export type EmojiSectionKey = EmojiTabKey | 'search';
+export type EmojiSectionKey = EmojiTabKey | typeof EMOJI_SECTION.search;
 
 export type EmojiPickerSlot =
   | 'container'
@@ -61,7 +65,7 @@ export interface EmojiPickerProps extends ThemableProps {
   searchPlaceholder?: string;
   emptyText?: string;
   showCategoryBar?: boolean;
-  categoryBarPosition?: 'top' | 'bottom';
+  categoryBarPosition?: CategoryBarPosition;
   showSectionHeaders?: boolean;
   categoryLabels?: Partial<Record<EmojiSectionKey, string>>;
   categoryIcons?: Partial<Record<EmojiTabKey, React.ReactNode>>;
@@ -98,7 +102,9 @@ export interface EmojiSection {
   items: Emoji[];
 }
 
-export type EmojiRow = { type: 'header'; key: EmojiSectionKey } | { type: 'emojis'; items: Emoji[]; section: EmojiSectionKey };
+export type EmojiRow =
+  | { type: typeof EMOJI_ROW_TYPE.header; key: EmojiSectionKey }
+  | { type: typeof EMOJI_ROW_TYPE.emojis; items: Emoji[]; section: EmojiSectionKey };
 
 /** Rows with their y offsets, and the row each section starts at (so the category bar can jump to it). */
 export interface EmojiLayout {
@@ -169,7 +175,7 @@ export interface SkinToneMenuProps {
 export interface CategoryBarProps {
   tabs: EmojiTabKey[];
   active: EmojiSectionKey;
-  position: 'top' | 'bottom';
+  position: CategoryBarPosition;
   labels: Record<EmojiSectionKey, string>;
   icons: Partial<Record<EmojiTabKey, React.ReactNode>>;
   onSelect: (key: EmojiTabKey) => void;

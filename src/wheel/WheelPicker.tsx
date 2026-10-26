@@ -10,7 +10,7 @@ import { WheelRow } from './components/WheelRow';
 import { WheelTypingInput } from './components/WheelTypingInput';
 import { useTypeToSelect } from './hooks/useTypeToSelect';
 import { useWheelScroll } from './hooks/useWheelScroll';
-import { DEFAULT_FADE_TO, DEFAULT_ITEM_HEIGHT, DEFAULT_ROTATION_DEG, DEFAULT_VISIBLE_ITEMS } from './wheel.constants';
+import { DEFAULT_FADE_TO, DEFAULT_ITEM_HEIGHT, DEFAULT_ROTATION_DEG, DEFAULT_VISIBLE_ITEMS, WHEEL_VARIANT } from './wheel.constants';
 import { styles } from './wheel.styles';
 import type { WheelPickerProps } from './wheel.types';
 import { normalizeItem, toOddCount } from './wheel.utils';
@@ -28,7 +28,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
     visibleItems: requestedVisibleItems = DEFAULT_VISIBLE_ITEMS,
     loop = false,
     keyboardInput = true,
-    variant = '3d',
+    variant = WHEEL_VARIANT.threeD,
     rotation = DEFAULT_ROTATION_DEG,
     fadeTo = DEFAULT_FADE_TO,
     renderItem,

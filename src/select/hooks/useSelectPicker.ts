@@ -4,6 +4,7 @@ import type { HostInstance } from 'react-native';
 import { Platform } from 'react-native';
 
 import type { AnchorRect } from '../../sheet/sheet.types';
+import { SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
 import { findOptions, resolveSelectPresentation, toValueList } from '../select.utils';
 
@@ -17,8 +18,8 @@ export const useSelectPicker = <T>(
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<AnchorRect | null>(null);
   const [query, setQuery] = useState('');
-  const presentation = resolveSelectPresentation(props.presentation ?? 'auto', Platform.OS);
-  const dropdown = presentation === 'dropdown';
+  const presentation = resolveSelectPresentation(props.presentation ?? SELECT_PRESENTATION.auto, Platform.OS);
+  const dropdown = presentation === SELECT_PRESENTATION.dropdown;
   const searchInField = dropdown && props.searchable !== false;
 
   const selected = useMemo(

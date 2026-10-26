@@ -181,7 +181,10 @@ Selection modes:
 mode?: 'single'   value: Date | null      onChange(date)
 mode: 'range'     value: { start, end }   onChange(range)   minRangeDays, maxRangeDays, allowSingleDayRange
 mode: 'multiple'  value: Date[]           onChange(dates)   maxSelections
+mode: 'ranges'    value: DateRange[]      onChange(ranges)  maxRanges, minRangeDays, maxRangeDays, allowSingleDayRange
 ```
+
+The modes are also exported as constants: `mode={CALENDAR_MODE.ranges}`.
 
 | Prop | Type | Default | |
 |---|---|---|---|

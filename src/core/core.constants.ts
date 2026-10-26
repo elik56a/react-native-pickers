@@ -6,6 +6,11 @@ export const SHOWS_SCROLL_INDICATOR = Platform.select({ web: false, default: tru
 /** react-native-web has no native animated module. Layout props (height) never run on it, whatever the platform. */
 export const USE_NATIVE_DRIVER = Platform.OS !== 'web';
 
+export const PICKER_DISPLAY = {
+  calendar: 'calendar',
+  wheel: 'wheel',
+} as const;
+
 /** Things arriving decelerate into place; things leaving accelerate away. */
 export const EASE_OUT = Easing.out(Easing.cubic);
 export const EASE_IN = Easing.in(Easing.cubic);

@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { DateRange } from '@elik56a/react-native-pickers';
 import {
+  CALENDAR_MODE,
   DatePicker,
   DatePickerField,
   DatePickerSheet,
@@ -97,6 +98,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [tab, setTab] = useState<TabKey>('wheel');
   const [date, setDate] = useState<Date>(new Date());
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  const [ranges, setRanges] = useState<DateRange[]>([]);
   const [time, setTime] = useState(new Date());
   const [meeting, setMeeting] = useState(new Date());
   const [size, setSize] = useState('M');
@@ -104,7 +106,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [framework, setFramework] = useState<string | null>(null);
   const [emoji, setEmoji] = useState('');
   const [mood, setMood] = useState<string | undefined>();
-  const [sheet, setSheet] = useState<'date' | 'range' | 'time' | 'datetime' | 'emoji' | null>(null);
+  const [sheet, setSheet] = useState<'date' | 'range' | 'ranges' | 'time' | 'datetime' | 'emoji' | null>(null);
 
   return (
     <>
@@ -130,6 +132,7 @@ function Demo({ insets }: { insets: Insets }) {
                 title={`Range: ${range.start ? formatDate(range.start) : '—'} → ${range.end ? formatDate(range.end) : '—'}`}
                 onPress={() => setSheet('range')}
               />
+              <Button title={`Ranges: ${ranges.length} picked`} onPress={() => setSheet('ranges')} />
               <Button title="Birthday (wheel sheet)" onPress={() => setSheet('date')} />
             </Section>
           )}
@@ -182,12 +185,23 @@ function Demo({ insets }: { insets: Insets }) {
               <DatePickerField
                 label="Stay"
                 placeholder="Add dates"
-                mode="range"
+                mode={CALENDAR_MODE.range}
                 value={range}
                 onConfirm={setRange}
                 minDate={new Date()}
                 clearable
                 onClear={() => setRange({ start: null, end: null })}
+              />
+              <DatePickerField
+                label="Blackout dates"
+                placeholder="Add ranges"
+                mode={CALENDAR_MODE.ranges}
+                value={ranges}
+                onConfirm={setRanges}
+                maxRanges={3}
+                minDate={new Date()}
+                clearable
+                onClear={() => setRanges([])}
               />
               <DatePickerField label="Birthday" display="wheel" value={date} onConfirm={setDate} />
               <TimePickerField label="Alarm" value={time} onConfirm={setTime} minuteInterval={5} />
@@ -216,9 +230,19 @@ function Demo({ insets }: { insets: Insets }) {
         visible={sheet === 'range'}
         onClose={() => setSheet(null)}
         title="Dates"
-        mode="range"
+        mode={CALENDAR_MODE.range}
         value={range}
         onConfirm={setRange}
+        minDate={new Date()}
+      />
+      <DatePickerSheet
+        visible={sheet === 'ranges'}
+        onClose={() => setSheet(null)}
+        title="Blackout dates"
+        mode={CALENDAR_MODE.ranges}
+        value={ranges}
+        onConfirm={setRanges}
+        maxRanges={3}
         minDate={new Date()}
       />
       <DatePickerSheet

@@ -1,7 +1,7 @@
 ---
 title: React Native Date Range Picker
 sidebar_label: Date range & multiple
-description: React Native date range picker (check-in / check-out) with min/max nights and multiple date selection. A pure-JS calendar, no native code.
+description: React Native date range picker (check-in / check-out) with min/max nights, multiple ranges and multiple date selection. A pure-JS calendar, no native code.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -9,26 +9,30 @@ import { DatePicker } from '@elik56a/react-native-pickers';
 
 # Date range & multiple dates
 
-Pick a check-in / check-out date range, or several separate dates, in React Native. `DatePicker` (and `Calendar`) switch selection model with `mode`. TypeScript narrows `value` and `onChange` for each mode.
+Pick a check-in / check-out date range, several ranges, or several separate dates, in React Native. `DatePicker` (and `Calendar`) switch selection model with `mode`. TypeScript narrows `value` and `onChange` for each mode.
 
 | `mode` | `value` | `onChange` | Extra props |
 | --- | --- | --- | --- |
 | `'single'` (default) | `Date \| null` | `(date: Date) => void` | — |
 | `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 | `'multiple'` | `Date[]` | `(dates: Date[]) => void` | `maxSelections` |
+| `'ranges'` | `DateRange[]` | `(ranges: DateRange[]) => void` | `maxRanges`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
+
+The modes are also exported as constants: `mode={CALENDAR_MODE.ranges}`.
 
 ## Try the props
 
 <PropPlayground
   name="DatePicker"
   component={DatePicker}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
+  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' || p.mode === 'ranges' ? [] : null)}
   code="value={value} onChange={setValue}"
   controls={[
-    { prop: 'mode', options: ['single', 'range', 'multiple'], initial: 'range' },
+    { prop: 'mode', options: ['single', 'range', 'multiple', 'ranges'], initial: 'range' },
     { prop: 'allowSingleDayRange', options: [true, false] },
     { prop: 'maxRangeDays', options: [7, 14, 30], default: null, initial: 14 },
     { prop: 'maxSelections', options: [3, 5, 10], default: null, initial: 5 },
+    { prop: 'maxRanges', options: [2, 3, 5], default: null, initial: 3 },
   ]}
 />
 
@@ -159,6 +163,30 @@ export default function Example() {
 }
 ```
 
+## Multiple ranges
+
+`mode="ranges"` picks several date ranges, e.g. blackout periods or trip legs. Each range is built with two taps, just like range mode. Tapping any day of a finished range removes it. Ranges never overlap, and `onChange` receives them **sorted by start**. The range rules (`minRangeDays`, `maxRangeDays`, `allowSingleDayRange`) apply to each range. With `maxRanges`, taps that would start another range are ignored once the limit is reached.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DatePicker, formatDate } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [ranges, setRanges] = useState<DateRange[]>([]);
+  const short = (d: Date | null) => (d ? formatDate(d, undefined, { day: 'numeric', month: 'short' }) : '…');
+  return (
+    <>
+      <DatePicker mode="ranges" value={ranges} onChange={setRanges} maxRanges={3} minDate={new Date()} />
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {ranges.length ? ranges.map((r) => `${short(r.start)} – ${short(r.end)}`).join(', ') : 'Pick up to 3 ranges'}
+      </Text>
+    </>
+  );
+}
+```
+
 ## Uncontrolled
 
 ```tsx
@@ -168,7 +196,7 @@ export default function Example() {
 
 ## In a sheet
 
-`DatePickerSheet` disables **Done** until the range is complete (both `start` and `end`).
+`DatePickerSheet` disables **Done** until the range is complete (both `start` and `end`). In ranges mode, it waits until no range is half-picked.
 
 ```tsx
 <DatePickerSheet
@@ -201,10 +229,11 @@ All [calendar props](./date-picker#calendar) apply. Mode-specific props:
 
 | Prop | Mode | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `minRangeDays` | `range` | `number` | — | Minimum nights (end − start in days). Shorter second taps are ignored. |
-| `maxRangeDays` | `range` | `number` | — | Maximum nights. Longer second taps start a new range. |
-| `allowSingleDayRange` | `range` | `boolean` | `true` | Allow `start === end`. |
+| `minRangeDays` | `range`, `ranges` | `number` | — | Minimum nights (end − start in days). Shorter second taps are ignored. |
+| `maxRangeDays` | `range`, `ranges` | `number` | — | Maximum nights. Longer second taps start a new range. |
+| `allowSingleDayRange` | `range`, `ranges` | `boolean` | `true` | Allow `start === end`. |
 | `maxSelections` | `multiple` | `number` | — | Maximum number of selected days. |
+| `maxRanges` | `ranges` | `number` | — | Maximum number of ranges. |
 
 ## Working with ranges
 
