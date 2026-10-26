@@ -2,7 +2,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CalendarBaseProps } from '../calendar/calendar.types';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { TimeOptions } from '../time/time.types';
 import type { MultiWheelSlot, WheelVariant } from '../wheel/wheel.types';
 
@@ -39,6 +39,8 @@ export type DateTimePickerSheetProps = SheetChromeProps &
     value?: Date;
     onConfirm: (date: Date) => void;
   };
+
+export type DateTimePickerFieldProps = WithPickerField<DateTimePickerSheetProps, MultiWheelSlot>;
 
 export type DateTimeViewProps = Omit<DateTimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'display'> & {
   date: Date;

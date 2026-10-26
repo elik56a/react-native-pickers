@@ -22,4 +22,12 @@ export const styles = StyleSheet.create({
   dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
   content: { paddingHorizontal: 16, paddingBottom: 8 },
   compactContent: { paddingHorizontal: 8 },
+  fieldLabel: { marginBottom: 6 },
+  trigger: { flexDirection: 'row', alignItems: 'center', minHeight: 48, borderWidth: 1, paddingVertical: 6 },
+  triggerRow: { flexDirection: 'row', alignItems: 'center' },
+  triggerIcon: { marginEnd: 8 },
+  clear: { paddingHorizontal: 6 },
+  clearButton: { justifyContent: 'center' },
+  chevron: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginStart: 4 },
+  chevronMark: { width: 8, height: 8, borderRightWidth: 1.75, borderBottomWidth: 1.75, marginTop: -4, transform: [{ rotate: '45deg' }] },
 });

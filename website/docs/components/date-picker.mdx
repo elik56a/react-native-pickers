@@ -346,8 +346,21 @@ type DatePickerProps = ({ display?: 'calendar' } & CalendarProps) | ({ display: 
 
 Each day is a button whose label is the full date ("Wednesday, October 14, 2026") with `selected` / `disabled` state. The arrows are labelled "Previous" / "Next", and the title is a button when quick jump is on.
 
+## In a form field
+
+`DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date:
+
+```tsx
+import { DatePickerField } from '@elik56a/react-native-pickers';
+
+<DatePickerField label="Due date" placeholder="Pick a date" value={date} onConfirm={setDate} minDate={new Date()} />
+```
+
+→ [Picker fields](./picker-fields)
+
 ## Related
 
 - [Date range & multiple](./date-range-picker)
 - [DatePickerSheet](./picker-sheets#datepickersheet)
+- [DatePickerField](./picker-fields): the calendar behind a form field
 - [Booking recipe](../recipes/booking-range)

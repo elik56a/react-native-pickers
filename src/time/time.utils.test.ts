@@ -1,6 +1,7 @@
 import {
   buildTime,
   clampTimeOfDay,
+  formatTimeValue,
   getHourItems,
   getMinuteItems,
   getPeriodItems,
@@ -149,5 +150,19 @@ describe('getTimeSeparator', () => {
     expect(getTimeSeparator(['hour', 'minute', 'period'], 0, ':')).toBe(':');
     expect(getTimeSeparator(['hour', 'minute', 'period'], 1, ':')).toBeNull();
     expect(getTimeSeparator(['period', 'hour', 'minute'], 0, ':')).toBeNull();
+  });
+});
+
+describe('formatTimeValue', () => {
+  const time = new Date(2026, 9, 26, 21, 5, 7);
+
+  it('follows the format, or the locale on auto', () => {
+    expect(formatTimeValue(time, { format: '24h', locale: 'en-US' })).toBe('21:05');
+    expect(formatTimeValue(time, { format: '12h', locale: 'en-GB' })).toMatch(/^9:05\spm$/i);
+    expect(formatTimeValue(time, { locale: 'en-US' })).toMatch(/^9:05\sPM$/);
+  });
+
+  it('adds seconds when shown', () => {
+    expect(formatTimeValue(time, { format: '24h', locale: 'en-US', showSeconds: true })).toBe('21:05:07');
   });
 });

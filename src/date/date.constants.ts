@@ -9,3 +9,6 @@ export const ORDER_PROBE_DATE = new Date(2021, 10, 23);
 export const DEFAULT_WHEEL_YEAR_SPAN = 100;
 
 export const COLUMN_FLEX = { day: 0.8, longMonth: 1.6, month: 1, year: 1 } as const;
+
+export const VALUE_RANGE_SEPARATOR = ' – ';
+export const VALUE_LIST_SEPARATOR = ', ';

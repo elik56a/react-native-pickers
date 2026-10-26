@@ -1,5 +1,7 @@
 import { Platform, StatusBar } from 'react-native';
 
+import type { PickerFieldBaseProps } from './sheet.types';
+
 export const DEFAULT_CONFIRM_LABEL = 'Done';
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;
@@ -48,3 +50,22 @@ export const DROPDOWN_GAP = 4;
 export const DROPDOWN_EDGE_MARGIN = 8;
 
 export const BUTTON_HIT_SLOP = 10;
+
+export const DEFAULT_PLACEHOLDER = 'Select…';
+export const DISABLED_TRIGGER_OPACITY = 0.5;
+
+/** The `PickerField` props a `*PickerField` keeps for itself; the rest go to its sheet. `theme` and `styles` go to both. */
+export const FIELD_PROP_KEYS = [
+  'label',
+  'placeholder',
+  'displayValue',
+  'disabled',
+  'clearable',
+  'onClear',
+  'renderTrigger',
+  'renderChevron',
+  'onOpen',
+  'onClose',
+  'style',
+  'testID',
+] as const satisfies ReadonlyArray<keyof PickerFieldBaseProps>;

@@ -1,8 +1,8 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { CalendarBaseProps, CalendarProps, DateRange } from '../calendar/calendar.types';
+import type { CalendarBaseProps, CalendarProps, CalendarSlot, DateRange } from '../calendar/calendar.types';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 
 export type DatePart = 'day' | 'month' | 'year';
@@ -54,6 +54,8 @@ export type DatePickerSheetProps = SheetChromeProps &
     /** Single mode: confirm as soon as a day is tapped. Default: false */
     confirmOnSelect?: boolean;
   };
+
+export type DatePickerFieldProps = WithPickerField<DatePickerSheetProps, CalendarSlot>;
 
 /** A date wheel column before its change handlers are attached. */
 export type DateColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChanging'>;

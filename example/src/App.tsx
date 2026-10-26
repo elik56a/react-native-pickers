@@ -5,18 +5,23 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { DateRange } from '@elik56a/react-native-pickers';
 import {
   DatePicker,
+  DatePickerField,
   DatePickerSheet,
   DateTimePicker,
+  DateTimePickerField,
   DateTimePickerSheet,
   EmojiPicker,
+  EmojiPickerField,
   EmojiPickerSheet,
   formatDate,
   PickersProvider,
   SelectPicker,
   TimePicker,
+  TimePickerField,
   TimePickerSheet,
   usePickerTheme,
   WheelPicker,
+  WheelPickerField,
 } from '@elik56a/react-native-pickers';
 
 const TABS = [
@@ -26,6 +31,7 @@ const TABS = [
   { key: 'datetime', label: 'Date & time', icon: '🗓️' },
   { key: 'select', label: 'Select', icon: '🔽' },
   { key: 'emoji', label: 'Emoji', icon: '😀' },
+  { key: 'form', label: 'Form', icon: '📝' },
 ] as const;
 
 type TabKey = (typeof TABS)[number]['key'];
@@ -97,6 +103,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [lang, setLang] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
   const [emoji, setEmoji] = useState('');
+  const [mood, setMood] = useState<string | undefined>();
   const [sheet, setSheet] = useState<'date' | 'range' | 'time' | 'datetime' | 'emoji' | null>(null);
 
   return (
@@ -167,6 +174,26 @@ function Demo({ insets }: { insets: Insets }) {
               <Text style={styles.emoji}>{emoji || ' '}</Text>
               <EmojiPicker onSelect={(e) => setEmoji((s) => s + e)} height={320} />
               <Button title="Open emoji sheet" onPress={() => setSheet('emoji')} />
+            </Section>
+          )}
+
+          {tab === 'form' && (
+            <Section title="Form fields">
+              <DatePickerField
+                label="Stay"
+                placeholder="Add dates"
+                mode="range"
+                value={range}
+                onConfirm={setRange}
+                minDate={new Date()}
+                clearable
+                onClear={() => setRange({ start: null, end: null })}
+              />
+              <DatePickerField label="Birthday" display="wheel" value={date} onConfirm={setDate} />
+              <TimePickerField label="Alarm" value={time} onConfirm={setTime} minuteInterval={5} />
+              <DateTimePickerField label="Meeting" display="calendar" value={meeting} onConfirm={setMeeting} minDate={new Date()} />
+              <WheelPickerField label="Size" items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onConfirm={setSize} />
+              <EmojiPickerField label="Mood" placeholder="Pick an emoji" value={mood} onSelect={setMood} />
             </Section>
           )}
         </View>

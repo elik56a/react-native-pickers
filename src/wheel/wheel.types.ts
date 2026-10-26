@@ -2,7 +2,7 @@ import type React from 'react';
 import type { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, WithPickerField } from '../sheet';
 
 export interface WheelItem<T> {
   label: string;
@@ -92,6 +92,8 @@ export type WheelPickerSheetProps<T> = SheetChromeProps &
     value?: T;
     onConfirm: (value: T) => void;
   };
+
+export type WheelPickerFieldProps<T> = WithPickerField<WheelPickerSheetProps<T>, WheelPickerSlot>;
 
 export interface WheelRowProps<T> {
   dataIndex: number;

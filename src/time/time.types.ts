@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, SlotStyles, ThemableProps } from '../core';
-import type { SheetChromeProps } from '../sheet';
+import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 
 export type TimeFormat = '12h' | '24h' | 'auto';
@@ -59,6 +59,8 @@ export type TimePickerSheetProps = SheetChromeProps &
     value?: Date;
     onConfirm: (date: Date) => void;
   };
+
+export type TimePickerFieldProps = WithPickerField<TimePickerSheetProps, MultiWheelSlot>;
 
 export interface TimeParts {
   hours: number;

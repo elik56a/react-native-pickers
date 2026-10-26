@@ -9,7 +9,7 @@ The library is written in TypeScript and ships its own declarations. No `@types`
 
 ## Generic values
 
-`WheelPicker`, `SelectPicker`, `SelectList` and `WheelPickerSheet` infer `T` from `items` / `options`:
+`WheelPicker`, `SelectPicker`, `SelectList`, `WheelPickerSheet` and `WheelPickerField` infer `T` from `items` / `options`:
 
 ```tsx
 type Plan = 'free' | 'pro' | 'team';
@@ -36,6 +36,12 @@ Or pass it explicitly: `<WheelPicker<number> items={…} />`.
 <SelectPicker multiple options={o} value={tags} onChange={(values, options) => {}} /> // values: T[]
 ```
 
+`DatePickerSheet` and `DatePickerField` narrow `value` and `onConfirm` the same way:
+
+```tsx
+<DatePickerField mode="range" value={range} onConfirm={(r) => r} /> // r: DateRange
+```
+
 Passing a `DateRange` without `mode="range"` is a type error.
 
 ## Exported types
@@ -58,7 +64,10 @@ import type {
   EmojiPickerProps, EmojiPickerSlot, Emoji, EmojiCategory, SkinTone,
   // sheets
   BottomSheetProps, BottomSheetSlot, SheetChromeProps, SheetPresentation, SelectPresentation, PickerSheetProps,
-  DatePickerSheetProps, TimePickerSheetProps, WheelPickerSheetProps, EmojiPickerSheetProps,
+  DatePickerSheetProps, TimePickerSheetProps, DateTimePickerSheetProps, WheelPickerSheetProps, EmojiPickerSheetProps,
+  // fields
+  PickerFieldProps, PickerFieldBaseProps, PickerFieldSlot, PickerFieldTriggerInfo, ChevronInfo, WithPickerField,
+  DatePickerFieldProps, TimePickerFieldProps, DateTimePickerFieldProps, WheelPickerFieldProps, EmojiPickerFieldProps,
 } from '@elik56a/react-native-pickers';
 ```
 

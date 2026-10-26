@@ -38,6 +38,7 @@ Prop-by-prop mappings from popular packages. Most migrations are a rename plus s
 | `themeVariant` | `PickersProvider colorScheme` |
 | `accentColor` / `textColor` | `theme={{ colors: { primary, text } }}` |
 | Android dialog (shown on mount) | `DatePickerSheet` / `TimePickerSheet` with `visible` |
+| A button or input that opens the picker | `DatePickerField` / `TimePickerField` / `DateTimePickerField` ([picker fields](../components/picker-fields)) |
 
 ## From `react-native-modal-datetime-picker`
 
@@ -55,6 +56,8 @@ Prop-by-prop mappings from popular packages. Most migrations are a rename plus s
 | `onCancel` | `onClose` |
 | `confirmTextIOS` / `cancelTextIOS` | `confirmLabel` / `cancelLabel` |
 | `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+
+If `isVisible` was only toggled by a field that shows the date, drop the state and use [`DatePickerField`](../components/picker-fields) / `TimePickerField` / `DateTimePickerField` with the same props minus `visible`.
 
 ## From `react-native-calendars`
 

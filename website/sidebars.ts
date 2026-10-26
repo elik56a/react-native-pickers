@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
         'components/emoji-picker',
         'components/bottom-sheet',
         'components/picker-sheets',
+        'components/picker-fields',
       ],
     },
     {

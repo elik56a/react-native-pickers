@@ -1,15 +1,17 @@
 import type { ComponentRef } from 'react';
 import { useRef } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle, usePickerTheme } from '../core';
+import { usePickerTheme } from '../core';
 import { PickerSheet } from '../sheet';
+import { FieldLabel } from '../sheet/components/FieldLabel';
 import { Dropdown } from '../sheet/Dropdown';
+import { DEFAULT_PLACEHOLDER } from '../sheet/sheet.constants';
 import { SelectSearchField } from './components/SelectSearchField';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
-import { DEFAULT_PLACEHOLDER, DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
+import { DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
@@ -55,9 +57,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
 
   return (
     <View style={style}>
-      {label ? (
-        <Text style={[textStyle(theme, 'sm', 'medium'), styles.label, { color: theme.colors.textSecondary }, slots?.label]}>{label}</Text>
-      ) : null}
+      {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
       <View ref={anchorRef} collapsable={false}>
         {renderTrigger ? (
           renderTrigger({ open: picker.show, selected: picker.selected, disabled })

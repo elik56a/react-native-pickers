@@ -9,6 +9,7 @@ import {
   resolvePresentation,
   resolveSheetHeight,
   shouldDismiss,
+  splitFieldProps,
 } from './sheet.utils';
 
 describe('resolveSheetHeight', () => {
@@ -157,5 +158,27 @@ describe('getDropdownFrame', () => {
 
   it('stays below and shrinks when below still has more room', () => {
     expect(getDropdownFrame(field(300), 800, 500)).toEqual({ left: 16, width: 300, top: 352, maxHeight: 440 });
+  });
+});
+
+describe('splitFieldProps', () => {
+  it('keeps the field props for the field and the rest for the sheet', () => {
+    const onClose = jest.fn();
+    const theme = { radius: { md: 4 } };
+    const styles = { trigger: { padding: 1 } };
+    const { field, sheet } = splitFieldProps({ label: 'Due', onClose, testID: 'due', theme, styles, title: 'Pick', locale: 'he' });
+    expect(field).toMatchObject({
+      label: 'Due',
+      onClose,
+      testID: 'due',
+      theme,
+      styles,
+    });
+    expect(sheet).toEqual({
+      theme,
+      styles,
+      title: 'Pick',
+      locale: 'he',
+    });
   });
 });

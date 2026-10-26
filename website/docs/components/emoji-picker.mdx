@@ -228,6 +228,18 @@ export default function Example() {
 
 The sheet closes after each pick by default (`closeOnSelect={false}` to keep it open). → [EmojiPickerSheet](./picker-sheets#emojipickersheet)
 
+## In a form field
+
+`EmojiPickerField` opens the sheet from a field and shows `value`, the emoji you keep in state. Use `renderTrigger` for an icon button instead of a field:
+
+```tsx
+import { EmojiPickerField } from '@elik56a/react-native-pickers';
+
+<EmojiPickerField label="Icon" placeholder="Pick an icon" value={icon} onSelect={setIcon} />
+```
+
+→ [Picker fields](./picker-fields#custom-trigger)
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -284,3 +296,4 @@ The emoji data comes from [emojibase](https://emojibase.dev) (MIT) and is parsed
 ## Related
 
 - [Chat input recipe](../recipes/chat-emoji)
+- [EmojiPickerField](./picker-fields): the picker behind a form field

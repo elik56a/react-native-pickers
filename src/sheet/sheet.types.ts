@@ -1,8 +1,9 @@
 import type React from 'react';
 import type { RefObject } from 'react';
-import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEvent } from 'react-native';
+import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import type { DistributiveOmit } from '../core/core.types';
 
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
 export type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
@@ -170,5 +171,83 @@ export interface DropdownProps extends ThemableProps {
   /** Drawn exactly over the anchor field, e.g. an input that stands in for it while open */
   overlay?: React.ReactNode;
   maxHeight?: number;
+  testID?: string;
+}
+
+export interface ChevronInfo {
+  open: boolean;
+  theme: PickerTheme;
+}
+
+export interface ChevronProps {
+  open: boolean;
+  renderChevron?: (info: ChevronInfo) => React.ReactNode;
+  theme: PickerTheme;
+  style?: StyleProp<ViewStyle>;
+}
+
+export type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';
+
+export interface PickerFieldTriggerInfo {
+  open: () => void;
+  displayValue: string;
+  disabled: boolean;
+}
+
+/** The props every `*PickerField` shares; `styles` also reaches the picker inside the sheet, so it takes the picker's slots `S` too. */
+export interface PickerFieldBaseProps<S extends string = never> extends ThemableProps {
+  /** Label rendered above the field, and the sheet title unless `title` is set */
+  label?: string;
+  /** Default: 'Select…' */
+  placeholder?: string;
+  /** Text shown in the field. Default: the value, formatted for `locale` */
+  displayValue?: string;
+  disabled?: boolean;
+  /** Show a clear (×) button while the field has a value; reset your value in `onClear` */
+  clearable?: boolean;
+  onClear?: () => void;
+  /** Custom trigger: render anything and call `open()` */
+  renderTrigger?: (info: PickerFieldTriggerInfo) => React.ReactNode;
+  /** Custom chevron icon; it still rotates as the field opens and closes */
+  renderChevron?: (info: ChevronInfo) => React.ReactNode;
+  onOpen?: () => void;
+  onClose?: () => void;
+  style?: StyleProp<ViewStyle>;
+  styles?: SlotStyles<PickerFieldSlot | S>;
+  /** On the default trigger */
+  testID?: string;
+}
+
+export interface PickerFieldProps extends PickerFieldBaseProps {
+  /** Render the sheet the field opens, passing it `visible` and `onClose` */
+  children: (sheet: Pick<SheetChromeProps, 'visible' | 'onClose'>) => React.ReactNode;
+}
+
+/** A sheet's props turned into a field's: no `visible`, and the field props in place of the picker's own `style`, `testID`... */
+export type WithPickerField<SheetProps, S extends string> = DistributiveOmit<SheetProps, 'visible' | keyof PickerFieldBaseProps> &
+  PickerFieldBaseProps<S>;
+
+export interface FieldLabelProps {
+  label: string;
+  theme: PickerTheme;
+  style?: StyleProp<TextStyle>;
+}
+
+export interface FieldTriggerProps {
+  displayValue: string;
+  /** Leading element before `displayValue` */
+  icon?: React.ReactNode;
+  /** Replaces the value or placeholder, e.g. with chips */
+  children?: React.ReactNode;
+  placeholder: string;
+  label?: string;
+  open: boolean;
+  disabled: boolean;
+  clearable: boolean;
+  onOpen: () => void;
+  onClear?: () => void;
+  renderChevron?: (info: ChevronInfo) => React.ReactNode;
+  theme: PickerTheme;
+  slots?: SlotStyles<PickerFieldSlot>;
   testID?: string;
 }

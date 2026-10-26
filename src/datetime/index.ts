@@ -1,3 +1,10 @@
 export { DateTimePicker } from './DateTimePicker';
+export { DateTimePickerField } from './DateTimePickerField';
 export { DateTimePickerSheet } from './DateTimePickerSheet';
-export type { DateTimeCalendarProps, DateTimeDisplay, DateTimePickerProps, DateTimePickerSheetProps } from './datetime.types';
+export type {
+  DateTimeCalendarProps,
+  DateTimeDisplay,
+  DateTimePickerFieldProps,
+  DateTimePickerProps,
+  DateTimePickerSheetProps,
+} from './datetime.types';

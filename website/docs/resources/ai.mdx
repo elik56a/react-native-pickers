@@ -53,7 +53,16 @@ Sheets (draft; commit on Done):
   TimePickerSheet  visible onClose value onConfirm + TimePicker props
   WheelPickerSheet visible onClose items value onConfirm
   EmojiPickerSheet visible onClose onSelect closeOnSelect=true
+  DateTimePickerSheet visible onClose value onConfirm + DateTimePicker props
   PickerSheet      visible onClose onConfirm children  +  useDraft(value, visible)
+Fields (a SelectPicker-style field that opens the sheet and shows the confirmed value; field owns open state):
+  DatePickerField / TimePickerField / DateTimePickerField / WheelPickerField / EmojiPickerField
+                   = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
+                   + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
+                     disabled renderTrigger({open,displayValue,disabled}) renderChevron({open,theme}) onOpen onClose style testID
+                   styles = field slots (label trigger triggerText placeholder chevron clear) + the picker's slots
+                   EmojiPickerField also takes value: string (the emoji shown). Sheet title defaults to label.
+  PickerField      same field props, children: ({visible, onClose}) => <AnySheet .../>
 Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...}>; per-component `theme` prop.
   tokens: colors{background,surface,sheet,text,textSecondary,textDisabled,primary,onPrimary,primaryMuted,border,backdrop,indicator,handle}
           radius{sm,md,lg,full,sheet} spacing{xs..xl} typography{fontFamily,fontFamilyMedium,sizes,weights} animation{duration}
@@ -66,7 +75,7 @@ Utils: toDateKey(d) 'YYYY-MM-DD' local; addDays addMonths isSameDay compareDay i
 
 ```tsx
 import { useState } from 'react';
-import { DatePicker, DatePickerSheet, SelectPicker, TimePicker, WheelPicker } from '@elik56a/react-native-pickers';
+import { DatePicker, DatePickerField, DatePickerSheet, SelectPicker, TimePicker, TimePickerField, WheelPicker } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
 function Examples() {
@@ -85,6 +94,9 @@ function Examples() {
       <DatePicker mode="range" value={range} onChange={setRange} />
       <SelectPicker label="Country" options={[{ label: 'Israel', value: 'IL' }]} value={country} onChange={setCountry} />
       <DatePickerSheet visible={open} onClose={() => setOpen(false)} mode="range" value={range} onConfirm={setRange} />
+      {/* In forms: a field that opens the sheet and shows the value, no open state needed */}
+      <DatePickerField label="Stay" mode="range" value={range} onConfirm={setRange} placeholder="Add dates" />
+      <TimePickerField label="Time" value={time} onConfirm={setTime} />
     </>
   );
 }
