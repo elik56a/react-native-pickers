@@ -46,6 +46,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # Ships the docs in the package so agents read the API offline, matching the installed version.
+      - run: pnpm build:llms
       # Checks already ran above, so skip the duplicate prepublishOnly run.
       - run: npm publish --ignore-scripts
 

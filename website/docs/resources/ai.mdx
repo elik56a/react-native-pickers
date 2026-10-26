@@ -15,12 +15,17 @@ This documentation is published in machine-readable form, following the [llms.tx
 
 Paste `llms-full.txt` into your assistant's context, or point Cursor / Claude / Copilot at the URL.
 
+`llms-full.txt` also ships inside the npm package, so a coding agent can read it offline from `node_modules/@elik56a/react-native-pickers/llms-full.txt`, always matching the installed version.
+
 ## Cheat sheet
 
 ```text
 Package: @elik56a/react-native-pickers   (npm i @elik56a/react-native-pickers)
 Pure JS, zero native code, no peer deps besides react >=18 and react-native >=0.72.
 Works in Expo Go, bare RN, React Native Web. All exports are named exports from the package root.
+Native apps: prefer subpaths so Metro skips unused pickers (root import bundles ~130 KB of emoji data):
+  /wheel /time /date /calendar /datetime /select /emoji /sheet /core   e.g. '@elik56a/react-native-pickers/date'
+  PickersProvider and theme/date utils live in /core. Subpaths need RN 0.79+ (Metro package exports).
 
 Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList are controlled-only.
 onChange fires on user changes only (not when value is set programmatically). Wheels fire onChange when they settle;

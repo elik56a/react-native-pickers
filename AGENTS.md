@@ -37,7 +37,7 @@ Every feature folder has the same layout:
 - `hooks/`: state and event handling
 - `<feature>.utils.ts`: pure logic, with `<feature>.utils.test.ts` next to it
 - `<feature>.types.ts`, `<feature>.constants.ts`, `<feature>.styles.ts`
-- `index.ts`: the folder's public API
+- `index.ts`: the folder's public API, also published as the `@elik56a/react-native-pickers/<folder>` subpath, so renaming a folder is a breaking change
 
 ## Code style
 

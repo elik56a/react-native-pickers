@@ -31,6 +31,10 @@ npm install @elik56a/react-native-pickers
 
 No other dependencies. Requires `react >= 18` and `react-native >= 0.72`.
 
+On native, import from a feature subpath (`@elik56a/react-native-pickers/date`, `/select`, `/emoji`, …) so Metro only bundles the pickers you use. See [Smaller native bundles](https://elik56a.github.io/react-native-pickers/docs/getting-started/installation#smaller-native-bundles).
+
+> **AI agents:** the full API docs ship with the package at `node_modules/@elik56a/react-native-pickers/llms-full.txt`, matching the installed version.
+
 ---
 
 ## Quick start
