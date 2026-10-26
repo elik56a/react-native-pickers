@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/elik56a/react-native-pickers/compare/v0.6.0...v0.7.0) (2026-10-26)
+
+
+### ✨ Features
+
+* add picker fields that open a sheet from a form field ([21b28c9](https://github.com/elik56a/react-native-pickers/commit/21b28c9726ae4173475721c130079538ad31f4da))
+
 ## [0.6.0](https://github.com/elik56a/react-native-pickers/compare/v0.5.0...v0.6.0) (2026-10-26)
 
 
