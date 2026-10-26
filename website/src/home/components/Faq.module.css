@@ -1,0 +1,108 @@
+.faq {
+  interpolate-size: allow-keywords;
+  max-width: 48rem;
+  margin: 0 auto;
+  border-top: 1px solid var(--site-border);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--site-border);
+}
+
+.faqItem summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  padding: 1.15rem 0.25rem;
+  list-style: none;
+  cursor: pointer;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.faqItem summary h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  transition: color 0.15s;
+}
+
+.faqItem summary:hover h3 {
+  color: var(--ifm-color-primary);
+}
+
+.faqIcon {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--site-border);
+  border-radius: 50%;
+  background: var(--site-surface);
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.2s;
+}
+
+.faqIcon::before,
+.faqIcon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.faqIcon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faqItem[open] .faqIcon {
+  transform: rotate(45deg);
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.faqItem p {
+  max-width: 42rem;
+  margin: 0;
+  padding: 0 0.25rem 1.25rem;
+  line-height: 1.65;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Browsers without ::details-content (Safari, Firefox today) just open instantly. */
+.faqItem::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    content-visibility 0.35s allow-discrete;
+}
+
+.faqItem[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faqIcon,
+  .faqItem summary h3,
+  .faqItem::details-content {
+    transition: none;
+  }
+}

@@ -1,0 +1,49 @@
+import Link from '@docusaurus/Link';
+
+import type { FaqEntry } from './home.types';
+
+export const FAQS: FaqEntry[] = [
+  {
+    question: 'Does it work in Expo Go?',
+    answer:
+      'Yes. There is no native code, so it runs in Expo Go, dev builds, bare React Native and the web without a rebuild or a pod install.',
+  },
+  {
+    question: 'Does it need Reanimated or Gesture Handler?',
+    answer: (
+      <>
+        No. It uses only React Native core: <code>Animated</code> with the native driver, <code>PanResponder</code>, <code>FlatList</code>{' '}
+        and <code>Modal</code>. Nothing to install next to it.
+      </>
+    ),
+  },
+  {
+    question: 'Does it work with React Native Web?',
+    answer:
+      'Yes, with the same components and props. On wide browser windows, sheets open as a centered modal and SelectPicker opens as a dropdown under the field.',
+  },
+  {
+    question: 'Can users pick a date range or several dates?',
+    answer: (
+      <>
+        Yes. Set <code>mode=&quot;range&quot;</code> for check-in / check-out with min and max nights, or{' '}
+        <code>mode=&quot;multiple&quot;</code> for separate days. See{' '}
+        <Link to="/docs/components/date-range-picker">Date range &amp; multiple</Link>.
+      </>
+    ),
+  },
+  {
+    question: 'Is it accessible?',
+    answer: (
+      <>
+        Wheels are adjustable for VoiceOver and TalkBack, days announce their full date, and selected and disabled states are exposed
+        everywhere. See <Link to="/docs/guides/accessibility">Accessibility</Link>.
+      </>
+    ),
+  },
+  {
+    question: 'How big is it?',
+    answer:
+      'It has no dependencies. The emoji table, about 134 KB of source, is the largest part, and on the web it is tree-shaken away if you never import EmojiPicker.',
+  },
+];

@@ -1,0 +1,36 @@
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 2rem 0 0;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.stats dt {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.statLink {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.statLink:hover {
+  color: var(--ifm-color-primary);
+}
+
+.stats dd {
+  margin: 0;
+  font-family: var(--ifm-heading-font-family);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
