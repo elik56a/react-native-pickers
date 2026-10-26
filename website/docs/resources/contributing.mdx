@@ -22,7 +22,7 @@ pnpm install   # also installs the git hooks
 | `pnpm web` | Example app in the browser |
 | `pnpm ios` | Example app in the iOS Simulator |
 | `pnpm android` | Example app in the Android emulator |
-| `pnpm docs` | This site at `localhost:3000` |
+| `pnpm docs` | This site at `localhost:3001` |
 | `pnpm test` | Jest + React Native Testing Library |
 | `pnpm lint` | Biome: lint, format and import order |
 | `pnpm format` | Fix whatever lint can fix |
@@ -32,7 +32,7 @@ pnpm install   # also installs the git hooks
 
 ## Project structure
 
-Each picker has its own folder under `src/`: `wheel`, `time`, `calendar`, `date`, `select` and `emoji`. They build on `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports only flow one way: feature → `sheet` → `core`.
+Each picker has its own folder under `src/`: `wheel`, `time`, `calendar`, `date`, `datetime`, `select` and `emoji`. They build on `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports only flow one way: feature → `sheet` → `core`.
 
 Every folder has the same layout:
 
