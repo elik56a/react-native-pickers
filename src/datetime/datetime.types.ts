@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CalendarBaseProps } from '../calendar/calendar.types';
-import type { SlotStyles, ThemableProps } from '../core';
+import type { Locale, SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet';
 import type { TimeOptions } from '../time/time.types';
 import type { MultiWheelSlot, WheelVariant } from '../wheel/wheel.types';
@@ -21,7 +21,7 @@ export interface DateTimePickerProps extends ThemableProps, Omit<TimeOptions, 'm
   /** Latest selectable moment (date and time) */
   maxDate?: Date;
   /** Wheel display: label of each row in the day wheel. Default: 'Today', else e.g. 'Tue, Oct 27' */
-  formatDay?: (date: Date, locale?: string) => string;
+  formatDay?: (date: Date, locale?: Locale) => string;
   /** Calendar display: passed through to the Calendar */
   calendarProps?: DateTimeCalendarProps;
   itemHeight?: number;

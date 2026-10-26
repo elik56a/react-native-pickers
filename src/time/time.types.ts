@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { SlotStyles, ThemableProps } from '../core';
+import type { Locale, SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 
@@ -16,7 +16,7 @@ export interface TimePickerProps extends ThemableProps {
   onValueChanging?: (date: Date) => void;
   /** Default: 'auto' (from locale) */
   format?: TimeFormat;
-  locale?: string;
+  locale?: Locale;
   /** Minute step: 1, 5, 15... Default: 1 */
   minuteInterval?: number;
   showSeconds?: boolean;

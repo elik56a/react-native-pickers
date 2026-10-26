@@ -17,6 +17,9 @@ export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
 
+/** A BCP 47 language tag passed to `Intl`, e.g. `'en-US'` or `'he'`. Default: the device locale. */
+export type Locale = string;
+
 /** Per-slot style overrides. Every component exposes its own slot names. */
 export type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 

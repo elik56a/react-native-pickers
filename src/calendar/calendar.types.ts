@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 
 export interface DateRange {
   start: Date | null;
@@ -62,7 +62,7 @@ export interface Weekday {
 }
 
 export interface CalendarBaseProps extends ThemableProps {
-  locale?: string;
+  locale?: Locale;
   minDate?: Date;
   maxDate?: Date;
   /** Return true to disable a day */
@@ -84,7 +84,7 @@ export interface CalendarBaseProps extends ThemableProps {
   weekdayFormat?: 'short' | 'narrow';
   showWeekdays?: boolean;
   /** Override the title text */
-  formatTitle?: (month: Date, locale?: string) => string;
+  formatTitle?: (month: Date, locale?: Locale) => string;
   /** Fully custom day cell */
   renderDay?: (state: DayState, theme: PickerTheme) => React.ReactNode;
   /** Custom arrows */
@@ -162,7 +162,7 @@ export interface DayGridProps {
   showOutsideDays: boolean;
   hasRangeEnd: boolean;
   dayHeight: number;
-  locale?: string;
+  locale?: Locale;
   renderDay?: CalendarBaseProps['renderDay'];
   onDayPress: (date: Date) => void;
   theme: PickerTheme;
@@ -174,7 +174,7 @@ export interface DayCellProps {
   hidden: boolean;
   hasRangeEnd: boolean;
   height: number;
-  locale?: string;
+  locale?: Locale;
   renderDay?: CalendarBaseProps['renderDay'];
   onSelect: (date: Date) => void;
   theme: PickerTheme;
