@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/elik56a/react-native-pickers/compare/v0.4.1...v0.5.0) (2026-10-26)
+
+
+### ✨ Features
+
+* add per-feature subpath exports and ship llms-full.txt in the package ([c42928b](https://github.com/elik56a/react-native-pickers/commit/c42928b85ee37124afdc5db4a219701a5070edbf))
+
 ## [0.4.1](https://github.com/elik56a/react-native-pickers/compare/v0.4.0...v0.4.1) (2026-10-26)
 
 
