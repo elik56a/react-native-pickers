@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/elik56a/react-native-pickers/compare/v0.3.0...v0.4.0) (2026-10-26)
+
+
+### ✨ Features
+
+* **datetime:** add DateTimePicker and DateTimePickerSheet ([a2dfe27](https://github.com/elik56a/react-native-pickers/commit/a2dfe272cb11401a3657f65d65fe0374dc2da171))
+
 ## [0.3.0](https://github.com/elik56a/react-native-pickers/compare/v0.2.0...v0.3.0) (2026-10-25)
 
 ### ✨ Features
