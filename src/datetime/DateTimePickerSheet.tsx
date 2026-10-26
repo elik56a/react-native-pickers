@@ -1,5 +1,6 @@
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
+import { snapTime } from '../time/time.utils';
 import { DateTimePicker } from './DateTimePicker';
 import type { DateTimePickerSheetProps } from './datetime.types';
 
@@ -22,7 +23,7 @@ export const DateTimePickerSheet = ({
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
-        onConfirm(draft);
+        onConfirm(snapTime(draft, rest));
         onClose();
       }}
     >

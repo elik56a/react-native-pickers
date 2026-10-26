@@ -3,7 +3,7 @@ import type React from 'react';
 import { uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
 import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './time.constants';
-import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeParts } from './time.types';
+import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeOptions, TimeParts } from './time.types';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -32,6 +32,12 @@ export const buildTime = (date: Date, parts: TimeParts, patch: Partial<TimeParts
   next.setHours(patch.hours ?? parts.hours, patch.minutes ?? parts.minutes, showSeconds ? (patch.seconds ?? parts.seconds) : 0, 0);
   return next;
 };
+
+/** `date` exactly as the wheels show it, so confirming without scrolling returns what the user saw. */
+export const snapTime = (
+  date: Date,
+  { minuteInterval = 1, secondInterval = 1, showSeconds = false }: Pick<TimeOptions, 'minuteInterval' | 'secondInterval' | 'showSeconds'>
+) => buildTime(date, getTimeParts(date, minuteInterval, secondInterval), {}, showSeconds);
 
 /** Pulls a time outside the bounds back to the nearest bound. */
 export const clampTimeOfDay = (date: Date, [minSecond, maxSecond]: TimeBounds, showSeconds: boolean) => {
