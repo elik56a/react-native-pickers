@@ -4,7 +4,14 @@ import { usePickerTheme } from '../core';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSheetResize } from './hooks/useSheetResize';
-import { DEFAULT_BOTTOM_INSET, DEFAULT_DRAGGABLE, DEFAULT_MAX_HEIGHT_RATIO, DIALOG_RISE, EXPANDED_TOP_INSET } from './sheet.constants';
+import {
+  DEFAULT_BOTTOM_INSET,
+  DEFAULT_DRAGGABLE,
+  DEFAULT_MAX_HEIGHT_RATIO,
+  DIALOG_RISE,
+  EXPANDED_TOP_INSET,
+  SHEET_PRESENTATION,
+} from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { BottomSheetProps } from './sheet.types';
 import { resolvePresentation, resolveSheetHeight } from './sheet.utils';
@@ -25,7 +32,7 @@ export const BottomSheet = ({
   maxHeightRatio = DEFAULT_MAX_HEIGHT_RATIO,
   height,
   bottomInset = DEFAULT_BOTTOM_INSET,
-  presentation = 'auto',
+  presentation = SHEET_PRESENTATION.auto,
   styles: slots,
   theme: themeOverride,
   onOpened,
@@ -34,7 +41,7 @@ export const BottomSheet = ({
 }: BottomSheetProps) => {
   const theme = usePickerTheme(themeOverride);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const dialog = resolvePresentation(presentation, Platform.OS, windowWidth) === 'modal';
+  const dialog = resolvePresentation(presentation, Platform.OS, windowWidth) === SHEET_PRESENTATION.modal;
   const { mounted, progress, drag, translateY } = useSheetAnimation({
     visible,
     duration: theme.animation.duration,

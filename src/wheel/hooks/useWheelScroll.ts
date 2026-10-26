@@ -4,7 +4,7 @@ import { Animated } from 'react-native';
 
 import { USE_NATIVE_DRIVER } from '../../core/core.constants';
 import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
-import { SETTLE_DELAY } from '../wheel.constants';
+import { SETTLE_DELAY, SETTLE_KIND } from '../wheel.constants';
 import type { WheelItem } from '../wheel.types';
 import { alignToLap, firstEnabled, getLoopLayout, getSettleResult, offsetToIndex, wrapIndex } from '../wheel.utils';
 
@@ -83,7 +83,7 @@ export const useWheelScroll = <T>({
   const settle = useCallback(() => {
     if (count === 0 || st.dragging || st.momentum) return;
     const result = getSettleResult({ y: st.y, itemHeight: h, items, committed: st.committed, loop, layout });
-    if (result.kind === 'snap') {
+    if (result.kind === SETTLE_KIND.snap) {
       scrollToData(result.dataIndex, true);
       return;
     }

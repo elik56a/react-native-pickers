@@ -2,6 +2,18 @@ import { Platform, StatusBar } from 'react-native';
 
 import type { PickerFieldBaseProps } from './sheet.types';
 
+export const SHEET_PRESENTATION = {
+  auto: 'auto',
+  bottomSheet: 'bottomSheet',
+  modal: 'modal',
+} as const;
+
+export const SHEET_SNAP = {
+  base: 'base',
+  expanded: 'expanded',
+  close: 'close',
+} as const;
+
 export const DEFAULT_CONFIRM_LABEL = 'Done';
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;

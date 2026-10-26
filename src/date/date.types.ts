@@ -1,13 +1,17 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { CalendarBaseProps, CalendarProps, CalendarSlot, DateRange } from '../calendar/calendar.types';
+import type { CALENDAR_MODE } from '../calendar/calendar.constants';
+import type { CalendarBaseProps, CalendarMode, CalendarProps, CalendarSlot, DateRange } from '../calendar/calendar.types';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
+import type { PICKER_DISPLAY } from '../core/core.constants';
+import type { PickerDisplay, ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
+import type { DATE_PART, MONTH_FORMAT } from './date.constants';
 
-export type DatePart = 'day' | 'month' | 'year';
+export type DatePart = ValueOf<typeof DATE_PART>;
 
-export type MonthFormat = 'long' | 'short' | 'numeric';
+export type MonthFormat = ValueOf<typeof MONTH_FORMAT>;
 
 export interface DateWheelPickerProps extends ThemableProps {
   value?: Date;
@@ -33,23 +37,39 @@ export interface DateWheelPickerProps extends ThemableProps {
   testID?: string;
 }
 
-export type DatePickerProps = ({ display?: 'calendar' } & CalendarProps) | ({ display: 'wheel' } & DateWheelPickerProps);
+export type DatePickerProps =
+  | ({ display?: typeof PICKER_DISPLAY.calendar } & CalendarProps)
+  | ({ display: typeof PICKER_DISPLAY.wheel } & DateWheelPickerProps);
 
-export type DateSheetMode = 'single' | 'range' | 'multiple';
+export type DateSheetMode = CalendarMode;
 
 export type DateSheetSelection =
-  | { mode?: 'single'; value?: Date | null; onConfirm: (date: Date) => void }
-  | { mode: 'range'; value?: DateRange; onConfirm: (range: DateRange) => void; minRangeDays?: number; maxRangeDays?: number }
-  | { mode: 'multiple'; value?: Date[]; onConfirm: (dates: Date[]) => void; maxSelections?: number };
+  | { mode?: typeof CALENDAR_MODE.single; value?: Date | null; onConfirm: (date: Date) => void }
+  | {
+      mode: typeof CALENDAR_MODE.range;
+      value?: DateRange;
+      onConfirm: (range: DateRange) => void;
+      minRangeDays?: number;
+      maxRangeDays?: number;
+    }
+  | { mode: typeof CALENDAR_MODE.multiple; value?: Date[]; onConfirm: (dates: Date[]) => void; maxSelections?: number }
+  | {
+      mode: typeof CALENDAR_MODE.ranges;
+      value?: DateRange[];
+      onConfirm: (ranges: DateRange[]) => void;
+      minRangeDays?: number;
+      maxRangeDays?: number;
+      maxRanges?: number;
+    };
 
 /** What a date sheet holds while open: one date, a range or a list, depending on the mode. */
-export type DateDraft = Date | DateRange | Date[] | null;
+export type DateDraft = Date | DateRange | Date[] | DateRange[] | null;
 
 export type DatePickerSheetProps = SheetChromeProps &
   Omit<CalendarBaseProps, 'theme'> &
   DateSheetSelection & {
-    /** 'calendar' (default) or 'wheel' (single mode only) */
-    display?: 'calendar' | 'wheel';
+    /** 'calendar' (default) or 'wheel'. Only single mode can use the wheel */
+    display?: PickerDisplay;
     wheelProps?: Partial<DateWheelPickerProps>;
     /** Single mode: confirm as soon as a day is tapped. Default: false */
     confirmOnSelect?: boolean;

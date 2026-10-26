@@ -1,7 +1,8 @@
 import type React from 'react';
 import type { TextStyle } from 'react-native';
 
-import type { DeepPartial } from '../core.types';
+import type { DeepPartial, ValueOf } from '../core.types';
+import type { COLOR_SCHEME } from './theme.constants';
 
 export interface PickerTheme {
   dark: boolean;
@@ -40,7 +41,7 @@ export interface PickerTheme {
   animation: { duration: number };
 }
 
-export type ColorScheme = 'auto' | 'light' | 'dark';
+export type ColorScheme = ValueOf<typeof COLOR_SCHEME>;
 export type TextSize = keyof PickerTheme['typography']['sizes'];
 export type TextWeight = keyof PickerTheme['typography']['weights'];
 

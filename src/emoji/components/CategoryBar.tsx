@@ -1,13 +1,18 @@
 import { Text, View } from 'react-native';
 
 import { Touchable } from '../../core/components/Touchable';
-import { INACTIVE_TAB_OPACITY } from '../emoji.constants';
+import { CATEGORY_BAR_POSITION, INACTIVE_TAB_OPACITY } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { CategoryBarProps } from '../emoji.types';
 
 export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, theme, slots }: CategoryBarProps) => (
   <View
-    style={[styles.bar, position === 'top' ? styles.barTop : styles.barBottom, { borderColor: theme.colors.border }, slots?.categoryBar]}
+    style={[
+      styles.bar,
+      position === CATEGORY_BAR_POSITION.top ? styles.barTop : styles.barBottom,
+      { borderColor: theme.colors.border },
+      slots?.categoryBar,
+    ]}
   >
     {tabs.map((key) => {
       const selected = active === key;
@@ -26,7 +31,7 @@ export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, t
           <View
             style={[
               styles.tabIndicator,
-              position === 'top' ? styles.tabIndicatorTop : styles.tabIndicatorBottom,
+              position === CATEGORY_BAR_POSITION.top ? styles.tabIndicatorTop : styles.tabIndicatorBottom,
               { backgroundColor: selected ? theme.colors.primary : 'transparent' },
               slots?.categoryIndicator,
             ]}

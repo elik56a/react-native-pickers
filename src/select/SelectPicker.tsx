@@ -11,7 +11,7 @@ import { SelectSearchField } from './components/SelectSearchField';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
-import { DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
+import { DEFAULT_SEARCH_PLACEHOLDER, SELECT_PRESENTATION } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
@@ -51,7 +51,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}
-      style={picker.presentation === 'dropdown' ? styles.dropdownList : styles.sheetList}
+      style={picker.presentation === SELECT_PRESENTATION.dropdown ? styles.dropdownList : styles.sheetList}
     />
   );
 
@@ -80,7 +80,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
           />
         )}
       </View>
-      {picker.presentation === 'dropdown' ? (
+      {picker.presentation === SELECT_PRESENTATION.dropdown ? (
         <Dropdown
           visible={picker.open}
           anchor={picker.anchor}

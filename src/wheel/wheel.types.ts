@@ -2,7 +2,9 @@ import type React from 'react';
 import type { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
+import type { ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
+import type { SETTLE_KIND, WHEEL_VARIANT } from './wheel.constants';
 
 export interface WheelItem<T> {
   label: string;
@@ -13,7 +15,7 @@ export interface WheelItem<T> {
 
 export type WheelItemInput<T> = WheelItem<T> | (T extends string | number ? T : never);
 
-export type WheelVariant = '3d' | 'flat';
+export type WheelVariant = ValueOf<typeof WHEEL_VARIANT>;
 
 export type WheelPickerSlot = 'container' | 'item' | 'itemText' | 'selectedItemText' | 'disabledItemText' | 'indicator';
 
@@ -121,8 +123,8 @@ export interface WheelLayout {
 }
 
 export type SettleResult =
-  | { kind: 'snap'; dataIndex: number }
-  | { kind: 'rest'; logicalIndex: number; changed: boolean; recenterTo: number | null };
+  | { kind: typeof SETTLE_KIND.snap; dataIndex: number }
+  | { kind: typeof SETTLE_KIND.rest; logicalIndex: number; changed: boolean; recenterTo: number | null };
 
 export interface RowFrames {
   inputRange: number[];

@@ -63,10 +63,10 @@ Each field takes the props of the sheet it opens, without `visible`, plus the [f
   changeProp="onConfirm"
   resetProp="onClear"
   props={{ label: 'Dates', placeholder: 'Pick dates' }}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
+  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' || p.mode === 'ranges' ? [] : null)}
   code="label=&quot;Dates&quot; placeholder=&quot;Pick dates&quot; value={value} onConfirm={setValue}"
   controls={[
-    { prop: 'mode', options: ['single', 'range', 'multiple'] },
+    { prop: 'mode', options: ['single', 'range', 'multiple', 'ranges'] },
     { prop: 'display', options: ['calendar', 'wheel'] },
     { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
     { prop: 'clearable', options: [false, true] },

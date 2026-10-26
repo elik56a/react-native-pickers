@@ -5,6 +5,7 @@ import {
   getDateColumnSpecs,
   getEmptyDraft,
   getLocaleDateOrder,
+  getSheetDisplay,
   getWheelYearBounds,
   isDraftReady,
 } from './date.utils';
@@ -82,6 +83,7 @@ describe('date sheet drafts', () => {
     expect(getEmptyDraft('single', 'calendar')).toBeNull();
     expect(getEmptyDraft('range', 'calendar')).toEqual({ start: null, end: null });
     expect(getEmptyDraft('multiple', 'calendar')).toEqual([]);
+    expect(getEmptyDraft('ranges', 'calendar')).toEqual([]);
     expect(getEmptyDraft('single', 'wheel')).toBeInstanceOf(Date);
   });
   it('is ready once the mode has what it needs', () => {
@@ -90,6 +92,9 @@ describe('date sheet drafts', () => {
     expect(isDraftReady('range', { start: new Date(), end: null })).toBe(false);
     expect(isDraftReady('range', { start: new Date(), end: new Date() })).toBe(true);
     expect(isDraftReady('multiple', [])).toBe(true);
+    expect(isDraftReady('ranges', [])).toBe(true);
+    expect(isDraftReady('ranges', [{ start: new Date(), end: null }])).toBe(false);
+    expect(isDraftReady('ranges', [{ start: new Date(), end: new Date() }])).toBe(true);
   });
 });
 
@@ -98,6 +103,14 @@ describe('formatDateValue', () => {
     expect(formatDateValue(day(5, 9), 'en-US')).toBe('Oct 5, 2026');
     expect(formatDateValue({ start: day(5, 9), end: day(9, 9) }, 'en-US')).toBe('Oct 5, 2026 – Oct 9, 2026');
     expect(formatDateValue([day(5, 9), day(7, 9)], 'en-US')).toBe('Oct 5, 2026, Oct 7, 2026');
+  });
+
+  it('formats a list of ranges', () => {
+    const ranges = [
+      { start: day(5, 9), end: day(6, 9) },
+      { start: day(9, 9), end: day(9, 9) },
+    ];
+    expect(formatDateValue(ranges, 'en-US')).toBe('Oct 5, 2026 – Oct 6, 2026, Oct 9, 2026 – Oct 9, 2026');
   });
 
   it('shows a range start before its end is picked', () => {
@@ -109,5 +122,14 @@ describe('formatDateValue', () => {
     expect(formatDateValue(undefined)).toBe('');
     expect(formatDateValue({ start: null, end: null })).toBe('');
     expect(formatDateValue([])).toBe('');
+  });
+});
+
+describe('getSheetDisplay', () => {
+  it('keeps the wheel in single mode only', () => {
+    expect(getSheetDisplay('single', 'wheel')).toBe('wheel');
+    expect(getSheetDisplay('range', 'wheel')).toBe('calendar');
+    expect(getSheetDisplay('multiple', 'wheel')).toBe('calendar');
+    expect(getSheetDisplay('single', 'calendar')).toBe('calendar');
   });
 });

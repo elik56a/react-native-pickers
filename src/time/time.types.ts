@@ -2,10 +2,12 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, SlotStyles, ThemableProps } from '../core';
+import type { ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
+import type { TIME_COLUMN, TIME_FORMAT } from './time.constants';
 
-export type TimeFormat = '12h' | '24h' | 'auto';
+export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
 
 export interface TimePickerProps extends ThemableProps {
   /** Selected time (the date part is preserved). */
@@ -71,7 +73,7 @@ export interface TimeParts {
 /** Selectable seconds of the day, inclusive. */
 export type TimeBounds = [minSecond: number, maxSecond: number];
 
-export type TimeColumnKey = 'period' | 'hour' | 'minute' | 'second';
+export type TimeColumnKey = ValueOf<typeof TIME_COLUMN>;
 
 /** A time wheel column before its change handlers are attached; `toPatch` maps a wheel value to the time parts it sets. */
 export type TimeColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChanging' | 'key'> & {

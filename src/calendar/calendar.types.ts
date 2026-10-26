@@ -2,6 +2,8 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
+import type { ValueOf } from '../core/core.types';
+import type { ARROW_DIRECTION, CALENDAR_MODE, CALENDAR_VIEW, WEEKDAY_FORMAT } from './calendar.constants';
 
 export interface DateRange {
   start: Date | null;
@@ -53,7 +55,7 @@ export interface DayState {
   marking?: MarkedDate;
 }
 
-export type ArrowDirection = 'prev' | 'next';
+export type ArrowDirection = ValueOf<typeof ARROW_DIRECTION>;
 
 export interface Weekday {
   /** 0 = Sunday ... 6 = Saturday */
@@ -81,7 +83,7 @@ export interface CalendarBaseProps extends ThemableProps {
   enableSwipe?: boolean;
   /** Tap the title to jump by month / year. Default: true */
   enableQuickJump?: boolean;
-  weekdayFormat?: 'short' | 'narrow';
+  weekdayFormat?: ValueOf<typeof WEEKDAY_FORMAT>;
   showWeekdays?: boolean;
   /** Override the title text */
   formatTitle?: (month: Date, locale?: Locale) => string;
@@ -107,15 +109,28 @@ export interface RangeRules {
 }
 
 export type CalendarSelectionProps =
-  | { mode?: 'single'; value?: Date | null; defaultValue?: Date | null; onChange?: (date: Date) => void }
-  | ({ mode: 'range'; value?: DateRange; defaultValue?: DateRange; onChange?: (range: DateRange) => void } & RangeRules)
-  | { mode: 'multiple'; value?: Date[]; defaultValue?: Date[]; onChange?: (dates: Date[]) => void; maxSelections?: number };
+  | { mode?: typeof CALENDAR_MODE.single; value?: Date | null; defaultValue?: Date | null; onChange?: (date: Date) => void }
+  | ({ mode: typeof CALENDAR_MODE.range; value?: DateRange; defaultValue?: DateRange; onChange?: (range: DateRange) => void } & RangeRules)
+  | {
+      mode: typeof CALENDAR_MODE.multiple;
+      value?: Date[];
+      defaultValue?: Date[];
+      onChange?: (dates: Date[]) => void;
+      maxSelections?: number;
+    }
+  | ({
+      mode: typeof CALENDAR_MODE.ranges;
+      value?: DateRange[];
+      defaultValue?: DateRange[];
+      onChange?: (ranges: DateRange[]) => void;
+      maxRanges?: number;
+    } & RangeRules);
 
 export type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
 
 export type CalendarMode = NonNullable<CalendarSelectionProps['mode']>;
 
-export type CalendarView = 'days' | 'months' | 'years';
+export type CalendarView = ValueOf<typeof CALENDAR_VIEW>;
 
 /** The current selection of every mode, so rendering never needs to narrow props. */
 export interface CalendarSelection {
@@ -123,6 +138,7 @@ export interface CalendarSelection {
   single: Date | null;
   range: DateRange;
   multiple: Date[];
+  ranges: DateRange[];
 }
 
 export interface DayDisabledRules {

@@ -3,10 +3,11 @@ import type { RefObject } from 'react';
 import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { DistributiveOmit } from '../core/core.types';
+import type { DistributiveOmit, ValueOf } from '../core/core.types';
+import type { SHEET_PRESENTATION, SHEET_SNAP } from './sheet.constants';
 
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
-export type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
+export type SheetPresentation = ValueOf<typeof SHEET_PRESENTATION>;
 
 export type BottomSheetSlot = 'backdrop' | 'sheet' | 'handle' | 'header' | 'title' | 'content' | 'footer';
 
@@ -88,7 +89,7 @@ export interface SheetButtonProps {
 }
 
 /** Where a drag or a wheel gesture leaves the sheet. */
-export type SheetSnap = 'base' | 'expanded' | 'close';
+export type SheetSnap = ValueOf<typeof SHEET_SNAP>;
 
 export interface SheetDragFrame {
   height: number;

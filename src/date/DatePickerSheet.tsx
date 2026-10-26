@@ -1,10 +1,12 @@
 import { Calendar } from '../calendar/Calendar';
+import { CALENDAR_MODE } from '../calendar/calendar.constants';
 import type { CalendarSelectionProps } from '../calendar/calendar.types';
+import { PICKER_DISPLAY } from '../core/core.constants';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { DateWheelPicker } from './DateWheelPicker';
 import type { DateDraft, DatePickerSheetProps } from './date.types';
-import { getEmptyDraft, isDraftReady } from './date.utils';
+import { getEmptyDraft, getSheetDisplay, isDraftReady } from './date.utils';
 
 export const DatePickerSheet = (props: DatePickerSheetProps) => {
   const {
@@ -17,19 +19,20 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
     presentation,
     sheetProps,
     theme,
-    display = 'calendar',
+    display: displayProp = PICKER_DISPLAY.calendar,
     wheelProps,
     confirmOnSelect,
-    mode = 'single',
+    mode = CALENDAR_MODE.single,
     value,
     onConfirm,
     ...calendarProps
   } = props;
+  const display = getSheetDisplay(mode, displayProp);
   // The sheet holds whichever value shape the mode uses; `mode` ties value, draft and onConfirm together.
   const confirmDraft = onConfirm as (draft: DateDraft) => void;
   const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible);
   const ready = isDraftReady(mode, draft);
-  const confirmsOnSelect = !!confirmOnSelect && mode === 'single' && display === 'calendar';
+  const confirmsOnSelect = !!confirmOnSelect && mode === CALENDAR_MODE.single && display === PICKER_DISPLAY.calendar;
 
   const confirm = () => {
     if (!ready) return;
@@ -57,7 +60,7 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
       onConfirm={confirmsOnSelect ? undefined : confirm}
       confirmDisabled={!ready}
     >
-      {display === 'wheel' ? (
+      {display === PICKER_DISPLAY.wheel ? (
         <SheetContent>
           <DateWheelPicker
             {...wheelProps}

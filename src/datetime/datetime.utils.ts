@@ -1,4 +1,5 @@
 import { addDays, clampDate, formatDate, isSameDay, startOfDay } from '../core/utils/date.utils';
+import { TIME_FORMAT } from '../time/time.constants';
 import type { TimeOptions } from '../time/time.types';
 import { is12HourFormat } from '../time/time.utils';
 import type { WheelItem } from '../wheel/wheel.types';
@@ -55,7 +56,7 @@ export const getDayItems = (
 
 export const formatDateTimeValue = (
   date: Date,
-  { format = 'auto', locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
+  { format = TIME_FORMAT.auto, locale, showSeconds = false }: Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>
 ) =>
   formatDate(date, locale, {
     year: 'numeric',

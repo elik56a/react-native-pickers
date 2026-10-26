@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../core';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelPicker } from './WheelPicker';
-import { DEFAULT_ITEM_HEIGHT, DEFAULT_VISIBLE_ITEMS } from './wheel.constants';
+import { DEFAULT_ITEM_HEIGHT, DEFAULT_VISIBLE_ITEMS, WHEEL_VARIANT } from './wheel.constants';
 import { styles } from './wheel.styles';
 import type { MultiWheelPickerProps } from './wheel.types';
 import { resolveSeparator, toOddCount } from './wheel.utils';
@@ -15,7 +15,7 @@ export const MultiWheelPicker = ({
   separator,
   itemHeight = DEFAULT_ITEM_HEIGHT,
   visibleItems = DEFAULT_VISIBLE_ITEMS,
-  variant = '3d',
+  variant = WHEEL_VARIANT.threeD,
   style,
   styles: slots,
   theme: themeOverride,

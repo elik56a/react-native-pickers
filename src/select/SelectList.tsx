@@ -6,7 +6,7 @@ import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { GroupHeader } from './components/GroupHeader';
 import { OptionRow } from './components/OptionRow';
 import { useSelectList } from './hooks/useSelectList';
-import { DEFAULT_EMPTY_TEXT, DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
+import { DEFAULT_EMPTY_TEXT, DEFAULT_SEARCH_PLACEHOLDER, SELECT_ROW_TYPE } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListProps, SelectRow } from './select.types';
 import { defaultFilter, getRowKey, isOptionDisabled, shouldShowSearch } from './select.utils';
@@ -33,7 +33,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
   const { query, setQuery, rows, atMax, isSelected, toggle } = useSelectList(props, filterOption, isEqual);
 
   const renderRow = ({ item }: { item: SelectRow<T> }) => {
-    if (item.type === 'header') {
+    if (item.type === SELECT_ROW_TYPE.header) {
       return <GroupHeader group={item.group} renderGroupHeader={renderGroupHeader} theme={theme} slots={slots} />;
     }
     const selected = isSelected(item.option.value);

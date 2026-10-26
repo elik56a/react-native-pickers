@@ -1,4 +1,4 @@
-import { SEARCH_THRESHOLD } from './select.constants';
+import { SEARCH_THRESHOLD, SELECT_PRESENTATION, SELECT_ROW_TYPE } from './select.constants';
 import type { SelectOption, SelectPresentation, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
@@ -37,16 +37,16 @@ export const buildRows = <T>(
   }
   // Array.from, not spread: Babel's loose mode (e.g. Docusaurus) compiles `[...map]` to `[map]`.
   return Array.from(groups).flatMap(([group, members]) => [
-    ...(group ? [{ type: 'header' as const, group }] : []),
+    ...(group ? [{ type: SELECT_ROW_TYPE.header, group }] : []),
     ...members.map((option) => ({
-      type: 'option' as const,
+      type: SELECT_ROW_TYPE.option,
       option,
     })),
   ]);
 };
 
 export const getRowKey = <T>(row: SelectRow<T>, index: number) =>
-  row.type === 'header' ? `h:${row.group}` : `o:${index}:${row.option.label}`;
+  row.type === SELECT_ROW_TYPE.header ? `h:${row.group}` : `o:${index}:${row.option.label}`;
 
 /** Values after toggling `value`; null when adding would pass `maxSelected`. */
 export const toggleValue = <T>(values: T[], value: T, isEqual: (a: T, b: T) => boolean, maxSelected?: number): T[] | null => {
@@ -65,4 +65,4 @@ export const getSelectedLabel = <T>(selected: SelectOption<T>[]) => selected.map
 
 /** `auto` is a dropdown on the web, where options are expected under the field, and a bottom sheet on native. */
 export const resolveSelectPresentation = (presentation: SelectPresentation, platform: string): SelectPresentation =>
-  presentation === 'auto' && platform === 'web' ? 'dropdown' : presentation;
+  presentation === SELECT_PRESENTATION.auto && platform === 'web' ? SELECT_PRESENTATION.dropdown : presentation;

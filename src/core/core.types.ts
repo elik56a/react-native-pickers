@@ -11,11 +11,17 @@ import type {
   ViewStyle,
 } from 'react-native';
 
+import type { PICKER_DISPLAY } from './core.constants';
 import type { PickerTheme } from './theme/theme.types';
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
+
+/** The union of an object's values, e.g. the strings of an `as const` lookup. */
+export type ValueOf<T> = T[keyof T];
+
+export type PickerDisplay = ValueOf<typeof PICKER_DISPLAY>;
 
 /** `Omit` that keeps a union a union, so discriminated props (like a sheet's `mode`) still narrow. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;

@@ -9,6 +9,7 @@ import { EmojiHeader } from './components/EmojiHeader';
 import { SectionHeader } from './components/SectionHeader';
 import { SkinToneMenu } from './components/SkinToneMenu';
 import {
+  CATEGORY_BAR_POSITION,
   DEFAULT_CATEGORY_ICONS,
   DEFAULT_CATEGORY_LABELS,
   DEFAULT_COLUMNS,
@@ -17,6 +18,7 @@ import {
   DEFAULT_MAX_RECENT,
   DEFAULT_SEARCH_PLACEHOLDER,
   EMOJI_CATEGORIES,
+  EMOJI_ROW_TYPE,
 } from './emoji.constants';
 import { styles } from './emoji.styles';
 import type { EmojiPickerProps, EmojiRow } from './emoji.types';
@@ -36,7 +38,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     searchPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
     emptyText = DEFAULT_EMPTY_TEXT,
     showCategoryBar = true,
-    categoryBarPosition = 'top',
+    categoryBarPosition = CATEGORY_BAR_POSITION.top,
     showSectionHeaders = true,
     categoryLabels,
     categoryIcons,
@@ -64,7 +66,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   const labels = { ...DEFAULT_CATEGORY_LABELS, ...categoryLabels };
 
   const renderRow = ({ item }: { item: EmojiRow }) =>
-    item.type === 'header' ? (
+    item.type === EMOJI_ROW_TYPE.header ? (
       <SectionHeader label={labels[item.key]} theme={theme} slots={slots} />
     ) : (
       <EmojiGridRow
@@ -108,7 +110,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
         />
       )}
       {selection.toneMenuOpen && <SkinToneMenu tone={selection.tone} onSelect={selection.pickTone} theme={theme} slots={slots} />}
-      {categoryBarPosition === 'top' && categoryBar}
+      {categoryBarPosition === CATEGORY_BAR_POSITION.top && categoryBar}
       <View
         style={[styles.flex, { paddingHorizontal: theme.spacing.xs }]}
         onLayout={grid.onLayout}
@@ -138,7 +140,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
           </OwnScroll>
         )}
       </View>
-      {categoryBarPosition === 'bottom' && categoryBar}
+      {categoryBarPosition === CATEGORY_BAR_POSITION.bottom && categoryBar}
     </View>
   );
 };

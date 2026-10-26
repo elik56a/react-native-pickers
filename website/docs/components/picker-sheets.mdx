@@ -128,7 +128,7 @@ export default function Example() {
 
 ### Behaviour
 
-- **Done is disabled** until the selection is complete: a date in single mode, both `start` and `end` in range mode. Multiple mode is always confirmable (including an empty array).
+- **Done is disabled** until the selection is complete: a date in single mode, both `start` and `end` in range mode, no half-picked range in ranges mode. Multiple and ranges modes can confirm an empty array.
 - **`confirmOnSelect`** (single + calendar only) hides Done and confirms as soon as a day is tapped.
 - **`display="wheel"`** shows a [DateWheelPicker](./date-wheel-picker) (single mode). The draft starts at `value` or today. `locale`, `minDate` and `maxDate` are forwarded; pass other wheel props via `wheelProps`.
 
@@ -138,11 +138,12 @@ Shared props, plus every [calendar prop](./date-picker#calendar) (`minDate`, `ma
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Selection mode. |
-| `value` | `Date \| null` · `DateRange` · `Date[]` | — | Current committed value; copied into the draft on open. |
-| `onConfirm` | `(date: Date)` · `(range: DateRange)` · `(dates: Date[])` `=> void` | **required** | Called with the draft on Done. |
-| `minRangeDays` / `maxRangeDays` | `number` | — | Range mode. |
+| `mode` | `'single' \| 'range' \| 'multiple' \| 'ranges'` | `'single'` | Selection mode. |
+| `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Current committed value; copied into the draft on open. |
+| `onConfirm` | `(date: Date)` · `(range: DateRange)` · `(dates: Date[])` · `(ranges: DateRange[])` `=> void` | **required** | Called with the draft on Done. |
+| `minRangeDays` / `maxRangeDays` | `number` | — | Range and ranges modes. |
 | `maxSelections` | `number` | — | Multiple mode. |
+| `maxRanges` | `number` | — | Ranges mode. |
 | `display` | `'calendar' \| 'wheel'` | `'calendar'` | Wheel is single mode only. |
 | `wheelProps` | `Partial<DateWheelPickerProps>` | — | Extra props for the wheel. |
 | `confirmOnSelect` | `boolean` | `false` | Single calendar: confirm on tap, no Done button. |

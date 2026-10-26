@@ -5,7 +5,7 @@ import { I18nManager, PanResponder } from 'react-native';
 import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
 import { timing } from '../../core/utils/animation.utils';
 import { addMonths, isSameMonth, startOfMonth, toDateKey } from '../../core/utils/date.utils';
-import { NEXT_VIEW, SLIDE_DISTANCE } from '../calendar.constants';
+import { ARROW_DIRECTION, CALENDAR_VIEW, NEXT_VIEW, SLIDE_DISTANCE } from '../calendar.constants';
 import type { ArrowDirection, CalendarView } from '../calendar.types';
 import { canGoToMonth, getSwipeDelta, isHorizontalSwipe, shiftMonthForView } from '../calendar.utils';
 
@@ -30,7 +30,7 @@ export const useMonthNavigation = ({
 }: UseMonthNavigationParams) => {
   const rtl = !!I18nManager.isRTL;
   const [month, setMonth] = useState(anchor);
-  const [view, setView] = useState<CalendarView>('days');
+  const [view, setView] = useState<CalendarView>(CALENDAR_VIEW.days);
   const slide: Animated.Value = useAnimatedValue(0);
 
   const canPrev = canGoToMonth(month, -1, minDate, maxDate);
@@ -39,7 +39,7 @@ export const useMonthNavigation = ({
   const followKey = followDate ? toDateKey(followDate) : '';
   // biome-ignore lint/correctness/useExhaustiveDependencies: only a new date from outside should move the calendar, not paging.
   useEffect(() => {
-    if (followDate && view === 'days' && !isSameMonth(followDate, month)) setMonth(startOfMonth(followDate));
+    if (followDate && view === CALENDAR_VIEW.days && !isSameMonth(followDate, month)) setMonth(startOfMonth(followDate));
   }, [followKey]);
 
   const goMonth = useCallback(
@@ -76,14 +76,14 @@ export const useMonthNavigation = ({
   );
 
   const isArrowDisabled = useCallback(
-    (direction: ArrowDirection) => view === 'days' && (direction === 'prev' ? !canPrev : !canNext),
+    (direction: ArrowDirection) => view === CALENDAR_VIEW.days && (direction === ARROW_DIRECTION.prev ? !canPrev : !canNext),
     [canNext, canPrev, view]
   );
 
   const onArrowPress = useCallback(
     (direction: ArrowDirection) => {
-      const delta = direction === 'prev' ? -1 : 1;
-      if (view === 'days') goMonth(delta);
+      const delta = direction === ARROW_DIRECTION.prev ? -1 : 1;
+      if (view === CALENDAR_VIEW.days) goMonth(delta);
       else setMonth(shiftMonthForView(view, month, delta));
     },
     [goMonth, month, view]
@@ -96,7 +96,7 @@ export const useMonthNavigation = ({
       const next = new Date(month.getFullYear(), monthIndex, 1);
       setMonth(next);
       onMonthChange?.(next);
-      setView('days');
+      setView(CALENDAR_VIEW.days);
     },
     [month, onMonthChange]
   );
@@ -104,7 +104,7 @@ export const useMonthNavigation = ({
   const pickYear = useCallback(
     (year: number) => {
       setMonth(new Date(year, month.getMonth(), 1));
-      setView('months');
+      setView(CALENDAR_VIEW.months);
     },
     [month]
   );

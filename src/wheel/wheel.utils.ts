@@ -1,6 +1,14 @@
 import type React from 'react';
 
-import { ALIGN_TOLERANCE_PX, EDGE_ANGLE_MARGIN_RAD, FLAT_UNSELECTED_SCALE, LOOP_MIN_COPIES, LOOP_MIN_ROWS } from './wheel.constants';
+import {
+  ALIGN_TOLERANCE_PX,
+  EDGE_ANGLE_MARGIN_RAD,
+  FLAT_UNSELECTED_SCALE,
+  LOOP_MIN_COPIES,
+  LOOP_MIN_ROWS,
+  SETTLE_KIND,
+  WHEEL_VARIANT,
+} from './wheel.constants';
 import type { MultiWheelPickerProps, RowFrames, SettleResult, WheelItem, WheelItemInput, WheelLayout, WheelVariant } from './wheel.types';
 
 type Disableable = { disabled?: boolean };
@@ -71,19 +79,19 @@ export const getSettleResult = (params: {
     const target = nearestEnabled(items, logicalIndex);
     if (target !== logicalIndex)
       return {
-        kind: 'snap',
+        kind: SETTLE_KIND.snap,
         dataIndex: dataIndex + (target - logicalIndex),
       };
   }
   if (Math.abs(y - dataIndex * itemHeight) > ALIGN_TOLERANCE_PX)
     return {
-      kind: 'snap',
+      kind: SETTLE_KIND.snap,
       dataIndex,
     };
 
   const nearLoopEdge = loop && (dataIndex < count || dataIndex >= layout.total - count);
   return {
-    kind: 'rest',
+    kind: SETTLE_KIND.rest,
     logicalIndex,
     changed: logicalIndex !== committed,
     recenterTo: nearLoopEdge ? layout.middle + logicalIndex : null,
@@ -110,7 +118,7 @@ export const getRowFrames = (params: {
   const inputRange = ks.map((k) => center - k * h);
   const opacity = ks.map((k) => 1 - (1 - fadeTo) * Math.min(1, Math.abs(k) / range));
 
-  if (variant === 'flat') {
+  if (variant === WHEEL_VARIANT.flat) {
     return {
       inputRange,
       opacity,

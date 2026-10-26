@@ -1,5 +1,11 @@
 import type { PickerTheme } from './theme.types';
 
+export const COLOR_SCHEME = {
+  auto: 'auto',
+  light: 'light',
+  dark: 'dark',
+} as const;
+
 const SHARED_TOKENS: Omit<PickerTheme, 'dark' | 'colors'> = {
   radius: { sm: 8, md: 12, lg: 16, full: 999, sheet: 24 },
   spacing: { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 },

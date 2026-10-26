@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import { toDateKey } from '../core';
 import { DatePickerSheet } from './DatePickerSheet';
+import type { DatePickerSheetProps } from './date.types';
 
 const OCTOBER = new Date(2026, 9, 1);
 const pressDay = (d: number) => fireEvent.press(screen.getByLabelText(new RegExp(`October ${d}, 2026`)));
@@ -39,5 +40,14 @@ describe('DatePickerSheet', () => {
     await fireEvent.press(done());
     const range = onConfirm.mock.calls[0][0];
     expect([toDateKey(range.start), toDateKey(range.end)]).toEqual(['2026-10-10', '2026-10-14']);
+  });
+
+  it.each([
+    ['range', { start: null, end: null }],
+    ['multiple', []],
+  ] as const)('shows the calendar for %s mode even with display="wheel"', async (mode, value) => {
+    const props = { mode, value, onConfirm: jest.fn() } as unknown as DatePickerSheetProps;
+    await render(<DatePickerSheet {...props} visible display="wheel" onClose={jest.fn()} initialMonth={OCTOBER} />);
+    expect(screen.getByLabelText(/October 15, 2026/)).toBeTruthy();
   });
 });

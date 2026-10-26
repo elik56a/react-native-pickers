@@ -39,6 +39,7 @@ DatePicker         display 'calendar'(default)|'wheel'
   mode 'single'    value: Date|null       onChange(date)
   mode 'range'     value: {start,end}     onChange(range)   minRangeDays maxRangeDays allowSingleDayRange
   mode 'multiple'  value: Date[]          onChange(dates)   maxSelections
+  mode 'ranges'    value: DateRange[]     onChange(ranges)  maxRanges minRangeDays maxRangeDays allowSingleDayRange
   minDate maxDate isDateDisabled(date) markedDates{'YYYY-MM-DD':{dots?,label?,textColor?,disabled?}}
   locale firstDayOfWeek(0=Sun) initialMonth onMonthChange renderDay(state,theme) dayHeight=44
 DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFormat 'long'|'short'|'numeric'  min/maxDate

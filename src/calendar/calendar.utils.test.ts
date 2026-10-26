@@ -17,10 +17,13 @@ import {
   getYearBounds,
   getYearCells,
   getYearPageLabel,
+  hasRangeEnd,
   isDayDisabled,
   isHorizontalSwipe,
   nextRange,
+  nextRanges,
   orderWeekdays,
+  rangeContains,
   rangeCrossesDisabled,
   shiftMonthForView,
   showsRangeBand,
@@ -35,6 +38,7 @@ const selection = (patch: Partial<CalendarSelection>): CalendarSelection => ({
   single: null,
   range: EMPTY_RANGE,
   multiple: [],
+  ranges: [],
   ...patch,
 });
 
@@ -89,6 +93,44 @@ describe('nextRange', () => {
   });
 });
 
+describe('rangeContains', () => {
+  it('includes both ends, and an open range holds only its start', () => {
+    expect(rangeContains({ start: day(10), end: day(12) }, day(10))).toBe(true);
+    expect(rangeContains({ start: day(10), end: day(12) }, day(11))).toBe(true);
+    expect(rangeContains({ start: day(10), end: day(12) }, day(13))).toBe(false);
+    expect(rangeContains({ start: day(10), end: null }, day(10))).toBe(true);
+    expect(rangeContains({ start: day(10), end: null }, day(11))).toBe(false);
+  });
+});
+
+describe('nextRanges', () => {
+  const first = { start: day(3), end: day(5) };
+
+  it('starts, completes and sorts ranges', () => {
+    const opened = nextRanges([first], day(20), {}, none) ?? [];
+    expect(opened).toEqual([first, { start: day(20), end: null }]);
+    const added = nextRanges([{ start: day(20), end: day(22) }], day(1), {}, none) ?? [];
+    expect(nextRanges(added, day(2), {}, none)).toEqual([
+      { start: day(1), end: day(2) },
+      { start: day(20), end: day(22) },
+    ]);
+  });
+  it('removes a finished range when one of its days is tapped', () => {
+    expect(nextRanges([first, { start: day(10), end: null }], day(4), {}, none)).toEqual([{ start: day(10), end: null }]);
+  });
+  it('restarts instead of overlapping another range', () => {
+    expect(nextRanges([first, { start: day(1), end: null }], day(8), {}, none)).toEqual([first, { start: day(8), end: null }]);
+  });
+  it('applies the range rules to the open range', () => {
+    expect(nextRanges([{ start: day(10), end: null }], day(11), { minRangeDays: 2 }, none)).toBeNull();
+  });
+  it('refuses a new range past maxRanges but still removes and completes', () => {
+    expect(nextRanges([first], day(10), { maxRanges: 1 }, none)).toBeNull();
+    expect(nextRanges([first], day(5), { maxRanges: 1 }, none)).toEqual([]);
+    expect(nextRanges([{ start: day(10), end: null }], day(12), { maxRanges: 1 }, none)).toEqual([{ start: day(10), end: day(12) }]);
+  });
+});
+
 describe('toggleMultiple', () => {
   it('adds in date order and removes existing days', () => {
     expect(keys(toggleMultiple([day(20)], day(5)) ?? [])).toEqual(['2026-10-05', '2026-10-20']);
@@ -106,6 +148,7 @@ describe('getAnchorMonth', () => {
     expect(getAnchorMonth(undefined, selection({ single: day(5, 4) }))).toEqual(day(1, 4));
     expect(getAnchorMonth(undefined, selection({ range: { start: day(5, 6), end: null } }))).toEqual(day(1, 6));
     expect(getAnchorMonth(undefined, selection({ multiple: [day(5, 7)] }))).toEqual(day(1, 7));
+    expect(getAnchorMonth(undefined, selection({ ranges: [{ start: day(5, 8), end: null }] }))).toEqual(day(1, 8));
   });
 });
 
@@ -122,6 +165,19 @@ describe('getDayState / getWeekStates', () => {
     expect(getDayState({ ...base, selection: sel, date: day(10) })).toMatchObject({ selected: true, rangeStart: true, inRange: false });
     expect(getDayState({ ...base, selection: sel, date: day(11) })).toMatchObject({ selected: false, inRange: true });
     expect(getDayState({ ...base, selection: sel, date: day(13) })).toMatchObject({ selected: true, rangeEnd: true });
+  });
+  it('marks the ends and days of each finished range in ranges mode', () => {
+    const sel = selection({
+      mode: 'ranges',
+      ranges: [
+        { start: day(3), end: day(5) },
+        { start: day(20), end: null },
+      ],
+    });
+    expect(getDayState({ ...base, selection: sel, date: day(3) })).toMatchObject({ selected: true, rangeStart: true });
+    expect(getDayState({ ...base, selection: sel, date: day(4) })).toMatchObject({ selected: false, inRange: true });
+    expect(getDayState({ ...base, selection: sel, date: day(5) })).toMatchObject({ selected: true, rangeEnd: true });
+    expect(getDayState({ ...base, selection: sel, date: day(20) })).toMatchObject({ selected: true, rangeStart: false, inRange: false });
   });
   it('marks every day in multiple mode and attaches markings', () => {
     const sel = selection({ mode: 'multiple', multiple: [day(3), day(9)] });
@@ -157,6 +213,11 @@ describe('showsRangeBand / getDayTextColor', () => {
     expect(showsRangeBand(state({ rangeStart: true }), true)).toBe(true);
     expect(showsRangeBand(state({ rangeStart: true }), false)).toBe(false);
     expect(showsRangeBand(state({ rangeStart: true, rangeEnd: true }), true)).toBe(false);
+  });
+  it('hides the band only for an open range in range mode', () => {
+    expect(hasRangeEnd(selection({ mode: 'range', range: { start: day(1), end: null } }))).toBe(false);
+    expect(hasRangeEnd(selection({ mode: 'range', range: { start: day(1), end: day(2) } }))).toBe(true);
+    expect(hasRangeEnd(selection({ mode: 'ranges' }))).toBe(true);
   });
   it('picks the day text colour by priority', () => {
     expect(getDayTextColor(state({ selected: true, disabled: true }), c)).toBe(c.onPrimary);

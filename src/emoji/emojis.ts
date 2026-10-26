@@ -1,5 +1,5 @@
 import { RAW_EMOJI_DATA } from './data';
-import { GROUP_TO_CATEGORY } from './emoji.constants';
+import { EMOJI_CATEGORY, GROUP_TO_CATEGORY } from './emoji.constants';
 import type { Emoji } from './emoji.types';
 
 let cache: Emoji[] | null = null;
@@ -14,7 +14,7 @@ const parseLine = (line: string): Emoji => {
     emoji,
     name,
     keywords: tags ? tags.split(' ') : [],
-    category: GROUP_TO_CATEGORY[group] ?? 'symbols',
+    category: GROUP_TO_CATEGORY[group] ?? EMOJI_CATEGORY.symbols,
     version: Number(version),
     skins: skins ? skins.split(',') : undefined,
   };

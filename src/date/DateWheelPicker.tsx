@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useControllableState } from '../core/hooks/useControllableState';
 import { clampDate } from '../core/utils/date.utils';
 import { MultiWheelPicker } from '../wheel';
+import { MONTH_FORMAT } from './date.constants';
 import type { DateWheelPickerProps } from './date.types';
 import { buildWheelDate, getDateColumnSpecs, getLocaleDateOrder, getWheelYearBounds } from './date.utils';
 
@@ -15,7 +16,7 @@ export const DateWheelPicker = ({
   minDate,
   maxDate,
   order,
-  monthFormat = 'long',
+  monthFormat = MONTH_FORMAT.long,
   yearRange,
   loop = true,
   itemHeight,

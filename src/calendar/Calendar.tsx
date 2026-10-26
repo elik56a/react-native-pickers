@@ -3,7 +3,7 @@ import { Animated, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
-import { DEFAULT_DAY_HEIGHT } from './calendar.constants';
+import { CALENDAR_VIEW, DEFAULT_DAY_HEIGHT, WEEKDAY_FORMAT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
 import {
   getAnchorMonth,
@@ -13,6 +13,7 @@ import {
   getWeekStates,
   getYearBounds,
   getYearCells,
+  hasRangeEnd,
   isDayDisabled,
   orderWeekdays,
 } from './calendar.utils';
@@ -35,7 +36,7 @@ export const Calendar = (props: CalendarProps) => {
     fixedWeeks = true,
     enableSwipe = true,
     enableQuickJump = true,
-    weekdayFormat = 'short',
+    weekdayFormat = WEEKDAY_FORMAT.short,
     showWeekdays = true,
     formatTitle,
     renderDay,
@@ -103,7 +104,7 @@ export const Calendar = (props: CalendarProps) => {
         theme={theme}
         slots={slots}
       />
-      {view === 'months' && (
+      {view === CALENDAR_VIEW.months && (
         <QuickGrid
           cells={getMonthCells(month, getMonthNames(locale, 'short'), minDate, maxDate)}
           height={quickGridHeight}
@@ -112,7 +113,7 @@ export const Calendar = (props: CalendarProps) => {
           slots={slots}
         />
       )}
-      {view === 'years' && (
+      {view === CALENDAR_VIEW.years && (
         <QuickGrid
           cells={getYearCells(month, getYearBounds(today, yearRange, minDate, maxDate))}
           height={quickGridHeight}
@@ -121,14 +122,14 @@ export const Calendar = (props: CalendarProps) => {
           slots={slots}
         />
       )}
-      {view === 'days' && (
+      {view === CALENDAR_VIEW.days && (
         <Animated.View style={nav.slideStyle} {...(enableSwipe ? nav.panHandlers : {})}>
           <DayGrid
             weeks={weeks}
             weekdays={weekdays}
             showWeekdays={showWeekdays}
             showOutsideDays={showOutsideDays}
-            hasRangeEnd={!!selection.range.end}
+            hasRangeEnd={hasRangeEnd(selection)}
             dayHeight={dayHeight}
             locale={locale}
             renderDay={renderDay}

@@ -1,3 +1,4 @@
+import { PICKER_DISPLAY } from '../core/core.constants';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { snapTime } from '../time/time.utils';
@@ -27,7 +28,7 @@ export const DateTimePickerSheet = ({
         onClose();
       }}
     >
-      <SheetContent compact={rest.display === 'calendar'}>
+      <SheetContent compact={rest.display === PICKER_DISPLAY.calendar}>
         <DateTimePicker {...rest} theme={theme} value={draft} onChange={setDraft} />
       </SheetContent>
     </PickerSheet>

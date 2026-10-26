@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
 
 import type { DeepPartial } from '../core.types';
-import { darkTheme, lightTheme } from './theme.constants';
+import { COLOR_SCHEME, darkTheme, lightTheme } from './theme.constants';
 import type { ColorScheme, PickersProviderProps, PickerTheme } from './theme.types';
 import { mergeTheme } from './theme.utils';
 
@@ -14,7 +14,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-export const PickersProvider = ({ children, colorScheme = 'auto', theme, darkTheme: dark }: PickersProviderProps) => {
+export const PickersProvider = ({ children, colorScheme = COLOR_SCHEME.auto, theme, darkTheme: dark }: PickersProviderProps) => {
   const value = useMemo<ThemeContextValue>(
     () => ({
       light: mergeTheme(lightTheme, theme),
@@ -30,8 +30,8 @@ export const PickersProvider = ({ children, colorScheme = 'auto', theme, darkThe
 export const usePickerTheme = (override?: DeepPartial<PickerTheme>): PickerTheme => {
   const ctx = useContext(ThemeContext);
   const system = useColorScheme();
-  const scheme = ctx?.colorScheme ?? 'auto';
-  const isDark = scheme === 'auto' ? system === 'dark' : scheme === 'dark';
+  const scheme = ctx?.colorScheme ?? COLOR_SCHEME.auto;
+  const isDark = scheme === COLOR_SCHEME.auto ? system === COLOR_SCHEME.dark : scheme === COLOR_SCHEME.dark;
   const base = isDark ? (ctx?.dark ?? darkTheme) : (ctx?.light ?? lightTheme);
   return useMemo(() => mergeTheme(base, override), [base, override]);
 };
