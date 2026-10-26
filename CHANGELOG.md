@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/elik56a/react-native-pickers/compare/v0.7.0...v0.8.0) (2026-10-26)
+
+
+### ✨ Features
+
+* **calendar:** add ranges mode for selecting multiple date ranges ([7dc2731](https://github.com/elik56a/react-native-pickers/commit/7dc2731b35fa0c01346b95a34a4b3117c948abf6))
+
 ## [0.7.0](https://github.com/elik56a/react-native-pickers/compare/v0.6.0...v0.7.0) (2026-10-26)
 
 

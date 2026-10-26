@@ -1,6 +1,6 @@
 {
   "name": "@elik56a/react-native-pickers",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Beautiful, fully customizable pickers for React Native in pure JS: wheel, time, date (calendar + wheel + range), select and emoji. No native code, works with Expo and React Native Web.",
   "license": "MIT",
   "author": "Eliyahu Kriel <elik56a@gmail.com>",
