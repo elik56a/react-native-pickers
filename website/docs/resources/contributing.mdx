@@ -68,3 +68,15 @@ Where new code goes:
 ## Checks
 
 The pre-commit hook formats and lints the staged files and runs typecheck, and the commit-msg hook checks the message. On every pull request, CI runs lint, typecheck, tests and the build. Pull requests are squash-merged, so CI also checks that the PR title is a Conventional Commit: it becomes the commit message on `master`.
+
+## Releasing
+
+Releases are automated with [release-please](https://github.com/googleapis/release-please) and driven by the commit messages on `master`:
+
+- `fix:` makes a patch release, `feat:` a minor one, and a `!` or a `BREAKING CHANGE:` footer a major one (a minor one before 1.0).
+- Commits that only touch `website/`, `example/`, `.github/` or `lint/` don't trigger a release.
+- After every merge, release-please updates a `chore(release): vX.Y.Z` pull request with the version bump and the [changelog](/changelog) entry. Nothing ships while it stays open.
+- Merging that PR tags the version, creates the GitHub release, publishes to npm and redeploys these docs.
+- To pick the version yourself, add a `Release-As: 1.0.0` footer to a commit.
+
+The docs are versioned from the git tags: `/docs` always matches the latest release on npm, `master` is published as **Next** at `/docs/next`, and every minor line keeps its own version in the dropdown.

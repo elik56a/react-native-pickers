@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
@@ -6,6 +7,13 @@ import { themes as prismThemes } from 'prism-react-renderer';
 const PACKAGE = '@elik56a/react-native-pickers';
 const REPO = 'https://github.com/elik56a/react-native-pickers';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
+const { version } = require('../package.json');
+
+// Written by scripts/prepare.mts from the git tags, newest first. The line npm currently serves gets its exact version.
+const releasedLines: string[] = fs.existsSync(path.join(__dirname, 'versions.json')) ? require('./versions.json') : [];
+const versionLabels = Object.fromEntries(
+  releasedLines.map((line) => [line, { label: version.startsWith(`${line}.`) ? `v${version}` : `v${line}.x` }])
+);
 
 const config: Config = {
   title: 'React Native Pickers',
@@ -18,7 +26,7 @@ const config: Config = {
   projectName: 'react-native-pickers',
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  markdown: { hooks: { onBrokenMarkdownLinks: 'throw' } },
+  markdown: { format: 'detect', hooks: { onBrokenMarkdownLinks: 'throw' } },
   i18n: { defaultLocale: 'en', locales: ['en'] },
 
   headTags: [
@@ -41,6 +49,8 @@ const config: Config = {
           routeBasePath: 'docs',
           sidebarPath: './sidebars.ts',
           editUrl: `${REPO}/edit/master/website/`,
+          editCurrentVersion: true,
+          versions: { current: { label: 'Next 🚧' }, ...versionLabels },
           showLastUpdateTime: true,
         },
         blog: false,
@@ -56,7 +66,14 @@ const config: Config = {
     '@docusaurus/theme-live-codeblock',
     [
       '@easyops-cn/docusaurus-search-local',
-      { hashed: true, docsRouteBasePath: 'docs', indexBlog: false, highlightSearchTermsOnTargetPage: true },
+      {
+        hashed: true,
+        docsRouteBasePath: 'docs',
+        indexBlog: false,
+        highlightSearchTermsOnTargetPage: true,
+        // Only index the latest release; Next and older lines would duplicate every result.
+        ignoreFiles: [/^docs\/(next|\d+\.\d+)\//],
+      },
     ],
   ],
 
@@ -124,6 +141,14 @@ const config: Config = {
         { to: '/docs/components/wheel-picker', label: 'Components', position: 'left' },
         { to: '/docs/api/reference', label: 'API', position: 'left' },
         { to: '/docs/recipes/booking-range', label: 'Recipes', position: 'left' },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownItemsAfter: [
+            { to: '/changelog', label: 'Changelog' },
+            { href: `${REPO}/releases`, label: 'GitHub releases' },
+          ],
+        },
         { href: `https://www.npmjs.com/package/${PACKAGE}`, label: 'npm', position: 'right' },
         { href: REPO, label: 'GitHub', position: 'right' },
       ],
@@ -150,6 +175,7 @@ const config: Config = {
         {
           title: 'More',
           items: [
+            { label: 'Changelog', to: '/changelog' },
             { label: 'GitHub', href: REPO },
             { label: 'npm', href: `https://www.npmjs.com/package/${PACKAGE}` },
             { label: 'Issues', href: `${REPO}/issues` },

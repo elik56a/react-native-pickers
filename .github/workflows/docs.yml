@@ -5,6 +5,8 @@ on:
     branches: [master]
     paths: ['website/**', 'src/**', '.github/workflows/docs.yml']
   workflow_dispatch:
+  # Called by the release workflow once a new version is tagged.
+  workflow_call:
 
 permissions:
   contents: read
