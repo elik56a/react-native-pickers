@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CalendarBaseProps, CalendarProps, DateRange } from '../calendar/calendar.types';
-import type { SlotStyles, ThemableProps } from '../core';
+import type { Locale, SlotStyles, ThemableProps } from '../core';
 import type { SheetChromeProps } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 
@@ -14,7 +14,7 @@ export interface DateWheelPickerProps extends ThemableProps {
   defaultValue?: Date;
   onChange?: (date: Date) => void;
   onValueChanging?: (date: Date) => void;
-  locale?: string;
+  locale?: Locale;
   minDate?: Date;
   maxDate?: Date;
   /** Column order. Default: from locale (e.g. M/D/Y for en-US, D/M/Y for he) */

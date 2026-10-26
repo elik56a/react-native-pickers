@@ -1,4 +1,4 @@
-export type { DeepPartial, SlotStyles, ThemableProps } from './core.types';
+export type { DeepPartial, Locale, SlotStyles, ThemableProps } from './core.types';
 export { PickersProvider, usePickerTheme } from './theme/ThemeProvider';
 export { darkTheme, lightTheme } from './theme/theme.constants';
 export type { PickersProviderProps, PickerTheme } from './theme/theme.types';
