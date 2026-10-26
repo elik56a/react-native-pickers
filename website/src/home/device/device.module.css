@@ -1,0 +1,382 @@
+.device {
+  --screen-bg: #ffffff;
+  --screen-fg: #17150f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  justify-self: center;
+  width: 100%;
+  max-width: 372px;
+  transition: max-width 0.3s ease;
+  animation: deviceIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
+}
+
+@keyframes deviceIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+:global([data-theme="dark"]) .device {
+  --screen-bg: #181612;
+  --screen-fg: #f5f2ec;
+}
+
+.deviceWide {
+  max-width: 520px;
+}
+
+.platformTabs {
+  --tab-width: 5.5rem;
+  position: relative;
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--site-border);
+  border-radius: 999px;
+  background: var(--site-surface);
+}
+
+.platformPill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: var(--tab-width);
+  border-radius: 999px;
+  background: var(--brand-ink);
+  transform: translateX(calc(var(--index) * (var(--tab-width) + 2px)));
+  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+:global([data-theme="dark"]) .platformPill {
+  background: var(--brand-signal);
+}
+
+.platformTab {
+  position: relative;
+  width: var(--tab-width);
+  padding: 0.45rem 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-700);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.platformTab:hover {
+  color: var(--ifm-font-color-base);
+}
+
+.platformTab[aria-selected="true"] {
+  color: #f5f2ec;
+}
+
+:global([data-theme="dark"]) .platformTab[aria-selected="true"] {
+  color: var(--brand-ink);
+}
+
+.platformTab:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  background: var(--screen-bg);
+  color: var(--screen-fg);
+  transition: border-radius 0.3s ease;
+}
+
+.hardware {
+  position: relative;
+  width: 100%;
+}
+
+/* Natural titanium band around the glass, with the four hardware buttons sticking out of it. */
+.titanium {
+  --metal: linear-gradient(135deg, #e2ded5 0%, #8e897f 20%, #d0cbc1 42%, #6c675e 68%, #c4bfb5 100%);
+  padding: 3px;
+  border-radius: 58px;
+  background: var(--metal);
+  box-shadow:
+    0 0 0 0.5px rgba(23, 21, 15, 0.45),
+    inset 0 0 1px rgba(255, 255, 255, 0.7),
+    0 50px 80px -40px rgba(23, 21, 15, 0.55);
+}
+
+:global([data-theme="dark"]) .titanium {
+  --metal: linear-gradient(135deg, #6b6862 0%, #2c2b28 22%, #55524c 45%, #1d1c1a 70%, #4a4843 100%);
+}
+
+.sideButton {
+  position: absolute;
+  width: 4px;
+}
+
+.titanium .sideButton {
+  background: linear-gradient(90deg, #7d786f, #ddd9d0 50%, #7d786f);
+}
+
+.aluminum .sideButton {
+  background: linear-gradient(90deg, #8d8f8d, #e4e5e2 50%, #8d8f8d);
+}
+
+:global([data-theme="dark"]) .titanium .sideButton {
+  background: linear-gradient(90deg, #1d1c1a, #5c5953 50%, #1d1c1a);
+}
+
+/* Pixel-style matte aluminium rail; the power key and volume rocker both sit on the right. */
+.aluminum {
+  --rail: linear-gradient(90deg, #a6a8a6, #e4e5e2 10%, #c6c7c4 50%, #e4e5e2 90%, #a6a8a6);
+  padding: 3px;
+  border-radius: 49px;
+  background: var(--rail);
+  box-shadow:
+    0 0 0 0.5px rgba(23, 21, 15, 0.4),
+    inset 0 0 1px rgba(255, 255, 255, 0.8),
+    0 50px 80px -40px rgba(23, 21, 15, 0.55);
+}
+
+:global([data-theme="dark"]) .aluminum {
+  --rail: linear-gradient(90deg, #1f2022, #4a4c4f 10%, #2c2e30 50%, #4a4c4f 90%, #1f2022);
+}
+
+:global([data-theme="dark"]) .aluminum .sideButton {
+  background: linear-gradient(90deg, #1f2022, #55575a 50%, #1f2022);
+}
+
+.androidPower,
+.androidVolume {
+  right: -3px;
+  border-radius: 0 2px 2px 0;
+}
+
+.androidPower {
+  top: 20%;
+  height: 7.5%;
+}
+
+.androidVolume {
+  top: 31%;
+  height: 14%;
+}
+
+.actionButton,
+.volumeUp,
+.volumeDown {
+  left: -3px;
+  border-radius: 2px 0 0 2px;
+}
+
+.actionButton {
+  top: 15%;
+  height: 4.5%;
+}
+
+.volumeUp {
+  top: 23%;
+  height: 8.5%;
+}
+
+.volumeDown {
+  top: 33.5%;
+  height: 8.5%;
+}
+
+.powerButton {
+  top: 26%;
+  right: -3px;
+  height: 13%;
+  border-radius: 0 2px 2px 0;
+}
+
+.ios {
+  border: 10px solid #050505;
+  border-radius: 55px;
+}
+
+.android {
+  border: 8px solid #050505;
+  border-radius: 46px;
+}
+
+.web {
+  border: 1px solid var(--site-border);
+  border-radius: 14px;
+  box-shadow: var(--site-shadow);
+}
+
+.statusBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* iOS centers the clock in the left ear and the icons in the right one, either side of the Dynamic Island. */
+.ios .statusBar {
+  display: grid;
+  grid-template-columns: 1fr 112px 1fr;
+  justify-items: center;
+  height: 54px;
+  padding: 0 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+.android .statusBar {
+  height: 42px;
+  padding: 0 26px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.statusIcons {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ios .statusIcons {
+  grid-column: 3;
+}
+
+.camera {
+  position: absolute;
+  left: 50%;
+  background: #000;
+  transform: translateX(-50%);
+}
+
+.ios .camera {
+  top: 11px;
+  width: 112px;
+  height: 32px;
+  border-radius: 20px;
+}
+
+.ios .camera::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #34476b 0 15%, #10172a 45%, #050608 75%);
+  box-shadow: inset 0 0 0 1.5px #121826;
+  transform: translateY(-50%);
+}
+
+.android .camera {
+  top: 13px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 36%, #3a4d72 0 12%, #0e1424 38%, #000 62%);
+}
+
+.browserBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 44px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--site-border);
+  background: var(--site-surface);
+}
+
+.trafficLights {
+  display: inline-flex;
+  gap: 7px;
+}
+
+.trafficLights i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.trafficLights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.trafficLights i:nth-child(3) {
+  background: #28c840;
+}
+
+.url {
+  flex: 1;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-700);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.screen {
+  height: clamp(440px, calc(100vh - 300px), 590px);
+}
+
+.screen > div {
+  height: 100%;
+}
+
+.homeIndicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  height: 5px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.85;
+  transform: translateX(-50%);
+}
+
+.ios .homeIndicator {
+  width: 128px;
+}
+
+.android .homeIndicator {
+  bottom: 10px;
+  width: 108px;
+  height: 4px;
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device {
+    animation: none;
+  }
+
+  .device,
+  .frame,
+  .platformTab,
+  .platformPill {
+    transition: none;
+  }
+}

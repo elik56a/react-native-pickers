@@ -1,0 +1,59 @@
+/* Stacked on phones; props beside the device on tablets; props, device and code side by side on desktop. */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "device"
+    "props"
+    "code";
+  gap: 2rem;
+  justify-items: center;
+  margin-top: 2.5rem;
+}
+
+.device {
+  grid-area: device;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.props {
+  grid-area: props;
+  width: 100%;
+  max-width: 372px;
+}
+
+.code {
+  grid-area: code;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 997px) {
+  .stage {
+    grid-template-columns: minmax(0, 420px) 290px;
+    grid-template-areas:
+      "device props"
+      "code code";
+    justify-content: center;
+    align-items: start;
+  }
+
+  /* Lines the cards up with the device screen, below the platform tabs. */
+  .props {
+    margin-top: 3.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .stage {
+    grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-areas: "props device code";
+    gap: 2rem;
+  }
+
+  .code {
+    margin-top: 3.5rem;
+  }
+}

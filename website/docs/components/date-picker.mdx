@@ -1,6 +1,6 @@
 ---
 title: React Native Date Picker & Calendar
-sidebar_label: DatePicker & Calendar
+sidebar_label: Date picker
 description: React Native calendar date picker with min/max dates, disabled days, marked dates and prices, locale-aware names and swipe between months. Pure JS.
 ---
 
@@ -16,7 +16,7 @@ import { DatePicker, Calendar } from '@elik56a/react-native-pickers';
 ```
 
 - **`DatePicker`** is the entry point. With `display="calendar"` (the default) it renders a `Calendar`, and with `display="wheel"` it renders a [`DateWheelPicker`](./date-wheel-picker).
-- **`Calendar`** is the calendar component itself, with the same props as `DatePicker` minus `display`.
+- **`Calendar`** is what `DatePicker` renders by default, with the same props minus `display`. `<DatePicker />` and `<Calendar />` look and behave the same; import `Calendar` directly if you never need the wheel.
 
 ```tsx live
 import { useState } from 'react';

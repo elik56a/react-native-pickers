@@ -1,0 +1,128 @@
+.tableScroll {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid var(--site-border);
+  border-radius: 18px;
+  background: var(--ifm-background-color);
+  box-shadow: var(--site-shadow);
+}
+
+.compare {
+  display: table;
+  width: 100%;
+  min-width: 720px;
+  margin: 0;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.92rem;
+}
+
+.compare thead tr,
+.compare tbody tr,
+.compare tbody tr:nth-child(2n) {
+  border: 0;
+  background: none;
+}
+
+.compare th,
+.compare td {
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--site-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.compare tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.compare thead th {
+  vertical-align: top;
+}
+
+.compare thead td {
+  width: 26%;
+}
+
+.compare tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--ifm-background-color);
+  font-weight: 600;
+}
+
+.colName {
+  display: block;
+  font-family: var(--ifm-heading-font-family);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.colExamples {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.compare .ours {
+  background: color-mix(in srgb, var(--brand-signal) 7%, var(--ifm-background-color));
+}
+
+.compare thead .ours {
+  box-shadow: inset 0 3px 0 var(--brand-signal);
+}
+
+.compare thead .ours .colName {
+  color: var(--ifm-color-primary);
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mark svg {
+  flex: none;
+  box-sizing: content-box;
+  padding: 3px;
+  border-radius: 50%;
+}
+
+.yes svg {
+  color: #fff;
+  background: var(--ifm-color-primary);
+}
+
+.partial {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.partial svg {
+  color: var(--ifm-color-emphasis-800);
+  background: var(--ifm-color-emphasis-200);
+}
+
+.no {
+  color: var(--ifm-color-emphasis-600);
+}
+
+.no svg {
+  color: var(--ifm-color-emphasis-600);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--ifm-color-emphasis-300);
+}
+
+:global([data-theme="dark"]) .yes svg {
+  color: var(--brand-ink);
+}
