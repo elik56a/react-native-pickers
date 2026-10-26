@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/elik56a/react-native-pickers/compare/v0.4.0...v0.4.1) (2026-10-26)
+
+
+### 🐛 Bug Fixes
+
+* **time:** time sheets confirm the time shown on the wheels ([#7](https://github.com/elik56a/react-native-pickers/issues/7)) ([1757a47](https://github.com/elik56a/react-native-pickers/commit/1757a47966cdfbc8f7d2b5765bd2184388b632db))
+
 ## [0.4.0](https://github.com/elik56a/react-native-pickers/compare/v0.3.0...v0.4.0) (2026-10-26)
 
 
