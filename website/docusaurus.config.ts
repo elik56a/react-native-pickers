@@ -6,19 +6,44 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 const PACKAGE = '@elik56a/react-native-pickers';
 const REPO = 'https://github.com/elik56a/react-native-pickers';
+const SITE = 'https://elik56a.github.io/react-native-pickers/';
+const DESCRIPTION =
+  'Wheel, time, date, calendar, range, select and emoji pickers for React Native. 100% JavaScript, zero native code — Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
 // Written by scripts/prepare.mts from the git tags, newest first. The line npm currently serves gets its exact version.
+// Only the latest release is indexed by search engines; Next and older lines would compete with it as duplicates.
 const releasedLines: string[] = fs.existsSync(path.join(__dirname, 'versions.json')) ? require('./versions.json') : [];
-const versionLabels = Object.fromEntries(
-  releasedLines.map((line) => [line, { label: version.startsWith(`${line}.`) ? `v${version}` : `v${line}.x` }])
+const versionOptions = Object.fromEntries(
+  releasedLines.map((line, i) => [line, { label: version.startsWith(`${line}.`) ? `v${version}` : `v${line}.x`, noIndex: i > 0 }])
 );
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: 'React Native Pickers', url: SITE },
+    {
+      '@type': 'SoftwareSourceCode',
+      name: 'React Native Pickers',
+      alternateName: PACKAGE,
+      description: DESCRIPTION,
+      url: SITE,
+      codeRepository: REPO,
+      programmingLanguage: ['TypeScript', 'JavaScript'],
+      runtimePlatform: ['React Native', 'Expo', 'React Native Web', 'iOS', 'Android'],
+      license: 'https://opensource.org/licenses/MIT',
+      version,
+      author: { '@type': 'Person', name: 'Eliyahu Kriel', url: 'https://github.com/elik56a' },
+      keywords:
+        'react native date picker, time picker, wheel picker, calendar, date range picker, select, dropdown, emoji picker, bottom sheet, expo',
+    },
+  ],
+};
 
 const config: Config = {
   title: 'React Native Pickers',
-  tagline:
-    'Wheel, time, date, calendar, range, select and emoji pickers for React Native. 100% JavaScript, zero native code — Expo Go, bare RN and React Native Web.',
+  tagline: DESCRIPTION,
   favicon: 'img/logo.svg',
   url: 'https://elik56a.github.io',
   baseUrl: '/react-native-pickers/',
@@ -39,6 +64,7 @@ const config: Config = {
       },
     },
     { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: '/react-native-pickers/llms.txt' } },
+    { tagName: 'script', attributes: { type: 'application/ld+json' }, innerHTML: JSON.stringify(structuredData) },
   ],
 
   presets: [
@@ -50,12 +76,12 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl: `${REPO}/edit/master/website/`,
           editCurrentVersion: true,
-          versions: { current: { label: 'Next 🚧' }, ...versionLabels },
+          versions: { current: { label: 'Next 🚧', noIndex: releasedLines.length > 0 }, ...versionOptions },
           showLastUpdateTime: true,
         },
         blog: false,
         theme: { customCss: './src/css/custom.css' },
-        sitemap: { changefreq: 'weekly' },
+        sitemap: { changefreq: 'weekly', lastmod: 'date' },
       } satisfies Preset.Options,
     ],
   ],
@@ -119,7 +145,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/social-card.svg',
+    image: 'img/social-card.png',
     colorMode: { defaultMode: 'light', respectPrefersColorScheme: true },
     metadata: [
       {

@@ -275,7 +275,7 @@ export default function Home() {
   const docPath = useDocPath();
   return (
     <Layout
-      title="Pure-JS pickers for React Native"
+      title="Date, Time, Wheel, Select & Emoji Pickers"
       description="Wheel, time, date, calendar, range, select and emoji pickers for React Native, with bottom sheets. 100% JavaScript, zero native code. Expo Go, bare RN and React Native Web."
     >
       <header className={styles.hero}>

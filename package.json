@@ -48,7 +48,19 @@
     "emoji-picker",
     "expo",
     "react-native-web",
-    "bottom-sheet"
+    "bottom-sheet",
+    "datepicker",
+    "timepicker",
+    "datetime-picker",
+    "calendar-picker",
+    "date-range-picker",
+    "dropdown-picker",
+    "multi-select",
+    "emoji-keyboard",
+    "duration-picker",
+    "ios-picker",
+    "react-native-component",
+    "typescript"
   ],
   "scripts": {
     "start": "pnpm --filter pickers-example start",
