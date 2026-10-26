@@ -33,4 +33,15 @@ describe('DateTimePickerSheet', () => {
     expect([confirmed.getHours(), confirmed.getMinutes()]).toEqual([10, 30]);
     expect(onClose).toHaveBeenCalled();
   });
+
+  it('confirms the time as shown when the value is between intervals', async () => {
+    const onConfirm = jest.fn();
+    await render(
+      <DateTimePickerSheet visible value={new Date(2026, 9, 25, 10, 7, 42)} minuteInterval={5} onClose={jest.fn()} onConfirm={onConfirm} />
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Done' }));
+    const confirmed: Date = onConfirm.mock.calls[0][0];
+    expect(toDateKey(confirmed)).toBe('2026-10-25');
+    expect([confirmed.getHours(), confirmed.getMinutes(), confirmed.getSeconds()]).toEqual([10, 5, 0]);
+  });
 });

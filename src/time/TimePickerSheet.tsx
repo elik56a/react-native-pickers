@@ -2,6 +2,7 @@ import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { TimePicker } from './TimePicker';
 import type { TimePickerSheetProps } from './time.types';
+import { snapTime } from './time.utils';
 
 export const TimePickerSheet = ({
   visible,
@@ -22,7 +23,7 @@ export const TimePickerSheet = ({
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
-        onConfirm(draft);
+        onConfirm(snapTime(draft, rest));
         onClose();
       }}
     >

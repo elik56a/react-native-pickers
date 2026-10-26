@@ -12,6 +12,7 @@ import {
   is12HourFormat,
   pad2,
   secondsOfDay,
+  snapTime,
   steps,
 } from './time.utils';
 
@@ -52,6 +53,18 @@ describe('getTimeParts / buildTime', () => {
   it('zeroes seconds when they are hidden', () => {
     const parts = getTimeParts(at(10, 30, 20), 1, 1);
     expect(hhmmss(buildTime(at(10, 30, 20), parts, { hours: 11 }, false))).toBe('11:30:00');
+  });
+});
+
+describe('snapTime', () => {
+  it('snaps to the intervals and drops hidden seconds', () => {
+    expect(hhmmss(snapTime(at(10, 7, 42), { minuteInterval: 5 }))).toBe('10:05:00');
+  });
+  it('keeps snapped seconds when they are shown', () => {
+    expect(hhmmss(snapTime(at(10, 7, 42), { minuteInterval: 5, showSeconds: true, secondInterval: 15 }))).toBe('10:05:30');
+  });
+  it('keeps the date', () => {
+    expect(snapTime(at(10, 7), {}).getDate()).toBe(25);
   });
 });
 

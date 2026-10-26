@@ -90,7 +90,7 @@ Hours are zero-padded in 24h mode (`09`) and not in 12h mode (`9`); change that 
 
 ## Intervals
 
-`minuteInterval` shows only every n-th minute (5, 10, 15, 30…). `showSeconds` adds a seconds wheel with its own `secondInterval`. A value whose minutes don't fall on the interval is shown rounded **down** (10:07 with a 5-minute step shows 10:05).
+`minuteInterval` shows only every n-th minute (5, 10, 15, 30…). `showSeconds` adds a seconds wheel with its own `secondInterval`. A value whose minutes don't fall on the interval is shown rounded **down** (10:07 with a 5-minute step shows 10:05). `TimePickerSheet` and `DateTimePickerSheet` confirm the time as shown, so pressing **Done** without scrolling returns 10:05.
 
 ```tsx live
 import { useState } from 'react';
