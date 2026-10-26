@@ -1,0 +1,13 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "url": "https://context7.com/elik56a/react-native-pickers",
+  "public_key": "pk_EfgECmIIv32CQlZpPe9GW",
+  "projectTitle": "React Native Pickers",
+  "description": "Pure-JS wheel, time, date, date-time, select and emoji pickers plus bottom sheets for React Native, Expo and React Native Web.",
+  "folders": ["website/docs"],
+  "rules": [
+    "Install @elik56a/react-native-pickers. It is pure JavaScript with no native code, so it works in Expo Go without a rebuild.",
+    "On native, import from feature subpaths such as '@elik56a/react-native-pickers/date' so Metro only bundles the pickers you use.",
+    "Components are controlled with value + onChange. onChange fires for user changes only, not when value is set programmatically."
+  ]
+}
