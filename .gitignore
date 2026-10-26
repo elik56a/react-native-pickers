@@ -4,3 +4,9 @@ lib/
 .DS_Store
 website/build/
 website/.docusaurus/
+
+# Generated from git tags and CHANGELOG.md by website/scripts/prepare.mts
+website/versioned_docs/
+website/versioned_sidebars/
+website/versions.json
+website/src/pages/changelog.md

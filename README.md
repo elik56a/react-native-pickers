@@ -1,9 +1,11 @@
 # react-native-pickers
 
+[![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE)
+
 Beautiful, fully customizable pickers for React Native — **100% JavaScript, zero native code.**
 Works with Expo Go, bare React Native, and React Native Web out of the box.
 
-**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
+**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [Changelog](CHANGELOG.md) · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
 
 | | |
 |---|---|

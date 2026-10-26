@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Link from '@docusaurus/Link';
+import { useLatestVersion, useVersions } from '@docusaurus/plugin-content-docs/client';
 import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
@@ -38,15 +39,15 @@ const FEATURES = [
 ];
 
 const COMPONENTS = [
-  { to: '/docs/components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
-  { to: '/docs/components/time-picker', name: 'TimePicker', body: '12/24h from locale, intervals, min/max' },
-  { to: '/docs/components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
-  { to: '/docs/components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheel, or calendar + time' },
-  { to: '/docs/components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
-  { to: '/docs/components/select-picker', name: 'SelectPicker', body: 'Search, groups, icons, multi-select chips' },
-  { to: '/docs/components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
-  { to: '/docs/components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
-  { to: '/docs/components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet with Done' },
+  { doc: 'components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
+  { doc: 'components/time-picker', name: 'TimePicker', body: '12/24h from locale, intervals, min/max' },
+  { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
+  { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheel, or calendar + time' },
+  { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
+  { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, groups, icons, multi-select chips' },
+  { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
+  { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
+  { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet with Done' },
 ];
 
 const CHIPS = [
@@ -261,9 +262,17 @@ function Device() {
   );
 }
 
+// Components added on master but not released yet only exist in the Next docs.
+const useDocPath = () => {
+  const latest = useLatestVersion(undefined);
+  const versions = useVersions(undefined);
+  return (id: string) => [latest, ...versions].flatMap((v) => v.docs).find((doc) => doc.id === id)?.path;
+};
+
 const delay = (step: number) => ({ '--delay': `${step * 90}ms` }) as React.CSSProperties;
 
 export default function Home() {
+  const docPath = useDocPath();
   return (
     <Layout
       title="Pure-JS pickers for React Native"
@@ -328,7 +337,7 @@ export default function Home() {
           <h2 className={styles.h2}>One package. One API. Every picker.</h2>
           <div className={styles.components}>
             {COMPONENTS.map((c) => (
-              <Link key={c.name} to={c.to} className={styles.componentCard}>
+              <Link key={c.name} to={docPath(c.doc)} className={styles.componentCard}>
                 <strong>{c.name}</strong>
                 <span>{c.body}</span>
               </Link>
