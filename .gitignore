@@ -1,5 +1,6 @@
 node_modules/
 lib/
+llms-full.txt
 *.log
 .DS_Store
 website/build/

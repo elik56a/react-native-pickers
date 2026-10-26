@@ -23,6 +23,11 @@
       "react-native": "./src/index.ts",
       "default": "./lib/index.js"
     },
+    "./*": {
+      "types": "./lib/*/index.d.ts",
+      "react-native": "./src/*/index.ts",
+      "default": "./lib/*/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -32,7 +37,8 @@
     "!src/**/*.test.tsx",
     "!src/__tests__",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "llms-full.txt"
   ],
   "sideEffects": false,
   "keywords": [
@@ -74,8 +80,9 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "jest",
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
+    "build:llms": "pnpm docs:build && cp website/build/llms-full.txt llms-full.txt",
     "gen:emoji": "node scripts/build-emoji-data.js",
-    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm build:llms"
   },
   "peerDependencies": {
     "react": ">=18",

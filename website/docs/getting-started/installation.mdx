@@ -107,3 +107,27 @@ import {
 ```
 
 The package is marked `sideEffects: false`, so bundlers that tree-shake (web) drop what you don't import. On native, Metro resolves the TypeScript source through the `react-native` export condition.
+
+### Smaller native bundles
+
+Metro doesn't tree-shake, so a root import bundles every picker on iOS and Android, including about 130 KB of emoji data. Import from the feature subpaths instead and Metro only bundles what you use:
+
+```tsx
+import { DatePicker, DatePickerSheet } from '@elik56a/react-native-pickers/date';
+import { SelectPicker } from '@elik56a/react-native-pickers/select';
+import { PickersProvider } from '@elik56a/react-native-pickers/core';
+```
+
+| Subpath | Exports |
+| --- | --- |
+| `/wheel` | `WheelPicker`, `MultiWheelPicker`, `WheelPickerSheet` |
+| `/time` | `TimePicker`, `TimePickerSheet` |
+| `/date` | `DatePicker`, `DateWheelPicker`, `DatePickerSheet` |
+| `/calendar` | `Calendar` |
+| `/datetime` | `DateTimePicker`, `DateTimePickerSheet` |
+| `/select` | `SelectPicker`, `SelectList` |
+| `/emoji` | `EmojiPicker`, `EmojiPickerSheet`, emoji utils |
+| `/sheet` | `BottomSheet`, `PickerSheet`, `useDraft` |
+| `/core` | `PickersProvider`, themes, date utils |
+
+Each subpath also exports its types. Subpaths need React Native 0.79+ (Expo SDK 53+), where Metro reads package `exports` by default. On older versions, set `resolver.unstable_enablePackageExports = true` in `metro.config.js` or keep the root import.
