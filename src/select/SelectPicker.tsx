@@ -55,7 +55,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
   return (
     <View style={style}>
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      <View ref={picker.anchorRef} collapsable={false}>
+      <View ref={picker.anchor.ref} collapsable={false}>
         {renderTrigger ? (
           renderTrigger({ open: picker.show, selected: picker.selected, disabled })
         ) : (
@@ -80,7 +80,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       {picker.presentation === SELECT_PRESENTATION.dropdown ? (
         <Dropdown
           visible={picker.open}
-          anchor={picker.anchor}
+          anchor={picker.anchor.rect}
           onClose={picker.hide}
           theme={themeOverride}
           overlay={

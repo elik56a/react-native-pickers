@@ -1,5 +1,4 @@
-import type { ComponentRef } from 'react';
-import type { View } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 import { act, renderHook } from '@testing-library/react-native';
 
@@ -25,7 +24,7 @@ describe('usePickerField', () => {
       presentation: 'dropdown',
       anchor: null,
     });
-    result.current.anchorRef.current = { measureInWindow } as unknown as ComponentRef<typeof View>;
+    result.current.anchor.ref.current = { measureInWindow } as unknown as HostInstance;
     await act(() => result.current.show());
     expect(measureInWindow).toHaveBeenCalled();
   });
@@ -34,7 +33,7 @@ describe('usePickerField', () => {
     const measureInWindow = jest.fn();
     const { result } = await renderHook(() => usePickerField({ presentation: 'modal' }));
     expect(result.current.sheet.presentation).toBe('modal');
-    result.current.anchorRef.current = { measureInWindow } as unknown as ComponentRef<typeof View>;
+    result.current.anchor.ref.current = { measureInWindow } as unknown as HostInstance;
     await act(() => result.current.show());
     expect(measureInWindow).not.toHaveBeenCalled();
   });

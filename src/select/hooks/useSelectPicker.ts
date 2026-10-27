@@ -10,7 +10,7 @@ import { findOptions, resolveSelectPresentation, toValueList } from '../select.u
 export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
   const { options, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
   const [open, setOpen] = useState(false);
-  const { ref: anchorRef, anchor, measure } = useAnchor();
+  const anchor = useAnchor();
   const [query, setQuery] = useState('');
   const presentation = resolveSelectPresentation(props.presentation ?? SELECT_PRESENTATION.auto, Platform.OS);
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
@@ -23,10 +23,10 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
 
   const show = useCallback(() => {
     if (disabled) return;
-    if (dropdown) measure();
+    if (dropdown) anchor.measure();
     setOpen(true);
     onOpen?.();
-  }, [disabled, dropdown, measure, onOpen]);
+  }, [anchor.measure, disabled, dropdown, onOpen]);
 
   const hide = useCallback(() => {
     setOpen(false);
@@ -69,7 +69,6 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     searchInField,
     query,
     setQuery,
-    anchorRef,
     anchor,
     show,
     hide,

@@ -33,7 +33,7 @@ export const PickerField = ({
   return (
     <View style={style}>
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      <View ref={field.anchorRef} collapsable={false}>
+      <View ref={field.anchor.ref} collapsable={false}>
         {renderTrigger ? (
           renderTrigger({ open: field.show, displayValue, disabled })
         ) : (

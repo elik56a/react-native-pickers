@@ -12,15 +12,15 @@ export const usePickerField = ({
   onClose,
 }: Pick<PickerFieldBaseProps, 'disabled' | 'onOpen' | 'onClose'> & { presentation?: FieldPresentation }) => {
   const [open, setOpen] = useState(false);
-  const { ref: anchorRef, anchor, measure } = useAnchor();
+  const anchor = useAnchor();
   const dropdown = presentation === FIELD_PRESENTATION.dropdown;
 
   const show = useCallback(() => {
     if (disabled) return;
-    if (dropdown) measure();
+    if (dropdown) anchor.measure();
     setOpen(true);
     onOpen?.();
-  }, [disabled, dropdown, measure, onOpen]);
+  }, [anchor.measure, disabled, dropdown, onOpen]);
 
   const hide = useCallback(() => {
     setOpen(false);
@@ -30,16 +30,16 @@ export const usePickerField = ({
   const sheet = useMemo<FieldSheetContextValue>(
     () => ({
       presentation,
-      anchor,
+      anchor: anchor.rect,
     }),
-    [anchor, presentation]
+    [anchor.rect, presentation]
   );
 
   return {
     open,
     show,
     hide,
-    anchorRef,
+    anchor,
     sheet,
   };
 };

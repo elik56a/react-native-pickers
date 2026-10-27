@@ -156,6 +156,13 @@ export interface SheetAnimationOptions {
   onClosed?: () => void;
 }
 
+/** The field a dropdown opens from: attach `ref`, call `measure` on open, and read `rect`. Named so the build can emit the hooks returning it. */
+export interface FieldAnchor {
+  ref: RefObject<HostInstance | null>;
+  rect: AnchorRect | null;
+  measure: () => void;
+}
+
 /** A view's position in window coordinates, from `measureInWindow`. */
 export interface AnchorRect {
   x: number;
