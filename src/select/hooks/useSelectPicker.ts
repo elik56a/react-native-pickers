@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { usePickerPlatform } from '../../core/theme/ThemeProvider';
 import { useAnchor } from '../../sheet/hooks/useAnchor';
 import { resolveFieldPresentation } from '../../sheet/sheet.utils';
 import { SELECT_PRESENTATION } from '../select.constants';
@@ -12,7 +13,7 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
   const [open, setOpen] = useState(false);
   const anchor = useAnchor();
   const [query, setQuery] = useState('');
-  const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto);
+  const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto, usePickerPlatform());
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
   const searchInField = dropdown && props.searchable !== false;
 

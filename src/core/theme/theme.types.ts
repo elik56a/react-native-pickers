@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { TextStyle } from 'react-native';
+import type { PlatformOSType, TextStyle } from 'react-native';
 
 import type { DeepPartial, ValueOf } from '../core.types';
 import type { COLOR_SCHEME } from './theme.constants';
@@ -53,4 +53,6 @@ export interface PickersProviderProps {
   theme?: DeepPartial<PickerTheme>;
   /** Overrides applied to the dark theme */
   darkTheme?: DeepPartial<PickerTheme>;
+  /** Pickers behave as on this platform: sheets or dropdowns, insets, dragging. For previewing iOS or Android in a browser. Default: `Platform.OS` */
+  platform?: PlatformOSType;
 }

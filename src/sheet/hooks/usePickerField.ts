@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { usePickerPlatform } from '../../core/theme/ThemeProvider';
 import { FIELD_PRESENTATION } from '../sheet.constants';
 import type { FieldPresentation, FieldSheetContextValue, PickerFieldBaseProps } from '../sheet.types';
 import { resolveFieldPresentation } from '../sheet.utils';
@@ -14,7 +15,7 @@ export const usePickerField = ({
 }: Pick<PickerFieldBaseProps, 'disabled' | 'onOpen' | 'onClose'> & { presentation?: FieldPresentation }) => {
   const [open, setOpen] = useState(false);
   const anchor = useAnchor();
-  const presentation = resolveFieldPresentation(presentationProp);
+  const presentation = resolveFieldPresentation(presentationProp, usePickerPlatform());
   const dropdown = presentation === FIELD_PRESENTATION.dropdown;
 
   const show = useCallback(() => {

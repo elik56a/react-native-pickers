@@ -4,6 +4,7 @@ import {
   getDragFrame,
   getDropdownFrame,
   getReleaseTarget,
+  getSheetDefaults,
   getWheelTarget,
   isVerticalDrag,
   resolveFieldPresentation,
@@ -200,9 +201,28 @@ describe('splitFieldProps', () => {
 
 describe('resolveFieldPresentation', () => {
   it('turns auto into a dropdown on the web only', () => {
-    expect(resolveFieldPresentation('auto', true)).toBe('dropdown');
-    expect(resolveFieldPresentation('auto', false)).toBe('auto');
-    expect(resolveFieldPresentation('modal', true)).toBe('modal');
-    expect(resolveFieldPresentation('bottomSheet', true)).toBe('bottomSheet');
+    expect(resolveFieldPresentation('auto', 'web')).toBe('dropdown');
+    expect(resolveFieldPresentation('auto', 'ios')).toBe('auto');
+    expect(resolveFieldPresentation('modal', 'web')).toBe('modal');
+    expect(resolveFieldPresentation('bottomSheet', 'web')).toBe('bottomSheet');
+  });
+});
+
+describe('getSheetDefaults', () => {
+  it('leaves room for the iOS home indicator and status bar, and drags by the header on native only', () => {
+    expect(getSheetDefaults('ios')).toEqual({
+      bottomInset: 24,
+      draggable: true,
+      expandedTopInset: 54,
+    });
+    expect(getSheetDefaults('android')).toMatchObject({
+      bottomInset: 12,
+      draggable: true,
+    });
+    expect(getSheetDefaults('web')).toEqual({
+      bottomInset: 12,
+      draggable: false,
+      expandedTopInset: 0,
+    });
   });
 });

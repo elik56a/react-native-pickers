@@ -1,5 +1,9 @@
+import type { PlatformOSType } from 'react-native';
+
+import { PLATFORM } from '../core/core.constants';
 import type { DistributiveOmit } from '../core/core.types';
 import {
+  DEFAULT_BOTTOM_INSET,
   DIALOG_MARGIN,
   DISMISS_DISTANCE,
   DISMISS_HEIGHT_RATIO,
@@ -8,9 +12,10 @@ import {
   DROPDOWN_EDGE_MARGIN,
   DROPDOWN_GAP,
   EXPAND_FLICK_VELOCITY,
+  EXPANDED_TOP_INSET,
   FIELD_PRESENTATION,
   FIELD_PROP_KEYS,
-  IS_WEB,
+  IOS_BOTTOM_INSET,
   SCROLLABLE_OVERFLOW,
   SHEET_MAX_WIDTH,
   SHEET_PRESENTATION,
@@ -77,18 +82,25 @@ export const canScrollWithin = (
 /** `auto` picks a modal on web windows wider than the sheet, where a bottom sheet looks cut off. */
 export const resolvePresentation = (
   presentation: SheetPresentation,
-  platform: string,
+  platform: PlatformOSType,
   windowWidth: number
 ): Exclude<SheetPresentation, typeof SHEET_PRESENTATION.auto> => {
   if (presentation !== SHEET_PRESENTATION.auto) return presentation;
-  return platform === 'web' && windowWidth >= SHEET_MAX_WIDTH + DIALOG_MARGIN * 2
+  return platform === PLATFORM.web && windowWidth >= SHEET_MAX_WIDTH + DIALOG_MARGIN * 2
     ? SHEET_PRESENTATION.modal
     : SHEET_PRESENTATION.bottomSheet;
 };
 
 /** A field's `auto`: a dropdown on the web, where options are expected under the field; on native, a sheet (`auto` again, resolved by the sheet). */
-export const resolveFieldPresentation = (presentation: FieldPresentation, web = IS_WEB): FieldPresentation =>
-  presentation === FIELD_PRESENTATION.auto && web ? FIELD_PRESENTATION.dropdown : presentation;
+export const resolveFieldPresentation = (presentation: FieldPresentation, platform: PlatformOSType): FieldPresentation =>
+  presentation === FIELD_PRESENTATION.auto && platform === PLATFORM.web ? FIELD_PRESENTATION.dropdown : presentation;
+
+/** Platform defaults for a bottom sheet. Mouse drags on the header would select its text on the web, so there only the handle drags. */
+export const getSheetDefaults = (platform: PlatformOSType) => ({
+  bottomInset: platform === PLATFORM.ios ? IOS_BOTTOM_INSET : DEFAULT_BOTTOM_INSET,
+  draggable: platform !== PLATFORM.web,
+  expandedTopInset: EXPANDED_TOP_INSET[platform] ?? 0,
+});
 
 /** Opens below the anchor, or above it when there's more room there and not enough below. Grows to `minWidth`, kept inside the window. */
 export const getDropdownFrame = (

@@ -1,20 +1,15 @@
 import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { PLATFORM } from '../core/core.constants';
+import { usePickerPlatform } from '../core/theme/ThemeProvider';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSheetResize } from './hooks/useSheetResize';
-import {
-  DEFAULT_BOTTOM_INSET,
-  DEFAULT_DRAGGABLE,
-  DEFAULT_MAX_HEIGHT_RATIO,
-  DIALOG_RISE,
-  EXPANDED_TOP_INSET,
-  SHEET_PRESENTATION,
-} from './sheet.constants';
+import { DEFAULT_MAX_HEIGHT_RATIO, DIALOG_RISE, SHEET_PRESENTATION } from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { BottomSheetProps } from './sheet.types';
-import { resolvePresentation, resolveSheetHeight } from './sheet.utils';
+import { getSheetDefaults, resolvePresentation, resolveSheetHeight } from './sheet.utils';
 
 export const BottomSheet = ({
   visible,
@@ -25,13 +20,13 @@ export const BottomSheet = ({
   headerRight,
   footer,
   enableSwipeToClose = true,
-  draggable = DEFAULT_DRAGGABLE,
+  draggable: draggableProp,
   expandable = true,
   expandedHeight,
   closeOnBackdropPress = true,
   maxHeightRatio = DEFAULT_MAX_HEIGHT_RATIO,
   height,
-  bottomInset = DEFAULT_BOTTOM_INSET,
+  bottomInset: bottomInsetProp,
   presentation = SHEET_PRESENTATION.auto,
   styles: slots,
   theme: themeOverride,
@@ -41,7 +36,11 @@ export const BottomSheet = ({
 }: BottomSheetProps) => {
   const theme = usePickerTheme(themeOverride);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const dialog = resolvePresentation(presentation, Platform.OS, windowWidth) === SHEET_PRESENTATION.modal;
+  const platform = usePickerPlatform();
+  const defaults = getSheetDefaults(platform);
+  const draggable = draggableProp ?? defaults.draggable;
+  const bottomInset = bottomInsetProp ?? defaults.bottomInset;
+  const dialog = resolvePresentation(presentation, platform, windowWidth) === SHEET_PRESENTATION.modal;
   const { mounted, progress, drag, translateY } = useSheetAnimation({
     visible,
     duration: theme.animation.duration,
@@ -49,7 +48,7 @@ export const BottomSheet = ({
     onOpened,
     onClosed,
   });
-  const expandedPx = resolveSheetHeight(expandedHeight, windowHeight) ?? windowHeight - EXPANDED_TOP_INSET;
+  const expandedPx = resolveSheetHeight(expandedHeight, windowHeight) ?? windowHeight - defaults.expandedTopInset;
   const resize = useSheetResize({
     active: mounted && visible,
     drag,
@@ -67,7 +66,7 @@ export const BottomSheet = ({
 
   return (
     <Modal visible transparent animationType="none" statusBarTranslucent onRequestClose={onClose} testID={testID}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={StyleSheet.absoluteFill}>
+      <KeyboardAvoidingView behavior={Platform.OS === PLATFORM.ios ? 'padding' : undefined} style={StyleSheet.absoluteFill}>
         <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.backdrop, opacity: progress }, slots?.backdrop]}>
           <Pressable
             style={StyleSheet.absoluteFill}
