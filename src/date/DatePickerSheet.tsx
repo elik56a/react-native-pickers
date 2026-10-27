@@ -33,9 +33,9 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
   } = props;
   const theme = useDesignOverride(themeProp, design);
   const display = getSheetDisplay(mode, displayProp);
-  // The sheet holds whichever value shape the mode uses; `mode` ties value, draft and onConfirm together.
+  // The sheet holds whichever value shape the mode uses; `mode` ties value, draft and onConfirm together, so a new mode starts a new draft.
   const confirmDraft = onConfirm as (draft: DateDraft) => void;
-  const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible);
+  const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible, mode);
   const ready = isDraftReady(mode, draft);
   const resolved = usePickerTheme(theme);
   const headline =

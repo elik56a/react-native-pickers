@@ -61,4 +61,16 @@ describe('DatePickerSheet', () => {
     await render(<DatePickerSheet {...props} visible display="wheel" onClose={jest.fn()} initialMonth={OCTOBER} />);
     expect(screen.getByLabelText(/October 15, 2026/)).toBeTruthy();
   });
+
+  it('starts a new draft when the mode changes while open', async () => {
+    const onConfirm = jest.fn();
+    const range = { start: new Date(2026, 9, 10), end: new Date(2026, 9, 14) };
+    const { rerender } = await render(
+      <DatePickerSheet visible mode="range" value={range} onClose={jest.fn()} onConfirm={onConfirm} initialMonth={OCTOBER} />
+    );
+    await rerender(<DatePickerSheet visible mode="multiple" value={[]} onClose={jest.fn()} onConfirm={onConfirm} initialMonth={OCTOBER} />);
+    await pressDay(3);
+    await fireEvent.press(done());
+    expect(onConfirm.mock.calls[0][0].map(toDateKey)).toEqual(['2026-10-03']);
+  });
 });
