@@ -1,0 +1,34 @@
+.root {
+  height: 100%;
+}
+
+/* Centred on its point, above the sheets the device mock pins over the phone. */
+.fingertip {
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: rgba(23, 21, 15, 0.28);
+  box-shadow: 0 4px 14px rgba(23, 21, 15, 0.3);
+  pointer-events: none;
+  transition:
+    transform 0.55s cubic-bezier(0.3, 0.7, 0.2, 1),
+    scale 0.15s ease-out,
+    background-color 0.15s;
+  animation: fingertipIn 0.3s ease-out;
+}
+
+.pressed {
+  scale: 0.75;
+  background: rgba(23, 21, 15, 0.45);
+}
+
+@keyframes fingertipIn {
+  from {
+    opacity: 0;
+  }
+}

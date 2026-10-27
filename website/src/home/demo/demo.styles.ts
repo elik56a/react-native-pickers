@@ -9,4 +9,11 @@ export const styles = StyleSheet.create({
   form: { flex: 1, gap: 16, paddingTop: 12 },
   flag: { fontSize: 18 },
   tabBar: { marginTop: 8 },
+  browserRoot: { paddingTop: 20 },
+  booking: { flex: 1, gap: 14, paddingTop: 10 },
+  reserve: { height: 50, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  reserveDisabled: { opacity: 0.5 },
+  reserveRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  reserveProgress: { opacity: 0.22, transformOrigin: 'left' },
+  reserveText: { fontSize: 16, fontWeight: '700' },
 });

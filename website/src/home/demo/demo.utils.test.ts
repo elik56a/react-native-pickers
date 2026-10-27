@@ -1,7 +1,17 @@
 import { toDateKey } from '@elik56a/react-native-pickers';
 import { DEFAULT_OPTIONS } from '../playground/playground.constants';
 import { PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
-import { buildPrices, daysFromNow, demoSubtitle, stay } from './demo.utils';
+import {
+  buildPrices,
+  daysFromNow,
+  demoSubtitle,
+  deviceSheetProps,
+  guestsLabel,
+  nightlyPrice,
+  stay,
+  stayNights,
+  stayTotal,
+} from './demo.utils';
 
 describe('stay', () => {
   it('spans whole local days from today', () => {
@@ -35,5 +45,34 @@ describe('demoSubtitle', () => {
     expect(demoSubtitle('wheel', { ...DEFAULT_OPTIONS, wheel: { variant: 'flat', loop: false, visibleItems: 5 } })).toBe(
       'Bounded flat wheel'
     );
+  });
+});
+
+describe('stayTotal', () => {
+  it('adds up the nights from check-in to the night before check-out', () => {
+    expect(stayNights(stay(2, 5))).toBe(3);
+    expect(stayTotal(stay(2, 5))).toBe(nightlyPrice(2) + nightlyPrice(3) + nightlyPrice(4));
+  });
+
+  it('is nothing until both ends are picked', () => {
+    const open = { start: daysFromNow(2), end: null };
+    expect(stayNights(open)).toBe(0);
+    expect(stayTotal(open)).toBe(0);
+  });
+});
+
+describe('guestsLabel', () => {
+  it('counts adults, and children only when there are some', () => {
+    expect(guestsLabel({ adults: 1, children: 0 })).toBe('1 adult');
+    expect(guestsLabel({ adults: 2, children: 1 })).toBe('2 adults, 1 child');
+    expect(guestsLabel({ adults: 2, children: 3 })).toBe('2 adults, 3 children');
+  });
+});
+
+describe('deviceSheetProps', () => {
+  it('clears the home indicator and stops under the status bar', () => {
+    expect(deviceSheetProps('ios', 700)).toEqual({ bottomInset: 30, draggable: true, expandedHeight: 648 });
+    expect(deviceSheetProps('android').expandedHeight).toBeUndefined();
+    expect(deviceSheetProps('android').bottomInset).toBe(16);
   });
 });

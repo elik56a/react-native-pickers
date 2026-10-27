@@ -1,14 +1,14 @@
 .device {
   --screen-bg: #ffffff;
   --screen-fg: #17150f;
+  /* Phones are about twice as tall as wide, so this keeps the whole phone on a laptop screen, under the navbar. */
+  --phone-width: clamp(240px, min(calc((100dvh - 7.5rem) / 2.06), 100cqw), 330px);
+  --morph: 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  justify-self: center;
+  justify-content: center;
+  gap: 1.5rem;
   width: 100%;
-  max-width: 372px;
-  transition: max-width 0.3s ease;
   animation: deviceIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
 }
 
@@ -28,36 +28,117 @@
   --screen-fg: #f5f2ec;
 }
 
-.deviceWide {
-  max-width: 520px;
+.rail {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--site-border);
+  border-radius: 18px;
+  background: var(--site-surface);
 }
 
-.platformTabs {
-  width: 280px;
-  max-width: 100%;
+.railButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 60px;
+  padding: 0.55rem 0 0.45rem;
+  border: 0;
+  border-radius: 13px;
+  background: none;
+  color: var(--ifm-color-emphasis-700);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+.railButton:hover {
+  color: var(--ifm-color-emphasis-900);
+}
+
+.railButton[aria-pressed="true"] {
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-primary);
+  box-shadow: var(--site-shadow);
+}
+
+.railButton:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
 }
 
 .frame {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
+  /* The iPhone's proportions; the browser window matches its height, so only the width changes between them. */
+  height: calc((var(--phone-width) - 6px) * 2);
   overflow: hidden;
   background: var(--screen-bg);
   color: var(--screen-fg);
-  transition: border-radius 0.3s ease;
+  transition:
+    height var(--morph),
+    border-width var(--morph),
+    border-color var(--morph),
+    border-radius var(--morph),
+    box-shadow var(--morph);
 }
 
+/* Room for the widest device, so the rail stays put while they morph and each grows away from it. */
+.slot {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: 520px;
+  container-type: inline-size;
+}
+
+/*
+ * One body that morphs between the devices: its width, corners and border animate, and the titanium and aluminium bands are
+ * layers that fade in and out, since gradients can't animate.
+ */
 .hardware {
+  --metal: linear-gradient(135deg, #e2ded5 0%, #8e897f 20%, #d0cbc1 42%, #6c675e 68%, #c4bfb5 100%);
+  --rail: linear-gradient(90deg, #a6a8a6, #e4e5e2 10%, #c6c7c4 50%, #e4e5e2 90%, #a6a8a6);
   position: relative;
   width: 100%;
+  max-width: var(--phone-width);
+  padding: 3px;
+  border-radius: 58px;
+  transition:
+    max-width var(--morph),
+    border-radius var(--morph);
+}
+
+:global([data-theme="dark"]) .hardware {
+  --metal: linear-gradient(135deg, #6b6862 0%, #2c2b28 22%, #55524c 45%, #1d1c1a 70%, #4a4843 100%);
+  --rail: linear-gradient(90deg, #1f2022, #4a4c4f 10%, #2c2e30 50%, #4a4c4f 90%, #1f2022);
+}
+
+.hardware::before,
+.hardware::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--morph);
 }
 
 /* Natural titanium band around the glass, with the four hardware buttons sticking out of it. */
-.titanium {
-  --metal: linear-gradient(135deg, #e2ded5 0%, #8e897f 20%, #d0cbc1 42%, #6c675e 68%, #c4bfb5 100%);
-  padding: 3px;
-  border-radius: 58px;
+.hardware::before {
   background: var(--metal);
   box-shadow:
     0 0 0 0.5px rgba(23, 21, 15, 0.45),
@@ -65,13 +146,54 @@
     0 50px 80px -40px rgba(23, 21, 15, 0.55);
 }
 
-:global([data-theme="dark"]) .titanium {
-  --metal: linear-gradient(135deg, #6b6862 0%, #2c2b28 22%, #55524c 45%, #1d1c1a 70%, #4a4843 100%);
+/* Pixel-style matte aluminium rail; the power key and volume rocker both sit on the right. */
+.hardware::after {
+  background: var(--rail);
+  box-shadow:
+    0 0 0 0.5px rgba(23, 21, 15, 0.4),
+    inset 0 0 1px rgba(255, 255, 255, 0.8),
+    0 50px 80px -40px rgba(23, 21, 15, 0.55);
+}
+
+.titanium::before,
+.aluminum::after {
+  opacity: 1;
+}
+
+.aluminum {
+  border-radius: 49px;
+}
+
+.deviceWide .hardware {
+  max-width: 520px;
+  border-radius: 17px;
+}
+
+/* The screen's content swaps while faded out, as the device morphs; DEVICE_SWAP_OUT_MS waits for the fade. */
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  transition: opacity 0.3s ease-out 0.1s;
+}
+
+.leaving .content {
+  opacity: 0;
+  transition: opacity 0.15s ease-in;
 }
 
 .sideButton {
   position: absolute;
+  z-index: 1;
   width: 4px;
+  animation: fadeIn var(--morph) both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 }
 
 .titanium .sideButton {
@@ -84,22 +206,6 @@
 
 :global([data-theme="dark"]) .titanium .sideButton {
   background: linear-gradient(90deg, #1d1c1a, #5c5953 50%, #1d1c1a);
-}
-
-/* Pixel-style matte aluminium rail; the power key and volume rocker both sit on the right. */
-.aluminum {
-  --rail: linear-gradient(90deg, #a6a8a6, #e4e5e2 10%, #c6c7c4 50%, #e4e5e2 90%, #a6a8a6);
-  padding: 3px;
-  border-radius: 49px;
-  background: var(--rail);
-  box-shadow:
-    0 0 0 0.5px rgba(23, 21, 15, 0.4),
-    inset 0 0 1px rgba(255, 255, 255, 0.8),
-    0 50px 80px -40px rgba(23, 21, 15, 0.55);
-}
-
-:global([data-theme="dark"]) .aluminum {
-  --rail: linear-gradient(90deg, #1f2022, #4a4c4f 10%, #2c2e30 50%, #4a4c4f 90%, #1f2022);
 }
 
 :global([data-theme="dark"]) .aluminum .sideButton {
@@ -151,12 +257,14 @@
   border-radius: 0 2px 2px 0;
 }
 
+/* Phones keep about a modern phone's proportions, a little shorter than the real ones so they fit most laptop screens. */
 .ios {
   border: 10px solid #050505;
   border-radius: 55px;
 }
 
 .android {
+  height: calc((var(--phone-width) - 6px) * 18.5 / 9);
   border: 8px solid #050505;
   border-radius: 46px;
 }
@@ -285,7 +393,8 @@
 }
 
 .screen {
-  height: clamp(440px, calc(100vh - 300px), 590px);
+  flex: 1;
+  min-height: 0;
 }
 
 .screen > div {
@@ -319,8 +428,15 @@
     animation: none;
   }
 
-  .device,
-  .frame {
+  .hardware,
+  .hardware::before,
+  .hardware::after,
+  .frame,
+  .content {
     transition: none;
+  }
+
+  .sideButton {
+    animation: none;
   }
 }
