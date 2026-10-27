@@ -1,6 +1,8 @@
 import type { KeyboardTypeOptions } from 'react-native';
 import { Platform } from 'react-native';
 
+import { PLATFORM } from '../core/core.constants';
+
 export const WHEEL_VARIANT = {
   threeD: '3d',
   flat: 'flat',
@@ -32,4 +34,4 @@ export const FLAT_UNSELECTED_SCALE = 0.94;
 /** Keeps edge rows just short of 90°, where they would collapse to a line. */
 export const EDGE_ANGLE_MARGIN_RAD = 0.05;
 
-export const NUMERIC_KEYBOARD_TYPE: KeyboardTypeOptions = Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'number-pad';
+export const NUMERIC_KEYBOARD_TYPE: KeyboardTypeOptions = Platform.OS === PLATFORM.ios ? 'numbers-and-punctuation' : 'number-pad';

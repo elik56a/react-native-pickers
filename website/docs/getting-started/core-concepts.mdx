@@ -29,6 +29,7 @@ const [date, setDate] = useState(new Date());
 | `EmojiPicker` skin tone | `skinTone` | `defaultSkinTone` |
 | `EmojiPicker` recents | `recent` | `defaultRecent` |
 | `SelectPicker` / `SelectList` | `value` | — (always controlled) |
+| `HorizontalList` | `value` | — (always controlled) |
 
 :::caution Select is controlled-only
 `SelectPicker` and `SelectList` don't keep their own selection. Always pass `value` and update it in `onChange`.
@@ -117,7 +118,8 @@ When styles aren't enough, replace a part entirely:
 | --- | --- |
 | `WheelPicker` | `renderItem`, `renderIndicator` |
 | `DatePicker` / `Calendar` | `renderDay`, `renderArrow`, `formatTitle` |
-| `SelectPicker` / `SelectList` | `renderTrigger`, `renderOption`, `renderGroupHeader` |
+| `SelectPicker` / `SelectList` | `renderTrigger`, `renderOption`, `renderGroupHeader`, `renderLoading` |
+| `HorizontalList` | `renderItem` |
 | `EmojiPicker` | `renderEmoji`, `categoryIcons` |
 | `*PickerField` / `PickerField` | `renderTrigger`, `renderChevron` |
 

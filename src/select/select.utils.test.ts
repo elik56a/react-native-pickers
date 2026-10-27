@@ -3,6 +3,7 @@ import {
   buildRows,
   defaultFilter,
   findOptions,
+  getEmptyMessage,
   getRowKey,
   getSelectedLabel,
   isAtMax,
@@ -36,12 +37,25 @@ describe('defaultFilter', () => {
   });
 });
 
+describe('getEmptyMessage', () => {
+  it('asks a searched list for a query until the user types, then says nothing matched', () => {
+    expect(getEmptyMessage(true, '', 'Type to search', 'No results')).toBe('Type to search');
+    expect(getEmptyMessage(true, 'lon', 'Type to search', 'No results')).toBe('No results');
+    expect(getEmptyMessage(false, '', 'Type to search', 'No results')).toBe('No results');
+  });
+});
+
 describe('shouldShowSearch', () => {
   it('searches long lists unless told otherwise', () => {
     expect(shouldShowSearch(undefined, 8)).toBe(false);
     expect(shouldShowSearch(undefined, 9)).toBe(true);
     expect(shouldShowSearch(false, 50)).toBe(false);
     expect(shouldShowSearch(true, 2)).toBe(true);
+  });
+
+  it('searches a remote list even before it has options', () => {
+    expect(shouldShowSearch(undefined, 0, true)).toBe(true);
+    expect(shouldShowSearch(false, 0, true)).toBe(false);
   });
 });
 

@@ -52,6 +52,7 @@ export const CONTROLS = {
     { key: 'multiple', values: [true, false] },
     { key: 'searchable', values: [true, false] },
     { key: 'groups', values: [true, false] },
+    { key: 'loading', values: [false, true] },
   ],
   emoji: [
     { key: 'columns', values: [6, 7, 8] },
@@ -64,7 +65,7 @@ export const DEFAULT_OPTIONS: PlaygroundOptions = {
   date: { mode: 'range', prices: true, firstDayOfWeek: 0 },
   time: { format: 'auto', minuteInterval: 5, showSeconds: false },
   wheel: { variant: '3d', loop: true, visibleItems: 5 },
-  select: { multiple: true, searchable: true, groups: true },
+  select: { multiple: true, searchable: true, groups: true, loading: false },
   emoji: { columns: 7, showSkinTones: true, categoryBarPosition: 'top' },
 };
 

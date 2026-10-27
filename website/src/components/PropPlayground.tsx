@@ -1,10 +1,11 @@
-import { type CSSProperties, type ElementType, type ReactNode, useState } from 'react';
+import { type ElementType, type ReactNode, useState } from 'react';
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 
 import { PickersProvider, SelectPicker } from '@elik56a/react-native-pickers';
+import { Choices } from './Choices';
 import styles from './PropPlayground.module.css';
 
 export type Option = string | number | boolean | readonly string[];
@@ -52,7 +53,8 @@ interface PreviewProps {
   children?: ReactNode;
 }
 
-const SEGMENTED_MAX_CHARS = 24;
+/** Option sets longer than this, like `presentation`, get a dropdown instead of the horizontal list. */
+const LIST_MAX_CHARS = 24;
 
 /** Sized to the panel: shorter and smaller than a form field. */
 const SELECT_STYLES = {
@@ -141,10 +143,7 @@ const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
 export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
   const { prop, options } = control;
   const isSwitch = options.length === 2 && options.every((o) => typeof o === 'boolean');
-  const isSelect = options.map(label).join('').length > SEGMENTED_MAX_CHARS;
-  const activeIndex = options.findIndex((o) => sameOption(selected, o));
-  // The segmented control's thumb slides to the active segment; its CSS reads both.
-  const thumbPosition = { '--count': options.length, '--index': activeIndex } as CSSProperties;
+  const isSelect = options.map(label).join('').length > LIST_MAX_CHARS;
 
   if (isSwitch) {
     return (
@@ -168,23 +167,12 @@ export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => 
       {isSelect ? (
         <PropSelect prop={prop} options={options} selected={selected} onChoose={onChoose} />
       ) : (
-        <fieldset className={styles.segmented} aria-label={prop}>
-          {activeIndex === -1 ? null : <span className={styles.thumb} aria-hidden="true" style={thumbPosition} />}
-          {options.map((option) => {
-            const active = sameOption(selected, option);
-            return (
-              <button
-                key={label(option)}
-                type="button"
-                aria-pressed={active}
-                className={active ? `${styles.segment} ${styles.active}` : styles.segment}
-                onClick={() => onChoose(prop, option)}
-              >
-                {label(option)}
-              </button>
-            );
-          })}
-        </fieldset>
+        <Choices
+          label={prop}
+          labels={options.map(label)}
+          selected={options.findIndex((o) => sameOption(selected, o))}
+          onChoose={(i) => onChoose(prop, options[i])}
+        />
       )}
     </div>
   );

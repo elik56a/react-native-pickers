@@ -4,22 +4,35 @@ import { textStyle, usePickerTheme } from '../core';
 import { SearchInput } from '../core/components/SearchInput';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { GroupHeader } from './components/GroupHeader';
+import { LoadingState } from './components/LoadingState';
 import { OptionRow } from './components/OptionRow';
 import { useSelectList } from './hooks/useSelectList';
-import { DEFAULT_EMPTY_TEXT, DEFAULT_SEARCH_PLACEHOLDER, SELECT_ROW_TYPE } from './select.constants';
+import {
+  DEFAULT_EMPTY_TEXT,
+  DEFAULT_LOADING_TEXT,
+  DEFAULT_SEARCH_PLACEHOLDER,
+  DEFAULT_SEARCH_PROMPT,
+  NO_OPTIONS,
+  SELECT_ROW_TYPE,
+} from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListProps, SelectRow } from './select.types';
-import { defaultFilter, getRowKey, isOptionDisabled, shouldShowSearch } from './select.utils';
+import { defaultFilter, getEmptyMessage, getRowKey, isOptionDisabled, keepAll, shouldShowSearch } from './select.utils';
 
 export const SelectList = <T,>(props: SelectListProps<T>) => {
   const {
-    options,
+    options = NO_OPTIONS,
     searchable,
     searchPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
-    filterOption = defaultFilter,
+    filterOption = props.loadOptions || props.onSearchChange ? keepAll : defaultFilter,
     renderOption,
     renderGroupHeader,
     emptyText = DEFAULT_EMPTY_TEXT,
+    searchPrompt = DEFAULT_SEARCH_PROMPT,
+    loading = false,
+    loadingText = DEFAULT_LOADING_TEXT,
+    renderLoading,
+    onEndReached,
     showCheckmarks = true,
     isEqual = Object.is,
     listHeight,
@@ -30,7 +43,11 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
     testID,
   } = props;
   const theme = usePickerTheme(themeOverride);
-  const { query, setQuery, rows, atMax, isSelected, toggle } = useSelectList(props, filterOption, isEqual);
+  const { query, setQuery, rows, pending, atMax, isSelected, toggle } = useSelectList(props, filterOption, isEqual);
+  const showLoader = loading || pending;
+  const remote = !!(props.loadOptions || props.onSearchChange);
+
+  const loader = <LoadingState text={loadingText} renderLoading={renderLoading} theme={theme} slots={slots} />;
 
   const renderRow = ({ item }: { item: SelectRow<T> }) => {
     if (item.type === SELECT_ROW_TYPE.header) {
@@ -54,7 +71,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
 
   return (
     <View style={[style, slots?.container]} testID={testID}>
-      {props.query === undefined && shouldShowSearch(searchable, options.length) && (
+      {props.query === undefined && shouldShowSearch(searchable, options.length, remote) && (
         <View style={[{ paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.sm }, slots?.search]}>
           <SearchInput
             value={query}
@@ -72,11 +89,19 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
         showsVerticalScrollIndicator={SHOWS_SCROLL_INDICATOR}
         renderItem={renderRow}
         keyboardShouldPersistTaps="handled"
+        onEndReached={onEndReached}
+        ListFooterComponent={showLoader && rows.length > 0 ? loader : undefined}
         style={[listHeight !== undefined ? { height: listHeight } : null, slots?.list]}
         ListEmptyComponent={
-          <View style={[styles.empty, { padding: theme.spacing.xl }, slots?.empty]}>
-            <Text style={[textStyle(theme, 'md'), { color: theme.colors.textSecondary }, slots?.emptyText]}>{emptyText}</Text>
-          </View>
+          showLoader ? (
+            loader
+          ) : (
+            <View style={[styles.empty, { padding: theme.spacing.xl }, slots?.empty]}>
+              <Text style={[textStyle(theme, 'md'), { color: theme.colors.textSecondary }, slots?.emptyText]}>
+                {getEmptyMessage(remote, query, searchPrompt, emptyText)}
+              </Text>
+            </View>
+          )
         }
       />
     </View>

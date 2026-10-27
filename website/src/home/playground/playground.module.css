@@ -53,14 +53,6 @@
   color: var(--ifm-color-emphasis-700);
 }
 
-.segmented {
-  display: flex;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 10px;
-  background: var(--site-surface);
-}
-
 .radioInput {
   position: absolute;
   width: 1px;
@@ -68,41 +60,6 @@
   margin: 0;
   opacity: 0;
   pointer-events: none;
-}
-
-.segment {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex: 1;
-  min-width: 0;
-  min-height: 30px;
-  padding: 0 0.4rem;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--ifm-color-emphasis-700);
-  font: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    box-shadow 0.15s;
-}
-
-.segment:hover {
-  color: var(--ifm-font-color-base);
-}
-
-.segmentOn {
-  background: var(--ifm-background-color);
-  color: var(--ifm-color-primary);
-  box-shadow:
-    0 1px 2px rgba(23, 21, 15, 0.08),
-    0 0 0 1px var(--site-border);
 }
 
 .switch {
@@ -165,7 +122,6 @@
   box-shadow: 0 0 0 2px var(--swatch);
 }
 
-.segment:has(:focus-visible),
 .switch:focus-visible,
 .swatch:has(:focus-visible) {
   outline: 2px solid var(--ifm-color-primary);
@@ -227,7 +183,6 @@
     animation: none;
   }
 
-  .segment,
   .switch,
   .switchThumb,
   .swatch {

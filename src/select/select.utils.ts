@@ -13,7 +13,16 @@ export const defaultFilter = <T>(option: SelectOption<T>, query: string): boolea
     .every((term) => haystack.includes(term));
 };
 
-export const shouldShowSearch = (searchable: boolean | undefined, optionCount: number) => searchable ?? optionCount > SEARCH_THRESHOLD;
+/** Long lists get a search field, and so do lists searched remotely, which may have no options until the user types. */
+export const shouldShowSearch = (searchable: boolean | undefined, optionCount: number, remote = false) =>
+  searchable ?? (remote || optionCount > SEARCH_THRESHOLD);
+
+/** A searched list with nothing typed and nothing to show asks for a query; anything else empty found no results. */
+export const getEmptyMessage = (remote: boolean, query: string, prompt: string, emptyText: string) =>
+  remote && !query ? prompt : emptyText;
+
+/** For options a server already filtered. */
+export const keepAll = () => true;
 
 /** The selected values as a list, whatever the mode. */
 export const toValueList = <T>(multiple: boolean | undefined, value: T | T[] | null | undefined): T[] => {

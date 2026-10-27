@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
 import { SelectPicker } from './SelectPicker';
 import type { SelectOption } from './select.types';
@@ -28,6 +28,12 @@ describe('SelectPicker', () => {
     await fireEvent.press(screen.getByLabelText('TypeScript'));
     expect(onChange).toHaveBeenCalledWith('typescript', options[1]);
     await waitFor(() => expect(onClose).toHaveBeenCalled());
+  });
+
+  it('keeps the selected label when new options no longer include it', async () => {
+    const { rerender } = await render(<SelectPicker options={options} value="expo" />);
+    await rerender(<SelectPicker options={options.slice(0, 1)} value="expo" />);
+    expect(screen.getByText('Expo')).toBeTruthy();
   });
 
   it('does not open when disabled', async () => {
@@ -107,6 +113,21 @@ describe('SelectPicker', () => {
       await waitFor(() => expect(screen.queryByLabelText('TypeScript')).toBeNull());
       await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
       expect(screen.getByLabelText('Expo')).toBeTruthy();
+    });
+
+    it('loads options as the user types in the field, and keeps the chosen label after closing', async () => {
+      const loadOptions = jest.fn((query: string) => Promise.resolve([{ label: `${query} City`, value: query }]));
+      const onChange = jest.fn();
+      const { rerender } = await render(
+        <SelectPicker label="City" presentation="dropdown" loadOptions={loadOptions} searchDebounce={0} onChange={onChange} />
+      );
+      await fireEvent.press(screen.getByRole('button', { name: 'City' }));
+      await fireEvent.changeText(screen.getByPlaceholderText('Search'), 'par');
+      await act(() => new Promise<void>((resolve) => setTimeout(resolve, 0)));
+      await fireEvent.press(screen.getByLabelText('par City'));
+      expect(onChange).toHaveBeenCalledWith('par', { label: 'par City', value: 'par' });
+      await rerender(<SelectPicker label="City" presentation="dropdown" loadOptions={loadOptions} searchDebounce={0} value="par" />);
+      await waitFor(() => expect(screen.getByText('par City')).toBeTruthy());
     });
 
     it('keeps the field read-only with searchable={false}', async () => {

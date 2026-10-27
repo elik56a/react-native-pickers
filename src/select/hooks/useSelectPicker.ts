@@ -1,25 +1,29 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { usePickerPlatform } from '../../core/theme/ThemeProvider';
 import { useAnchor } from '../../sheet/hooks/useAnchor';
 import { resolveFieldPresentation } from '../../sheet/sheet.utils';
-import { SELECT_PRESENTATION } from '../select.constants';
+import { NO_OPTIONS, SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
 import { findOptions, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
 export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
-  const { options, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
+  const { options = NO_OPTIONS, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
   const [open, setOpen] = useState(false);
   const anchor = useAnchor();
   const [query, setQuery] = useState('');
-  const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto);
+  const known = useRef<SelectOption<T>[]>([]);
+  const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto, usePickerPlatform());
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
   const searchInField = dropdown && props.searchable !== false;
 
-  const selected = useMemo(
-    () => findOptions(toValueList(props.multiple, props.value), options, isEqual),
-    [isEqual, options, props.multiple, props.value]
-  );
+  // Search results can drop a selected option, so its label is remembered from the options it last appeared in, or came with in onChange.
+  const selected = useMemo(() => {
+    const found = findOptions(toValueList(props.multiple, props.value), [...options, ...known.current], isEqual);
+    if (found.length > 0) known.current = found;
+    return found;
+  }, [isEqual, options, props.multiple, props.value]);
 
   const show = useCallback(() => {
     if (disabled) return;
@@ -38,13 +42,17 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     ? {
         multiple: true,
         value: props.value,
-        onChange: props.onChange,
+        onChange: (values, chosen) => {
+          known.current = chosen;
+          props.onChange?.(values, chosen);
+        },
         maxSelected: props.maxSelected,
       }
     : {
         multiple: false,
         value: props.value,
         onChange: (value, option) => {
+          known.current = [option];
           props.onChange?.(value, option);
           if (closeOnSelect) hide();
         },

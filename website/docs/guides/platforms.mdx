@@ -32,6 +32,18 @@ Only React Native core APIs: `FlatList`, `Animated` (native driver on iOS/Androi
 - `Modal` (used by sheets) renders into a portal on the web.
 - Animations run on the JS driver on the web, because the native driver isn't available there.
 
+### Previewing other platforms
+
+Pickers adapt to `Platform.OS`: fields open a dropdown on the web and a bottom sheet on iOS and Android, sheets keep room for the iOS home indicator and status bar, and headers drag on native. To see the native behavior in a browser (a design system, Storybook, these docs), set `platform` on the provider:
+
+```tsx
+<PickersProvider platform="ios">
+  <App />
+</PickersProvider>
+```
+
+The toolbar under every live example here switches between iOS, Android and Web this way. Other platforms, such as Windows and macOS, behave like Android.
+
 ### Next.js / SSR
 
 Render pickers on the client. They measure layout and animate, so wrap them in a client component:

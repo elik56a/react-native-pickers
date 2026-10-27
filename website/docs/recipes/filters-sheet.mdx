@@ -1,11 +1,11 @@
 ---
 title: Filters bottom sheet
-description: Build a React Native filters bottom sheet combining a date range, select fields and an Apply footer with draft state using BottomSheet and useDraft.
+description: Build a React Native filters bottom sheet combining a sort segmented control, a date range, select fields and an Apply footer with draft state using BottomSheet, HorizontalList and useDraft.
 ---
 
 # Filters bottom sheet
 
-A "Filters" sheet with a category select, a date range and Reset / Apply, all applied at once. It uses `BottomSheet` for the layout and `useDraft` so nothing changes until **Apply**.
+A "Filters" sheet with a sort order, a status select, a date range and Reset / Apply, all applied at once. It uses `BottomSheet` for the layout, [`HorizontalList`](../components/horizontal-list) for the sort order, and `useDraft` so nothing changes until **Apply**.
 
 ```tsx live
 import { useState } from 'react';
@@ -13,14 +13,25 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   BottomSheet,
   DatePicker,
+  HorizontalList,
   SelectList,
   useDraft,
   formatDate,
 } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
-type Filters = { status: string[]; dates: DateRange };
-const EMPTY: Filters = { status: [], dates: { start: null, end: null } };
+type Sort = 'newest' | 'oldest' | 'priority';
+type Filters = { sort: Sort; status: string[]; dates: DateRange };
+const EMPTY: Filters = {
+  sort: 'newest',
+  status: [],
+  dates: { start: null, end: null },
+};
+const SORTS: { label: string; value: Sort }[] = [
+  { label: 'Newest', value: 'newest' },
+  { label: 'Oldest', value: 'oldest' },
+  { label: 'Priority', value: 'priority' },
+];
 const STATUSES = ['Open', 'In progress', 'Blocked', 'Done'].map((s) => ({
   label: s,
   value: s,
@@ -60,6 +71,7 @@ export default function FiltersExample() {
         onPress={() => setOpen(true)}
       />
       <Text style={styles.summary}>
+        {SORTS.find((s) => s.value === filters.sort)?.label} ·{' '}
         {filters.status.join(', ') || 'Any status'} ·{' '}
         {filters.dates.start && filters.dates.end
           ? `${formatDate(filters.dates.start)} → ${formatDate(filters.dates.end)}`
@@ -84,6 +96,14 @@ export default function FiltersExample() {
         }
       >
         <View style={styles.body}>
+          <Text style={styles.h}>Sort by</Text>
+          <HorizontalList
+            items={SORTS}
+            value={draft.sort}
+            onChange={(sort) => setDraft({ ...draft, sort })}
+            accessibilityLabel="Sort by"
+            style={styles.sort}
+          />
           <Text style={styles.h}>Status</Text>
           <SelectList
             multiple
@@ -116,6 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     marginStart: 12,
   },
+  sort: { marginHorizontal: 12 },
   summary: { marginTop: 8, color: '#6E685E', textAlign: 'center' },
   btn: {
     paddingVertical: 12,

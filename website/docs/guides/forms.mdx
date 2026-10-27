@@ -79,6 +79,30 @@ export function BookingForm() {
 
 `field.onChange` receives the first argument, which is the value, so extra arguments such as the `option` from `SelectPicker` are ignored.
 
+### Options from your API
+
+A field whose options come from a server takes `loadOptions` instead of a fixed list. It searches as the user types, with a loader, and the form only ever sees the picked value:
+
+```tsx
+<Controller
+  control={control}
+  name="assignee"
+  rules={{ required: 'Assign someone' }}
+  render={({ field }) => (
+    <SelectPicker
+      label="Assignee"
+      placeholder="Search people"
+      loadOptions={(query) => api.searchUsers(query).then((users) => users.map((u) => ({ label: u.name, value: u.id })))}
+      value={field.value}
+      onChange={field.onChange}
+      onClose={field.onBlur}
+    />
+  )}
+/>
+```
+
+The field keeps showing the picked person's name after later searches stop returning them. For a full form with server search, see the [flight search form recipe](../recipes/flight-search-form).
+
 ### Optional values
 
 A field with `clearable` shows a × button while it has a value. Reset the form value in `onClear`:

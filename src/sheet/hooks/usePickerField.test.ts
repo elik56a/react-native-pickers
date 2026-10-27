@@ -1,7 +1,9 @@
+import { createElement, type ReactNode } from 'react';
 import type { HostInstance } from 'react-native';
 
 import { act, renderHook } from '@testing-library/react-native';
 
+import { PickersProvider } from '../../core';
 import { usePickerField } from './usePickerField';
 
 describe('usePickerField', () => {
@@ -36,6 +38,16 @@ describe('usePickerField', () => {
     result.current.anchor.ref.current = { measureInWindow } as unknown as HostInstance;
     await act(() => result.current.show());
     expect(measureInWindow).not.toHaveBeenCalled();
+  });
+
+  it('opens a dropdown by default when the provider says the platform is the web', async () => {
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(PickersProvider, {
+        platform: 'web',
+        children,
+      });
+    const { result } = await renderHook(() => usePickerField({}), { wrapper });
+    expect(result.current.sheet.presentation).toBe('dropdown');
   });
 
   it('stays closed while disabled', async () => {

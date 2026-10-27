@@ -62,6 +62,7 @@ export default function Example() {
     { prop: 'multiple', options: [false, true] },
     { prop: 'searchable', options: [true, false], default: null },
     { prop: 'showCheckmarks', options: [true, false] },
+    { prop: 'loading', options: [false, true] },
   ]}
 />
 
@@ -103,6 +104,97 @@ export default function Example() {
 }
 ```
 
+## Searching a server
+
+`loadOptions` loads the options for what the user types, with the loader showing from the keystroke until they arrive. Here the list starts with recent picks and searches a fake API:
+
+```tsx live
+import { useState } from 'react';
+import { SelectList } from '@elik56a/react-native-pickers';
+
+const RECENT = ['react', 'react-native', 'expo'].map((name) => ({ label: name, value: name, description: 'Recent' }));
+const PACKAGES = ['react', 'react-dom', 'react-native', 'react-native-web', 'react-query', 'redux', 'expo', 'expo-router', 'zod', 'zustand', 'date-fns', 'dayjs'];
+
+// Stands in for a package registry search
+const searchPackages = (query: string) =>
+  new Promise<{ label: string; value: string }[]>((resolve) =>
+    setTimeout(() => resolve(PACKAGES.filter((p) => p.includes(query.toLowerCase())).map((p) => ({ label: p, value: p }))), 500)
+  );
+
+export default function Example() {
+  const [packages, setPackages] = useState<string[]>([]);
+  return (
+    <SelectList
+      multiple
+      options={RECENT}
+      loadOptions={searchPackages}
+      value={packages}
+      onChange={setPackages}
+      searchPlaceholder="Search packages"
+      loadingText="Searching the registry…"
+      listHeight={300}
+    />
+  );
+}
+```
+
+## Loading more as you scroll
+
+`onEndReached` fires near the end of the list; append the next page to `options` and set `loading` while it's on its way. The spinner shows under the options.
+
+```tsx live
+import { useEffect, useState } from 'react';
+import { SelectList } from '@elik56a/react-native-pickers';
+
+const PAGE = 15;
+const TOTAL = 60;
+
+// Stands in for your API
+const fetchPage = (offset: number) =>
+  new Promise<{ label: string; value: number }[]>((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          Array.from({ length: Math.min(PAGE, TOTAL - offset) }, (_, i) => ({
+            label: `Contact ${offset + i + 1}`,
+            value: offset + i + 1,
+          }))
+        ),
+      800
+    )
+  );
+
+export default function Example() {
+  const [contact, setContact] = useState<number | null>(null);
+  const [options, setOptions] = useState<{ label: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadMore = () => {
+    if (loading || options.length >= TOTAL) return;
+    setLoading(true);
+    fetchPage(options.length).then((page) => {
+      setOptions((current) => [...current, ...page]);
+      setLoading(false);
+    });
+  };
+
+  useEffect(loadMore, []);
+
+  return (
+    <SelectList
+      options={options}
+      value={contact}
+      onChange={setContact}
+      searchable={false}
+      loading={loading}
+      loadingText="Loading contacts…"
+      onEndReached={loadMore}
+      listHeight={300}
+    />
+  );
+}
+```
+
 ## Behaviour
 
 - **Controlled only**: pass `value` and update it in `onChange`.
@@ -110,13 +202,14 @@ export default function Example() {
 - In multiple mode, taps toggle. `onChange(values, options)` keeps selection order (appended at the end).
 - With `maxSelected` reached, unselected options become disabled until something is deselected.
 - Without `listHeight`, the list grows with its content. Inside a scroll view or sheet, give it a `listHeight` so it scrolls on its own.
-- Search state is internal and resets when the list unmounts.
+- Search state is internal and resets when the list unmounts; with `onSearchChange`, that reset calls `onSearchChange('')` so a remote list can drop its results.
+- For options from a server, see [Search on a server](./select-picker#search-on-a-server): `loadOptions`, `onSearchChange`, `loading` and `onEndReached` work the same here.
 
 ## Props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `options` | `ReadonlyArray<SelectOption<T>>` | **required** | See [options](./select-picker#options). |
+| `options` | `ReadonlyArray<SelectOption<T>>` | `[]` | See [options](./select-picker#options). With `loadOptions`, the ones shown before the user types. |
 | `multiple` | `boolean` | `false` | Multi-select. |
 | `value` | `T \| null` · `T[]` | — | Selection. |
 | `onChange` | `(value: T, option) => void` · `(values: T[], options) => void` | — | Single · multiple. |
@@ -124,7 +217,15 @@ export default function Example() {
 | `searchable` | `boolean` | `options.length > 8` | Show the search field. |
 | `query` | `string` | — | Controlled search query, for filtering from your own input. Hides the built-in search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint and its accessibility label. |
-| `filterOption` | `(option: SelectOption<T>, query: string) => boolean` | `defaultFilter` | Custom filter. |
+| `filterOption` | `(option: SelectOption<T>, query: string) => boolean` | `defaultFilter`; none with `loadOptions` / `onSearchChange` | Custom filter. |
+| `loadOptions` | `(query: string) => Promise<SelectOption<T>[]>` | — | [Search a server](./select-picker#search-on-a-server): loader, debounce and stale answers handled. |
+| `onSearchChange` | `(query: string) => void` | — | Called once typing pauses, to search yourself. |
+| `searchPrompt` | `string` | `'Type to search'` | Shown before the user types, while a searched list has no options. |
+| `searchDebounce` | `number` | `300` | ms after the last keystroke before `loadOptions` / `onSearchChange`. |
+| `onEndReached` | `() => void` | — | Called near the end of the list, to load more. |
+| `loading` | `boolean` | `false` | Spinner in place of an empty list, or under the options. |
+| `loadingText` | `string` | `'Loading…'` | Text next to the spinner. |
+| `renderLoading` | `(theme: PickerTheme) => ReactNode` | — | Custom loader. |
 | `renderOption` | `(info: SelectRenderOptionInfo<T>) => ReactNode` | — | Custom row content. |
 | `renderGroupHeader` | `(group: string, theme: PickerTheme) => ReactNode` | — | Custom section header. |
 | `emptyText` | `string` | `'No results'` | Empty-state text. |
@@ -151,7 +252,8 @@ export default function Example() {
 | `optionLabel` / `selectedOptionLabel` | Row label |
 | `optionDescription` | Second line |
 | `check` | ✓ or checkbox |
-| `empty` / `emptyText` | Empty state |
+| `empty` / `emptyText` | Empty state, and the `searchPrompt` |
+| `loading` / `loadingText` | Loader row / its text |
 
 ### Types
 

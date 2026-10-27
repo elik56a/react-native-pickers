@@ -7,7 +7,10 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import clsx from 'clsx';
 import { Editor, LiveEditor, LiveError, LivePreview } from 'react-live';
 
+import { Choices } from '../../components/Choices';
 import { ControlRow, type Option } from '../../components/PropPlayground';
+import { PLATFORM, PLATFORM_LABELS, PLATFORMS } from '../../home/device/device.constants';
+import type { Platform } from '../../home/device/device.types';
 import { useCopyToClipboard } from '../../home/hooks/useCopyToClipboard';
 import { toCodePreview, withCodePreview } from '../../live/codePreview';
 import { findControls, readControl, writeControl } from '../../live/controls';
@@ -95,6 +98,8 @@ export default function Playground({ children, scope }: PlaygroundProps) {
   const initialCode = children.replace(/\n$/, '');
   const [code, setCode] = useState(initialCode);
   const [expanded, setExpanded] = useState(false);
+  // The browser is the web, so iOS and Android are emulated: sheets instead of dropdowns, native insets and dragging.
+  const [platform, setPlatform] = useState<Platform>(PLATFORM.web);
   const isBrowser = useIsBrowser();
   const controls = findControls(code);
   const preview = toCodePreview(code);
@@ -106,9 +111,17 @@ export default function Playground({ children, scope }: PlaygroundProps) {
 
   return (
     <div className={styles.playground}>
-      <PlaygroundProvider code={code} scope={scope}>
+      <PlaygroundProvider code={code} scope={scope} platform={platform}>
         <div className={clsx(styles.body, controls.length > 0 && styles.withPanel)}>
           <div className={styles.preview}>
+            <div className={styles.platforms}>
+              <Choices
+                label="Preview platform"
+                labels={PLATFORMS.map((p) => PLATFORM_LABELS[p])}
+                selected={PLATFORMS.indexOf(platform)}
+                onChoose={(i) => setPlatform(PLATFORMS[i])}
+              />
+            </div>
             <Preview />
           </div>
           {controls.length > 0 ? (

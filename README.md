@@ -20,7 +20,8 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 | ⏰ **TimePicker** | 12h / 24h (auto from locale), minute & second intervals, min/max time |
 | 📅 **DatePicker** | Calendar (single · range · multiple) or wheel, min/max, disabled days, marked dates, i18n |
 | 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS-style) or a calendar with time wheels, min/max moments |
-| 📋 **SelectPicker** | Field + bottom sheet, search, groups, multi-select with chips, icons |
+| 📋 **SelectPicker** | Field + bottom sheet, search (local or on your server, with a loader), groups, multi-select with chips, icons |
+| ↔️ **HorizontalList** | Segmented control or chips that scroll sideways and reveal the next item |
 | 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
 
 Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
@@ -218,12 +219,42 @@ multiple: true     value: T[]        onChange(values, options)   maxSelected
 |---|---|---|
 | `searchable` | `> 8 options` | Accent- and niqqud-insensitive |
 | `filterOption` | | Custom search |
+| `loadOptions` | | `(query) => Promise<options>`: search a server, with a loader, debounce and stale answers ignored |
+| `searchDebounce` | `300` | ms after typing stops before searching |
+| `onSearchChange` / `loading` / `onEndReached` | | Search yourself: fetch on each query, show a loader, load more |
+| `loadingText` / `renderLoading` | `'Loading…'` | Custom loader |
+| `searchPrompt` | `'Type to search'` | Shown before typing when a searched list has no options |
 | `placeholder` / `label` / `sheetTitle` | | |
 | `clearable` | `false` | |
 | `chips` | `true` | Removable chips in multi mode |
 | `presentation` | `'auto'` | `'bottomSheet'`, `'modal'` or `'dropdown'` (under the field). `auto`: dropdown on the web, bottom sheet on native |
 | `closeOnSelect` | `true` | Single mode |
 | `disabled` | `false` | |
+
+### HorizontalList
+
+A segmented control (default) or a row of chips that scrolls sideways. Tapping the item at the edge scrolls the next one into view, so users see there's more.
+
+```tsx
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+<HorizontalList
+  items={[
+    { label: 'Day', value: 'day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' },
+  ]}
+  value={view}
+  onChange={setView}
+/>
+```
+
+| Prop | Default | |
+|---|---|---|
+| `items` | — | `{ label, value, disabled?, icon? }[]` |
+| `value` / `onChange` | | Controlled; `onChange(value, item)` |
+| `variant` | `'segmented'` | or `'chips'` |
+| `renderItem` | | `({ item, selected, disabled, theme }) => ReactNode` |
 
 ### EmojiPicker
 

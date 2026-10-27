@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   checkBox: { width: 22, height: 22, borderWidth: 2, borderRadius: 6, alignItems: 'center', justifyContent: 'center' },
   checkBoxMark: { fontSize: 13, fontWeight: '700', lineHeight: 16 },
   empty: { alignItems: 'center' },
+  loading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
   searchField: { height: '100%' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chip: { paddingHorizontal: 10, paddingVertical: 4 },

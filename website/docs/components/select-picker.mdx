@@ -74,6 +74,7 @@ export default function Example() {
     { prop: 'closeOnSelect', options: [true, false] },
     { prop: 'showCheckmarks', options: [true, false] },
     { prop: 'disabled', options: [false, true] },
+    { prop: 'loading', options: [false, true] },
   ]}
 />
 
@@ -218,6 +219,68 @@ The default is exported as `defaultFilter`, so you can extend it:
 import { defaultFilter } from '@elik56a/react-native-pickers';
 
 filterOption={(o, q) => defaultFilter(o, q) || o.value === q.toUpperCase()}
+```
+
+## Search on a server
+
+Pass `loadOptions` and the picker runs the search for you. It waits for a pause in typing (`searchDebounce`, 300 ms by default), shows the loader from the keystroke until the results arrive, and ignores answers to older queries. Before the user types, it lists `options`; with none, like here, it shows `searchPrompt` (default *Type to search*). A search with no results shows `emptyText`.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const CITIES = ['Amsterdam', 'Athens', 'Barcelona', 'Berlin', 'Lisbon', 'London', 'Madrid', 'Milan', 'Paris', 'Prague', 'Rome', 'Vienna'];
+
+// Stands in for your API
+const searchCities = (query: string) =>
+  new Promise<{ label: string; value: string }[]>((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          CITIES.filter((c) => c.toLowerCase().includes(query.toLowerCase())).map((c) => ({
+            label: c,
+            value: c,
+          }))
+        ),
+      700
+    )
+  );
+
+export default function Example() {
+  const [city, setCity] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="City"
+      placeholder="Search a city"
+      value={city}
+      onChange={setCity}
+      loadOptions={searchCities}
+      searchPrompt="Type a city"
+      emptyText="No city matches"
+    />
+  );
+}
+```
+
+- **Search field from the start**, even with no `options`.
+- **No double filtering**: results are listed as `loadOptions` returns them. Pass `filterOption` to filter anyway.
+- **The selected label stays** in the field after a new search drops it from the results.
+- **A failed request** shows `emptyText`.
+
+For a whole form built this way, see the [flight search form recipe](../recipes/flight-search-form).
+
+### Searching yourself
+
+For full control (pagination, caching, your own state), use `onSearchChange` instead: it's called with the query once typing pauses, and you set `options` and `loading`. With options showing, `loading` puts the spinner under them, which suits `onEndReached` for loading the next page. See the [Search a server recipe](../recipes/server-search).
+
+`renderLoading` replaces the spinner and text with your own element:
+
+```tsx
+<SelectPicker
+  // …
+  loading={loading}
+  renderLoading={(theme) => <Text style={{ color: theme.colors.textSecondary }}>Asking the server…</Text>}
+/>
 ```
 
 ## Clearing
@@ -464,7 +527,7 @@ import { useState } from 'react';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState<string | null>(null);
   return (
     <SelectPicker
       label="Framework"
@@ -559,7 +622,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `options` | `ReadonlyArray<SelectOption<T>>` | **required** | The options. |
+| `options` | `ReadonlyArray<SelectOption<T>>` | `[]` | The options; with `loadOptions`, the ones shown before the user types. |
 | `multiple` | `boolean` | `false` | Multi-select mode. |
 | `value` | `T \| null` · `T[]` | — | Selected value(s). |
 | `onChange` | `(value: T, option: SelectOption<T>) => void` · `(values: T[], options: SelectOption<T>[]) => void` | — | Single · multiple. |
@@ -591,7 +654,15 @@ export default function Example() {
 | `onOpen` / `onClose` | `() => void` | — | Sheet open / close. |
 | `searchable` | `boolean` | dropdown: `true` · sheet: `options.length > 8` | Dropdown: type in the field to filter. Sheet: show the search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint. |
-| `filterOption` | `(option, query) => boolean` | `defaultFilter` | Custom search. |
+| `filterOption` | `(option, query) => boolean` | `defaultFilter`; none with `loadOptions` / `onSearchChange` | Custom search. |
+| `loadOptions` | `(query: string) => Promise<SelectOption<T>[]>` | — | [Search a server](#search-on-a-server): loader, debounce and stale answers handled. An empty query shows `options`. |
+| `onSearchChange` | `(query: string) => void` | — | Called once typing pauses, to [search yourself](#searching-yourself). |
+| `searchPrompt` | `string` | `'Type to search'` | Shown before the user types, while a searched list has no options. |
+| `searchDebounce` | `number` | `300` | ms after the last keystroke before `loadOptions` / `onSearchChange`. |
+| `onEndReached` | `() => void` | — | Called near the end of the list, to load more. |
+| `loading` | `boolean` | `false` | Spinner in place of an empty list, or under the options. |
+| `loadingText` | `string` | `'Loading…'` | Text next to the spinner. |
+| `renderLoading` | `(theme) => ReactNode` | — | Custom loader. |
 | `emptyText` | `string` | `'No results'` | Shown when nothing matches. |
 | `showCheckmarks` | `boolean` | `true` | Check marks / checkboxes on rows. |
 | `renderOption` | `(info: { option, selected, disabled, theme }) => ReactNode` | — | Custom row content. |
@@ -628,3 +699,5 @@ The field is a button labelled with `label` (or the placeholder), with the curre
 - [Picker fields](./picker-fields): the same field for dates, times, wheels and emoji
 - [Country select recipe](../recipes/country-select)
 - [Tag picker recipe](../recipes/tags)
+- [Search a server recipe](../recipes/server-search): loading, debounced search and load-more
+- [Flight search form recipe](../recipes/flight-search-form): a full form with airports searched on a server

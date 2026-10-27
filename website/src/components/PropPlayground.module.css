@@ -64,59 +64,6 @@
   color: var(--ifm-font-color-base);
 }
 
-.segmented {
-  --ease-slide: cubic-bezier(0.32, 0.72, 0, 1);
-  position: relative;
-  display: flex;
-  min-width: 0;
-  margin: 0;
-  border: none;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 10px;
-  background: var(--site-border);
-}
-
-/* One thumb slides under the active segment; segments are equal width, so it moves by its own width plus the gap. */
-.thumb {
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: 3px;
-  width: calc((100% - 6px - (var(--count) - 1) * 2px) / var(--count));
-  border-radius: 7px;
-  background: var(--ifm-background-color);
-  box-shadow:
-    0 1px 2px rgba(23, 21, 15, 0.12),
-    0 1px 1px rgba(23, 21, 15, 0.06);
-  transform: translateX(calc(var(--index) * (100% + 2px)));
-  transition: transform 0.3s var(--ease-slide);
-}
-
-.segment {
-  position: relative;
-  flex: 1;
-  border: none;
-  background: none;
-  border-radius: 7px;
-  padding: 0.3rem 0.4rem;
-  font: inherit;
-  font-size: 0.78rem;
-  font-weight: 500;
-  white-space: nowrap;
-  color: var(--ifm-color-emphasis-700);
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.segment:hover {
-  color: var(--ifm-font-color-base);
-}
-
-.segment.active {
-  color: var(--ifm-color-primary);
-}
-
 .selectFallback {
   height: 38px;
 }
@@ -155,8 +102,7 @@
   transform: translateX(14px);
 }
 
-.switch:focus-visible,
-.segment:focus-visible {
+.switch:focus-visible {
   outline: 2px solid var(--ifm-color-primary);
   outline-offset: 2px;
 }
@@ -173,7 +119,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .thumb,
   .switch,
   .switch::after {
     transition: none;

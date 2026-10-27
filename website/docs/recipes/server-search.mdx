@@ -1,0 +1,147 @@
+---
+title: Search a server
+description: React Native searchable select that loads options from an API as the user types, with a loader, debounced requests, load-more pagination and a custom skeleton loader.
+---
+
+# Search a server
+
+Options that come from an API. `loadOptions` covers most cases in one line; `onSearchChange` is there when you need pagination or your own cache.
+
+## With `loadOptions`
+
+Give it a function from the query to the options. The picker waits for a pause in typing, shows the loader from the keystroke until the results arrive, and ignores answers to older queries. It starts empty with `searchPrompt`, since `options` (shown before the user types) isn't passed, and says `emptyText` when a search finds nobody.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+
+const NAMES = ['Ada Lovelace', 'Alan Turing', 'Barbara Liskov', 'Dennis Ritchie', 'Donald Knuth', 'Edsger Dijkstra', 'Frances Allen', 'Grace Hopper', 'Guido van Rossum', 'Hedy Lamarr', 'Ken Thompson', 'Linus Torvalds', 'Margaret Hamilton', 'Radia Perlman', 'Tim Berners-Lee'];
+
+// Stands in for GET /users?q=…
+const searchUsers = (query: string) =>
+  new Promise<{ label: string; value: string; description: string }[]>((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          NAMES.filter((n) => n.toLowerCase().includes(query.toLowerCase())).map((name) => ({
+            label: name,
+            value: name,
+            description: `@${name.split(' ')[0].toLowerCase()}`,
+          }))
+        ),
+      600
+    )
+  );
+
+export default function Example() {
+  const [user, setUser] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Assignee"
+      placeholder="Search people"
+      value={user}
+      onChange={setUser}
+      loadOptions={searchUsers}
+      searchPrompt="Type a name"
+      loadingText="Searching people…"
+      emptyText="Nobody by that name"
+      clearable
+      onClear={() => setUser(null)}
+    />
+  );
+}
+```
+
+`searchDebounce` sets the wait after the last keystroke (300 ms by default; `0` searches on every keystroke). A rejected promise shows `emptyText`. For several fields like this in one form, see the [flight search form](./flight-search-form).
+
+## With `onSearchChange`, and pages
+
+When the server pages its results, keep the options yourself: `onSearchChange` gives you the query once typing pauses, `loading` shows the loader (under the options once some are showing), and `onEndReached` asks for the next page.
+
+```tsx live
+import { useEffect, useRef, useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+import type { SelectOption } from '@elik56a/react-native-pickers';
+
+const NAMES = Array.from({ length: 40 }, (_, i) => `Customer ${i + 1}`);
+const PAGE = 10;
+
+// Stands in for GET /customers?q=…&offset=…
+const fetchCustomers = (query: string, offset: number) =>
+  new Promise<{ names: string[]; hasMore: boolean }>((resolve) => {
+    const matches = NAMES.filter((n) => n.toLowerCase().includes(query.toLowerCase()));
+    setTimeout(() => resolve({ names: matches.slice(offset, offset + PAGE), hasMore: offset + PAGE < matches.length }), 600);
+  });
+
+export default function Example() {
+  const [customer, setCustomer] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [options, setOptions] = useState<SelectOption<string>[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const latest = useRef('');
+
+  const load = (q: string, offset: number) => {
+    latest.current = q;
+    setLoading(true);
+    fetchCustomers(q, offset).then(({ names, hasMore: more }) => {
+      if (latest.current !== q) return; // an older query answered late
+      const page = names.map((name) => ({ label: name, value: name }));
+      setOptions((current) => (offset ? [...current, ...page] : page));
+      setHasMore(more);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => load(query, 0), [query]);
+
+  return (
+    <SelectPicker
+      label="Customer"
+      options={options}
+      value={customer}
+      onChange={setCustomer}
+      onSearchChange={setQuery}
+      loading={loading}
+      onEndReached={() => {
+        if (hasMore && !loading) load(query, options.length);
+      }}
+      listHeight={280}
+    />
+  );
+}
+```
+
+Closing the picker calls `onSearchChange('')`, so the next open starts from the first page of everything.
+
+## A custom loader
+
+`renderLoading` replaces the spinner and text. Here, skeleton rows shaped like the options:
+
+```tsx live
+import { StyleSheet, View } from 'react-native';
+import { SelectList } from '@elik56a/react-native-pickers';
+import type { PickerTheme } from '@elik56a/react-native-pickers';
+
+const Skeleton = ({ theme }: { theme: PickerTheme }) => (
+  <View style={styles.skeleton}>
+    {[0.7, 0.5, 0.6].map((width) => (
+      <View key={width} style={styles.row}>
+        <View style={[styles.avatar, { backgroundColor: theme.colors.surface }]} />
+        <View style={[styles.line, { width: `${width * 100}%`, backgroundColor: theme.colors.surface }]} />
+      </View>
+    ))}
+  </View>
+);
+
+export default function Example() {
+  return <SelectList options={[]} loading renderLoading={(theme) => <Skeleton theme={theme} />} />;
+}
+
+const styles = StyleSheet.create({
+  skeleton: { flex: 1, gap: 14 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  avatar: { width: 32, height: 32, borderRadius: 16 },
+  line: { height: 12, borderRadius: 6 },
+});
+```
