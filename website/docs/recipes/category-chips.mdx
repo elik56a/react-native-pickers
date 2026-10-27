@@ -10,7 +10,7 @@ A row of category chips above a menu, like a food or shop app. There are more ca
 ```tsx live
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { HorizontalList } from '@elik56a/react-native-pickers';
+import { HorizontalList, usePickerTheme } from '@elik56a/react-native-pickers';
 
 const CATEGORIES = [
   { label: 'All', value: 'all', icon: <Text>🍽️</Text> },
@@ -35,6 +35,7 @@ const MENU = [
 ];
 
 export default function Example() {
+  const { colors } = usePickerTheme();
   const [category, setCategory] = useState('all');
   const dishes = category === 'all' ? MENU : MENU.filter((d) => d.category === category);
   return (
@@ -47,9 +48,9 @@ export default function Example() {
         accessibilityLabel="Categories"
       />
       {dishes.map((dish) => (
-        <View key={dish.name} style={styles.row}>
-          <Text style={styles.name}>{dish.name}</Text>
-          <Text style={styles.price}>${dish.price}</Text>
+        <View key={dish.name} style={[styles.row, { borderColor: colors.border }]}>
+          <Text style={[styles.dish, { color: colors.text }]}>{dish.name}</Text>
+          <Text style={[styles.dish, { color: colors.textSecondary }]}>${dish.price}</Text>
         </View>
       ))}
     </View>
@@ -64,16 +65,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 4,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#E8E4DC',
   },
-  name: { fontSize: 15, color: '#17150F' },
-  price: { fontSize: 15, color: '#6E685E' },
+  dish: { fontSize: 15 },
 });
 ```
 
 ## How it works
 
-- `variant="chips"` shows separate pills; leave it out for a segmented control (good for 2–5 options like a sort order).
+- `variant="chips"` shows separate pills; leave it out for a segmented control (good for 2–5 options like a sort order). Both follow the [design](../guides/platforms#designs): filled on iOS and the web, outlined with a ✓ on the chosen chip in Material.
 - Each item's `icon` sits before its label. For anything else, render the whole item with `renderItem`.
 - The list is controlled: keep the category in state and filter with it.
 - Tapping a chip whose neighbor is cut off scrolls that neighbor into view, plus a peek of the one after it.

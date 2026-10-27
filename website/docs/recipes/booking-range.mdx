@@ -15,6 +15,7 @@ import {
   addDays,
   formatDate,
   toDateKey,
+  usePickerTheme,
 } from '@elik56a/react-native-pickers';
 import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
 
@@ -22,6 +23,7 @@ const MIN_NIGHTS = 2;
 const nightly = (d: Date) => (d.getDay() === 5 || d.getDay() === 6 ? 189 : 129);
 
 export default function Booking() {
+  const { colors } = usePickerTheme();
   const today = useMemo(() => new Date(), []);
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
 
@@ -57,7 +59,7 @@ export default function Booking() {
         dayHeight={50}
       />
       <View style={styles.summary}>
-        <Text style={styles.dates}>
+        <Text style={[styles.dates, { color: colors.textSecondary }]}>
           {range.start
             ? formatDate(range.start, undefined, {
                 day: 'numeric',
@@ -72,7 +74,7 @@ export default function Booking() {
               })
             : 'Check-out'}
         </Text>
-        <Text style={styles.total}>
+        <Text style={[styles.total, { color: colors.primary }]}>
           {nights
             ? `${nights} nights · $${total}`
             : `Min. ${MIN_NIGHTS} nights`}
@@ -90,8 +92,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
   },
-  dates: { fontSize: 15, fontWeight: '600', color: '#6E685E' },
-  total: { fontSize: 15, fontWeight: '700', color: '#C8460D' },
+  dates: { fontSize: 15, fontWeight: '600' },
+  total: { fontSize: 15, fontWeight: '700' },
 });
 ```
 
@@ -102,9 +104,9 @@ const styles = StyleSheet.create({
 - **`dayHeight={50}`** leaves room for the label.
 - Prices are summed per night with `addDays`, which is DST-safe.
 
-## As a sheet with Done
+## As a sheet
 
-On phones, open the calendar from a summary bar. **Done** stays disabled until both dates are chosen:
+On phones, open the calendar from a summary bar. The confirm button (**Done**, or **OK** in Material) stays disabled until both dates are chosen, and in Material the headline above the calendar shows the range as it's picked:
 
 ```tsx
 <DatePickerSheet

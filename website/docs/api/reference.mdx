@@ -114,7 +114,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 
 | Where | Prop | Default |
 | --- | --- | --- |
-| Sheets | `confirmLabel` / `cancelLabel` | `Done` / `Cancel` |
+| Sheets | `confirmLabel` / `cancelLabel` | `Done` (iOS, web) · `OK` (Material) / `Cancel` |
 | SelectPicker, fields | `placeholder` | `Select…` |
 | SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
@@ -132,10 +132,13 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `keyboardInput` | `true` | WheelPicker |
 | `minuteInterval` / `secondInterval` | `1` | TimePicker |
 | `format` | `'auto'` | TimePicker |
+| `display` | `'wheel'` iOS · `'dial'` Material · `'list'` web | TimePicker |
+| `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
+| `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |
 | `fixedWeeks` / `showOutsideDays` | `true` | Calendar |
 | `enableSwipe` / `enableQuickJump` | `true` | Calendar |
-| `weekdayFormat` | `'short'` | Calendar |
+| `weekdayFormat` | `'short'` · `'narrow'` Material | Calendar |
 | `monthFormat` | `'long'` | DateWheelPicker |
 | `searchable` | `options.length > 8` · `true` emoji | Select, Emoji |
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |

@@ -1,11 +1,11 @@
 ---
 title: Birthday picker
-description: React Native birthday / date-of-birth picker with a date wheel, minimum age validation and a localized display field.
+description: React Native birthday / date-of-birth picker with minimum age validation and a localized display field, as a calendar or date wheels.
 ---
 
 # Birthday picker
 
-A date-of-birth [field](../components/picker-fields) that opens a wheel sheet, enforces a minimum age of 13, and shows the age.
+A date-of-birth [field](../components/picker-fields) that enforces a minimum age of 13 and shows the age. It opens a calendar styled for each [design](../guides/platforms#designs), in a bottom sheet on phones and a dropdown on the web; `display="wheel"` switches to date wheels.
 
 ```tsx live
 import { useState } from 'react';
@@ -34,7 +34,6 @@ export default function Birthday() {
       label="Date of birth"
       title="Birthday"
       placeholder="Select your birthday"
-      display="wheel"
       value={birthday ?? new Date(2000, 0, 1)}
       displayValue={
         birthday
@@ -51,7 +50,8 @@ export default function Birthday() {
 
 ## Notes
 
-- `value` starts the wheel on 2000 before anything is picked, so `displayValue` is what keeps the placeholder showing until the user confirms.
-- `maxDate` 13 years ago disables later days and months on the wheel and clamps the value, so under-13 dates can't be confirmed.
-- The wheel's column order follows the locale (M/D/Y in the US, D/M/Y in most of the world). Pass `wheelProps={{ order: ['day', 'month', 'year'] }}` to force one.
+- In the calendar, tap the month title to jump to a year instead of paging back month by month. Some apps prefer `display="wheel"` for birthdays, since a year wheel reaches decades back in one flick.
+- `value` opens the picker on 2000 before anything is picked, so `displayValue` is what keeps the placeholder showing until the user confirms.
+- `maxDate` 13 years ago disables later days (and months and years on the wheels) and clamps the value, so under-13 dates can't be confirmed.
+- With wheels, the column order follows the locale (M/D/Y in the US, D/M/Y in most of the world). Pass `wheelProps={{ order: ['day', 'month', 'year'] }}` to force one.
 - Store birthdays as `toDateKey(birthday)` (`YYYY-MM-DD`). They're calendar days, not instants.

@@ -5,7 +5,7 @@ description: React Native alarm / reminder time picker with a big clock display,
 
 # Alarm & reminder time
 
-A big clock you tap to change, with repeat days chosen through a multi-select list. The clock is the `renderTrigger` of a [`TimePickerField`](../components/picker-fields#custom-trigger), so the field handles the sheet and formats the time.
+A big clock you tap to change, with repeat days chosen through a multi-select list. The clock is the `renderTrigger` of a [`TimePickerField`](../components/picker-fields#custom-trigger), so the field opens the picker and formats the time. The picker follows the [design](../guides/platforms#designs): wheels on iOS, Material's clock dial on Android, and time columns in a dropdown on the web.
 
 ```tsx live
 import { useState } from 'react';
@@ -14,6 +14,7 @@ import {
   TimePickerField,
   SelectList,
   getWeekdayNames,
+  usePickerTheme,
 } from '@elik56a/react-native-pickers';
 
 const days = getWeekdayNames(undefined, 'long').map((label, value) => ({
@@ -22,6 +23,7 @@ const days = getWeekdayNames(undefined, 'long').map((label, value) => ({
 }));
 
 export default function Alarm() {
+  const { colors } = usePickerTheme();
   const [time, setTime] = useState(() => {
     const d = new Date();
     d.setHours(7, 30, 0, 0);
@@ -44,11 +46,11 @@ export default function Alarm() {
             accessibilityLabel="Change alarm time"
             accessibilityHint={displayValue}
           >
-            <Text style={styles.clock}>{displayValue}</Text>
+            <Text style={[styles.clock, { color: colors.text }]}>{displayValue}</Text>
           </Pressable>
         )}
       />
-      <Text style={styles.caption}>Repeat</Text>
+      <Text style={[styles.caption, { color: colors.textSecondary }]}>Repeat</Text>
       <SelectList multiple options={days} value={repeat} onChange={setRepeat} />
     </View>
   );
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#6E685E',
     textTransform: 'uppercase',
     marginTop: 8,
     marginStart: 16,

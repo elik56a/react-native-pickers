@@ -9,8 +9,11 @@ Flags generated from ISO codes, grouped by region, searchable in several languag
 
 ```tsx live
 import { useState } from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { SelectPicker } from '@elik56a/react-native-pickers';
+
+// Defined first: the option icons below use it while the module loads.
+const styles = StyleSheet.create({ flag: { fontSize: 22 } });
 
 const flag = (code: string) =>
   String.fromCodePoint(...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
@@ -36,7 +39,7 @@ const options = COUNTRIES.map(([code, name, region, dial, keywords]) => ({
   group: region,
   description: dial,
   keywords: [code, dial, ...keywords],
-  icon: <Text style={{ fontSize: 22 }}>{flag(code)}</Text>,
+  icon: <Text style={styles.flag}>{flag(code)}</Text>,
 }));
 
 export default function CountrySelect() {
@@ -65,4 +68,4 @@ Try searching `deutsch`, `+44`, `uae` or `日本`.
 - Use `keywords` for ISO codes, dialing codes and native names. Search matches them all, accent-insensitively.
 - `group` + `options` order controls the sections: sort by region, then name.
 - For phone inputs, use `renderTrigger` to show just `🇮🇱 +972` next to your `TextInput`.
-- For all ~250 countries, the list is virtualized; give the sheet a fixed height (`sheetProps.height`) so it opens at a consistent size.
+- For all ~250 countries, the list is virtualized. On phones, give the sheet a fixed height (`sheetProps.height`) so it opens at a consistent size; on the web the options open in a dropdown under the field, sized by `listHeight`.
