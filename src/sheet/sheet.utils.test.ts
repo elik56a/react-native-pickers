@@ -149,15 +149,29 @@ describe('getDropdownFrame', () => {
   });
 
   it('opens below the field with its width', () => {
-    expect(getDropdownFrame(field(100), 800, 320)).toEqual({ left: 16, width: 300, top: 152, maxHeight: 320 });
+    expect(getDropdownFrame(field(100), { width: 400, height: 800 }, 320)).toEqual({ left: 16, width: 300, top: 152, maxHeight: 320 });
   });
 
   it('flips above when there is more room there', () => {
-    expect(getDropdownFrame(field(600), 800, 320)).toEqual({ left: 16, width: 300, bottom: 204, maxHeight: 320 });
+    expect(getDropdownFrame(field(600), { width: 400, height: 800 }, 320)).toEqual({ left: 16, width: 300, bottom: 204, maxHeight: 320 });
   });
 
   it('stays below and shrinks when below still has more room', () => {
-    expect(getDropdownFrame(field(300), 800, 500)).toEqual({ left: 16, width: 300, top: 352, maxHeight: 440 });
+    expect(getDropdownFrame(field(300), { width: 400, height: 800 }, 500)).toEqual({ left: 16, width: 300, top: 352, maxHeight: 440 });
+  });
+
+  it('grows to minWidth and shifts left to stay inside the window', () => {
+    expect(getDropdownFrame({ ...field(100), x: 40, width: 280 }, { width: 360, height: 800 }, 320, 320)).toMatchObject({
+      left: 32,
+      width: 320,
+    });
+  });
+
+  it('never grows wider than the window allows', () => {
+    expect(getDropdownFrame({ ...field(100), x: 0, width: 200 }, { width: 300, height: 800 }, 320, 320)).toMatchObject({
+      left: 0,
+      width: 284,
+    });
   });
 });
 

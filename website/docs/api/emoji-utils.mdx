@@ -54,8 +54,20 @@ export default function Example() {
   const results = searchEmojis(q).slice(0, 24);
   return (
     <View style={{ gap: 12 }}>
-      <TextInput value={q} onChangeText={setQ} placeholder=":shortcode" style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 10, padding: 10 }} />
-      <Text style={{ fontSize: 28, lineHeight: 40 }}>{results.map((e) => e.emoji).join(' ')}</Text>
+      <TextInput
+        value={q}
+        onChangeText={setQ}
+        placeholder=":shortcode"
+        style={{
+          borderWidth: 1,
+          borderColor: '#E8E4DC',
+          borderRadius: 10,
+          padding: 10,
+        }}
+      />
+      <Text style={{ fontSize: 28, lineHeight: 40 }}>
+        {results.map((e) => e.emoji).join(' ')}
+      </Text>
     </View>
   );
 }

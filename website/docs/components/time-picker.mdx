@@ -25,7 +25,9 @@ export default function Example() {
   return (
     <>
       <TimePicker value={time} onChange={setTime} />
-      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{time.toLocaleTimeString()}</Text>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {time.toLocaleTimeString()}
+      </Text>
     </>
   );
 }
@@ -82,7 +84,15 @@ import { TimePicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [time, setTime] = useState(new Date(2026, 0, 1, 9, 30));
-  return <TimePicker value={time} onChange={setTime} format="12h" locale="ko-KR" dayPeriodFirst />;
+  return (
+    <TimePicker
+      value={time}
+      onChange={setTime}
+      format="12h"
+      locale="ko-KR"
+      dayPeriodFirst
+    />
+  );
 }
 ```
 
@@ -98,7 +108,16 @@ import { TimePicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [time, setTime] = useState(new Date(2026, 0, 1, 0, 2, 30));
-  return <TimePicker value={time} onChange={setTime} format="24h" showSeconds secondInterval={5} minuteInterval={1} />;
+  return (
+    <TimePicker
+      value={time}
+      onChange={setTime}
+      format="24h"
+      showSeconds
+      secondInterval={5}
+      minuteInterval={1}
+    />
+  );
 }
 ```
 
@@ -117,8 +136,17 @@ export default function Example() {
   const [time, setTime] = useState(at(12));
   return (
     <>
-      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6E685E' }}>Opening hours: 09:00 – 17:30</Text>
-      <TimePicker value={time} onChange={setTime} minTime={at(9)} maxTime={at(17, 30)} minuteInterval={15} format="24h" />
+      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6E685E' }}>
+        Opening hours: 09:00 – 17:30
+      </Text>
+      <TimePicker
+        value={time}
+        onChange={setTime}
+        minTime={at(9)}
+        maxTime={at(17, 30)}
+        minuteInterval={15}
+        format="24h"
+      />
     </>
   );
 }

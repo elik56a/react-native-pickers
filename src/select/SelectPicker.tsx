@@ -1,5 +1,3 @@
-import type { ComponentRef } from 'react';
-import { useRef } from 'react';
 import { View } from 'react-native';
 
 import { usePickerTheme } from '../core';
@@ -41,8 +39,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     ...listProps
   } = props;
   const theme = usePickerTheme(themeOverride);
-  const anchorRef = useRef<ComponentRef<typeof View>>(null);
-  const picker = useSelectPicker(props, isEqual, anchorRef);
+  const picker = useSelectPicker(props, isEqual);
   const list = (
     <SelectList<T>
       {...(listProps as Omit<SelectListBaseProps<T>, 'isEqual' | 'theme' | 'styles'>)}
@@ -58,7 +55,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
   return (
     <View style={style}>
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      <View ref={anchorRef} collapsable={false}>
+      <View ref={picker.anchorRef} collapsable={false}>
         {renderTrigger ? (
           renderTrigger({ open: picker.show, selected: picker.selected, disabled })
         ) : (

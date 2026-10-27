@@ -25,7 +25,7 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 
 Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
 
-In a form, use the **field** version (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`): it looks like `SelectPicker`'s field, opens the sheet on tap, and shows the confirmed value once it closes. Pass `renderTrigger` for your own trigger, or wrap any sheet in `PickerField`.
+In a form, use the **field** version (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`): it looks like `SelectPicker`'s field, opens the picker on tap (in a dropdown under the field by default, or a bottom sheet or modal with `presentation`), and shows the confirmed value once it closes. Pass `renderTrigger` for your own trigger, or wrap any sheet in `PickerField`.
 
 ```sh
 npm install @elik56a/react-native-pickers
@@ -268,6 +268,7 @@ Utilities: `getAllEmojis()`, `searchEmojis(query)`, `findEmoji(char)`, `withSkin
 | `disabled` | `false` | |
 | `renderTrigger` | | `({ open, displayValue, disabled }) => node`: your own trigger |
 | `renderChevron` | | `({ open, theme }) => node` |
+| `presentation` | `'dropdown'` | `'dropdown'` under the field, `'bottomSheet'`, `'modal'` or `'auto'` |
 | `onOpen` / `onClose` | | |
 | `style` / `styles` | | `styles` takes the field slots (`label trigger triggerText placeholder chevron clear`) and the picker's |
 

@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
-import { themes as prismThemes } from 'prism-react-renderer';
+
+import { CODE_THEME } from './src/theme/Playground/playground.constants';
 
 const PACKAGE = '@elik56a/react-native-pickers';
 const REPO = 'https://github.com/elik56a/react-native-pickers';
@@ -116,7 +117,7 @@ const config: Config = {
     ],
   ],
 
-  clientModules: [require.resolve('./src/clientModules/searchEventCompat.ts')],
+  clientModules: [require.resolve('./src/clientModules/searchEventCompat.ts'), require.resolve('./src/clientModules/hashScroll.ts')],
 
   themes: [
     '@docusaurus/theme-live-codeblock',
@@ -246,8 +247,9 @@ const config: Config = {
       copyright: `MIT © ${new Date().getFullYear()} <a href="${LINKEDIN}" target="_blank" rel="noopener noreferrer">${AUTHOR}</a>. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.vsDark,
+      // One always-dark theme for every code block, the same as the live editor's.
+      theme: CODE_THEME,
+      darkTheme: CODE_THEME,
       additionalLanguages: ['bash', 'json', 'diff'],
     },
     liveCodeBlock: { playgroundPosition: 'top' },

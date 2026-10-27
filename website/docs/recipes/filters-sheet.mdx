@@ -10,17 +10,39 @@ A "Filters" sheet with a category select, a date range and Reset / Apply, all ap
 ```tsx live
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { BottomSheet, DatePicker, SelectList, useDraft, formatDate } from '@elik56a/react-native-pickers';
+import {
+  BottomSheet,
+  DatePicker,
+  SelectList,
+  useDraft,
+  formatDate,
+} from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
 type Filters = { status: string[]; dates: DateRange };
 const EMPTY: Filters = { status: [], dates: { start: null, end: null } };
-const STATUSES = ['Open', 'In progress', 'Blocked', 'Done'].map((s) => ({ label: s, value: s }));
+const STATUSES = ['Open', 'In progress', 'Blocked', 'Done'].map((s) => ({
+  label: s,
+  value: s,
+}));
 
-function Button({ title, onPress, primary }: { title: string; onPress: () => void; primary?: boolean }) {
+function Button({
+  title,
+  onPress,
+  primary,
+}: {
+  title: string;
+  onPress: () => void;
+  primary?: boolean;
+}) {
   return (
-    <Pressable onPress={onPress} style={[styles.btn, primary && styles.btnPrimary]}>
-      <Text style={[styles.btnText, primary && styles.btnTextPrimary]}>{title}</Text>
+    <Pressable
+      onPress={onPress}
+      style={[styles.btn, primary && styles.btnPrimary]}
+    >
+      <Text style={[styles.btnText, primary && styles.btnTextPrimary]}>
+        {title}
+      </Text>
     </Pressable>
   );
 }
@@ -33,10 +55,15 @@ export default function FiltersExample() {
 
   return (
     <>
-      <Button title={`Filters${count ? ` · ${count}` : ''}`} onPress={() => setOpen(true)} />
+      <Button
+        title={`Filters${count ? ` · ${count}` : ''}`}
+        onPress={() => setOpen(true)}
+      />
       <Text style={styles.summary}>
         {filters.status.join(', ') || 'Any status'} ·{' '}
-        {filters.dates.start && filters.dates.end ? `${formatDate(filters.dates.start)} → ${formatDate(filters.dates.end)}` : 'Any date'}
+        {filters.dates.start && filters.dates.end
+          ? `${formatDate(filters.dates.start)} → ${formatDate(filters.dates.end)}`
+          : 'Any date'}
       </Text>
 
       <BottomSheet
@@ -58,9 +85,20 @@ export default function FiltersExample() {
       >
         <View style={styles.body}>
           <Text style={styles.h}>Status</Text>
-          <SelectList multiple options={STATUSES} value={draft.status} onChange={(status) => setDraft({ ...draft, status })} />
+          <SelectList
+            multiple
+            options={STATUSES}
+            value={draft.status}
+            onChange={(status) => setDraft({ ...draft, status })}
+          />
           <Text style={styles.h}>Created</Text>
-          <DatePicker mode="range" value={draft.dates} onChange={(dates) => setDraft({ ...draft, dates })} maxDate={new Date()} dayHeight={38} />
+          <DatePicker
+            mode="range"
+            value={draft.dates}
+            onChange={(dates) => setDraft({ ...draft, dates })}
+            maxDate={new Date()}
+            dayHeight={38}
+          />
         </View>
       </BottomSheet>
     </>
@@ -69,9 +107,23 @@ export default function FiltersExample() {
 
 const styles = StyleSheet.create({
   body: { paddingHorizontal: 8 },
-  h: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', color: '#6E685E', marginTop: 12, marginBottom: 4, marginStart: 12 },
+  h: {
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    color: '#6E685E',
+    marginTop: 12,
+    marginBottom: 4,
+    marginStart: 12,
+  },
   summary: { marginTop: 8, color: '#6E685E', textAlign: 'center' },
-  btn: { paddingVertical: 12, paddingHorizontal: 16, borderRadius: 12, backgroundColor: '#F4F2EE', alignItems: 'center' },
+  btn: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    backgroundColor: '#F4F2EE',
+    alignItems: 'center',
+  },
   btnPrimary: { backgroundColor: '#C8460D' },
   btnText: { fontWeight: '600', color: '#17150F' },
   btnTextPrimary: { color: '#FFFFFF' },

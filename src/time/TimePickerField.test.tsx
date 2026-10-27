@@ -9,6 +9,7 @@ describe('TimePickerField', () => {
     await render(
       <TimePickerField
         label="Alarm"
+        presentation="bottomSheet"
         format="24h"
         locale="en-US"
         value={new Date(2026, 9, 26, 7, 30)}

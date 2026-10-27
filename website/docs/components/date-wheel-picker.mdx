@@ -25,8 +25,14 @@ export default function Example() {
   const [birthday, setBirthday] = useState(new Date(1990, 4, 17));
   return (
     <>
-      <DateWheelPicker value={birthday} onChange={setBirthday} maxDate={new Date()} />
-      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{formatDate(birthday, undefined, { dateStyle: 'long' })}</Text>
+      <DateWheelPicker
+        value={birthday}
+        onChange={setBirthday}
+        maxDate={new Date()}
+      />
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {formatDate(birthday, undefined, { dateStyle: 'long' })}
+      </Text>
     </>
   );
 }
@@ -63,11 +69,27 @@ export default function Example() {
   return (
     <View style={{ gap: 12 }}>
       <Text style={{ fontWeight: '600' }}>en-GB</Text>
-      <DateWheelPicker value={d} onChange={setD} locale="en-GB" visibleItems={3} />
+      <DateWheelPicker
+        value={d}
+        onChange={setD}
+        locale="en-GB"
+        visibleItems={3}
+      />
       <Text style={{ fontWeight: '600' }}>ja-JP</Text>
-      <DateWheelPicker value={d} onChange={setD} locale="ja-JP" visibleItems={3} />
+      <DateWheelPicker
+        value={d}
+        onChange={setD}
+        locale="ja-JP"
+        visibleItems={3}
+      />
       <Text style={{ fontWeight: '600' }}>Custom order, numeric months</Text>
-      <DateWheelPicker value={d} onChange={setD} order={['year', 'month', 'day']} monthFormat="numeric" visibleItems={3} />
+      <DateWheelPicker
+        value={d}
+        onChange={setD}
+        order={['year', 'month', 'day']}
+        monthFormat="numeric"
+        visibleItems={3}
+      />
     </View>
   );
 }
@@ -95,7 +117,16 @@ import { DateWheelPicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [expiry, setExpiry] = useState(new Date(2028, 5, 1));
-  return <DateWheelPicker value={expiry} onChange={setExpiry} order={['month', 'year']} monthFormat="numeric" yearRange={[2026, 2040]} loop={false} />;
+  return (
+    <DateWheelPicker
+      value={expiry}
+      onChange={setExpiry}
+      order={['month', 'year']}
+      monthFormat="numeric"
+      yearRange={[2026, 2040]}
+      loop={false}
+    />
+  );
 }
 ```
 

@@ -24,7 +24,9 @@ export default function Example() {
   const [text, setText] = useState('Hello ');
   return (
     <>
-      <Text style={{ fontSize: 24, minHeight: 36, marginBottom: 8 }}>{text}</Text>
+      <Text style={{ fontSize: 24, minHeight: 36, marginBottom: 8 }}>
+        {text}
+      </Text>
       <EmojiPicker onSelect={(emoji) => setText((t) => t + emoji)} />
     </>
   );
@@ -80,7 +82,14 @@ type EmojiCategory = 'smileys' | 'people' | 'animals' | 'food' | 'travel' | 'act
 import { EmojiPicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
-  return <EmojiPicker height={300} categories={['food', 'animals', 'activities']} onSelect={() => {}} showSkinTones={false} />;
+  return (
+    <EmojiPicker
+      height={300}
+      categories={['food', 'animals', 'activities']}
+      onSelect={() => {}}
+      showSkinTones={false}
+    />
+  );
 }
 ```
 

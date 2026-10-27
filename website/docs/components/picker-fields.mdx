@@ -1,7 +1,7 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
 sidebar_label: Picker fields
-description: "Form fields for React Native that open a picker sheet and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, WheelPickerField, EmojiPickerField and PickerField."
+description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -9,7 +9,7 @@ import { DatePickerField } from '@elik56a/react-native-pickers';
 
 # Picker fields
 
-In a form, a picker usually isn't on screen. The user taps a field, picks in a sheet, and sees the value in the field once the sheet closes. Each picker has a field that does this, with the same look as [`SelectPicker`](./select-picker)'s field:
+In a form, a picker usually isn't on screen. The user taps a field, picks in a dropdown under it (or a bottom sheet, or a modal), and sees the value in the field once it closes. Each picker has a field that does this, with the same look as [`SelectPicker`](./select-picker)'s field:
 
 | Field | Opens | Shows |
 | --- | --- | --- |
@@ -27,11 +27,24 @@ import { DatePickerField, TimePickerField, DateTimePickerField, WheelPickerField
 ```tsx live
 import { useState } from 'react';
 import { View } from 'react-native';
-import { DatePickerField, DateTimePickerField, EmojiPickerField, SelectPicker, TimePickerField, WheelPickerField } from '@elik56a/react-native-pickers';
+import {
+  DatePickerField,
+  DateTimePickerField,
+  EmojiPickerField,
+  SelectPicker,
+  TimePickerField,
+  WheelPickerField,
+} from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
-const guests = Array.from({ length: 8 }, (_, i) => ({ label: `${i + 1} guest${i ? 's' : ''}`, value: i + 1 }));
-const rooms = ['Standard', 'Deluxe', 'Suite'].map((r) => ({ label: r, value: r }));
+const guests = Array.from({ length: 8 }, (_, i) => ({
+  label: `${i + 1} guest${i ? 's' : ''}`,
+  value: i + 1,
+}));
+const rooms = ['Standard', 'Deluxe', 'Suite'].map((r) => ({
+  label: r,
+  value: r,
+}));
 
 export default function Example() {
   const [stay, setStay] = useState<DateRange>({ start: null, end: null });
@@ -42,18 +55,61 @@ export default function Example() {
   const [mood, setMood] = useState<string | undefined>();
   return (
     <View style={{ gap: 14 }}>
-      <DatePickerField label="Stay" placeholder="Add dates" mode="range" value={stay} onConfirm={setStay} minDate={new Date()} />
-      <TimePickerField label="Arrival time" placeholder="Choose a time" value={arrival} onConfirm={setArrival} minuteInterval={15} />
-      <WheelPickerField label="Guests" placeholder="How many?" items={guests} value={guestCount} onConfirm={setGuestCount} />
-      <SelectPicker label="Room" placeholder="Choose a room" options={rooms} value={room} onChange={setRoom} />
-      <DateTimePickerField label="Reminder" placeholder="Set a reminder" value={reminder} onConfirm={setReminder} clearable onClear={() => setReminder(undefined)} />
-      <EmojiPickerField label="Mood" placeholder="Pick an emoji" value={mood} onSelect={setMood} />
+      <DatePickerField
+        label="Stay"
+        presentation="dropdown"
+        placeholder="Add dates"
+        mode="range"
+        value={stay}
+        onConfirm={setStay}
+        minDate={new Date()}
+      />
+      <TimePickerField
+        label="Arrival time"
+        presentation="dropdown"
+        placeholder="Choose a time"
+        value={arrival}
+        onConfirm={setArrival}
+        minuteInterval={15}
+      />
+      <WheelPickerField
+        label="Guests"
+        presentation="dropdown"
+        placeholder="How many?"
+        items={guests}
+        value={guestCount}
+        onConfirm={setGuestCount}
+      />
+      <SelectPicker
+        label="Room"
+        presentation="dropdown"
+        placeholder="Choose a room"
+        options={rooms}
+        value={room}
+        onChange={setRoom}
+      />
+      <DateTimePickerField
+        label="Reminder"
+        presentation="dropdown"
+        placeholder="Set a reminder"
+        value={reminder}
+        onConfirm={setReminder}
+        clearable
+        onClear={() => setReminder(undefined)}
+      />
+      <EmojiPickerField
+        label="Mood"
+        presentation="dropdown"
+        placeholder="Pick an emoji"
+        value={mood}
+        onSelect={setMood}
+      />
     </View>
   );
 }
 ```
 
-Each field takes the props of the sheet it opens, without `visible`, plus the [field props](#props). The field owns the open state; you keep the value. As with the sheets, `onConfirm` fires only on **Done**, so your state changes only when the user confirms.
+Each field takes the props of the sheet it opens, without `visible`, plus the [field props](#props). The field owns the open state; you keep the value. As with the sheets, `onConfirm` fires only on **Done**, so your state changes only when the user confirms. Switch `presentation` in the panel to see the same form with bottom sheets or modals.
 
 ## Try the props
 
@@ -68,12 +124,30 @@ Each field takes the props of the sheet it opens, without `visible`, plus the [f
   controls={[
     { prop: 'mode', options: ['single', 'range', 'multiple', 'ranges'] },
     { prop: 'display', options: ['calendar', 'wheel'] },
-    { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
+    { prop: 'presentation', options: ['dropdown', 'bottomSheet', 'modal', 'auto'] },
     { prop: 'clearable', options: [false, true] },
     { prop: 'confirmOnSelect', options: [false, true] },
     { prop: 'disabled', options: [false, true] },
   ]}
 />
+
+## Dropdown, bottom sheet or modal
+
+`presentation` sets where the picker opens:
+
+| `presentation` | Opens |
+| --- | --- |
+| `'dropdown'` (default) | Under the field, like a menu, or above it when there's more room there. **Cancel** and **Done** sit below the picker; a tap outside cancels. It's at least 320 px wide, so a calendar fits under a narrow field. |
+| `'bottomSheet'` | A bottom sheet with the title and buttons in its header. |
+| `'modal'` | A centered dialog. |
+| `'auto'` | A modal on web windows wider than the sheet, a bottom sheet everywhere else. |
+
+```tsx
+<DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} />
+<DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} presentation="bottomSheet" />
+```
+
+`sheetProps` and `title` apply to the bottom sheet and the modal; the dropdown has no header. [`SelectPicker`](./select-picker#presentation) takes the same values, with `'auto'` as its default (a dropdown on the web, a bottom sheet on native).
 
 ## What the field shows
 
@@ -94,7 +168,7 @@ When `displayValue` is empty and there's no value, the field shows `placeholder`
 
 ## Label and sheet title
 
-`label` is drawn above the field, used as its accessibility label and, unless you set `title`, as the sheet's title.
+`label` is drawn above the field, used as its accessibility label and, unless you set `title`, as the sheet's title (a bottom sheet or modal; the dropdown has no title).
 
 ```tsx
 <TimePickerField label="Alarm" title="Wake me up at" value={alarm} onConfirm={setAlarm} />
@@ -129,7 +203,14 @@ export default function Example() {
           onPress={open}
           accessibilityRole="button"
           accessibilityLabel="Change project icon"
-          style={{ width: 64, height: 64, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F4F2EE' }}
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#F4F2EE',
+          }}
         >
           <Text style={{ fontSize: 34 }}>{displayValue}</Text>
         </Pressable>
@@ -143,16 +224,30 @@ export default function Example() {
 
 ## Your own sheet: `PickerField`
 
-`PickerField` is the field without a picker. Its child is a function that gets `{ visible, onClose }` for the sheet you render, so any [`BottomSheet`](./bottom-sheet) or [`PickerSheet`](./picker-sheets#pickersheet) can open from a field.
+`PickerField` is the field without a picker. Its child is a function that gets `{ visible, onClose }` for the sheet you render, so any [`BottomSheet`](./bottom-sheet) or [`PickerSheet`](./picker-sheets#pickersheet) can open from a field. A `PickerSheet` inside follows the field's `presentation`, so it opens as a dropdown by default; a `presentation` set on the `PickerSheet` itself wins.
 
 ```tsx live
 import { useState } from 'react';
 import { Switch, Text, View } from 'react-native';
-import { PickerField, PickerSheet, useDraft } from '@elik56a/react-native-pickers';
+import {
+  PickerField,
+  PickerSheet,
+  useDraft,
+} from '@elik56a/react-native-pickers';
 
 type Prefs = { push: boolean; email: boolean };
 
-const NotificationsSheet = ({ visible, onClose, prefs, onSave }: { visible: boolean; onClose: () => void; prefs: Prefs; onSave: (p: Prefs) => void }) => {
+const NotificationsSheet = ({
+  visible,
+  onClose,
+  prefs,
+  onSave,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  prefs: Prefs;
+  onSave: (p: Prefs) => void;
+}) => {
   const [draft, setDraft] = useDraft(prefs, visible);
   return (
     <PickerSheet
@@ -167,9 +262,21 @@ const NotificationsSheet = ({ visible, onClose, prefs, onSave }: { visible: bool
     >
       <View style={{ padding: 16, gap: 16 }}>
         {(['push', 'email'] as const).map((k) => (
-          <View key={k} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: 16, textTransform: 'capitalize' }}>{k}</Text>
-            <Switch value={draft[k]} onValueChange={(v) => setDraft({ ...draft, [k]: v })} />
+          <View
+            key={k}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ fontSize: 16, textTransform: 'capitalize' }}>
+              {k}
+            </Text>
+            <Switch
+              value={draft[k]}
+              onValueChange={(v) => setDraft({ ...draft, [k]: v })}
+            />
           </View>
         ))}
       </View>
@@ -179,10 +286,15 @@ const NotificationsSheet = ({ visible, onClose, prefs, onSave }: { visible: bool
 
 export default function Example() {
   const [prefs, setPrefs] = useState<Prefs>({ push: true, email: false });
-  const summary = [prefs.push && 'Push', prefs.email && 'Email'].filter(Boolean).join(' + ') || 'Off';
+  const summary =
+    [prefs.push && 'Push', prefs.email && 'Email']
+      .filter(Boolean)
+      .join(' + ') || 'Off';
   return (
     <PickerField label="Notifications" displayValue={summary}>
-      {(sheet) => <NotificationsSheet {...sheet} prefs={prefs} onSave={setPrefs} />}
+      {(sheet) => (
+        <NotificationsSheet {...sheet} prefs={prefs} onSave={setPrefs} />
+      )}
     </PickerField>
   );
 }
@@ -218,7 +330,7 @@ The theme (`theme` prop or [`PickersProvider`](../guides/theming)) applies to th
 
 ## Props
 
-Every field takes these, plus its sheet's props without `visible`: `value`, `onConfirm` (`onSelect` for emoji), `title`, `presentation`, `confirmLabel`, `sheetProps`, the picker's own props (`mode`, `minDate`, `locale`, `items`, `minuteInterval`…). The picker's own `style` and `testID` aren't available on a field; `style` and `testID` belong to the field.
+Every field takes these, plus its sheet's props without `visible`: `value`, `onConfirm` (`onSelect` for emoji), `title`, `confirmLabel`, `sheetProps`, the picker's own props (`mode`, `minDate`, `locale`, `items`, `minuteInterval`…). The picker's own `style` and `testID` aren't available on a field; `style` and `testID` belong to the field.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -230,7 +342,8 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 | `onClear` | `() => void` | — | Called by ×. Reset your value here. |
 | `renderTrigger` | `(info: { open, displayValue, disabled }) => ReactNode` | — | Replace the field box. |
 | `renderChevron` | `(info: { open, theme }) => ReactNode` | — | Custom chevron icon. It still rotates on open and close. |
-| `onOpen` / `onClose` | `() => void` | — | The sheet opened / closed (Done, Cancel or dismiss). |
+| `presentation` | `'dropdown' \| 'bottomSheet' \| 'modal' \| 'auto'` | `'dropdown'` | Where the picker opens. See [Dropdown, bottom sheet or modal](#dropdown-bottom-sheet-or-modal). |
+| `onOpen` / `onClose` | `() => void` | — | The picker opened / closed (Done, Cancel or dismiss). |
 | `style` | `StyleProp<ViewStyle>` | — | Wrapper style (label + field). |
 | `styles` | `SlotStyles<PickerFieldSlot \| …>` | — | Field slots plus the picker's slots. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme for the field and the sheet. |
@@ -251,6 +364,7 @@ import type {
   PickerFieldBaseProps,
   PickerFieldSlot,
   PickerFieldTriggerInfo,
+  FieldPresentation,
   WithPickerField,
 } from '@elik56a/react-native-pickers';
 ```
@@ -259,7 +373,7 @@ import type {
 
 ## Accessibility
 
-The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the sheet is open. The × button is labelled `Clear`.
+The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the picker is open. The dropdown closes on a tap outside it and on the Android back button. The × button is labelled `Clear`.
 
 ## Related
 

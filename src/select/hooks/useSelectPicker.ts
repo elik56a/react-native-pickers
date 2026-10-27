@@ -1,22 +1,16 @@
-import type { RefObject } from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import type { HostInstance } from 'react-native';
 import { Platform } from 'react-native';
 
-import type { AnchorRect } from '../../sheet/sheet.types';
+import { useAnchor } from '../../sheet/hooks/useAnchor';
 import { SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
 import { findOptions, resolveSelectPresentation, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
-export const useSelectPicker = <T>(
-  props: SelectPickerProps<T>,
-  isEqual: (a: T, b: T) => boolean,
-  anchorRef: RefObject<HostInstance | null>
-) => {
+export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
   const { options, disabled = false, closeOnSelect = true, onOpen, onClose, onClear } = props;
   const [open, setOpen] = useState(false);
-  const [anchor, setAnchor] = useState<AnchorRect | null>(null);
+  const { ref: anchorRef, anchor, measure } = useAnchor();
   const [query, setQuery] = useState('');
   const presentation = resolveSelectPresentation(props.presentation ?? SELECT_PRESENTATION.auto, Platform.OS);
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
@@ -29,19 +23,10 @@ export const useSelectPicker = <T>(
 
   const show = useCallback(() => {
     if (disabled) return;
-    if (dropdown) {
-      anchorRef.current?.measureInWindow((x, y, width, height) =>
-        setAnchor({
-          x,
-          y,
-          width,
-          height,
-        })
-      );
-    }
+    if (dropdown) measure();
     setOpen(true);
     onOpen?.();
-  }, [anchorRef, disabled, dropdown, onOpen]);
+  }, [disabled, dropdown, measure, onOpen]);
 
   const hide = useCallback(() => {
     setOpen(false);
@@ -84,6 +69,7 @@ export const useSelectPicker = <T>(
     searchInField,
     query,
     setQuery,
+    anchorRef,
     anchor,
     show,
     hide,

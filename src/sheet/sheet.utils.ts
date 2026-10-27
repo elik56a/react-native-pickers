@@ -83,21 +83,29 @@ export const resolvePresentation = (
     : SHEET_PRESENTATION.bottomSheet;
 };
 
-/** Opens below the anchor, or above it when there's more room there and not enough below. */
-export const getDropdownFrame = (anchor: AnchorRect, windowHeight: number, preferredHeight: number): DropdownFrame => {
+/** Opens below the anchor, or above it when there's more room there and not enough below. Grows to `minWidth`, kept inside the window. */
+export const getDropdownFrame = (
+  anchor: AnchorRect,
+  windowSize: { width: number; height: number },
+  preferredHeight: number,
+  minWidth = 0
+): DropdownFrame => {
+  const windowHeight = windowSize.height;
+  const width = Math.max(anchor.width, Math.min(minWidth, windowSize.width - DROPDOWN_EDGE_MARGIN * 2));
+  const left = Math.max(0, Math.min(anchor.x, windowSize.width - DROPDOWN_EDGE_MARGIN - width));
   const below = windowHeight - (anchor.y + anchor.height) - DROPDOWN_GAP - DROPDOWN_EDGE_MARGIN;
   const above = anchor.y - DROPDOWN_GAP - DROPDOWN_EDGE_MARGIN;
   if (below < preferredHeight && above > below) {
     return {
-      left: anchor.x,
-      width: anchor.width,
+      left,
+      width,
       bottom: windowHeight - anchor.y + DROPDOWN_GAP,
       maxHeight: Math.min(preferredHeight, above),
     };
   }
   return {
-    left: anchor.x,
-    width: anchor.width,
+    left,
+    width,
     top: anchor.y + anchor.height + DROPDOWN_GAP,
     maxHeight: Math.min(preferredHeight, below),
   };

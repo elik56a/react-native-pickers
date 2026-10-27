@@ -1,0 +1,227 @@
+.playground {
+  border: 1px solid var(--site-border);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--site-shadow);
+  background: var(--ifm-background-color);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.withPanel {
+  grid-template-columns: minmax(0, 1fr) 260px;
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 2rem 1.25rem;
+  background:
+    var(--site-glow),
+    radial-gradient(circle, var(--site-grid) 1px, transparent 1px) 0 0 / 18px 18px,
+    var(--ifm-background-color);
+}
+
+/* Lay examples out like a React Native root view, so a <Text> stretches and its textAlign applies. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.loading {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.85rem;
+}
+
+.error {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--ifm-color-danger-contrast-background);
+  color: var(--ifm-color-danger-contrast-foreground);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+.panel {
+  border-left: 1px solid var(--site-border);
+  background: var(--site-surface);
+  padding: 0.35rem 0;
+}
+
+.panelTitle {
+  padding: 0.6rem 1.1rem 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--site-border);
+  background: var(--ifm-background-color);
+}
+
+.expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 0 0.85rem 0 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ifm-color-primary) 35%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 6%, transparent);
+  color: var(--ifm-color-primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.expand svg {
+  width: 16px;
+  height: 16px;
+}
+
+.expand:hover {
+  border-color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 6px;
+  background: var(--site-border);
+}
+
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.iconButton:hover {
+  background: var(--site-surface);
+  color: var(--ifm-font-color-base);
+}
+
+/* Tooltip: the button's label, below it, on hover and keyboard focus. */
+.iconButton::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  z-index: 2;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: var(--site-code);
+  color: var(--code-text);
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -2px);
+  transition:
+    opacity 0.12s,
+    transform 0.12s;
+}
+
+.iconButton:hover::after,
+.iconButton:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* The last buttons sit at the card's edge, which clips overflow: anchor their tooltips to the right. */
+.actions > .iconButton:nth-last-child(-n + 2)::after {
+  left: auto;
+  right: 0;
+  transform: translateY(-2px);
+}
+
+.actions > .iconButton:nth-last-child(-n + 2):hover::after,
+.actions > .iconButton:nth-last-child(-n + 2):focus-visible::after {
+  transform: none;
+}
+
+.expand:focus-visible,
+.iconButton:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+}
+
+.code {
+  max-height: 520px;
+  overflow: auto;
+  background: var(--site-code);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.7;
+  font-variant-ligatures: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--code-text) 20%, transparent) transparent;
+}
+
+.code pre {
+  font: inherit;
+}
+
+.editor pre {
+  /* biome-ignore lint/complexity/noImportantStyles: react-live sets the editor's padding inline */
+  padding: 1.1rem 1.5rem !important;
+}
+
+@media (max-width: 996px) {
+  .withPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    border-left: none;
+    border-top: 1px solid var(--site-border);
+  }
+}

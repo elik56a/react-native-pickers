@@ -28,7 +28,9 @@ export default function Example() {
   return (
     <>
       <DateTimePicker value={date} onChange={setDate} minuteInterval={5} />
-      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{date.toLocaleString()}</Text>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {date.toLocaleString()}
+      </Text>
     </>
   );
 }
@@ -58,7 +60,14 @@ import { DateTimePicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [date, setDate] = useState(new Date());
-  return <DateTimePicker display="calendar" value={date} onChange={setDate} minuteInterval={15} />;
+  return (
+    <DateTimePicker
+      display="calendar"
+      value={date}
+      onChange={setDate}
+      minuteInterval={15}
+    />
+  );
 }
 ```
 
@@ -78,8 +87,16 @@ export default function Example() {
   const [date, setDate] = useState(now);
   return (
     <>
-      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6E685E' }}>From now, up to 2 weeks ahead</Text>
-      <DateTimePicker value={date} onChange={setDate} minDate={now} maxDate={addDays(now, 14)} minuteInterval={15} />
+      <Text style={{ textAlign: 'center', marginBottom: 8, color: '#6E685E' }}>
+        From now, up to 2 weeks ahead
+      </Text>
+      <DateTimePicker
+        value={date}
+        onChange={setDate}
+        minDate={now}
+        maxDate={addDays(now, 14)}
+        minuteInterval={15}
+      />
     </>
   );
 }

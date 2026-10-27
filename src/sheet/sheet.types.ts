@@ -4,10 +4,19 @@ import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEven
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DistributiveOmit, ValueOf } from '../core/core.types';
-import type { SHEET_PRESENTATION, SHEET_SNAP } from './sheet.constants';
+import type { FIELD_PRESENTATION, SHEET_PRESENTATION, SHEET_SNAP } from './sheet.constants';
 
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
 export type SheetPresentation = ValueOf<typeof SHEET_PRESENTATION>;
+
+/** A sheet presentation, or `dropdown`: a popover under the field. */
+export type FieldPresentation = ValueOf<typeof FIELD_PRESENTATION>;
+
+export interface FieldSheetContextValue {
+  presentation: FieldPresentation;
+  /** The field, measured when a dropdown opens */
+  anchor: AnchorRect | null;
+}
 
 export type BottomSheetSlot = 'backdrop' | 'sheet' | 'handle' | 'header' | 'title' | 'content' | 'footer';
 
@@ -172,6 +181,8 @@ export interface DropdownProps extends ThemableProps {
   /** Drawn exactly over the anchor field, e.g. an input that stands in for it while open */
   overlay?: React.ReactNode;
   maxHeight?: number;
+  /** Wider than the anchor when it's narrower than this, still within the window */
+  minWidth?: number;
   testID?: string;
 }
 
@@ -213,6 +224,8 @@ export interface PickerFieldBaseProps<S extends string = never> extends Themable
   renderChevron?: (info: ChevronInfo) => React.ReactNode;
   onOpen?: () => void;
   onClose?: () => void;
+  /** Where the picker opens: `dropdown` under the field, `bottomSheet`, `modal`, or `auto` (modal on wide web windows, else a bottom sheet). Default: 'dropdown' */
+  presentation?: FieldPresentation;
   style?: StyleProp<ViewStyle>;
   styles?: SlotStyles<PickerFieldSlot | S>;
   /** On the default trigger */

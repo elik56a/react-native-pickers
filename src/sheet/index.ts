@@ -6,6 +6,7 @@ export type {
   BottomSheetProps,
   BottomSheetSlot,
   ChevronInfo,
+  FieldPresentation,
   PickerFieldBaseProps,
   PickerFieldProps,
   PickerFieldSlot,

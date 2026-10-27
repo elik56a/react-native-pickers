@@ -46,12 +46,21 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
-  const nights = range.start && range.end ? Math.round((+range.end - +range.start) / 864e5) : 0;
+  const nights =
+    range.start && range.end
+      ? Math.round((+range.end - +range.start) / 864e5)
+      : 0;
   return (
     <>
-      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
+      <DatePicker
+        mode="range"
+        value={range}
+        onChange={setRange}
+        minDate={new Date()}
+      />
       <Text style={{ textAlign: 'center', color: '#6E685E' }}>
-        {range.start ? formatDate(range.start) : 'Check-in'} → {range.end ? formatDate(range.end) : 'Check-out'}
+        {range.start ? formatDate(range.start) : 'Check-in'} →{' '}
+        {range.end ? formatDate(range.end) : 'Check-out'}
         {nights ? `  ·  ${nights} night${nights > 1 ? 's' : ''}` : ''}
       </Text>
     </>
@@ -78,7 +87,11 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const today = new Date();
-  const booked = new Set([toDateKey(addDays(today, 4)), toDateKey(addDays(today, 5)), toDateKey(addDays(today, 12))]);
+  const booked = new Set([
+    toDateKey(addDays(today, 4)),
+    toDateKey(addDays(today, 5)),
+    toDateKey(addDays(today, 12)),
+  ]);
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <DatePicker
@@ -112,8 +125,18 @@ export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <Text style={{ textAlign: 'center', marginBottom: 4, color: '#6E685E' }}>Stay 2 – 7 nights</Text>
-      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} minRangeDays={2} maxRangeDays={7} allowSingleDayRange={false} />
+      <Text style={{ textAlign: 'center', marginBottom: 4, color: '#6E685E' }}>
+        Stay 2 – 7 nights
+      </Text>
+      <DatePicker
+        mode="range"
+        value={range}
+        onChange={setRange}
+        minDate={new Date()}
+        minRangeDays={2}
+        maxRangeDays={7}
+        allowSingleDayRange={false}
+      />
     </>
   );
 }
@@ -128,14 +151,20 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const t = new Date();
-  const [range, setRange] = useState<DateRange>({ start: addDays(t, 2), end: addDays(t, 6) });
+  const [range, setRange] = useState<DateRange>({
+    start: addDays(t, 2),
+    end: addDays(t, 6),
+  });
   return (
     <DatePicker
       mode="range"
       value={range}
       onChange={setRange}
       theme={{ colors: { primary: '#E11D48', primaryMuted: '#FFE4E6' } }}
-      styles={{ selectedDay: { borderRadius: 10 }, rangeBand: { borderRadius: 0 } }}
+      styles={{
+        selectedDay: { borderRadius: 10 },
+        rangeBand: { borderRadius: 0 },
+      }}
     />
   );
 }
@@ -154,9 +183,21 @@ export default function Example() {
   const [dates, setDates] = useState<Date[]>([]);
   return (
     <>
-      <DatePicker mode="multiple" value={dates} onChange={setDates} maxSelections={5} minDate={new Date()} />
+      <DatePicker
+        mode="multiple"
+        value={dates}
+        onChange={setDates}
+        maxSelections={5}
+        minDate={new Date()}
+      />
       <Text style={{ textAlign: 'center', color: '#6E685E' }}>
-        {dates.length ? dates.map((d) => formatDate(d, undefined, { day: 'numeric', month: 'short' })).join(', ') : 'Pick up to 5 days'}
+        {dates.length
+          ? dates
+              .map((d) =>
+                formatDate(d, undefined, { day: 'numeric', month: 'short' })
+              )
+              .join(', ')
+          : 'Pick up to 5 days'}
       </Text>
     </>
   );
@@ -175,12 +216,21 @@ import type { DateRange } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [ranges, setRanges] = useState<DateRange[]>([]);
-  const short = (d: Date | null) => (d ? formatDate(d, undefined, { day: 'numeric', month: 'short' }) : '…');
+  const short = (d: Date | null) =>
+    d ? formatDate(d, undefined, { day: 'numeric', month: 'short' }) : '…';
   return (
     <>
-      <DatePicker mode="ranges" value={ranges} onChange={setRanges} maxRanges={3} minDate={new Date()} />
+      <DatePicker
+        mode="ranges"
+        value={ranges}
+        onChange={setRanges}
+        maxRanges={3}
+        minDate={new Date()}
+      />
       <Text style={{ textAlign: 'center', color: '#6E685E' }}>
-        {ranges.length ? ranges.map((r) => `${short(r.start)} – ${short(r.end)}`).join(', ') : 'Pick up to 3 ranges'}
+        {ranges.length
+          ? ranges.map((r) => `${short(r.start)} – ${short(r.end)}`).join(', ')
+          : 'Pick up to 3 ranges'}
       </Text>
     </>
   );

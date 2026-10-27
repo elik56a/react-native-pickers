@@ -15,11 +15,12 @@ export const Dropdown = ({
   children,
   overlay,
   maxHeight = DROPDOWN_MAX_HEIGHT,
+  minWidth,
   theme: themeOverride,
   testID,
 }: DropdownProps) => {
   const theme = usePickerTheme(themeOverride);
-  const { height: windowHeight } = useWindowDimensions();
+  const windowSize = useWindowDimensions();
   const { mounted, progress } = usePresence({ visible, duration: theme.animation.duration });
   if (!mounted || !anchor) return null;
 
@@ -53,7 +54,7 @@ export const Dropdown = ({
         style={[
           styles.dropdown,
           { opacity: progress },
-          getDropdownFrame(anchor, windowHeight, maxHeight),
+          getDropdownFrame(anchor, windowSize, maxHeight, minWidth),
           {
             backgroundColor: theme.colors.sheet,
             borderColor: theme.colors.border,

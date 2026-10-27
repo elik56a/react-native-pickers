@@ -3,11 +3,12 @@ import { View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { FieldLabel } from './components/FieldLabel';
 import { FieldTrigger } from './components/FieldTrigger';
+import { FieldSheetContext } from './hooks/useFieldSheet';
 import { usePickerField } from './hooks/usePickerField';
 import { DEFAULT_PLACEHOLDER } from './sheet.constants';
 import type { PickerFieldProps } from './sheet.types';
 
-/** A labelled field that opens the sheet `children` renders, and shows `displayValue` once it closes. */
+/** A labelled field that opens the sheet `children` renders (as a dropdown under it by default), and shows `displayValue` once it closes. */
 export const PickerField = ({
   label,
   placeholder = DEFAULT_PLACEHOLDER,
@@ -19,6 +20,7 @@ export const PickerField = ({
   renderChevron,
   onOpen,
   onClose,
+  presentation,
   style,
   styles: slots,
   theme: themeOverride,
@@ -26,30 +28,32 @@ export const PickerField = ({
   children,
 }: PickerFieldProps) => {
   const theme = usePickerTheme(themeOverride);
-  const field = usePickerField({ disabled, onOpen, onClose });
+  const field = usePickerField({ disabled, presentation, onOpen, onClose });
 
   return (
     <View style={style}>
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      {renderTrigger ? (
-        renderTrigger({ open: field.show, displayValue, disabled })
-      ) : (
-        <FieldTrigger
-          displayValue={displayValue}
-          placeholder={placeholder}
-          label={label}
-          open={field.open}
-          disabled={disabled}
-          clearable={clearable}
-          onOpen={field.show}
-          onClear={onClear}
-          renderChevron={renderChevron}
-          theme={theme}
-          slots={slots}
-          testID={testID}
-        />
-      )}
-      {children({ visible: field.open, onClose: field.hide })}
+      <View ref={field.anchorRef} collapsable={false}>
+        {renderTrigger ? (
+          renderTrigger({ open: field.show, displayValue, disabled })
+        ) : (
+          <FieldTrigger
+            displayValue={displayValue}
+            placeholder={placeholder}
+            label={label}
+            open={field.open}
+            disabled={disabled}
+            clearable={clearable}
+            onOpen={field.show}
+            onClear={onClear}
+            renderChevron={renderChevron}
+            theme={theme}
+            slots={slots}
+            testID={testID}
+          />
+        )}
+      </View>
+      <FieldSheetContext.Provider value={field.sheet}>{children({ visible: field.open, onClose: field.hide })}</FieldSheetContext.Provider>
     </View>
   );
 };

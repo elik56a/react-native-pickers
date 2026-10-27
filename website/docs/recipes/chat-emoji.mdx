@@ -30,13 +30,19 @@ export default function Composer() {
   return (
     <View style={styles.root}>
       <View style={styles.bar}>
-        <Pressable onPress={() => setShowEmoji((v) => !v)} accessibilityLabel="Emoji" style={styles.icon}>
+        <Pressable
+          onPress={() => setShowEmoji((v) => !v)}
+          accessibilityLabel="Emoji"
+          style={styles.icon}
+        >
           <Text style={styles.iconText}>{showEmoji ? '⌨️' : '😊'}</Text>
         </Pressable>
         <TextInput
           value={text}
           onChangeText={setText}
-          onSelectionChange={(e) => (selection.current = e.nativeEvent.selection)}
+          onSelectionChange={(e) =>
+            (selection.current = e.nativeEvent.selection)
+          }
           placeholder="Message"
           style={styles.input}
           multiline
@@ -60,9 +66,24 @@ export default function Composer() {
 const styles = StyleSheet.create({
   root: { gap: 8 },
   bar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
-  icon: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  icon: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   iconText: { fontSize: 22 },
-  input: { flex: 1, minHeight: 40, maxHeight: 120, borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 20, paddingHorizontal: 14, paddingVertical: 9, fontSize: 16 },
+  input: {
+    flex: 1,
+    minHeight: 40,
+    maxHeight: 120,
+    borderWidth: 1,
+    borderColor: '#E8E4DC',
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    fontSize: 16,
+  },
 });
 ```
 

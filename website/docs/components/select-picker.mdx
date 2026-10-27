@@ -19,14 +19,33 @@ import { SelectPicker } from '@elik56a/react-native-pickers';
 import { useState } from 'react';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
-const fruits = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Peach', 'Pear', 'Plum', 'Strawberry', 'Watermelon'].map((f) => ({
+const fruits = [
+  'Apple',
+  'Banana',
+  'Cherry',
+  'Mango',
+  'Orange',
+  'Peach',
+  'Pear',
+  'Plum',
+  'Strawberry',
+  'Watermelon',
+].map((f) => ({
   label: f,
   value: f.toLowerCase(),
 }));
 
 export default function Example() {
   const [fruit, setFruit] = useState<string | null>(null);
-  return <SelectPicker label="Favourite fruit" placeholder="Pick one" options={fruits} value={fruit} onChange={setFruit} />;
+  return (
+    <SelectPicker
+      label="Favourite fruit"
+      placeholder="Pick one"
+      options={fruits}
+      value={fruit}
+      onChange={setFruit}
+    />
+  );
 }
 ```
 
@@ -78,17 +97,56 @@ import { Text } from 'react-native';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
 const countries = [
-  { label: 'Israel', value: 'IL', icon: <Text>🇮🇱</Text>, group: 'Middle East', keywords: ['ישראל'] },
+  {
+    label: 'Israel',
+    value: 'IL',
+    icon: <Text>🇮🇱</Text>,
+    group: 'Middle East',
+    keywords: ['ישראל'],
+  },
   { label: 'Jordan', value: 'JO', icon: <Text>🇯🇴</Text>, group: 'Middle East' },
-  { label: 'France', value: 'FR', icon: <Text>🇫🇷</Text>, group: 'Europe', description: 'République française' },
-  { label: 'Germany', value: 'DE', icon: <Text>🇩🇪</Text>, group: 'Europe', keywords: ['deutschland'] },
-  { label: 'Spain', value: 'ES', icon: <Text>🇪🇸</Text>, group: 'Europe', disabled: true, description: 'Not shipping yet' },
-  { label: 'Japan', value: 'JP', icon: <Text>🇯🇵</Text>, group: 'Asia', keywords: ['nippon'] },
+  {
+    label: 'France',
+    value: 'FR',
+    icon: <Text>🇫🇷</Text>,
+    group: 'Europe',
+    description: 'République française',
+  },
+  {
+    label: 'Germany',
+    value: 'DE',
+    icon: <Text>🇩🇪</Text>,
+    group: 'Europe',
+    keywords: ['deutschland'],
+  },
+  {
+    label: 'Spain',
+    value: 'ES',
+    icon: <Text>🇪🇸</Text>,
+    group: 'Europe',
+    disabled: true,
+    description: 'Not shipping yet',
+  },
+  {
+    label: 'Japan',
+    value: 'JP',
+    icon: <Text>🇯🇵</Text>,
+    group: 'Asia',
+    keywords: ['nippon'],
+  },
 ];
 
 export default function Example() {
   const [country, setCountry] = useState<string | null>('FR');
-  return <SelectPicker label="Ship to" options={countries} value={country} onChange={setCountry} searchable />;
+  return (
+    <SelectPicker
+      label="Ship to"
+      options={countries}
+      value={country}
+      onChange={setCountry}
+      searchable
+    />
+  );
 }
 ```
 
@@ -102,10 +160,22 @@ Groups appear in the order their first option appears in `options`. Options with
 import { useState } from 'react';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
-const skills = ['React', 'React Native', 'TypeScript', 'Expo', 'Node.js', 'GraphQL', 'Swift', 'Kotlin'].map((s) => ({ label: s, value: s }));
+const skills = [
+  'React',
+  'React Native',
+  'TypeScript',
+  'Expo',
+  'Node.js',
+  'GraphQL',
+  'Swift',
+  'Kotlin',
+].map((s) => ({ label: s, value: s }));
 
 export default function Example() {
-  const [picked, setPicked] = useState<string[]>(['React Native', 'TypeScript']);
+  const [picked, setPicked] = useState<string[]>([
+    'React Native',
+    'TypeScript',
+  ]);
   return (
     <SelectPicker
       multiple
@@ -192,7 +262,14 @@ Rows tint while the pointer is over them and ripple from the touch point when pi
 import { useState } from 'react';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
-const frameworks = ['Expo', 'React Native CLI', 'React Native Web', 'Next.js', 'Remix', 'Vite'].map((f) => ({ label: f, value: f }));
+const frameworks = [
+  'Expo',
+  'React Native CLI',
+  'React Native Web',
+  'Next.js',
+  'Remix',
+  'Vite',
+].map((f) => ({ label: f, value: f }));
 
 export default function Example() {
   const [framework, setFramework] = useState<string | null>(null);
@@ -203,7 +280,12 @@ export default function Example() {
       options={frameworks}
       value={framework}
       onChange={setFramework}
-      theme={{ colors: { hover: 'rgba(200,70,13,0.08)', ripple: 'rgba(200,70,13,0.24)' } }}
+      theme={{
+        colors: {
+          hover: 'rgba(200,70,13,0.08)',
+          ripple: 'rgba(200,70,13,0.24)',
+        },
+      }}
     />
   );
 }
@@ -236,8 +318,19 @@ export default function Example() {
       onChange={setSort}
       sheetTitle="Sort by"
       renderTrigger={({ open, selected }) => (
-        <Pressable onPress={open} style={{ alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 14, borderRadius: 999, backgroundColor: '#EEF2FF' }}>
-          <Text style={{ color: '#C8460D', fontWeight: '600' }}>↕ {selected[0]?.label ?? 'Sort'}</Text>
+        <Pressable
+          onPress={open}
+          style={{
+            alignSelf: 'flex-start',
+            paddingVertical: 8,
+            paddingHorizontal: 14,
+            borderRadius: 999,
+            backgroundColor: '#EEF2FF',
+          }}
+        >
+          <Text style={{ color: '#C8460D', fontWeight: '600' }}>
+            ↕ {selected[0]?.label ?? 'Sort'}
+          </Text>
         </Pressable>
       )}
     />
@@ -264,7 +357,9 @@ export default function Example() {
       options={sizes}
       value={size}
       onChange={setSize}
-      renderChevron={({ theme }) => <Text style={{ color: theme.colors.primary, fontSize: 16 }}>⌄</Text>}
+      renderChevron={({ theme }) => (
+        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>⌄</Text>
+      )}
     />
   );
 }
@@ -280,9 +375,24 @@ import { View, Text } from 'react-native';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
 const people = [
-  { label: 'Ada Lovelace', value: 'ada', description: 'Mathematician', color: '#F59E0B' },
-  { label: 'Alan Turing', value: 'alan', description: 'Computer scientist', color: '#10B981' },
-  { label: 'Grace Hopper', value: 'grace', description: 'Rear admiral', color: '#6366F1' },
+  {
+    label: 'Ada Lovelace',
+    value: 'ada',
+    description: 'Mathematician',
+    color: '#F59E0B',
+  },
+  {
+    label: 'Alan Turing',
+    value: 'alan',
+    description: 'Computer scientist',
+    color: '#10B981',
+  },
+  {
+    label: 'Grace Hopper',
+    value: 'grace',
+    description: 'Rear admiral',
+    color: '#6366F1',
+  },
 ];
 
 export default function Example() {
@@ -296,13 +406,40 @@ export default function Example() {
       renderOption={({ option, selected, theme }) => {
         const p = people.find((x) => x.value === option.value)!;
         return (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
-            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: p.color, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: 'white', fontWeight: '700' }}>{p.label[0]}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 12,
+              flex: 1,
+            }}
+          >
+            <View
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: p.color,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: 'white', fontWeight: '700' }}>
+                {p.label[0]}
+              </Text>
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ color: theme.colors.text, fontWeight: selected ? '700' : '500' }}>{p.label}</Text>
-              <Text style={{ color: theme.colors.textSecondary, fontSize: 12 }}>{p.description}</Text>
+              <Text
+                style={{
+                  color: theme.colors.text,
+                  fontWeight: selected ? '700' : '500',
+                }}
+              >
+                {p.label}
+              </Text>
+              <Text style={{ color: theme.colors.textSecondary, fontSize: 12 }}>
+                {p.description}
+              </Text>
             </View>
             {selected && <Text style={{ color: theme.colors.primary }}>●</Text>}
           </View>
@@ -333,7 +470,10 @@ export default function Example() {
       label="Framework"
       value={value}
       onChange={setValue}
-      options={['Expo', 'React Native CLI', 'Next.js', 'Vite'].map((label) => ({ label, value: label }))}
+      options={['Expo', 'React Native CLI', 'Next.js', 'Vite'].map((label) => ({
+        label,
+        value: label,
+      }))}
     />
   );
 }
@@ -364,9 +504,36 @@ import { useState } from 'react';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
 const countries = [
-  'Argentina', 'Australia', 'Austria', 'Belgium', 'Brazil', 'Canada', 'Chile', 'China', 'Denmark', 'Egypt',
-  'Finland', 'France', 'Germany', 'Greece', 'India', 'Ireland', 'Israel', 'Italy', 'Japan', 'Mexico',
-  'Netherlands', 'Norway', 'Poland', 'Portugal', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'United Kingdom', 'United States',
+  'Argentina',
+  'Australia',
+  'Austria',
+  'Belgium',
+  'Brazil',
+  'Canada',
+  'Chile',
+  'China',
+  'Denmark',
+  'Egypt',
+  'Finland',
+  'France',
+  'Germany',
+  'Greece',
+  'India',
+  'Ireland',
+  'Israel',
+  'Italy',
+  'Japan',
+  'Mexico',
+  'Netherlands',
+  'Norway',
+  'Poland',
+  'Portugal',
+  'Spain',
+  'Sweden',
+  'Switzerland',
+  'Turkey',
+  'United Kingdom',
+  'United States',
 ].map((c) => ({ label: c, value: c }));
 
 export default function Example() {

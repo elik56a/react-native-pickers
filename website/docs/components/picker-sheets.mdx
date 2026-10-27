@@ -93,9 +93,25 @@ import { Pressable, Text, View } from 'react-native';
 import { DatePickerSheet, formatDate } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
-function Field({ label, value, onPress }: { label: string; value: string; onPress: () => void }) {
+function Field({
+  label,
+  value,
+  onPress,
+}: {
+  label: string;
+  value: string;
+  onPress: () => void;
+}) {
   return (
-    <Pressable onPress={onPress} style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 12, padding: 14 }}>
+    <Pressable
+      onPress={onPress}
+      style={{
+        borderWidth: 1,
+        borderColor: '#E8E4DC',
+        borderRadius: 12,
+        padding: 14,
+      }}
+    >
       <Text style={{ fontSize: 12, color: '#6E685E' }}>{label}</Text>
       <Text style={{ fontSize: 16, marginTop: 2 }}>{value}</Text>
     </Pressable>
@@ -110,17 +126,53 @@ export default function Example() {
   const close = () => setSheet(null);
   return (
     <View style={{ gap: 10 }}>
-      <Field label="Delivery date" value={day ? formatDate(day) : 'Choose…'} onPress={() => setSheet('day')} />
+      <Field
+        label="Delivery date"
+        value={day ? formatDate(day) : 'Choose…'}
+        onPress={() => setSheet('day')}
+      />
       <Field
         label="Trip"
-        value={range.start && range.end ? `${formatDate(range.start)} → ${formatDate(range.end)}` : 'Choose…'}
+        value={
+          range.start && range.end
+            ? `${formatDate(range.start)} → ${formatDate(range.end)}`
+            : 'Choose…'
+        }
         onPress={() => setSheet('range')}
       />
-      <Field label="Birthday" value={formatDate(birthday)} onPress={() => setSheet('birthday')} />
+      <Field
+        label="Birthday"
+        value={formatDate(birthday)}
+        onPress={() => setSheet('birthday')}
+      />
 
-      <DatePickerSheet visible={sheet === 'day'} onClose={close} title="Delivery" value={day} onConfirm={setDay} minDate={new Date()} confirmOnSelect />
-      <DatePickerSheet visible={sheet === 'range'} onClose={close} title="Trip dates" mode="range" value={range} onConfirm={setRange} minDate={new Date()} />
-      <DatePickerSheet visible={sheet === 'birthday'} onClose={close} title="Birthday" display="wheel" value={birthday} onConfirm={setBirthday} maxDate={new Date()} />
+      <DatePickerSheet
+        visible={sheet === 'day'}
+        onClose={close}
+        title="Delivery"
+        value={day}
+        onConfirm={setDay}
+        minDate={new Date()}
+        confirmOnSelect
+      />
+      <DatePickerSheet
+        visible={sheet === 'range'}
+        onClose={close}
+        title="Trip dates"
+        mode="range"
+        value={range}
+        onConfirm={setRange}
+        minDate={new Date()}
+      />
+      <DatePickerSheet
+        visible={sheet === 'birthday'}
+        onClose={close}
+        title="Birthday"
+        display="wheel"
+        value={birthday}
+        onConfirm={setBirthday}
+        maxDate={new Date()}
+      />
     </View>
   );
 }
@@ -162,11 +214,23 @@ export default function Example() {
   const [time, setTime] = useState(new Date(2026, 0, 1, 7, 30));
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ alignItems: 'center', padding: 12 }}>
-        <Text style={{ fontSize: 48, fontWeight: '200' }}>{time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ alignItems: 'center', padding: 12 }}
+      >
+        <Text style={{ fontSize: 48, fontWeight: '200' }}>
+          {time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+        </Text>
         <Text style={{ color: '#C8460D' }}>Change</Text>
       </Pressable>
-      <TimePickerSheet visible={open} onClose={() => setOpen(false)} title="Wake up" value={time} onConfirm={setTime} minuteInterval={5} />
+      <TimePickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Wake up"
+        value={time}
+        onConfirm={setTime}
+        minuteInterval={5}
+      />
     </>
   );
 }
@@ -188,17 +252,35 @@ import { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 import { WheelPickerSheet } from '@elik56a/react-native-pickers';
 
-const guests = Array.from({ length: 12 }, (_, i) => ({ label: `${i + 1} guest${i ? 's' : ''}`, value: i + 1 }));
+const guests = Array.from({ length: 12 }, (_, i) => ({
+  label: `${i + 1} guest${i ? 's' : ''}`,
+  value: i + 1,
+}));
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(2);
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 12, padding: 14 }}>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{
+          borderWidth: 1,
+          borderColor: '#E8E4DC',
+          borderRadius: 12,
+          padding: 14,
+        }}
+      >
         <Text>👥 {guests[count - 1].label}</Text>
       </Pressable>
-      <WheelPickerSheet visible={open} onClose={() => setOpen(false)} title="Guests" items={guests} value={count} onConfirm={setCount} />
+      <WheelPickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Guests"
+        items={guests}
+        value={count}
+        onConfirm={setCount}
+      />
     </>
   );
 }
@@ -228,12 +310,37 @@ export default function Example() {
   return (
     <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
       {reactions.map((r, i) => (
-        <Text key={i} style={{ fontSize: 22, backgroundColor: '#F4F2EE', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 }}>{r}</Text>
+        <Text
+          key={i}
+          style={{
+            fontSize: 22,
+            backgroundColor: '#F4F2EE',
+            borderRadius: 999,
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+          }}
+        >
+          {r}
+        </Text>
       ))}
-      <Pressable onPress={() => setOpen(true)} style={{ borderRadius: 999, borderWidth: 1, borderColor: '#E8E4DC', paddingHorizontal: 12, justifyContent: 'center' }}>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{
+          borderRadius: 999,
+          borderWidth: 1,
+          borderColor: '#E8E4DC',
+          paddingHorizontal: 12,
+          justifyContent: 'center',
+        }}
+      >
         <Text>＋</Text>
       </Pressable>
-      <EmojiPickerSheet visible={open} onClose={() => setOpen(false)} title="React" onSelect={(e) => setReactions((r) => [...r, e])} />
+      <EmojiPickerSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="React"
+        onSelect={(e) => setReactions((r) => [...r, e])}
+      />
     </View>
   );
 }
@@ -266,8 +373,16 @@ export default function Example() {
   const [draft, setDraft] = useDraft(prefs, open);
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ padding: 14, borderRadius: 12, backgroundColor: '#F4F2EE' }}>
-        <Text>Notifications: {[prefs.push && 'push', prefs.email && 'email'].filter(Boolean).join(' + ') || 'off'}</Text>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ padding: 14, borderRadius: 12, backgroundColor: '#F4F2EE' }}
+      >
+        <Text>
+          Notifications:{' '}
+          {[prefs.push && 'push', prefs.email && 'email']
+            .filter(Boolean)
+            .join(' + ') || 'off'}
+        </Text>
       </Pressable>
       <PickerSheet
         visible={open}
@@ -281,9 +396,21 @@ export default function Example() {
       >
         <View style={{ padding: 16, gap: 16 }}>
           {(['push', 'email'] as const).map((k) => (
-            <View key={k} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textTransform: 'capitalize' }}>{k}</Text>
-              <Switch value={draft[k]} onValueChange={(v) => setDraft({ ...draft, [k]: v })} />
+            <View
+              key={k}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontSize: 16, textTransform: 'capitalize' }}>
+                {k}
+              </Text>
+              <Switch
+                value={draft[k]}
+                onValueChange={(v) => setDraft({ ...draft, [k]: v })}
+              />
             </View>
           ))}
         </View>

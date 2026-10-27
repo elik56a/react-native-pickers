@@ -19,7 +19,11 @@ import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 import { useState } from 'react';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 
-const range = (n: number) => Array.from({ length: n }, (_, i) => ({ label: String(i).padStart(2, '0'), value: i }));
+const range = (n: number) =>
+  Array.from({ length: n }, (_, i) => ({
+    label: String(i).padStart(2, '0'),
+    value: i,
+  }));
 
 export default function Example() {
   const [h, setH] = useState(1);
@@ -82,7 +86,10 @@ import { Text } from 'react-native';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 
 const feet = [3, 4, 5, 6, 7].map((v) => ({ label: `${v} ft`, value: v }));
-const inches = Array.from({ length: 12 }, (_, i) => ({ label: `${i} in`, value: i }));
+const inches = Array.from({ length: 12 }, (_, i) => ({
+  label: `${i} in`,
+  value: i,
+}));
 
 export default function Example() {
   const [ft, setFt] = useState(5);
@@ -91,8 +98,20 @@ export default function Example() {
     <>
       <MultiWheelPicker
         columns={[
-          { key: 'ft', items: feet, value: ft, onChange: setFt, textAlign: 'right' },
-          { key: 'in', items: inches, value: inch, onChange: setInch, textAlign: 'left' },
+          {
+            key: 'ft',
+            items: feet,
+            value: ft,
+            onChange: setFt,
+            textAlign: 'right',
+          },
+          {
+            key: 'in',
+            items: inches,
+            value: inch,
+            onChange: setInch,
+            textAlign: 'left',
+          },
         ]}
       />
       <Text style={{ textAlign: 'center', color: '#6E685E' }}>
@@ -120,8 +139,20 @@ export default function Example() {
     <MultiWheelPicker
       variant="flat"
       columns={[
-        { key: 'cur', items: ['USD', 'EUR', 'GBP', 'ILS'], value: cur, onChange: setCur, width: 90 },
-        { key: 'amount', items: amounts, value: amount, onChange: setAmount, flex: 2 },
+        {
+          key: 'cur',
+          items: ['USD', 'EUR', 'GBP', 'ILS'],
+          value: cur,
+          onChange: setCur,
+          width: 90,
+        },
+        {
+          key: 'amount',
+          items: amounts,
+          value: amount,
+          onChange: setAmount,
+          flex: 2,
+        },
       ]}
     />
   );
@@ -157,7 +188,13 @@ export default function Example() {
             setModel(models[b][0]);
           },
         },
-        { key: 'model', items: models[brand], value: model, onChange: setModel, flex: 1.4 },
+        {
+          key: 'model',
+          items: models[brand],
+          value: model,
+          onChange: setModel,
+          flex: 1.4,
+        },
       ]}
     />
   );

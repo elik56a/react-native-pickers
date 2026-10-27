@@ -1,11 +1,9 @@
-import { SHEET_PRESENTATION } from '../sheet/sheet.constants';
+import { FIELD_PRESENTATION } from '../sheet/sheet.constants';
+
 /** Lists with more options than this get a search field unless `searchable` says otherwise. */
 export const SEARCH_THRESHOLD = 8;
 
-export const SELECT_PRESENTATION = {
-  ...SHEET_PRESENTATION,
-  dropdown: 'dropdown',
-} as const;
+export const SELECT_PRESENTATION = FIELD_PRESENTATION;
 
 export const SELECT_ROW_TYPE = {
   header: 'header',

@@ -20,7 +20,11 @@ export default function Example() {
       onChange={setV}
       styles={{
         indicator: { backgroundColor: '#111827', borderRadius: 999 },
-        selectedItemText: { color: '#FFFFFF', fontWeight: '800', letterSpacing: 1 },
+        selectedItemText: {
+          color: '#FFFFFF',
+          fontWeight: '800',
+          letterSpacing: 1,
+        },
         itemText: { fontSize: 17 },
       }}
     />
@@ -72,7 +76,10 @@ const square = {
 
 export default function Example() {
   const t = new Date();
-  const [r, setR] = useState<DateRange>({ start: addDays(t, 1), end: addDays(t, 4) });
+  const [r, setR] = useState<DateRange>({
+    start: addDays(t, 1),
+    end: addDays(t, 4),
+  });
   return <DatePicker mode="range" value={r} onChange={setR} styles={square} />;
 }
 ```
@@ -89,7 +96,10 @@ export default function Example() {
     <SelectPicker
       multiple
       label="TEAMS"
-      options={['Design', 'Engineering', 'Marketing', 'Sales'].map((t) => ({ label: t, value: t.toLowerCase() }))}
+      options={['Design', 'Engineering', 'Marketing', 'Sales'].map((t) => ({
+        label: t,
+        value: t.toLowerCase(),
+      }))}
       value={v}
       onChange={setV}
       styles={{

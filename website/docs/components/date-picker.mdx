@@ -28,7 +28,11 @@ export default function Example() {
   return (
     <>
       <DatePicker value={date} onChange={setDate} />
-      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{date ? formatDate(date, undefined, { dateStyle: 'full' }) : 'No date selected'}</Text>
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {date
+          ? formatDate(date, undefined, { dateStyle: 'full' })
+          : 'No date selected'}
+      </Text>
     </>
   );
 }
@@ -66,7 +70,14 @@ import { DatePicker, addDays } from '@elik56a/react-native-pickers';
 export default function Example() {
   const today = new Date();
   const [date, setDate] = useState<Date | null>(addDays(today, 2));
-  return <DatePicker value={date} onChange={setDate} minDate={today} maxDate={addDays(today, 45)} />;
+  return (
+    <DatePicker
+      value={date}
+      onChange={setDate}
+      minDate={today}
+      maxDate={addDays(today, 45)}
+    />
+  );
 }
 ```
 
@@ -87,7 +98,9 @@ export default function Example() {
       value={date}
       onChange={setDate}
       initialMonth={new Date(2026, 11, 1)}
-      isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6 || holidays.has(toDateKey(d))}
+      isDateDisabled={(d) =>
+        d.getDay() === 0 || d.getDay() === 6 || holidays.has(toDateKey(d))
+      }
     />
   );
 }
@@ -141,8 +154,18 @@ export default function Example() {
   const [date, setDate] = useState<Date | null>(new Date());
   return (
     <View style={{ gap: 24 }}>
-      <DatePicker value={date} onChange={setDate} locale="fr-FR" firstDayOfWeek={1} />
-      <DatePicker value={date} onChange={setDate} locale="ja-JP" weekdayFormat="narrow" />
+      <DatePicker
+        value={date}
+        onChange={setDate}
+        locale="fr-FR"
+        firstDayOfWeek={1}
+      />
+      <DatePicker
+        value={date}
+        onChange={setDate}
+        locale="ja-JP"
+        weekdayFormat="narrow"
+      />
     </View>
   );
 }
@@ -173,7 +196,9 @@ export default function Example() {
       showOutsideDays={false}
       fixedWeeks={false}
       dayHeight={38}
-      formatTitle={(month) => month.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
+      formatTitle={(month) =>
+        month.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+      }
     />
   );
 }
@@ -199,7 +224,11 @@ export default function Example() {
     <DatePicker
       value={date}
       onChange={setDate}
-      renderArrow={(dir, disabled) => <Text style={{ fontSize: 16, opacity: disabled ? 0.3 : 1 }}>{dir === 'prev' ? '⬅️' : '➡️'}</Text>}
+      renderArrow={(dir, disabled) => (
+        <Text style={{ fontSize: 16, opacity: disabled ? 0.3 : 1 }}>
+          {dir === 'prev' ? '⬅️' : '➡️'}
+        </Text>
+      )}
       renderDay={(s, theme) => (
         <View
           style={{
@@ -208,11 +237,24 @@ export default function Example() {
             borderRadius: 10,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: s.selected ? theme.colors.primary : s.today ? theme.colors.primaryMuted : 'transparent',
+            backgroundColor: s.selected
+              ? theme.colors.primary
+              : s.today
+                ? theme.colors.primaryMuted
+                : 'transparent',
             opacity: s.outside ? 0.35 : 1,
           }}
         >
-          <Text style={{ color: s.selected ? theme.colors.onPrimary : s.disabled ? theme.colors.textDisabled : theme.colors.text, fontWeight: '600' }}>
+          <Text
+            style={{
+              color: s.selected
+                ? theme.colors.onPrimary
+                : s.disabled
+                  ? theme.colors.textDisabled
+                  : theme.colors.text,
+              fontWeight: '600',
+            }}
+          >
             {s.date.getDate()}
           </Text>
         </View>
@@ -250,11 +292,22 @@ export default function Example() {
     <DatePicker
       value={date}
       onChange={setDate}
-      theme={{ colors: { primary: '#059669', primaryMuted: 'rgba(5,150,105,0.12)' } }}
+      theme={{
+        colors: { primary: '#059669', primaryMuted: 'rgba(5,150,105,0.12)' },
+      }}
       styles={{
-        container: { borderRadius: 20, borderWidth: 1, borderColor: '#E8E4DC', paddingHorizontal: 8 },
+        container: {
+          borderRadius: 20,
+          borderWidth: 1,
+          borderColor: '#E8E4DC',
+          paddingHorizontal: 8,
+        },
         headerTitle: { fontSize: 20, fontWeight: '800' },
-        weekdayText: { textTransform: 'uppercase', fontSize: 10, letterSpacing: 1 },
+        weekdayText: {
+          textTransform: 'uppercase',
+          fontSize: 10,
+          letterSpacing: 1,
+        },
         selectedDay: { borderRadius: 10 },
         todayDay: { borderRadius: 10 },
       }}
