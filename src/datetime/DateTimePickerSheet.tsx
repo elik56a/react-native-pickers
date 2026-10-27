@@ -1,9 +1,10 @@
 import { PICKER_DISPLAY } from '../core/core.constants';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { snapTime } from '../time/time.utils';
 import { DateTimePicker } from './DateTimePicker';
+import { DATETIME_DESIGN } from './datetime.constants';
 import type { DateTimePickerSheetProps } from './datetime.types';
 
 export const DateTimePickerSheet = ({
@@ -23,6 +24,8 @@ export const DateTimePickerSheet = ({
 }: DateTimePickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
   const [draft, setDraft] = useDraft(value ?? new Date(), visible);
+  const { design: resolvedDesign } = usePickerTheme(theme);
+  const display = rest.display ?? DATETIME_DESIGN[resolvedDesign].display;
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
@@ -31,7 +34,7 @@ export const DateTimePickerSheet = ({
         onClose();
       }}
     >
-      <SheetContent compact={rest.display === PICKER_DISPLAY.calendar}>
+      <SheetContent compact={display === PICKER_DISPLAY.calendar}>
         <DateTimePicker {...rest} theme={theme} value={draft} onChange={setDraft} />
       </SheetContent>
     </PickerSheet>

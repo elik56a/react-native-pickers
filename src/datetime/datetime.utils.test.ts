@@ -1,5 +1,14 @@
 import { toDateKey } from '../core/utils/date.utils';
-import { formatDateTimeValue, formatDayLabel, getDayItems, getDayTimeBounds, getDayWheelBounds, withDay } from './datetime.utils';
+import {
+  fitsBeside,
+  formatDateTimeValue,
+  formatDayLabel,
+  getCalendarTimeRows,
+  getDayItems,
+  getDayTimeBounds,
+  getDayWheelBounds,
+  withDay,
+} from './datetime.utils';
 
 const at = (d: number, h = 0, m = 0) => new Date(2026, 9, d, h, m);
 
@@ -57,5 +66,30 @@ describe('formatDateTimeValue', () => {
   it('shows the date and the time in the chosen format', () => {
     expect(formatDateTimeValue(at(26, 21, 5), { format: '24h', locale: 'en-US' })).toBe('Oct 26, 2026, 21:05');
     expect(formatDateTimeValue(at(26, 21, 5), { locale: 'en-US' })).toMatch(/^Oct 26, 2026, 9:05\sPM$/);
+  });
+});
+
+describe('getCalendarTimeRows', () => {
+  it('makes the time beside the calendar about as tall as it', () => {
+    expect(getCalendarTimeRows('list', 'beside')).toBe(9);
+    expect(getCalendarTimeRows('wheel', 'beside')).toBe(9);
+  });
+
+  it('gives a few wheels under the calendar, and the web panel a few more', () => {
+    expect(getCalendarTimeRows('wheel', 'below')).toBe(3);
+    expect(getCalendarTimeRows('list', 'below')).toBe(5);
+  });
+});
+
+describe('fitsBeside', () => {
+  it('fits the time beside the calendar when the width holds both, with the card around them', () => {
+    expect(fitsBeside(502, 176)).toBe(true);
+    expect(fitsBeside(501, 176)).toBe(false);
+    expect(fitsBeside(320, 176)).toBe(false);
+  });
+
+  it('assumes it fits until both widths are measured', () => {
+    expect(fitsBeside(0, 176)).toBe(true);
+    expect(fitsBeside(320, 0)).toBe(true);
   });
 });
