@@ -7,10 +7,12 @@ import type { PickerTheme } from '../core/theme/theme.types';
 import type { SelectOption } from '../select/select.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
-import type { TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
+import type { useClockDial } from './hooks/useClockDial';
+import type { CLOCK_MODE, TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
 
 export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
 export type TimeDisplay = ValueOf<typeof TIME_DISPLAY>;
+export type ClockMode = ValueOf<typeof CLOCK_MODE>;
 
 export interface TimePickerProps extends ThemableProps {
   /** Selected time (the date part is preserved). */
@@ -19,7 +21,7 @@ export interface TimePickerProps extends ThemableProps {
   onChange?: (date: Date) => void;
   /** Fires on every tick while scrolling (for haptics). */
   onValueChanging?: (date: Date) => void;
-  /** Wheels, or a list of times (stepping by `minuteInterval`, or 15 minutes). Default: a list in the web design, wheels otherwise */
+  /** Wheels, a clock dial, or a list of times (stepping by `minuteInterval`, or 15 minutes). Default: wheels on iOS, a dial in Material, a list on the web. With `showSeconds`, a dial falls back to wheels */
   display?: TimeDisplay;
   /** Default: 'auto' (from locale) */
   format?: TimeFormat;
@@ -97,3 +99,32 @@ export interface TimeListProps {
 }
 
 export type TimeListItem = SelectOption<number>;
+
+export interface DialNumber {
+  /** An hour of the day (12h: 1–12) or a minute */
+  value: number;
+  label: string;
+  /** The number's centre on the dial */
+  x: number;
+  y: number;
+  /** On the inner ring of a 24h dial */
+  inner: boolean;
+  disabled: boolean;
+}
+
+export interface ClockDialProps {
+  date: Date;
+  onChange: (date: Date) => void;
+  options: TimeOptions;
+  theme: PickerTheme;
+  style?: StyleProp<ViewStyle>;
+  testID?: string;
+}
+
+export type ClockDialState = ReturnType<typeof useClockDial>;
+
+export interface ClockPartProps {
+  dial: ClockDialState;
+  theme: PickerTheme;
+  testID?: string;
+}
