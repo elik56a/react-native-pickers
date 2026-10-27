@@ -8,7 +8,7 @@ import { usePickerField } from './hooks/usePickerField';
 import { DEFAULT_PLACEHOLDER } from './sheet.constants';
 import type { PickerFieldProps } from './sheet.types';
 
-/** A labelled field that opens the sheet `children` renders (as a dropdown under it by default), and shows `displayValue` once it closes. */
+/** A labelled field that opens the sheet `children` renders (by default, a dropdown under it on the web and a bottom sheet on native), and shows `displayValue` once it closes. */
 export const PickerField = ({
   label,
   placeholder = DEFAULT_PLACEHOLDER,

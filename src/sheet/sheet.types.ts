@@ -231,7 +231,7 @@ export interface PickerFieldBaseProps<S extends string = never> extends Themable
   renderChevron?: (info: ChevronInfo) => React.ReactNode;
   onOpen?: () => void;
   onClose?: () => void;
-  /** Where the picker opens: `dropdown` under the field, `bottomSheet`, `modal`, or `auto` (modal on wide web windows, else a bottom sheet). Default: 'dropdown' */
+  /** Where the picker opens: `dropdown` under the field, `bottomSheet`, `modal`, or `auto`: a dropdown on the web, a bottom sheet on native. Default: 'auto' */
   presentation?: FieldPresentation;
   style?: StyleProp<ViewStyle>;
   styles?: SlotStyles<PickerFieldSlot | S>;

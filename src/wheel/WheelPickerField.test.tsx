@@ -10,7 +10,7 @@ const sizes = [
 describe('WheelPickerField', () => {
   it("shows the item's label and confirms from the sheet", async () => {
     const onConfirm = jest.fn();
-    await render(<WheelPickerField label="Size" presentation="bottomSheet" items={sizes} value="l" onConfirm={onConfirm} />);
+    await render(<WheelPickerField label="Size" items={sizes} value="l" onConfirm={onConfirm} />);
     expect(screen.getByText('Large')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Size' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Done' }));

@@ -2,17 +2,19 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { FIELD_PRESENTATION } from '../sheet.constants';
 import type { FieldPresentation, FieldSheetContextValue, PickerFieldBaseProps } from '../sheet.types';
+import { resolveFieldPresentation } from '../sheet.utils';
 import { useAnchor } from './useAnchor';
 
 /** Whether the field's picker is open, and where; opening does nothing while `disabled`. */
 export const usePickerField = ({
   disabled,
-  presentation = FIELD_PRESENTATION.dropdown,
+  presentation: presentationProp = FIELD_PRESENTATION.auto,
   onOpen,
   onClose,
 }: Pick<PickerFieldBaseProps, 'disabled' | 'onOpen' | 'onClose'> & { presentation?: FieldPresentation }) => {
   const [open, setOpen] = useState(false);
   const anchor = useAnchor();
+  const presentation = resolveFieldPresentation(presentationProp);
   const dropdown = presentation === FIELD_PRESENTATION.dropdown;
 
   const show = useCallback(() => {

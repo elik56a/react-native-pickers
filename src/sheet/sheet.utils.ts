@@ -8,7 +8,9 @@ import {
   DROPDOWN_EDGE_MARGIN,
   DROPDOWN_GAP,
   EXPAND_FLICK_VELOCITY,
+  FIELD_PRESENTATION,
   FIELD_PROP_KEYS,
+  IS_WEB,
   SCROLLABLE_OVERFLOW,
   SHEET_MAX_WIDTH,
   SHEET_PRESENTATION,
@@ -17,6 +19,7 @@ import {
 import type {
   AnchorRect,
   DropdownFrame,
+  FieldPresentation,
   PickerFieldBaseProps,
   ScrollNode,
   SheetDragFrame,
@@ -82,6 +85,10 @@ export const resolvePresentation = (
     ? SHEET_PRESENTATION.modal
     : SHEET_PRESENTATION.bottomSheet;
 };
+
+/** A field's `auto`: a dropdown on the web, where options are expected under the field; on native, a sheet (`auto` again, resolved by the sheet). */
+export const resolveFieldPresentation = (presentation: FieldPresentation, web = IS_WEB): FieldPresentation =>
+  presentation === FIELD_PRESENTATION.auto && web ? FIELD_PRESENTATION.dropdown : presentation;
 
 /** Opens below the anchor, or above it when there's more room there and not enough below. Grows to `minWidth`, kept inside the window. */
 export const getDropdownFrame = (

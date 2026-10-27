@@ -9,16 +9,7 @@ const pressDay = (d: number) => fireEvent.press(screen.getByLabelText(new RegExp
 describe('DatePickerField', () => {
   it('opens the sheet titled by the label and confirms the picked day', async () => {
     const onConfirm = jest.fn();
-    await render(
-      <DatePickerField
-        label="Due"
-        presentation="bottomSheet"
-        locale="en-US"
-        placeholder="Pick a day"
-        initialMonth={OCTOBER}
-        onConfirm={onConfirm}
-      />
-    );
+    await render(<DatePickerField label="Due" locale="en-US" placeholder="Pick a day" initialMonth={OCTOBER} onConfirm={onConfirm} />);
     expect(screen.getByText('Pick a day')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Due' }));
     expect(screen.getAllByText('Due')).toHaveLength(2);
@@ -45,7 +36,7 @@ describe('DatePickerField', () => {
     expect(screen.getByText('Tomorrow')).toBeTruthy();
   });
 
-  describe('dropdown (the default)', () => {
+  describe('dropdown', () => {
     // The preset's View mock shares these instance methods; measureInWindow never calls back unless told to.
     const { measureInWindow }: { measureInWindow: jest.Mock } = jest.requireActual(
       '@react-native/jest-preset/jest/MockNativeMethods'
@@ -55,7 +46,7 @@ describe('DatePickerField', () => {
 
     it('opens under the field without a title, and confirms with Done', async () => {
       const onConfirm = jest.fn();
-      await render(<DatePickerField label="Due" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
+      await render(<DatePickerField label="Due" presentation="dropdown" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
       await fireEvent.press(screen.getByRole('button', { name: 'Due' }));
       expect(screen.getAllByText('Due')).toHaveLength(1);
       await pressDay(15);
@@ -66,7 +57,7 @@ describe('DatePickerField', () => {
 
     it('closes without confirming on Cancel', async () => {
       const onConfirm = jest.fn();
-      await render(<DatePickerField label="Due" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
+      await render(<DatePickerField label="Due" presentation="dropdown" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
       await fireEvent.press(screen.getByRole('button', { name: 'Due' }));
       await pressDay(15);
       await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));

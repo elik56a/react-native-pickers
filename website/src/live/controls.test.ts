@@ -20,7 +20,7 @@ describe('findControls', () => {
     const props = findControls(fields).map((c) => c.prop);
     expect(props).toEqual(['presentation', 'clearable', 'disabled']);
     expect(control(fields, 'presentation')).toMatchObject({
-      options: ['dropdown', 'bottomSheet', 'modal', 'auto'],
+      options: ['auto', 'dropdown', 'bottomSheet', 'modal'],
       components: ['DatePickerField', 'SelectPicker'],
     });
   });
@@ -38,7 +38,7 @@ describe('findControls', () => {
 describe('readControl', () => {
   it('reads string, bare and missing props', () => {
     expect(readControl(fields, control(fields, 'clearable'))).toBe(true);
-    expect(readControl(fields, control(fields, 'presentation'))).toBe('dropdown');
+    expect(readControl(fields, control(fields, 'presentation'))).toBe('auto');
     expect(readControl('<TimePicker format="24h" />', control('<TimePicker format="24h" />', 'format'))).toBe('24h');
   });
 });

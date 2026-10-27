@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Platform } from 'react-native';
 
 import { useAnchor } from '../../sheet/hooks/useAnchor';
+import { resolveFieldPresentation } from '../../sheet/sheet.utils';
 import { SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
-import { findOptions, resolveSelectPresentation, toValueList } from '../select.utils';
+import { findOptions, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
 export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
@@ -12,7 +12,7 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
   const [open, setOpen] = useState(false);
   const anchor = useAnchor();
   const [query, setQuery] = useState('');
-  const presentation = resolveSelectPresentation(props.presentation ?? SELECT_PRESENTATION.auto, Platform.OS);
+  const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto);
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
   const searchInField = dropdown && props.searchable !== false;
 

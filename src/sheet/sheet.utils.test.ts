@@ -6,6 +6,7 @@ import {
   getReleaseTarget,
   getWheelTarget,
   isVerticalDrag,
+  resolveFieldPresentation,
   resolvePresentation,
   resolveSheetHeight,
   shouldDismiss,
@@ -194,5 +195,14 @@ describe('splitFieldProps', () => {
       title: 'Pick',
       locale: 'he',
     });
+  });
+});
+
+describe('resolveFieldPresentation', () => {
+  it('turns auto into a dropdown on the web only', () => {
+    expect(resolveFieldPresentation('auto', true)).toBe('dropdown');
+    expect(resolveFieldPresentation('auto', false)).toBe('auto');
+    expect(resolveFieldPresentation('modal', true)).toBe('modal');
+    expect(resolveFieldPresentation('bottomSheet', true)).toBe('bottomSheet');
   });
 });

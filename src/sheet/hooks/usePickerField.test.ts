@@ -17,9 +17,9 @@ describe('usePickerField', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  it('tells its sheet to open as a dropdown by default, and measures the field on open', async () => {
+  it('measures the field on open for a dropdown', async () => {
     const measureInWindow = jest.fn();
-    const { result } = await renderHook(() => usePickerField({}));
+    const { result } = await renderHook(() => usePickerField({ presentation: 'dropdown' }));
     expect(result.current.sheet).toEqual({
       presentation: 'dropdown',
       anchor: null,
@@ -29,10 +29,10 @@ describe('usePickerField', () => {
     expect(measureInWindow).toHaveBeenCalled();
   });
 
-  it('does not measure for a bottom sheet or modal', async () => {
+  it('opens a sheet by default on native, without measuring', async () => {
     const measureInWindow = jest.fn();
-    const { result } = await renderHook(() => usePickerField({ presentation: 'modal' }));
-    expect(result.current.sheet.presentation).toBe('modal');
+    const { result } = await renderHook(() => usePickerField({}));
+    expect(result.current.sheet.presentation).toBe('auto');
     result.current.anchor.ref.current = { measureInWindow } as unknown as HostInstance;
     await act(() => result.current.show());
     expect(measureInWindow).not.toHaveBeenCalled();
