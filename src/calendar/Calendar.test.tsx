@@ -18,6 +18,15 @@ describe('Calendar', () => {
     expect(dayCell(15).props.accessibilityState).toMatchObject({ selected: true });
   });
 
+  it('labels weekdays with one letter in Material, and the short names elsewhere', async () => {
+    const { rerender } = await render(<Calendar initialMonth={OCTOBER} locale="en-US" design="material" />);
+    expect(screen.getAllByText('S')).toHaveLength(2);
+    await rerender(<Calendar initialMonth={OCTOBER} locale="en-US" design="web" />);
+    expect(screen.getByText('Sun')).toBeTruthy();
+    await rerender(<Calendar initialMonth={OCTOBER} locale="en-US" design="material" weekdayFormat="short" />);
+    expect(screen.getByText('Sun')).toBeTruthy();
+  });
+
   it('builds a range from two taps', async () => {
     const onChange = jest.fn();
     await render(<Calendar mode="range" initialMonth={OCTOBER} onChange={onChange} />);

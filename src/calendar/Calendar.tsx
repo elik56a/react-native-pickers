@@ -4,7 +4,7 @@ import { Animated, View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
-import { CALENDAR_VIEW, DEFAULT_DAY_HEIGHT, WEEKDAY_FORMAT } from './calendar.constants';
+import { CALENDAR_DESIGN, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
 import {
   getAnchorMonth,
@@ -37,7 +37,7 @@ export const Calendar = (props: CalendarProps) => {
     fixedWeeks = true,
     enableSwipe = true,
     enableQuickJump = true,
-    weekdayFormat = WEEKDAY_FORMAT.short,
+    weekdayFormat: weekdayFormatProp,
     showWeekdays = true,
     formatTitle,
     renderDay,
@@ -52,6 +52,7 @@ export const Calendar = (props: CalendarProps) => {
   } = props;
   const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
+  const weekdayFormat = weekdayFormatProp ?? CALENDAR_DESIGN[theme.design].weekdayFormat;
   const firstDayOfWeek = props.firstDayOfWeek ?? getFirstDayOfWeek(locale);
   const today = useMemo(() => new Date(), []);
 

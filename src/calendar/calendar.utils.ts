@@ -5,16 +5,19 @@ import {
   CALENDAR_MODE,
   CALENDAR_VIEW,
   DAY_MS,
+  DAY_SELECTION,
   DEFAULT_YEAR_SPAN,
   EMPTY_RANGE,
   MAX_DAY_SIZE,
   QUICK_GRID_COLUMNS,
   SWIPE,
+  TODAY_MARK,
   WEEKDAY_ROW_HEIGHT,
   YEARS_PER_PAGE,
 } from './calendar.constants';
 import type {
   ArrowDirection,
+  CalendarDesign,
   CalendarSelection,
   CalendarView,
   DateRange,
@@ -132,6 +135,7 @@ export const getDayState = (params: {
     rangeStart: isSameDay(date, dayRange.start),
     rangeEnd: isSameDay(date, dayRange.end),
     inRange: isBetweenDays(date, dayRange.start, dayRange.end),
+    ranged: selection.mode === CALENDAR_MODE.range || selection.mode === CALENDAR_MODE.ranges,
     selected: isDaySelected(selection, date, dayRange),
     marking: markedDates?.[toDateKey(date)],
   };
@@ -147,8 +151,9 @@ export const getWeekStates = (grid: Date[][], params: Omit<Parameters<typeof get
 export const showsRangeBand = (state: DayState, hasRangeEnd: boolean) =>
   state.inRange || (hasRangeEnd && (state.rangeStart || state.rangeEnd) && !(state.rangeStart && state.rangeEnd));
 
-export const getDayTextColor = (state: DayState, colors: PickerTheme['colors']) => {
-  if (state.selected) return colors.onPrimary;
+/** `tinted`: the chosen day is tinted rather than filled, so its number takes the primary colour. */
+export const getDayTextColor = (state: DayState, colors: PickerTheme['colors'], tinted = false) => {
+  if (state.selected) return tinted ? colors.primary : colors.onPrimary;
   if (state.disabled) return colors.textDisabled;
   if (state.marking?.textColor !== undefined) return state.marking.textColor;
   if (state.outside) return colors.textDisabled;
@@ -243,4 +248,16 @@ export const getSwipeDelta = (dx: number, vx: number, rtl: boolean) => {
   if (Math.abs(dx) <= SWIPE.minDistance && Math.abs(vx) <= SWIPE.minVelocity) return 0;
   const delta = dx < 0 ? 1 : -1;
   return rtl ? -delta : delta;
+};
+
+/** How a day is drawn in the design: tinted or filled when chosen (range ends always filled), and how today is marked. */
+export const getDayLook = (state: DayState, design: CalendarDesign) => {
+  const tinted = state.selected && design.selection === DAY_SELECTION.tint && !state.ranged;
+  return {
+    tinted,
+    filled: state.selected && !tinted,
+    todayRing: !state.selected && state.today && design.today === TODAY_MARK.ring,
+    // An opaque square would cut a hole in the range band.
+    todaySurface: !state.selected && !state.inRange && state.today && design.today === TODAY_MARK.surface,
+  };
 };

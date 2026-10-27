@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { Touchable } from '../../core/components/Touchable';
-import { ARROW_DIRECTIONS, ARROW_LABELS, CALENDAR_VIEW } from '../calendar.constants';
+import { ARROW_DIRECTIONS, ARROW_LABELS, CALENDAR_DESIGN, CALENDAR_VIEW } from '../calendar.constants';
 import { styles } from '../calendar.styles';
 import type { CalendarHeaderProps } from '../calendar.types';
 import { getArrowGlyph } from '../calendar.utils';
@@ -58,7 +58,7 @@ export const CalendarHeader = ({
                 style={[
                   textStyle(theme, 'lg', 'bold'),
                   styles.arrowText,
-                  { color: disabled ? theme.colors.textDisabled : theme.colors.primary },
+                  { color: disabled ? theme.colors.textDisabled : theme.colors[CALENDAR_DESIGN[theme.design].arrowColor] },
                   slots?.arrowText,
                 ]}
               >
