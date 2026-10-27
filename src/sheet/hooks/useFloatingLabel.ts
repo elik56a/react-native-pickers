@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { LayoutChangeEvent } from 'react-native';
+import type { Animated, LayoutChangeEvent } from 'react-native';
 
 import { useAnimatedToggle } from '../../core/hooks/useAnimatedToggle';
 import type { PickerTheme } from '../../core/theme/theme.types';
@@ -14,14 +14,13 @@ export const useFloatingLabel = (raised: boolean, borderWidth: number, theme: Pi
   const { sizes } = theme.typography;
   const scale = sizes[FLOATING_LABEL_RAISED_SIZE] / sizes.md;
   const shift = getFloatingLabelShift(boxHeight, textWidth, scale, borderWidth);
+  // Typed with the public Animated type so the emitted .d.ts doesn't reach into react-native's internal files.
+  const toward = (to: number, from = 0): Animated.AnimatedInterpolation<number> =>
+    progress.interpolate({ inputRange: [0, 1], outputRange: [from, to] });
 
   return {
     onBoxLayout: (e: LayoutChangeEvent) => setBoxHeight(e.nativeEvent.layout.height),
     onTextLayout: (e: LayoutChangeEvent) => setTextWidth(e.nativeEvent.layout.width),
-    transform: [
-      { translateX: progress.interpolate({ inputRange: [0, 1], outputRange: [0, shift.x] }) },
-      { translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [0, shift.y] }) },
-      { scale: progress.interpolate({ inputRange: [0, 1], outputRange: [1, scale] }) },
-    ],
+    transform: [{ translateX: toward(shift.x) }, { translateY: toward(shift.y) }, { scale: toward(scale, 1) }],
   };
 };

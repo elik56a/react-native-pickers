@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import type { GestureResponderEvent } from 'react-native';
+import type { Animated, GestureResponderEvent, GestureResponderHandlers } from 'react-native';
 import { PanResponder } from 'react-native';
 
 import { getDayPeriods } from '../../core/utils/date.utils';
@@ -91,7 +91,9 @@ export const useClockDial = (date: Date, onChange: (date: Date) => void, options
     })
   ).current;
   const hand = getDialHand(mode, parts.hours, parts.minutes, is12);
-  const rotation = useDialHand(hand.angle, dragging, duration);
+  // Public react-native types, so the emitted .d.ts doesn't reach into its internal files.
+  const rotation: Animated.AnimatedInterpolation<string> = useDialHand(hand.angle, dragging, duration);
+  const panHandlers: GestureResponderHandlers = pan.panHandlers;
   const hourLabel = is12 ? String(parts.hours % 12 || 12) : pad ? pad2(parts.hours) : String(parts.hours);
   const minuteLabel = pad2(parts.minutes);
 
@@ -121,7 +123,7 @@ export const useClockDial = (date: Date, onChange: (date: Date) => void, options
       if (patch) set(patch);
     },
     endTyping: () => setDraft(null),
-    panHandlers: pan.panHandlers,
+    panHandlers,
     selectPeriod: (pm: boolean) => {
       if (pm !== isPM) set({ hours: (parts.hours + 12) % 24 });
     },

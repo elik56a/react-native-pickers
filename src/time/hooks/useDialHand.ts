@@ -1,12 +1,13 @@
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
+import type { Animated } from 'react-native';
 
 import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
 import { timing } from '../../core/utils/animation.utils';
 import { getNearestAngle } from '../time.utils';
 
 /** The hand's rotation: it turns the short way to a tapped number, and follows the finger without lag while dragging. */
-export const useDialHand = (angle: number, dragging: RefObject<boolean>, duration: number) => {
+export const useDialHand = (angle: number, dragging: RefObject<boolean>, duration: number): Animated.AnimatedInterpolation<string> => {
   const rotation = useAnimatedValue(angle);
   const shown = useRef(angle);
   useEffect(() => {
