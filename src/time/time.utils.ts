@@ -16,6 +16,7 @@ import {
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
   TIME_COLUMN,
+  TIME_COLUMN_LABEL,
   TIME_DISPLAY,
   TIME_DISPLAY_DESIGN,
   TIME_FORMAT,
@@ -28,7 +29,6 @@ import type {
   TimeColumnSpec,
   TimeDisplay,
   TimeFormat,
-  TimeListItem,
   TimeOptions,
   TimeParts,
 } from './time.types';
@@ -198,40 +198,11 @@ export const formatTimeValue = (
     hour12: is12HourFormat(format, locale),
   });
 
-/** `date` at the given second of its day. */
-export const atSecondOfDay = (date: Date, second: number) => {
-  const out = new Date(date);
-  out.setHours(0, 0, second, 0);
-  return out;
-};
-
-/** The times a list offers: every `stepMinutes` within the bounds, labelled for the locale. Values are seconds of the day. */
-export const getTimeListItems = (
-  date: Date,
-  stepMinutes: number,
-  [minSecond, maxSecond]: TimeBounds,
-  format: Pick<TimeOptions, 'format' | 'locale'>
-): TimeListItem[] =>
-  steps(24 * 60, stepMinutes)
-    .map((minute) => minute * SECONDS_PER_MINUTE)
-    .filter((second) => second >= minSecond && second <= maxSecond)
-    .map((second) => ({
-      value: second,
-      label: formatTimeValue(atSecondOfDay(date, second), format),
-    }));
-
-/** The row to open a list at: a little above the chosen time (or the next one in the list) so it shows near the middle. */
-export const getTimeListScrollIndex = (items: TimeListItem[], second: number, visibleRows: number) => {
-  if (items.length === 0) return 0;
-  const next = items.findIndex((item) => item.value >= second);
-  const target = next === -1 ? items.length - 1 : next;
-  return Math.max(0, Math.min(target - Math.floor(visibleRows / 2), items.length - visibleRows));
-};
-
-/** The display to draw: the one asked for, else the design's; a dial has no seconds, so it falls back to wheels. */
+/** The display to draw: the one asked for, else the design's; a dial or time input has no seconds, so it falls back to wheels. */
 export const resolveTimeDisplay = (display: TimeDisplay | undefined, design: Design, showSeconds: boolean): TimeDisplay => {
   const chosen = display ?? TIME_DISPLAY_DESIGN[design];
-  return chosen === TIME_DISPLAY.dial && showSeconds ? TIME_DISPLAY.wheel : chosen;
+  const clock = chosen === TIME_DISPLAY.dial || chosen === TIME_DISPLAY.input;
+  return clock && showSeconds ? TIME_DISPLAY.wheel : chosen;
 };
 
 /** Degrees clockwise from 12 o'clock to a point `dx`, `dy` from the dial's centre (y grows downward). */
@@ -326,4 +297,14 @@ export const parseTypedTime = (
   if (mode === CLOCK_MODE.minute) return n < 60 ? { minutes: Math.floor(n / minuteInterval) * minuteInterval } : null;
   if (is12) return n >= 1 && n <= 12 ? { hours: (n % 12) + (isPM ? 12 : 0) } : null;
   return n < 24 ? { hours: n } : null;
+};
+
+/** The first row a time panel column shows: the chosen cell in the middle, but never scrolled past either end. */
+export const getPanelTopRow = (index: number, count: number, rows: number) =>
+  Math.max(0, Math.min(index - Math.floor(rows / 2), count - rows));
+
+/** A time panel cell's screen-reader label: its column and value, like "Hour 09". */
+export const getPanelCellLabel = (column: TimeColumnKey, label: string) => {
+  const name = TIME_COLUMN_LABEL[column];
+  return name ? `${name} ${label}` : label;
 };

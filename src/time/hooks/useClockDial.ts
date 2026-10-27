@@ -26,10 +26,16 @@ import { useDialHand } from './useDialHand';
  * A clock dial's state: hours or minutes, dial or keyboard, the numbers and hand to draw, and the drag, tap, typing, AM/PM and
  * screen-reader handlers.
  */
-export const useClockDial = (date: Date, onChange: (date: Date) => void, options: TimeOptions, duration: number) => {
+export const useClockDial = (date: Date, onChange: (date: Date) => void, options: TimeOptions, duration: number, inputOnly = false) => {
   const { format = TIME_FORMAT.auto, locale, minuteInterval = 1, minTime, maxTime, padHours, dayPeriodLabels } = options;
   const [mode, setMode] = useState<ClockMode>(CLOCK_MODE.hour);
-  const [typing, setTyping] = useState(false);
+  const [typing, setTyping] = useState(inputOnly);
+  const [wasInputOnly, setWasInputOnly] = useState(inputOnly);
+  // Switching `display` between 'dial' and 'input' on a mounted picker moves it to the fields or back to the dial.
+  if (inputOnly !== wasInputOnly) {
+    setWasInputOnly(inputOnly);
+    setTyping(inputOnly);
+  }
   const [draft, setDraft] = useState<{ mode: ClockMode; text: string } | null>(null);
   const dragging = useRef(false);
   const is12 = is12HourFormat(format, locale);

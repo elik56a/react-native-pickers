@@ -1,5 +1,4 @@
 import {
-  atSecondOfDay,
   buildTime,
   clampTimeOfDay,
   formatTimeValue,
@@ -9,12 +8,12 @@ import {
   getHourItems,
   getMinuteItems,
   getNearestAngle,
+  getPanelCellLabel,
+  getPanelTopRow,
   getPeriodItems,
   getSecondItems,
   getTimeBounds,
   getTimeColumnSpecs,
-  getTimeListItems,
-  getTimeListScrollIndex,
   getTimeParts,
   getTimeSeparator,
   is12HourFormat,
@@ -178,34 +177,6 @@ describe('formatTimeValue', () => {
   });
 });
 
-describe('time lists', () => {
-  const day = new Date(2026, 9, 27, 13, 7, 30);
-
-  it('sets a time of day and keeps the day', () => {
-    const at = atSecondOfDay(day, 9 * 3600 + 15 * 60);
-    expect([at.getDate(), at.getHours(), at.getMinutes(), at.getSeconds()]).toEqual([27, 9, 15, 0]);
-  });
-
-  it('offers every step within the bounds, labelled for the locale', () => {
-    const items = getTimeListItems(day, 30, [9 * 3600, 10 * 3600], { format: '24h', locale: 'en-GB' });
-    expect(items).toEqual([
-      { value: 32400, label: '9:00' },
-      { value: 34200, label: '9:30' },
-      { value: 36000, label: '10:00' },
-    ]);
-    expect(getTimeListItems(day, 15, [0, 86399], { format: 'auto' })).toHaveLength(96);
-  });
-
-  it('opens a little above the chosen time, or the next one, without scrolling past either end', () => {
-    const items = getTimeListItems(day, 60, [0, 86399], { format: '24h' });
-    expect(getTimeListScrollIndex(items, 12 * 3600, 6)).toBe(9);
-    expect(getTimeListScrollIndex(items, 12 * 3600 + 60, 6)).toBe(10);
-    expect(getTimeListScrollIndex(items, 3600, 6)).toBe(0);
-    expect(getTimeListScrollIndex(items, 23 * 3600, 6)).toBe(18);
-    expect(getTimeListScrollIndex([], 0, 6)).toBe(0);
-  });
-});
-
 describe('time display', () => {
   it('follows the design unless asked, and turns a dial into wheels when seconds show', () => {
     expect(resolveTimeDisplay(undefined, 'ios', false)).toBe('wheel');
@@ -213,6 +184,8 @@ describe('time display', () => {
     expect(resolveTimeDisplay(undefined, 'web', false)).toBe('list');
     expect(resolveTimeDisplay('list', 'material', false)).toBe('list');
     expect(resolveTimeDisplay(undefined, 'material', true)).toBe('wheel');
+    expect(resolveTimeDisplay('input', 'web', true)).toBe('wheel');
+    expect(resolveTimeDisplay('input', 'web', false)).toBe('input');
   });
 });
 
@@ -291,5 +264,25 @@ describe('parseTypedTime', () => {
     expect(parseTypedTime('minute', '60', false, false, 1)).toBeNull();
     expect(parseTypedTime('minute', '', false, false, 1)).toBeNull();
     expect(parseTypedTime('minute', '1a', false, false, 1)).toBeNull();
+  });
+});
+
+describe('getPanelTopRow', () => {
+  it('puts the chosen cell in the middle of the column', () => {
+    expect(getPanelTopRow(30, 60, 7)).toBe(27);
+  });
+
+  it('stops at the first and last cells instead of leaving blank rows', () => {
+    expect(getPanelTopRow(1, 60, 7)).toBe(0);
+    expect(getPanelTopRow(58, 60, 7)).toBe(53);
+    expect(getPanelTopRow(1, 2, 7)).toBe(0);
+  });
+});
+
+describe('getPanelCellLabel', () => {
+  it('names the column, so an hour cell and a minute cell with the same number sound different', () => {
+    expect(getPanelCellLabel('hour', '09')).toBe('Hour 09');
+    expect(getPanelCellLabel('minute', '09')).toBe('Minute 09');
+    expect(getPanelCellLabel('period', 'PM')).toBe('PM');
   });
 });

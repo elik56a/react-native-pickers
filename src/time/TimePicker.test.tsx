@@ -14,16 +14,15 @@ describe('TimePicker', () => {
   beforeEach(() => jest.useFakeTimers());
   afterEach(() => jest.useRealTimers());
 
-  it('picks from a list of times in the web design, keeping the day', async () => {
+  it('picks from columns of hours and minutes in the web design, keeping the day', async () => {
     const onChange = jest.fn();
-    await render(
-      <TimePicker value={at(9, 0)} onChange={onChange} format="24h" locale="en-GB" minuteInterval={30} design="web" testID="time" />
-    );
-    expect(screen.queryByTestId('time-hour')).toBeNull();
-    expect(screen.getByLabelText('9:00').props.accessibilityState).toMatchObject({ selected: true });
-    await fireEvent.press(screen.getByLabelText('10:30'));
-    expect(hhmm(onChange.mock.calls[0][0])).toBe('10:30');
+    await render(<TimePicker value={at(9, 0)} onChange={onChange} format="24h" minuteInterval={15} design="web" testID="time" />);
+    expect(screen.getByLabelText('Hour 09').props.accessibilityState).toMatchObject({ selected: true });
+    await fireEvent.press(screen.getByLabelText('Minute 30'));
+    expect(hhmm(onChange.mock.calls[0][0])).toBe('9:30');
     expect(onChange.mock.calls[0][0].getDate()).toBe(25);
+    await fireEvent.press(screen.getByLabelText('Hour 14'));
+    expect(hhmm(onChange.mock.calls[1][0])).toBe('14:00');
   });
 
   describe('clock dial', () => {
@@ -118,6 +117,13 @@ describe('TimePicker', () => {
       await render(<TimePicker value={at(9, 0)} design="material" showSeconds testID="time" />);
       expect(screen.queryByTestId('time-dial')).toBeNull();
       expect(screen.getByTestId('time-second')).toBeTruthy();
+    });
+
+    it('shows only the typed fields with display="input"', async () => {
+      await render(<TimePicker value={at(9, 0)} format="24h" design="material" display="input" testID="time" />);
+      expect(screen.queryByTestId('time-dial')).toBeNull();
+      expect(screen.queryByLabelText('Pick the time on the dial')).toBeNull();
+      expect(screen.getByTestId('time-hour').props.value).toBe('09');
     });
   });
 

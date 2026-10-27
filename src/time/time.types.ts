@@ -4,10 +4,10 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
 import type { PickerTheme } from '../core/theme/theme.types';
-import type { SelectOption } from '../select/select.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 import type { useClockDial } from './hooks/useClockDial';
+import type { useTimeColumns } from './hooks/useTimeColumns';
 import type { CLOCK_MODE, TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
 
 export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
@@ -21,7 +21,7 @@ export interface TimePickerProps extends ThemableProps {
   onChange?: (date: Date) => void;
   /** Fires on every tick while scrolling (for haptics). */
   onValueChanging?: (date: Date) => void;
-  /** Wheels, a clock dial, or a list of times (stepping by `minuteInterval`, or 15 minutes). Default: wheels on iOS, a dial in Material, a list on the web. With `showSeconds`, a dial falls back to wheels */
+  /** Wheels, a clock dial, hour and minute fields to type into, or columns of clickable hours and minutes. Default: wheels on iOS, a dial in Material, the columns on the web. With `showSeconds`, a dial or input falls back to wheels */
   display?: TimeDisplay;
   /** Default: 'auto' (from locale) */
   format?: TimeFormat;
@@ -88,17 +88,21 @@ export type TimeColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChan
   toPatch: (value: number) => Partial<TimeParts>;
 };
 
-export interface TimeListProps {
-  date: Date;
-  onChange: (date: Date) => void;
-  options: TimeOptions;
+export type TimePanelColumn = ReturnType<typeof useTimeColumns>['columns'][number];
+
+export interface TimePanelProps {
+  columns: TimePanelColumn[];
   visibleRows?: number;
   theme: PickerTheme;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
-export type TimeListItem = SelectOption<number>;
+export interface TimePanelColumnProps {
+  column: TimePanelColumn;
+  visibleRows: number;
+  theme: PickerTheme;
+}
 
 export interface DialNumber {
   /** An hour of the day (12h: 1–12) or a minute */
@@ -113,6 +117,8 @@ export interface DialNumber {
 }
 
 export interface ClockDialProps {
+  /** Only the typed fields: no dial and no button to switch to it */
+  inputOnly?: boolean;
   date: Date;
   onChange: (date: Date) => void;
   options: TimeOptions;

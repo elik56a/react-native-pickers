@@ -1,5 +1,5 @@
 import type { Design } from '../core/theme/theme.types';
-import type { TimeDisplay } from './time.types';
+import type { TimeColumnKey, TimeDisplay } from './time.types';
 
 export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
@@ -21,10 +21,19 @@ export const TIME_COLUMN = {
   second: 'second',
 } as const;
 
+/** Read before a time panel cell, so screen readers tell an hour from a minute. AM/PM cells say enough on their own. */
+export const TIME_COLUMN_LABEL: Partial<Record<TimeColumnKey, string>> = {
+  hour: 'Hour',
+  minute: 'Minute',
+  second: 'Second',
+};
+
 export const TIME_DISPLAY = {
   wheel: 'wheel',
   list: 'list',
   dial: 'dial',
+  /** Material's time input: hour and minute fields to type into, without the dial */
+  input: 'input',
 } as const;
 
 /** iOS scrolls wheels, Material turns a clock dial, and the web picks from a list, like a desktop calendar app. */
@@ -57,8 +66,7 @@ export const ENTRY_TOGGLE_LABEL = { toKeyboard: 'Type the time', toDial: 'Pick t
 export const ENTRY_ICON_SIZE = 22;
 export const ENTRY_TOGGLE_SIZE = 40;
 
-/** A list of times steps by `minuteInterval`, or by this when it's 1. */
-export const DEFAULT_LIST_STEP_MINUTES = 15;
-export const DEFAULT_LIST_VISIBLE_ROWS = 6;
-/** OptionRow's vertical margin, which sits outside its height. */
-export const LIST_ROW_MARGIN = 2;
+/** The web's time panel: columns of clickable hours, minutes and AM/PM. */
+export const TIME_CELL_HEIGHT = 36;
+export const TIME_COLUMN_WIDTH = 56;
+export const DEFAULT_PANEL_ROWS = 7;
