@@ -26,6 +26,85 @@ describe('TimePicker', () => {
     expect(onChange.mock.calls[0][0].getDate()).toBe(25);
   });
 
+  describe('clock dial', () => {
+    /** A tap on the 256-wide dial, `x`, `y` from its top left, for a dial whose top left sits at (100, 200) on the page. */
+    const tap = async (x: number, y: number) => {
+      const dial = screen.getByTestId('time-dial');
+      const touch = { pageX: 100 + x, pageY: 200 + y, locationX: x, locationY: y };
+      const touchHistory = {
+        numberActiveTouches: 1,
+        indexOfSingleActiveTouch: 0,
+        mostRecentTimeStamp: 1,
+        touchBank: [
+          {
+            touchActive: true,
+            startPageX: touch.pageX,
+            startPageY: touch.pageY,
+            currentPageX: touch.pageX,
+            currentPageY: touch.pageY,
+            previousPageX: touch.pageX,
+            previousPageY: touch.pageY,
+            startTimeStamp: 1,
+            currentTimeStamp: 1,
+            previousTimeStamp: 1,
+          },
+        ],
+      };
+      await fireEvent(dial, 'responderGrant', { nativeEvent: touch, touchHistory });
+      await fireEvent(dial, 'responderRelease', { nativeEvent: touch, touchHistory });
+    };
+
+    it('is the Material default: pick the hour on the dial, then the minutes', async () => {
+      const onChange = jest.fn();
+      const { rerender } = await render(
+        <TimePicker value={at(9, 0)} onChange={onChange} format="12h" dayPeriodLabels={['AM', 'PM']} design="material" testID="time" />
+      );
+      expect(screen.getByTestId('time-hour').props.accessibilityValue.text).toBe('9');
+      await tap(128 + 104, 128);
+      expect(hhmm(onChange.mock.calls[0][0])).toBe('3:00');
+      await rerender(
+        <TimePicker
+          value={onChange.mock.calls[0][0]}
+          onChange={onChange}
+          format="12h"
+          dayPeriodLabels={['AM', 'PM']}
+          design="material"
+          testID="time"
+        />
+      );
+      expect(screen.getByTestId('time-dial').props.accessibilityLabel).toBe('Minute');
+      await tap(128, 128 + 104);
+      expect(onChange).toHaveBeenCalledTimes(2);
+      expect(hhmm(onChange.mock.calls[1][0])).toBe('3:30');
+    });
+
+    it('switches AM/PM, steps with a screen reader, and lets the header pick what the dial sets', async () => {
+      const onChange = jest.fn();
+      await render(
+        <TimePicker
+          value={at(9, 10)}
+          onChange={onChange}
+          format="12h"
+          dayPeriodLabels={['AM', 'PM']}
+          minuteInterval={5}
+          design="material"
+          testID="time"
+        />
+      );
+      await fireEvent.press(screen.getByText('PM'));
+      expect(hhmm(onChange.mock.calls[0][0])).toBe('21:10');
+      await fireEvent.press(screen.getByLabelText('Minute'));
+      await fireEvent(screen.getByTestId('time-dial'), 'accessibilityAction', { nativeEvent: { actionName: 'increment' } });
+      expect(hhmm(onChange.mock.calls[1][0])).toBe('9:15');
+    });
+
+    it('falls back to wheels when seconds show', async () => {
+      await render(<TimePicker value={at(9, 0)} design="material" showSeconds testID="time" />);
+      expect(screen.queryByTestId('time-dial')).toBeNull();
+      expect(screen.getByTestId('time-second')).toBeTruthy();
+    });
+  });
+
   it('keeps the wheels in the web design with display="wheel"', async () => {
     await render(<TimePicker value={at(9, 5)} format="24h" loop={false} design="web" display="wheel" testID="time" />);
     expect(screen.getByTestId('time-hour')).toBeTruthy();
