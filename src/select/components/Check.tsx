@@ -1,7 +1,8 @@
 import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
-import { CHECK_MARK, SELECT_DESIGN } from '../select.constants';
+import { CHECK_MARK } from '../../core/core.constants';
+import { SELECT_DESIGN } from '../select.constants';
 import { styles } from '../select.styles';
 import type { CheckProps } from '../select.types';
 

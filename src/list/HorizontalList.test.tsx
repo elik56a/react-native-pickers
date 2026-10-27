@@ -21,6 +21,13 @@ describe('HorizontalList', () => {
     expect(onChange).toHaveBeenCalledWith('multiple', items[2]);
   });
 
+  it('checks the chosen segment in Material, with no sliding thumb', async () => {
+    await render(<HorizontalList items={items} value="range" onChange={jest.fn()} design="material" />);
+    expect(screen.getAllByText('✓')).toHaveLength(1);
+    await render(<HorizontalList items={items} value="range" onChange={jest.fn()} design="ios" />);
+    expect(screen.queryByText('✓')).toBeNull();
+  });
+
   it('ignores disabled items', async () => {
     const onChange = jest.fn();
     await render(<HorizontalList items={[{ label: 'Single', value: 'single', disabled: true }]} onChange={onChange} />);

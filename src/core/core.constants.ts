@@ -28,6 +28,8 @@ export const EASE_IN = Easing.in(Easing.cubic);
 /** A text field can't hold the hover tint as a child view, so an inset shadow this wide paints it over the background, under the text. */
 export const HOVER_FILL_SPREAD = 999;
 
+export const CHECK_MARK = '✓';
+
 export const PRESS_FEEDBACK = {
   ripple: 'ripple',
   highlight: 'highlight',

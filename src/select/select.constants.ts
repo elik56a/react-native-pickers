@@ -24,8 +24,6 @@ export const DEFAULT_SEARCH_DEBOUNCE_MS = 300;
 
 export const DISABLED_OPTION_OPACITY = 0.45;
 
-export const CHECK_MARK = '✓';
-
 export const SINGLE_INDICATOR = {
   check: 'check',
   radio: 'radio',
