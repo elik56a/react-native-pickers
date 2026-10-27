@@ -11,7 +11,7 @@ import { LiveDevice } from './LiveDevice';
 import styles from './PlaygroundSection.module.css';
 
 export const PlaygroundSection = () => {
-  const playground = usePlayground({ autoplay: false });
+  const playground = usePlayground();
   const docPath = useDocPath();
   return (
     <section className={clsx('container', shared.section)} aria-labelledby="playground-title">
@@ -23,10 +23,10 @@ export const PlaygroundSection = () => {
       </p>
       <div className={styles.stage}>
         <div className={styles.props} data-reveal style={revealAt(1)}>
-          <PropsPanel playground={playground} docsHref={docPath(TAB_DOCS[playground.tab])} />
+          <PropsPanel playground={playground} docsHref={playground.tab ? docPath(TAB_DOCS[playground.tab]) : undefined} />
         </div>
         <div className={styles.device} data-reveal>
-          <LiveDevice demo={playground} />
+          <LiveDevice playground={playground} />
         </div>
         <div className={styles.code} data-reveal style={revealAt(2)}>
           <LiveCode playground={playground} />

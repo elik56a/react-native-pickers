@@ -8,28 +8,25 @@ export const DEMO_TAB = {
   emoji: 'emoji',
 } as const;
 
-export const DEMO_TABS = Object.values(DEMO_TAB);
-
-export const TAB_LABELS: Record<DemoTab, string> = { date: 'Date', time: 'Time', wheel: 'Wheel', select: 'Select', emoji: 'Emoji' };
+/** Shown in the props panel and the live code until the visitor touches a field on the phone. */
+export const PICK_A_FIELD = 'Tap a field on the phone to try its picker’s props.';
+export const PICK_A_FIELD_CODE = 'Tap a field on the phone to see its code.';
 
 export const TAB_COMPONENTS: Record<DemoTab, string> = {
-  date: 'DatePicker',
-  time: 'TimePicker',
-  wheel: 'WheelPicker',
+  date: 'DatePickerField',
+  time: 'TimePickerField',
+  wheel: 'MultiWheelPicker',
   select: 'SelectPicker',
-  emoji: 'EmojiPicker',
+  emoji: 'EmojiPickerField',
 };
 
 export const TAB_DOCS: Record<DemoTab, string> = {
-  date: 'components/date-range-picker',
+  date: 'components/date-picker',
   time: 'components/time-picker',
-  wheel: 'components/wheel-picker',
+  wheel: 'components/multi-wheel-picker',
   select: 'components/select-picker',
   emoji: 'components/emoji-picker',
 };
-
-/** The phone flips through the pickers on its own until the visitor touches it. */
-export const AUTOPLAY_MS = 3200;
 
 /** Each control maps to one real prop, except `prices` and `groups`, which switch the data passed in. */
 export const CONTROLS = {
@@ -63,9 +60,9 @@ export const CONTROLS = {
 
 export const DEFAULT_OPTIONS: PlaygroundOptions = {
   date: { mode: 'range', prices: true, firstDayOfWeek: 0 },
-  time: { format: 'auto', minuteInterval: 5, showSeconds: false },
-  wheel: { variant: '3d', loop: true, visibleItems: 5 },
-  select: { multiple: true, searchable: true, groups: true, loading: false },
+  time: { format: 'auto', minuteInterval: 15, showSeconds: false },
+  wheel: { variant: '3d', loop: false, visibleItems: 5 },
+  select: { multiple: false, searchable: true, groups: true, loading: false },
   emoji: { columns: 7, showSkinTones: true, categoryBarPosition: 'top' },
 };
 
