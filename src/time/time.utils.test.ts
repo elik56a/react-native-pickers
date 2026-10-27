@@ -1,4 +1,5 @@
 import {
+  atSecondOfDay,
   buildTime,
   clampTimeOfDay,
   formatTimeValue,
@@ -8,6 +9,8 @@ import {
   getSecondItems,
   getTimeBounds,
   getTimeColumnSpecs,
+  getTimeListItems,
+  getTimeListScrollIndex,
   getTimeParts,
   getTimeSeparator,
   is12HourFormat,
@@ -164,5 +167,33 @@ describe('formatTimeValue', () => {
 
   it('adds seconds when shown', () => {
     expect(formatTimeValue(time, { format: '24h', locale: 'en-US', showSeconds: true })).toBe('21:05:07');
+  });
+});
+
+describe('time lists', () => {
+  const day = new Date(2026, 9, 27, 13, 7, 30);
+
+  it('sets a time of day and keeps the day', () => {
+    const at = atSecondOfDay(day, 9 * 3600 + 15 * 60);
+    expect([at.getDate(), at.getHours(), at.getMinutes(), at.getSeconds()]).toEqual([27, 9, 15, 0]);
+  });
+
+  it('offers every step within the bounds, labelled for the locale', () => {
+    const items = getTimeListItems(day, 30, [9 * 3600, 10 * 3600], { format: '24h', locale: 'en-GB' });
+    expect(items).toEqual([
+      { value: 32400, label: '9:00' },
+      { value: 34200, label: '9:30' },
+      { value: 36000, label: '10:00' },
+    ]);
+    expect(getTimeListItems(day, 15, [0, 86399], { format: 'auto' })).toHaveLength(96);
+  });
+
+  it('opens a little above the chosen time, or the next one, without scrolling past either end', () => {
+    const items = getTimeListItems(day, 60, [0, 86399], { format: '24h' });
+    expect(getTimeListScrollIndex(items, 12 * 3600, 6)).toBe(9);
+    expect(getTimeListScrollIndex(items, 12 * 3600 + 60, 6)).toBe(10);
+    expect(getTimeListScrollIndex(items, 3600, 6)).toBe(0);
+    expect(getTimeListScrollIndex(items, 23 * 3600, 6)).toBe(18);
+    expect(getTimeListScrollIndex([], 0, 6)).toBe(0);
   });
 });

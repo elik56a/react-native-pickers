@@ -3,11 +3,14 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
+import type { PickerTheme } from '../core/theme/theme.types';
+import type { SelectOption } from '../select/select.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
-import type { TIME_COLUMN, TIME_FORMAT } from './time.constants';
+import type { TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
 
 export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
+export type TimeDisplay = ValueOf<typeof TIME_DISPLAY>;
 
 export interface TimePickerProps extends ThemableProps {
   /** Selected time (the date part is preserved). */
@@ -16,6 +19,8 @@ export interface TimePickerProps extends ThemableProps {
   onChange?: (date: Date) => void;
   /** Fires on every tick while scrolling (for haptics). */
   onValueChanging?: (date: Date) => void;
+  /** Wheels, or a list of times (stepping by `minuteInterval`, or 15 minutes). Default: a list in the web design, wheels otherwise */
+  display?: TimeDisplay;
   /** Default: 'auto' (from locale) */
   format?: TimeFormat;
   locale?: Locale;
@@ -48,7 +53,7 @@ export interface TimePickerProps extends ThemableProps {
 /** The TimePicker props that shape its wheels, without the visual ones. */
 export type TimeOptions = Omit<
   TimePickerProps,
-  'value' | 'defaultValue' | 'onChange' | 'itemHeight' | 'visibleItems' | 'variant' | 'style' | 'styles' | 'theme'
+  'value' | 'defaultValue' | 'onChange' | 'itemHeight' | 'visibleItems' | 'variant' | 'style' | 'styles' | 'theme' | 'display'
 >;
 
 export type TimeColumnsOptions = TimeOptions & {
@@ -80,3 +85,15 @@ export type TimeColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChan
   key: TimeColumnKey;
   toPatch: (value: number) => Partial<TimeParts>;
 };
+
+export interface TimeListProps {
+  date: Date;
+  onChange: (date: Date) => void;
+  options: TimeOptions;
+  visibleRows?: number;
+  theme: PickerTheme;
+  style?: StyleProp<ViewStyle>;
+  testID?: string;
+}
+
+export type TimeListItem = SelectOption<number>;

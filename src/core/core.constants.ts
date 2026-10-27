@@ -1,5 +1,8 @@
 import { Easing, Platform, type PlatformOSType } from 'react-native';
 
+import type { PressFeedback } from './core.types';
+import type { Design } from './theme/theme.types';
+
 /** The `Platform.OS` values pickers tell apart. Anything else (windows, macos) behaves like native. */
 export const PLATFORM = {
   ios: 'ios',
@@ -24,6 +27,18 @@ export const EASE_IN = Easing.in(Easing.cubic);
 
 /** A text field can't hold the hover tint as a child view, so an inset shadow this wide paints it over the background, under the text. */
 export const HOVER_FILL_SPREAD = 999;
+
+export const PRESS_FEEDBACK = {
+  ripple: 'ripple',
+  highlight: 'highlight',
+} as const;
+
+/** Material ripples from the touch point; iOS and the web dim what's pressed while it's held. */
+export const PRESS_FEEDBACK_DESIGN: Record<Design, PressFeedback> = {
+  ios: PRESS_FEEDBACK.highlight,
+  material: PRESS_FEEDBACK.ripple,
+  web: PRESS_FEEDBACK.highlight,
+};
 
 /** The ripple grows over this multiple of the theme's animation duration, and fades out over the other. */
 export const RIPPLE_GROW_RATIO = 1.5;
