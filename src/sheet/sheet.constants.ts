@@ -2,7 +2,7 @@ import { Platform, type PlatformOSType, StatusBar } from 'react-native';
 
 import { PLATFORM } from '../core/core.constants';
 import type { Design } from '../core/theme/theme.types';
-import type { PickerFieldBaseProps, SheetDesign } from './sheet.types';
+import type { FieldDesign, PickerFieldBaseProps, SheetDesign } from './sheet.types';
 
 export const SHEET_PRESENTATION = {
   auto: 'auto',
@@ -38,6 +38,35 @@ export const SHEET_DESIGN: Record<Design, SheetDesign> = {
   material: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'OK' },
   web: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'Done' },
 };
+
+export const FIELD_LABEL = {
+  above: 'above',
+  floating: 'floating',
+} as const;
+
+export const FIELD_ARROW = {
+  chevron: 'chevron',
+  triangle: 'triangle',
+} as const;
+
+/** Material fields are outlined, with the label inside until there's a value and then on the border; web fields are compact, with a focus ring. */
+export const FIELD_DESIGN: Record<Design, FieldDesign> = {
+  ios: { label: FIELD_LABEL.above, arrow: FIELD_ARROW.chevron, minHeight: 48, outline: 'border', openBorderWidth: 1, focusRing: false },
+  material: {
+    label: FIELD_LABEL.floating,
+    arrow: FIELD_ARROW.triangle,
+    minHeight: 56,
+    outline: 'textSecondary',
+    openBorderWidth: 2,
+    focusRing: false,
+  },
+  web: { label: FIELD_LABEL.above, arrow: FIELD_ARROW.chevron, minHeight: 40, outline: 'border', openBorderWidth: 1, focusRing: true },
+};
+export const FOCUS_RING_WIDTH = 3;
+/** Space either side of a floating label, cut out of the border behind it. */
+export const FLOATING_LABEL_PADDING = 4;
+/** A raised floating label shrinks from the body text size to this one. */
+export const FLOATING_LABEL_RAISED_SIZE = 'xs';
 
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;

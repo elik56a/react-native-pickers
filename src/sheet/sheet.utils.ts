@@ -150,3 +150,12 @@ export const splitFieldProps = <P extends PickerFieldBaseProps<string>>(props: P
     sheet: sheet as DistributiveOmit<P, FieldPropKey>,
   };
 };
+
+/**
+ * Where a raised floating label moves from its resting place, centred in the field: up onto the top border, and left so it
+ * still starts at the same edge once scaled down (it scales around its centre).
+ */
+export const getFloatingLabelShift = (boxHeight: number, textWidth: number, scale: number, borderWidth: number) => ({
+  x: (-textWidth * (1 - scale)) / 2,
+  y: -(boxHeight + borderWidth) / 2,
+});

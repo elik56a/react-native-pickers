@@ -21,6 +21,17 @@ describe('DatePickerSheet', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it('shows the picked day in large type above the calendar in the Material design only', async () => {
+    const { rerender } = await render(
+      <DatePickerSheet visible onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} design="material" />
+    );
+    expect(screen.getByRole('header', { name: 'Selected date' })).toBeTruthy();
+    await pressDay(15);
+    expect(screen.getByRole('header', { name: 'Thu, Oct 15' })).toBeTruthy();
+    await rerender(<DatePickerSheet visible onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} design="ios" />);
+    expect(screen.queryByRole('header', { name: /Oct 15/ })).toBeNull();
+  });
+
   it('confirms on tap with confirmOnSelect', async () => {
     const onConfirm = jest.fn();
     const onClose = jest.fn();
