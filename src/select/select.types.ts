@@ -37,7 +37,9 @@ export type SelectSlot =
   | 'optionDescription'
   | 'check'
   | 'empty'
-  | 'emptyText';
+  | 'emptyText'
+  | 'loading'
+  | 'loadingText';
 
 export interface SelectRenderOptionInfo<T> {
   option: SelectOption<T>;
@@ -54,14 +56,31 @@ export type SelectValueProps<T> =
   | { multiple: true; value?: T[]; onChange?: (value: NoInferValue<T>[], options: SelectOption<T>[]) => void; maxSelected?: number };
 
 export type SelectListBaseProps<T> = ThemableProps & {
-  options: ReadonlyArray<SelectOption<T>>;
+  /** The options; with `loadOptions`, the ones shown before the user types. Default: [] */
+  options?: ReadonlyArray<SelectOption<T>>;
   /** Show a search field. Default: true when there are more than 8 options */
   searchable?: boolean;
   searchPlaceholder?: string;
   /** Controlled search query, for filtering from your own input. Hides the built-in search field */
   query?: string;
-  /** Custom filter. Default: case/diacritics-insensitive match on label, description and keywords */
+  /** Custom filter. Default: case/diacritics-insensitive match on label, description and keywords; with `loadOptions` or `onSearchChange`, none (the server filters) */
   filterOption?: (option: SelectOption<T>, query: string) => boolean;
+  /** Loads the options for what the user typed, e.g. from a server. The list shows the loader from the keystroke until they arrive, and ignores answers to older queries. An empty query shows `options` */
+  loadOptions?: (query: string) => Promise<ReadonlyArray<SelectOption<T>>>;
+  /** Called once the user pauses typing, to search yourself (set `loading` and `options`). Shows the search field even before any options arrive */
+  onSearchChange?: (query: string) => void;
+  /** ms to wait after the last keystroke before `loadOptions` / `onSearchChange`. Default: 300 */
+  searchDebounce?: number;
+  /** Called when the user scrolls near the end of the list, to load more options */
+  onEndReached?: () => void;
+  /** Show a loader: in place of the list while there are no options, under them otherwise */
+  loading?: boolean;
+  /** Shown in place of the list before the user types, while a searched list (`loadOptions` / `onSearchChange`) has no options. Default: 'Type to search' */
+  searchPrompt?: string;
+  /** Default: 'Loading…' */
+  loadingText?: string;
+  /** Custom loader, in place of the spinner and `loadingText` */
+  renderLoading?: (theme: PickerTheme) => React.ReactNode;
   renderOption?: (info: SelectRenderOptionInfo<T>) => React.ReactNode;
   renderGroupHeader?: (group: string, theme: PickerTheme) => React.ReactNode;
   emptyText?: string;
@@ -135,6 +154,13 @@ export interface OptionRowProps<T> {
   showCheckmarks: boolean;
   renderOption?: (info: SelectRenderOptionInfo<T>) => React.ReactNode;
   onToggle: (option: SelectOption<T>) => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<SelectSlot>;
+}
+
+export interface LoadingStateProps {
+  text: string;
+  renderLoading?: (theme: PickerTheme) => React.ReactNode;
   theme: PickerTheme;
   slots?: SlotStyles<SelectSlot>;
 }
