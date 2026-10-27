@@ -121,6 +121,7 @@ Each platform gets its own design by default (`design="auto"`): iOS on iOS, Mate
 | Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
 | Date sheet | calendar | the picked date in large type above the calendar | calendar |
 | Time | wheels | wheels | a list of times |
+| HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
 | Press | dims while held | ripple | dims while held |
 
 Pick one design for every platform on the provider, or for one component with its `design` prop:
