@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { CLOCK_MODE_LABEL, DIAL_NUMBER_SIZE, DIAL_SIZE } from '../time.constants';
@@ -8,7 +8,7 @@ import type { ClockPartProps } from '../time.types';
 /** The round face: numbers around it, a hand from the centre to the chosen one. Drag or tap to choose. */
 export const DialFace = ({ dial, theme, testID }: ClockPartProps) => {
   const c = theme.colors;
-  const { angle, radius } = dial.hand;
+  const radius = dial.handRadius;
   return (
     <View
       {...dial.panHandlers}
@@ -21,10 +21,10 @@ export const DialFace = ({ dial, theme, testID }: ClockPartProps) => {
       style={[styles.dial, { backgroundColor: c.surface }]}
       testID={testID}
     >
-      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { transform: [{ rotate: `${angle}deg` }] }]}>
+      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { transform: [{ rotate: dial.rotation }] }]}>
         <View style={[styles.hand, { top: DIAL_SIZE / 2 - radius, height: radius, backgroundColor: c.primary }]} />
         <View style={[styles.selector, { top: DIAL_SIZE / 2 - radius - DIAL_NUMBER_SIZE / 2, backgroundColor: c.primary }]} />
-      </View>
+      </Animated.View>
       <View pointerEvents="none" style={[styles.center, { backgroundColor: c.primary }]} />
       {dial.numbers.map((n) => (
         <View

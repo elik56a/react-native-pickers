@@ -16,14 +16,22 @@ import {
   getTimeParts,
   is12HourFormat,
   pad2,
+  parseTypedTime,
   pickDialHour,
   pickDialMinute,
 } from '../time.utils';
+import { useDialHand } from './useDialHand';
 
-/** A clock dial's state: hours or minutes, the numbers and hand to draw, and the drag, tap, AM/PM and screen-reader handlers. */
-export const useClockDial = (date: Date, onChange: (date: Date) => void, options: TimeOptions) => {
+/**
+ * A clock dial's state: hours or minutes, dial or keyboard, the numbers and hand to draw, and the drag, tap, typing, AM/PM and
+ * screen-reader handlers.
+ */
+export const useClockDial = (date: Date, onChange: (date: Date) => void, options: TimeOptions, duration: number) => {
   const { format = TIME_FORMAT.auto, locale, minuteInterval = 1, minTime, maxTime, padHours, dayPeriodLabels } = options;
   const [mode, setMode] = useState<ClockMode>(CLOCK_MODE.hour);
+  const [typing, setTyping] = useState(false);
+  const [draft, setDraft] = useState<{ mode: ClockMode; text: string } | null>(null);
+  const dragging = useRef(false);
   const is12 = is12HourFormat(format, locale);
   const periods = useMemo(() => dayPeriodLabels ?? getDayPeriods(locale), [dayPeriodLabels, locale]);
   const bounds = getTimeBounds(minTime, maxTime);
@@ -49,6 +57,7 @@ export const useClockDial = (date: Date, onChange: (date: Date) => void, options
   };
   // Lifting the finger after choosing the hour moves on to the minutes.
   const finish = () => {
+    dragging.current = false;
     if (mode === CLOCK_MODE.hour) setMode(CLOCK_MODE.minute);
   };
   // The responder is created once, so it calls the latest handlers, and reads touches against where the dial was on the page.
@@ -65,12 +74,20 @@ export const useClockDial = (date: Date, onChange: (date: Date) => void, options
       onPanResponderGrant: (e) => {
         const { pageX, pageY, locationX, locationY } = e.nativeEvent;
         origin.current = { x: pageX - locationX, y: pageY - locationY };
+        dragging.current = false;
         pick(e);
       },
-      onPanResponderMove: pick,
+      onPanResponderMove: (e) => {
+        dragging.current = true;
+        pick(e);
+      },
       onPanResponderRelease: () => latest.current.finish(),
     })
   ).current;
+  const hand = getDialHand(mode, parts.hours, parts.minutes, is12);
+  const rotation = useDialHand(hand.angle, dragging, duration);
+  const hourLabel = is12 ? String(parts.hours % 12 || 12) : pad ? pad2(parts.hours) : String(parts.hours);
+  const minuteLabel = pad2(parts.minutes);
 
   return {
     mode,
@@ -79,11 +96,25 @@ export const useClockDial = (date: Date, onChange: (date: Date) => void, options
     isPM,
     periods,
     selected: mode === CLOCK_MODE.hour ? parts.hours : parts.minutes,
-    hourLabel: is12 ? String(parts.hours % 12 || 12) : pad ? pad2(parts.hours) : String(parts.hours),
-    minuteLabel: pad2(parts.minutes),
+    hourLabel,
+    minuteLabel,
     valueText: formatTimeValue(date, { format, locale }),
     numbers: getDialNumbers({ mode, hours: parts.hours, is12, padHours: pad, bounds }),
-    hand: getDialHand(mode, parts.hours, parts.minutes, is12),
+    handRadius: hand.radius,
+    rotation,
+    typing,
+    toggleTyping: () => {
+      setTyping(!typing);
+      setDraft(null);
+    },
+    /** What a typed field shows: the text being typed into it, else the time. */
+    fieldText: (field: ClockMode) => (draft?.mode === field ? draft.text : field === CLOCK_MODE.hour ? hourLabel : minuteLabel),
+    type: (field: ClockMode, text: string) => {
+      setDraft({ mode: field, text });
+      const patch = parseTypedTime(field, text, is12, isPM, minuteInterval);
+      if (patch) set(patch);
+    },
+    endTyping: () => setDraft(null),
     panHandlers: pan.panHandlers,
     selectPeriod: (pm: boolean) => {
       if (pm !== isPM) set({ hours: (parts.hours + 12) % 24 });

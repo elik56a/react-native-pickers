@@ -8,6 +8,7 @@ import {
   getDialNumbers,
   getHourItems,
   getMinuteItems,
+  getNearestAngle,
   getPeriodItems,
   getSecondItems,
   getTimeBounds,
@@ -18,6 +19,7 @@ import {
   getTimeSeparator,
   is12HourFormat,
   pad2,
+  parseTypedTime,
   pickDialHour,
   pickDialMinute,
   resolveTimeDisplay,
@@ -262,5 +264,32 @@ describe('clock dial', () => {
     expect(minutes.map((n) => n.label).slice(0, 3)).toEqual(['00', '05', '10']);
     expect(minutes.find((n) => n.value === 25)?.disabled).toBe(true);
     expect(minutes.find((n) => n.value === 30)?.disabled).toBe(false);
+  });
+});
+
+describe('getNearestAngle', () => {
+  it('turns the short way round, keeping whole turns already made', () => {
+    expect(getNearestAngle(0, 90)).toBe(90);
+    expect(getNearestAngle(350, 10)).toBe(370);
+    expect(getNearestAngle(10, 350)).toBe(-10);
+    expect(getNearestAngle(720, 30)).toBe(750);
+  });
+});
+
+describe('parseTypedTime', () => {
+  it('reads 12h hours in the current half of the day, and 24h hours as they are', () => {
+    expect(parseTypedTime('hour', '3', true, true, 1)).toEqual({ hours: 15 });
+    expect(parseTypedTime('hour', '12', true, false, 1)).toEqual({ hours: 0 });
+    expect(parseTypedTime('hour', '13', true, false, 1)).toBeNull();
+    expect(parseTypedTime('hour', '0', true, false, 1)).toBeNull();
+    expect(parseTypedTime('hour', '23', false, false, 1)).toEqual({ hours: 23 });
+    expect(parseTypedTime('hour', '24', false, false, 1)).toBeNull();
+  });
+
+  it('snaps minutes down to the interval, and waits while the text is not a number', () => {
+    expect(parseTypedTime('minute', '07', false, false, 5)).toEqual({ minutes: 5 });
+    expect(parseTypedTime('minute', '60', false, false, 1)).toBeNull();
+    expect(parseTypedTime('minute', '', false, false, 1)).toBeNull();
+    expect(parseTypedTime('minute', '1a', false, false, 1)).toBeNull();
   });
 });
