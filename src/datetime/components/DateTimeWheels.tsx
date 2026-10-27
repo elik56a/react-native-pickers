@@ -17,6 +17,8 @@ export const DateTimeWheels = ({
   maxDate,
   formatDay = formatDayLabel,
   calendarProps: _calendarProps,
+  timeDisplay: _timeDisplay,
+  timePosition: _timePosition,
   itemHeight,
   visibleItems,
   variant,

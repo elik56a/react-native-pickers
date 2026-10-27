@@ -2,12 +2,15 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CalendarBaseProps } from '../calendar/calendar.types';
 import type { Locale, SlotStyles, ThemableProps } from '../core';
-import type { PickerDisplay } from '../core/core.types';
+import type { PickerDisplay, ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
-import type { TimeOptions } from '../time/time.types';
+import type { TimeDisplay, TimeOptions } from '../time/time.types';
 import type { MultiWheelSlot, WheelVariant } from '../wheel/wheel.types';
+import type { TIME_POSITION } from './datetime.constants';
 
 export type DateTimeDisplay = PickerDisplay;
+
+export type TimePosition = ValueOf<typeof TIME_POSITION>;
 
 export type DateTimeCalendarProps = Omit<CalendarBaseProps, 'locale' | 'minDate' | 'maxDate' | 'theme' | 'testID'>;
 
@@ -15,8 +18,12 @@ export interface DateTimePickerProps extends ThemableProps, Omit<TimeOptions, 'm
   value?: Date;
   defaultValue?: Date;
   onChange?: (date: Date) => void;
-  /** 'wheel' (default): one row of day + time wheels. 'calendar': a month grid above the time wheels. */
+  /** 'wheel': one row of day + time wheels (the iOS default). 'calendar': a month grid and the time, as the design shows time (the Material and web default) */
   display?: DateTimeDisplay;
+  /** Calendar display: the time beside the calendar (under it when there's no room) or below it. Default: 'beside' on the web, 'below' in iOS and Material */
+  timePosition?: TimePosition;
+  /** Calendar display: how the time is picked: 'wheel', 'dial', 'input' or 'list'. Default: wheels in iOS, 'input' in Material, 'list' on the web */
+  timeDisplay?: TimeDisplay;
   /** Earliest selectable moment (date and time) */
   minDate?: Date;
   /** Latest selectable moment (date and time) */
@@ -26,7 +33,7 @@ export interface DateTimePickerProps extends ThemableProps, Omit<TimeOptions, 'm
   /** Calendar display: passed through to the Calendar */
   calendarProps?: DateTimeCalendarProps;
   itemHeight?: number;
-  /** Default: 5 for the wheel display, 3 under the calendar */
+  /** Default: 5 for the wheel display; 3 wheels or 5 web time rows under the calendar, 9 rows beside it */
   visibleItems?: number;
   variant?: WheelVariant;
   style?: StyleProp<ViewStyle>;
@@ -43,7 +50,19 @@ export type DateTimePickerSheetProps = SheetChromeProps &
 
 export type DateTimePickerFieldProps = WithPickerField<DateTimePickerSheetProps, MultiWheelSlot>;
 
-export type DateTimeViewProps = Omit<DateTimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'display'> & {
+export type DateTimeViewProps = Omit<
+  DateTimePickerProps,
+  'value' | 'defaultValue' | 'onChange' | 'display' | 'timePosition' | 'timeDisplay'
+> & {
   date: Date;
   onChange: (date: Date) => void;
+  /** How the calendar display shows the time */
+  timeDisplay: TimeDisplay;
+  timePosition: TimePosition;
 };
+
+export interface DateTimeDesign {
+  display: DateTimeDisplay;
+  timeDisplay: TimeDisplay;
+  timePosition: TimePosition;
+}

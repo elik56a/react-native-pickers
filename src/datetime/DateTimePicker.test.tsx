@@ -67,4 +67,26 @@ describe('DateTimePicker', () => {
       expect(stamp(onChange.mock.calls[0][0])).toBe('2026-10-27 14:45');
     });
   });
+
+  it('shows a calendar with time fields to type into in Material, and with clickable time columns on the web', async () => {
+    const onChange = jest.fn();
+    const { rerender } = await render(
+      <DateTimePicker value={at(20, 9, 0)} onChange={onChange} format="24h" design="material" testID="dt" />
+    );
+    expect(screen.getByTestId('dt-calendar')).toBeTruthy();
+    await fireEvent.changeText(screen.getByTestId('dt-time-hour'), '14');
+    expect(stamp(onChange.mock.calls[0][0])).toBe('2026-10-20 14:00');
+
+    await rerender(<DateTimePicker value={at(20, 9, 0)} onChange={onChange} format="24h" minuteInterval={15} design="web" testID="dt" />);
+    expect(screen.getByTestId('dt-calendar')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Minute 45'));
+    expect(stamp(onChange.mock.calls[1][0])).toBe('2026-10-20 9:45');
+  });
+
+  it('picks the time with the given timeDisplay next to the calendar, whatever the design', async () => {
+    await render(<DateTimePicker value={at(20, 9, 0)} format="24h" design="web" timeDisplay="wheel" testID="dt" />);
+    expect(screen.getByTestId('dt-calendar')).toBeTruthy();
+    expect(screen.getByTestId('dt-time-hour-list')).toBeTruthy();
+    expect(screen.queryByLabelText('Hour 09')).toBeNull();
+  });
 });
