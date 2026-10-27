@@ -7,9 +7,10 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import clsx from 'clsx';
 import { Editor, LiveEditor, LiveError, LivePreview } from 'react-live';
 
-import { Choices } from '../../components/Choices';
+import { PlatformSwitch } from '../../components/PlatformSwitch';
 import { ControlRow, type Option } from '../../components/PropPlayground';
-import { PLATFORM, PLATFORM_LABELS, PLATFORMS } from '../../home/device/device.constants';
+import { Device } from '../../home/device/Device';
+import { PLATFORM } from '../../home/device/device.constants';
 import type { Platform } from '../../home/device/device.types';
 import { useCopyToClipboard } from '../../home/hooks/useCopyToClipboard';
 import { toCodePreview, withCodePreview } from '../../live/codePreview';
@@ -24,6 +25,11 @@ import styles from './styles.module.css';
 interface PlaygroundProps {
   children: string;
   scope?: Record<string, unknown>;
+  /**
+   * The code fence's words after the language: `wide` widens the preview on the Web tab, `noplatforms` hides the iOS / Android / Web
+   * switch, and `device` runs the example full screen in the home page's phone and browser mocks.
+   */
+  metastring?: string;
 }
 
 interface ToolbarProps {
@@ -41,11 +47,11 @@ interface IconButtonProps {
   children: ReactNode;
 }
 
-const Preview = () => (
+const Preview = ({ className = styles.stage }: { className?: string }) => (
   <BrowserOnly fallback={<div className={styles.loading}>Loading…</div>}>
     {() => (
       <ErrorBoundary fallback={(params) => <ErrorBoundaryErrorMessageFallback {...params} />}>
-        <LivePreview className={styles.stage} />
+        <LivePreview className={className} />
         <LiveError className={styles.error} />
       </ErrorBoundary>
     )}
@@ -94,12 +100,16 @@ const Toolbar = ({ code, edited, onReset, expanded, onToggleExpanded }: ToolbarP
 };
 
 /** A live example: the result, a panel for the props of the components it renders, a toolbar, and the editable code (collapsed to its JSX until expanded). */
-export default function Playground({ children, scope }: PlaygroundProps) {
+export default function Playground({ children, scope, metastring }: PlaygroundProps) {
+  const words = metastring?.split(' ') ?? [];
+  const wide = words.includes('wide');
+  const platforms = !words.includes('noplatforms');
+  const device = words.includes('device');
   const initialCode = children.replace(/\n$/, '');
   const [code, setCode] = useState(initialCode);
   const [expanded, setExpanded] = useState(false);
   // The browser is the web, so iOS and Android are emulated: sheets instead of dropdowns, native insets and dragging.
-  const [platform, setPlatform] = useState<Platform>(PLATFORM.web);
+  const [platform, setPlatform] = useState<Platform>(device ? PLATFORM.ios : PLATFORM.web);
   const isBrowser = useIsBrowser();
   const controls = findControls(code);
   const preview = toCodePreview(code);
@@ -113,16 +123,22 @@ export default function Playground({ children, scope }: PlaygroundProps) {
     <div className={styles.playground}>
       <PlaygroundProvider code={code} scope={scope} platform={platform}>
         <div className={clsx(styles.body, controls.length > 0 && styles.withPanel)}>
-          <div className={styles.preview}>
-            <div className={styles.platforms}>
-              <Choices
-                label="Preview platform"
-                labels={PLATFORMS.map((p) => PLATFORM_LABELS[p])}
-                selected={PLATFORMS.indexOf(platform)}
-                onChoose={(i) => setPlatform(PLATFORMS[i])}
-              />
-            </div>
-            <Preview />
+          <div
+            className={styles.preview}
+            data-wide={(wide && platform === PLATFORM.web) || undefined}
+            data-platforms={(platforms && !device) || undefined}
+            data-device={device ? platform : undefined}
+          >
+            {device ? (
+              <Device platform={platform} onPlatformChange={setPlatform}>
+                {() => <Preview className={styles.deviceScreen} />}
+              </Device>
+            ) : (
+              <>
+                {platforms ? <PlatformSwitch platform={platform} onChange={setPlatform} /> : null}
+                <Preview />
+              </>
+            )}
           </div>
           {controls.length > 0 ? (
             <aside className={styles.panel} aria-label="Props">
