@@ -9,12 +9,16 @@ import {
   DIAL_SIZE,
   ENTRY_ICON_SIZE,
   ENTRY_TOGGLE_SIZE,
+  TIME_CELL_HEIGHT,
+  TIME_COLUMN_WIDTH,
 } from './time.constants';
 
 const CENTER = DIAL_SIZE / 2;
 
 export const styles = StyleSheet.create({
-  listRow: { paddingVertical: 0 },
+  panel: { flexDirection: 'row', alignSelf: 'center', borderWidth: 1, padding: 4, overflow: 'hidden' },
+  panelColumn: { width: TIME_COLUMN_WIDTH },
+  cell: { height: TIME_CELL_HEIGHT - 4, marginVertical: 2, marginHorizontal: 4, alignItems: 'center', justifyContent: 'center' },
   clock: { alignItems: 'center' },
   header: { flexDirection: 'row', alignItems: 'center' },
   field: { width: CLOCK_FIELD.width, height: CLOCK_FIELD.height, alignItems: 'center', justifyContent: 'center' },
