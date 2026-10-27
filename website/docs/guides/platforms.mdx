@@ -18,9 +18,31 @@ description: Platform support for React Native Pickers — Expo Go, development 
 
 ## Why pure JS matters
 
-- **Same look everywhere.** Native date pickers look different on every OS version, and Android's calendar dialog can't be themed much. These pickers look exactly like your design on iOS, Android and web.
+- **Native feel, your brand.** Each platform gets its own [design](#designs), in your colors and fonts. Native date pickers change with every OS version, and Android's calendar dialog can't be themed much.
 - **No native build.** Add the package and reload. Works in Expo Go and in OTA updates.
 - **One code path.** No platform-specific bugs to chase, and tests run in Jest without native mocks.
+
+## Designs
+
+Pickers follow the design of the platform they run on: iOS on iOS, Material on Android, a web design on the web. A design changes shapes and layout, never your colors:
+
+| | `ios` | `material` | `web` |
+| --- | --- | --- | --- |
+| Sheet corners | 24 | 28 | 12 |
+| Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
+| Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+
+Use one design on every platform with `design` on the provider, or set it on one component:
+
+```tsx
+<PickersProvider design="ios">
+  <App />
+</PickersProvider>
+
+<SelectPicker design="material" options={options} value={value} onChange={setValue} />
+```
+
+`'auto'` (the default) picks iOS for `ios`, the web design for `web`, and Material for everything else. Your `theme` overrides and explicit props such as `confirmLabel` always win over the design, and a field passes its design to the sheet it opens.
 
 ## How it's built
 
@@ -42,7 +64,7 @@ Pickers adapt to `Platform.OS`: fields open a dropdown on the web and a bottom s
 </PickersProvider>
 ```
 
-The toolbar under every live example here switches between iOS, Android and Web this way. Other platforms, such as Windows and macOS, behave like Android.
+The switch on every live example here previews iOS, Android and Web this way, with each platform's [design](#designs). Other platforms, such as Windows and macOS, behave like Android.
 
 ### Next.js / SSR
 
