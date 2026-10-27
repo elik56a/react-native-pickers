@@ -120,6 +120,8 @@ Each platform gets its own design by default (`design="auto"`): iOS on iOS, Mate
 | Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
 | Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
 | Date sheet | calendar | the picked date in large type above the calendar | calendar |
+| Time | wheels | wheels | a list of times |
+| Press | dims while held | ripple | dims while held |
 
 Pick one design for every platform on the provider, or for one component with its `design` prop:
 
@@ -188,6 +190,7 @@ import * as Haptics from 'expo-haptics';
 | `onChange` / `onValueChanging` | `(date) => void` | |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` (from `locale`) |
 | `locale` | `string` | device |
+| `display` | `'wheel' \| 'list'` | `'list'` in the web design, else `'wheel'` |
 | `minuteInterval` | `number` | `1` |
 | `showSeconds` / `secondInterval` | `boolean` / `number` | `false` / `1` |
 | `minTime` / `maxTime` | `Date` (time of day) | |
