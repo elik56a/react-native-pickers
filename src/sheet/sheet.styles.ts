@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { DIALOG_MARGIN, FLOATING_LABEL_PADDING, SHEET_MAX_WIDTH } from './sheet.constants';
+import { DIALOG_MARGIN, DROPDOWN_PADDING, FLOATING_LABEL_PADDING, SHEET_MAX_WIDTH } from './sheet.constants';
 
 export const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'flex-end' },
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   /** Padded for a comfortable hover and ripple area; the negative margin keeps the label lined up with the edge. */
   button: { paddingVertical: 6, paddingHorizontal: 8, marginHorizontal: -8 },
   dropdownOverlay: { position: 'absolute' },
-  dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
+  dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: DROPDOWN_PADDING, overflow: 'hidden' },
   dropdownScroll: { flexGrow: 0, flexShrink: 1 },
   actions: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 24 },
   dropdownFooter: {
