@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/elik56a/react-native-pickers/compare/v0.8.0...v0.9.0) (2026-10-27)
+
+
+### ✨ Features
+
+* **sheet:** open picker fields in a dropdown on the web, and redesign the docs playground ([#20](https://github.com/elik56a/react-native-pickers/issues/20)) ([3f0c841](https://github.com/elik56a/react-native-pickers/commit/3f0c841030d37fbc54ac4adb70433dedd9525fd2))
+
 ## [0.8.0](https://github.com/elik56a/react-native-pickers/compare/v0.7.0...v0.8.0) (2026-10-26)
 
 
