@@ -112,13 +112,14 @@ export const DIALOG_MARGIN = 24;
 export const DIALOG_RISE = 24;
 
 export const DROPDOWN_MAX_HEIGHT = 320;
+export const DROPDOWN_PADDING = 6;
 /** Space between the field and the dropdown. */
 export const DROPDOWN_GAP = 4;
 /** Space kept between the dropdown and the window edge. */
 export const DROPDOWN_EDGE_MARGIN = 8;
 /** A picker in a dropdown is at least this wide, so a calendar keeps its tap targets under a narrow field. */
 export const PICKER_DROPDOWN_MIN_WIDTH = 320;
-/** A calendar with its Done row is about 420 tall; with less room below than this, the dropdown opens above the field if there's more room there. */
+/** A picker dropdown's assumed height until its content is measured: about a calendar with its Done row. */
 export const PICKER_DROPDOWN_MAX_HEIGHT = 440;
 
 export const BUTTON_HIT_SLOP = 10;

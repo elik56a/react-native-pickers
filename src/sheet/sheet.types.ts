@@ -65,7 +65,7 @@ export interface SheetChromeProps extends ThemableProps {
   visible: boolean;
   onClose: () => void;
   title?: React.ReactNode;
-  /** Default: 'Done' */
+  /** Default: 'OK' in the Material design, else 'Done' */
   confirmLabel?: string;
   /** Default: 'Cancel' */
   cancelLabel?: string;
@@ -219,6 +219,8 @@ export interface DropdownProps extends ThemableProps {
   maxHeight?: number;
   /** Wider than the anchor when it's narrower than this, still within the window */
   minWidth?: number;
+  /** Stays invisible while false, e.g. until its content is measured and it knows which side of the field it fits on. Default: true */
+  ready?: boolean;
   testID?: string;
 }
 

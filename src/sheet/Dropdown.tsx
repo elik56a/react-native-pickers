@@ -17,6 +17,7 @@ export const Dropdown = ({
   overlay,
   maxHeight = DROPDOWN_MAX_HEIGHT,
   minWidth,
+  ready = true,
   theme: themeProp,
   design,
   testID,
@@ -56,7 +57,7 @@ export const Dropdown = ({
         pointerEvents={visible ? 'auto' : 'none'}
         style={[
           styles.dropdown,
-          { opacity: progress },
+          { opacity: ready ? progress : 0 },
           getDropdownFrame(anchor, windowSize, maxHeight, minWidth),
           {
             backgroundColor: theme.colors.sheet,
