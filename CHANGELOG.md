@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.0](https://github.com/elik56a/react-native-pickers/compare/v0.9.0...v0.10.0) (2026-10-27)
+
+
+### ✨ Features
+
+* **core:** add a platform prop to PickersProvider to preview iOS or Android behavior ([601c14d](https://github.com/elik56a/react-native-pickers/commit/601c14d9fa301a26bc8bd99f9a787657c1fa8edb))
+* **list:** add HorizontalList, a segmented control or chips that scroll sideways ([601c14d](https://github.com/elik56a/react-native-pickers/commit/601c14d9fa301a26bc8bd99f9a787657c1fa8edb))
+* **select:** search a server with loadOptions, and show a loader while options load ([601c14d](https://github.com/elik56a/react-native-pickers/commit/601c14d9fa301a26bc8bd99f9a787657c1fa8edb))
+
 ## [0.9.0](https://github.com/elik56a/react-native-pickers/compare/v0.8.0...v0.9.0) (2026-10-27)
 
 
