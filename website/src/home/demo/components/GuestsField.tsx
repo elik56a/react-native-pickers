@@ -1,5 +1,6 @@
 import type { BottomSheetProps } from '@elik56a/react-native-pickers';
 import { MultiWheelPicker, PickerField, PickerSheet, useDraft } from '@elik56a/react-native-pickers';
+import type { TabOptions } from '../../playground/playground.types';
 import { ADULTS, BOOKING_FIELD, CHILDREN } from '../demo.constants';
 import type { Guests } from '../demo.types';
 import { adultsLabel, childrenLabel, guestsLabel } from '../demo.utils';
@@ -8,6 +9,7 @@ interface GuestsFieldProps {
   value: Guests;
   onConfirm: (guests: Guests) => void;
   sheetProps: Partial<BottomSheetProps>;
+  options: TabOptions<'wheel'>;
 }
 
 interface GuestsSheetProps extends GuestsFieldProps {
@@ -24,7 +26,7 @@ const CHILD_ITEMS = CHILDREN.map((n) => ({
   value: n,
 }));
 
-const GuestsSheet = ({ visible, onClose, value, onConfirm, sheetProps }: GuestsSheetProps) => {
+const GuestsSheet = ({ visible, onClose, value, onConfirm, sheetProps, options }: GuestsSheetProps) => {
   const [draft, setDraft] = useDraft(value, visible);
   return (
     <PickerSheet
@@ -38,12 +40,15 @@ const GuestsSheet = ({ visible, onClose, value, onConfirm, sheetProps }: GuestsS
       }}
     >
       <MultiWheelPicker
+        variant={options.variant}
+        visibleItems={options.visibleItems}
         columns={[
           {
             key: 'adults',
             items: ADULT_ITEMS,
             value: draft.adults,
             onChange: (adults: number) => setDraft({ ...draft, adults }),
+            loop: options.loop,
             accessibilityLabel: 'Adults',
           },
           {
@@ -51,6 +56,7 @@ const GuestsSheet = ({ visible, onClose, value, onConfirm, sheetProps }: GuestsS
             items: CHILD_ITEMS,
             value: draft.children,
             onChange: (children: number) => setDraft({ ...draft, children }),
+            loop: options.loop,
             accessibilityLabel: 'Children',
           },
         ]}

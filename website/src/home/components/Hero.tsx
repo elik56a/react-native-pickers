@@ -6,7 +6,7 @@ import { revealDelay } from '../home.utils';
 import { CopyInstall } from './CopyInstall';
 import styles from './Hero.module.css';
 import { HeroChips } from './HeroChips';
-import { HeroDevice } from './HeroDevice';
+import { LiveDevice } from './LiveDevice';
 import { Stats } from './Stats';
 
 export const Hero = () => {
@@ -49,7 +49,7 @@ export const Hero = () => {
         </div>
         <div className={styles.stageWrap}>
           <HeroChips />
-          <HeroDevice />
+          <LiveDevice />
         </div>
       </div>
     </header>

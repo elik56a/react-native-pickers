@@ -68,6 +68,9 @@ const LIST_MAX_CHARS = 24;
 const LIST_MAX_OPTIONS = 4;
 const LABEL_MAX_CHARS = 10;
 
+export const needsSelect = (labels: readonly string[]) =>
+  labels.join('').length > LIST_MAX_CHARS || labels.length > LIST_MAX_OPTIONS || labels.some((l) => l.length > LABEL_MAX_CHARS);
+
 /** Sized to the panel: shorter and smaller than a form field. */
 const SELECT_STYLES = {
   trigger: { minHeight: 38 },
@@ -128,7 +131,7 @@ interface PropSelectProps {
 }
 
 /** The library's own SelectPicker, as a dropdown; it renders in the browser only, like the previews. */
-const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
+export const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
   const { colorMode } = useColorMode();
   return (
     <BrowserOnly fallback={<div className={styles.selectFallback} />}>
@@ -155,9 +158,7 @@ const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
 export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
   const { prop, options } = control;
   const isSwitch = options.length === 2 && options.every((o) => typeof o === 'boolean');
-  const labels = options.map(label);
-  const isSelect =
-    labels.join('').length > LIST_MAX_CHARS || labels.length > LIST_MAX_OPTIONS || labels.some((l) => l.length > LABEL_MAX_CHARS);
+  const isSelect = needsSelect(options.map(label));
 
   if (isSwitch) {
     return (

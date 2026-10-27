@@ -15,22 +15,30 @@ export const usePortalsInside = (frameRef: RefObject<HTMLDivElement | null>, ena
   useEffect(() => {
     const frame = frameRef.current;
     if (!enabled || !frame) return;
-    const claim = () => {
-      activeFrame = frame;
+    const pinned = new Set<HTMLElement>();
+    // A touch on the phone or a sheet it opened claims the next portal; a touch anywhere else, like the props panel, lets it go.
+    const track = (e: Event) => {
+      const target = e.target as Node;
+      const inside = frame.contains(target) || [...pinned].some((node) => node.isConnected && node.contains(target));
+      if (inside) activeFrame = frame;
+      else if (activeFrame === frame) activeFrame = null;
     };
-    frame.addEventListener('pointerdown', claim, true);
-    frame.addEventListener('focusin', claim);
+    document.addEventListener('pointerdown', track, true);
+    document.addEventListener('focusin', track, true);
     const observer = new MutationObserver((mutations) => {
       if (activeFrame !== frame) return;
       for (const node of mutations.flatMap((m) => Array.from(m.addedNodes))) {
-        if (node instanceof HTMLDivElement && !node.attributes.length) pinOver(node, frame);
+        if (node instanceof HTMLDivElement && !node.attributes.length) {
+          pinOver(node, frame);
+          pinned.add(node);
+        }
       }
     });
     observer.observe(document.body, { childList: true });
     return () => {
       observer.disconnect();
-      frame.removeEventListener('pointerdown', claim, true);
-      frame.removeEventListener('focusin', claim);
+      document.removeEventListener('pointerdown', track, true);
+      document.removeEventListener('focusin', track, true);
     };
   }, [frameRef, enabled]);
 };

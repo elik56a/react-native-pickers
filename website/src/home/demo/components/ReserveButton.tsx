@@ -1,7 +1,7 @@
 import { ActivityIndicator, Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { usePickerTheme } from '@elik56a/react-native-pickers';
-import { RESERVE_PHASE, RESERVE_TEST_ID } from '../demo.constants';
+import { RESERVE_PHASE } from '../demo.constants';
 import { styles } from '../demo.styles';
 import { useReserve } from '../hooks/useReserve';
 
@@ -12,7 +12,6 @@ export const ReserveButton = ({ total, disabled }: { total: number; disabled: bo
   const label = [styles.reserveText, { color: colors.onPrimary }];
   return (
     <Pressable
-      testID={RESERVE_TEST_ID}
       accessibilityRole="button"
       accessibilityState={{ disabled, busy }}
       disabled={disabled || phase !== RESERVE_PHASE.idle}

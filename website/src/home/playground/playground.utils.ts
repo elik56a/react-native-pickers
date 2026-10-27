@@ -15,31 +15,31 @@ const SNIPPET_PROPS: { [T in DemoTab]: (o: TabOptions<T>) => (string | false)[] 
   date: (o) => {
     const [value, setter] = DATE_STATE[o.mode];
     return [
+      'label="Dates"',
       o.mode !== 'single' && jsxProp('mode', o.mode),
       `value={${value}}`,
-      `onChange={${setter}}`,
+      `onConfirm={${setter}}`,
       'minDate={new Date()}',
       o.prices && 'markedDates={prices}',
       o.firstDayOfWeek !== 0 && jsxProp('firstDayOfWeek', o.firstDayOfWeek),
     ];
   },
   time: (o) => [
-    'value={time}',
-    'onChange={setTime}',
+    'label="Check-in"',
+    'value={checkIn}',
+    'onConfirm={setCheckIn}',
     o.format !== 'auto' && jsxProp('format', o.format),
     o.minuteInterval !== 1 && jsxProp('minuteInterval', o.minuteInterval),
     o.showSeconds && 'showSeconds',
   ],
+  // The guests sheet's two wheels; `loop` belongs to each column.
   wheel: (o) => [
-    'items={SIZES}',
-    'value={size}',
-    'onChange={setSize}',
+    o.loop ? 'columns={[{ ...adults, loop: true }, { ...children, loop: true }]}' : 'columns={[adults, children]}',
     o.variant !== '3d' && jsxProp('variant', o.variant),
-    o.loop && 'loop',
     o.visibleItems !== 5 && jsxProp('visibleItems', o.visibleItems),
   ],
   select: (o) => [
-    'label="Cities"',
+    'label="Where"',
     `options={${o.groups ? 'CITIES_BY_REGION' : 'CITIES'}}`,
     `value={${o.multiple ? 'cities' : 'city'}}`,
     `onChange={${o.multiple ? 'setCities' : 'setCity'}}`,
@@ -49,7 +49,9 @@ const SNIPPET_PROPS: { [T in DemoTab]: (o: TabOptions<T>) => (string | false)[] 
     o.loading && 'loading',
   ],
   emoji: (o) => [
-    'onSelect={setEmoji}',
+    'label="Vibe"',
+    'value={vibe}',
+    'onSelect={setVibe}',
     o.columns !== 8 && jsxProp('columns', o.columns),
     !o.showSkinTones && 'showSkinTones={false}',
     o.categoryBarPosition !== 'top' && jsxProp('categoryBarPosition', o.categoryBarPosition),
@@ -62,7 +64,7 @@ const element = (component: string, props: string[], indent: string) =>
 const themeLiteral = ({ primary, primaryMuted }: AccentColors) =>
   `{{ colors: { primary: '${primary}', primaryMuted: '${primaryMuted}' } }}`;
 
-/** Copy-ready JSX for the picker the phone is showing, with the visitor's props and theme. */
+/** Copy-ready JSX for the booking field the visitor last touched, with the visitor's props and theme. */
 export const buildSnippet = (tab: DemoTab, options: PlaygroundOptions[DemoTab], accent: Accent = ACCENTS[0]) => {
   const component = TAB_COMPONENTS[tab];
   // `options` is the entry for `tab`; TypeScript can't tie the two together through the index.

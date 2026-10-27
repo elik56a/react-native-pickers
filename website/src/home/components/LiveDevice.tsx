@@ -1,21 +1,22 @@
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { useColorMode } from '@docusaurus/theme-common';
 
-import type { DemoApp } from '../demo/DemoApp';
+import type { BookingApp } from '../demo/BookingApp';
+import type { BookingPlayground } from '../demo/demo.types';
 import { Device } from '../device/Device';
-import type { Playground } from '../playground/playground.types';
 
-/** The device mock running the real pickers through react-native-web. */
-export const LiveDevice = ({ demo }: { demo: Playground }) => {
+/** The device mock running the booking app on the real pickers through react-native-web, driven by the playground when given one. */
+export const LiveDevice = ({ playground }: { playground?: BookingPlayground }) => {
   const { colorMode } = useColorMode();
   return (
     <Device>
       {(platform, screenHeight) => (
         <BrowserOnly fallback={null}>
           {() => {
-            // react-native-web touches `window` on import, so the demo only loads in the browser.
-            const { DemoApp: App } = require('../demo/DemoApp') as { DemoApp: typeof DemoApp };
-            return <App colorMode={colorMode} platform={platform} screenHeight={screenHeight} demo={demo} />;
+            // react-native-web touches `window` on import, so the app only loads in the browser.
+            const { BookingApp: App } = require('../demo/BookingApp') as { BookingApp: typeof BookingApp };
+            // A fresh app per platform, so a sheet left open on one doesn't carry over.
+            return <App key={platform} colorMode={colorMode} platform={platform} screenHeight={screenHeight} playground={playground} />;
           }}
         </BrowserOnly>
       )}
