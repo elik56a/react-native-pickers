@@ -41,7 +41,7 @@ export default function Example() {
   value={new Date(2026, 9, 26, 9, 41, 0)}
   code="value={time} onChange={setTime}"
   controls={[
-    { prop: 'display', options: ['wheel', 'list'] },
+    { prop: 'display', options: ['wheel', 'dial', 'list'] },
     { prop: 'format', options: ['auto', '12h', '24h'] },
     { prop: 'showSeconds', options: [false, true] },
     { prop: 'minuteInterval', options: [1, 5, 15, 30] },
@@ -153,13 +153,21 @@ export default function Example() {
 }
 ```
 
-## Wheels or a list
+## Wheels, a dial or a list
 
-`display="list"` shows the times in a scrolling list, every `minuteInterval` minutes (every 15 when it's 1), opened at the chosen one. It's the default in the [web design](../guides/platforms#designs), where a list is easier with a mouse than wheels; iOS and Material default to wheels. `display="wheel"` keeps the wheels on the web.
+Each [design](../guides/platforms#designs) has its own default:
+
+| `display` | Default in | What it is |
+| --- | --- | --- |
+| `'wheel'` | iOS | Hour, minute and AM/PM wheels |
+| `'dial'` | Material | The time in large type above a clock dial. Tap or drag to the hour, lift, then the minutes; tap the hours or minutes above to switch. 24h dials have 1–12 outside and 00, 13–23 on an inner ring |
+| `'list'` | web | A scrolling list every `minuteInterval` minutes (every 15 when it's 1), opened at the chosen time |
 
 ```tsx
-<TimePicker value={time} onChange={setTime} display="list" minuteInterval={30} />
+<TimePicker value={time} onChange={setTime} display="dial" minuteInterval={5} />
 ```
+
+A dial has no seconds, so with `showSeconds` it shows wheels instead. Screen readers adjust the dial up and down by an hour, or by `minuteInterval`.
 
 ## Looping
 
@@ -205,7 +213,7 @@ import { TimePickerField } from '@elik56a/react-native-pickers';
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` | Clock format; `'auto'` reads it from `locale`. |
 | `locale` | `string` | device | BCP 47 locale, e.g. `'en-US'`, `'he-IL'`. |
-| `display` | `'wheel' \| 'list'` | `'list'` in the web design, else `'wheel'` | Wheels, or a list of times. |
+| `display` | `'wheel' \| 'dial' \| 'list'` | from the design | Wheels (iOS), a clock dial (Material) or a list of times (web). |
 | `minuteInterval` | `number` | `1` | Minute step: 1, 5, 10, 15, 30… |
 | `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
 | `secondInterval` | `number` | `1` | Second step. |
