@@ -15,6 +15,11 @@ const placeElement = (ref: { current: HostInstance | null }) => {
   } as unknown as HostInstance;
 };
 
+const material = {
+  ...lightTheme,
+  design: 'material' as const,
+};
+
 describe('useTouchFeedback', () => {
   it('tints on hover, and not when disabled', async () => {
     const { result, rerender } = await renderHook(({ disabled }: { disabled: boolean }) => useTouchFeedback(lightTheme, disabled), {
@@ -29,15 +34,15 @@ describe('useTouchFeedback', () => {
     expect(result.current.feedback.hovered).toBe(false);
   });
 
-  it('starts the ripple where the element was touched, sized to reach its far corner', async () => {
-    const { result } = await renderHook(() => useTouchFeedback(lightTheme));
+  it('starts the ripple where the element was touched, sized to reach its far corner, in Material', async () => {
+    const { result } = await renderHook(() => useTouchFeedback(material));
     placeElement(result.current.ref);
     await act(() => result.current.handlers.onPressIn(press(60, 30)));
     expect(result.current.feedback.ripple).toEqual({ x: 50, y: 10, radius: Math.hypot(50, 30) });
   });
 
-  it('has no ripple when the ripple is switched off, but still hovers', async () => {
-    const { result } = await renderHook(() => useTouchFeedback(lightTheme, false, false));
+  it('has no ripple when press feedback is switched off, but still hovers', async () => {
+    const { result } = await renderHook(() => useTouchFeedback(material, false, false));
     placeElement(result.current.ref);
     await act(() => result.current.handlers.onPressIn(press(60, 30)));
     expect(result.current.feedback.ripple).toBeNull();
@@ -45,8 +50,21 @@ describe('useTouchFeedback', () => {
     expect(result.current.feedback.hovered).toBe(true);
   });
 
+  it('dims while held instead of rippling on iOS, and not when switched off', async () => {
+    const { result } = await renderHook(() => useTouchFeedback(lightTheme));
+    placeElement(result.current.ref);
+    await act(() => result.current.handlers.onPressIn(press(60, 30)));
+    expect(result.current.feedback).toMatchObject({ pressed: true, ripple: null });
+    await act(() => result.current.handlers.onPressOut());
+    expect(result.current.feedback.pressed).toBe(false);
+
+    const off = await renderHook(() => useTouchFeedback(lightTheme, false, false));
+    await act(() => off.result.current.handlers.onPressIn(press(60, 30)));
+    expect(off.result.current.feedback.pressed).toBe(false);
+  });
+
   it('has no ripple when disabled', async () => {
-    const { result } = await renderHook(() => useTouchFeedback(lightTheme, true));
+    const { result } = await renderHook(() => useTouchFeedback(material, true));
     placeElement(result.current.ref);
     await act(() => result.current.handlers.onPressIn(press(60, 30)));
     expect(result.current.feedback.ripple).toBeNull();

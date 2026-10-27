@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { GestureResponderEvent, HostInstance } from 'react-native';
 import { Easing } from 'react-native';
 
-import { RIPPLE_FADE_RATIO, RIPPLE_GROW_RATIO, RIPPLE_MIN_VISIBLE_RATIO } from '../core.constants';
+import { PRESS_FEEDBACK, PRESS_FEEDBACK_DESIGN, RIPPLE_FADE_RATIO, RIPPLE_GROW_RATIO, RIPPLE_MIN_VISIBLE_RATIO } from '../core.constants';
 import type { RippleOrigin, TouchFeedbackState } from '../core.types';
 import type { PickerTheme } from '../theme/theme.types';
 import { timing } from '../utils/animation.utils';
@@ -10,12 +10,14 @@ import { getRippleOrigin } from '../utils/touch.utils';
 import { useAnimatedValue } from './useAnimatedValue';
 
 /**
- * Hover and ripple state for a pressable. `ref` goes on the view the effects cover (the ripple is measured against it),
+ * Hover and press state for a pressable: a ripple, or a dim while held, as the theme's design does it. `ref` goes on the view the effects cover (the ripple is measured against it),
  * `handlers` on the Pressable, and `feedback` on a <TouchFeedback /> inside that view.
  */
-export const useTouchFeedback = (theme: PickerTheme, disabled = false, rippleEnabled = true): TouchFeedbackState => {
+export const useTouchFeedback = (theme: PickerTheme, disabled = false, feedbackEnabled = true): TouchFeedbackState => {
   const ref = useRef<HostInstance>(null);
   const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const highlight = PRESS_FEEDBACK_DESIGN[theme.design] === PRESS_FEEDBACK.highlight;
   const [ripple, setRipple] = useState<RippleOrigin | null>(null);
   const scale = useAnimatedValue(0);
   const opacity = useAnimatedValue(0);
@@ -31,7 +33,11 @@ export const useTouchFeedback = (theme: PickerTheme, disabled = false, rippleEna
 
   const onPressIn = useCallback(
     (e: GestureResponderEvent) => {
-      if (disabled || !rippleEnabled) return;
+      if (disabled || !feedbackEnabled) return;
+      if (highlight) {
+        setPressed(true);
+        return;
+      }
       pressing.current = true;
       const { pageX, pageY } = e.nativeEvent;
       ref.current?.measure((_x, _y, width, height, left, top) => {
@@ -44,10 +50,11 @@ export const useTouchFeedback = (theme: PickerTheme, disabled = false, rippleEna
         if (!pressing.current) fadeOut();
       });
     },
-    [disabled, fadeOut, growDuration, opacity, rippleEnabled, scale]
+    [disabled, fadeOut, feedbackEnabled, growDuration, highlight, opacity, scale]
   );
 
   const onPressOut = useCallback(() => {
+    setPressed(false);
     pressing.current = false;
     fadeOut();
   }, [fadeOut]);
@@ -65,6 +72,7 @@ export const useTouchFeedback = (theme: PickerTheme, disabled = false, rippleEna
     },
     feedback: {
       hovered: hovered && !disabled,
+      pressed: pressed && !disabled,
       ripple,
       scale,
       opacity,

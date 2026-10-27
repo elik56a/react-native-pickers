@@ -14,6 +14,23 @@ describe('TimePicker', () => {
   beforeEach(() => jest.useFakeTimers());
   afterEach(() => jest.useRealTimers());
 
+  it('picks from a list of times in the web design, keeping the day', async () => {
+    const onChange = jest.fn();
+    await render(
+      <TimePicker value={at(9, 0)} onChange={onChange} format="24h" locale="en-GB" minuteInterval={30} design="web" testID="time" />
+    );
+    expect(screen.queryByTestId('time-hour')).toBeNull();
+    expect(screen.getByLabelText('9:00').props.accessibilityState).toMatchObject({ selected: true });
+    await fireEvent.press(screen.getByLabelText('10:30'));
+    expect(hhmm(onChange.mock.calls[0][0])).toBe('10:30');
+    expect(onChange.mock.calls[0][0].getDate()).toBe(25);
+  });
+
+  it('keeps the wheels in the web design with display="wheel"', async () => {
+    await render(<TimePicker value={at(9, 5)} format="24h" loop={false} design="web" display="wheel" testID="time" />);
+    expect(screen.getByTestId('time-hour')).toBeTruthy();
+  });
+
   it('shows 24h columns with padded hours', async () => {
     await render(<TimePicker value={at(9, 5)} format="24h" loop={false} testID="time" />);
     expect(screen.getByTestId('time-hour').props.accessibilityValue.text).toBe('09');

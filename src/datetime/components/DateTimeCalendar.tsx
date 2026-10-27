@@ -2,6 +2,7 @@ import { View } from 'react-native';
 
 import { Calendar } from '../../calendar/Calendar';
 import { TimePicker } from '../../time/TimePicker';
+import { TIME_DISPLAY } from '../../time/time.constants';
 import { CALENDAR_TIME_VISIBLE_ITEMS } from '../datetime.constants';
 import { styles } from '../datetime.styles';
 import type { DateTimeViewProps } from '../datetime.types';
@@ -35,6 +36,7 @@ export const DateTimeCalendar = ({
     />
     <TimePicker
       {...timeProps}
+      display={TIME_DISPLAY.wheel}
       {...getDayTimeBounds(date, minDate, maxDate)}
       locale={locale}
       visibleItems={visibleItems}

@@ -3,7 +3,7 @@ import type React from 'react';
 import { formatDate, uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
 import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TIME_COLUMN, TIME_FORMAT } from './time.constants';
-import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeOptions, TimeParts } from './time.types';
+import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeListItem, TimeOptions, TimeParts } from './time.types';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -169,3 +169,33 @@ export const formatTimeValue = (
     second: showSeconds ? '2-digit' : undefined,
     hour12: is12HourFormat(format, locale),
   });
+
+/** `date` at the given second of its day. */
+export const atSecondOfDay = (date: Date, second: number) => {
+  const out = new Date(date);
+  out.setHours(0, 0, second, 0);
+  return out;
+};
+
+/** The times a list offers: every `stepMinutes` within the bounds, labelled for the locale. Values are seconds of the day. */
+export const getTimeListItems = (
+  date: Date,
+  stepMinutes: number,
+  [minSecond, maxSecond]: TimeBounds,
+  format: Pick<TimeOptions, 'format' | 'locale'>
+): TimeListItem[] =>
+  steps(24 * 60, stepMinutes)
+    .map((minute) => minute * SECONDS_PER_MINUTE)
+    .filter((second) => second >= minSecond && second <= maxSecond)
+    .map((second) => ({
+      value: second,
+      label: formatTimeValue(atSecondOfDay(date, second), format),
+    }));
+
+/** The row to open a list at: a little above the chosen time (or the next one in the list) so it shows near the middle. */
+export const getTimeListScrollIndex = (items: TimeListItem[], second: number, visibleRows: number) => {
+  if (items.length === 0) return 0;
+  const next = items.findIndex((item) => item.value >= second);
+  const target = next === -1 ? items.length - 1 : next;
+  return Math.max(0, Math.min(target - Math.floor(visibleRows / 2), items.length - visibleRows));
+};

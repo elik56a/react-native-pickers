@@ -4,9 +4,10 @@ import { coreStyles } from '../core.styles';
 import type { TouchFeedbackProps } from '../core.types';
 
 /** The hover tint and press ripple, drawn behind the content of the view it's placed in. */
-export const TouchFeedback = ({ hovered, ripple, scale, opacity, theme, borderRadius }: TouchFeedbackProps) => (
+export const TouchFeedback = ({ hovered, pressed, ripple, scale, opacity, theme, borderRadius }: TouchFeedbackProps) => (
   <View pointerEvents="none" style={[StyleSheet.absoluteFill, coreStyles.clip, { borderRadius }]}>
     {hovered ? <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.hover }]} /> : null}
+    {pressed ? <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.ripple }]} /> : null}
     {ripple ? (
       <Animated.View
         style={[
