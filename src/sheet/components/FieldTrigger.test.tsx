@@ -21,6 +21,27 @@ const renderTrigger = (props: Partial<React.ComponentProps<typeof FieldTrigger>>
   );
 
 describe('FieldTrigger', () => {
+  it('shows the label inside an empty closed Material field, and on its border once it has a value', async () => {
+    const material = { ...lightTheme, design: 'material' as const };
+    const { rerender } = await renderTrigger({ theme: material });
+    expect(screen.getByText('Size')).toBeTruthy();
+    expect(screen.queryByText('Pick one')).toBeNull();
+    await rerender(
+      <FieldTrigger
+        displayValue="Large"
+        placeholder="Pick one"
+        label="Size"
+        open={false}
+        disabled={false}
+        clearable={false}
+        onOpen={jest.fn()}
+        theme={material}
+      />
+    );
+    expect(screen.getByText('Size')).toBeTruthy();
+    expect(screen.getByText('Large')).toBeTruthy();
+  });
+
   it('shows the placeholder without a value, and the value with its icon once set', async () => {
     const { rerender } = await renderTrigger();
     expect(screen.getByText('Pick one')).toBeTruthy();

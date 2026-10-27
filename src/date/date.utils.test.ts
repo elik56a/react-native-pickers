@@ -1,6 +1,7 @@
 import { toDateKey } from '../core/utils/date.utils';
 import {
   buildWheelDate,
+  formatDateHeadline,
   formatDateValue,
   getDateColumnSpecs,
   getEmptyDraft,
@@ -131,5 +132,22 @@ describe('getSheetDisplay', () => {
     expect(getSheetDisplay('range', 'wheel')).toBe('calendar');
     expect(getSheetDisplay('multiple', 'wheel')).toBe('calendar');
     expect(getSheetDisplay('single', 'calendar')).toBe('calendar');
+  });
+});
+
+describe('formatDateHeadline', () => {
+  it('shows the picked day, or a placeholder, for single mode', () => {
+    expect(formatDateHeadline('single', new Date(2026, 9, 27), 'en-US')).toBe('Tue, Oct 27');
+    expect(formatDateHeadline('single', null, 'en-US')).toBe('Selected date');
+  });
+
+  it('shows both ends of a range, with placeholders for the missing ones', () => {
+    expect(formatDateHeadline('range', { start: new Date(2026, 9, 27), end: new Date(2026, 9, 30) }, 'en-US')).toBe('Oct 27 – Oct 30');
+    expect(formatDateHeadline('range', { start: new Date(2026, 9, 27), end: null }, 'en-US')).toBe('Oct 27 – End date');
+  });
+
+  it('has no headline for modes that pick several dates', () => {
+    expect(formatDateHeadline('multiple', [], 'en-US')).toBeNull();
+    expect(formatDateHeadline('ranges', [], 'en-US')).toBeNull();
   });
 });

@@ -72,6 +72,6 @@ export const darkTheme: PickerTheme = {
 /** What each design changes on top of the light or dark theme. iOS is the base look. */
 export const DESIGN_TOKENS: Record<Design, DeepPartial<PickerTheme>> = {
   ios: { design: DESIGN.ios },
-  material: { design: DESIGN.material, radius: { sm: 8, md: 8, lg: 16, sheet: 28 } },
+  material: { design: DESIGN.material, radius: { sm: 8, md: 4, lg: 16, sheet: 28 } },
   web: { design: DESIGN.web, radius: { sm: 6, md: 8, lg: 12, sheet: 12 } },
 };

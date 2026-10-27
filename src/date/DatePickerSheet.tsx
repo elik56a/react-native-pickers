@@ -2,12 +2,14 @@ import { Calendar } from '../calendar/Calendar';
 import { CALENDAR_MODE } from '../calendar/calendar.constants';
 import type { CalendarSelectionProps } from '../calendar/calendar.types';
 import { PICKER_DISPLAY } from '../core/core.constants';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
+import { DateHeadline } from './components/DateHeadline';
 import { DateWheelPicker } from './DateWheelPicker';
+import { DATE_HEADLINE } from './date.constants';
 import type { DateDraft, DatePickerSheetProps } from './date.types';
-import { getEmptyDraft, getSheetDisplay, isDraftReady } from './date.utils';
+import { formatDateHeadline, getEmptyDraft, getSheetDisplay, isDraftReady } from './date.utils';
 
 export const DatePickerSheet = (props: DatePickerSheetProps) => {
   const {
@@ -35,6 +37,9 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
   const confirmDraft = onConfirm as (draft: DateDraft) => void;
   const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible);
   const ready = isDraftReady(mode, draft);
+  const resolved = usePickerTheme(theme);
+  const headline =
+    DATE_HEADLINE[resolved.design] && display === PICKER_DISPLAY.calendar ? formatDateHeadline(mode, draft, calendarProps.locale) : null;
   const confirmsOnSelect = !!confirmOnSelect && mode === CALENDAR_MODE.single && display === PICKER_DISPLAY.calendar;
 
   const confirm = () => {
@@ -77,6 +82,7 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
         </SheetContent>
       ) : (
         <SheetContent compact>
+          {headline ? <DateHeadline text={headline} theme={resolved} /> : null}
           <Calendar {...calendarProps} {...selectionProps} theme={theme} />
         </SheetContent>
       )}

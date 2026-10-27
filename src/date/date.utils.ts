@@ -9,8 +9,11 @@ import {
   DATE_PART,
   DEFAULT_WHEEL_YEAR_SPAN,
   FALLBACK_DATE_ORDER,
+  HEADLINE_FORMAT,
+  HEADLINE_PLACEHOLDER,
   MONTH_FORMAT,
   ORDER_PROBE_DATE,
+  RANGE_HEADLINE_FORMAT,
   VALUE_LIST_SEPARATOR,
   VALUE_RANGE_SEPARATOR,
 } from './date.constants';
@@ -127,4 +130,14 @@ export const formatDateValue = (value: DateDraft | undefined, locale?: Locale): 
     .filter((d): d is Date => !!d)
     .map((d) => formatDate(d, locale))
     .join(VALUE_RANGE_SEPARATOR);
+};
+
+/** The large date above a Material calendar: 'Mon, Oct 27', or 'Oct 27 – Oct 30' for a range. Null for modes that pick several. */
+export const formatDateHeadline = (mode: DateSheetMode, draft: DateDraft, locale?: Locale): string | null => {
+  if (mode === CALENDAR_MODE.single) return draft instanceof Date ? formatDate(draft, locale, HEADLINE_FORMAT) : HEADLINE_PLACEHOLDER.date;
+  if (mode !== CALENDAR_MODE.range) return null;
+  const range = draft as DateRange | null;
+  const start = range?.start ? formatDate(range.start, locale, RANGE_HEADLINE_FORMAT) : HEADLINE_PLACEHOLDER.start;
+  const end = range?.end ? formatDate(range.end, locale, RANGE_HEADLINE_FORMAT) : HEADLINE_PLACEHOLDER.end;
+  return `${start}${VALUE_RANGE_SEPARATOR}${end}`;
 };

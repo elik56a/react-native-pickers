@@ -3,6 +3,7 @@ import {
   canScrollWithin,
   getDragFrame,
   getDropdownFrame,
+  getFloatingLabelShift,
   getReleaseTarget,
   getSheetDefaults,
   getWheelTarget,
@@ -235,5 +236,12 @@ describe('getSheetDefaults', () => {
       draggable: false,
       expandedTopInset: 0,
     });
+  });
+});
+
+describe('getFloatingLabelShift', () => {
+  it('moves the label onto the top border, and left by what scaling around its centre takes off its start', () => {
+    expect(getFloatingLabelShift(54, 80, 0.75, 2)).toEqual({ x: -10, y: -28 });
+    expect(getFloatingLabelShift(54, 80, 1, 1)).toEqual({ x: -0, y: -27.5 });
   });
 });
