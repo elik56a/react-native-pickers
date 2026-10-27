@@ -8,6 +8,12 @@ export const SHEET_PRESENTATION = {
   modal: 'modal',
 } as const;
 
+/** A field opens its picker in one of the sheet presentations, or in a dropdown under the field. */
+export const FIELD_PRESENTATION = {
+  ...SHEET_PRESENTATION,
+  dropdown: 'dropdown',
+} as const;
+
 export const SHEET_SNAP = {
   base: 'base',
   expanded: 'expanded',
@@ -60,6 +66,10 @@ export const DROPDOWN_MAX_HEIGHT = 320;
 export const DROPDOWN_GAP = 4;
 /** Space kept between the dropdown and the window edge. */
 export const DROPDOWN_EDGE_MARGIN = 8;
+/** A picker in a dropdown is at least this wide, so a calendar keeps its tap targets under a narrow field. */
+export const PICKER_DROPDOWN_MIN_WIDTH = 320;
+/** A calendar with its Done row is about 420 tall; with less room below than this, the dropdown opens above the field if there's more room there. */
+export const PICKER_DROPDOWN_MAX_HEIGHT = 440;
 
 export const BUTTON_HIT_SLOP = 10;
 
@@ -78,6 +88,7 @@ export const FIELD_PROP_KEYS = [
   'renderChevron',
   'onOpen',
   'onClose',
+  'presentation',
   'style',
   'testID',
 ] as const satisfies ReadonlyArray<keyof PickerFieldBaseProps>;

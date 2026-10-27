@@ -21,7 +21,9 @@ const yearsAgo = (n: number) => {
 
 const ageOf = (b: Date) => {
   const now = new Date();
-  const hadBirthday = now.getMonth() > b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() >= b.getDate());
+  const hadBirthday =
+    now.getMonth() > b.getMonth() ||
+    (now.getMonth() === b.getMonth() && now.getDate() >= b.getDate());
   return now.getFullYear() - b.getFullYear() - (hadBirthday ? 0 : 1);
 };
 
@@ -34,7 +36,11 @@ export default function Birthday() {
       placeholder="Select your birthday"
       display="wheel"
       value={birthday ?? new Date(2000, 0, 1)}
-      displayValue={birthday ? `${formatDate(birthday, undefined, { dateStyle: 'long' })} · ${ageOf(birthday)} y/o` : ''}
+      displayValue={
+        birthday
+          ? `${formatDate(birthday, undefined, { dateStyle: 'long' })} · ${ageOf(birthday)} y/o`
+          : ''
+      }
       onConfirm={setBirthday}
       minDate={yearsAgo(110)}
       maxDate={yearsAgo(MIN_AGE)}

@@ -10,9 +10,16 @@ A big clock you tap to change, with repeat days chosen through a multi-select li
 ```tsx live
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { TimePickerField, SelectList, getWeekdayNames } from '@elik56a/react-native-pickers';
+import {
+  TimePickerField,
+  SelectList,
+  getWeekdayNames,
+} from '@elik56a/react-native-pickers';
 
-const days = getWeekdayNames(undefined, 'long').map((label, value) => ({ label, value }));
+const days = getWeekdayNames(undefined, 'long').map((label, value) => ({
+  label,
+  value,
+}));
 
 export default function Alarm() {
   const [time, setTime] = useState(() => {
@@ -31,7 +38,12 @@ export default function Alarm() {
         onConfirm={setTime}
         minuteInterval={5}
         renderTrigger={({ open, displayValue }) => (
-          <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="Change alarm time" accessibilityHint={displayValue}>
+          <Pressable
+            onPress={open}
+            accessibilityRole="button"
+            accessibilityLabel="Change alarm time"
+            accessibilityHint={displayValue}
+          >
             <Text style={styles.clock}>{displayValue}</Text>
           </Pressable>
         )}
@@ -44,8 +56,20 @@ export default function Alarm() {
 
 const styles = StyleSheet.create({
   root: { gap: 8 },
-  clock: { fontSize: 64, fontWeight: '200', textAlign: 'center', fontVariant: ['tabular-nums'] },
-  caption: { fontSize: 12, fontWeight: '700', color: '#6E685E', textTransform: 'uppercase', marginTop: 8, marginStart: 16 },
+  clock: {
+    fontSize: 64,
+    fontWeight: '200',
+    textAlign: 'center',
+    fontVariant: ['tabular-nums'],
+  },
+  caption: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#6E685E',
+    textTransform: 'uppercase',
+    marginTop: 8,
+    marginStart: 16,
+  },
 });
 ```
 

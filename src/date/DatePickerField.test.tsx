@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
 import type { DateRange } from '../calendar/calendar.types';
 import { DatePickerField } from './DatePickerField';
@@ -34,5 +34,34 @@ describe('DatePickerField', () => {
   it('prefers displayValue over the formatted value', async () => {
     await render(<DatePickerField value={new Date(2026, 9, 5)} displayValue="Tomorrow" onConfirm={jest.fn()} />);
     expect(screen.getByText('Tomorrow')).toBeTruthy();
+  });
+
+  describe('dropdown', () => {
+    // The preset's View mock shares these instance methods; measureInWindow never calls back unless told to.
+    const { measureInWindow }: { measureInWindow: jest.Mock } = jest.requireActual(
+      '@react-native/jest-preset/jest/MockNativeMethods'
+    ).default;
+    beforeEach(() => measureInWindow.mockImplementation((callback: (...rect: number[]) => void) => callback(16, 100, 300, 48)));
+    afterEach(() => measureInWindow.mockReset());
+
+    it('opens under the field without a title, and confirms with Done', async () => {
+      const onConfirm = jest.fn();
+      await render(<DatePickerField label="Due" presentation="dropdown" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
+      await fireEvent.press(screen.getByRole('button', { name: 'Due' }));
+      expect(screen.getAllByText('Due')).toHaveLength(1);
+      await pressDay(15);
+      await fireEvent.press(screen.getByRole('button', { name: 'Done' }));
+      expect(onConfirm.mock.calls[0][0]).toEqual(new Date(2026, 9, 15));
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Done' })).toBeNull());
+    });
+
+    it('closes without confirming on Cancel', async () => {
+      const onConfirm = jest.fn();
+      await render(<DatePickerField label="Due" presentation="dropdown" locale="en-US" initialMonth={OCTOBER} onConfirm={onConfirm} />);
+      await fireEvent.press(screen.getByRole('button', { name: 'Due' }));
+      await pressDay(15);
+      await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
+      expect(onConfirm).not.toHaveBeenCalled();
+    });
   });
 });

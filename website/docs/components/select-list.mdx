@@ -21,7 +21,11 @@ import { View } from 'react-native';
 import { SelectList } from '@elik56a/react-native-pickers';
 
 const themes = [
-  { label: 'System', value: 'system', description: 'Follow the device setting' },
+  {
+    label: 'System',
+    value: 'system',
+    description: 'Follow the device setting',
+  },
   { label: 'Light', value: 'light' },
   { label: 'Dark', value: 'dark' },
 ];
@@ -29,7 +33,14 @@ const themes = [
 export default function Example() {
   const [mode, setMode] = useState<string | null>('system');
   return (
-    <View style={{ borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 16, paddingVertical: 8 }}>
+    <View
+      style={{
+        borderWidth: 1,
+        borderColor: '#E8E4DC',
+        borderRadius: 16,
+        paddingVertical: 8,
+      }}
+    >
       <SelectList options={themes} value={mode} onChange={setMode} />
     </View>
   );
@@ -60,7 +71,18 @@ export default function Example() {
 import { useState } from 'react';
 import { SelectList } from '@elik56a/react-native-pickers';
 
-const toppings = ['Mozzarella', 'Basil', 'Mushrooms', 'Olives', 'Pepperoni', 'Jalapeños', 'Pineapple', 'Onion', 'Ham', 'Rocket'].map((t) => ({
+const toppings = [
+  'Mozzarella',
+  'Basil',
+  'Mushrooms',
+  'Olives',
+  'Pepperoni',
+  'Jalapeños',
+  'Pineapple',
+  'Onion',
+  'Ham',
+  'Rocket',
+].map((t) => ({
   label: t,
   value: t,
   group: ['Pepperoni', 'Ham'].includes(t) ? 'Meat' : 'Veggie',
@@ -68,7 +90,16 @@ const toppings = ['Mozzarella', 'Basil', 'Mushrooms', 'Olives', 'Pepperoni', 'Ja
 
 export default function Example() {
   const [picked, setPicked] = useState<string[]>(['Mozzarella', 'Basil']);
-  return <SelectList multiple options={toppings} value={picked} onChange={setPicked} maxSelected={5} listHeight={320} />;
+  return (
+    <SelectList
+      multiple
+      options={toppings}
+      value={picked}
+      onChange={setPicked}
+      maxSelected={5}
+      listHeight={320}
+    />
+  );
 }
 ```
 

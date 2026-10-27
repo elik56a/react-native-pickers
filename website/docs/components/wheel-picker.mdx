@@ -21,7 +21,13 @@ import { WheelPicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [size, setSize] = useState('M');
-  return <WheelPicker items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onChange={setSize} />;
+  return (
+    <WheelPicker
+      items={['XS', 'S', 'M', 'L', 'XL', 'XXL']}
+      value={size}
+      onChange={setSize}
+    />
+  );
 }
 ```
 
@@ -68,7 +74,11 @@ const plans = [
   { label: 'Free', value: { id: 'free', price: 0 } },
   { label: 'Pro — $9', value: { id: 'pro', price: 9 } },
   { label: 'Team — $29', value: { id: 'team', price: 29 } },
-  { label: 'Enterprise (contact us)', value: { id: 'ent', price: -1 }, disabled: true },
+  {
+    label: 'Enterprise (contact us)',
+    value: { id: 'ent', price: -1 },
+    disabled: true,
+  },
 ];
 
 export default function Example() {
@@ -81,7 +91,9 @@ export default function Example() {
         onChange={setPlan}
         isEqual={(a, b) => a.id === b.id}
       />
-      <Text style={{ textAlign: 'center', marginTop: 8, color: '#6E685E' }}>Selected: {plan.id}</Text>
+      <Text style={{ textAlign: 'center', marginTop: 8, color: '#6E685E' }}>
+        Selected: {plan.id}
+      </Text>
     </>
   );
 }
@@ -99,11 +111,16 @@ Selection is matched with `Object.is` by default. If your values are objects tha
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
-const minutes = Array.from({ length: 60 }, (_, i) => ({ label: String(i).padStart(2, '0'), value: i }));
+const minutes = Array.from({ length: 60 }, (_, i) => ({
+  label: String(i).padStart(2, '0'),
+  value: i,
+}));
 
 export default function Example() {
   const [minute, setMinute] = useState(30);
-  return <WheelPicker items={minutes} value={minute} onChange={setMinute} loop />;
+  return (
+    <WheelPicker items={minutes} value={minute} onChange={setMinute} loop />
+  );
 }
 ```
 
@@ -115,7 +132,15 @@ Disabled rows are shown dimmed and are never selected. If the user lets go on on
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
-const slots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00'].map((t, i) => ({
+const slots = [
+  '09:00',
+  '09:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+].map((t, i) => ({
   label: i % 3 === 1 ? `${t} · booked` : t,
   value: t,
   disabled: i % 3 === 1,
@@ -144,9 +169,27 @@ export default function Example() {
   const [c, setC] = useState(5);
   return (
     <View style={{ flexDirection: 'row', gap: 8 }}>
-      <WheelPicker style={{ flex: 1 }} items={items} value={a} onChange={setA} />
-      <WheelPicker style={{ flex: 1 }} items={items} value={b} onChange={setB} rotation={32} fadeTo={0.1} />
-      <WheelPicker style={{ flex: 1 }} items={items} value={c} onChange={setC} variant="flat" />
+      <WheelPicker
+        style={{ flex: 1 }}
+        items={items}
+        value={a}
+        onChange={setA}
+      />
+      <WheelPicker
+        style={{ flex: 1 }}
+        items={items}
+        value={b}
+        onChange={setB}
+        rotation={32}
+        fadeTo={0.1}
+      />
+      <WheelPicker
+        style={{ flex: 1 }}
+        items={items}
+        value={c}
+        onChange={setC}
+        variant="flat"
+      />
     </View>
   );
 }
@@ -227,12 +270,31 @@ export default function Example() {
       renderItem={({ item, selected, theme }) => {
         const c = currencies.find((x) => x.value === item.value)!;
         return (
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 10,
+            }}
+          >
             <Text style={{ fontSize: 22 }}>{c.flag}</Text>
-            <Text style={{ fontSize: 18, fontWeight: selected ? '700' : '400', color: selected ? theme.colors.text : theme.colors.textSecondary }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: selected ? '700' : '400',
+                color: selected
+                  ? theme.colors.text
+                  : theme.colors.textSecondary,
+              }}
+            >
               {c.label}
             </Text>
-            {selected && <Text style={{ color: theme.colors.textSecondary }}>{c.name}</Text>}
+            {selected && (
+              <Text style={{ color: theme.colors.textSecondary }}>
+                {c.name}
+              </Text>
+            )}
           </View>
         );
       }}
@@ -256,7 +318,15 @@ export default function Example() {
       value={v}
       onChange={setV}
       renderIndicator={(theme) => (
-        <View style={{ height: 40, borderTopWidth: 2, borderBottomWidth: 2, borderColor: theme.colors.primary, marginHorizontal: 24 }} />
+        <View
+          style={{
+            height: 40,
+            borderTopWidth: 2,
+            borderBottomWidth: 2,
+            borderColor: theme.colors.primary,
+            marginHorizontal: 24,
+          }}
+        />
       )}
     />
   );
@@ -287,7 +357,15 @@ const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 export default function Example() {
   const [size, setSize] = useState<string | undefined>();
-  return <WheelPickerField label="Size" placeholder="Choose a size" items={sizes} value={size} onConfirm={setSize} />;
+  return (
+    <WheelPickerField
+      label="Size"
+      placeholder="Choose a size"
+      items={sizes}
+      value={size}
+      onConfirm={setSize}
+    />
+  );
 }
 ```
 

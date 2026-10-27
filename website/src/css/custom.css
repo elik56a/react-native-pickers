@@ -31,6 +31,18 @@
   --site-grid: rgba(23, 21, 15, 0.07);
   --site-glow: radial-gradient(60% 60% at 50% 0%, rgba(255, 91, 20, 0.1), transparent 70%);
   --site-shadow: 0 1px 2px rgba(23, 21, 15, 0.05), 0 16px 32px -16px rgba(23, 21, 15, 0.18);
+  --site-code: #17150f;
+  /* Live editor syntax colors: warm, on the always-dark code block, with the brand orange for JSX tags. */
+  --code-text: #e8e3da;
+  --code-comment: #7d776b;
+  --code-punctuation: #9e978a;
+  --code-tag: #ff8f5a;
+  --code-attr: #f3c677;
+  --code-string: #a8d98f;
+  --code-keyword: #c9a2f2;
+  --code-function: #7fb6ff;
+  --code-type: #ffd28a;
+  --code-number: #ff9f80;
 }
 
 [data-theme="dark"] {
@@ -55,12 +67,18 @@
   --site-grid: rgba(245, 242, 236, 0.06);
   --site-glow: radial-gradient(60% 60% at 50% 0%, rgba(255, 122, 61, 0.12), transparent 70%);
   --site-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 32px -16px rgba(0, 0, 0, 0.6);
+  --site-code: #0b0a07;
 }
 
 div[class*="announcementBar_"] {
   background-color: var(--brand-ink) !important;
   color: #f5f2ec !important;
   border-bottom: none;
+}
+
+div[class*="announcementBar_"] button {
+  color: inherit;
+  opacity: 0.75;
 }
 
 ::selection {
@@ -87,6 +105,11 @@ h3 {
 
 [data-theme="light"] .navbar {
   background-color: rgba(252, 251, 248, 0.82);
+}
+
+/* A backdrop-filter makes the navbar the box its fixed mobile menu is laid out in, squeezing the menu into the bar. */
+.navbar.navbar-sidebar--show {
+  backdrop-filter: none;
 }
 
 .navbar__title {
@@ -160,12 +183,23 @@ pre {
   box-shadow: none;
 }
 
-[data-theme="light"] .theme-code-block {
-  --prism-background-color: var(--site-surface) !important;
+/* Every code block reads like the live editor: same dark theme (prism config), font and spacing. */
+.theme-code-block pre {
+  font-size: 13px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-[data-theme="light"] .theme-code-block pre {
-  background-color: var(--site-surface) !important;
+.theme-code-block pre {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--code-text) 20%, transparent) transparent;
+}
+
+.theme-code-block [class*="buttonGroup"] button {
+  color: var(--code-text);
+  background: color-mix(in srgb, var(--code-text) 8%, transparent);
+  border-color: color-mix(in srgb, var(--code-text) 18%, transparent);
 }
 
 .menu__link {
@@ -339,47 +373,6 @@ pre {
 
 [data-theme="dark"] .button--primary {
   --ifm-button-color: var(--brand-ink);
-}
-
-/* ----- live playground: render the result like a phone screen ----- */
-
-div[class*="playgroundContainer"] {
-  border: 1px solid var(--site-border);
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 1.75rem;
-  box-shadow: var(--site-shadow);
-}
-
-div[class*="playgroundHeader"] {
-  background: var(--site-surface);
-  color: var(--ifm-color-emphasis-700);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 1rem;
-  border-bottom: 1px solid var(--site-border);
-}
-
-div[class*="playgroundPreview"] {
-  background: var(--site-glow), var(--ifm-background-color);
-  padding: 1.75rem 1rem;
-}
-
-div[class*="playgroundPreview"] > div:first-child,
-div[class*="playgroundPreview"] > div[class^="css-"] {
-  max-width: 400px;
-  margin: 0 auto;
-  /* Lay examples out like a React Native root view, so a <Text> stretches and its textAlign applies. */
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-div[class*="playgroundEditor"] {
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.85rem;
 }
 
 /* ----- landing ----- */

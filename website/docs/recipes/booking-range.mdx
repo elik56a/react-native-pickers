@@ -10,7 +10,12 @@ Check-in / check-out with nightly prices under each day, booked nights that rang
 ```tsx live
 import { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { DatePicker, addDays, formatDate, toDateKey } from '@elik56a/react-native-pickers';
+import {
+  DatePicker,
+  addDays,
+  formatDate,
+  toDateKey,
+} from '@elik56a/react-native-pickers';
 import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
 
 const MIN_NIGHTS = 2;
@@ -24,12 +29,18 @@ export default function Booking() {
     const out: Record<string, MarkedDate> = {};
     for (let i = 0; i < 90; i++) {
       const d = addDays(today, i);
-      out[toDateKey(d)] = i % 11 === 6 || i % 11 === 7 ? { disabled: true, label: '—' } : { label: `$${nightly(d)}` };
+      out[toDateKey(d)] =
+        i % 11 === 6 || i % 11 === 7
+          ? { disabled: true, label: '—' }
+          : { label: `$${nightly(d)}` };
     }
     return out;
   }, [today]);
 
-  const nights = range.start && range.end ? Math.round((+range.end - +range.start) / 864e5) : 0;
+  const nights =
+    range.start && range.end
+      ? Math.round((+range.end - +range.start) / 864e5)
+      : 0;
   let total = 0;
   for (let i = 0; i < nights; i++) total += nightly(addDays(range.start!, i));
 
@@ -47,11 +58,25 @@ export default function Booking() {
       />
       <View style={styles.summary}>
         <Text style={styles.dates}>
-          {range.start ? formatDate(range.start, undefined, { day: 'numeric', month: 'short' }) : 'Check-in'}
+          {range.start
+            ? formatDate(range.start, undefined, {
+                day: 'numeric',
+                month: 'short',
+              })
+            : 'Check-in'}
           {'  →  '}
-          {range.end ? formatDate(range.end, undefined, { day: 'numeric', month: 'short' }) : 'Check-out'}
+          {range.end
+            ? formatDate(range.end, undefined, {
+                day: 'numeric',
+                month: 'short',
+              })
+            : 'Check-out'}
         </Text>
-        <Text style={styles.total}>{nights ? `${nights} nights · $${total}` : `Min. ${MIN_NIGHTS} nights`}</Text>
+        <Text style={styles.total}>
+          {nights
+            ? `${nights} nights · $${total}`
+            : `Min. ${MIN_NIGHTS} nights`}
+        </Text>
       </View>
     </View>
   );
@@ -59,7 +84,12 @@ export default function Booking() {
 
 const styles = StyleSheet.create({
   card: { gap: 8 },
-  summary: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8 },
+  summary: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
   dates: { fontSize: 15, fontWeight: '600', color: '#6E685E' },
   total: { fontSize: 15, fontWeight: '700', color: '#C8460D' },
 });

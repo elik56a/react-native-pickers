@@ -1,13 +1,13 @@
-import { type ElementType, type ReactNode, useState } from 'react';
+import { type CSSProperties, type ElementType, type ReactNode, useState } from 'react';
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 
-import { PickersProvider } from '@elik56a/react-native-pickers';
+import { PickersProvider, SelectPicker } from '@elik56a/react-native-pickers';
 import styles from './PropPlayground.module.css';
 
-type Option = string | number | boolean | readonly string[];
+export type Option = string | number | boolean | readonly string[];
 type Selection = Record<string, Option>;
 
 interface Control {
@@ -54,6 +54,14 @@ interface PreviewProps {
 
 const SEGMENTED_MAX_CHARS = 24;
 
+/** Sized to the panel: shorter and smaller than a form field. */
+const SELECT_STYLES = {
+  trigger: { minHeight: 38 },
+  triggerText: { fontSize: 13 },
+  option: { minHeight: 34, paddingVertical: 6 },
+  optionLabel: { fontSize: 13 },
+};
+
 const label = (option: Option) => (Array.isArray(option) ? option.join(' · ') : String(option));
 
 const sameOption = (a: Option, b: Option | null) => JSON.stringify(a) === JSON.stringify(b);
@@ -98,10 +106,45 @@ const Preview = ({ component: Component, props, opener, children }: PreviewProps
   );
 };
 
-const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
+interface PropSelectProps {
+  prop: string;
+  options: readonly Option[];
+  selected: Option;
+  onChoose: (prop: string, option: Option) => void;
+}
+
+/** The library's own SelectPicker, as a dropdown; it renders in the browser only, like the previews. */
+const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
+  const { colorMode } = useColorMode();
+  return (
+    <BrowserOnly fallback={<div className={styles.selectFallback} />}>
+      {() => (
+        <PickersProvider colorScheme={colorMode}>
+          <SelectPicker
+            placeholder={prop}
+            presentation="dropdown"
+            searchable={false}
+            options={options.map((option, i) => ({
+              label: label(option),
+              value: i,
+            }))}
+            value={options.findIndex((o) => sameOption(selected, o))}
+            onChange={(i) => onChoose(prop, options[i])}
+            styles={SELECT_STYLES}
+          />
+        </PickersProvider>
+      )}
+    </BrowserOnly>
+  );
+};
+
+export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
   const { prop, options } = control;
   const isSwitch = options.length === 2 && options.every((o) => typeof o === 'boolean');
   const isSelect = options.map(label).join('').length > SEGMENTED_MAX_CHARS;
+  const activeIndex = options.findIndex((o) => sameOption(selected, o));
+  // The segmented control's thumb slides to the active segment; its CSS reads both.
+  const thumbPosition = { '--count': options.length, '--index': activeIndex } as CSSProperties;
 
   if (isSwitch) {
     return (
@@ -123,20 +166,10 @@ const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
     <div className={styles.row}>
       <code className={styles.prop}>{prop}</code>
       {isSelect ? (
-        <select
-          className={styles.select}
-          aria-label={prop}
-          value={options.findIndex((o) => sameOption(selected, o))}
-          onChange={(e) => onChoose(prop, options[Number(e.target.value)])}
-        >
-          {options.map((option, i) => (
-            <option key={label(option)} value={i}>
-              {label(option)}
-            </option>
-          ))}
-        </select>
+        <PropSelect prop={prop} options={options} selected={selected} onChoose={onChoose} />
       ) : (
         <fieldset className={styles.segmented} aria-label={prop}>
+          {activeIndex === -1 ? null : <span className={styles.thumb} aria-hidden="true" style={thumbPosition} />}
           {options.map((option) => {
             const active = sameOption(selected, option);
             return (

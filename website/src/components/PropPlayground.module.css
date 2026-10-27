@@ -65,6 +65,8 @@
 }
 
 .segmented {
+  --ease-slide: cubic-bezier(0.32, 0.72, 0, 1);
+  position: relative;
   display: flex;
   min-width: 0;
   margin: 0;
@@ -75,7 +77,24 @@
   background: var(--site-border);
 }
 
+/* One thumb slides under the active segment; segments are equal width, so it moves by its own width plus the gap. */
+.thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px - (var(--count) - 1) * 2px) / var(--count));
+  border-radius: 7px;
+  background: var(--ifm-background-color);
+  box-shadow:
+    0 1px 2px rgba(23, 21, 15, 0.12),
+    0 1px 1px rgba(23, 21, 15, 0.06);
+  transform: translateX(calc(var(--index) * (100% + 2px)));
+  transition: transform 0.3s var(--ease-slide);
+}
+
 .segment {
+  position: relative;
   flex: 1;
   border: none;
   background: none;
@@ -87,10 +106,7 @@
   white-space: nowrap;
   color: var(--ifm-color-emphasis-700);
   cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    box-shadow 0.15s;
+  transition: color 0.2s;
 }
 
 .segment:hover {
@@ -98,24 +114,11 @@
 }
 
 .segment.active {
-  background: var(--ifm-background-color);
   color: var(--ifm-color-primary);
-  font-weight: 600;
-  box-shadow:
-    0 1px 2px rgba(23, 21, 15, 0.12),
-    0 1px 1px rgba(23, 21, 15, 0.06);
 }
 
-.select {
-  width: 100%;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--site-border);
-  border-radius: 10px;
-  background: var(--ifm-background-color);
-  color: var(--ifm-font-color-base);
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
+.selectFallback {
+  height: 38px;
 }
 
 .switch {
@@ -128,7 +131,7 @@
   border-radius: 999px;
   background: var(--ifm-color-emphasis-300);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .switch::after {
@@ -141,7 +144,7 @@
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  transition: transform 0.2s;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .switch:checked {
@@ -153,8 +156,7 @@
 }
 
 .switch:focus-visible,
-.segment:focus-visible,
-.select:focus-visible {
+.segment:focus-visible {
   outline: 2px solid var(--ifm-color-primary);
   outline-offset: 2px;
 }
@@ -164,11 +166,18 @@
   border-radius: 0;
   border-top: 1px solid var(--site-border);
   box-shadow: none;
-  --prism-background-color: var(--site-surface);
 }
 
 .code [class*="buttonGroup"] button {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb,
+  .switch,
+  .switch::after {
+    transition: none;
+  }
 }
 
 @media (max-width: 996px) {

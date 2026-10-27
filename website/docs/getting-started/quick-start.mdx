@@ -17,7 +17,13 @@ import { WheelPicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [size, setSize] = useState('M');
-  return <WheelPicker items={['XS', 'S', 'M', 'L', 'XL', 'XXL']} value={size} onChange={setSize} />;
+  return (
+    <WheelPicker
+      items={['XS', 'S', 'M', 'L', 'XL', 'XXL']}
+      value={size}
+      onChange={setSize}
+    />
+  );
 }
 ```
 
@@ -59,9 +65,15 @@ export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <DatePicker mode="range" value={range} onChange={setRange} minDate={new Date()} />
+      <DatePicker
+        mode="range"
+        value={range}
+        onChange={setRange}
+        minDate={new Date()}
+      />
       <Text style={{ textAlign: 'center', color: '#6E685E' }}>
-        {range.start ? formatDate(range.start) : '—'} → {range.end ? formatDate(range.end) : '—'}
+        {range.start ? formatDate(range.start) : '—'} →{' '}
+        {range.end ? formatDate(range.end) : '—'}
       </Text>
     </>
   );
@@ -76,7 +88,14 @@ import { DatePicker } from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [birthday, setBirthday] = useState(new Date(1990, 4, 17));
-  return <DatePicker display="wheel" value={birthday} onChange={setBirthday} maxDate={new Date()} />;
+  return (
+    <DatePicker
+      display="wheel"
+      value={birthday}
+      onChange={setBirthday}
+      maxDate={new Date()}
+    />
+  );
 }
 ```
 
@@ -98,7 +117,15 @@ const languages = [
 
 export default function Example() {
   const [lang, setLang] = useState<string | null>(null);
-  return <SelectPicker label="Language" placeholder="Choose a language" options={languages} value={lang} onChange={setLang} />;
+  return (
+    <SelectPicker
+      label="Language"
+      placeholder="Choose a language"
+      options={languages}
+      value={lang}
+      onChange={setLang}
+    />
+  );
 }
 ```
 
@@ -114,7 +141,10 @@ export default function Example() {
   return (
     <>
       <Text style={{ fontSize: 28, minHeight: 40 }}>{text}</Text>
-      <EmojiPicker height={320} onSelect={(emoji) => setText((t) => t + emoji)} />
+      <EmojiPicker
+        height={320}
+        onSelect={(emoji) => setText((t) => t + emoji)}
+      />
     </>
   );
 }
@@ -135,9 +165,16 @@ export default function Example() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}>
-        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
-          {range.start && range.end ? `${formatDate(range.start)} → ${formatDate(range.end)}` : 'Pick dates'}
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
+      >
+        <Text
+          style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}
+        >
+          {range.start && range.end
+            ? `${formatDate(range.start)} → ${formatDate(range.end)}`
+            : 'Pick dates'}
         </Text>
       </Pressable>
       <DatePickerSheet
@@ -161,15 +198,30 @@ A field opens the sheet for you and shows the confirmed value, so there's no ope
 ```tsx live
 import { useState } from 'react';
 import { View } from 'react-native';
-import { DatePickerField, TimePickerField } from '@elik56a/react-native-pickers';
+import {
+  DatePickerField,
+  TimePickerField,
+} from '@elik56a/react-native-pickers';
 
 export default function Example() {
   const [day, setDay] = useState<Date | null>(null);
   const [time, setTime] = useState<Date | undefined>();
   return (
     <View style={{ gap: 14 }}>
-      <DatePickerField label="Date" placeholder="Pick a date" value={day} onConfirm={setDay} minDate={new Date()} />
-      <TimePickerField label="Time" placeholder="Pick a time" value={time} onConfirm={setTime} minuteInterval={15} />
+      <DatePickerField
+        label="Date"
+        placeholder="Pick a date"
+        value={day}
+        onConfirm={setDay}
+        minDate={new Date()}
+      />
+      <TimePickerField
+        label="Time"
+        placeholder="Pick a time"
+        value={time}
+        onConfirm={setTime}
+        minuteInterval={15}
+      />
     </View>
   );
 }

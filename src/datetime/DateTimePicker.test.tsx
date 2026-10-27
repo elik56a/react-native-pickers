@@ -12,7 +12,11 @@ const scrollColumn = async (column: string, index: number) => {
 };
 
 describe('DateTimePicker', () => {
-  beforeEach(() => jest.useFakeTimers());
+  beforeEach(() => {
+    jest.useFakeTimers();
+    // Outside the October 2026 dates below, so no day is labelled 'Today' whenever the suite runs.
+    jest.setSystemTime(new Date(2026, 0, 15));
+  });
   afterEach(() => jest.useRealTimers());
 
   describe('wheel display', () => {

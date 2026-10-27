@@ -12,7 +12,8 @@ import { useState } from 'react';
 import { Text } from 'react-native';
 import { SelectPicker } from '@elik56a/react-native-pickers';
 
-const flag = (code: string) => String.fromCodePoint(...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+const flag = (code: string) =>
+  String.fromCodePoint(...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
 
 const COUNTRIES = [
   ['US', 'United States', 'Americas', '+1', ['usa', 'america']],

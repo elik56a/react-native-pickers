@@ -53,7 +53,9 @@ export default function Example() {
   const [date, setDate] = useState<Date | null>(new Date());
   return (
     <PickersProvider colorScheme="dark">
-      <View style={{ backgroundColor: '#181612', borderRadius: 20, padding: 8 }}>
+      <View
+        style={{ backgroundColor: '#181612', borderRadius: 20, padding: 8 }}
+      >
         <DatePicker value={date} onChange={setDate} />
       </View>
     </PickersProvider>
@@ -74,8 +76,22 @@ export default function Example() {
   const [t, setT] = useState(new Date());
   return (
     <View style={{ gap: 16 }}>
-      <TimePicker value={t} onChange={setT} theme={{ colors: { indicator: 'rgba(16,185,129,0.15)' }, typography: { sizes: { lg: 24 } } }} />
-      <TimePicker value={t} onChange={setT} theme={{ colors: { indicator: 'rgba(244,63,94,0.12)', text: '#E11D48' }, radius: { md: 0 } }} />
+      <TimePicker
+        value={t}
+        onChange={setT}
+        theme={{
+          colors: { indicator: 'rgba(16,185,129,0.15)' },
+          typography: { sizes: { lg: 24 } },
+        }}
+      />
+      <TimePicker
+        value={t}
+        onChange={setT}
+        theme={{
+          colors: { indicator: 'rgba(244,63,94,0.12)', text: '#E11D48' },
+          radius: { md: 0 },
+        }}
+      />
     </View>
   );
 }
@@ -168,7 +184,10 @@ Everything you can press (the select field, list and dropdown rows, calendar day
 import { useState } from 'react';
 import { SelectList } from '@elik56a/react-native-pickers';
 
-const fruits = ['Apple', 'Banana', 'Cherry', 'Mango'].map((f) => ({ label: f, value: f }));
+const fruits = ['Apple', 'Banana', 'Cherry', 'Mango'].map((f) => ({
+  label: f,
+  value: f,
+}));
 
 export default function Example() {
   const [fruit, setFruit] = useState<string | null>('Banana');
@@ -177,7 +196,12 @@ export default function Example() {
       options={fruits}
       value={fruit}
       onChange={setFruit}
-      theme={{ colors: { hover: 'rgba(200,70,13,0.08)', ripple: 'rgba(200,70,13,0.22)' } }}
+      theme={{
+        colors: {
+          hover: 'rgba(200,70,13,0.08)',
+          ripple: 'rgba(200,70,13,0.22)',
+        },
+      }}
     />
   );
 }

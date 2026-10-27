@@ -94,8 +94,11 @@ type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
 /** Every sheet's `presentation`. */
 type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
 
+/** A field's `presentation`: a sheet presentation, or a dropdown under the field. Its `auto` (the default) is a dropdown on the web. */
+type FieldPresentation = SheetPresentation | 'dropdown';
+
 /** SelectPicker's `presentation`; its `auto` is a dropdown on the web. */
-type SelectPresentation = SheetPresentation | 'dropdown';
+type SelectPresentation = FieldPresentation;
 
 /** The field slots every `*PickerField` and `PickerField` takes in `styles`. */
 type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';

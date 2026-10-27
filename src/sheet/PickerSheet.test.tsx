@@ -3,7 +3,19 @@ import { Text } from 'react-native';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import { BottomSheet } from './BottomSheet';
+import { FieldSheetContext } from './hooks/useFieldSheet';
 import { PickerSheet } from './PickerSheet';
+import type { FieldSheetContextValue } from './sheet.types';
+
+const inDropdownField: FieldSheetContextValue = {
+  presentation: 'dropdown',
+  anchor: {
+    x: 16,
+    y: 100,
+    width: 300,
+    height: 48,
+  },
+};
 
 describe('BottomSheet', () => {
   it('renders nothing until visible', async () => {
@@ -66,5 +78,60 @@ describe('PickerSheet', () => {
     expect(screen.queryByRole('button', { name: 'Cancel' })).toBeNull();
     await fireEvent.press(screen.getByRole('button', { name: 'Done' }));
     expect(onConfirm).not.toHaveBeenCalled();
+  });
+});
+
+describe('PickerSheet in a field', () => {
+  it('opens as a dropdown under the field: no title, Cancel and Done below the content', async () => {
+    const onClose = jest.fn();
+    const onConfirm = jest.fn();
+    await render(
+      <FieldSheetContext.Provider value={inDropdownField}>
+        <PickerSheet visible onClose={onClose} onConfirm={onConfirm} title="Due">
+          <Text>Body</Text>
+        </PickerSheet>
+      </FieldSheetContext.Provider>
+    );
+    expect(screen.getByText('Body')).toBeTruthy();
+    expect(screen.queryByRole('header', { name: 'Due' })).toBeNull();
+    await fireEvent.press(screen.getByRole('button', { name: 'Done' }));
+    expect(onConfirm).toHaveBeenCalled();
+    await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('follows a field set to a sheet presentation', async () => {
+    await render(
+      <FieldSheetContext.Provider value={{ ...inDropdownField, presentation: 'bottomSheet' }}>
+        <PickerSheet visible onClose={jest.fn()} title="Due">
+          <Text>Body</Text>
+        </PickerSheet>
+      </FieldSheetContext.Provider>
+    );
+    expect(screen.getByRole('header', { name: 'Due' })).toBeTruthy();
+  });
+
+  it('keeps its own presentation over the field', async () => {
+    await render(
+      <FieldSheetContext.Provider value={inDropdownField}>
+        <PickerSheet visible onClose={jest.fn()} title="Due" presentation="bottomSheet">
+          <Text>Body</Text>
+        </PickerSheet>
+      </FieldSheetContext.Provider>
+    );
+    expect(screen.getByRole('header', { name: 'Due' })).toBeTruthy();
+  });
+
+  it('does not pass the field on to a sheet opened inside it', async () => {
+    await render(
+      <FieldSheetContext.Provider value={inDropdownField}>
+        <PickerSheet visible onClose={jest.fn()}>
+          <PickerSheet visible onClose={jest.fn()} title="Nested">
+            <Text>Inner</Text>
+          </PickerSheet>
+        </PickerSheet>
+      </FieldSheetContext.Provider>
+    );
+    expect(screen.getByRole('header', { name: 'Nested' })).toBeTruthy();
   });
 });

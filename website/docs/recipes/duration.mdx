@@ -31,12 +31,37 @@ export default function Timer() {
       <MultiWheelPicker
         separator={(left) => <Unit>{['hours', 'min', 'sec'][left]}</Unit>}
         columns={[
-          { key: 'h', items: HOURS, value: h, onChange: setH, accessibilityLabel: 'Hours', textAlign: 'right' },
-          { key: 'm', items: SIXTY, value: m, onChange: setM, loop: true, accessibilityLabel: 'Minutes', textAlign: 'right' },
-          { key: 's', items: SIXTY, value: s, onChange: setS, loop: true, accessibilityLabel: 'Seconds', textAlign: 'right' },
+          {
+            key: 'h',
+            items: HOURS,
+            value: h,
+            onChange: setH,
+            accessibilityLabel: 'Hours',
+            textAlign: 'right',
+          },
+          {
+            key: 'm',
+            items: SIXTY,
+            value: m,
+            onChange: setM,
+            loop: true,
+            accessibilityLabel: 'Minutes',
+            textAlign: 'right',
+          },
+          {
+            key: 's',
+            items: SIXTY,
+            value: s,
+            onChange: setS,
+            loop: true,
+            accessibilityLabel: 'Seconds',
+            textAlign: 'right',
+          },
         ]}
       />
-      <Text style={styles.summary}>{total ? `Timer: ${total.toLocaleString()} seconds` : 'Pick a duration'}</Text>
+      <Text style={styles.summary}>
+        {total ? `Timer: ${total.toLocaleString()} seconds` : 'Pick a duration'}
+      </Text>
     </View>
   );
 }
