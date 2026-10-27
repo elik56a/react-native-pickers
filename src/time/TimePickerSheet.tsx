@@ -1,3 +1,4 @@
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { TimePicker } from './TimePicker';
@@ -13,11 +14,13 @@ export const TimePickerSheet = ({
   showCancel,
   presentation,
   sheetProps,
-  theme,
+  theme: themeProp,
+  design,
   value,
   onConfirm,
   ...rest
 }: TimePickerSheetProps) => {
+  const theme = useDesignOverride(themeProp, design);
   const [draft, setDraft] = useDraft(value ?? new Date(), visible);
   return (
     <PickerSheet

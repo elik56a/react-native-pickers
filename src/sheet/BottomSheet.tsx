@@ -2,7 +2,7 @@ import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet,
 
 import { usePickerTheme } from '../core';
 import { PLATFORM } from '../core/core.constants';
-import { usePickerPlatform } from '../core/theme/ThemeProvider';
+import { useDesignOverride, usePickerPlatform } from '../core/theme/ThemeProvider';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSheetResize } from './hooks/useSheetResize';
@@ -29,11 +29,13 @@ export const BottomSheet = ({
   bottomInset: bottomInsetProp,
   presentation = SHEET_PRESENTATION.auto,
   styles: slots,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   onOpened,
   onClosed,
   testID,
 }: BottomSheetProps) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const platform = usePickerPlatform();

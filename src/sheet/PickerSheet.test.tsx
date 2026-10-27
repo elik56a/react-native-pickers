@@ -54,6 +54,22 @@ describe('BottomSheet', () => {
 });
 
 describe('PickerSheet', () => {
+  it('puts Cancel and Done beside the title on iOS, and Cancel and OK after the content in Material', async () => {
+    const sheet = (design: 'ios' | 'material') => (
+      <PickerSheet visible onClose={jest.fn()} onConfirm={jest.fn()} title="Pick" design={design}>
+        <Text>Body</Text>
+      </PickerSheet>
+    );
+    const { rerender } = await render(sheet('ios'));
+    expect(screen.getByRole('button', { name: 'Done' })).toBeTruthy();
+    const iosText = screen.getAllByText(/Pick|Body|Cancel|Done/).map((node) => node.props.children);
+    expect(iosText).toEqual(['Cancel', 'Pick', 'Done', 'Body']);
+
+    await rerender(sheet('material'));
+    const materialText = screen.getAllByText(/Pick|Body|Cancel|OK/).map((node) => node.props.children);
+    expect(materialText).toEqual(['Pick', 'Body', 'Cancel', 'OK']);
+  });
+
   it('cancels and confirms from the header', async () => {
     const onClose = jest.fn();
     const onConfirm = jest.fn();

@@ -1,3 +1,4 @@
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { WheelPicker } from './WheelPicker';
@@ -13,11 +14,13 @@ export const WheelPickerSheet = <T,>({
   showCancel,
   presentation,
   sheetProps,
-  theme,
+  theme: themeProp,
+  design,
   value,
   onConfirm,
   ...rest
 }: WheelPickerSheetProps<T>) => {
+  const theme = useDesignOverride(themeProp, design);
   const [draft, setDraft] = useDraft<T>(value ?? (firstItemValue(rest.items) as T), visible);
   return (
     <PickerSheet

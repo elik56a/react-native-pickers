@@ -23,6 +23,13 @@ describe('SelectList', () => {
     expect(screen.getByText('République française')).toBeTruthy();
   });
 
+  it('marks single choices with radios in the Material design', async () => {
+    await render(<SelectList options={tags} value="react" design="material" />);
+    expect(screen.getAllByRole('radio')).toHaveLength(3);
+    expect(screen.getByRole('radio', { name: 'React' }).props.accessibilityState).toMatchObject({ checked: true });
+    expect(screen.getByRole('radio', { name: 'Expo' }).props.accessibilityState).toMatchObject({ checked: false });
+  });
+
   it('selects one option', async () => {
     const onChange = jest.fn();
     await render(<SelectList options={countries} value="IL" onChange={onChange} />);

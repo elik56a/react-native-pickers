@@ -2,10 +2,12 @@ import type React from 'react';
 import type { PlatformOSType, TextStyle } from 'react-native';
 
 import type { DeepPartial, ValueOf } from '../core.types';
-import type { COLOR_SCHEME } from './theme.constants';
+import type { COLOR_SCHEME, DESIGN } from './theme.constants';
 
 export interface PickerTheme {
   dark: boolean;
+  /** The look pickers follow: 'ios', 'material' or 'web' */
+  design: Design;
   colors: {
     /** Picker surface background */
     background: string;
@@ -42,6 +44,9 @@ export interface PickerTheme {
 }
 
 export type ColorScheme = ValueOf<typeof COLOR_SCHEME>;
+/** A design, or 'auto' for the one that matches the platform */
+export type DesignPreference = ValueOf<typeof DESIGN>;
+export type Design = Exclude<DesignPreference, typeof DESIGN.auto>;
 export type TextSize = keyof PickerTheme['typography']['sizes'];
 export type TextWeight = keyof PickerTheme['typography']['weights'];
 
@@ -55,4 +60,6 @@ export interface PickersProviderProps {
   darkTheme?: DeepPartial<PickerTheme>;
   /** Pickers behave as on this platform: sheets or dropdowns, insets, dragging. For previewing iOS or Android in a browser. Default: `Platform.OS` */
   platform?: PlatformOSType;
+  /** The look pickers follow. 'auto' matches the platform: 'ios' on iOS, 'web' on the web, 'material' elsewhere. Default: 'auto' */
+  design?: DesignPreference;
 }

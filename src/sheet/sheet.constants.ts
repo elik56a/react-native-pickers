@@ -1,7 +1,8 @@
 import { Platform, type PlatformOSType, StatusBar } from 'react-native';
 
 import { PLATFORM } from '../core/core.constants';
-import type { PickerFieldBaseProps } from './sheet.types';
+import type { Design } from '../core/theme/theme.types';
+import type { PickerFieldBaseProps, SheetDesign } from './sheet.types';
 
 export const SHEET_PRESENTATION = {
   auto: 'auto',
@@ -21,7 +22,23 @@ export const SHEET_SNAP = {
   close: 'close',
 } as const;
 
-export const DEFAULT_CONFIRM_LABEL = 'Done';
+export const SHEET_ACTIONS = {
+  header: 'header',
+  footer: 'footer',
+} as const;
+
+export const TITLE_ALIGN = {
+  center: 'center',
+  start: 'start',
+} as const;
+
+/** iOS puts Cancel / Done beside a centered title; Material and the web put the title first and Cancel / OK at the bottom. */
+export const SHEET_DESIGN: Record<Design, SheetDesign> = {
+  ios: { actions: SHEET_ACTIONS.header, titleAlign: TITLE_ALIGN.center, confirmLabel: 'Done' },
+  material: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'OK' },
+  web: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'Done' },
+};
+
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;
 /** Room under a bottom sheet for the iOS home indicator, and a smaller margin elsewhere. */

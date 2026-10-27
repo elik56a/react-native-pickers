@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet } from '../sheet';
 import { FieldLabel } from '../sheet/components/FieldLabel';
 import { Dropdown } from '../sheet/Dropdown';
@@ -31,13 +32,15 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     onClose: _onClose,
     style,
     styles: slots,
-    theme: themeOverride,
+    theme: themeProp,
+    design,
     isEqual = Object.is,
     multiple: _multiple,
     value: _value,
     onChange: _onChange,
     ...listProps
   } = props;
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const picker = useSelectPicker(props, isEqual);
   const list = (

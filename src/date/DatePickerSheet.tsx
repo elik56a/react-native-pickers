@@ -2,6 +2,7 @@ import { Calendar } from '../calendar/Calendar';
 import { CALENDAR_MODE } from '../calendar/calendar.constants';
 import type { CalendarSelectionProps } from '../calendar/calendar.types';
 import { PICKER_DISPLAY } from '../core/core.constants';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { DateWheelPicker } from './DateWheelPicker';
@@ -18,7 +19,8 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
     showCancel,
     presentation,
     sheetProps,
-    theme,
+    theme: themeProp,
+    design,
     display: displayProp = PICKER_DISPLAY.calendar,
     wheelProps,
     confirmOnSelect,
@@ -27,6 +29,7 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
     onConfirm,
     ...calendarProps
   } = props;
+  const theme = useDesignOverride(themeProp, design);
   const display = getSheetDisplay(mode, displayProp);
   // The sheet holds whichever value shape the mode uses; `mode` ties value, draft and onConfirm together.
   const confirmDraft = onConfirm as (draft: DateDraft) => void;

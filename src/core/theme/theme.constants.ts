@@ -1,4 +1,5 @@
-import type { PickerTheme } from './theme.types';
+import type { DeepPartial } from '../core.types';
+import type { Design, PickerTheme } from './theme.types';
 
 export const COLOR_SCHEME = {
   auto: 'auto',
@@ -6,7 +7,15 @@ export const COLOR_SCHEME = {
   dark: 'dark',
 } as const;
 
+export const DESIGN = {
+  auto: 'auto',
+  ios: 'ios',
+  material: 'material',
+  web: 'web',
+} as const;
+
 const SHARED_TOKENS: Omit<PickerTheme, 'dark' | 'colors'> = {
+  design: DESIGN.ios,
   radius: { sm: 8, md: 12, lg: 16, full: 999, sheet: 24 },
   spacing: { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 },
   typography: {
@@ -58,4 +67,11 @@ export const darkTheme: PickerTheme = {
     ripple: 'rgba(255,255,255,0.2)',
   },
   ...SHARED_TOKENS,
+};
+
+/** What each design changes on top of the light or dark theme. iOS is the base look. */
+export const DESIGN_TOKENS: Record<Design, DeepPartial<PickerTheme>> = {
+  ios: { design: DESIGN.ios },
+  material: { design: DESIGN.material, radius: { sm: 8, md: 8, lg: 16, sheet: 28 } },
+  web: { design: DESIGN.web, radius: { sm: 6, md: 8, lg: 12, sheet: 12 } },
 };

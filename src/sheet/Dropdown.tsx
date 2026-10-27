@@ -2,6 +2,7 @@ import { Animated, Modal, Pressable, StyleSheet, useWindowDimensions } from 'rea
 
 import { usePickerTheme } from '../core';
 import { usePresence } from '../core/hooks/usePresence';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { DROPDOWN_MAX_HEIGHT } from './sheet.constants';
 import { styles } from './sheet.styles';
 import type { DropdownProps } from './sheet.types';
@@ -16,9 +17,11 @@ export const Dropdown = ({
   overlay,
   maxHeight = DROPDOWN_MAX_HEIGHT,
   minWidth,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   testID,
 }: DropdownProps) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const windowSize = useWindowDimensions();
   const { mounted, progress } = usePresence({ visible, duration: theme.animation.duration });
