@@ -3,7 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
-import type { ARROW_DIRECTION, CALENDAR_MODE, CALENDAR_VIEW, WEEKDAY_FORMAT } from './calendar.constants';
+import type { ARROW_DIRECTION, CALENDAR_MODE, CALENDAR_VIEW, DAY_SELECTION, TODAY_MARK, WEEKDAY_FORMAT } from './calendar.constants';
 
 export interface DateRange {
   start: Date | null;
@@ -49,6 +49,8 @@ export interface DayState {
   rangeStart: boolean;
   rangeEnd: boolean;
   inRange: boolean;
+  /** The calendar picks ranges, so a chosen day is a range end, even the first tap of a range not finished yet. */
+  ranged: boolean;
   today: boolean;
   disabled: boolean;
   outside: boolean;
@@ -83,6 +85,7 @@ export interface CalendarBaseProps extends ThemableProps {
   enableSwipe?: boolean;
   /** Tap the title to jump by month / year. Default: true */
   enableQuickJump?: boolean;
+  /** Default: from the design: 'short' on iOS and the web, 'narrow' (S M T) in Material */
   weekdayFormat?: ValueOf<typeof WEEKDAY_FORMAT>;
   showWeekdays?: boolean;
   /** Override the title text */
@@ -203,4 +206,15 @@ export interface QuickGridProps {
   onSelect: (value: number) => void;
   theme: PickerTheme;
   slots?: SlotStyles<CalendarSlot>;
+}
+
+export interface CalendarDesign {
+  /** The chosen day filled with the primary colour, or tinted with its number in the primary colour */
+  selection: ValueOf<typeof DAY_SELECTION>;
+  today: ValueOf<typeof TODAY_MARK>;
+  /** Rounded squares rather than circles */
+  squareDays: boolean;
+  weekdayFormat: ValueOf<typeof WEEKDAY_FORMAT>;
+  uppercaseWeekdays: boolean;
+  arrowColor: keyof PickerTheme['colors'];
 }

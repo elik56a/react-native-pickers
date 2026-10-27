@@ -1,4 +1,5 @@
-import type { ArrowDirection, CalendarView, DateRange } from './calendar.types';
+import type { Design } from '../core/theme/theme.types';
+import type { ArrowDirection, CalendarDesign, CalendarView, DateRange } from './calendar.types';
 
 export const DAY_MS = 86_400_000;
 
@@ -28,6 +29,48 @@ export const WEEKDAY_FORMAT = {
   short: 'short',
   narrow: 'narrow',
 } as const;
+
+export const DAY_SELECTION = {
+  fill: 'fill',
+  tint: 'tint',
+} as const;
+
+export const TODAY_MARK = {
+  ring: 'ring',
+  text: 'text',
+  surface: 'surface',
+} as const;
+
+/**
+ * iOS tints the chosen day and colours today's number; Material fills a circle and rings today; the web fills a rounded
+ * square and shades today. Range ends are filled in every design, so a tint never sits on the range band.
+ */
+export const CALENDAR_DESIGN: Record<Design, CalendarDesign> = {
+  ios: {
+    selection: DAY_SELECTION.tint,
+    today: TODAY_MARK.text,
+    squareDays: false,
+    weekdayFormat: WEEKDAY_FORMAT.short,
+    uppercaseWeekdays: true,
+    arrowColor: 'primary',
+  },
+  material: {
+    selection: DAY_SELECTION.fill,
+    today: TODAY_MARK.ring,
+    squareDays: false,
+    weekdayFormat: WEEKDAY_FORMAT.narrow,
+    uppercaseWeekdays: false,
+    arrowColor: 'textSecondary',
+  },
+  web: {
+    selection: DAY_SELECTION.fill,
+    today: TODAY_MARK.surface,
+    squareDays: true,
+    weekdayFormat: WEEKDAY_FORMAT.short,
+    uppercaseWeekdays: false,
+    arrowColor: 'textSecondary',
+  },
+};
 
 export const DEFAULT_DAY_HEIGHT = 44;
 /** The day circle never grows past this, however tall the cell. */

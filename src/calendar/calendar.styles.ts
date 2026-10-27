@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   week: { flexDirection: 'row' },
   weekdays: { marginBottom: 4 },
   weekdayText: { textAlign: 'center' },
+  uppercase: { textTransform: 'uppercase' },
   cell: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   dayInner: { alignItems: 'center', justifyContent: 'center' },
   todayRing: { borderWidth: 1.5 },
