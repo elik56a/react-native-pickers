@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Animated, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
 import { CALENDAR_VIEW, DEFAULT_DAY_HEIGHT, WEEKDAY_FORMAT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
@@ -45,9 +46,11 @@ export const Calendar = (props: CalendarProps) => {
     dayHeight = DEFAULT_DAY_HEIGHT,
     style,
     styles: slots,
-    theme: themeOverride,
+    theme: themeProp,
+    design,
     testID,
   } = props;
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const firstDayOfWeek = props.firstDayOfWeek ?? getFirstDayOfWeek(locale);
   const today = useMemo(() => new Date(), []);

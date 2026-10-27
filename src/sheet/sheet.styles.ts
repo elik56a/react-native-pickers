@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   headerSide: { flex: 1, flexDirection: 'row', alignItems: 'center' },
   headerRight: { justifyContent: 'flex-end' },
   headerCenter: { flex: 2, alignItems: 'center' },
+  headerStart: { alignItems: 'flex-start' },
   flex: { flex: 1 },
   shrink: { flexShrink: 1 },
   /** Padded for a comfortable hover and ripple area; the negative margin keeps the label lined up with the edge. */
@@ -21,11 +22,8 @@ export const styles = StyleSheet.create({
   dropdownOverlay: { position: 'absolute' },
   dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
   dropdownScroll: { flexGrow: 0, flexShrink: 1 },
+  actions: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 24 },
   dropdownFooter: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    gap: 24,
     paddingTop: 8,
     paddingBottom: 2,
     borderTopWidth: StyleSheet.hairlineWidth,

@@ -12,7 +12,7 @@ import type {
 } from 'react-native';
 
 import type { PICKER_DISPLAY } from './core.constants';
-import type { PickerTheme } from './theme/theme.types';
+import type { Design, PickerTheme } from './theme/theme.types';
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
@@ -35,6 +35,8 @@ export type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle
 export interface ThemableProps {
   /** Component-level theme override, merged on top of the provider theme */
   theme?: DeepPartial<PickerTheme>;
+  /** Draw this design instead of the provider's or the platform's: 'ios', 'material' or 'web' */
+  design?: Design;
 }
 
 export interface SearchInputProps {

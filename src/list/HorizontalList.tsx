@@ -1,6 +1,7 @@
 import { Animated, ScrollView } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { ListItem } from './components/ListItem';
 import { useHorizontalList } from './hooks/useHorizontalList';
 import { useSegmentThumb } from './hooks/useSegmentThumb';
@@ -20,9 +21,11 @@ export const HorizontalList = <T,>({
   accessibilityLabel,
   style,
   styles: slots,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   testID,
 }: HorizontalListProps<T>) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const list = useHorizontalList(onChange, theme.spacing.lg);
   const selectedIndex = findItemIndex(items, value, isEqual);

@@ -5,7 +5,7 @@ import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
 import type { ChevronInfo, PickerFieldSlot, SheetChromeProps } from '../sheet';
 import type { FieldTriggerProps } from '../sheet/sheet.types';
-import type { SELECT_PRESENTATION, SELECT_ROW_TYPE } from './select.constants';
+import type { SELECT_PRESENTATION, SELECT_ROW_TYPE, SINGLE_INDICATOR } from './select.constants';
 
 export interface SelectOption<T> {
   label: string;
@@ -165,9 +165,20 @@ export interface LoadingStateProps {
   slots?: SlotStyles<SelectSlot>;
 }
 
+export interface SelectDesign {
+  singleIndicator: ValueOf<typeof SINGLE_INDICATOR>;
+  /** Rows as rounded blocks inset from the edges, or edge to edge */
+  insetRows: boolean;
+  /** Tint the chosen rows, on top of their check */
+  tintSelected: boolean;
+  rowHeight: number;
+  checkbox: { size: number; radius: number; offColor: keyof PickerTheme['colors'] };
+}
+
 export interface CheckProps {
   selected: boolean;
   multiple: boolean;
+  radio: boolean;
   theme: PickerTheme;
   style?: StyleProp<TextStyle>;
 }

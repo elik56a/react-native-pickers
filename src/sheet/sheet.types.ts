@@ -4,7 +4,7 @@ import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEven
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DistributiveOmit, ValueOf } from '../core/core.types';
-import type { FIELD_PRESENTATION, SHEET_PRESENTATION, SHEET_SNAP } from './sheet.constants';
+import type { FIELD_PRESENTATION, SHEET_ACTIONS, SHEET_PRESENTATION, SHEET_SNAP, TITLE_ALIGN } from './sheet.constants';
 
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
 export type SheetPresentation = ValueOf<typeof SHEET_PRESENTATION>;
@@ -99,6 +99,13 @@ export interface SheetButtonProps {
 
 /** Where a drag or a wheel gesture leaves the sheet. */
 export type SheetSnap = ValueOf<typeof SHEET_SNAP>;
+
+export interface SheetDesign {
+  /** Where Cancel and Done go: beside the title, or in a row at the bottom */
+  actions: ValueOf<typeof SHEET_ACTIONS>;
+  titleAlign: ValueOf<typeof TITLE_ALIGN>;
+  confirmLabel: string;
+}
 
 export interface SheetDragFrame {
   height: number;

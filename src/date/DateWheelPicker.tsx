@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { useControllableState } from '../core/hooks/useControllableState';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { clampDate } from '../core/utils/date.utils';
 import { MultiWheelPicker } from '../wheel';
 import { MONTH_FORMAT } from './date.constants';
@@ -24,9 +25,11 @@ export const DateWheelPicker = ({
   variant,
   style,
   styles,
-  theme,
+  theme: themeProp,
+  design,
   testID,
 }: DateWheelPickerProps) => {
+  const theme = useDesignOverride(themeProp, design);
   const [date, commit] = useControllableState(value, () => clampDate(defaultValue ?? new Date(), minDate, maxDate), onChange);
 
   const columns = useMemo(() => {

@@ -1,4 +1,5 @@
 import { PICKER_DISPLAY } from '../core/core.constants';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet, useDraft } from '../sheet';
 import { SheetContent } from '../sheet/SheetContent';
 import { snapTime } from '../time/time.utils';
@@ -14,11 +15,13 @@ export const DateTimePickerSheet = ({
   showCancel,
   presentation,
   sheetProps,
-  theme,
+  theme: themeProp,
+  design,
   value,
   onConfirm,
   ...rest
 }: DateTimePickerSheetProps) => {
+  const theme = useDesignOverride(themeProp, design);
   const [draft, setDraft] = useDraft(value ?? new Date(), visible);
   return (
     <PickerSheet
