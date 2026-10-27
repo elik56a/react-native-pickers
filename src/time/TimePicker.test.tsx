@@ -98,6 +98,22 @@ describe('TimePicker', () => {
       expect(hhmm(onChange.mock.calls[1][0])).toBe('9:15');
     });
 
+    it('types the time instead, after switching to the keyboard, and goes back to the dial', async () => {
+      const onChange = jest.fn();
+      await render(<TimePicker value={at(9, 0)} onChange={onChange} format="24h" design="material" testID="time" />);
+      await fireEvent.press(screen.getByLabelText('Type the time'));
+      expect(screen.queryByTestId('time-dial')).toBeNull();
+      await fireEvent.changeText(screen.getByTestId('time-hour'), '25');
+      expect(onChange).not.toHaveBeenCalled();
+      expect(screen.getByTestId('time-hour').props.value).toBe('25');
+      await fireEvent.changeText(screen.getByTestId('time-hour'), '14');
+      expect(hhmm(onChange.mock.calls[0][0])).toBe('14:00');
+      await fireEvent.changeText(screen.getByTestId('time-minute'), '45');
+      expect(hhmm(onChange.mock.calls[1][0])).toBe('9:45');
+      await fireEvent.press(screen.getByLabelText('Pick the time on the dial'));
+      expect(screen.getByTestId('time-dial')).toBeTruthy();
+    });
+
     it('falls back to wheels when seconds show', async () => {
       await render(<TimePicker value={at(9, 0)} design="material" showSeconds testID="time" />);
       expect(screen.queryByTestId('time-dial')).toBeNull();

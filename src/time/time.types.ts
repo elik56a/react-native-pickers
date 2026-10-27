@@ -123,6 +123,10 @@ export interface ClockDialProps {
 
 export type ClockDialState = ReturnType<typeof useClockDial>;
 
+export interface ClockFieldProps extends ClockPartProps {
+  field: ClockMode;
+}
+
 export interface ClockPartProps {
   dial: ClockDialState;
   theme: PickerTheme;

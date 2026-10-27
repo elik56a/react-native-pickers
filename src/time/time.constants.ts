@@ -53,6 +53,9 @@ export const DEGREES_PER_MINUTE = 6;
 export const CLOCK_FIELD = { width: 88, height: 72, fontSize: 44 } as const;
 export const CLOCK_PERIOD_WIDTH = 52;
 export const CLOCK_MODE_LABEL = { hour: 'Hour', minute: 'Minute' } as const;
+export const ENTRY_TOGGLE_LABEL = { toKeyboard: 'Type the time', toDial: 'Pick the time on the dial' } as const;
+export const ENTRY_ICON_SIZE = 22;
+export const ENTRY_TOGGLE_SIZE = 40;
 
 /** A list of times steps by `minuteInterval`, or by this when it's 1. */
 export const DEFAULT_LIST_STEP_MINUTES = 15;

@@ -306,3 +306,24 @@ export const getDialNumbers = (params: {
   const outer = steps(12).map((slot) => ring(slot, false));
   return is12 ? outer : [...outer, ...steps(12).map((slot) => ring(slot, true))];
 };
+
+/** `to`, moved by whole turns to be as close as it can to `from`, so a hand turns the short way round (350° → 10° is +20°). */
+export const getNearestAngle = (from: number, to: number) => from + ((((to - from) % 360) + 540) % 360) - 180;
+
+/**
+ * The time a typed hour or minute sets, or null while it isn't one yet. 12h hours are 1–12 in the current half of the day;
+ * minutes snap down to the interval, as the dial shows them.
+ */
+export const parseTypedTime = (
+  mode: ClockMode,
+  text: string,
+  is12: boolean,
+  isPM: boolean,
+  minuteInterval: number
+): Partial<TimeParts> | null => {
+  if (!/^\d{1,2}$/.test(text)) return null;
+  const n = Number(text);
+  if (mode === CLOCK_MODE.minute) return n < 60 ? { minutes: Math.floor(n / minuteInterval) * minuteInterval } : null;
+  if (is12) return n >= 1 && n <= 12 ? { hours: (n % 12) + (isPM ? 12 : 0) } : null;
+  return n < 24 ? { hours: n } : null;
+};
