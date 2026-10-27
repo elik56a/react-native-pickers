@@ -3,16 +3,14 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import clsx from 'clsx';
 
 import { revealDelay } from '../home.utils';
-import { usePlayground } from '../playground/hooks/usePlayground';
 import { CopyInstall } from './CopyInstall';
 import styles from './Hero.module.css';
 import { HeroChips } from './HeroChips';
-import { LiveDevice } from './LiveDevice';
+import { HeroDevice } from './HeroDevice';
 import { Stats } from './Stats';
 
 export const Hero = () => {
   const { version } = useDocusaurusContext().siteConfig.customFields as { version: string };
-  const demo = usePlayground();
   return (
     <header className={styles.hero}>
       <div className={styles.aurora} aria-hidden>
@@ -51,7 +49,7 @@ export const Hero = () => {
         </div>
         <div className={styles.stageWrap}>
           <HeroChips />
-          <LiveDevice demo={demo} />
+          <HeroDevice />
         </div>
       </div>
     </header>

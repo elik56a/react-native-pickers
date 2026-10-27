@@ -6,9 +6,9 @@ import { DatePickerField, SelectPicker } from '@elik56a/react-native-pickers';
 import { PLATFORM } from '../../device/device.constants';
 import type { Platform } from '../../device/device.types';
 import type { TabOptions } from '../../playground/playground.types';
-import { CABINS, CITIES, DEFAULT_CITIES, MAX_CITIES, PHONE_STATUS_BAR, SELECT_LIST_HEIGHT } from '../demo.constants';
+import { CABINS, CITIES, DEFAULT_CITIES, MAX_CITIES, SELECT_LIST_HEIGHT } from '../demo.constants';
 import { styles } from '../demo.styles';
-import { startOfToday, stay } from '../demo.utils';
+import { deviceSheetProps, startOfToday, stay } from '../demo.utils';
 
 interface SelectDemoProps {
   options: TabOptions<'select'>;
@@ -33,13 +33,7 @@ export const SelectDemo = ({ options, platform, screenHeight }: SelectDemoProps)
   );
   const isWeb = platform === PLATFORM.web;
   const presentation = isWeb ? 'dropdown' : 'bottomSheet';
-  const sheet = {
-    sheetProps: {
-      bottomInset: platform === PLATFORM.ios ? 30 : 16,
-      draggable: true,
-      expandedHeight: screenHeight ? screenHeight - PHONE_STATUS_BAR : undefined,
-    },
-  };
+  const sheet = { sheetProps: deviceSheetProps(platform, screenHeight) };
   const shared = {
     label: 'Cities',
     options: cityOptions,

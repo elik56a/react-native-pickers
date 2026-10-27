@@ -13,3 +13,6 @@ export const PLATFORM_LABELS: Record<Platform, string> = { ios: 'iOS', android: 
 export const STATUS_BAR_TIME = '9:41';
 
 export const BROWSER_URL = 'localhost:8081';
+
+/** Matches the exit transition in device.module.css. */
+export const DEVICE_SWAP_OUT_MS = 160;

@@ -1,7 +1,10 @@
 import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
 import { toDateKey } from '@elik56a/react-native-pickers';
+import { PLATFORM } from '../device/device.constants';
+import type { Platform } from '../device/device.types';
 import type { DemoTab, PlaygroundOptions, TabOptions } from '../playground/playground.types';
-import { DATE_SUBTITLES, DAY_MS, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
+import { DATE_SUBTITLES, DAY_MS, PHONE_STATUS_BAR, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
+import type { Guests } from './demo.types';
 
 export const startOfToday = () => {
   const today = new Date();
@@ -18,15 +21,36 @@ export const stay = (from: number, to: number): DateRange => ({
 
 const isWeekendNight = (day: Date) => day.getDay() === 5 || day.getDay() === 6;
 
-/** Nightly prices that rise on weekends, so the marked dates look like a real booking calendar. */
+/** The price of the night `daysAhead` from today, higher on weekends, so the marked dates look like a real booking calendar. */
+export const nightlyPrice = (daysAhead: number) =>
+  (isWeekendNight(daysFromNow(daysAhead)) ? WEEKEND_PRICE : WEEKDAY_PRICE) + ((daysAhead * 7) % 30);
+
 export const buildPrices = (): Record<string, MarkedDate> =>
-  Object.fromEntries(
-    Array.from({ length: PRICE_DAYS }, (_, i) => {
-      const day = daysFromNow(i);
-      const base = isWeekendNight(day) ? WEEKEND_PRICE : WEEKDAY_PRICE;
-      return [toDateKey(day), { label: `$${base + ((i * 7) % 30)}` }];
-    })
-  );
+  Object.fromEntries(Array.from({ length: PRICE_DAYS }, (_, i) => [toDateKey(daysFromNow(i)), { label: `$${nightlyPrice(i)}` }]));
+
+const daysBetween = (from: Date, to: Date) => Math.round((+to - +from) / DAY_MS);
+
+export const stayNights = ({ start, end }: DateRange) => (start && end ? daysBetween(start, end) : 0);
+
+export const stayTotal = (range: DateRange) => {
+  const first = range.start ? daysBetween(startOfToday(), range.start) : 0;
+  return Array.from({ length: stayNights(range) }, (_, i) => nightlyPrice(first + i)).reduce((sum, price) => sum + price, 0);
+};
+
+const plural = (n: number, word: string, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
+
+export const adultsLabel = (n: number) => plural(n, 'adult');
+export const childrenLabel = (n: number) => plural(n, 'child', 'children');
+
+export const guestsLabel = ({ adults, children }: Guests) =>
+  children ? `${adultsLabel(adults)}, ${childrenLabel(children)}` : adultsLabel(adults);
+
+/** Sheets inside the mock phone stop under its status bar and clear its home indicator. */
+export const deviceSheetProps = (platform: Platform, screenHeight?: number) => ({
+  bottomInset: platform === PLATFORM.ios ? 30 : 16,
+  draggable: true,
+  expandedHeight: screenHeight ? screenHeight - PHONE_STATUS_BAR : undefined,
+});
 
 const SUBTITLES: { [T in DemoTab]: (o: TabOptions<T>) => string } = {
   date: (o) => `${DATE_SUBTITLES[o.mode]}${o.prices ? ' · nightly prices' : ''}`,
