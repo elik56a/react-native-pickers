@@ -114,9 +114,12 @@ Each platform gets its own design by default (`design="auto"`): iOS on iOS, Mate
 
 | | `ios` | `material` | `web` |
 |---|---|---|---|
+| Fields | label above, 48 tall | outlined, 56 tall; the label sits inside, then floats onto the border | label above, 40 tall, focus ring while open |
 | Sheet corners | 24 | 28 | 12 |
 | Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
 | Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+| Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
+| Date sheet | calendar | the picked date in large type above the calendar | calendar |
 
 Pick one design for every platform on the provider, or for one component with its `design` prop:
 

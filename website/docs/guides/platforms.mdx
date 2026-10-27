@@ -28,9 +28,12 @@ Pickers follow the design of the platform they run on: iOS on iOS, Material on A
 
 | | `ios` | `material` | `web` |
 | --- | --- | --- | --- |
+| Fields | label above, 48 tall | outlined, 56 tall; the label sits inside, then floats onto the border | label above, 40 tall, focus ring while open |
 | Sheet corners | 24 | 28 | 12 |
 | Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
 | Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+| Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
+| Date sheet | calendar | the picked date in large type above the calendar | calendar |
 
 Use one design on every platform with `design` on the provider, or set it on one component:
 
