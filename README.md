@@ -94,6 +94,7 @@ import { PickersProvider } from '@elik56a/react-native-pickers';
   colorScheme="auto" // 'auto' | 'light' | 'dark'
   theme={{ colors: { primary: '#FF5A5F' }, radius: { md: 8 }, typography: { fontFamily: 'Inter' } }}
   darkTheme={{ colors: { primary: '#FF8A8E', background: '#000' } }}
+  design="auto" // 'auto' | 'ios' | 'material' | 'web'
 >
   <App />
 </PickersProvider>
@@ -106,6 +107,25 @@ Any component also accepts `theme` for a local override. Available tokens:
 - `spacing`: xs, sm, md, lg, xl
 - `typography`: fontFamily, fontFamilyMedium, sizes, weights
 - `animation`: duration
+
+### Designs
+
+Each platform gets its own design by default (`design="auto"`): iOS on iOS, Material on Android, a web design on the web. A design changes shapes and layout, never your colors:
+
+| | `ios` | `material` | `web` |
+|---|---|---|---|
+| Sheet corners | 24 | 28 | 12 |
+| Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
+| Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+
+Pick one design for every platform on the provider, or for one component with its `design` prop:
+
+```tsx
+<PickersProvider design="ios">…</PickersProvider>   // the iOS look everywhere
+<SelectPicker design="material" … />                 // one component
+```
+
+Your `theme` overrides and explicit props such as `confirmLabel` always win over the design.
 
 ### Slot styles
 

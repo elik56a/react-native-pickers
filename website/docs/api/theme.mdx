@@ -1,6 +1,6 @@
 ---
 title: Theme API
-description: PickersProvider, usePickerTheme, createTheme, mergeTheme, lightTheme, darkTheme and textStyle — signatures and behaviour.
+description: PickersProvider, usePickerTheme, createTheme, mergeTheme, lightTheme, darkTheme, designs and textStyle — signatures and behaviour.
 ---
 
 # Theme API
@@ -15,6 +15,8 @@ function PickersProvider(props: {
   colorScheme?: 'auto' | 'light' | 'dark'; // default 'auto'
   theme?: DeepPartial<PickerTheme>;        // merged onto lightTheme (and onto darkTheme if `darkTheme` is omitted)
   darkTheme?: DeepPartial<PickerTheme>;    // merged onto darkTheme
+  platform?: PlatformOSType;               // default Platform.OS
+  design?: 'auto' | 'ios' | 'material' | 'web'; // default 'auto'
 }): JSX.Element;
 ```
 
@@ -26,7 +28,7 @@ Optional. Without a provider, components use `lightTheme` / `darkTheme` followin
 function usePickerTheme(override?: DeepPartial<PickerTheme>): PickerTheme;
 ```
 
-Returns the active theme: provider (or built-in) light/dark based on the colour scheme, with `override` merged on top. Use it in your own components to match the pickers.
+Returns the active theme: the design's tokens on the built-in light or dark theme, then the provider's overrides, then `override`. The design comes from `override.design`, the provider's `design`, or the platform. `theme.design` tells your own components which design to match.
 
 ## `createTheme`
 
@@ -53,6 +55,16 @@ const darkTheme: PickerTheme;
 
 The built-in themes. See [default values](../guides/theming#defaults).
 
+## Designs
+
+```ts
+const DESIGN: { auto: 'auto'; ios: 'ios'; material: 'material'; web: 'web' };
+const DESIGN_TOKENS: Record<Design, DeepPartial<PickerTheme>>; // what each design changes on the light or dark theme
+function resolveDesign(preference: DesignPreference, platform: PlatformOSType): Design;
+```
+
+`resolveDesign('auto', platform)` gives `'ios'` on iOS, `'web'` on the web and `'material'` everywhere else. See [designs](../guides/platforms#designs).
+
 ## `textStyle`
 
 ```ts
@@ -69,5 +81,7 @@ function textStyle(
 
 ```ts
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? (T[K] extends Function ? T[K] : DeepPartial<T[K]>) : T[K] };
-interface ThemableProps { theme?: DeepPartial<PickerTheme> }
+interface ThemableProps { theme?: DeepPartial<PickerTheme>; design?: Design }
+type DesignPreference = 'auto' | 'ios' | 'material' | 'web';
+type Design = 'ios' | 'material' | 'web';
 ```
