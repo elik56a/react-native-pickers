@@ -36,6 +36,7 @@ export default function App() {
 | `colorScheme` | `'auto' \| 'light' \| 'dark'` | `'auto'` | `'auto'` follows `useColorScheme()`. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `lightTheme`. **Also applied to dark mode when `darkTheme` is not given.** |
 | `darkTheme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `darkTheme`. |
+| `platform` | `'ios' \| 'android' \| 'web' \| …` | `Platform.OS` | Pickers behave as on this platform. See [previewing other platforms](./platforms#previewing-other-platforms). |
 | `children` | `ReactNode` | **required** | |
 
 :::caution Light overrides leak into dark mode

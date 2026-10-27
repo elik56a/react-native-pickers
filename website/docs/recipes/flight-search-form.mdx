@@ -1,0 +1,200 @@
+---
+title: Flight search form
+description: A real-world React Native form with airport search loaded from a server as you type, popular airports before typing, a segmented trip type and cabin, travel dates, travellers and validation.
+---
+
+# Flight search form
+
+A booking form like the ones on airline and travel sites. The airports come from a server: the list starts empty and asks for a city, airport or code, then searches as the user types, with a loader. Trip type and cabin are segmented controls, the dates switch between one date and a range with the trip type, and **Search flights** checks everything before it goes.
+
+**Try it:** open **From**: the list is empty and says *Type a city, airport or code*. Type `lon`: the loader shows *Finding airports…* while the fake server answers, then London's two airports appear. Type `xyz` and it says *No airport matches*.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  DatePickerField,
+  HorizontalList,
+  SelectPicker,
+  WheelPickerField,
+  formatDate,
+} from '@elik56a/react-native-pickers';
+import type { DateRange, SelectOption } from '@elik56a/react-native-pickers';
+
+type Airport = { code: string; city: string; name: string; flag: string };
+
+// Defined first: the option icons below use it while the module loads.
+const styles = StyleSheet.create({
+  form: { gap: 14 },
+  flag: { fontSize: 20 },
+  label: { fontSize: 13, fontWeight: '500', color: '#6E685E', marginBottom: 6 },
+  error: { marginTop: 4, fontSize: 12, color: '#C8460D' },
+  button: { paddingVertical: 14, borderRadius: 12, backgroundColor: '#C8460D', alignItems: 'center' },
+  buttonText: { color: '#FFFFFF', fontWeight: '600', fontSize: 16 },
+  summary: { textAlign: 'center', color: '#17150F' },
+});
+
+const AIRPORTS: Airport[] = [
+  { code: 'TLV', city: 'Tel Aviv', name: 'Ben Gurion', flag: '🇮🇱' },
+  { code: 'JFK', city: 'New York', name: 'John F. Kennedy', flag: '🇺🇸' },
+  { code: 'EWR', city: 'Newark', name: 'Newark Liberty', flag: '🇺🇸' },
+  { code: 'LHR', city: 'London', name: 'Heathrow', flag: '🇬🇧' },
+  { code: 'LGW', city: 'London', name: 'Gatwick', flag: '🇬🇧' },
+  { code: 'CDG', city: 'Paris', name: 'Charles de Gaulle', flag: '🇫🇷' },
+  { code: 'AMS', city: 'Amsterdam', name: 'Schiphol', flag: '🇳🇱' },
+  { code: 'FCO', city: 'Rome', name: 'Fiumicino', flag: '🇮🇹' },
+  { code: 'MAD', city: 'Madrid', name: 'Barajas', flag: '🇪🇸' },
+  { code: 'BER', city: 'Berlin', name: 'Brandenburg', flag: '🇩🇪' },
+  { code: 'DXB', city: 'Dubai', name: 'Dubai International', flag: '🇦🇪' },
+  { code: 'HND', city: 'Tokyo', name: 'Haneda', flag: '🇯🇵' },
+  { code: 'SFO', city: 'San Francisco', name: 'San Francisco International', flag: '🇺🇸' },
+];
+
+const toOption = (a: Airport): SelectOption<string> => ({
+  label: `${a.city} (${a.code})`,
+  value: a.code,
+  description: `${a.name} Airport`,
+  icon: <Text style={styles.flag}>{a.flag}</Text>,
+});
+
+// Stands in for GET /airports?q=…, which matches city, code and airport name
+const searchAirports = (query: string) =>
+  new Promise<SelectOption<string>[]>((resolve) => {
+    const q = query.trim().toLowerCase();
+    const matches = AIRPORTS.filter((a) => [a.city, a.code, a.name].some((s) => s.toLowerCase().includes(q)));
+    setTimeout(() => resolve(matches.map(toOption)), 900);
+  });
+
+const TRIPS = [
+  { label: 'Round trip', value: 'round' },
+  { label: 'One way', value: 'oneWay' },
+];
+const CABINS = [
+  { label: 'Economy', value: 'economy' },
+  { label: 'Premium', value: 'premium' },
+  { label: 'Business', value: 'business' },
+  { label: 'First', value: 'first' },
+];
+const TRAVELLERS = Array.from({ length: 9 }, (_, i) => ({
+  label: `${i + 1} traveller${i ? 's' : ''}`,
+  value: i + 1,
+}));
+
+const FieldError = ({ message }: { message: string | false }) =>
+  message ? <Text style={styles.error}>{message}</Text> : null;
+
+export default function FlightSearch() {
+  const [from, setFrom] = useState<string | null>(null);
+  const [to, setTo] = useState<string | null>(null);
+  const [trip, setTrip] = useState('round');
+  const [depart, setDepart] = useState<Date | null>(null);
+  const [dates, setDates] = useState<DateRange>({ start: null, end: null });
+  const [cabin, setCabin] = useState('economy');
+  const [travellers, setTravellers] = useState(1);
+  const [submitted, setSubmitted] = useState(false);
+  const [summary, setSummary] = useState('');
+
+  const errors = {
+    from: !from && 'Where from?',
+    to: !to ? 'Where to?' : to === from && 'Pick a different airport',
+    dates: trip === 'round' ? (!dates.start || !dates.end) && 'Pick both dates' : !depart && 'Pick a date',
+  };
+  const valid = !errors.from && !errors.to && !errors.dates;
+
+  const submit = () => {
+    setSubmitted(true);
+    if (!valid) return setSummary('');
+    const when =
+      trip === 'round' ? `${formatDate(dates.start!)} → ${formatDate(dates.end!)}` : formatDate(depart!);
+    setSummary(`${from} → ${to} · ${when} · ${travellers} × ${cabin}`);
+  };
+
+  return (
+    <View style={styles.form}>
+      <HorizontalList items={TRIPS} value={trip} onChange={setTrip} accessibilityLabel="Trip type" />
+
+      <View>
+        <SelectPicker
+          label="From"
+          placeholder="City or airport"
+          loadOptions={searchAirports}
+          value={from}
+          onChange={setFrom}
+          searchPrompt="Type a city, airport or code"
+          loadingText="Finding airports…"
+          emptyText="No airport matches"
+        />
+        <FieldError message={submitted && errors.from} />
+      </View>
+
+      <View>
+        <SelectPicker
+          label="To"
+          placeholder="City or airport"
+          loadOptions={searchAirports}
+          value={to}
+          onChange={setTo}
+          searchPrompt="Type a city, airport or code"
+          loadingText="Finding airports…"
+          emptyText="No airport matches"
+        />
+        <FieldError message={submitted && errors.to} />
+      </View>
+
+      <View>
+        {trip === 'round' ? (
+          <DatePickerField
+            label="Dates"
+            placeholder="Depart → Return"
+            mode="range"
+            value={dates}
+            onConfirm={setDates}
+            minDate={new Date()}
+          />
+        ) : (
+          <DatePickerField label="Date" placeholder="Depart" value={depart} onConfirm={setDepart} minDate={new Date()} />
+        )}
+        <FieldError message={submitted && errors.dates} />
+      </View>
+
+      <WheelPickerField label="Travellers" items={TRAVELLERS} value={travellers} onConfirm={setTravellers} />
+
+      <View>
+        <Text style={styles.label}>Cabin</Text>
+        <HorizontalList items={CABINS} value={cabin} onChange={setCabin} accessibilityLabel="Cabin" />
+      </View>
+
+      <Pressable onPress={submit} style={styles.button} accessibilityRole="button">
+        <Text style={styles.buttonText}>Search flights</Text>
+      </Pressable>
+      {summary ? <Text style={styles.summary}>✈️ {summary}</Text> : null}
+    </View>
+  );
+}
+```
+
+## How it's built
+
+- **Airports from a server.** `loadOptions={searchAirports}` does the searching: it waits for a pause in typing, shows `loadingText` from the keystroke until the airports arrive, and ignores answers to older queries.
+- **The right text at each step.** Before typing, the empty list shows `searchPrompt`; after a search with no results, `emptyText`. To list something before typing instead (popular or recent airports), pass them as `options`.
+- **Search by anything.** The server matches city, code and airport name, so `tlv`, `heathrow` and `new york` all work. The list shows what it returns without filtering again.
+- **The picked airport keeps its label** after a later search no longer returns it.
+- **Trip type** is a segmented [`HorizontalList`](../components/horizontal-list); it swaps the dates field between a range and a single date. **Cabin** is another, with four options that scroll if the screen is narrow.
+- **Validation** runs on submit and shows a message under each field, including **From** and **To** being the same airport.
+
+## With your API
+
+Replace the stand-in with a real request. `loadOptions` takes any function that returns a promise of options:
+
+```tsx
+const searchAirports = async (query: string) => {
+  const res = await fetch(`https://api.example.com/airports?q=${encodeURIComponent(query)}`);
+  if (!res.ok) throw new Error(`Airport search failed: ${res.status}`);
+  const airports: Airport[] = await res.json();
+  return airports.map(toOption);
+};
+```
+
+A rejected promise shows `emptyText`. Set `searchDebounce` (300 ms by default) higher for a slow or rate-limited API.
+
+In a form library, wire the fields the same way as in the [forms guide](../guides/forms): `value={field.value}` and `onChange={field.onChange}` on the `SelectPicker`, `onConfirm={field.onChange}` on the fields.

@@ -17,15 +17,25 @@
 }
 
 .preview {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 220px;
-  padding: 2rem 1.25rem;
+  padding: 3.75rem 1.25rem 2rem;
   background:
     var(--site-glow),
     radial-gradient(circle, var(--site-grid) 1px, transparent 1px) 0 0 / 18px 18px,
     var(--ifm-background-color);
+}
+
+/* How the example behaves, not its code: so it sits over the preview, not in the code toolbar. */
+.platforms {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  width: 210px;
+  max-width: calc(100% - 1.5rem);
 }
 
 /* Lay examples out like a React Native root view, so a <Text> stretches and its textAlign applies. */

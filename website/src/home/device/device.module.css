@@ -33,62 +33,8 @@
 }
 
 .platformTabs {
-  --tab-width: 5.5rem;
-  position: relative;
-  display: inline-flex;
-  gap: 2px;
-  padding: 4px;
-  border: 1px solid var(--site-border);
-  border-radius: 999px;
-  background: var(--site-surface);
-}
-
-.platformPill {
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 4px;
-  width: var(--tab-width);
-  border-radius: 999px;
-  background: var(--brand-ink);
-  transform: translateX(calc(var(--index) * (var(--tab-width) + 2px)));
-  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.5, 1);
-}
-
-:global([data-theme="dark"]) .platformPill {
-  background: var(--brand-signal);
-}
-
-.platformTab {
-  position: relative;
-  width: var(--tab-width);
-  padding: 0.45rem 0;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--ifm-color-emphasis-700);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.25s;
-}
-
-.platformTab:hover {
-  color: var(--ifm-font-color-base);
-}
-
-.platformTab[aria-selected="true"] {
-  color: #f5f2ec;
-}
-
-:global([data-theme="dark"]) .platformTab[aria-selected="true"] {
-  color: var(--brand-ink);
-}
-
-.platformTab:focus-visible {
-  outline: 2px solid var(--ifm-color-primary);
-  outline-offset: 2px;
+  width: 280px;
+  max-width: 100%;
 }
 
 .frame {
@@ -374,9 +320,7 @@
   }
 
   .device,
-  .frame,
-  .platformTab,
-  .platformPill {
+  .frame {
     transition: none;
   }
 }

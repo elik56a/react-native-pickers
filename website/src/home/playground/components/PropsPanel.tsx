@@ -1,10 +1,11 @@
 import Link from '@docusaurus/Link';
 
+import { Choices } from '../../../components/Choices';
 import { CONTROLS, TAB_COMPONENTS } from '../playground.constants';
 import styles from '../playground.module.css';
 import type { Control, ControlValue, Playground } from '../playground.types';
+import { controlValues, valueLabel } from '../playground.utils';
 import { AccentSwatches } from './AccentSwatches';
-import { Segmented } from './Segmented';
 import { Switch } from './Switch';
 
 const THEME_LABEL_ID = 'prop-theme';
@@ -31,7 +32,12 @@ export const PropsPanel = ({ playground, docsHref }: { playground: Playground; d
               {typeof value === 'boolean' ? (
                 <Switch on={value} labelId={labelId} onChange={(v) => setOption(tab, control.key, v)} />
               ) : (
-                <Segmented control={control} value={value} labelId={labelId} onChange={(v) => setOption(tab, control.key, v)} />
+                <Choices
+                  label={control.key}
+                  labels={controlValues(control).map((option) => valueLabel(control, option))}
+                  selected={controlValues(control).indexOf(value)}
+                  onChoose={(i) => setOption(tab, control.key, controlValues(control)[i])}
+                />
               )}
             </div>
           );

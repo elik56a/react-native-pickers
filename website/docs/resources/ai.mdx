@@ -24,10 +24,10 @@ Package: @elik56a/react-native-pickers   (npm i @elik56a/react-native-pickers)
 Pure JS, zero native code, no peer deps besides react >=18 and react-native >=0.72.
 Works in Expo Go, bare RN, React Native Web. All exports are named exports from the package root.
 Native apps: prefer subpaths so Metro skips unused pickers (root import bundles ~130 KB of emoji data):
-  /wheel /time /date /calendar /datetime /select /emoji /sheet /core   e.g. '@elik56a/react-native-pickers/date'
+  /wheel /time /date /calendar /datetime /select /list /emoji /sheet /core   e.g. '@elik56a/react-native-pickers/date'
   PickersProvider and theme/date utils live in /core. Subpaths need RN 0.79+ (Metro package exports).
 
-Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList are controlled-only.
+Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList/HorizontalList are controlled-only.
 onChange fires on user changes only (not when value is set programmatically). Wheels fire onChange when they settle;
 onValueChanging fires on every row crossing (use for haptics).
 
@@ -47,6 +47,9 @@ SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,key
                    multiple → value T[], onChange(values, options), maxSelected, chips
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
 SelectList<T>      same list inline: options value onChange multiple listHeight
+                   server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
+                   or manual: onSearchChange(query) + loading + onEndReached; loadingText renderLoading(theme); no local filtering with either
+HorizontalList<T>  items: {label,value,disabled?,icon?}[]  value  onChange(value, item)  variant 'segmented'|'chips'  renderItem  (tap at the edge scrolls the next item into view)
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight
 Sheets (draft; commit on Done):
@@ -64,7 +67,7 @@ Fields (a SelectPicker-style field that opens the sheet and shows the confirmed 
                    styles = field slots (label trigger triggerText placeholder chevron clear) + the picker's slots
                    EmojiPickerField also takes value: string (the emoji shown). Sheet title defaults to label.
   PickerField      same field props, children: ({visible, onClose}) => <AnySheet .../>
-Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...}>; per-component `theme` prop.
+Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...} platform?='ios'|'android'|'web'>; per-component `theme` prop. `platform` makes pickers behave as on that OS (preview native in a browser).
   tokens: colors{background,surface,sheet,text,textSecondary,textDisabled,primary,onPrimary,primaryMuted,border,backdrop,indicator,handle}
           radius{sm,md,lg,full,sheet} spacing{xs..xl} typography{fontFamily,fontFamilyMedium,sizes,weights} animation{duration}
 Slots: every component takes `styles={{ slotName: style }}`.

@@ -1,0 +1,79 @@
+---
+title: Category filter chips
+description: React Native category filter chips that scroll sideways and reveal the next category on tap, filtering a list below, built with HorizontalList.
+---
+
+# Category filter chips
+
+A row of category chips above a menu, like a food or shop app. There are more categories than fit, so the row scrolls; tap the last visible chip and the next one slides into view, so people find the rest without guessing.
+
+```tsx live
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const CATEGORIES = [
+  { label: 'All', value: 'all', icon: <Text>🍽️</Text> },
+  { label: 'Breakfast', value: 'breakfast', icon: <Text>🥐</Text> },
+  { label: 'Salads', value: 'salads', icon: <Text>🥗</Text> },
+  { label: 'Pizza', value: 'pizza', icon: <Text>🍕</Text> },
+  { label: 'Burgers', value: 'burgers', icon: <Text>🍔</Text> },
+  { label: 'Sushi', value: 'sushi', icon: <Text>🍣</Text> },
+  { label: 'Desserts', value: 'desserts', icon: <Text>🍰</Text> },
+  { label: 'Drinks', value: 'drinks', icon: <Text>🥤</Text> },
+];
+
+const MENU = [
+  { name: 'Croissant', category: 'breakfast', price: 4 },
+  { name: 'Shakshuka', category: 'breakfast', price: 12 },
+  { name: 'Greek salad', category: 'salads', price: 11 },
+  { name: 'Margherita', category: 'pizza', price: 14 },
+  { name: 'Smash burger', category: 'burgers', price: 15 },
+  { name: 'Salmon roll', category: 'sushi', price: 13 },
+  { name: 'Cheesecake', category: 'desserts', price: 8 },
+  { name: 'Lemonade', category: 'drinks', price: 5 },
+];
+
+export default function Example() {
+  const [category, setCategory] = useState('all');
+  const dishes = category === 'all' ? MENU : MENU.filter((d) => d.category === category);
+  return (
+    <View style={styles.screen}>
+      <HorizontalList
+        variant="chips"
+        items={CATEGORIES}
+        value={category}
+        onChange={setCategory}
+        accessibilityLabel="Categories"
+      />
+      {dishes.map((dish) => (
+        <View key={dish.name} style={styles.row}>
+          <Text style={styles.name}>{dish.name}</Text>
+          <Text style={styles.price}>${dish.price}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { gap: 4 },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: '#E8E4DC',
+  },
+  name: { fontSize: 15, color: '#17150F' },
+  price: { fontSize: 15, color: '#6E685E' },
+});
+```
+
+## How it works
+
+- `variant="chips"` shows separate pills; leave it out for a segmented control (good for 2–5 options like a sort order).
+- Each item's `icon` sits before its label. For anything else, render the whole item with `renderItem`.
+- The list is controlled: keep the category in state and filter with it.
+- Tapping a chip whose neighbor is cut off scrolls that neighbor into view, plus a peek of the one after it.

@@ -1,8 +1,8 @@
+import { DEMO_TABS, TAB_LABELS } from '../playground/playground.constants';
 import type { DemoTab, TabOptions } from '../playground/playground.types';
 
 export const TAB_FADE_MS = 280;
 export const DAY_MS = 864e5;
-export const SEGMENTED_PADDING = 4;
 /** Keeps an expanded sheet below the mock status bar. */
 export const PHONE_STATUS_BAR = 52;
 export const PRICE_DAYS = 120;
@@ -48,4 +48,9 @@ export const DEFAULT_CITIES = ['Lisbon', 'Tokyo'];
 export const CABINS = ['Economy', 'Premium', 'Business', 'First'].map((c) => ({
   label: c,
   value: c,
+}));
+
+export const DEMO_TAB_ITEMS = DEMO_TABS.map((tab) => ({
+  label: TAB_LABELS[tab],
+  value: tab,
 }));

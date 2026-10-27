@@ -37,8 +37,8 @@ describe('buildSnippet', () => {
   });
 
   it('switches select state and data with the multiple and groups toggles', () => {
-    const single = buildSnippet('select', { multiple: false, searchable: false, groups: false });
-    expect(single).toContain('options={CITIES}\n  value={city}\n  onChange={setCity}\n  searchable={false}');
+    const single = buildSnippet('select', { multiple: false, searchable: false, groups: false, loading: true });
+    expect(single).toContain('options={CITIES}\n  value={city}\n  onChange={setCity}\n  searchable={false}\n  loading');
     expect(buildSnippet('select', DEFAULT_OPTIONS.select)).toContain(
       'options={CITIES_BY_REGION}\n  value={cities}\n  onChange={setCities}\n  multiple'
     );

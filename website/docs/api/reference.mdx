@@ -20,6 +20,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`DateTimePicker`](../components/date-time-picker) | Day + time wheels (`display="wheel"`) or calendar + time (`display="calendar"`) |
 | [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
 | [`SelectList<T>`](../components/select-list) | Inline searchable list |
+| [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
 | [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
 | [`BottomSheet`](../components/bottom-sheet) | Animated sheet |
 
@@ -114,7 +115,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | --- | --- | --- |
 | Sheets | `confirmLabel` / `cancelLabel` | `Done` / `Cancel` |
 | SelectPicker, fields | `placeholder` | `Select…` |
-| SelectList | `searchPlaceholder` / `emptyText` | `Search` / `No results` |
+| SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
 

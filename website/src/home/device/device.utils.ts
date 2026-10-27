@@ -1,7 +1,3 @@
-import type React from 'react';
-
-export const pillAt = (index: number) => ({ '--index': index }) as React.CSSProperties;
-
 /** Places a portal host exactly over the device screen, with the same rounded corners. */
 export const pinOver = (host: HTMLElement, frame: HTMLElement) => {
   const rect = frame.getBoundingClientRect();

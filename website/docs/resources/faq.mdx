@@ -59,6 +59,10 @@ Yes: `theme={{ typography: { fontFamily: 'Inter-Regular', fontFamilyMedium: 'Int
 
 `itemHeight` sets the row height, `visibleItems` the row count, and `styles.itemText` the font size. The wheel's height is `itemHeight × visibleItems`.
 
+## How do I load options from an API?
+
+Pass `loadOptions={(query) => api.search(query)}` to `SelectPicker` or `SelectList`. The list waits for a pause in typing, shows a loader until the results arrive, and ignores answers to older queries. For pagination or your own caching, use `onSearchChange` with `loading` and `onEndReached` instead. See [Search a server](../recipes/server-search).
+
 ## How do I use it in a ScrollView?
 
 Just place it there. Wheels and the emoji grid scroll independently and don't trigger the "VirtualizedLists should never be nested" warning. For `SelectList` inside a `ScrollView`, set `listHeight`.

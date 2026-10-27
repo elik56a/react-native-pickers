@@ -46,6 +46,7 @@ const SNIPPET_PROPS: { [T in DemoTab]: (o: TabOptions<T>) => (string | false)[] 
     o.multiple && 'multiple',
     // More than 8 options shows search on its own, so only turning it off needs the prop.
     !o.searchable && 'searchable={false}',
+    o.loading && 'loading',
   ],
   emoji: (o) => [
     'onSelect={setEmoji}',

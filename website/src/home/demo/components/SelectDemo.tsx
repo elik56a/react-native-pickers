@@ -44,6 +44,7 @@ export const SelectDemo = ({ options, platform, screenHeight }: SelectDemoProps)
     label: 'Cities',
     options: cityOptions,
     searchable: options.searchable,
+    loading: options.loading,
     listHeight: SELECT_LIST_HEIGHT,
     presentation,
     sheet,

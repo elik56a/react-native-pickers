@@ -1,0 +1,106 @@
+---
+title: React Native Horizontal List
+sidebar_label: HorizontalList
+description: React Native segmented control and horizontal chip list that scrolls sideways and reveals the next item when you tap one at the edge.
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+# HorizontalList
+
+`HorizontalList` is a row of choices that scrolls sideways: a segmented control by default, or a row of chips. When the user taps the item at the edge and more items are hidden past it, the list scrolls a little so the next item comes into view.
+
+```tsx
+import { HorizontalList } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const views = [
+  { label: 'Day', value: 'day' },
+  { label: 'Week', value: 'week' },
+  { label: 'Month', value: 'month' },
+];
+
+export default function Example() {
+  const [view, setView] = useState('week');
+  return <HorizontalList items={views} value={view} onChange={setView} accessibilityLabel="Calendar view" />;
+}
+```
+
+## Chips
+
+`variant="chips"` shows separate pills. With more items than fit, tap the last visible one: the list scrolls to show the next.
+
+```tsx live
+import { useState } from 'react';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const categories = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Desserts', 'Drinks', 'Snacks', 'Vegan', 'Gluten free'].map((c) => ({
+  label: c,
+  value: c,
+}));
+
+export default function Example() {
+  const [category, setCategory] = useState('All');
+  return <HorizontalList variant="chips" items={categories} value={category} onChange={setCategory} />;
+}
+```
+
+## Try the props
+
+<PropPlayground
+  name="HorizontalList"
+  component={HorizontalList}
+  props={{
+    items: ['Single', 'Range', 'Multiple', 'Ranges', 'Week', 'Month'].map((m) => ({ label: m, value: m })),
+  }}
+  value="Range"
+  code="items={modes} value={mode} onChange={setMode}"
+  controls={[{ prop: 'variant', options: ['segmented', 'chips'] }]}
+/>
+
+## Behaviour
+
+- **Controlled**: pass `value` and update it in `onChange`. Tapping the selected item calls `onChange` again.
+- In `segmented`, the thumb slides to the selected item; items share the track's width while they fit, and scroll when they don't.
+- Tapping an item whose neighbor is hidden scrolls that neighbor into view, plus a little of the one after it, so the user sees there's more.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` | `ReadonlyArray<HorizontalListItem<T>>` | **required** | `{ label, value, disabled?, icon? }` |
+| `value` | `T \| null` | — | Selected value. |
+| `onChange` | `(value: T, item) => void` | — | Called on tap. |
+| `variant` | `'segmented' \| 'chips'` | `'segmented'` | Track with a sliding thumb, or separate pills. |
+| `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
+| `renderItem` | `(info: { item, selected, disabled, theme }) => ReactNode` | — | Custom item content. |
+| `accessibilityLabel` | `string` | — | Names the list for screen readers. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<HorizontalListSlot>` | — | Slots below. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `testID` | `string` | — | Test ID; items get `{testID}-item-{index}`. |
+
+### Slots
+
+| Slot | Element |
+| --- | --- |
+| `container` | The scroll view (the track in `segmented`) |
+| `content` | The row inside it |
+| `item` / `selectedItem` | Each item / the selected one |
+| `itemLabel` / `selectedItemLabel` | Item label |
+| `thumb` | The sliding thumb (`segmented`) |
+
+## Accessibility
+
+The list is a `radiogroup` named by `accessibilityLabel`; items are `radio`s with `checked` and `disabled` states.
+
+## Related
+
+- [Category filter chips](../recipes/category-chips): chips filtering a menu
+- [Filters bottom sheet](../recipes/filters-sheet): a segmented sort order inside a sheet
+- [Flight search form](../recipes/flight-search-form): trip type and cabin in a booking form
