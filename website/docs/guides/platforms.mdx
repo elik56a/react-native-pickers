@@ -33,8 +33,10 @@ Pickers follow the design of the platform they run on: iOS on iOS, Material on A
 | Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
 | Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
 | Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
+| Calendar | chosen day tinted, today's number coloured, SUN MON | chosen day filled, today ringed, S M T | chosen day a filled square, today shaded, Sun Mon |
 | Date sheet | calendar | the picked date in large type above the calendar | calendar |
-| Time | wheels | a clock dial | a list of times |
+| Time | wheels | a clock dial | columns of hours and minutes to click |
+| Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
 | HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
 | Press | dims while held | ripple | dims while held |
 
@@ -49,6 +51,10 @@ Use one design on every platform with `design` on the provider, or set it on one
 ```
 
 `'auto'` (the default) picks iOS for `ios`, the web design for `web`, and Material for everything else. Your `theme` overrides and explicit props such as `confirmLabel` always win over the design, and a field passes its design to the sheet it opens.
+
+### Keeping the iOS look everywhere
+
+Before designs, every platform got the iOS look: wheels for times, one row of wheels for `DateTimePicker`, **Done** in the sheet header. To keep it, set `design="ios"` on the provider. To keep only part of it, set the prop that picks it: `display="wheel"` on `TimePicker` or `DateTimePicker`, or `timeDisplay="wheel"` for wheels next to `DateTimePicker`'s calendar.
 
 ## How it's built
 

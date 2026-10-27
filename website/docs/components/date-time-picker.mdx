@@ -5,20 +5,20 @@ description: "React Native date and time picker in one component: an iOS-style d
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DateTimePicker } from '@elik56a/react-native-pickers';
+import { DateTimePicker, DateTimePickerField } from '@elik56a/react-native-pickers';
 
 # DateTimePicker
 
-`DateTimePicker` is a React Native date and time picker: pick a day and a time in one control. It has two displays:
+`DateTimePicker` is a React Native date and time picker: pick a day and a time in one control. It has two displays, and each [design](../guides/platforms#designs) has its own default:
 
-- **`wheel`** (default): one row of wheels like the iOS date-and-time picker. The day wheel shows `Today`, `Tue, Oct 27`… next to the hour, minute and AM/PM wheels.
-- **`calendar`**: a month grid with the time wheels under it.
+- **`wheel`** (the iOS default): one row of wheels like the iOS date-and-time picker. The day wheel shows `Today`, `Tue, Oct 27`… next to the hour, minute and AM/PM wheels.
+- **`calendar`** (the Material and web default): a month grid and the time: hour and minute fields to type into under it in Material, wheels under it on iOS, and on the web columns to click beside it. `timePosition="below"` puts the time under the calendar instead, and `"beside"` puts it next to the calendar in any design when there's room for both. `timeDisplay` picks how the time is chosen in any design: `'wheel'`, `'dial'`, `'input'` or `'list'`.
 
 ```tsx
 import { DateTimePicker } from '@elik56a/react-native-pickers';
 ```
 
-```tsx live
+```tsx live wide
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { DateTimePicker } from '@elik56a/react-native-pickers';
@@ -39,12 +39,15 @@ export default function Example() {
 ## Try the props
 
 <PropPlayground
+  wide
   name="DateTimePicker"
   component={DateTimePicker}
   value={new Date(2026, 9, 26, 9, 41, 0)}
   code="value={date} onChange={setDate}"
   controls={[
-    { prop: 'display', options: ['wheel', 'calendar'] },
+    { prop: 'display', options: ['auto', 'wheel', 'calendar'], unset: 'auto' },
+    { prop: 'timePosition', options: ['auto', 'beside', 'below'], unset: 'auto' },
+    { prop: 'timeDisplay', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
     { prop: 'format', options: ['auto', '12h', '24h'] },
     { prop: 'minuteInterval', options: [1, 5, 15, 30] },
     { prop: 'showSeconds', options: [false, true] },
@@ -54,7 +57,7 @@ export default function Example() {
 
 ## Calendar display
 
-```tsx live
+```tsx live wide
 import { useState } from 'react';
 import { DateTimePicker } from '@elik56a/react-native-pickers';
 
@@ -77,7 +80,7 @@ Pass Calendar options (`markedDates`, `isDateDisabled`, `firstDayOfWeek`…) thr
 
 `minDate` and `maxDate` are **moments**, so their time counts too. The day wheel lists only the days between them. On the first day, times before `minDate` are disabled; on the last day, times after `maxDate` are disabled. A change that lands outside the range is pulled back to the nearest bound.
 
-```tsx live
+```tsx live wide
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { DateTimePicker, addDays } from '@elik56a/react-native-pickers';
@@ -124,13 +127,23 @@ It takes the same props as `DateTimePicker`, plus the [sheet props](./picker-she
 
 ## In a form field
 
-`DateTimePickerField` opens the same sheet from a field, and shows the confirmed moment (`Oct 26, 2026, 9:30 AM`):
+`DateTimePickerField` opens the same sheet from a field, and shows the confirmed moment (`Oct 26, 2026, 9:30 AM`). Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-```tsx
-import { DateTimePickerField } from '@elik56a/react-native-pickers';
-
-<DateTimePickerField label="Reminder" placeholder="Set a reminder" value={date} onConfirm={setDate} minDate={new Date()} />
-```
+<PropPlayground
+  name="DateTimePickerField"
+  component={DateTimePickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Reminder', placeholder: 'Set a reminder' }}
+  value={() => undefined}
+  code="label=&quot;Reminder&quot; placeholder=&quot;Set a reminder&quot; value={date} onConfirm={setDate}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'display', options: ['auto', 'wheel', 'calendar'], unset: 'auto' },
+    { prop: 'minuteInterval', options: [1, 5, 15, 30] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
 
 → [Picker fields](./picker-fields)
 
@@ -144,14 +157,16 @@ All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minute
 | `defaultValue` | `Date` | now | Initial value when uncontrolled. |
 | `onChange` | `(date: Date) => void` | — | Fires when a wheel settles or a day is tapped. Receives a **new** `Date`. |
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
-| `display` | `'wheel' \| 'calendar'` | `'wheel'` | One row of wheels, or a calendar with time wheels under it. |
+| `display` | `'wheel' \| 'calendar'` | `'wheel'` on iOS, `'calendar'` in Material and on the web | One row of wheels, or a calendar with the time. |
+| `timePosition` | `'beside' \| 'below'` | `'beside'` on the web, `'below'` in iOS and Material | Calendar display: the time beside the calendar or under it. Beside moves under the calendar when there is no room for both. |
+| `timeDisplay` | `'wheel' \| 'dial' \| 'input' \| 'list'` | wheels in iOS, `'input'` in Material, `'list'` on the web | Calendar display: how the time is picked. `'dial'` and `'input'` fall back to wheels with `showSeconds`. |
 | `minDate` | `Date` | — | Earliest selectable moment. |
 | `maxDate` | `Date` | — | Latest selectable moment. |
 | `locale` | `string` | device | BCP 47 locale for day labels, clock format and the calendar. |
 | `formatDay` | `(date: Date, locale?: string) => string` | `Today`, `Tue, Oct 27` | Day wheel labels (wheel display). |
 | `calendarProps` | `Partial<CalendarBaseProps>` | — | Passed to the [Calendar](./date-picker#props) (calendar display). |
 | `itemHeight` | `number` | `40` | Row height. |
-| `visibleItems` | `number` | `5` (wheel), `3` (calendar) | Visible rows. |
+| `visibleItems` | `number` | `5` (wheel); with the calendar `3` wheels or `5` web rows under it, `9` beside it | Visible rows. |
 | `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots) of the wheels. |

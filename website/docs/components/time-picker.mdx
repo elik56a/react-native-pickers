@@ -5,7 +5,7 @@ description: React Native time picker wheel with 12h/24h from the locale, minute
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { TimePicker } from '@elik56a/react-native-pickers';
+import { TimePicker, TimePickerField } from '@elik56a/react-native-pickers';
 
 # TimePicker
 
@@ -41,7 +41,7 @@ export default function Example() {
   value={new Date(2026, 9, 26, 9, 41, 0)}
   code="value={time} onChange={setTime}"
   controls={[
-    { prop: 'display', options: ['wheel', 'dial', 'list'] },
+    { prop: 'display', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
     { prop: 'format', options: ['auto', '12h', '24h'] },
     { prop: 'showSeconds', options: [false, true] },
     { prop: 'minuteInterval', options: [1, 5, 15, 30] },
@@ -161,13 +161,14 @@ Each [design](../guides/platforms#designs) has its own default:
 | --- | --- | --- |
 | `'wheel'` | iOS | Hour, minute and AM/PM wheels |
 | `'dial'` | Material | The time in large type above a clock dial. Tap or drag to the hour, lift, then the minutes; tap the hours or minutes above to switch. 24h dials have 1–12 outside and 00, 13–23 on an inner ring. The keyboard button under the dial switches to typing the hours and minutes |
-| `'list'` | web | A scrolling list every `minuteInterval` minutes (every 15 when it's 1), opened at the chosen time |
+| `'input'` | | Material's time input: the hour and minute fields to type into, without the dial. Compact, so `DateTimePicker` uses it under a Material calendar |
+| `'list'` | web | Hours, minutes (and seconds) and AM/PM side by side in a bordered panel, each a column of cells to click, the chosen one kept at the top |
 
 ```tsx
 <TimePicker value={time} onChange={setTime} display="dial" minuteInterval={5} />
 ```
 
-A dial has no seconds, so with `showSeconds` it shows wheels instead. Screen readers adjust the dial up and down by an hour, or by `minuteInterval`.
+A dial or time input has no seconds, so with `showSeconds` they show wheels instead. Screen readers adjust the dial up and down by an hour, or by `minuteInterval`.
 
 ## Looping
 
@@ -193,13 +194,23 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 
 ## In a form field
 
-`TimePickerField` is a field that opens the sheet and shows the confirmed time (`9:30 AM` or `09:30`, from `format` and `locale`):
+`TimePickerField` is a field that opens the sheet and shows the confirmed time (`9:30 AM` or `09:30`, from `format` and `locale`). Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-```tsx
-import { TimePickerField } from '@elik56a/react-native-pickers';
-
-<TimePickerField label="Alarm" placeholder="Set a time" value={time} onConfirm={setTime} minuteInterval={5} />
-```
+<PropPlayground
+  name="TimePickerField"
+  component={TimePickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Alarm', placeholder: 'Set a time' }}
+  value={() => undefined}
+  code="label=&quot;Alarm&quot; placeholder=&quot;Set a time&quot; value={time} onConfirm={setTime}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'display', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
+    { prop: 'format', options: ['auto', '12h', '24h'] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
 
 → [Picker fields](./picker-fields)
 
@@ -213,7 +224,7 @@ import { TimePickerField } from '@elik56a/react-native-pickers';
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` | Clock format; `'auto'` reads it from `locale`. |
 | `locale` | `string` | device | BCP 47 locale, e.g. `'en-US'`, `'he-IL'`. |
-| `display` | `'wheel' \| 'dial' \| 'list'` | from the design | Wheels (iOS), a clock dial (Material) or a list of times (web). |
+| `display` | `'wheel' \| 'dial' \| 'input' \| 'list'` | from the design | Wheels (iOS), a clock dial (Material), typed fields, or columns to click (web). |
 | `minuteInterval` | `number` | `1` | Minute step: 1, 5, 10, 15, 30… |
 | `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
 | `secondInterval` | `number` | `1` | Second step. |

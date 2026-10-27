@@ -5,7 +5,7 @@ description: iOS-style 3D wheel picker for React Native with infinite loop, disa
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { WheelPicker } from '@elik56a/react-native-pickers';
+import { WheelPicker, WheelPickerField } from '@elik56a/react-native-pickers';
 
 # WheelPicker
 
@@ -15,7 +15,7 @@ import { WheelPicker } from '@elik56a/react-native-pickers';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 ```
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
@@ -34,6 +34,7 @@ export default function Example() {
 ## Try the props
 
 <PropPlayground
+  platforms={false}
   name="WheelPicker"
   component={WheelPicker}
   props={{ items: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] }}
@@ -65,7 +66,7 @@ type WheelItem<T> = {
 items: ReadonlyArray<WheelItem<T> | T>   // T must be string | number for the shorthand
 ```
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { WheelPicker } from '@elik56a/react-native-pickers';
@@ -107,7 +108,7 @@ Selection is matched with `Object.is` by default. If your values are objects tha
 
 `loop` makes the wheel wrap around: scroll past the last item to reach the first. Internally the list is repeated and silently re-centred when it settles, so the user can never hit an end.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
@@ -128,7 +129,7 @@ export default function Example() {
 
 Disabled rows are shown dimmed and are never selected. If the user lets go on one, the wheel springs to the nearest enabled row. If the initial `value` points at a disabled row, the nearest enabled row is shown.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
@@ -156,7 +157,7 @@ export default function Example() {
 
 `variant="flat"` turns off the cylinder; rows just fade and scale slightly. For the 3D wheel, `rotation` sets how sharply it curves (degrees between rows) and `fadeTo` sets the opacity of the outermost rows.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { View } from 'react-native';
 import { WheelPicker } from '@elik56a/react-native-pickers';
@@ -199,7 +200,7 @@ export default function Example() {
 
 The wheel is exactly `itemHeight × visibleItems` tall. `visibleItems` should be odd so one row sits in the middle; an even number is rounded up.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
@@ -228,7 +229,7 @@ With `keyboardInput` (on by default), tapping the **selected** row opens the key
 
 Tap the selected row below, then type:
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { WheelPicker } from '@elik56a/react-native-pickers';
 
@@ -246,7 +247,7 @@ Set `keyboardInput={false}` to disable it. Tapping a non-selected row always scr
 
 `renderItem` replaces the row content. You get the item, its index, whether it's selected and the active theme.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { View, Text } from 'react-native';
 import { WheelPicker } from '@elik56a/react-native-pickers';
@@ -305,7 +306,7 @@ export default function Example() {
 
 `renderIndicator` replaces the selection band (the grey pill behind the selected row), and `showIndicator={false}` removes it:
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { View } from 'react-native';
 import { WheelPicker } from '@elik56a/react-native-pickers';
@@ -347,27 +348,22 @@ import * as Haptics from 'expo-haptics';
 
 ## In a form field
 
-`WheelPickerField` opens the wheel in a sheet from a field, and shows the confirmed item's `label`:
+`WheelPickerField` opens the wheel in a sheet from a field, and shows the confirmed item's `label`. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-```tsx live
-import { useState } from 'react';
-import { WheelPickerField } from '@elik56a/react-native-pickers';
-
-const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-
-export default function Example() {
-  const [size, setSize] = useState<string | undefined>();
-  return (
-    <WheelPickerField
-      label="Size"
-      placeholder="Choose a size"
-      items={sizes}
-      value={size}
-      onConfirm={setSize}
-    />
-  );
-}
-```
+<PropPlayground
+  name="WheelPickerField"
+  component={WheelPickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Size', placeholder: 'Choose a size', items: ['XS', 'S', 'M', 'L', 'XL'] }}
+  value={() => undefined}
+  code="label=&quot;Size&quot; placeholder=&quot;Choose a size&quot; items={sizes} value={size} onConfirm={setSize}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'variant', options: ['3d', 'flat'] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
 
 → [Picker fields](./picker-fields)
 

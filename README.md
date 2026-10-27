@@ -19,7 +19,7 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
 | 🎡 **WheelPicker** | iOS-style 3D wheel, infinite loop, disabled items, multi-column |
 | ⏰ **TimePicker** | 12h / 24h (auto from locale), minute & second intervals, min/max time |
 | 📅 **DatePicker** | Calendar (single · range · multiple) or wheel, min/max, disabled days, marked dates, i18n |
-| 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS-style) or a calendar with time wheels, min/max moments |
+| 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS) or a calendar with the time under it (Material) or beside it (web), min/max moments |
 | 📋 **SelectPicker** | Field + bottom sheet, search (local or on your server, with a loader), groups, multi-select with chips, icons |
 | ↔️ **HorizontalList** | Segmented control or chips that scroll sideways and reveal the next item |
 | 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
@@ -119,8 +119,10 @@ Each platform gets its own design by default (`design="auto"`): iOS on iOS, Mate
 | Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
 | Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
 | Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
+| Calendar | chosen day tinted, today's number coloured, SUN MON | chosen day filled, today ringed, S M T | chosen day a filled square, today shaded, Sun Mon |
 | Date sheet | calendar | the picked date in large type above the calendar | calendar |
-| Time | wheels | a clock dial | a list of times |
+| Time | wheels | a clock dial | columns of hours and minutes to click |
+| Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
 | HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
 | Press | dims while held | ripple | dims while held |
 
@@ -191,7 +193,7 @@ import * as Haptics from 'expo-haptics';
 | `onChange` / `onValueChanging` | `(date) => void` | |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` (from `locale`) |
 | `locale` | `string` | device |
-| `display` | `'wheel' \| 'dial' \| 'list'` | wheels on iOS, a clock dial in Material, a list on the web |
+| `display` | `'wheel' \| 'dial' \| 'input' \| 'list'` | wheels on iOS, a clock dial in Material, columns to click on the web |
 | `minuteInterval` | `number` | `1` |
 | `showSeconds` / `secondInterval` | `boolean` / `number` | `false` / `1` |
 | `minTime` / `maxTime` | `Date` (time of day) | |

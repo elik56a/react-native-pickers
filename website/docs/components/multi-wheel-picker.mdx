@@ -15,7 +15,7 @@ import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 ```
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 
@@ -45,6 +45,7 @@ export default function Example() {
 ## Try the props
 
 <PropPlayground
+  platforms={false}
   name="MultiWheelPicker"
   component={MultiWheelPicker}
   props={{
@@ -80,7 +81,7 @@ So every column has its own `items`, `value`, `onChange`, `onValueChanging`, `lo
 
 `separator` is placed between every pair of columns. A string is rendered as bold text (style it with the `separator` slot), and any React node is rendered as-is. Pass a function to choose per gap: it gets the index of the column on the left and can return `null` to skip that gap.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
@@ -126,7 +127,7 @@ export default function Example() {
 
 Use `flex` for proportional columns and `width` for fixed ones:
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 
@@ -163,7 +164,7 @@ export default function Example() {
 
 Columns are plain props, so derive one from another in render. Here the model list depends on the brand:
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
 

@@ -9,8 +9,8 @@ Pick up to 3 interests from grouped options. They show as removable chips, with 
 
 ```tsx live
 import { useState } from 'react';
-import { Text, View } from 'react-native';
-import { SelectPicker } from '@elik56a/react-native-pickers';
+import { StyleSheet, Text, View } from 'react-native';
+import { SelectPicker, usePickerTheme } from '@elik56a/react-native-pickers';
 
 const INTERESTS: Record<string, string[]> = {
   Sports: ['Running', 'Cycling', 'Climbing', 'Surfing'],
@@ -25,9 +25,10 @@ const options = Object.entries(INTERESTS).flatMap(([group, items]) =>
 const MAX = 3;
 
 export default function Tags() {
+  const { colors } = usePickerTheme();
   const [tags, setTags] = useState<string[]>(['climbing', 'ai']);
   return (
-    <View style={{ gap: 6 }}>
+    <View style={styles.root}>
       <SelectPicker
         multiple
         label="Interests"
@@ -39,12 +40,17 @@ export default function Tags() {
         maxSelected={MAX}
         clearable
       />
-      <Text style={{ fontSize: 12, color: '#6E685E' }}>
+      <Text style={[styles.hint, { color: colors.textSecondary }]}>
         {tags.length}/{MAX} selected · tap a chip to remove it
       </Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { gap: 6 },
+  hint: { fontSize: 12 },
+});
 ```
 
 ## Behaviour
