@@ -41,6 +41,7 @@ export default function Example() {
   value={new Date(2026, 9, 26, 9, 41, 0)}
   code="value={time} onChange={setTime}"
   controls={[
+    { prop: 'display', options: ['wheel', 'list'] },
     { prop: 'format', options: ['auto', '12h', '24h'] },
     { prop: 'showSeconds', options: [false, true] },
     { prop: 'minuteInterval', options: [1, 5, 15, 30] },
@@ -152,6 +153,14 @@ export default function Example() {
 }
 ```
 
+## Wheels or a list
+
+`display="list"` shows the times in a scrolling list, every `minuteInterval` minutes (every 15 when it's 1), opened at the chosen one. It's the default in the [web design](../guides/platforms#designs), where a list is easier with a mouse than wheels; iOS and Material default to wheels. `display="wheel"` keeps the wheels on the web.
+
+```tsx
+<TimePicker value={time} onChange={setTime} display="list" minuteInterval={30} />
+```
+
 ## Looping
 
 Hour, minute and second wheels loop by default. Set `loop={false}` for wheels that stop at the ends. The AM/PM wheel never loops.
@@ -196,6 +205,7 @@ import { TimePickerField } from '@elik56a/react-native-pickers';
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` | Clock format; `'auto'` reads it from `locale`. |
 | `locale` | `string` | device | BCP 47 locale, e.g. `'en-US'`, `'he-IL'`. |
+| `display` | `'wheel' \| 'list'` | `'list'` in the web design, else `'wheel'` | Wheels, or a list of times. |
 | `minuteInterval` | `number` | `1` | Minute step: 1, 5, 10, 15, 30… |
 | `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
 | `secondInterval` | `number` | `1` | Second step. |
