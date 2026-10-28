@@ -28,11 +28,6 @@ export const SANDBOX_ICONS: Record<string, ReactNode> = {
       <path d="M10.797 14.182H3.635L16.728 0l-3.525 9.818h7.162L7.272 24l3.524-9.818Z" />
     </Icon>
   ),
-  CodeSandbox: (
-    <Icon filled>
-      <path d="M0 24h24V0H0v2.455h21.546v19.09H2.454V0H0Z" />
-    </Icon>
-  ),
 };
 
 export const GitHubIcon = () => (
