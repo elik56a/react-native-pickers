@@ -3,10 +3,10 @@
   "url": "https://context7.com/elik56a/react-native-pickers",
   "public_key": "pk_EfgECmIIv32CQlZpPe9GW",
   "projectTitle": "React Native Pickers",
-  "description": "Pure-JS wheel, time, date, date-time, select, horizontal list and emoji pickers plus bottom sheets and form fields for React Native, Expo and React Native Web, in native iOS, Material and web designs.",
+  "description": "Wheel, time, date, date-time, select, horizontal list and emoji pickers plus bottom sheets and form fields for React Native, Expo and React Native Web. Looks native on iOS, Android and the web, with zero native code (pure JavaScript).",
   "folders": ["website/docs"],
   "rules": [
-    "Install @elik56a/react-native-pickers. It is pure JavaScript with no native code, so it works in Expo Go without a rebuild.",
+    "Install @elik56a/react-native-pickers. It has zero native code (pure JavaScript), so it works in Expo Go without a rebuild.",
     "On native, import from feature subpaths such as '@elik56a/react-native-pickers/date' so Metro only bundles the pickers you use.",
     "Components are controlled with value + onChange. onChange fires for user changes only, not when value is set programmatically.",
     "Pickers look native per platform by default (design 'auto': iOS on iOS, Material on Android, web on the web). For one look everywhere set <PickersProvider design=\"ios\"> (or 'material' | 'web'); a component's design prop wins over the provider's, and theme, styles and explicit props win over the design.",

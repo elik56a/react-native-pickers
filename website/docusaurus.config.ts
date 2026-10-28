@@ -38,7 +38,7 @@ const FOOTER_BRAND = `
   ${socialLink('LinkedIn', LINKEDIN, `${AUTHOR} on LinkedIn`)}
 </div>`;
 const DESCRIPTION =
-  'Wheel, time, date, calendar, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Native iOS, Material and web designs, fully themeable. 100% JavaScript, zero native code: Expo Go, bare RN and React Native Web.';
+  'Wheel, time, date, calendar, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
@@ -155,7 +155,7 @@ const config: Config = {
       'docusaurus-plugin-llms',
       {
         title: 'React Native Pickers',
-        description: `${PACKAGE}: pure-JS wheel, time, date (calendar, range, multiple, wheel), date-time, select (local or server search), horizontal list (segmented control, chips) and emoji pickers, plus bottom sheets and form fields, for React Native, Expo and React Native Web. Native iOS, Material and web designs by default (design="auto"), or one design everywhere; fully themeable.`,
+        description: `${PACKAGE}: wheel, time, date (calendar, range, multiple, wheel), date-time, select (local or server search), horizontal list (segmented control, chips) and emoji pickers, plus bottom sheets and form fields, for React Native, Expo and React Native Web, with zero native code (pure JavaScript). Native iOS, Material and web designs by default (design="auto"), or one design everywhere; fully themeable.`,
         excludeImports: true,
         removeDuplicateHeadings: true,
         generateMarkdownFiles: true,
@@ -183,7 +183,7 @@ const config: Config = {
       {
         name: 'description',
         content:
-          'Pure-JS pickers for React Native: wheel, time, date, calendar, range, date-time, select, emoji and bottom sheets, in native iOS, Material and web designs.',
+          'React Native pickers with zero native code: wheel, time, date, calendar, range, date-time, select, emoji and bottom sheets, in native iOS, Material and web designs.',
       },
     ],
     announcementBar: {

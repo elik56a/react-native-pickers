@@ -11,9 +11,9 @@ export const NPM_DOWNLOADS_STATUS = {
   unavailable: 'unavailable',
 } as const;
 
-export const PAGE_TITLE = 'Date, Time, Wheel, Select & Emoji Pickers';
+export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, date, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Native iOS, Material and web designs, fully themeable. 100% JavaScript: Expo Go, bare RN and React Native Web.';
+  'Wheel, time, date, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -67,7 +67,7 @@ export const COMPONENTS = [
 ];
 
 export const HERO_CHIPS = [
-  { icon: '📦', text: 'Zero native deps' },
+  { icon: '📦', text: 'Zero native code' },
   { icon: '🌙', text: 'Dark mode built in' },
   { icon: '🎨', text: 'iOS, Material & web looks' },
   { icon: '🌍', text: 'Any locale, RTL' },
@@ -149,7 +149,7 @@ export const COMPARE_ROWS: CompareRow[] = [
     ],
   },
   {
-    feature: 'No native code',
+    feature: 'Zero native code',
     cells: [{ support: yes }, { support: no }, { support: yes, note: 'Usually' }, { support: no }],
   },
 ];

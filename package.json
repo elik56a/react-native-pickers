@@ -1,7 +1,7 @@
 {
   "name": "@elik56a/react-native-pickers",
   "version": "0.11.1",
-  "description": "Fully customizable pickers for React Native in pure JS: wheel, time, date (calendar, range, wheel), date-time, select (with server search), segmented control and emoji, plus bottom sheets and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
+  "description": "Fully customizable React Native pickers with zero native code: wheel, time, date (calendar, range, wheel), date-time, select (with server search), segmented control and emoji, plus bottom sheets and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
   "license": "MIT",
   "author": "Eliyahu Kriel <elik56a@gmail.com>",
   "homepage": "https://elik56a.github.io/react-native-pickers/",
@@ -66,6 +66,8 @@
     "duration-picker",
     "ios-picker",
     "react-native-component",
+    "pure-js",
+    "no-native-code",
     "material-design",
     "material-date-picker",
     "segmented-control",
