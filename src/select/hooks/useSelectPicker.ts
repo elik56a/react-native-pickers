@@ -5,7 +5,7 @@ import { useAnchor } from '../../sheet/hooks/useAnchor';
 import { resolveFieldPresentation } from '../../sheet/sheet.utils';
 import { NO_OPTIONS, SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
-import { findOptions, toValueList } from '../select.utils';
+import { findOptions, shouldSearchInField, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
 export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
@@ -16,7 +16,7 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
   const known = useRef<SelectOption<T>[]>([]);
   const presentation = resolveFieldPresentation(props.presentation ?? SELECT_PRESENTATION.auto, usePickerPlatform());
   const dropdown = presentation === SELECT_PRESENTATION.dropdown;
-  const searchInField = dropdown && props.searchable !== false;
+  const searchInField = shouldSearchInField(dropdown, props.searchable, !!props.renderTrigger);
 
   // Search results can drop a selected option, so its label is remembered from the options it last appeared in, or came with in onChange.
   const selected = useMemo(() => {

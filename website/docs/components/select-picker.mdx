@@ -652,7 +652,7 @@ export default function Example() {
 | `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
 | `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |
 | `onOpen` / `onClose` | `() => void` | — | Sheet open / close. |
-| `searchable` | `boolean` | dropdown: `true` · sheet: `options.length > 8` | Dropdown: type in the field to filter. Sheet: show the search field. |
+| `searchable` | `boolean` | dropdown: `true` · sheet: `options.length > 8` | Dropdown: type in the field to filter, or in a search field atop the list with `renderTrigger`. Sheet: show the search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint. |
 | `filterOption` | `(option, query) => boolean` | `defaultFilter`; none with `loadOptions` / `onSearchChange` | Custom search. |
 | `loadOptions` | `(query: string) => Promise<SelectOption<T>[]>` | — | [Search a server](#search-on-a-server): loader, debounce and stale answers handled. An empty query shows `options`. |
