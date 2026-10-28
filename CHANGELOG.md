@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.13.0](https://github.com/elik56a/react-native-pickers/compare/v0.12.0...v0.13.0) (2026-10-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **emoji:** on iOS and Android the emoji category bar moves to the bottom. Set categoryBarPosition="top" to keep it on top.
+
+### ✨ Features
+
+* **emoji:** follow the iOS, Material and web designs in EmojiPicker and search fields ([#33](https://github.com/elik56a/react-native-pickers/issues/33)) ([7986db8](https://github.com/elik56a/react-native-pickers/commit/7986db8e8b9e4749d34d5e167fd1082c6ba1b442))
+
 ## [0.12.0](https://github.com/elik56a/react-native-pickers/compare/v0.11.1...v0.12.0) (2026-10-28)
 
 
