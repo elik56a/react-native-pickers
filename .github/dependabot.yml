@@ -1,0 +1,63 @@
+# Weekly grouped update PRs, plus security PRs whenever an advisory lands. Titles are Conventional Commits
+# under `chore(deps)`, so they stay out of the changelog and don't trigger a release.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories: ['/', '/website']
+    schedule:
+      interval: weekly
+      day: monday
+    # Skips versions younger than 3 days, long enough for a hijacked release to be caught and pulled.
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: chore(deps)
+    open-pull-requests-limit: 10
+    groups:
+      # React Native, React and Expo move together with each Expo SDK, so they land as one PR.
+      react-native:
+        patterns: ['react', 'react-dom', 'react-native', '@react-native/*', 'expo', 'expo-*', '@expo/*', 'react-native-*']
+      docusaurus:
+        patterns: ['@docusaurus/*', '@easyops-cn/*', 'docusaurus-*']
+      dev-tooling:
+        update-types: [minor, patch]
+    ignore:
+      # A new React Native or Expo major is a migration: bump it by hand alongside the example app.
+      - dependency-name: 'react-native'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'expo'
+        update-types: ['version-update:semver-major']
+      # TypeScript 7 is native and drops the JS compiler API that scripts/expand-returned-objects.js uses, and
+      # Docusaurus's base tsconfig still sets the removed `baseUrl`.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+
+  # The Expo SDK pins React, React Native and its modules in the example app: only Expo itself is bumped, and
+  # `npx expo install --fix` brings the rest along.
+  - package-ecosystem: npm
+    directory: /example
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: chore(deps)
+    allow:
+      - dependency-name: 'expo'
+    ignore:
+      - dependency-name: 'expo'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ['*']
