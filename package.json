@@ -1,7 +1,7 @@
 {
   "name": "@elik56a/react-native-pickers",
   "version": "0.15.1",
-  "description": "Fully customizable React Native pickers with zero native code: wheel, time, date (calendar, range, wheel), date-time, select (with server search), segmented control and emoji, plus bottom sheets and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
+  "description": "Fully customizable React Native pickers with zero native code: wheel, time, date (calendar, range, wheel), date-time, select (with server search), country (flags and dialing codes), segmented control and emoji, plus bottom sheets and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
   "license": "MIT",
   "author": "Eliyahu Kriel <elik56a@gmail.com>",
   "homepage": "https://elik56a.github.io/react-native-pickers/",
@@ -52,6 +52,9 @@
     "select",
     "dropdown",
     "emoji-picker",
+    "country-picker",
+    "country-code-picker",
+    "phone-code",
     "expo",
     "react-native-web",
     "bottom-sheet",
@@ -91,6 +94,7 @@
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "build:llms": "pnpm docs:build && cp website/build/llms-full.txt llms-full.txt",
     "gen:emoji": "node scripts/build-emoji-data.js",
+    "gen:countries": "node scripts/build-country-data.js",
     "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm build:llms"
   },
   "peerDependencies": {
@@ -107,6 +111,7 @@
     "@testing-library/react-native": "14.1.0",
     "@types/jest": "^30.0.0",
     "@types/react": "^19.3.0",
+    "countries-list": "^3.4.1",
     "emojibase-data": "^18.0.0",
     "jest": "^30.5.2",
     "lefthook": "^2.2.2",

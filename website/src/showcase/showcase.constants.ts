@@ -1,3 +1,4 @@
+import type { CountryCode } from '@elik56a/react-native-pickers';
 import { labelOptions } from '../home/demo/demo.utils';
 import type { ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
 
@@ -19,8 +20,8 @@ export const SHOWCASE: ShowcaseItem[] = [
   {
     key: SHOWCASE_SCREEN.booking,
     title: 'Book a stay',
-    blurb: 'A searchable city list, a priced range calendar, the check-in time, an emoji and two guest wheels.',
-    components: ['SelectPicker', 'DatePickerField', 'TimePickerField', 'EmojiPickerField', 'MultiWheelPicker'],
+    blurb: 'A searchable city list, a priced range calendar, the check-in time, an emoji, two guest wheels and the guest’s country.',
+    components: ['SelectPicker', 'DatePickerField', 'TimePickerField', 'EmojiPickerField', 'MultiWheelPicker', 'CountryPicker'],
     recipe: 'booking-range',
   },
   {
@@ -68,7 +69,7 @@ export const SHOWCASE: ShowcaseItem[] = [
     key: SHOWCASE_SCREEN.signUp,
     title: 'Sign up',
     blurb: 'A birthday on date wheels, a country with flags, interests as chips and the app language.',
-    components: ['DatePickerField', 'SelectPicker', 'HorizontalList'],
+    components: ['DatePickerField', 'CountryPicker', 'SelectPicker', 'HorizontalList'],
     recipe: 'birthday',
   },
   {
@@ -201,24 +202,11 @@ export const CHAT_RECENT = ['😂', '❤️', '👍'];
 export const SIGN_UP = {
   birthday: new Date(1994, 4, 12),
   oldestBirthday: new Date(1920, 0, 1),
-  country: 'Portugal',
+  country: 'PT' as CountryCode,
   interests: ['Coffee', 'Hiking'],
   maxInterests: 4,
   language: 'English',
 };
-
-export const COUNTRIES = [
-  { label: 'Portugal', flag: '🇵🇹' },
-  { label: 'Israel', flag: '🇮🇱' },
-  { label: 'Japan', flag: '🇯🇵' },
-  { label: 'United States', flag: '🇺🇸' },
-  { label: 'Germany', flag: '🇩🇪' },
-  { label: 'France', flag: '🇫🇷' },
-  { label: 'Brazil', flag: '🇧🇷' },
-  { label: 'India', flag: '🇮🇳' },
-  { label: 'Mexico', flag: '🇲🇽' },
-  { label: 'South Korea', flag: '🇰🇷' },
-];
 
 export const INTERESTS = labelOptions(['Hiking', 'Coffee', 'Jazz', 'Design', 'Running', 'Photography', 'Cooking', 'Travel']);
 

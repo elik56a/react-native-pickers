@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 
-import { EmojiPickerField, TimePickerField } from '@elik56a/react-native-pickers';
+import { CountryPicker, EmojiPickerField, TimePickerField } from '@elik56a/react-native-pickers';
 import { DEFAULT_OPTIONS, DEMO_TAB } from '../../playground/playground.constants';
 import type { DemoTab } from '../../playground/playground.types';
-import { BOOKING_FIELD } from '../demo.constants';
+import { BOOKING_FIELD, PREFERRED_COUNTRIES } from '../demo.constants';
 import { styles } from '../demo.styles';
 import type { BookingScreenProps } from '../demo.types';
 import { deviceSheetProps } from '../demo.utils';
@@ -17,8 +17,8 @@ import { WhereField } from './WhereField';
 const EMOJI_HEIGHT = 300;
 
 /**
- * A booking form whose every field opens one of the pickers: a searchable select, a priced calendar, the time, two wheels and the
- * emojis. In the playground, touching a field points the props panel at its picker, and the panel's props shape the fields.
+ * A booking form whose every field opens one of the pickers: a searchable select, a priced calendar, the time, the emojis, two
+ * wheels and the guest's country. In the playground, touching a field points the props panel at its picker, and the panel's props shape the fields.
  */
 export const BookingScreen = ({ platform, screenHeight, playground }: BookingScreenProps) => {
   const options = playground?.options ?? DEFAULT_OPTIONS;
@@ -71,8 +71,21 @@ export const BookingScreen = ({ platform, screenHeight, playground }: BookingScr
           />
         </View>
       </View>
-      <View {...pointsAt(DEMO_TAB.wheel)}>
-        <GuestsField value={booking.guests} onConfirm={booking.setGuests} sheetProps={sheetProps} options={options.wheel} />
+      <View style={styles.pair}>
+        <View style={styles.half} {...pointsAt(DEMO_TAB.wheel)}>
+          <GuestsField value={booking.guests} onConfirm={booking.setGuests} sheetProps={sheetProps} options={options.wheel} />
+        </View>
+        <View style={styles.half} {...pointsAt(DEMO_TAB.country)}>
+          <CountryPicker
+            label={BOOKING_FIELD.country}
+            value={booking.country}
+            onChange={booking.setCountry}
+            preferred={options.country.preferred ? PREFERRED_COUNTRIES : undefined}
+            showDialCode={options.country.showDialCode}
+            locale={options.country.locale === 'auto' ? undefined : options.country.locale}
+            sheet={{ sheetProps }}
+          />
+        </View>
       </View>
     </AppScreen>
   );
