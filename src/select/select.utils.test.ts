@@ -8,6 +8,7 @@ import {
   getSelectedLabel,
   isAtMax,
   isOptionDisabled,
+  shouldSearchInField,
   shouldShowSearch,
   toggleValue,
   toValueList,
@@ -125,5 +126,14 @@ describe('toggleValue / isAtMax / isOptionDisabled', () => {
 describe('getSelectedLabel', () => {
   it('joins labels', () => {
     expect(getSelectedLabel([option('A'), option('B')])).toBe('A, B');
+  });
+});
+
+describe('shouldSearchInField', () => {
+  it('types into the field only for a searchable dropdown with the built-in field', () => {
+    expect(shouldSearchInField(true, undefined, false)).toBe(true);
+    expect(shouldSearchInField(true, false, false)).toBe(false);
+    expect(shouldSearchInField(true, undefined, true)).toBe(false);
+    expect(shouldSearchInField(false, true, false)).toBe(false);
   });
 });

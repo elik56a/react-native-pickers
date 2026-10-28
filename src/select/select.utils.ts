@@ -25,6 +25,10 @@ export const shouldShowSearch = (searchable: boolean | undefined, optionCount: n
 export const getEmptyMessage = (remote: boolean, query: string, prompt: string, emptyText: string) =>
   remote && !query ? prompt : emptyText;
 
+/** A dropdown types into the field itself, unless search is off or `renderTrigger` replaced the field: then the list has its own search. */
+export const shouldSearchInField = (dropdown: boolean, searchable: boolean | undefined, customTrigger: boolean) =>
+  dropdown && searchable !== false && !customTrigger;
+
 /** For options a server already filtered. */
 export const keepAll = () => true;
 

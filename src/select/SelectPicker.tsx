@@ -10,7 +10,7 @@ import { SelectSearchField } from './components/SelectSearchField';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
-import { DEFAULT_SEARCH_PLACEHOLDER, SELECT_PRESENTATION } from './select.constants';
+import { DEFAULT_SEARCH_PLACEHOLDER, SELECT_DROPDOWN_MIN_WIDTH, SELECT_PRESENTATION } from './select.constants';
 import { styles } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
@@ -84,6 +84,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
         <Dropdown
           visible={picker.open}
           anchor={picker.anchor.rect}
+          minWidth={SELECT_DROPDOWN_MIN_WIDTH}
           onClose={picker.hide}
           theme={themeOverride}
           overlay={

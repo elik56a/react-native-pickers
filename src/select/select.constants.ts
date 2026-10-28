@@ -24,6 +24,9 @@ export const DEFAULT_SEARCH_DEBOUNCE_MS = 300;
 
 export const DISABLED_OPTION_OPACITY = 0.45;
 
+/** A dropdown opened from a narrow trigger, such as a `renderTrigger` button, still fits a row's icon and label. */
+export const SELECT_DROPDOWN_MIN_WIDTH = 240;
+
 export const SINGLE_INDICATOR = {
   check: 'check',
   radio: 'radio',

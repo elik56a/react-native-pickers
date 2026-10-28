@@ -126,7 +126,7 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
     renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
     /** Sheet title. Default: `label` */
     sheetTitle?: string;
-    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (dropdown on the web, bottom sheet on native). As a dropdown, `searchable` (default: true) lets the user type in the field itself */
+    /** Bottom sheet, centered modal, or a dropdown under the field. Default: 'auto' (dropdown on the web, bottom sheet on native). As a dropdown, `searchable` (default: true) lets the user type in the field itself, or in a search field atop the list with `renderTrigger` */
     presentation?: SelectPresentation;
     sheet?: Partial<Omit<SheetChromeProps, 'visible' | 'onClose' | 'theme' | 'presentation'>>;
     onOpen?: () => void;
