@@ -1,14 +1,15 @@
-import { toSnackUrl, toStackBlitzFields, toStackBlitzUrl } from './sandbox';
+import { CODEPEN_URL } from './live.constants';
+import { toCodePenFields, toSnackUrl, toStackBlitzFields, toStackBlitzUrl } from './sandbox';
 
 const openInSnack = (code: string) => window.open(toSnackUrl(code), '_blank', 'noopener');
 
-/** StackBlitz takes a form POST, so the project opens without an API key or a size limit on the URL. */
-const openInStackBlitz = (code: string) => {
+/** StackBlitz and CodePen take a form POST, so the project opens without an API key or a size limit on the URL. */
+const postForm = (action: string, fields: Record<string, string>) => {
   const form = document.createElement('form');
   form.method = 'POST';
-  form.action = toStackBlitzUrl(code);
+  form.action = action;
   form.target = '_blank';
-  for (const [name, value] of Object.entries(toStackBlitzFields(code))) {
+  for (const [name, value] of Object.entries(fields)) {
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = name;
@@ -22,5 +23,6 @@ const openInStackBlitz = (code: string) => {
 
 export const SANDBOXES = [
   { label: 'Expo Snack', open: openInSnack },
-  { label: 'StackBlitz', open: openInStackBlitz },
+  { label: 'StackBlitz', open: (code: string) => postForm(toStackBlitzUrl(code), toStackBlitzFields(code)) },
+  { label: 'CodePen', open: (code: string) => postForm(CODEPEN_URL, toCodePenFields(code)) },
 ];

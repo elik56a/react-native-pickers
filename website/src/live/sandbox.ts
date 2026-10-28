@@ -1,11 +1,21 @@
+import { transform } from 'sucrase';
+
 import {
   COMPONENT_FOLDERS,
   GENERIC_EXAMPLE_NAMES,
   PACKAGE,
+  PEN_HEAD,
+  PEN_HTML,
+  PEN_IMPORT_URLS,
+  PEN_IMPORTS,
+  PEN_JSX_PRAGMA,
+  ROOT_CSS,
   SANDBOX_TITLE,
   SNACK_URL,
   SOURCE_URL,
   STACKBLITZ_URL,
+  toPenPackageUrl,
+  toPenPreview,
   toSandboxApp,
   WEB_DEPENDENCIES,
   WEB_DEV_DEPENDENCIES,
@@ -84,4 +94,37 @@ export const toStackBlitzFields = (code: string): Record<string, string> => ({
   'project[title]': SANDBOX_TITLE,
   'project[template]': 'node',
   ...Object.fromEntries(Object.entries(toWebProject(code)).map(([path, content]) => [`project[files][${path}]`, content])),
+});
+
+/** A package import's quoted specifier: not relative (`./x`) or already a URL. */
+const PACKAGE_IMPORT = /(\bfrom\s*)(['"])(?![./]|https?:)([^'"]+)\2/g;
+
+/**
+ * The example as a pen's JS: types stripped, JSX kept for CodePen's Babel, packages from esm.sh, rendered in the platform switch's Preview.
+ * A pen is one file with nothing to export to, and CodePen's Babel turns an `export` into CommonJS the browser can't run.
+ */
+export const toPenJs = (code: string) => {
+  const name = /export\s+default\s+function\s+(\w+)/.exec(code)?.[1] ?? 'Example';
+  const js = transform(code, { transforms: ['typescript', 'jsx'], jsxRuntime: 'preserve' })
+    .code.replace(/export\s+default\s+/, '')
+    .trim();
+  const react = /import\s+React\b/.test(js) ? '' : "import React from 'react';\n";
+  return `${PEN_JSX_PRAGMA}${react}import { createRoot } from 'react-dom/client';\n${PEN_IMPORTS}${js}\n\n${toPenPreview(name)}\ncreateRoot(document.getElementById('root')).render(<Preview />);\n`.replace(
+    PACKAGE_IMPORT,
+    (_, from: string, quote: string, specifier: string) =>
+      `${from}${quote}${PEN_IMPORT_URLS[specifier] ?? toPenPackageUrl(specifier)}${quote}`
+  );
+};
+
+/** The form fields CodePen's prefill API takes: one `data` field of JSON. */
+export const toCodePenFields = (code: string): Record<string, string> => ({
+  data: JSON.stringify({
+    title: `${SANDBOX_TITLE}: ${toExampleName(code)}`,
+    head: PEN_HEAD,
+    html: PEN_HTML,
+    css: ROOT_CSS,
+    js: toPenJs(code),
+    js_pre_processor: 'babel',
+    editors: '001',
+  }),
 });
