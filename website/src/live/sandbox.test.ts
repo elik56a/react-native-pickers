@@ -1,7 +1,9 @@
 import {
   canOpenInSandbox,
   findMainComponent,
+  toCodePenFields,
   toExampleName,
+  toPenJs,
   toSnackUrl,
   toSourceUrl,
   toStackBlitzFields,
@@ -92,5 +94,61 @@ describe('toWebProject', () => {
 
   it('becomes StackBlitz form fields', () => {
     expect(toStackBlitzFields(code)).toMatchObject({ 'project[template]': 'node', 'project[files][src/Example.tsx]': code });
+  });
+});
+
+const typed = `import { useState } from 'react';
+import { Text } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+import { helper } from './helper';
+
+export default function Booking() {
+  const [day, setDay] = useState<string>(helper());
+  return (
+    <>
+      <HorizontalList items={[]} value={day} onChange={setDay} />
+      <Text>{day}</Text>
+    </>
+  );
+}`;
+
+describe('toPenJs', () => {
+  const js = toPenJs(typed);
+
+  it("strips the types but keeps the JSX, for CodePen's Babel", () => {
+    expect(js).toContain('useState(helper())');
+    expect(js).toContain('<Text>{day}</Text>');
+    expect(js.startsWith('/** @jsxRuntime classic */')).toBe(true);
+  });
+
+  it('loads packages from esm.sh, the pickers as one bundle, leaving relative imports', () => {
+    expect(js).toContain("import React from 'https://esm.sh/react@19.1.0';");
+    expect(js).toContain("import { useState } from 'https://esm.sh/react@19.1.0';");
+    expect(js).toContain("from 'https://esm.sh/react-native-web@0.21.4?deps=react@19.1.0,react-dom@19.1.0'");
+    expect(js).toContain("from 'https://esm.sh/@elik56a/react-native-pickers?bundle&external=react,react-dom,react-native'");
+    expect(js).toContain("from './helper'");
+  });
+
+  it('renders the example in the platform switch without exporting it, importing React only once', () => {
+    expect(js).toContain('<Booking />');
+    expect(js).toContain('<Pickers.PickersProvider platform={platform}>');
+    expect(js).toContain("createRoot(document.getElementById('root')).render(<Preview />);");
+    expect(js).not.toMatch(/\bexport\b/);
+    expect(toPenJs(`import React from 'react';\n${code}`).match(/import React\b/g)).toHaveLength(1);
+  });
+});
+
+describe('toCodePenFields', () => {
+  it("is CodePen's prefill data, with the JS through Babel", () => {
+    const data = JSON.parse(toCodePenFields(typed).data);
+    expect(data).toMatchObject({
+      title: 'React Native Pickers example: Booking',
+      html: '<div id="root"></div>',
+      js_pre_processor: 'babel',
+    });
+    expect(data.js).toBe(toPenJs(typed));
+    const importMap = JSON.parse(/<script type="importmap">([\s\S]*)<\/script>/.exec(data.head)?.[1] ?? '{}');
+    expect(importMap.imports['react-native']).toBe('https://esm.sh/react-native-web@0.21.4?deps=react@19.1.0,react-dom@19.1.0');
+    expect(importMap.imports['react/jsx-runtime']).toBe('https://esm.sh/react@19.1.0/jsx-runtime');
   });
 });

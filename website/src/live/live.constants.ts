@@ -49,6 +49,7 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
 
 export const SNACK_URL = 'https://snack.expo.dev/';
 export const STACKBLITZ_URL = 'https://stackblitz.com/run';
+export const CODEPEN_URL = 'https://codepen.io/pen/define';
 
 /** Pinned to the versions the docs run, so a sandbox renders what the reader just saw. */
 export const WEB_DEPENDENCIES = {
@@ -57,6 +58,66 @@ export const WEB_DEPENDENCIES = {
   'react-dom': '19.1.0',
   'react-native-web': '0.21.4',
 };
+
+const { react: REACT, 'react-native-web': REACT_NATIVE_WEB } = WEB_DEPENDENCIES;
+const ESM_CDN = 'https://esm.sh/';
+
+/** A pen has no bundler, so its imports load from esm.sh: React pinned as in the docs, and react-native served by react-native-web. */
+export const PEN_IMPORT_URLS: Record<string, string> = {
+  react: `${ESM_CDN}react@${REACT}`,
+  'react/jsx-runtime': `${ESM_CDN}react@${REACT}/jsx-runtime`,
+  'react-dom': `${ESM_CDN}react-dom@${REACT}?deps=react@${REACT}`,
+  'react-dom/client': `${ESM_CDN}react-dom@${REACT}/client?deps=react@${REACT}`,
+  'react-native': `${ESM_CDN}react-native-web@${REACT_NATIVE_WEB}?deps=react@${REACT},react-dom@${REACT}`,
+};
+
+const PEN_EXTERNALS = 'external=react,react-dom,react-native';
+
+/**
+ * esm.sh splits the pickers by their subpath exports and duplicates the theme context across the pieces, so a component can miss
+ * PickersProvider's. Bundled whole, there's one copy; its react and react-native imports stay bare, for the pen's import map.
+ * Subpaths (`/date`) use the same bundle: the root exports everything they do.
+ */
+const PEN_PICKERS_URL = `${ESM_CDN}${PACKAGE}?bundle&${PEN_EXTERNALS}`;
+
+export const toPenPackageUrl = (specifier: string) =>
+  specifier === PACKAGE || specifier.startsWith(`${PACKAGE}/`) ? PEN_PICKERS_URL : `${ESM_CDN}${specifier}?${PEN_EXTERNALS}`;
+
+/** Points the packages' bare react and react-native imports at the same URLs the pen imports, so there's one copy of each. */
+export const PEN_HEAD = `<script type="importmap">${JSON.stringify({ imports: PEN_IMPORT_URLS }, null, 2)}</script>`;
+
+/** CodePen's Babel compiles the JSX; the pragma keeps it on React.createElement instead of a react/jsx-runtime import esm.sh wouldn't pin. */
+export const PEN_JSX_PRAGMA = '/** @jsxRuntime classic */\n';
+
+export const PEN_HTML = '<div id="root"></div>';
+
+/** Namespaced, so the platform switch's imports can't clash with the example's own. */
+export const PEN_IMPORTS = `import * as ReactNative from 'react-native';
+import * as Pickers from '${PACKAGE}';
+`;
+
+/** The pen's version of the sandbox App: the example, with the library's HorizontalList in a corner to switch the platform. */
+export const toPenPreview = (example: string) => `function Preview() {
+  const [platform, setPlatform] = React.useState(ReactNative.Platform.OS);
+  const platforms = [
+    { label: 'iOS', value: 'ios', icon: <ReactNative.Text>🍎</ReactNative.Text> },
+    { label: 'Android', value: 'android', icon: <ReactNative.Text>🤖</ReactNative.Text> },
+    { label: 'Web', value: 'web', icon: <ReactNative.Text>🌐</ReactNative.Text> },
+  ];
+  return (
+    <Pickers.PickersProvider platform={platform}>
+      <ReactNative.ScrollView contentContainerStyle={previewStyles.screen}>
+        <ReactNative.View style={previewStyles.example}>
+          <${example} />
+        </ReactNative.View>
+      </ReactNative.ScrollView>
+      <Pickers.HorizontalList items={platforms} value={platform} onChange={setPlatform} style={previewStyles.platforms} />
+    </Pickers.PickersProvider>
+  );
+}
+
+const previewStyles = ReactNative.StyleSheet.create(${SANDBOX_STYLES});
+`;
 
 export const WEB_DEV_DEPENDENCIES = {
   '@vitejs/plugin-react': '^5.0.0',
@@ -99,6 +160,18 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
 /** Names too generic for a sandbox file; the example's main component names it instead. */
 export const GENERIC_EXAMPLE_NAMES = ['Example', 'App'];
 
+/** The layout around every sandbox's example: centered like the docs preview, with the platform switch in the bottom corner. */
+const SANDBOX_STYLES = `{
+  screen: { flexGrow: 1, alignItems: 'center', padding: 20, paddingTop: 56, paddingBottom: 96 },
+  example: { width: '100%', maxWidth: 400, gap: 8 },
+  platforms: { position: 'absolute', right: 16, bottom: 24 },
+}`;
+
+/** A full-height root for react-native-web, so the switch can sit in the window's corner. */
+export const ROOT_CSS = `html, body, #root { height: 100%; margin: 0; }
+#root { display: flex; }
+`;
+
 /** Every sandbox renders the example like the docs preview, with the library's own HorizontalList floating in a corner to try it as on iOS, Android or the web. */
 export const toSandboxApp = (example: string) => `import { useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -127,11 +200,7 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flexGrow: 1, alignItems: 'center', padding: 20, paddingTop: 56, paddingBottom: 96 },
-  example: { width: '100%', maxWidth: 400, gap: 8 },
-  platforms: { position: 'absolute', right: 16, bottom: 24 },
-});
+const styles = StyleSheet.create(${SANDBOX_STYLES});
 `;
 
 const VITE_CONFIG = `import react from '@vitejs/plugin-react';
@@ -153,9 +222,7 @@ const INDEX_HTML = `<!doctype html>
     <!-- react-native-web's animations call global.requestAnimationFrame, and Vite, unlike Metro and webpack, doesn't define global. -->
     <script>globalThis.global = globalThis;</script>
     <style>
-      html, body, #root { height: 100%; margin: 0; }
-      #root { display: flex; }
-    </style>
+${ROOT_CSS}    </style>
   </head>
   <body>
     <div id="root"></div>
