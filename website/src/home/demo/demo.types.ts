@@ -26,5 +26,12 @@ export interface BookingAppProps extends BookingScreenProps {
   colorMode: ColorMode;
 }
 
+/** A place shown with its flag, e.g. a city grouped by region */
+export interface FlagPlace {
+  label: string;
+  flag: string;
+  group?: string;
+}
+
 /** A Dates pick in any calendar mode */
 export type BookedDates = Date | DateRange | Date[] | DateRange[] | null;

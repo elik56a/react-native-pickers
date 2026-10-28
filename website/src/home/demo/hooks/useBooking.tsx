@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { Text } from 'react-native';
 
 import type { DateRange } from '@elik56a/react-native-pickers';
 import type { PlaygroundOptions } from '../../playground/playground.types';
@@ -15,15 +14,9 @@ import {
   DEFAULT_GUESTS,
   DEFAULT_VIBE,
 } from '../demo.constants';
-import { styles } from '../demo.styles';
 import type { Guests } from '../demo.types';
-import { bookedNights, buildPrices, daysFromNow, guestsLabel, nightsTotal, startOfToday, stay } from '../demo.utils';
-
-const checkInAt = (hour: number) => {
-  const time = startOfToday();
-  time.setHours(hour);
-  return time;
-};
+import { bookedNights, buildPrices, daysFromNow, daysFromNowAt, guestsLabel, nightsTotal, plural, stay } from '../demo.utils';
+import { useFlagOptions } from './useFlagOptions';
 
 /** The booking app's state: where, when, who and the vibe, with the Dates field's pick kept for each calendar mode. */
 export const useBooking = (options: PlaygroundOptions) => {
@@ -33,20 +26,11 @@ export const useBooking = (options: PlaygroundOptions) => {
   const [range, setRange] = useState<DateRange>(() => stay(BOOKING_STAY.from, BOOKING_STAY.to));
   const [dates, setDates] = useState<Date[]>(() => BOOKING_DAYS.map(daysFromNow));
   const [ranges, setRanges] = useState<DateRange[]>(() => BOOKING_STAYS.map(([from, to]) => stay(from, to)));
-  const [checkIn, setCheckIn] = useState(() => checkInAt(CHECK_IN_HOUR));
+  const [checkIn, setCheckIn] = useState(() => daysFromNowAt(0, CHECK_IN_HOUR));
   const [guests, setGuests] = useState<Guests>(DEFAULT_GUESTS);
   const [vibe, setVibe] = useState(DEFAULT_VIBE);
   const prices = useMemo(buildPrices, []);
-  const cityOptions = useMemo(
-    () =>
-      CITIES.map((c) => ({
-        label: c.label,
-        value: c.label,
-        group: options.select.groups ? c.group : undefined,
-        icon: <Text style={styles.flag}>{c.flag}</Text>,
-      })),
-    [options.select.groups]
-  );
+  const cityOptions = useFlagOptions(CITIES, options.select.groups);
 
   const picked = { single: date, range, multiple: dates, ranges }[options.date.mode];
   const nights = bookedNights(picked);
@@ -74,7 +58,7 @@ export const useBooking = (options: PlaygroundOptions) => {
     vibe,
     setVibe,
     nights: nights.length,
-    summary: `${where || 'Anywhere'} · ${nights.length === 1 ? '1 night' : `${nights.length} nights`}`,
+    summary: `${where || 'Anywhere'} · ${plural(nights.length, 'night')}`,
     total: nightsTotal(nights),
   };
 };

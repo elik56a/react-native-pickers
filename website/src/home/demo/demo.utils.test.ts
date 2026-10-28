@@ -1,6 +1,18 @@
 import { toDateKey } from '@elik56a/react-native-pickers';
 import { PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
-import { bookedNights, buildPrices, daysFromNow, deviceSheetProps, guestsLabel, nightlyPrice, nightsTotal, stay } from './demo.utils';
+import {
+  bookedNights,
+  buildPrices,
+  daysFromNow,
+  daysFromNowAt,
+  deviceSheetProps,
+  guestsLabel,
+  labelOptions,
+  nightlyPrice,
+  nightsTotal,
+  plural,
+  stay,
+} from './demo.utils';
 
 describe('stay', () => {
   it('spans whole local days from today', () => {
@@ -61,8 +73,39 @@ describe('guestsLabel', () => {
 
 describe('deviceSheetProps', () => {
   it('clears the home indicator and stops under the status bar', () => {
-    expect(deviceSheetProps('ios', 700)).toEqual({ bottomInset: 30, draggable: true, expandedHeight: 648 });
+    expect(deviceSheetProps('ios', 700, 1000)).toEqual({ bottomInset: 30, draggable: true, expandedHeight: 648, maxHeightRatio: 0.648 });
     expect(deviceSheetProps('android').expandedHeight).toBeUndefined();
     expect(deviceSheetProps('android').bottomInset).toBe(16);
+  });
+
+  it('caps the sheet at the phone screen, not the taller browser window', () => {
+    expect(deviceSheetProps('android', 600, 900).maxHeightRatio).toBeCloseTo(548 / 900);
+    expect(deviceSheetProps('ios', 900, 600).maxHeightRatio).toBe(1);
+    expect(deviceSheetProps('ios', undefined, 900).maxHeightRatio).toBeUndefined();
+  });
+});
+
+describe('daysFromNowAt', () => {
+  it('sets the time on a day ahead', () => {
+    const date = daysFromNowAt(3, 10, 30);
+    expect(toDateKey(date)).toBe(toDateKey(daysFromNow(3)));
+    expect([date.getHours(), date.getMinutes()]).toEqual([10, 30]);
+  });
+});
+
+describe('plural', () => {
+  it('pluralizes past one', () => {
+    expect(plural(1, 'day')).toBe('1 day');
+    expect(plural(3, 'day')).toBe('3 days');
+    expect(plural(2, 'city', 'cities')).toBe('2 cities');
+  });
+});
+
+describe('labelOptions', () => {
+  it('uses each label as its value', () => {
+    expect(labelOptions(['S', 'M'])).toEqual([
+      { label: 'S', value: 'S' },
+      { label: 'M', value: 'M' },
+    ]);
   });
 });

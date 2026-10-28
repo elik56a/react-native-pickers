@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   subtitle: { fontSize: 13 },
   flag: { fontSize: 18 },
   browserRoot: { paddingTop: 20 },
-  booking: { flex: 1, gap: 12, paddingTop: 8 },
+  body: { flex: 1, gap: 12, paddingTop: 8 },
   pair: { flexDirection: 'row', gap: 10 },
   half: { flex: 1 },
   reserve: { height: 50, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
