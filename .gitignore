@@ -10,4 +10,5 @@ website/.docusaurus/
 website/versioned_docs/
 website/versioned_sidebars/
 website/versions.json
+website/archived-versions.json
 website/src/pages/changelog.md

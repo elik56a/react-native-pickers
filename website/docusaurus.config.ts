@@ -45,6 +45,10 @@ const { version } = require('../package.json');
 // Written by scripts/prepare.mts from the git tags, newest first. The line npm currently serves gets its exact version.
 // Only the latest release is indexed by search engines; Next and older lines would compete with it as duplicates.
 const releasedLines: string[] = fs.existsSync(path.join(__dirname, 'versions.json')) ? require('./versions.json') : [];
+// Older release lines aren't built (see scripts/prepare.mts); the versions menu links to their docs on GitHub.
+const archivedLines: { line: string; tag: string }[] = fs.existsSync(path.join(__dirname, 'archived-versions.json'))
+  ? require('./archived-versions.json')
+  : [];
 const versionOptions = Object.fromEntries(
   releasedLines.map((line, i) => [line, { label: version.startsWith(`${line}.`) ? `v${version}` : `v${line}.x`, noIndex: i > 0 }])
 );
@@ -205,6 +209,10 @@ const config: Config = {
           type: 'docsVersionDropdown',
           position: 'right',
           dropdownItemsAfter: [
+            ...archivedLines.map(({ line, tag }) => ({
+              href: `${REPO}/tree/${tag}/website/docs`,
+              label: `v${line}.x`,
+            })),
             { to: '/changelog', label: 'Changelog' },
             { href: `${REPO}/releases`, label: 'GitHub releases' },
           ],
