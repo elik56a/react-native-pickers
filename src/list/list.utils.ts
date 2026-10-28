@@ -1,4 +1,5 @@
-import type { ItemLayout, ScrollFrame } from './list.types';
+import { SCROLL_ARROW_SIDE } from './list.constants';
+import type { HorizontalListArrowSide, ItemLayout, ScrollFrame } from './list.types';
 
 /**
  * Where to scroll after pressing item `index`, so its neighbors show too: pressing the last visible item reveals the next one,
@@ -23,3 +24,16 @@ export const getRevealOffset = (layouts: ReadonlyArray<ItemLayout | undefined>, 
 /** Index of the item holding `value`, -1 for none. */
 export const findItemIndex = <T>(items: ReadonlyArray<{ value: T }>, value: T | null | undefined, isEqual: (a: T, b: T) => boolean) =>
   value === undefined || value === null ? -1 : items.findIndex((item) => isEqual(item.value, value));
+
+/** Which sides have content hidden past them, so an arrow shows there. A pixel of slack absorbs fractional scroll offsets. */
+export const getHiddenSides = ({ offset, width, contentWidth }: ScrollFrame) => ({
+  left: width > 0 && offset > 1,
+  right: width > 0 && offset + width < contentWidth - 1,
+});
+
+/** Where an arrow scrolls: a visible width toward `side`, less `inset`, so what the arrows covered comes into view. */
+export const getPageOffset = ({ offset, width, contentWidth }: ScrollFrame, side: HorizontalListArrowSide, inset: number) => {
+  const step = Math.max(width - inset, 0);
+  const target = side === SCROLL_ARROW_SIDE.right ? offset + step : offset - step;
+  return Math.max(0, Math.min(target, contentWidth - width));
+};

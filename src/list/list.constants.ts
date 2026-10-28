@@ -1,7 +1,7 @@
 import type { ViewStyle } from 'react-native';
 
 import type { Design } from '../core/theme/theme.types';
-import type { HorizontalListIconPosition, ListDesign } from './list.types';
+import type { HorizontalListArrowSide, HorizontalListIconPosition, ListDesign } from './list.types';
 
 export const HORIZONTAL_LIST_VARIANT = {
   segmented: 'segmented',
@@ -38,3 +38,19 @@ export const LIST_DESIGN: Record<Design, ListDesign> = {
   web: { outlined: false },
 };
 export const OUTLINED_SEGMENT_HEIGHT = 40;
+
+/** Physical sides, like scroll offsets: the left arrow always scrolls toward x = 0. */
+export const SCROLL_ARROW_SIDE = {
+  left: 'left',
+  right: 'right',
+} as const;
+
+export const SCROLL_ARROW_SIDES: readonly HorizontalListArrowSide[] = [SCROLL_ARROW_SIDE.left, SCROLL_ARROW_SIDE.right];
+export const SCROLL_ARROW_GLYPHS: Record<HorizontalListArrowSide, string> = { left: '‹', right: '›' };
+export const SCROLL_ARROW_LABELS: Record<HorizontalListArrowSide, string> = { left: 'Scroll left', right: 'Scroll right' };
+export const SCROLL_ARROW_SIZE = 28;
+
+export const ARROW_POSITION = {
+  outside: 'outside',
+  overlay: 'overlay',
+} as const;

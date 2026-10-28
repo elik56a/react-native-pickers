@@ -3,7 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
-import type { HORIZONTAL_LIST_VARIANT, ICON_POSITION } from './list.constants';
+import type { ARROW_POSITION, HORIZONTAL_LIST_VARIANT, ICON_POSITION, SCROLL_ARROW_SIDE } from './list.constants';
 
 /** What an item's icon can match: its state and its label's color. */
 export interface HorizontalListIconInfo {
@@ -24,7 +24,20 @@ export type HorizontalListVariant = ValueOf<typeof HORIZONTAL_LIST_VARIANT>;
 
 export type HorizontalListIconPosition = ValueOf<typeof ICON_POSITION>;
 
-export type HorizontalListSlot = 'container' | 'content' | 'item' | 'selectedItem' | 'itemLabel' | 'selectedItemLabel' | 'thumb';
+export type HorizontalListSlot =
+  | 'container'
+  | 'content'
+  | 'item'
+  | 'selectedItem'
+  | 'itemLabel'
+  | 'selectedItemLabel'
+  | 'thumb'
+  | 'arrow'
+  | 'arrowText';
+
+export type HorizontalListArrowSide = ValueOf<typeof SCROLL_ARROW_SIDE>;
+
+export type HorizontalListArrowPosition = ValueOf<typeof ARROW_POSITION>;
 
 export interface HorizontalListRenderItemInfo<T> {
   item: HorizontalListItem<T>;
@@ -42,6 +55,15 @@ export type HorizontalListProps<T> = ThemableProps & {
   variant?: HorizontalListVariant;
   /** Where each item's icon sits around its label. 'left' and 'right' follow the layout direction, so they swap in RTL. Default: 'left' */
   iconPosition?: HorizontalListIconPosition;
+  /** Round ‹ › buttons that scroll the list about a page, shown while its items overflow. Default: false */
+  showArrows?: boolean;
+  /**
+   * 'outside': the arrows sit beside the list, the one that can't scroll further dimmed.
+   * 'overlay': they float over the list's edges, each shown only while items are hidden past it. Default: 'outside'
+   */
+  arrowPosition?: HorizontalListArrowPosition;
+  /** Custom arrow content, inside the pressable arrow */
+  renderArrow?: (side: HorizontalListArrowSide, disabled: boolean) => React.ReactNode;
   /** Custom item content, inside the pressable item */
   renderItem?: (info: HorizontalListRenderItemInfo<T>) => React.ReactNode;
   /** Names the list for screen readers */
@@ -78,6 +100,18 @@ export interface ListItemProps<T> {
   renderItem?: HorizontalListProps<T>['renderItem'];
   onPress: () => void;
   onLayout: (layout: ItemLayout) => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<HorizontalListSlot>;
+  testID?: string;
+}
+
+export interface ScrollArrowProps {
+  side: HorizontalListArrowSide;
+  disabled: boolean;
+  /** Floats over the list's edge instead of sitting beside it */
+  overlay: boolean;
+  renderArrow?: HorizontalListProps<unknown>['renderArrow'];
+  onPress: () => void;
   theme: PickerTheme;
   slots?: SlotStyles<HorizontalListSlot>;
   testID?: string;
