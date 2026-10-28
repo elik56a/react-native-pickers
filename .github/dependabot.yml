@@ -27,6 +27,10 @@ updates:
         update-types: ['version-update:semver-major']
       - dependency-name: 'expo'
         update-types: ['version-update:semver-major']
+      # TypeScript 7 is native and drops the JS compiler API that scripts/expand-returned-objects.js uses, and
+      # Docusaurus's base tsconfig still sets the removed `baseUrl`.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
 
   # The Expo SDK pins React, React Native and its modules in the example app: only Expo itself is bumped, and
   # `npx expo install --fix` brings the rest along.
