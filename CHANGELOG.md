@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/elik56a/react-native-pickers/compare/v0.15.2...v0.16.0) (2026-10-28)
+
+
+### ✨ Features
+
+* **country:** add CountryPicker, with flags, dialing codes and localized names ([#49](https://github.com/elik56a/react-native-pickers/issues/49)) ([#51](https://github.com/elik56a/react-native-pickers/issues/51)) ([c4b53f1](https://github.com/elik56a/react-native-pickers/commit/c4b53f1baaf79a93fd6f9d6e0f91ce7b5aa50960))
+
 ## [0.15.2](https://github.com/elik56a/react-native-pickers/compare/v0.15.1...v0.15.2) (2026-10-28)
 
 
