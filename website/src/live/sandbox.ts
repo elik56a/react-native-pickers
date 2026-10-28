@@ -85,7 +85,3 @@ export const toStackBlitzFields = (code: string): Record<string, string> => ({
   'project[template]': 'node',
   ...Object.fromEntries(Object.entries(toWebProject(code)).map(([path, content]) => [`project[files][${path}]`, content])),
 });
-
-export const toCodeSandboxBody = (code: string) => ({
-  files: Object.fromEntries(Object.entries(toWebProject(code)).map(([path, content]) => [path, { content }])),
-});

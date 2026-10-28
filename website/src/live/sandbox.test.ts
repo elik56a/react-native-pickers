@@ -1,7 +1,6 @@
 import {
   canOpenInSandbox,
   findMainComponent,
-  toCodeSandboxBody,
   toExampleName,
   toSnackUrl,
   toSourceUrl,
@@ -83,6 +82,7 @@ describe('toWebProject', () => {
     expect(files['src/Example.tsx']).toBe(code);
     expect(files['src/App.tsx']).toContain('<Example />');
     expect(files['vite.config.ts']).toContain("'react-native': 'react-native-web'");
+    expect(files['index.html']).toContain('globalThis.global = globalThis');
     expect(JSON.parse(files['package.json']).dependencies).toHaveProperty('@elik56a/react-native-pickers');
   });
 
@@ -90,8 +90,7 @@ describe('toWebProject', () => {
     expect(toStackBlitzUrl(datePicker)).toBe('https://stackblitz.com/run?file=src/DatePickerFieldExample.tsx');
   });
 
-  it('becomes StackBlitz form fields and a CodeSandbox body', () => {
+  it('becomes StackBlitz form fields', () => {
     expect(toStackBlitzFields(code)).toMatchObject({ 'project[template]': 'node', 'project[files][src/Example.tsx]': code });
-    expect(toCodeSandboxBody(code).files['src/Example.tsx']).toEqual({ content: code });
   });
 });

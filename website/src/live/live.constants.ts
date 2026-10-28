@@ -49,8 +49,6 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
 
 export const SNACK_URL = 'https://snack.expo.dev/';
 export const STACKBLITZ_URL = 'https://stackblitz.com/run';
-export const CODESANDBOX_DEFINE_URL = 'https://codesandbox.io/api/v1/sandboxes/define?json=1';
-export const CODESANDBOX_SANDBOX_URL = 'https://codesandbox.io/p/sandbox/';
 
 /** Pinned to the versions the docs run, so a sandbox renders what the reader just saw. */
 export const WEB_DEPENDENCIES = {
@@ -152,6 +150,8 @@ const INDEX_HTML = `<!doctype html>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${SANDBOX_TITLE}</title>
+    <!-- react-native-web's animations call global.requestAnimationFrame, and Vite, unlike Metro and webpack, doesn't define global. -->
+    <script>globalThis.global = globalThis;</script>
     <style>
       html, body, #root { height: 100%; margin: 0; }
       #root { display: flex; }
