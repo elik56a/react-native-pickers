@@ -7,7 +7,7 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import clsx from 'clsx';
 import { Editor, LiveEditor, LiveError, LivePreview } from 'react-live';
 
-import { PlatformSwitch } from '../../components/PlatformSwitch';
+import { PlatformRow, PlatformSwitch } from '../../components/PlatformSwitch';
 import { ControlRow, type Option } from '../../components/PropPlayground';
 import { Device } from '../../home/device/Device';
 import { PLATFORM } from '../../home/device/device.constants';
@@ -126,6 +126,9 @@ export default function Playground({ children, scope, metastring }: PlaygroundPr
   const isBrowser = useIsBrowser();
   const controls = findControls(code);
   const preview = toCodePreview(code);
+  // With a props panel, the switch is its first row; without one, it floats over the preview.
+  const platformRow = platforms && !device && controls.length > 0;
+  const floatingPlatforms = platforms && !device && !platformRow;
 
   const choose = (prop: string, option: Option) => {
     const control = controls.find((c) => c.prop === prop);
@@ -139,7 +142,7 @@ export default function Playground({ children, scope, metastring }: PlaygroundPr
           <div
             className={styles.preview}
             data-wide={(wide && platform === PLATFORM.web) || undefined}
-            data-platforms={(platforms && !device) || undefined}
+            data-platforms={floatingPlatforms || undefined}
             data-device={device ? platform : undefined}
           >
             {device ? (
@@ -148,13 +151,14 @@ export default function Playground({ children, scope, metastring }: PlaygroundPr
               </Device>
             ) : (
               <>
-                {platforms ? <PlatformSwitch platform={platform} onChange={setPlatform} /> : null}
+                {floatingPlatforms ? <PlatformSwitch platform={platform} onChange={setPlatform} /> : null}
                 <Preview />
               </>
             )}
           </div>
           {controls.length > 0 ? (
             <aside className={styles.panel} aria-label="Props">
+              {platformRow ? <PlatformRow platform={platform} onChange={setPlatform} /> : null}
               <div className={styles.panelTitle}>Props</div>
               {controls.map((control) => (
                 <ControlRow key={control.prop} control={control} selected={readControl(code, control)} onChoose={choose} />

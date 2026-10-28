@@ -42,7 +42,7 @@
 /* An example marked wide, on the Web tab: the desktop width a picker like DateTimePicker spreads out to. */
 /* Room above the stage for the platform switch. */
 .preview[data-platforms] {
-  padding-top: 3.75rem;
+  padding-top: 4.5rem;
 }
 
 /* A `device` example fills the mock's screen, like an app, above the phone's home indicator. */
@@ -92,6 +92,11 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ifm-color-emphasis-600);
+}
+
+/* Below the platform row. */
+.panelTitle:not(:first-child) {
+  border-top: 1px solid var(--site-border);
 }
 
 .toolbar {
