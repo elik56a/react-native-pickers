@@ -30,7 +30,7 @@ export const MultiWheelPicker = ({
     <View style={[{ height: itemHeight * visible }, style, slots?.container]} testID={testID}>
       <WheelIndicator itemHeight={itemHeight} theme={theme} style={slots?.indicator} />
       <View style={styles.columns}>
-        {columns.map(({ key, flex, width, styles: columnSlots, ...column }, i) => {
+        {columns.map(({ key, flex, width, suffix, styles: columnSlots, ...column }, i) => {
           const sep = resolveSeparator(separator, i);
           return (
             <Fragment key={key}>
@@ -55,6 +55,11 @@ export const MultiWheelPicker = ({
                   ...columnSlots,
                 }}
               />
+              {suffix ? (
+                <View style={styles.separator} pointerEvents="none">
+                  <Text style={[textStyle(theme, 'md'), { color: theme.colors.textSecondary }, slots?.separator]}>{suffix}</Text>
+                </View>
+              ) : null}
             </Fragment>
           );
         })}

@@ -1,7 +1,7 @@
 ---
 title: React Native Multi-Column Wheel Picker
 sidebar_label: MultiWheelPicker
-description: Several React Native wheel pickers side by side sharing one selection band — for durations, measurements, compound values and custom date/time layouts.
+description: Several React Native wheel pickers side by side sharing one selection band — for units, measurements, compound values and custom date/time layouts.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -72,6 +72,7 @@ type WheelColumn<T> = Omit<WheelPickerProps<T>, 'itemHeight' | 'visibleItems' | 
   key: string;     // React key, required
   flex?: number;   // flex weight, default 1
   width?: number;  // fixed width instead of flex
+  suffix?: string; // text after the column at the selection band, such as a unit
 };
 ```
 
@@ -122,6 +123,8 @@ export default function Example() {
   );
 }
 ```
+
+For a unit after each column, such as `min`, set the column's `suffix` instead: it's shown after the column at the selection band in the theme's secondary text color, and the `separator` slot styles it too. [`DurationPicker`](./duration-picker) labels its wheels this way.
 
 ## Column widths
 

@@ -1,14 +1,18 @@
 import { CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
-import type { Duration, TextSelection } from './showcase.types';
+import type { TextSelection } from './showcase.types';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/** A timer's length as a clock reads it: 4:00, or 2:15:00 once it runs an hour or more. */
-export const formatDuration = ({ hours, minutes, seconds }: Duration) =>
-  hours ? `${hours}:${pad(minutes)}:${pad(seconds)}` : `${minutes}:${pad(seconds)}`;
+/** A timer's length in seconds as a clock reads it: 4:00, or 2:15:00 once it runs an hour or more. */
+export const formatClock = (total: number) => {
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  return hours ? `${hours}:${pad(minutes)}:${pad(seconds)}` : `${minutes}:${pad(seconds)}`;
+};
 
-/** The preset a duration matches, if any. */
-export const findPreset = (duration: Duration) => TIMER_PRESETS.find((p) => formatDuration(p.value) === formatDuration(duration));
+/** The preset a duration in seconds matches, if any. */
+export const findPreset = (seconds: number) => TIMER_PRESETS.find((p) => p.value === seconds);
 
 export const isClosedDay = (date: Date) => date.getDay() === CLOSED_WEEKDAY;
 

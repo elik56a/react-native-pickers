@@ -1,11 +1,11 @@
 import { CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
-import { findPreset, formatDuration, insertAtSelection, isClosedDay } from './showcase.utils';
+import { findPreset, formatClock, insertAtSelection, isClosedDay } from './showcase.utils';
 
-describe('formatDuration', () => {
+describe('formatClock', () => {
   it('reads like a clock, with hours only once there are some', () => {
-    expect(formatDuration({ hours: 0, minutes: 4, seconds: 0 })).toBe('4:00');
-    expect(formatDuration({ hours: 0, minutes: 1, seconds: 5 })).toBe('1:05');
-    expect(formatDuration({ hours: 2, minutes: 15, seconds: 0 })).toBe('2:15:00');
+    expect(formatClock(4 * 60)).toBe('4:00');
+    expect(formatClock(65)).toBe('1:05');
+    expect(formatClock(2 * 3600 + 15 * 60)).toBe('2:15:00');
   });
 });
 
@@ -20,8 +20,8 @@ describe('isClosedDay', () => {
 
 describe('findPreset', () => {
   it('matches a preset by its length, and nothing for a custom one', () => {
-    expect(findPreset({ hours: 0, minutes: 1, seconds: 30 })).toBe(TIMER_PRESETS[2]);
-    expect(findPreset({ hours: 0, minutes: 1, seconds: 31 })).toBeUndefined();
+    expect(findPreset(90)).toBe(TIMER_PRESETS[2]);
+    expect(findPreset(91)).toBeUndefined();
   });
 });
 

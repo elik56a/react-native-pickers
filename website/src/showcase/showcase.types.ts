@@ -29,13 +29,8 @@ export interface TextSelection {
   end: number;
 }
 
-export interface Duration {
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
 export interface TimerPreset {
   label: string;
-  value: Duration;
+  /** Seconds */
+  value: number;
 }

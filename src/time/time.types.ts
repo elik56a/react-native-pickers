@@ -7,7 +7,6 @@ import type { PickerTheme } from '../core/theme/theme.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 import type { useClockDial } from './hooks/useClockDial';
-import type { useTimeColumns } from './hooks/useTimeColumns';
 import type { CLOCK_MODE, TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
 
 export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
@@ -88,7 +87,12 @@ export type TimeColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChan
   toPatch: (value: number) => Partial<TimeParts>;
 };
 
-export type TimePanelColumn = ReturnType<typeof useTimeColumns>['columns'][number];
+/** A column of cells to click on the web: a time or duration wheel column with its handler attached. */
+export type TimePanelColumn = Pick<WheelColumn<number>, 'items' | 'accessibilityLabel' | 'suffix' | 'testID'> & {
+  key: string;
+  value?: number;
+  onChange: (value: number) => void;
+};
 
 export interface TimePanelProps {
   columns: TimePanelColumn[];

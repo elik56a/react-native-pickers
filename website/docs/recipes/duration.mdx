@@ -1,115 +1,59 @@
 ---
 title: Duration & timer picker
-description: React Native duration / countdown timer picker in a form field, with hours, minutes and seconds wheels and inline unit labels, built with MultiWheelPicker and PickerField.
+description: "React Native workout form with a duration field and a rest timer, built with DurationPickerField: wheels on iOS, number boxes in Material, columns on the web, with min/max and intervals and the value in seconds."
 ---
 
 # Duration & timer picker
 
-`TimePicker` picks a time of day. For a **length of time** (timer, workout, cooking), use `MultiWheelPicker` with unit labels. Here it opens from a [`PickerField`](../components/picker-fields#your-own-sheet-pickerfield), so it fits a form on every platform: the field and the sheet's buttons follow the [design](../guides/designs), it opens in a bottom sheet on iOS and Android and in a dropdown under the field on the web, and nothing changes until the user confirms.
+A workout form with two lengths of time: the session, in 5-minute steps from 10 minutes to 3 hours, and the rest between sets, in minutes and seconds. Both are [`DurationPickerField`](../components/duration-picker#in-a-form-field)s: a bottom sheet on iOS and Android, a dropdown under the field on the web, and nothing changes until the user confirms.
 
 ```tsx live
 import { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import {
-  MultiWheelPicker,
-  PickerField,
-  PickerSheet,
-  useDraft,
-  usePickerTheme,
-} from '@elik56a/react-native-pickers';
+import { StyleSheet, Text, View } from 'react-native';
+import { DurationPickerField, formatDuration } from '@elik56a/react-native-pickers';
 
-type Duration = { h: number; m: number; s: number };
-
-const range = (n: number) => Array.from({ length: n }, (_, i) => i);
-const HOURS = range(24);
-const SIXTY = range(60);
-const UNITS = ['hours', 'min', 'sec'];
-
-const format = ({ h, m, s }: Duration) =>
-  [h && `${h} h`, m && `${m} min`, s && `${s} s`].filter(Boolean).join(' ');
-
-function Unit({ children }: { children?: string }) {
-  const { colors } = usePickerTheme();
-  return <Text style={[styles.unit, { color: colors.textSecondary }]}>{children}</Text>;
-}
-
-function DurationSheet({
-  visible,
-  onClose,
-  value,
-  onSave,
-}: {
-  visible: boolean;
-  onClose: () => void;
-  value: Duration;
-  onSave: (d: Duration) => void;
-}) {
-  const [draft, setDraft] = useDraft(value, visible);
+export default function Workout() {
+  const [session, setSession] = useState(45 * 60);
+  const [rest, setRest] = useState(90);
   return (
-    <PickerSheet
-      visible={visible}
-      onClose={onClose}
-      title="Timer"
-      confirmDisabled={!format(draft)}
-      onConfirm={() => {
-        onSave(draft);
-        onClose();
-      }}
-    >
-      <MultiWheelPicker
-        separator={(left) => <Unit>{UNITS[left]}</Unit>}
-        columns={[
-          {
-            key: 'h',
-            items: HOURS,
-            value: draft.h,
-            onChange: (h) => setDraft({ ...draft, h }),
-            accessibilityLabel: 'Hours',
-            textAlign: 'right',
-          },
-          {
-            key: 'm',
-            items: SIXTY,
-            value: draft.m,
-            onChange: (m) => setDraft({ ...draft, m }),
-            loop: true,
-            accessibilityLabel: 'Minutes',
-            textAlign: 'right',
-          },
-          {
-            key: 's',
-            items: SIXTY,
-            value: draft.s,
-            onChange: (s) => setDraft({ ...draft, s }),
-            loop: true,
-            accessibilityLabel: 'Seconds',
-            textAlign: 'right',
-          },
-        ]}
+    <View style={styles.form}>
+      <DurationPickerField
+        label="Session"
+        value={session}
+        onConfirm={setSession}
+        min={10 * 60}
+        max={3 * 3600}
+        minuteInterval={5}
       />
-    </PickerSheet>
-  );
-}
-
-export default function Timer() {
-  const [duration, setDuration] = useState<Duration>({ h: 0, m: 25, s: 0 });
-  return (
-    <PickerField label="Timer" placeholder="Pick a duration" displayValue={format(duration)}>
-      {(sheet) => <DurationSheet {...sheet} value={duration} onSave={setDuration} />}
-    </PickerField>
+      <DurationPickerField
+        label="Rest between sets"
+        title="Rest"
+        value={rest}
+        onConfirm={setRest}
+        showHours={false}
+        showSeconds
+        min={15}
+        max={5 * 60}
+        secondInterval={15}
+      />
+      <Text style={styles.summary}>
+        {Math.floor(session / (rest + 60))} sets of 1 min with {formatDuration(rest)} rest
+      </Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  unit: { fontSize: 14, fontWeight: '600', width: 44 },
+  form: { gap: 12 },
+  summary: { color: '#6E685E', textAlign: 'center' },
 });
 ```
 
 ## How it works
 
-- **`PickerField` + `PickerSheet`.** The field owns the open state and hands `{ visible, onClose }` to the sheet. A `PickerSheet` inside a field follows its `presentation`, so `'auto'` is a dropdown on the web and a bottom sheet on native.
-- **`useDraft`** copies the duration into a draft each time the sheet opens. The wheels change only the draft; **Done** (**OK** in Material) saves it, and closing any other way discards it. **Done** stays disabled at zero.
-- **Unit labels.** The `separator` function gets the index of the column on its **left**, so each gap shows that column's unit.
-- **Inline**, without the field, render the `MultiWheelPicker` on its own and keep `h`, `m` and `s` in state.
+- **The value is seconds.** `45 * 60` goes in, and `onConfirm` hands back a number of seconds, ready to store or to start a timer with.
+- **`min` and `max`** dim what's out of range, so the session can't be under 10 minutes and the rest can't be 0.
+- **`showHours={false}`** leaves minutes and seconds for short times. Without hours, minutes count past 59.
+- **`formatDuration`** writes seconds as the field shows them, such as `1 min 30 s`, for any text of your own.
 
-Wheels look the same in every design, so the duration looks alike on each platform; the field, the sheet and the buttons around it are what change.
+For other units, such as feet and inches or kilograms, build the wheels with [`MultiWheelPicker`](../components/multi-wheel-picker) and a `suffix` on each column.

@@ -1,4 +1,4 @@
-import { HorizontalList, MultiWheelPicker } from '@elik56a/react-native-pickers';
+import { DurationPicker, HorizontalList } from '@elik56a/react-native-pickers';
 import { ActionButton } from '../../home/demo/components/ActionButton';
 import { AppScreen } from '../../home/demo/components/AppScreen';
 import { useTimer } from '../hooks/useTimer';
@@ -15,7 +15,7 @@ export const TimerScreen = ({ platform }: ScreenProps) => {
       action={<ActionButton label="Start" busyLabel="Get ready…" doneLabel="✓ Go!" />}
     >
       <HorizontalList variant="chips" items={TIMER_PRESET_ITEMS} value={timer.preset} onChange={timer.choosePreset} />
-      <MultiWheelPicker columns={timer.columns} />
+      <DurationPicker value={timer.seconds} onChange={timer.setSeconds} showSeconds />
     </AppScreen>
   );
 };

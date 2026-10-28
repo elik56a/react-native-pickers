@@ -11,6 +11,8 @@ import { TimePicker, TimePickerField } from '@elik56a/react-native-pickers';
 
 `TimePicker` is a React Native time picker for hours, minutes and optionally seconds and AM/PM. It looks native on each platform: [wheels on iOS, a Material clock dial on Android, columns to click on the web](#wheels-a-dial-or-a-list), or the one you pick with `display`. The 12h or 24h clock and the AM/PM labels come from the locale automatically.
 
+Picking a length of time, such as a timer or a workout, rather than a time of day? Use [`DurationPicker`](./duration-picker).
+
 ```tsx
 import { TimePicker } from '@elik56a/react-native-pickers';
 ```
@@ -248,4 +250,4 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 
 - [Alarm recipe](../recipes/alarm-time)
 - [TimePickerField](./picker-fields): the picker behind a form field
-- [Duration picker](../recipes/duration): for lengths of time rather than a time of day, use `MultiWheelPicker`
+- [DurationPicker](./duration-picker): for a length of time rather than a time of day

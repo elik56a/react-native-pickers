@@ -73,6 +73,8 @@ export type WheelColumn<T = any> = Omit<WheelPickerProps<T>, 'itemHeight' | 'vis
   flex?: number;
   /** Fixed column width */
   width?: number;
+  /** Text after the column at the selection band, such as a unit ('min'). */
+  suffix?: string;
 };
 
 export type MultiWheelSlot = 'container' | 'indicator' | 'separator' | WheelPickerSlot;
