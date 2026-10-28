@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   segment: { height: SEGMENT_HEIGHT },
   outlinedTrack: { borderWidth: 1 },
   outlinedContent: { flexGrow: 1 },
-  outlinedSegment: { height: OUTLINED_SEGMENT_HEIGHT, borderRadius: 0 },
+  outlinedSegment: { borderRadius: 0 },
+  outlinedSegmentHeight: { height: OUTLINED_SEGMENT_HEIGHT },
   thumb: { position: 'absolute', top: TRACK_PADDING, bottom: TRACK_PADDING, boxShadow: SEGMENT_THUMB_SHADOW },
 });

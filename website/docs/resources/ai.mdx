@@ -56,7 +56,7 @@ SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,key
 SelectList<T>      same list inline: options value onChange multiple listHeight
                    server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
                    or manual: onSearchChange(query) + loading + onEndReached; loadingText renderLoading(theme); no local filtering with either
-HorizontalList<T>  items: {label,value,disabled?,icon?}[]  value  onChange(value, item)  variant 'segmented'|'chips'  renderItem  (tap at the edge scrolls the next item into view)
+HorizontalList<T>  items: {label,value,disabled?,icon?}[] (icon: node or ({selected,disabled,color}) => node)  value  onChange(value, item)  variant 'segmented'|'chips'  iconPosition 'left'|'right'|'top'|'bottom'  renderItem  (tap at the edge scrolls the next item into view)
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight
 Sheets (draft; commit on Done):

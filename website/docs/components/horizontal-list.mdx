@@ -1,9 +1,10 @@
 ---
 title: React Native Horizontal List
 sidebar_label: HorizontalList
-description: "React Native segmented control and horizontal chips that scroll sideways and reveal the next item when you tap one at the edge. Zero native code."
+description: "React Native segmented control and horizontal chips with icons on any side, that scroll sideways and reveal the next item when you tap one at the edge. Zero native code."
 ---
 
+import { Text } from 'react-native';
 import PropPlayground from '@site/src/components/PropPlayground';
 import { HorizontalList } from '@elik56a/react-native-pickers';
 
@@ -50,17 +51,50 @@ export default function Example() {
 }
 ```
 
+## Icons
+
+Give an item an `icon` and choose its side with `iconPosition`: `'left'` (the default), `'right'`, `'top'` or `'bottom'`. `'left'` and `'right'` follow the layout direction, so they swap in RTL. An icon can also be a function of `{ selected, disabled, color }`, to color it like its label.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const modes = [
+  { label: 'Walk', value: 'walk', icon: '🚶' },
+  { label: 'Bike', value: 'bike', icon: '🚲' },
+  { label: 'Bus', value: 'bus', icon: '🚌' },
+  { label: 'Car', value: 'car', icon: '🚗' },
+].map((m) => ({
+  ...m,
+  icon: ({ selected }: { selected: boolean }) => <Text style={{ fontSize: 18, opacity: selected ? 1 : 0.6 }}>{m.icon}</Text>,
+}));
+
+export default function Example() {
+  const [mode, setMode] = useState('bike');
+  return <HorizontalList items={modes} value={mode} onChange={setMode} iconPosition="top" accessibilityLabel="Travel mode" />;
+}
+```
+
 ## Try the props
 
 <PropPlayground
   name="HorizontalList"
   component={HorizontalList}
   props={{
-    items: ['Single', 'Range', 'Multiple', 'Ranges', 'Week', 'Month'].map((m) => ({ label: m, value: m })),
+    items: [
+      { label: 'Walk', value: 'walk', icon: <Text>🚶</Text> },
+      { label: 'Bike', value: 'bike', icon: <Text>🚲</Text> },
+      { label: 'Bus', value: 'bus', icon: <Text>🚌</Text> },
+      { label: 'Car', value: 'car', icon: <Text>🚗</Text> },
+    ],
   }}
-  value="Range"
+  value="bike"
   code="items={modes} value={mode} onChange={setMode}"
-  controls={[{ prop: 'variant', options: ['segmented', 'chips'] }]}
+  controls={[
+    { prop: 'variant', options: ['segmented', 'chips'] },
+    { prop: 'iconPosition', options: ['left', 'right', 'top', 'bottom'] },
+  ]}
 />
 
 ## Behaviour
@@ -73,10 +107,11 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` | `ReadonlyArray<HorizontalListItem<T>>` | **required** | `{ label, value, disabled?, icon? }` |
+| `items` | `ReadonlyArray<HorizontalListItem<T>>` | **required** | `{ label, value, disabled?, icon? }`. `icon` is a node, or a function of `{ selected, disabled, color }`. |
 | `value` | `T \| null` | — | Selected value. |
 | `onChange` | `(value: T, item) => void` | — | Called on tap. |
 | `variant` | `'segmented' \| 'chips'` | `'segmented'` | Track with a sliding thumb, or separate pills. |
+| `iconPosition` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` | Where each icon sits around its label. |
 | `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
 | `renderItem` | `(info: { item, selected, disabled, theme }) => ReactNode` | — | Custom item content. |
 | `accessibilityLabel` | `string` | — | Names the list for screen readers. |

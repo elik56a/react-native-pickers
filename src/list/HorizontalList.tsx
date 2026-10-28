@@ -5,7 +5,7 @@ import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { ListItem } from './components/ListItem';
 import { useHorizontalList } from './hooks/useHorizontalList';
 import { useSegmentThumb } from './hooks/useSegmentThumb';
-import { HORIZONTAL_LIST_VARIANT, LIST_DESIGN } from './list.constants';
+import { HORIZONTAL_LIST_VARIANT, ICON_POSITION, LIST_DESIGN } from './list.constants';
 import { styles } from './list.styles';
 import type { HorizontalListProps } from './list.types';
 import { findItemIndex } from './list.utils';
@@ -17,6 +17,7 @@ export const HorizontalList = <T,>({
   onChange,
   isEqual = Object.is,
   variant = HORIZONTAL_LIST_VARIANT.segmented,
+  iconPosition = ICON_POSITION.left,
   renderItem,
   accessibilityLabel,
   style,
@@ -71,6 +72,7 @@ export const HorizontalList = <T,>({
           selected={index === selectedIndex}
           divided={index > 0}
           variant={variant}
+          iconPosition={iconPosition}
           renderItem={renderItem}
           onPress={() => list.press(item, index)}
           onLayout={(layout) => {
