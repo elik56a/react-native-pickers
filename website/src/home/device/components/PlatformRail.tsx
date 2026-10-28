@@ -13,7 +13,7 @@ const ICONS: Record<Platform, React.ReactNode> = {
   [PLATFORM.android]: (
     <>
       <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
-      <circle cx="12" cy="5.5" r="0.6" fill="currentColor" />
+      <circle cx="12" cy="5.5" r="0.6" fill="currentColor" stroke="none" />
     </>
   ),
   [PLATFORM.web]: (
@@ -23,6 +23,29 @@ const ICONS: Record<Platform, React.ReactNode> = {
     </>
   ),
 };
+
+interface PlatformIconProps {
+  platform: Platform;
+  size?: number;
+  /** Default: the text color around it */
+  color?: string;
+}
+
+export const PlatformIcon = ({ platform, size = 22, color = 'currentColor' }: PlatformIconProps) => (
+  <svg
+    aria-hidden="true"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    color={color}
+    strokeWidth="1.7"
+    strokeLinecap="round"
+  >
+    {ICONS[platform]}
+  </svg>
+);
 
 /** iOS / Android / Web as a slim rail beside the device, so switching costs no height above it. */
 export const PlatformRail = ({ value, onChange }: { value: Platform; onChange: (platform: Platform) => void }) => (
@@ -35,18 +58,7 @@ export const PlatformRail = ({ value, onChange }: { value: Platform; onChange: (
         aria-pressed={platform === value}
         onClick={() => onChange(platform)}
       >
-        <svg
-          aria-hidden="true"
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-        >
-          {ICONS[platform]}
-        </svg>
+        <PlatformIcon platform={platform} />
         {PLATFORM_LABELS[platform]}
       </button>
     ))}

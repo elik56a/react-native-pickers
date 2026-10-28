@@ -8,7 +8,7 @@ import { PickersProvider, SelectPicker } from '@elik56a/react-native-pickers';
 import { PLATFORM } from '../home/device/device.constants';
 import type { Platform } from '../home/device/device.types';
 import { Choices } from './Choices';
-import { PlatformSwitch } from './PlatformSwitch';
+import { PlatformRow } from './PlatformSwitch';
 import styles from './PropPlayground.module.css';
 
 export type Option = string | number | boolean | readonly string[];
@@ -233,12 +233,7 @@ export default function PropPlayground({
   return (
     <div className={styles.playground}>
       <div className={styles.body}>
-        <div
-          className={styles.preview}
-          data-wide={(wide && platform === PLATFORM.web) || undefined}
-          data-platforms={platforms || undefined}
-        >
-          {platforms ? <PlatformSwitch platform={platform} onChange={setPlatform} /> : null}
+        <div className={styles.preview} data-wide={(wide && platform === PLATFORM.web) || undefined}>
           <div className={styles.stage}>
             <BrowserOnly fallback={null}>
               {() => (
@@ -250,6 +245,7 @@ export default function PropPlayground({
           </div>
         </div>
         <div className={styles.panel}>
+          {platforms ? <PlatformRow platform={platform} onChange={setPlatform} /> : null}
           {controls.map((control) => (
             <ControlRow key={control.prop} control={control} selected={selection[control.prop]} onChoose={choose} />
           ))}

@@ -1,5 +1,5 @@
-import { CODESANDBOX_DEFINE_URL, CODESANDBOX_SANDBOX_URL, STACKBLITZ_URL } from './live.constants';
-import { toCodeSandboxBody, toSnackUrl, toStackBlitzFields } from './sandbox';
+import { CODESANDBOX_DEFINE_URL, CODESANDBOX_SANDBOX_URL } from './live.constants';
+import { toCodeSandboxBody, toSnackUrl, toStackBlitzFields, toStackBlitzUrl } from './sandbox';
 
 const openInSnack = (code: string) => window.open(toSnackUrl(code), '_blank', 'noopener');
 
@@ -7,7 +7,7 @@ const openInSnack = (code: string) => window.open(toSnackUrl(code), '_blank', 'n
 const openInStackBlitz = (code: string) => {
   const form = document.createElement('form');
   form.method = 'POST';
-  form.action = STACKBLITZ_URL;
+  form.action = toStackBlitzUrl(code);
   form.target = '_blank';
   for (const [name, value] of Object.entries(toStackBlitzFields(code))) {
     const input = document.createElement('input');

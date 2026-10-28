@@ -48,7 +48,7 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
 ];
 
 export const SNACK_URL = 'https://snack.expo.dev/';
-export const STACKBLITZ_URL = 'https://stackblitz.com/run?file=src/Example.tsx';
+export const STACKBLITZ_URL = 'https://stackblitz.com/run';
 export const CODESANDBOX_DEFINE_URL = 'https://codesandbox.io/api/v1/sandboxes/define?json=1';
 export const CODESANDBOX_SANDBOX_URL = 'https://codesandbox.io/p/sandbox/';
 
@@ -65,25 +65,74 @@ export const WEB_DEV_DEPENDENCIES = {
   vite: '^7.0.0',
 };
 
-/** Every sandbox renders the example through this screen: padded, centered and scrollable, like the docs preview. */
-export const SANDBOX_APP = `import { ScrollView, StyleSheet, View } from 'react-native';
+/** The pickers' source on GitHub: `src/<folder>/<Component>.tsx`. */
+export const SOURCE_URL = 'https://github.com/elik56a/react-native-pickers/blob/master/src/';
 
-import Example from './Example';
+/** Each component's folder under `src/`, for its source link and to name a sandbox's example file after it. */
+export const COMPONENT_FOLDERS: Record<string, string> = {
+  Calendar: 'calendar',
+  DatePicker: 'date',
+  DatePickerField: 'date',
+  DatePickerSheet: 'date',
+  DateWheelPicker: 'date',
+  DateTimePicker: 'datetime',
+  DateTimePickerField: 'datetime',
+  DateTimePickerSheet: 'datetime',
+  EmojiPicker: 'emoji',
+  EmojiPickerField: 'emoji',
+  EmojiPickerSheet: 'emoji',
+  HorizontalList: 'list',
+  SelectList: 'select',
+  SelectPicker: 'select',
+  BottomSheet: 'sheet',
+  Dropdown: 'sheet',
+  PickerField: 'sheet',
+  PickerSheet: 'sheet',
+  SheetContent: 'sheet',
+  TimePicker: 'time',
+  TimePickerField: 'time',
+  TimePickerSheet: 'time',
+  MultiWheelPicker: 'wheel',
+  WheelPicker: 'wheel',
+  WheelPickerField: 'wheel',
+  WheelPickerSheet: 'wheel',
+};
+
+/** Names too generic for a sandbox file; the example's main component names it instead. */
+export const GENERIC_EXAMPLE_NAMES = ['Example', 'App'];
+
+/** Every sandbox renders the example like the docs preview, with the library's own HorizontalList floating in a corner to try it as on iOS, Android or the web. */
+export const toSandboxApp = (example: string) => `import { useState } from 'react';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+
+import { HorizontalList, PickersProvider } from '${PACKAGE}';
+
+import ${example} from './${example}';
+
+const platforms = [
+  { label: 'iOS', value: 'ios', icon: <Text>🍎</Text> },
+  { label: 'Android', value: 'android', icon: <Text>🤖</Text> },
+  { label: 'Web', value: 'web', icon: <Text>🌐</Text> },
+] as const;
 
 export default function App() {
+  const [platform, setPlatform] = useState(Platform.OS);
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <View style={styles.frame}>
-        <Example />
-      </View>
-    </ScrollView>
+    <PickersProvider platform={platform}>
+      <ScrollView contentContainerStyle={styles.screen}>
+        <View style={styles.example}>
+          <${example} />
+        </View>
+      </ScrollView>
+      <HorizontalList items={platforms} value={platform} onChange={setPlatform} style={styles.platforms} />
+    </PickersProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#fff' },
-  content: { flexGrow: 1, alignItems: 'center', paddingHorizontal: 20, paddingTop: 56, paddingBottom: 32 },
-  frame: { width: '100%', maxWidth: 400, gap: 8 },
+  screen: { flexGrow: 1, alignItems: 'center', padding: 20, paddingTop: 56, paddingBottom: 96 },
+  example: { width: '100%', maxWidth: 400, gap: 8 },
+  platforms: { position: 'absolute', right: 16, bottom: 24 },
 });
 `;
 
@@ -122,11 +171,10 @@ import App from './App';
 createRoot(document.getElementById('root')!).render(<App />);
 `;
 
-/** The Vite + react-native-web files around an example's `src/Example.tsx`. `.npmrc`: the pickers' react-native peer is served by react-native-web, so npm mustn't install it. */
+/** The Vite + react-native-web files around an example and the App that renders it. `.npmrc`: the pickers' react-native peer is served by react-native-web, so npm mustn't install it. */
 export const WEB_TEMPLATE_FILES = {
   '.npmrc': 'legacy-peer-deps=true\n',
   'vite.config.ts': VITE_CONFIG,
   'index.html': INDEX_HTML,
   'src/main.tsx': MAIN,
-  'src/App.tsx': SANDBOX_APP,
 };
