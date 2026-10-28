@@ -2,7 +2,11 @@ import { SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
 import type { SelectOption, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
-const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-֑ͯ-ׇ]/g, '');
+const fold = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f\u0591-\u05c7]/g, '');
 
 /** Every word of the query must appear in the label, description or keywords. */
 export const defaultFilter = <T>(option: SelectOption<T>, query: string): boolean => {

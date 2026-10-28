@@ -27,6 +27,13 @@ describe('defaultFilter', () => {
   it('ignores Hebrew niqqud', () => {
     expect(defaultFilter(option('שָׁלוֹם'), 'שלום')).toBe(true);
   });
+  it('keeps Greek, Cyrillic and Armenian letters', () => {
+    expect(defaultFilter(option('Москва'), 'моск')).toBe(true);
+    expect(defaultFilter(option('Москва'), 'париж')).toBe(false);
+    expect(defaultFilter(option('Αθήνα'), 'αθηνα')).toBe(true);
+    expect(defaultFilter(option('Αθήνα'), 'ρώμη')).toBe(false);
+    expect(defaultFilter(option('Երևան'), 'գյումրի')).toBe(false);
+  });
   it('searches description and keywords', () => {
     expect(defaultFilter(option('France', { description: 'République française' }), 'republique')).toBe(true);
     expect(defaultFilter(option('Israel', { keywords: ['ישראל'] }), 'ישראל')).toBe(true);
