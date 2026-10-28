@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/elik56a/react-native-pickers/compare/v0.13.0...v0.14.0) (2026-10-28)
+
+
+### ✨ Features
+
+* **list:** scroll arrows for HorizontalList, and richer docs examples ([#37](https://github.com/elik56a/react-native-pickers/issues/37)) ([11b114e](https://github.com/elik56a/react-native-pickers/commit/11b114ee41b7bb9ae5ac9ded778a95e62b836082))
+
 ## [0.13.0](https://github.com/elik56a/react-native-pickers/compare/v0.12.0...v0.13.0) (2026-10-28)
 
 
