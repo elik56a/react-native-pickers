@@ -71,6 +71,11 @@ describe('filterEmojis', () => {
     expect(filterEmojis(all, ['smileys', 'food'], ['🍕'])).toEqual([emoji('😀'), emoji('🫠')]);
     expect(filterEmojis(all, ['smileys'], undefined, 13)).toEqual([emoji('😀')]);
   });
+
+  it('excludes regardless of variation selector or skin tone', () => {
+    const hands = [emoji('👍'), emoji('👋')];
+    expect(filterEmojis(hands, ['people'], ['👍\uFE0F', '👋🏽'])).toEqual([]);
+  });
 });
 
 describe('recent', () => {
