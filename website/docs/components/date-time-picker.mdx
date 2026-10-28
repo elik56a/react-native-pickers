@@ -1,7 +1,7 @@
 ---
 title: React Native Date Time Picker
 sidebar_label: DateTimePicker
-description: "React Native date and time picker in one component: an iOS-style day + time wheel or a calendar with time wheels. 12h/24h from locale. Pure JS."
+description: "React Native date and time picker in one component: one row of wheels on iOS, or a calendar with the time under it (Material) or beside it (web). 12h/24h from locale. Pure JS."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -9,7 +9,7 @@ import { DateTimePicker, DateTimePickerField } from '@elik56a/react-native-picke
 
 # DateTimePicker
 
-`DateTimePicker` is a React Native date and time picker: pick a day and a time in one control. It has two displays, and each [design](../guides/platforms#designs) has its own default:
+`DateTimePicker` is a React Native date and time picker: pick a day and a time in one control. It has two displays, and each [design](../guides/designs) has its own default:
 
 - **`wheel`** (the iOS default): one row of wheels like the iOS date-and-time picker. The day wheel shows `Today`, `Tue, Oct 27`… next to the hour, minute and AM/PM wheels.
 - **`calendar`** (the Material and web default): a month grid and the time: hour and minute fields to type into under it in Material, wheels under it on iOS, and on the web columns to click beside it. `timePosition="below"` puts the time under the calendar instead, and `"beside"` puts it next to the calendar in any design when there's room for both. `timeDisplay` picks how the time is chosen in any design: `'wheel'`, `'dial'`, `'input'` or `'list'`.
@@ -171,4 +171,5 @@ All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minute
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots) of the wheels. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
 | `testID` | `string` | — | Test ID. The wheels get `${testID}-day`, `-hour`, `-minute`… (in the calendar display: `-calendar`, `-time-hour`…). |

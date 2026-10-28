@@ -1,0 +1,137 @@
+---
+title: iOS, Material & web designs
+sidebar_label: Designs (iOS, Material, web)
+description: "React Native pickers that look native on every OS: iOS on iPhone, Material Design on Android, a web design in the browser. Or one design everywhere, in your brand."
+---
+
+# Designs
+
+Every picker looks native on the platform it runs on, from one code path: **iOS** on iPhone and iPad, **Material Design** on Android, and a **web** design in the browser. You don't write anything for this; it's the default.
+
+A design changes shapes and layout: where Cancel and Done sit, how a field and a chosen day look, whether time is picked on wheels, a clock dial or columns. It never changes your colors, fonts or anything you set yourself.
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import {
+  DatePickerField,
+  HorizontalList,
+  TimePicker,
+} from '@elik56a/react-native-pickers';
+import type { Design } from '@elik56a/react-native-pickers';
+
+const DESIGNS = [
+  { label: 'iOS', value: 'ios' },
+  { label: 'Material', value: 'material' },
+  { label: 'Web', value: 'web' },
+] as const;
+
+export default function Example() {
+  const [design, setDesign] = useState<Design>('material');
+  const [date, setDate] = useState<Date | null>(null);
+  const [time, setTime] = useState(new Date());
+  return (
+    <View style={{ gap: 16 }}>
+      <HorizontalList
+        items={DESIGNS}
+        value={design}
+        onChange={setDesign}
+      />
+      <DatePickerField
+        design={design}
+        label="Date"
+        value={date}
+        onConfirm={setDate}
+      />
+      <TimePicker
+        design={design}
+        value={time}
+        onChange={setTime}
+      />
+    </View>
+  );
+}
+```
+
+## What each design changes
+
+| | `ios` | `material` | `web` |
+| --- | --- | --- | --- |
+| Fields | label above, 48 tall | outlined, 56 tall; the label sits inside, then floats onto the border | label above, 40 tall, focus ring while open |
+| Sheet corners | 24 | 28 | 12 |
+| Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
+| Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+| Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
+| Calendar | chosen day tinted, today's number coloured, SUN MON | chosen day filled, today ringed, S M T | chosen day a filled square, today shaded, Sun Mon |
+| Date sheet | calendar | the picked date in large type above the calendar | calendar |
+| Time | wheels | a clock dial | columns of hours and minutes to click |
+| Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
+| HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
+| Press | dims while held | ripple | dims while held |
+
+`design="auto"` (the default) picks `ios` on iOS, `web` on the web, and `material` everywhere else (Android, Windows, macOS).
+
+## One design everywhere
+
+Set `design` on the provider to use one look on every platform. To keep the iOS look on Android and the web:
+
+```tsx
+<PickersProvider design="ios">
+  <App />
+</PickersProvider>
+```
+
+Or Material everywhere, for an app built on Material Design:
+
+```tsx
+<PickersProvider design="material">
+  <App />
+</PickersProvider>
+```
+
+## One component
+
+`design` on a component wins over the provider's. A field passes its design to the sheet it opens.
+
+```tsx
+<SelectPicker design="material" options={options} value={value} onChange={setValue} />
+<TimePickerField design="ios" label="Alarm" value={time} onConfirm={setTime} />
+```
+
+## Only part of a design
+
+Some choices a design makes are props of their own, so you can keep the rest of a design and change just that:
+
+| To get | Set |
+| --- | --- |
+| Wheels for time in any design | `display="wheel"` on `TimePicker` |
+| A clock dial, typed fields or columns | `display="dial"`, `"input"` or `"list"` on `TimePicker` |
+| One row of date and time wheels | `display="wheel"` on `DateTimePicker` |
+| A calendar with time wheels | `display="calendar"` and `timeDisplay="wheel"` on `DateTimePicker` |
+| The time beside or under the calendar | `timePosition="beside"` or `"below"` on `DateTimePicker` |
+| `Mon` instead of `M` | `weekdayFormat="short"` on `DatePicker` |
+| Your own button labels | `confirmLabel` / `cancelLabel` on any sheet or field |
+
+## Customize a design
+
+A design is a starting point. Everything you set wins over it:
+
+- **Theme tokens.** `theme` and `darkTheme` on `PickersProvider` (colors, radius, spacing, fonts) are merged on top of the design's tokens. `radius.sheet` sets sheet corners in every design. See [Theming](./theming).
+- **Slot styles.** Every visual part takes a style through `styles`. See [Styling with slots](./styling).
+- **Render props.** Replace a row, a day, a trigger or a chevron and keep the behavior. See [Render props](./render-props).
+- **Explicit props.** `confirmLabel`, `weekdayFormat`, `display` and the others above always win over the design's defaults.
+
+`DESIGN_TOKENS` shows exactly what each design changes on the light or dark theme. In your own components, `usePickerTheme().design` tells you which design to match:
+
+```tsx
+const theme = usePickerTheme();
+const radius = theme.design === 'material' ? theme.radius.full : theme.radius.md;
+```
+
+## Upgrading from 0.10
+
+Before 0.11, every platform got the iOS look: wheels for times, one row of wheels for `DateTimePicker`, **Done** in the sheet header. Android and web apps now get the Material and web designs. To keep the old look, set `design="ios"` on the provider. To keep only part of it, use the props in [Only part of a design](#only-part-of-a-design).
+
+## Previewing other platforms
+
+`design` sets the look. To also see how pickers *behave* on another platform in a browser (fields opening a bottom sheet instead of a dropdown, room for the iOS home indicator), set `platform` on the provider. See [Previewing other platforms](./platforms#previewing-other-platforms). The iOS / Android / Web switch on every live example on this site does both.

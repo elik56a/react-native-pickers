@@ -229,6 +229,28 @@ export default function Example() {
 
 → [Picker fields](../components/picker-fields)
 
+## Pick a design
+
+Each picker looks native on its platform by default. Use the switch at the top left of any example to see iOS, Android and Web. To use one look on every platform, set `design` on the provider or on one component:
+
+```tsx live
+import { useState } from 'react';
+import { TimePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [time, setTime] = useState(new Date());
+  return (
+    <TimePicker
+      design="material"
+      value={time}
+      onChange={setTime}
+    />
+  );
+}
+```
+
+→ [Designs](../guides/designs)
+
 ## Next
 
 - [Core concepts](./core-concepts): the few ideas every component shares

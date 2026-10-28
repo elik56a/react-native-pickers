@@ -48,6 +48,19 @@ Every feature folder has the same layout:
 - Dates are local time. Compare and serialize calendar days with `toDateKey`, never `toISOString()`.
 - `onChange` fires for user changes only. Changing `value` programmatically must not call it.
 
+## Docs stay in sync
+
+When a change affects what users see or call (a new component, prop, default, behavior or design), update in the same PR:
+
+- `website/docs/components/<page>.mdx`: the prose, a live example and the props table. New pages go in `website/sidebars.ts`.
+- `website/docs/api/reference.mdx` for new exports, and every guide or recipe that mentions what changed (`guides/designs.mdx`, `guides/theming.mdx`, `guides/platforms.mdx`…).
+- `website/docs/resources/ai.mdx`: the cheat sheet AI assistants read. `llms.txt` and `llms-full.txt` are generated from the docs, so they follow.
+- `README.md`.
+- Home page: `website/src/home/home.constants.ts` (features, component grid, comparison table, hero chips), `website/src/home/faq.constants.tsx` and `website/src/home/components/Hero.tsx`.
+- SEO: the `description` front matter of each page you touched, `DESCRIPTION` and the keywords in `website/docusaurus.config.ts`, `description` and `keywords` in `package.json`, and `context7.json`.
+
+Claude Code runs `.claude/hooks/docs-check.sh` before it finishes, as a reminder of this list.
+
 ## Commits and releases
 
 - Use Conventional Commits (`feat(select): …`, `fix(time): …`, `docs: …`). PRs are squash-merged, so the PR title becomes the commit on `master`.

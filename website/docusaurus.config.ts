@@ -31,14 +31,14 @@ const FOOTER_BRAND = `
   <img src="${BASE_URL}img/logo.svg" width="40" height="40" alt="" />
   <span>React Native Pickers</span>
 </a>
-<p class="footer-tagline">Every picker your React Native app needs. 100% JavaScript, zero native code.</p>
+<p class="footer-tagline">Every picker your React Native app needs. Native on iOS, Android and the web. 100% JavaScript, zero native code.</p>
 <div class="footer-social">
   ${socialLink('GitHub', REPO, 'React Native Pickers on GitHub')}
   ${socialLink('npm', NPM, 'React Native Pickers on npm')}
   ${socialLink('LinkedIn', LINKEDIN, `${AUTHOR} on LinkedIn`)}
 </div>`;
 const DESCRIPTION =
-  'Wheel, time, date, calendar, range, select and emoji pickers for React Native. 100% JavaScript, zero native code — Expo Go, bare RN and React Native Web.';
+  'Wheel, time, date, calendar, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Native iOS, Material and web designs, fully themeable. 100% JavaScript, zero native code: Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
@@ -66,7 +66,7 @@ const structuredData = {
       version,
       author: { '@type': 'Person', name: AUTHOR, url: 'https://github.com/elik56a', sameAs: [LINKEDIN] },
       keywords:
-        'react native date picker, time picker, wheel picker, calendar, date range picker, select, dropdown, emoji picker, bottom sheet, expo',
+        'react native date picker, time picker, date time picker, wheel picker, calendar, date range picker, select, dropdown, multi-select, autocomplete, segmented control, emoji picker, bottom sheet, material design, ios picker, expo, react native web',
     },
   ],
 };
@@ -91,7 +91,7 @@ const config: Config = {
       attributes: {
         name: 'keywords',
         content:
-          'react native picker, react native date picker, react native time picker, react native wheel picker, react native calendar, date range picker, react native select, dropdown, emoji picker, bottom sheet, expo, react native web',
+          'react native picker, react native date picker, react native time picker, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, emoji picker, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
       },
     },
     { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: '/react-native-pickers/llms.txt' } },
@@ -155,7 +155,7 @@ const config: Config = {
       'docusaurus-plugin-llms',
       {
         title: 'React Native Pickers',
-        description: `${PACKAGE}: pure-JS wheel, time, date (calendar, range, multiple, wheel), select and emoji pickers plus bottom sheets for React Native, Expo and React Native Web.`,
+        description: `${PACKAGE}: pure-JS wheel, time, date (calendar, range, multiple, wheel), date-time, select (local or server search), horizontal list (segmented control, chips) and emoji pickers, plus bottom sheets and form fields, for React Native, Expo and React Native Web. Native iOS, Material and web designs by default (design="auto"), or one design everywhere; fully themeable.`,
         excludeImports: true,
         removeDuplicateHeadings: true,
         generateMarkdownFiles: true,
@@ -165,6 +165,7 @@ const config: Config = {
           'getting-started/installation.mdx',
           'getting-started/quick-start.mdx',
           'getting-started/**',
+          'guides/designs.mdx',
           'components/**',
           'api/**',
           'guides/**',
@@ -181,12 +182,13 @@ const config: Config = {
     metadata: [
       {
         name: 'description',
-        content: 'Pure-JS pickers for React Native: wheel, time, date, calendar, range, select, emoji, bottom sheets.',
+        content:
+          'Pure-JS pickers for React Native: wheel, time, date, calendar, range, date-time, select, emoji and bottom sheets, in native iOS, Material and web designs.',
       },
     ],
     announcementBar: {
       id: 'llms',
-      content: `Using an AI assistant? Point it at <a href="/react-native-pickers/llms-full.txt">llms-full.txt</a> — the whole API in one file.`,
+      content: `Using an AI assistant? Point it at <a href="/react-native-pickers/llms-full.txt">llms-full.txt</a>: the whole API in one file.`,
       isCloseable: true,
     },
     navbar: {

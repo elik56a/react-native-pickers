@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Wheel, Select & Emoji Pickers';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, date, calendar, range, select and emoji pickers for React Native, with bottom sheets. 100% JavaScript, zero native code. Expo Go, bare RN and React Native Web.';
+  'Wheel, time, date, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Native iOS, Material and web designs, fully themeable. 100% JavaScript: Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -21,16 +21,24 @@ export const REVEAL_STEP_MS = 90;
 
 export const FEATURES = [
   {
+    title: 'Native on every platform',
+    body: 'iOS on iPhone, Material Design on Android, a web design in the browser, from one code path. Want one look everywhere? Set design="ios".',
+  },
+  {
     title: 'Zero native code',
     body: 'Pure JavaScript. Runs in Expo Go, bare React Native and React Native Web with no pod install or rebuild.',
   },
   {
-    title: 'Themeable to the pixel',
-    body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control.',
+    title: 'Yours to customize',
+    body: 'Design tokens, automatic dark mode, a typed style slot for every part, and render props when you need full control. Your settings always win over the design.',
   },
   {
     title: 'Ranges, built in',
     body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.',
+  },
+  {
+    title: 'Search anything',
+    body: 'Searchable selects and multi-selects, or search your server as the user types, with a loader, debounce and paging.',
   },
   {
     title: 'Any locale, RTL',
@@ -45,21 +53,23 @@ export const FEATURES = [
 
 export const COMPONENTS = [
   { doc: 'components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
-  { doc: 'components/time-picker', name: 'TimePicker', body: '12/24h from locale, intervals, min/max' },
+  { doc: 'components/time-picker', name: 'TimePicker', body: 'Wheels, clock dial or columns, 12/24h' },
   { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
-  { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheel, or calendar + time' },
+  { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheels, or calendar + time' },
   { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
-  { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, groups, icons, multi-select chips' },
+  { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },
+  { doc: 'components/select-list', name: 'SelectList', body: 'The searchable list, inline' },
+  { doc: 'components/horizontal-list', name: 'HorizontalList', body: 'Segmented control or scrolling chips' },
   { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
-  { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet with Done' },
-  { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a form field, pick, see the value' },
+  { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet or modal' },
+  { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet or dropdown' },
 ];
 
 export const HERO_CHIPS = [
   { icon: '📦', text: 'Zero native deps' },
   { icon: '🌙', text: 'Dark mode built in' },
-  { icon: '⚡', text: '60 fps wheels' },
+  { icon: '🎨', text: 'iOS, Material & web looks' },
   { icon: '🌍', text: 'Any locale, RTL' },
 ];
 
@@ -115,7 +125,7 @@ export const COMPARE_ROWS: CompareRow[] = [
   },
   {
     feature: 'Searchable select and multi-select',
-    cells: [{ support: yes }, { support: no }, { support: no }, { support: partial, note: 'Varies' }],
+    cells: [{ support: yes, note: 'Local or server' }, { support: no }, { support: no }, { support: partial, note: 'Varies' }],
   },
   {
     feature: 'Emoji picker',
@@ -126,8 +136,8 @@ export const COMPARE_ROWS: CompareRow[] = [
     cells: [{ support: yes, note: 'Built in' }, { support: no }, { support: no }, { support: no }],
   },
   {
-    feature: 'Same UI on iOS, Android and web',
-    cells: [{ support: yes }, { support: no }, { support: yes }, { support: no }],
+    feature: 'Native look on iOS, Android and web',
+    cells: [{ support: yes, note: 'Or one look everywhere' }, { support: yes }, { support: no }, { support: partial, note: 'No web' }],
   },
   {
     feature: 'Theming and dark mode',

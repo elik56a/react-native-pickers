@@ -13,10 +13,11 @@ export const CodeSample = () => (
       <h2 className={shared.h2Left}>Feels native. Isn&apos;t.</h2>
       <p className={clsx(shared.lead, shared.leadLeft)}>
         The same <code>value</code> / <code>onChange</code> API everywhere, typed down to the selection mode. Sheets keep a draft and commit
-        on Done, just like the system pickers, but they match your design on every platform.
+        on Done, just like the system pickers, in each platform's design and your brand's colors.
       </p>
       <ul className={styles.checks}>
         <li>Controlled or uncontrolled</li>
+        <li>iOS, Material and web designs</li>
         <li>Light and dark themes that follow the OS</li>
         <li>No Reanimated, Gesture Handler or SVG</li>
         <li>Full TypeScript types</li>

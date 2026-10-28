@@ -1,32 +1,38 @@
 ---
 title: Migrate to React Native Pickers
 sidebar_label: Migration
-description: Migrate from @react-native-community/datetimepicker, react-native-modal-datetime-picker, react-native-calendars or react-native-picker-select.
+description: "Migrate from @react-native-community/datetimepicker, react-native-modal-datetime-picker, react-native-calendars, react-native-picker-select, @react-native-picker/picker or @react-native-segmented-control/segmented-control."
 ---
 
 # Migration
 
 Prop-by-prop mappings from popular packages. Most migrations are a rename plus switching callbacks to `(value) => …`.
 
+Compared with native pickers, your users keep a native look: the iOS design on iOS and Material Design on Android, by default. Set `design="ios"` on `PickersProvider` if you'd rather show the same look everywhere. See [Designs](../guides/designs).
+
 ## From `@react-native-community/datetimepicker`
 
 ```diff
 - import DateTimePicker from '@react-native-community/datetimepicker';
-+ import { DatePicker, TimePicker } from '@elik56a/react-native-pickers';
++ import { DatePicker, DateTimePicker, TimePicker } from '@elik56a/react-native-pickers';
 
 - <DateTimePicker mode="date" value={date} onChange={(event, d) => d && setDate(d)} minimumDate={min} />
 + <DatePicker value={date} onChange={setDate} minDate={min} />
 
 - <DateTimePicker mode="time" value={time} is24Hour onChange={(e, d) => d && setTime(d)} minuteInterval={5} />
 + <TimePicker value={time} onChange={setTime} format="24h" minuteInterval={5} />
+
+- <DateTimePicker mode="datetime" value={when} onChange={(e, d) => d && setWhen(d)} />
++ <DateTimePicker value={when} onChange={setWhen} />
 ```
 
 | datetimepicker | React Native Pickers |
 | --- | --- |
 | `mode="date"` | `DatePicker` (calendar) or `DatePicker display="wheel"` |
 | `mode="time"` | `TimePicker` |
-| `mode="datetime"` | `DatePicker` + `TimePicker` sharing one `Date` (the time picker keeps the date part) |
-| `display="spinner"` | `DatePicker display="wheel"` |
+| `mode="datetime"` | [`DateTimePicker`](../components/date-time-picker) |
+| `display="spinner"` | `DatePicker display="wheel"`, `TimePicker display="wheel"` |
+| `display="clock"` (Android) | `TimePicker display="dial"` (the default in the Material design) |
 | `display="calendar"` / `"inline"` | `DatePicker` |
 | `value` | `value` |
 | `onChange(event, date)` | `onChange(date)` (no event, never `undefined`) |
@@ -50,7 +56,7 @@ Prop-by-prop mappings from popular packages. Most migrations are a rename plus s
 | modal-datetime-picker | React Native Pickers |
 | --- | --- |
 | `isVisible` | `visible` |
-| `mode="date" \| "time"` | `DatePickerSheet` · `TimePickerSheet` |
+| `mode="date" \| "time" \| "datetime"` | `DatePickerSheet` · `TimePickerSheet` · `DateTimePickerSheet` |
 | `date` | `value` |
 | `onConfirm(date)` | `onConfirm(date)` (`onClose` is called right after) |
 | `onCancel` | `onClose` |
@@ -144,3 +150,32 @@ Want an iOS-style wheel instead of a list? Use [`WheelPickerSheet`](../component
 ```
 
 `Picker.Item enabled={false}` → `{ disabled: true }`. Android `mode="dropdown"` → [`SelectPicker`](../components/select-picker).
+
+## From `@react-native-segmented-control/segmented-control`
+
+```diff
+- import SegmentedControl from '@react-native-segmented-control/segmented-control';
++ import { HorizontalList } from '@elik56a/react-native-pickers';
+
+- <SegmentedControl
+-   values={['Day', 'Week', 'Month']}
+-   selectedIndex={index}
+-   onChange={(e) => setIndex(e.nativeEvent.selectedSegmentIndex)}
+- />
++ <HorizontalList
++   items={[{ label: 'Day', value: 'day' }, { label: 'Week', value: 'week' }, { label: 'Month', value: 'month' }]}
++   value={view}
++   onChange={setView}
++ />
+```
+
+| segmented-control | React Native Pickers |
+| --- | --- |
+| `values` (strings) | `items` (`{ label, value, disabled?, icon? }`) |
+| `selectedIndex` | `value` (the item's value, not its index) |
+| `onChange(event)` / `onValueChange(label)` | `onChange(value, item)` |
+| `enabled={false}` | `disabled: true` on each item |
+| `tintColor` / `backgroundColor` | `theme={{ colors: { primary, surface } }}` or `styles={{ thumb, container }}` |
+| — | scrolls sideways when the items don't fit, `variant="chips"`, `renderItem`, works on the web |
+
+[`HorizontalList`](../components/horizontal-list) has no native code, so it runs in Expo Go and on the web.

@@ -1,6 +1,6 @@
 ---
 title: Core concepts
-description: "The ideas shared by every component: controlled vs uncontrolled state, onChange vs onValueChanging, sheets and drafts, theming and slot styles."
+description: "The ideas shared by every component: controlled vs uncontrolled state, onChange vs onValueChanging, sheets and drafts, fields, iOS / Material / web designs, theming and slot styles."
 ---
 
 # Core concepts
@@ -72,17 +72,28 @@ Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `D
 
 ## Fields
 
-In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field.
+In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field. By default it opens a bottom sheet on iOS and Android and a dropdown under the field on the web; `presentation` picks `'bottomSheet'`, `'modal'` or `'dropdown'`.
 
 ```tsx
 <TimePickerField label="Alarm" value={time} onConfirm={setTime} />
 ```
 
+## Designs
+
+Pickers look native wherever they run: the iOS design on iOS, Material Design on Android, a web design in the browser. The design sets shapes and layout (where Done sits, a radio or a ✓, wheels or a clock dial), never your colors. Use one look everywhere, or for one component, with `design`:
+
+```tsx
+<PickersProvider design="ios">{/* the iOS look on Android and the web too */}</PickersProvider>
+<TimePicker design="material" value={time} onChange={setTime} />
+```
+
+→ [Designs guide](../guides/designs)
+
 ## Theming
 
 Three layers, each merged on top of the previous one:
 
-1. Built-in `lightTheme` / `darkTheme`, chosen from the OS appearance
+1. Built-in `lightTheme` / `darkTheme`, chosen from the OS appearance, with the [design](../guides/designs)'s shapes
 2. `<PickersProvider theme={…} darkTheme={…}>` for your whole app
 3. The `theme` prop on any single component
 
