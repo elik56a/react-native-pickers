@@ -2,9 +2,10 @@ import type React from 'react';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { DateRange } from '@elik56a/react-native-pickers';
+import type { CountryCode, DateRange } from '@elik56a/react-native-pickers';
 import {
   CALENDAR_MODE,
+  CountryPicker,
   DatePicker,
   DatePickerField,
   DatePickerSheet,
@@ -104,6 +105,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
+  const [country, setCountry] = useState<CountryCode | null>('IL');
   const [emoji, setEmoji] = useState('');
   const [mood, setMood] = useState<string | undefined>();
   const [sheet, setSheet] = useState<'date' | 'range' | 'ranges' | 'time' | 'datetime' | 'emoji' | null>(null);
@@ -169,6 +171,7 @@ function Demo({ insets }: { insets: Insets }) {
                   value: label,
                 }))}
               />
+              <CountryPicker label="Country" preferred={['US', 'GB', 'IL']} showDialCode value={country} onChange={setCountry} />
             </Section>
           )}
 

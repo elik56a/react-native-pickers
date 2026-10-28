@@ -6,6 +6,7 @@ export const DEMO_TAB = {
   wheel: 'wheel',
   select: 'select',
   emoji: 'emoji',
+  country: 'country',
 } as const;
 
 /** Shown in the props panel and the live code until the visitor touches a field on the phone. */
@@ -18,6 +19,7 @@ export const TAB_COMPONENTS: Record<DemoTab, string> = {
   wheel: 'MultiWheelPicker',
   select: 'SelectPicker',
   emoji: 'EmojiPickerField',
+  country: 'CountryPicker',
 };
 
 export const TAB_DOCS: Record<DemoTab, string> = {
@@ -26,9 +28,10 @@ export const TAB_DOCS: Record<DemoTab, string> = {
   wheel: 'components/multi-wheel-picker',
   select: 'components/select-picker',
   emoji: 'components/emoji-picker',
+  country: 'components/country-picker',
 };
 
-/** Each control maps to one real prop, except `prices` and `groups`, which switch the data passed in. */
+/** Each control maps to one real prop, except `prices`, `groups` and `preferred`, which switch the data passed in. */
 export const CONTROLS = {
   date: [
     { key: 'mode', values: ['single', 'range', 'multiple', 'ranges'] },
@@ -56,6 +59,11 @@ export const CONTROLS = {
     { key: 'showSkinTones', values: [true, false] },
     { key: 'categoryBarPosition', values: ['top', 'bottom'] },
   ],
+  country: [
+    { key: 'preferred', values: [true, false] },
+    { key: 'showDialCode', values: [false, true] },
+    { key: 'locale', values: ['auto', 'de', 'ja'] },
+  ],
 } as const;
 
 export const DEFAULT_OPTIONS: PlaygroundOptions = {
@@ -64,6 +72,7 @@ export const DEFAULT_OPTIONS: PlaygroundOptions = {
   wheel: { variant: '3d', loop: false, visibleItems: 5 },
   select: { multiple: false, searchable: true, groups: true, loading: false },
   emoji: { columns: 7, showSkinTones: true, categoryBarPosition: 'top' },
+  country: { preferred: true, showDialCode: false, locale: 'auto' },
 };
 
 export const ACCENTS: Accent[] = [
