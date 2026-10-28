@@ -3,6 +3,7 @@ export * from './core';
 export * from './country';
 export * from './date';
 export * from './datetime';
+export * from './duration';
 export * from './emoji';
 export * from './list';
 export * from './select';

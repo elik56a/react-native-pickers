@@ -5,11 +5,20 @@ export const SANDBOX_TITLE = 'React Native Pickers example';
 
 const BOOLEAN: readonly LiveOption[] = [false, true];
 
-const FIELDS = ['DatePickerField', 'TimePickerField', 'DateTimePickerField', 'WheelPickerField', 'EmojiPickerField', 'PickerField'];
+const FIELDS = [
+  'DatePickerField',
+  'TimePickerField',
+  'DateTimePickerField',
+  'DurationPickerField',
+  'WheelPickerField',
+  'EmojiPickerField',
+  'PickerField',
+];
 const SHEETS = [
   'DatePickerSheet',
   'TimePickerSheet',
   'DateTimePickerSheet',
+  'DurationPickerSheet',
   'WheelPickerSheet',
   'EmojiPickerSheet',
   'PickerSheet',
@@ -17,6 +26,7 @@ const SHEETS = [
 ];
 const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet'];
 const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet'];
+const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
 const SELECT = ['SelectPicker', 'CountryPicker'];
 
@@ -30,10 +40,10 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'presentation', components: SHEETS, options: ['auto', 'bottomSheet', 'modal'], default: 'auto' },
   { prop: 'display', components: DATE_TIME, options: ['wheel', 'calendar'], default: 'wheel' },
   { prop: 'format', components: [...TIME, ...DATE_TIME], options: ['auto', '12h', '24h'], default: 'auto' },
-  { prop: 'showSeconds', components: TIME, options: BOOLEAN, default: false },
+  { prop: 'showSeconds', components: [...TIME, ...DURATION], options: BOOLEAN, default: false },
   {
     prop: 'variant',
-    components: ['WheelPicker', 'MultiWheelPicker', 'DateWheelPicker', ...TIME, 'WheelPickerField', 'WheelPickerSheet'],
+    components: ['WheelPicker', 'MultiWheelPicker', 'DateWheelPicker', ...TIME, ...DURATION, 'WheelPickerField', 'WheelPickerSheet'],
     options: ['3d', 'flat'],
     default: '3d',
   },
@@ -140,6 +150,9 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
   DateTimePicker: 'datetime',
   DateTimePickerField: 'datetime',
   DateTimePickerSheet: 'datetime',
+  DurationPicker: 'duration',
+  DurationPickerField: 'duration',
+  DurationPickerSheet: 'duration',
   EmojiPicker: 'emoji',
   EmojiPickerField: 'emoji',
   EmojiPickerSheet: 'emoji',

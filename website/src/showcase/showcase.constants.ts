@@ -54,8 +54,8 @@ export const SHOWCASE: ShowcaseItem[] = [
   {
     key: SHOWCASE_SCREEN.timer,
     title: 'Interval timer',
-    blurb: 'Hours, minutes and seconds on looping wheels, with presets that spin them.',
-    components: ['MultiWheelPicker', 'HorizontalList'],
+    blurb: 'Hours, minutes and seconds on wheels, number boxes or columns, with presets that set them.',
+    components: ['DurationPicker', 'HorizontalList'],
     recipe: 'duration',
   },
   {
@@ -165,25 +165,13 @@ export const TIME_ZONES = labelOptions(['Lisbon · WET', 'New York · EST', 'Tel
 export const PEOPLE = labelOptions(['Maya', 'Noam', 'Lea', 'Omer', 'Yuki', 'Dana', 'Ari']);
 
 export const TIMER_PRESETS: TimerPreset[] = [
-  { label: 'Tabata', value: { hours: 0, minutes: 4, seconds: 0 } },
-  { label: 'Run', value: { hours: 0, minutes: 30, seconds: 0 } },
-  { label: 'Plank', value: { hours: 0, minutes: 1, seconds: 30 } },
-  { label: 'Long ride', value: { hours: 2, minutes: 15, seconds: 0 } },
+  { label: 'Tabata', value: 4 * 60 },
+  { label: 'Run', value: 30 * 60 },
+  { label: 'Plank', value: 90 },
+  { label: 'Long ride', value: 2 * 3600 + 15 * 60 },
 ];
 
 export const TIMER_PRESET_ITEMS = labelOptions(TIMER_PRESETS.map((p) => p.label));
-
-const counter = (length: number, unit: string) =>
-  Array.from({ length }, (_, i) => ({
-    label: `${i} ${unit}`,
-    value: i,
-  }));
-
-export const TIMER_COLUMNS = [
-  { key: 'hours', items: counter(6, 'h'), loop: false, accessibilityLabel: 'Hours' },
-  { key: 'minutes', items: counter(60, 'min'), loop: true, accessibilityLabel: 'Minutes' },
-  { key: 'seconds', items: counter(60, 's'), loop: true, accessibilityLabel: 'Seconds' },
-] as const;
 
 export const CHAT_CONTACT = {
   name: 'Maya',

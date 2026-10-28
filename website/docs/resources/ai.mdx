@@ -36,9 +36,13 @@ onValueChanging fires on every row crossing (use for haptics).
 
 WheelPicker<T>     items: (T | {label, value, disabled?})[]  value  onChange(value, index)  loop  itemHeight=40  visibleItems=5
                    variant '3d'|'flat'  keyboardInput=true  isEqual  renderItem({item,index,selected,theme})  styles
-MultiWheelPicker   columns: [{ key, items, value, onChange, flex?, width?, loop? }]  separator: node | (leftIndex)=>node
+MultiWheelPicker   columns: [{ key, items, value, onChange, flex?, width?, loop?, suffix? }]  separator: node | (leftIndex)=>node  (suffix = unit text after a column)
 TimePicker         value: Date  onChange(date)  format '12h'|'24h'|'auto'  minuteInterval  showSeconds  minTime/maxTime  locale
                    display 'wheel'(ios) | 'dial'(material clock) | 'input'(typed fields) | 'list'(web columns); default from the design
+DurationPicker     a length of time, not a time of day: value: number (seconds)  onChange(seconds)  showHours=true  showSeconds=false
+                   display 'wheel'(ios) | 'input'(material number boxes) | 'list'(web columns); default from the design
+                   min max (seconds; default max 23h59m59s, or 59m59s without hours)  minuteInterval secondInterval  loop (minutes/seconds)
+                   labels {hours:'h',minutes:'min',seconds:'s'}  formatDuration(5400) → '1 h 30 min'
 DateTimePicker     value: Date  onChange(date)  display 'wheel'(ios default)|'calendar'(material/web default)  minDate maxDate (moments)
                    timePosition 'beside'|'below'  timeDisplay 'wheel'|'dial'|'input'|'list'  minuteInterval format locale calendarProps
 DatePicker         display 'calendar'(default)|'wheel'
@@ -69,9 +73,10 @@ Sheets (draft; commit on Done):
   WheelPickerSheet visible onClose items value onConfirm
   EmojiPickerSheet visible onClose onSelect closeOnSelect=true
   DateTimePickerSheet visible onClose value onConfirm + DateTimePicker props
+  DurationPickerSheet visible onClose value onConfirm(seconds) + DurationPicker props
   PickerSheet      visible onClose onConfirm children  +  useDraft(value, visible)
 Fields (a SelectPicker-style field that opens the sheet and shows the confirmed value; field owns open state):
-  DatePickerField / TimePickerField / DateTimePickerField / WheelPickerField / EmojiPickerField
+  DatePickerField / TimePickerField / DateTimePickerField / DurationPickerField / WheelPickerField / EmojiPickerField
                    = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
                    + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
                      disabled renderTrigger({open,displayValue,disabled}) renderChevron({open,theme}) onOpen onClose style testID

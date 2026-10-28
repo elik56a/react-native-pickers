@@ -12,6 +12,7 @@ import {
   DateTimePicker,
   DateTimePickerField,
   DateTimePickerSheet,
+  DurationPickerField,
   EmojiPicker,
   EmojiPickerField,
   EmojiPickerSheet,
@@ -102,6 +103,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [ranges, setRanges] = useState<DateRange[]>([]);
   const [time, setTime] = useState(new Date());
   const [meeting, setMeeting] = useState(new Date());
+  const [timer, setTimer] = useState(25 * 60);
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
@@ -124,6 +126,7 @@ function Demo({ insets }: { insets: Insets }) {
             <Section title="Time">
               <TimePicker value={time} onChange={setTime} minuteInterval={5} />
               <Button title="Open time sheet" onPress={() => setSheet('time')} />
+              <DurationPickerField label="Timer" value={timer} onConfirm={setTimer} showSeconds />
             </Section>
           )}
 

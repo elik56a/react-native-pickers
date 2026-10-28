@@ -1,25 +1,17 @@
 import { useState } from 'react';
 
-import { TIMER_COLUMNS, TIMER_PRESETS } from '../showcase.constants';
-import type { Duration } from '../showcase.types';
-import { findPreset, formatDuration } from '../showcase.utils';
+import { TIMER_PRESETS } from '../showcase.constants';
+import { findPreset, formatClock } from '../showcase.utils';
 
-/** A timer's length on three wheels, with presets that set all three. */
+/** A timer's length in seconds, with presets that set it. */
 export const useTimer = () => {
-  const [duration, setDuration] = useState<Duration>(TIMER_PRESETS[0].value);
-  const preset = findPreset(duration);
+  const [seconds, setSeconds] = useState(TIMER_PRESETS[0].value);
+  const preset = findPreset(seconds);
   return {
-    label: `${preset?.label ?? 'Custom'} · ${formatDuration(duration)}`,
+    seconds,
+    setSeconds,
+    label: `${preset?.label ?? 'Custom'} · ${formatClock(seconds)}`,
     preset: preset?.label ?? null,
-    choosePreset: (label: string) => setDuration(TIMER_PRESETS.find((p) => p.label === label)?.value ?? duration),
-    columns: TIMER_COLUMNS.map((column) => ({
-      ...column,
-      value: duration[column.key],
-      onChange: (value: number) =>
-        setDuration((d) => ({
-          ...d,
-          [column.key]: value,
-        })),
-    })),
+    choosePreset: (label: string) => setSeconds(TIMER_PRESETS.find((p) => p.label === label)?.value ?? seconds),
   };
 };

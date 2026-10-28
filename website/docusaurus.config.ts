@@ -38,7 +38,7 @@ const FOOTER_BRAND = `
   ${socialLink('LinkedIn', LINKEDIN, `${AUTHOR} on LinkedIn`)}
 </div>`;
 const DESCRIPTION =
-  'Wheel, time, date, calendar, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, calendar, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
@@ -70,7 +70,7 @@ const structuredData = {
       version,
       author: { '@type': 'Person', name: AUTHOR, url: 'https://github.com/elik56a', sameAs: [LINKEDIN] },
       keywords:
-        'react native date picker, time picker, date time picker, wheel picker, calendar, date range picker, select, dropdown, multi-select, autocomplete, segmented control, country picker, phone code picker, emoji picker, bottom sheet, material design, ios picker, expo, react native web',
+        'react native date picker, time picker, duration picker, date time picker, wheel picker, calendar, date range picker, select, dropdown, multi-select, autocomplete, segmented control, country picker, phone code picker, emoji picker, bottom sheet, material design, ios picker, expo, react native web',
     },
   ],
 };
@@ -95,7 +95,7 @@ const config: Config = {
       attributes: {
         name: 'keywords',
         content:
-          'react native picker, react native date picker, react native time picker, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, react native country picker, country code picker, emoji picker, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
+          'react native picker, react native date picker, react native time picker, react native duration picker, countdown timer picker, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, react native country picker, country code picker, emoji picker, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
       },
     },
     { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: '/react-native-pickers/llms.txt' } },

@@ -281,8 +281,9 @@ describe('getPanelTopRow', () => {
 
 describe('getPanelCellLabel', () => {
   it('names the column, so an hour cell and a minute cell with the same number sound different', () => {
-    expect(getPanelCellLabel('hour', '09')).toBe('Hour 09');
-    expect(getPanelCellLabel('minute', '09')).toBe('Minute 09');
-    expect(getPanelCellLabel('period', 'PM')).toBe('PM');
+    expect(getPanelCellLabel({ key: 'hour' }, '09')).toBe('Hour 09');
+    expect(getPanelCellLabel({ key: 'minute' }, '09')).toBe('Minute 09');
+    expect(getPanelCellLabel({ key: 'period' }, 'PM')).toBe('PM');
+    expect(getPanelCellLabel({ key: 'hours', accessibilityLabel: 'Hours' }, '5')).toBe('Hours 5');
   });
 });

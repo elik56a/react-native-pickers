@@ -30,6 +30,7 @@ import type {
   TimeDisplay,
   TimeFormat,
   TimeOptions,
+  TimePanelColumn,
   TimeParts,
 } from './time.types';
 
@@ -304,7 +305,7 @@ export const getPanelTopRow = (index: number, count: number, rows: number) =>
   Math.max(0, Math.min(index - Math.floor(rows / 2), count - rows));
 
 /** A time panel cell's screen-reader label: its column and value, like "Hour 09". */
-export const getPanelCellLabel = (column: TimeColumnKey, label: string) => {
-  const name = TIME_COLUMN_LABEL[column];
+export const getPanelCellLabel = ({ key, accessibilityLabel }: Pick<TimePanelColumn, 'key' | 'accessibilityLabel'>, label: string) => {
+  const name = accessibilityLabel ?? TIME_COLUMN_LABEL[key];
   return name ? `${name} ${label}` : label;
 };

@@ -18,6 +18,8 @@ const CENTER = DIAL_SIZE / 2;
 export const styles = StyleSheet.create({
   panel: { flexDirection: 'row', alignSelf: 'center', borderWidth: 1, padding: 4, overflow: 'hidden' },
   panelColumn: { width: TIME_COLUMN_WIDTH },
+  panelHeader: { textAlign: 'center', paddingVertical: 4 },
+  panelList: { flexGrow: 0 },
   cell: { height: TIME_CELL_HEIGHT - 4, marginVertical: 2, marginHorizontal: 4, alignItems: 'center', justifyContent: 'center' },
   clock: { alignItems: 'center' },
   header: { flexDirection: 'row', alignItems: 'center' },

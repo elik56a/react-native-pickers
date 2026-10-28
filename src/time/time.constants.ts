@@ -1,5 +1,5 @@
 import type { Design } from '../core/theme/theme.types';
-import type { TimeColumnKey, TimeDisplay } from './time.types';
+import type { TimeDisplay } from './time.types';
 
 export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
@@ -22,7 +22,7 @@ export const TIME_COLUMN = {
 } as const;
 
 /** Read before a time panel cell, so screen readers tell an hour from a minute. AM/PM cells say enough on their own. */
-export const TIME_COLUMN_LABEL: Partial<Record<TimeColumnKey, string>> = {
+export const TIME_COLUMN_LABEL: Partial<Record<string, string>> = {
   hour: 'Hour',
   minute: 'Minute',
   second: 'Second',

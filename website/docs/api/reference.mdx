@@ -14,6 +14,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`WheelPicker<T>`](../components/wheel-picker) | Single scrolling wheel |
 | [`MultiWheelPicker`](../components/multi-wheel-picker) | Several wheels in one band |
 | [`TimePicker`](../components/time-picker) | Hour / minute / second / AM-PM wheels |
+| [`DurationPicker`](../components/duration-picker) | A length of time in seconds: wheels, number boxes or columns |
 | [`DatePicker`](../components/date-picker) | Calendar (`display="calendar"`) or wheel (`display="wheel"`) |
 | [`Calendar`](../components/date-picker) | Month calendar: single / range / multiple / ranges |
 | [`DateWheelPicker`](../components/date-wheel-picker) | Day / month / year wheels |
@@ -33,6 +34,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`DatePickerSheet`](../components/picker-sheets#datepickersheet) | Calendar or date wheel in a sheet |
 | [`TimePickerSheet`](../components/picker-sheets#timepickersheet) | TimePicker in a sheet |
 | [`DateTimePickerSheet`](../components/date-time-picker#in-a-sheet) | DateTimePicker in a sheet |
+| [`DurationPickerSheet`](../components/duration-picker#in-a-sheet) | DurationPicker in a sheet |
 | [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
 | [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
 | [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
@@ -45,6 +47,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`DatePickerField`](../components/picker-fields) | Field + DatePickerSheet; shows the date, range or dates |
 | [`TimePickerField`](../components/picker-fields) | Field + TimePickerSheet; shows the time |
 | [`DateTimePickerField`](../components/picker-fields) | Field + DateTimePickerSheet; shows the date and time |
+| [`DurationPickerField`](../components/duration-picker#in-a-form-field) | Field + DurationPickerSheet; shows `1 h 30 min` |
 | [`WheelPickerField<T>`](../components/picker-fields) | Field + WheelPickerSheet; shows the item's label |
 | [`EmojiPickerField`](../components/picker-fields) | Field + EmojiPickerSheet; shows `value` |
 
@@ -73,6 +76,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 ## Country utilities
 
 [`getCountry`](../components/country-picker#utilities) · [`getAllCountries`](../components/country-picker#utilities) · [`getCountryFlag`](../components/country-picker#utilities)
+
+## Duration utilities
+
+[`formatDuration(seconds, { showHours?, labels? })`](../components/duration-picker#formatduration): `5400` → `'1 h 30 min'`
 
 ## Select utilities
 
@@ -125,6 +132,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
+| DurationPicker | `labels` | `{ hours: 'h', minutes: 'min', seconds: 's' }` |
 
 ## Default values at a glance
 
@@ -134,11 +142,12 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `visibleItems` | `5` | wheels |
 | `variant` | `'3d'` | wheels |
 | `rotation` / `fadeTo` | `20` / `0.3` | WheelPicker |
-| `loop` | `false` WheelPicker · `true` TimePicker, DateWheelPicker | wheels |
+| `loop` | `false` WheelPicker · `true` TimePicker, DurationPicker, DateWheelPicker | wheels |
 | `keyboardInput` | `true` | WheelPicker |
-| `minuteInterval` / `secondInterval` | `1` | TimePicker |
+| `minuteInterval` / `secondInterval` | `1` | TimePicker, DurationPicker |
 | `format` | `'auto'` | TimePicker |
 | `display` | `'wheel'` iOS · `'dial'` Material · `'list'` web | TimePicker |
+| `display` | `'wheel'` iOS · `'input'` Material · `'list'` web | DurationPicker |
 | `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
 | `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |

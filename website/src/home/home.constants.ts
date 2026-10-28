@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, date, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -54,6 +54,7 @@ export const FEATURES = [
 export const COMPONENTS = [
   { doc: 'components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
   { doc: 'components/time-picker', name: 'TimePicker', body: 'Wheels, clock dial or columns, 12/24h' },
+  { doc: 'components/duration-picker', name: 'DurationPicker', body: 'Timers and workouts: hours, minutes, seconds' },
   { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
   { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheels, or calendar + time' },
   { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
@@ -62,7 +63,7 @@ export const COMPONENTS = [
   { doc: 'components/country-picker', name: 'CountryPicker', body: 'Flags, dialing codes, localized names' },
   { doc: 'components/horizontal-list', name: 'HorizontalList', body: 'Segmented control or scrolling chips, with icons' },
   { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,923 emojis, skin tones, recents, search' },
-  { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
+  { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Units, compound values, dependent columns' },
   { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet or modal' },
   { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet or dropdown' },
 ];

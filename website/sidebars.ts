@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
             },
             'components/date-wheel-picker',
             'components/time-picker',
+            'components/duration-picker',
             'components/date-time-picker',
           ],
         },

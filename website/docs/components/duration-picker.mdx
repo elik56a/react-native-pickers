@@ -1,0 +1,195 @@
+---
+title: React Native Duration Picker
+sidebar_label: DurationPicker
+description: "React Native duration and countdown timer picker: iOS wheels, Material number boxes or columns to click on the web, with unit labels, the value in seconds, min/max and minute intervals. In a bottom sheet or a form field. Zero native code, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { DurationPicker, DurationPickerField } from '@elik56a/react-native-pickers';
+
+# DurationPicker
+
+`DurationPicker` picks a **length of time**, such as a timer, a workout, a cooking time or a reminder: hours, minutes and optionally seconds, each with its unit beside it. It looks native on each platform: [wheels like the iOS countdown timer, number boxes to type into in Material, columns to click on the web](#wheels-boxes-or-columns), or the one you pick with `display`. The value is a number of seconds.
+
+For a **time of day** (an alarm at 7:30 AM), use [`TimePicker`](./time-picker). A duration has no AM/PM and no locale clock, its hours don't wrap at midnight, and its limits are lengths, not times.
+
+```tsx
+import { DurationPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { DurationPicker, formatDuration } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [seconds, setSeconds] = useState(25 * 60);
+  return (
+    <>
+      <DurationPicker value={seconds} onChange={setSeconds} />
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>
+        {seconds} s = {formatDuration(seconds)}
+      </Text>
+    </>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground
+  name="DurationPicker"
+  component={DurationPicker}
+  value={5400}
+  code="value={seconds} onChange={setSeconds}"
+  controls={[
+    { prop: 'display', options: ['auto', 'wheel', 'input', 'list'], unset: 'auto' },
+    { prop: 'showHours', options: [true, false] },
+    { prop: 'showSeconds', options: [false, true] },
+    { prop: 'minuteInterval', options: [1, 5, 15], default: 1 },
+    { prop: 'loop', options: [true, false] },
+    { prop: 'variant', options: ['3d', 'flat'] },
+  ]}
+/>
+
+## The value is in seconds
+
+`value`, `defaultValue` and `onChange` use a number of seconds: `5400` is 1 h 30 min. Store it as is, or turn it into text with [`formatDuration`](#formatduration). Without `value` or `defaultValue`, the picker starts at `0`.
+
+## Wheels, boxes or columns
+
+Each [design](../guides/designs) has its own default:
+
+| `display` | Default in | What it is |
+| --- | --- | --- |
+| `'wheel'` | iOS | Hours, minutes and seconds wheels with their units at the selection band, like the iOS countdown timer |
+| `'input'` | Material | A box per unit to type the number into, as in Material's time input. A number that isn't one of the steps yet (`3` on the way to `30` with `minuteInterval={15}`) waits for the next digit |
+| `'list'` | web | A column of cells per unit under its label, the chosen one filled, as in `TimePicker` on the web |
+
+```tsx
+<DurationPicker value={seconds} onChange={setSeconds} display="wheel" />
+```
+
+## Hours, minutes and seconds
+
+Hours and minutes show by default. `showSeconds` adds a seconds wheel, and `showHours={false}` drops the hours, so the minutes count past 59 (up to 90 for a 90-minute run):
+
+```tsx live
+import { useState } from 'react';
+import { DurationPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [rest, setRest] = useState(90);
+  return <DurationPicker value={rest} onChange={setRest} showHours={false} showSeconds secondInterval={5} />;
+}
+```
+
+## Min, max and intervals
+
+`min` and `max` are in seconds. Values outside them are dimmed, and a combination that lands outside (such as 2 h with 45 min while the max is 2 h) is pulled back to the nearest limit. Without `max`, the hours go up to 23, or the minutes up to 59 without hours.
+
+`minuteInterval` and `secondInterval` show every n-th minute or second. A value between steps shows rounded **down**, and `DurationPickerSheet` confirms what the wheels show.
+
+```tsx live
+import { useState } from 'react';
+import { DurationPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [workout, setWorkout] = useState(45 * 60);
+  return <DurationPicker value={workout} onChange={setWorkout} min={10 * 60} max={3 * 3600} minuteInterval={5} />;
+}
+```
+
+## Unit labels and other languages
+
+`labels` sets the unit beside each wheel, box or column and in the field text. Screen readers read each one as "Hours", "Minutes" or "Seconds", followed by its value.
+
+```tsx live
+import { useState } from 'react';
+import { DurationPicker } from '@elik56a/react-native-pickers';
+
+const GERMAN = { hours: 'Std.', minutes: 'Min.', seconds: 'Sek.' };
+
+export default function Example() {
+  const [seconds, setSeconds] = useState(3600);
+  return <DurationPicker value={seconds} onChange={setSeconds} labels={GERMAN} />;
+}
+```
+
+## `formatDuration`
+
+Turns seconds into the field's text: the units that aren't zero, exact to the second.
+
+```ts
+formatDuration(5400); // '1 h 30 min'
+formatDuration(95); // '1 min 35 s'
+formatDuration(5400, { showHours: false }); // '90 min'
+formatDuration(0); // '0 min'
+```
+
+It takes `showHours` and `labels`, like the picker.
+
+## In a sheet
+
+```tsx
+import { DurationPickerSheet } from '@elik56a/react-native-pickers';
+
+<DurationPickerSheet visible={open} onClose={() => setOpen(false)} title="Timer" value={seconds} onConfirm={setSeconds} />
+```
+
+It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's, and keeps a draft until **Done**, like the other [picker sheets](./picker-sheets#how-drafts-work).
+
+## In a form field
+
+`DurationPickerField` opens the sheet and shows the confirmed duration, like `1 h 30 min`. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
+
+<PropPlayground
+  name="DurationPickerField"
+  component={DurationPickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Timer', placeholder: 'Set a timer', minuteInterval: 5 }}
+  value={() => undefined}
+  code="label=&quot;Timer&quot; placeholder=&quot;Set a timer&quot; minuteInterval={5} value={seconds} onConfirm={setSeconds}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'showSeconds', options: [false, true] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
+
+→ [Picker fields](./picker-fields)
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | — | Selected duration in seconds (controlled). |
+| `defaultValue` | `number` | `0` | Initial duration when uncontrolled. |
+| `onChange` | `(seconds: number) => void` | — | Fires when any wheel settles. |
+| `onValueChanging` | `(seconds: number) => void` | — | Fires on every tick while scrolling (haptics). |
+| `display` | `'wheel' \| 'input' \| 'list'` | from the design | Wheels (iOS), boxes to type into (Material), or columns to click (web). |
+| `showHours` | `boolean` | `true` | Show the hours wheel. Without it, minutes count past 59. |
+| `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
+| `min` | `number` | `0` | Shortest selectable duration, in seconds. |
+| `max` | `number` | 23 h 59 min 59 s, or 59 min 59 s without hours | Longest selectable duration, in seconds. |
+| `minuteInterval` | `number` | `1` | Minute step: 1, 5, 15… |
+| `secondInterval` | `number` | `1` | Second step. |
+| `labels` | `{ hours?, minutes?, seconds? }` | `{ hours: 'h', minutes: 'min', seconds: 's' }` | Units beside the wheels and in the field. |
+| `loop` | `boolean` | `true` | Loop the minute and second wheels. Hours never loop. |
+| `itemHeight` | `number` | `40` | Wheel row height. |
+| `visibleItems` | `number` | `5` | Visible wheel rows, or cells in a column. |
+| `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots), for the wheels. The `separator` slot styles their unit labels. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. Each wheel, box or column gets `${testID}-hours`, `-minutes` and `-seconds`. |
+
+`DurationPickerSheet` takes these plus the [sheet props](./picker-sheets#shared-props) and `onConfirm(seconds)`. `DurationPickerField` takes the sheet's props plus the [field props](./picker-fields#props).
+
+## Related
+
+- [TimePicker](./time-picker): for a time of day
+- [Duration & timer recipe](../recipes/duration)
+- [MultiWheelPicker](./multi-wheel-picker): build other unit pickers with the column `suffix`
