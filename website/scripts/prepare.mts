@@ -1,6 +1,8 @@
 // Generates the release-driven parts of the site before `docusaurus start|build`:
 // - versioned docs from git tags: the latest patch of each minor line becomes a version, so /docs matches
 //   what's on npm and master's docs show as "Next" at /docs/next. Nothing is committed; tags are the source.
+//   Only the newest BUILT_LINES lines are built; older ones are listed in archived-versions.json and linked to their
+//   docs on GitHub, as Docusaurus recommends, since every built version is a full copy of the docs to compile.
 // - src/pages/changelog.md from the root CHANGELOG.md that release-please maintains.
 import { execFileSync, execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -10,6 +12,7 @@ import ts from 'typescript';
 
 // Older tags predate the docs components the current site provides.
 const FIRST_VERSIONED = [0, 3];
+const BUILT_LINES = 2;
 
 const site = path.join(import.meta.dirname, '..');
 const git = (...args: string[]) => execFileSync('git', args, { cwd: site, encoding: 'utf8' });
@@ -43,7 +46,12 @@ const writeVersions = () => {
   fs.rmSync(sidebarsDir, { recursive: true, force: true });
   fs.mkdirSync(sidebarsDir, { recursive: true });
 
-  const lines = releaseLines();
+  const all = [...releaseLines()];
+  const lines = new Map(all.slice(0, BUILT_LINES));
+  const archived = all.slice(BUILT_LINES).map(([line, tag]) => ({
+    line,
+    tag,
+  }));
   for (const [line, tag] of lines) {
     const dir = path.join(docsDir, `version-${line}`);
     fs.mkdirSync(dir, { recursive: true });
@@ -52,7 +60,10 @@ const writeVersions = () => {
     fs.writeFileSync(path.join(sidebarsDir, `version-${line}-sidebars.json`), JSON.stringify(sidebarsAt(tag), null, 2));
   }
   fs.writeFileSync(path.join(site, 'versions.json'), JSON.stringify([...lines.keys()], null, 2));
-  console.log(`[prepare] docs versions: ${[...lines.values()].join(', ') || 'none'}`);
+  fs.writeFileSync(path.join(site, 'archived-versions.json'), JSON.stringify(archived, null, 2));
+  console.log(
+    `[prepare] docs versions: ${[...lines.values()].join(', ') || 'none'}; on GitHub: ${archived.map((a) => a.tag).join(', ') || 'none'}`
+  );
 };
 
 const writeChangelog = () => {
