@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/elik56a/react-native-pickers/compare/v0.16.0...v0.17.0) (2026-10-28)
+
+
+### ✨ Features
+
+* **duration:** add DurationPicker, with wheels, Material number boxes or web columns ([#53](https://github.com/elik56a/react-native-pickers/issues/53)) ([04ffbdd](https://github.com/elik56a/react-native-pickers/commit/04ffbdda17f46f8d5ab97f8db135971a4e07b195))
+
 ## [0.16.0](https://github.com/elik56a/react-native-pickers/compare/v0.15.2...v0.16.0) (2026-10-28)
 
 
