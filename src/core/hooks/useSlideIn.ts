@@ -3,6 +3,7 @@ import type { Animated } from 'react-native';
 import { I18nManager } from 'react-native';
 
 import { SLIDE_DISTANCE } from '../core.constants';
+import type { SlideStyle } from '../core.types';
 import { timing } from '../utils/animation.utils';
 import { useAnimatedValue } from './useAnimatedValue';
 
@@ -18,7 +19,7 @@ export const useSlideIn = (animationDuration: number) => {
     [animationDuration, slide]
   );
 
-  const style = useMemo(
+  const style = useMemo<SlideStyle>(
     () => ({
       opacity: slide.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 1, 0] }),
       transform: [{ translateX: slide.interpolate({ inputRange: [-1, 0, 1], outputRange: [-SLIDE_DISTANCE, 0, SLIDE_DISTANCE] }) }],
