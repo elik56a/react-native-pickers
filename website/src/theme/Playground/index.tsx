@@ -16,8 +16,8 @@ import { useCopyToClipboard } from '../../home/hooks/useCopyToClipboard';
 import { toCodePreview, withCodePreview } from '../../live/codePreview';
 import { findControls, readControl, writeControl } from '../../live/controls';
 import { SANDBOXES } from '../../live/openSandbox';
-import { canOpenInSandbox } from '../../live/sandbox';
-import { CheckIcon, CodeIcon, CopyIcon, ResetIcon, SANDBOX_ICONS } from './components/icons';
+import { canOpenInSandbox, toSourceUrl } from '../../live/sandbox';
+import { CheckIcon, CodeIcon, CopyIcon, GitHubIcon, ResetIcon, SANDBOX_ICONS } from './components/icons';
 import PlaygroundProvider from './Provider';
 import { CODE_THEME } from './playground.constants';
 import styles from './styles.module.css';
@@ -67,6 +67,7 @@ const IconButton = ({ label, onClick, children }: IconButtonProps) => (
 
 const Toolbar = ({ code, edited, onReset, expanded, onToggleExpanded }: ToolbarProps) => {
   const { copied, copy } = useCopyToClipboard(code);
+  const sourceUrl = toSourceUrl(code);
   return (
     <div className={styles.toolbar}>
       {expanded === undefined ? (
@@ -78,6 +79,18 @@ const Toolbar = ({ code, edited, onReset, expanded, onToggleExpanded }: ToolbarP
         </button>
       )}
       <div className={styles.actions}>
+        {sourceUrl ? (
+          <a
+            className={styles.iconButton}
+            href={sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View source on GitHub"
+            data-tooltip="View source on GitHub"
+          >
+            <GitHubIcon />
+          </a>
+        ) : null}
         {canOpenInSandbox(code)
           ? SANDBOXES.map(({ label, open }) => (
               <IconButton key={label} label={`Open in ${label}`} onClick={() => open(code)}>
