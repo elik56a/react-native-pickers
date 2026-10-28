@@ -60,7 +60,7 @@ export const COMPONENTS = [
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },
   { doc: 'components/select-list', name: 'SelectList', body: 'The searchable list, inline' },
   { doc: 'components/horizontal-list', name: 'HorizontalList', body: 'Segmented control or scrolling chips, with icons' },
-  { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,906 emojis, skin tones, recents, search' },
+  { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,923 emojis, skin tones, recents, search' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
   { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet or modal' },
   { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet or dropdown' },

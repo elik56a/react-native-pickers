@@ -59,11 +59,10 @@ export const searchEmojis = (query: string, list: Emoji[] = getAllEmojis()): Emo
 
 /** The emojis the picker may show: in `categories`, not excluded, not newer than `maxEmojiVersion`. */
 export const filterEmojis = (all: Emoji[], categories: EmojiCategory[], exclude?: string[], maxEmojiVersion?: number): Emoji[] => {
-  const excluded = new Set(exclude);
+  // Resolved, so a variation selector or skin tone in `exclude` still matches.
+  const excluded = new Set(exclude?.map(findEmoji));
   const shown = new Set(categories);
-  return all.filter(
-    (e) => shown.has(e.category) && (maxEmojiVersion === undefined || e.version <= maxEmojiVersion) && !excluded.has(e.emoji)
-  );
+  return all.filter((e) => shown.has(e.category) && (maxEmojiVersion === undefined || e.version <= maxEmojiVersion) && !excluded.has(e));
 };
 
 /** Recent characters that resolve to an emoji in `pool`, in order. */

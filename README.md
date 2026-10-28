@@ -25,7 +25,7 @@
 - **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
 - **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
-- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, 1,906 emojis with skin tones and recents.
+- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, 1,923 emojis with skin tones and recents.
 - **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
@@ -101,7 +101,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
 | [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
-| [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,906 emojis: categories, search, skin tones, recents, version filtering |
+| [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
 | [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
 | [Picker sheets](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
 | [Picker fields](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |

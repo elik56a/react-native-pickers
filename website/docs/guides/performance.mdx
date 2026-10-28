@@ -10,7 +10,7 @@ description: How React Native Pickers stay at 60 fps — native-driver animation
 - **Native-driver animations.** Wheel 3D transforms, fades, month slides and sheet transitions run on the UI thread on iOS and Android.
 - **Virtualized lists.** Wheels and the emoji grid are `FlatList`s with `getItemLayout`, so only visible rows exist and scrolling never measures.
 - **Memoized rows.** While a wheel scrolls, only the two rows whose selected state flips re-render. Calendar days and emoji cells are memoized too.
-- **Lazy emoji data.** The 1,906-emoji table is parsed on first use and cached.
+- **Lazy emoji data.** The 1,923-emoji table is parsed on first use and cached.
 - **Formatter cache.** `Intl.DateTimeFormat` instances are cached per locale and options.
 
 ## What you can do
