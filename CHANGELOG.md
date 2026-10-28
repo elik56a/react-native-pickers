@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/elik56a/react-native-pickers/compare/v0.15.0...v0.15.1) (2026-10-28)
+
+
+### 🐛 Bug Fixes
+
+* **select:** searching in Greek, Cyrillic or Armenian matched every option ([#45](https://github.com/elik56a/react-native-pickers/issues/45)) ([935ac34](https://github.com/elik56a/react-native-pickers/commit/935ac345b7c960bc0096125d5cec72f0192e1e71))
+
 ## [0.15.0](https://github.com/elik56a/react-native-pickers/compare/v0.14.0...v0.15.0) (2026-10-28)
 
 
