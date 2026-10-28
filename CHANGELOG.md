@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/elik56a/react-native-pickers/compare/v0.17.0...v0.18.0) (2026-10-28)
+
+
+### ✨ Features
+
+* add MonthPicker and WeekStrip ([#55](https://github.com/elik56a/react-native-pickers/issues/55)) ([15002b8](https://github.com/elik56a/react-native-pickers/commit/15002b8784be24a97ccf5f7a69224a4eee991dd0))
+
 ## [0.17.0](https://github.com/elik56a/react-native-pickers/compare/v0.16.0...v0.17.0) (2026-10-28)
 
 
