@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/elik56a/react-native-pickers/compare/v0.11.0...v0.11.1) (2026-10-28)
+
+
+### 🐛 Bug Fixes
+
+* **date:** reset the draft when the mode changes while the sheet is closed ([#26](https://github.com/elik56a/react-native-pickers/issues/26)) ([62e5e0e](https://github.com/elik56a/react-native-pickers/commit/62e5e0eb2f266735c9051423355952b57c64ac5f))
+
 ## [0.11.0](https://github.com/elik56a/react-native-pickers/compare/v0.10.0...v0.11.0) (2026-10-28)
 
 
