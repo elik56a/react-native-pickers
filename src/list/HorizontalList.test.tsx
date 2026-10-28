@@ -81,4 +81,55 @@ describe('HorizontalList', () => {
     });
     scrollTo.mockRestore();
   });
+
+  const measure = async () => {
+    await fireEvent(screen.getByTestId('list'), 'layout', layout(0, 200));
+    await fireEvent(screen.getByTestId('list'), 'contentSizeChange', 432, 34);
+  };
+  const isDisabled = (label: string) => screen.getByLabelText(label).props.accessibilityState.disabled;
+
+  it('shows arrows only when asked, beside the list, dimming the one that cannot scroll further', async () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(() => {});
+    await render(<HorizontalList items={items} testID="list" />);
+    await measure();
+    expect(screen.queryByLabelText('Scroll right')).toBeNull();
+
+    await render(<HorizontalList items={items} testID="list" showArrows />);
+    await measure();
+    expect(isDisabled('Scroll left')).toBe(true);
+    await fireEvent.press(screen.getByLabelText('Scroll right'));
+    expect(scrollTo).toHaveBeenCalledWith({
+      x: 184,
+      animated: true,
+    });
+    expect(isDisabled('Scroll left')).toBe(false);
+    await fireEvent.press(screen.getByLabelText('Scroll right'));
+    expect(isDisabled('Scroll right')).toBe(true);
+    scrollTo.mockRestore();
+  });
+
+  it('overlays the arrows on the edges, each only while items hide past it', async () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(() => {});
+    await render(<HorizontalList items={items} testID="list" showArrows arrowPosition="overlay" />);
+    await measure();
+    expect(screen.queryByLabelText('Scroll left')).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Scroll right'));
+    expect(scrollTo).toHaveBeenCalledWith({
+      x: 144,
+      animated: true,
+    });
+    expect(screen.getByLabelText('Scroll left')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Scroll right'));
+    expect(screen.queryByLabelText('Scroll right')).toBeNull();
+    scrollTo.mockRestore();
+  });
+
+  it('renders custom arrows', async () => {
+    await render(
+      <HorizontalList items={items} testID="list" showArrows renderArrow={(side, disabled) => <Text>{`${side}:${disabled}`}</Text>} />
+    );
+    await measure();
+    expect(screen.getByText('left:true')).toBeTruthy();
+    expect(screen.getByText('right:false')).toBeTruthy();
+  });
 });

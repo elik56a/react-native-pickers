@@ -1,7 +1,7 @@
 ---
 title: React Native Horizontal List
 sidebar_label: HorizontalList
-description: "React Native segmented control and horizontal chips with icons on any side, that scroll sideways and reveal the next item when you tap one at the edge. Zero native code."
+description: "React Native segmented control and horizontal chips with icons on any side, that scroll sideways, reveal the next item when you tap one at the edge, and can show scroll arrows. Zero native code."
 ---
 
 import { Text } from 'react-native';
@@ -32,6 +32,30 @@ export default function Example() {
 }
 ```
 
+## Segmented controls
+
+A few items share the track's width. With more than fit, the track scrolls, and the thumb follows the selection along it.
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const sorts = ['Popular', 'Newest', 'Price'].map((s) => ({ label: s, value: s }));
+const ranges = ['1D', '1W', '1M', '3M', '6M', 'YTD', '1Y', '2Y', '5Y', '10Y', 'All'].map((r) => ({ label: r, value: r }));
+
+export default function Example() {
+  const [sort, setSort] = useState('Popular');
+  const [range, setRange] = useState('1M');
+  return (
+    <View style={{ gap: 16 }}>
+      <HorizontalList items={sorts} value={sort} onChange={setSort} accessibilityLabel="Sort by" />
+      <HorizontalList items={ranges} value={range} onChange={setRange} accessibilityLabel="Chart range" />
+    </View>
+  );
+}
+```
+
 ## Chips
 
 `variant="chips"` shows separate pills. With more items than fit, tap the last visible one: the list scrolls to show the next.
@@ -40,14 +64,105 @@ export default function Example() {
 import { useState } from 'react';
 import { HorizontalList } from '@elik56a/react-native-pickers';
 
-const categories = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Desserts', 'Drinks', 'Snacks', 'Vegan', 'Gluten free'].map((c) => ({
-  label: c,
-  value: c,
-}));
+const cuisines = [
+  'All', 'Italian', 'Japanese', 'Mexican', 'Indian', 'Thai', 'Chinese', 'Korean', 'Vietnamese', 'Greek',
+  'Lebanese', 'Turkish', 'French', 'Spanish', 'Ethiopian', 'Peruvian', 'Brazilian', 'American', 'Vegan', 'Seafood',
+].map((c) => ({ label: c, value: c }));
 
 export default function Example() {
-  const [category, setCategory] = useState('All');
-  return <HorizontalList variant="chips" items={categories} value={category} onChange={setCategory} />;
+  const [cuisine, setCuisine] = useState('All');
+  return <HorizontalList variant="chips" items={cuisines} value={cuisine} onChange={setCuisine} accessibilityLabel="Cuisine" />;
+}
+```
+
+## Scroll arrows
+
+`showArrows` adds round ‹ › buttons that scroll the list about a page. They're off by default: swiping already scrolls on touch screens, so arrows help most with a mouse on the web, or a long row of chips.
+
+By default (`arrowPosition="outside"`) the arrows sit beside the list and show while its items overflow; the one that can't scroll further is dimmed, so the list keeps its width.
+
+```tsx live
+import { useState } from 'react';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const countries = [
+  ['🇺🇸', 'United States'], ['🇨🇦', 'Canada'], ['🇲🇽', 'Mexico'], ['🇧🇷', 'Brazil'], ['🇦🇷', 'Argentina'],
+  ['🇬🇧', 'United Kingdom'], ['🇮🇪', 'Ireland'], ['🇫🇷', 'France'], ['🇩🇪', 'Germany'], ['🇪🇸', 'Spain'],
+  ['🇵🇹', 'Portugal'], ['🇮🇹', 'Italy'], ['🇳🇱', 'Netherlands'], ['🇸🇪', 'Sweden'], ['🇳🇴', 'Norway'],
+  ['🇬🇷', 'Greece'], ['🇹🇷', 'Turkey'], ['🇮🇱', 'Israel'], ['🇪🇬', 'Egypt'], ['🇿🇦', 'South Africa'],
+  ['🇮🇳', 'India'], ['🇹🇭', 'Thailand'], ['🇻🇳', 'Vietnam'], ['🇯🇵', 'Japan'], ['🇰🇷', 'South Korea'],
+  ['🇦🇺', 'Australia'], ['🇳🇿', 'New Zealand'],
+].map(([flag, name]) => ({ label: name, value: name, icon: flag }));
+
+export default function Example() {
+  const [country, setCountry] = useState('Japan');
+  return (
+    <HorizontalList variant="chips" items={countries} value={country} onChange={setCountry} showArrows accessibilityLabel="Country" />
+  );
+}
+```
+
+### Over the edges
+
+`arrowPosition="overlay"` floats the arrows over the list's edges instead, each shown only while items are hidden past it, so the list keeps its full width.
+
+```tsx live
+import { useState } from 'react';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const topics = [
+  'For you', 'Following', 'Design', 'Engineering', 'React Native', 'TypeScript', 'Product', 'Startups', 'AI',
+  'Open source', 'Accessibility', 'Performance', 'Testing', 'Animation', 'Career', 'Remote work', 'Writing',
+].map((t) => ({ label: t, value: t }));
+
+export default function Example() {
+  const [topic, setTopic] = useState('For you');
+  return (
+    <HorizontalList
+      variant="chips"
+      items={topics}
+      value={topic}
+      onChange={setTopic}
+      showArrows
+      arrowPosition="overlay"
+      accessibilityLabel="Topic"
+    />
+  );
+}
+```
+
+### Custom arrows
+
+`renderArrow(side, disabled)` replaces the ‹ › glyph, and the `arrow` slot styles the button around it.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { HorizontalList, usePickerTheme } from '@elik56a/react-native-pickers';
+
+const genres = [
+  'Pop', 'Rock', 'Hip-hop', 'Jazz', 'Classical', 'Electronic', 'R&B', 'Country', 'Reggae', 'Metal', 'Folk', 'Blues', 'Latin', 'K-pop',
+].map((g) => ({ label: g, value: g }));
+
+export default function Example() {
+  const theme = usePickerTheme();
+  const [genre, setGenre] = useState('Jazz');
+  return (
+    <HorizontalList
+      variant="chips"
+      items={genres}
+      value={genre}
+      onChange={setGenre}
+      showArrows
+      renderArrow={(side, disabled) => (
+        <Text style={{ fontSize: 16, fontWeight: '700', color: disabled ? theme.colors.textDisabled : theme.colors.primary }}>
+          {side === 'left' ? '←' : '→'}
+        </Text>
+      )}
+      styles={{ arrow: { backgroundColor: theme.colors.primaryMuted, borderWidth: 0, boxShadow: 'none' } }}
+      accessibilityLabel="Genre"
+    />
+  );
 }
 ```
 
@@ -76,6 +191,120 @@ export default function Example() {
 }
 ```
 
+Icons can be any view. Here each color filter has a swatch on its left:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const colors = [
+  ['Black', '#1f1f1f'], ['White', '#f4f4f4'], ['Gray', '#9e9e9e'], ['Navy', '#1e3a8a'], ['Blue', '#3b82f6'],
+  ['Green', '#16a34a'], ['Olive', '#708238'], ['Yellow', '#facc15'], ['Orange', '#f97316'], ['Red', '#dc2626'],
+  ['Pink', '#ec4899'], ['Purple', '#9333ea'], ['Brown', '#8b5a2b'], ['Beige', '#d6c6a5'],
+].map(([name, hex]) => ({
+  label: name,
+  value: name,
+  icon: <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: hex, borderWidth: 1, borderColor: 'rgba(0,0,0,0.15)' }} />,
+}));
+
+export default function Example() {
+  const [color, setColor] = useState('Navy');
+  return <HorizontalList variant="chips" items={colors} value={color} onChange={setColor} accessibilityLabel="Color" />;
+}
+```
+
+## Disabled items
+
+A `disabled` item is dimmed and can't be chosen, like sizes that are sold out.
+
+```tsx live
+import { useState } from 'react';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const soldOut = ['XS', 'XXL'];
+const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'].map((s) => ({ label: s, value: s, disabled: soldOut.includes(s) }));
+
+export default function Example() {
+  const [size, setSize] = useState('M');
+  return <HorizontalList variant="chips" items={sizes} value={size} onChange={setSize} accessibilityLabel="Size" />;
+}
+```
+
+## Any value type
+
+Values can be anything: numbers, ids, objects. `HorizontalList<T>` infers `T` from `items`, so `onChange` gets the typed value.
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { HorizontalList, usePickerTheme } from '@elik56a/react-native-pickers';
+
+const bill = 64.5;
+const tips = [0, 10, 15, 18, 20, 25, 30].map((percent) => ({ label: percent ? `${percent}%` : 'No tip', value: percent }));
+
+export default function Example() {
+  const theme = usePickerTheme();
+  const [tip, setTip] = useState(18);
+  return (
+    <View style={{ gap: 12 }}>
+      <HorizontalList items={tips} value={tip} onChange={setTip} accessibilityLabel="Tip" />
+      <Text style={{ color: theme.colors.text, fontSize: 16 }}>Total: ${(bill * (1 + tip / 100)).toFixed(2)}</Text>
+    </View>
+  );
+}
+```
+
+Object values are compared with `Object.is`. When they're recreated (say, refetched from a server), pass `isEqual`:
+
+```tsx
+<HorizontalList items={plans} value={plan} onChange={setPlan} isEqual={(a, b) => a.id === b.id} />
+```
+
+## Custom items
+
+`renderItem` draws each item's content, and the `item` slot resizes the pill around it. Here, a strip of the next three weeks:
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { HorizontalList } from '@elik56a/react-native-pickers';
+
+const dates = Array.from({ length: 21 }, (_, i) => {
+  const date = new Date();
+  date.setDate(date.getDate() + i);
+  return date;
+});
+const days = dates.map((date, i) => ({ label: date.toDateString(), value: i }));
+
+export default function Example() {
+  const [day, setDay] = useState(0);
+  return (
+    <HorizontalList
+      variant="chips"
+      items={days}
+      value={day}
+      onChange={setDay}
+      showArrows
+      styles={{ item: { height: 60, minWidth: 48, borderRadius: 16 } }}
+      renderItem={({ item, selected, theme }) => {
+        const date = dates[item.value];
+        const color = selected ? theme.colors.primary : theme.colors.text;
+        return (
+          <View style={{ alignItems: 'center', gap: 2 }}>
+            <Text style={{ fontSize: 11, color: selected ? theme.colors.primary : theme.colors.textSecondary }}>
+              {item.value === 0 ? 'Today' : date.toLocaleDateString(undefined, { weekday: 'short' })}
+            </Text>
+            <Text style={{ fontSize: 18, fontWeight: '700', color }}>{date.getDate()}</Text>
+          </View>
+        );
+      }}
+      accessibilityLabel="Day"
+    />
+  );
+}
+```
+
 ## Try the props
 
 <PropPlayground
@@ -94,6 +323,8 @@ export default function Example() {
   controls={[
     { prop: 'variant', options: ['segmented', 'chips'] },
     { prop: 'iconPosition', options: ['left', 'right', 'top', 'bottom'] },
+    { prop: 'showArrows', options: [false, true] },
+    { prop: 'arrowPosition', options: ['outside', 'overlay'] },
   ]}
 />
 
@@ -102,6 +333,7 @@ export default function Example() {
 - **Controlled**: pass `value` and update it in `onChange`. Tapping the selected item calls `onChange` again.
 - In `segmented`, the thumb slides to the selected item; items share the track's width while they fit, and scroll when they don't.
 - Tapping an item whose neighbor is hidden scrolls that neighbor into view, plus a little of the one after it, so the user sees there's more.
+- With `showArrows`, the arrows need a frame around the list: `style` lays out that frame and `styles.container` styles the list itself.
 
 ## Props
 
@@ -112,6 +344,9 @@ export default function Example() {
 | `onChange` | `(value: T, item) => void` | — | Called on tap. |
 | `variant` | `'segmented' \| 'chips'` | `'segmented'` | Track with a sliding thumb, or separate pills. |
 | `iconPosition` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` | Where each icon sits around its label. |
+| `showArrows` | `boolean` | `false` | Round ‹ › buttons that scroll about a page, shown while the items overflow. |
+| `arrowPosition` | `'outside' \| 'overlay'` | `'outside'` | Beside the list, the one that can't scroll further dimmed; or over its edges, each shown while items hide past it. |
+| `renderArrow` | `(side: 'left' \| 'right', disabled: boolean) => ReactNode` | — | Custom arrow content. |
 | `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
 | `renderItem` | `(info: { item, selected, disabled, theme }) => ReactNode` | — | Custom item content. |
 | `accessibilityLabel` | `string` | — | Names the list for screen readers. |
@@ -130,10 +365,11 @@ export default function Example() {
 | `item` / `selectedItem` | Each item / the selected one |
 | `itemLabel` / `selectedItemLabel` | Item label |
 | `thumb` | The sliding thumb (`segmented`) |
+| `arrow` / `arrowText` | Each scroll arrow / its glyph (`showArrows`) |
 
 ## Accessibility
 
-The list is a `radiogroup` named by `accessibilityLabel`; items are `radio`s with `checked` and `disabled` states.
+The list is a `radiogroup` named by `accessibilityLabel`; items are `radio`s with `checked` and `disabled` states. Scroll arrows are buttons labelled "Scroll left" and "Scroll right".
 
 ## Related
 

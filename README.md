@@ -330,6 +330,8 @@ The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api
 | `onChange` | `(value, item) => void` | |
 | `variant` | `'segmented' \| 'chips'` | `'segmented'` |
 | `iconPosition` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` |
+| `showArrows` | `boolean`: ‹ › buttons that scroll the list | `false` |
+| `arrowPosition` | `'outside' \| 'overlay'`: beside the list or over its edges | `'outside'` |
 
 ### EmojiPicker
 
