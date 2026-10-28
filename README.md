@@ -1,11 +1,8 @@
-# react-native-pickers
+# React Native Pickers
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE)
 
-Beautiful, fully customizable pickers for React Native — **100% JavaScript, zero native code.**
-Works with Expo Go, bare React Native, and React Native Web out of the box.
-
-**Native on every platform:** the iOS design on iOS, Material Design on Android and a web design in the browser, from one code path. Prefer one look everywhere? `<PickersProvider design="ios">`. Your theme, slot styles and props always win over the design.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, date, date range, date & time, select, segmented control and emoji pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <picture>
@@ -14,80 +11,129 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
   </picture>
 </p>
 
-**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [Showcase](https://elik56a.github.io/react-native-pickers/showcase) · [Designs](https://elik56a.github.io/react-native-pickers/docs/guides/designs) · [Changelog](CHANGELOG.md) · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
+<p align="center">
+  <a href="https://elik56a.github.io/react-native-pickers/"><b>Documentation & live examples</b></a> ·
+  <a href="https://elik56a.github.io/react-native-pickers/showcase">Showcase</a> ·
+  <a href="https://elik56a.github.io/react-native-pickers/docs/getting-started/quick-start">Quick start</a> ·
+  <a href="https://elik56a.github.io/react-native-pickers/llms-full.txt">llms-full.txt</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
-| | |
-|---|---|
-| 🎡 **WheelPicker** | iOS-style 3D wheel, infinite loop, disabled items, multi-column |
-| ⏰ **TimePicker** | Wheels, a Material clock dial or columns to click; 12h / 24h (auto from locale), minute & second intervals, min/max time |
-| 📅 **DatePicker** | Calendar (single · range · multiple) or wheel, min/max, disabled days, marked dates, i18n |
-| 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS) or a calendar with the time under it (Material) or beside it (web), min/max moments |
-| 📋 **SelectPicker** | Field + bottom sheet, search (local or on your server, with a loader), groups, multi-select with chips, icons |
-| ↔️ **HorizontalList** | Segmented control or chips that scroll sideways and reveal the next item |
-| 😀 **EmojiPicker** | 1,900+ emojis, categories, search, skin tones, recents, version filtering |
+## Why this one
 
-Every picker comes **inline** and as a **sheet** (`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`) with Cancel / Done. A sheet is a bottom sheet with drag-to-dismiss or a centered modal (`presentation`); by default it's a modal on wide web windows and a bottom sheet everywhere else. `SelectPicker` can also open as a dropdown under its field, which is its default on the web.
+- **Native on every platform.** The iOS design on iPhone, Material Design on Android and a web design in the browser, from one code path. Prefer one look everywhere? Set `design="ios"` once.
+- **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
+- **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
+- **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
+- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, 1,906 emojis with skin tones and recents.
+- **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout.
+- **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
-In a form, use the **field** version (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`): it looks like `SelectPicker`'s field, opens the picker on tap (a bottom sheet on native and a dropdown on the web by default; set `presentation` to choose), and shows the confirmed value once it closes. Pass `renderTrigger` for your own trigger, or wrap any sheet in `PickerField`.
+## Install
 
 ```sh
 npm install @elik56a/react-native-pickers
+# or: yarn add / pnpm add / npx expo install @elik56a/react-native-pickers
 ```
 
-No other dependencies. Requires `react >= 18` and `react-native >= 0.72`.
-
-On native, import from a feature subpath (`@elik56a/react-native-pickers/date`, `/select`, `/emoji`, …) so Metro only bundles the pickers you use. See [Smaller native bundles](https://elik56a.github.io/react-native-pickers/docs/getting-started/installation#smaller-native-bundles).
-
-> **AI agents:** the full API docs ship with the package at `node_modules/@elik56a/react-native-pickers/llms-full.txt`, matching the installed version.
-
----
+Needs `react >= 18` and `react-native >= 0.72`. Nothing else: no pod install, no rebuild, no config plugin.
 
 ## Quick start
 
 ```tsx
-import { DatePicker, TimePicker, SelectPicker, EmojiPicker, WheelPicker } from '@elik56a/react-native-pickers';
+import { useState } from 'react';
+import { View } from 'react-native';
+import { DatePickerField, SelectPicker, TimePickerField } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
 
-<WheelPicker items={['S', 'M', 'L', 'XL']} value={size} onChange={setSize} />
+const ROOMS = [
+  { label: 'Single', value: 'single' },
+  { label: 'Double', value: 'double' },
+  { label: 'Suite', value: 'suite' },
+];
 
-<TimePicker value={time} onChange={setTime} minuteInterval={5} />
+export default function Booking() {
+  const [stay, setStay] = useState<DateRange>({ start: null, end: null });
+  const [arrival, setArrival] = useState<Date | undefined>();
+  const [room, setRoom] = useState<string | null>(null);
 
-<DatePicker value={date} onChange={setDate} minDate={new Date()} />
-<DatePicker mode="range" value={range} onChange={setRange} />
-<DatePicker display="wheel" value={birthday} onChange={setBirthday} />
-
-<SelectPicker label="Country" options={countries} value={country} onChange={setCountry} />
-
-<EmojiPicker onSelect={(emoji) => setText((t) => t + emoji)} />
+  return (
+    <View style={{ gap: 16, padding: 16 }}>
+      <DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} minDate={new Date()} placeholder="Add dates" />
+      <TimePickerField label="Arrival" value={arrival} onConfirm={setArrival} minuteInterval={15} />
+      <SelectPicker label="Room" options={ROOMS} value={room} onChange={setRoom} />
+    </View>
+  );
+}
 ```
 
-Bottom sheets keep a draft and only commit on **Done**:
+Each field opens its picker in a bottom sheet on iOS and Android and in a dropdown on the web, in that platform's design, and shows the confirmed value formatted for the locale.
+
+## Components
+
+| Component | What it is |
+|---|---|
+| [`WheelPicker`](https://elik56a.github.io/react-native-pickers/docs/components/wheel-picker) | 3D scrolling wheel: infinite loop, disabled items, tap-to-type |
+| [`MultiWheelPicker`](https://elik56a.github.io/react-native-pickers/docs/components/multi-wheel-picker) | Several wheels sharing one selection band: durations, units, compound values |
+| [`TimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, intervals, min / max |
+| [`DatePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
+| [`DateTimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
+| [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
+| [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
+| [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
+| [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,906 emojis: categories, search, skin tones, recents, version filtering |
+| [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
+| [`*PickerSheet`](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
+| [`*PickerField`](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
+
+## Inline, in a sheet, or behind a field
+
+Every picker comes three ways, with the same props.
 
 ```tsx
-<DatePickerSheet
-  visible={open}
-  onClose={() => setOpen(false)}
-  title="Check-in / Check-out"
-  mode="range"
-  value={range}
-  onConfirm={setRange}
-/>
+// Inline: changes as the user scrolls or taps
+<DatePicker value={date} onChange={setDate} />
+
+// In a sheet: keeps a draft, commits on Done, discards on Cancel
+<DatePickerSheet visible={open} onClose={() => setOpen(false)} value={date} onConfirm={setDate} />
+
+// Behind a field: the field owns the open state and shows the confirmed value
+<DatePickerField label="Date" value={date} onConfirm={setDate} />
 ```
 
-Or skip the open state and let a field own it. It shows the formatted value for `locale`:
+Sheets open as a bottom sheet, or as a centered modal on wide web windows (`presentation="bottomSheet" | "modal"`). Fields and `SelectPicker` also open as a dropdown under the field, their default on the web (`presentation="dropdown"`). `PickerField` wraps any sheet of your own in a field.
+
+## Designs: native on each platform
+
+By default each platform gets its own design (`design="auto"`). A design changes shapes and layout, never your colors:
+
+| | `ios` | `material` | `web` |
+|---|---|---|---|
+| Fields | label above | outlined, the label floats onto the border | label above, compact, focus ring |
+| Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
+| Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
+| Calendar | chosen day tinted | chosen day filled, today ringed | chosen day a filled square |
+| Time | wheels | a clock dial | columns of hours and minutes to click |
+| Date & time | one row of wheels | calendar, time fields under it | calendar, time columns beside it |
+| Press | dims | ripple | dims |
+
+Pick one design for the whole app, or for one component:
 
 ```tsx
-<DatePickerField label="Check-in / Check-out" mode="range" value={range} onConfirm={setRange} placeholder="Add dates" />
-<TimePickerField label="Alarm" value={alarm} onConfirm={setAlarm} minuteInterval={5} />
-<WheelPickerField label="Size" items={['S', 'M', 'L', 'XL']} value={size} onConfirm={setSize} />
+<PickersProvider design="ios">   {/* the iOS look on Android and the web too */}
+  <App />
+</PickersProvider>
+
+<TimePicker design="material" value={time} onChange={setTime} />   {/* one component */}
 ```
 
-Wheel, time, date and emoji pickers work **controlled** (`value` + `onChange`) or **uncontrolled** (`defaultValue`). `SelectPicker` and `SelectList` are controlled-only: always pass `value` and update it in `onChange`.
+Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs).
 
----
+> Upgrading from 0.10? Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
 
-## Theming
+## Customize anything
 
-Wrap your app (optional — sensible light & dark defaults apply without it):
+**Theme** your whole app once (optional; light and dark defaults follow the OS):
 
 ```tsx
 import { PickersProvider } from '@elik56a/react-native-pickers';
@@ -102,329 +148,99 @@ import { PickersProvider } from '@elik56a/react-native-pickers';
 </PickersProvider>
 ```
 
-Any component also accepts `theme` for a local override. Available tokens:
+| Token group | Keys |
+|---|---|
+| `colors` | `background surface sheet text textSecondary textDisabled primary onPrimary primaryMuted border backdrop indicator handle hover ripple` |
+| `radius` | `sm md lg full sheet` |
+| `spacing` | `xs sm md lg xl` |
+| `typography` | `fontFamily fontFamilyMedium sizes weights` |
+| `animation` | `duration` |
 
-- `colors`: background, surface, sheet, text, textSecondary, textDisabled, primary, onPrimary, primaryMuted, border, backdrop, indicator, handle
-- `radius`: sm, md, lg, full, sheet
-- `spacing`: xs, sm, md, lg, xl
-- `typography`: fontFamily, fontFamilyMedium, sizes, weights
-- `animation`: duration
+Any component also takes `theme` (and `design`) for a local override.
 
-### Designs
-
-Each platform gets its own design by default (`design="auto"`): iOS on iOS, Material on Android, a web design on the web. A design changes shapes and layout, never your colors:
-
-| | `ios` | `material` | `web` |
-|---|---|---|---|
-| Fields | label above, 48 tall | outlined, 56 tall; the label sits inside, then floats onto the border | label above, 40 tall, focus ring while open |
-| Sheet corners | 24 | 28 | 12 |
-| Cancel / confirm | beside a centered title, **Done** | after the content, **OK** | after the content, **Done** |
-| Single select | ✓ beside the chosen option | a radio on every option | ✓ beside the chosen option |
-| Option rows | rounded and tinted when chosen | edge to edge, untinted | compact, rounded and tinted |
-| Calendar | chosen day tinted, today's number coloured, SUN MON | chosen day filled, today ringed, S M T | chosen day a filled square, today shaded, Sun Mon |
-| Date sheet | calendar | the picked date in large type above the calendar | calendar |
-| Time | wheels | a clock dial | columns of hours and minutes to click |
-| Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
-| HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
-| Press | dims while held | ripple | dims while held |
-
-Pick one design for every platform on the provider, or for one component with its `design` prop:
+**Slot styles** reach every visual part, so you never fork:
 
 ```tsx
-<PickersProvider design="ios">…</PickersProvider>   // the iOS look everywhere
-<SelectPicker design="material" … />                 // one component
+<DatePicker styles={{ selectedDay: { borderRadius: 8 }, dayText: { fontFamily: 'Inter' }, rangeBand: { backgroundColor: '#FFE4E6' } }} />
 ```
 
-Your `theme` overrides and explicit props such as `confirmLabel` always win over the design.
+**Render props** replace a part and keep its behavior and accessibility: `renderItem` (wheel, horizontal list), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderGroupHeader` / `renderLoading` (select), `renderEmoji` (emoji), `renderTrigger` / `renderChevron` (fields and select).
 
-### Slot styles
+## Good to know
 
-Every visual part is reachable through `styles`, so you never have to fork:
+- **Controlled or uncontrolled.** Pass `value` + `onChange`, or `defaultValue`. `SelectPicker`, `SelectList` and `HorizontalList` are controlled-only: update `value` in `onChange`.
+- **`onChange` is for user changes only.** Setting `value` in code moves the picker silently. Wheels fire `onChange` when they settle and `onValueChanging` on every row, which is the place for haptics.
+- **Sheets commit on Done.** `onConfirm` gets the value; Cancel, the backdrop and dragging down discard the draft.
+- **Dates are local time.** Days are compared by local year, month and day. Serialize them with `toDateKey(date)` (`'YYYY-MM-DD'`), not `toISOString()`.
+- **Smaller native bundles.** Metro doesn't tree-shake, so on native import from feature subpaths: `/wheel /time /date /calendar /datetime /select /list /emoji /sheet /core` (React Native 0.79+). For example `import { DatePicker } from '@elik56a/react-native-pickers/date'`.
 
-```tsx
-<DatePicker
-  styles={{
-    selectedDay: { borderRadius: 8 },
-    dayText: { fontFamily: 'Inter' },
-    rangeBand: { backgroundColor: '#FFE4E6' },
-    headerTitle: { fontSize: 20 },
-  }}
-/>
-```
+## API at a glance
 
-### Render props
+The [full API](https://elik56a.github.io/react-native-pickers/docs/api/reference) lists every prop. The ones you'll reach for:
 
-For full control: `renderItem` / `renderIndicator` (wheel), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderTrigger` / `renderChevron` / `renderGroupHeader` (select), `renderEmoji` (emoji), `renderTrigger` / `renderChevron` (fields).
+**WheelPicker&lt;T&gt;** · `items: (T | { label, value, disabled? })[]` · `value` · `onChange(value, index)` · `onValueChanging` · `loop` · `itemHeight = 40` · `visibleItems = 5` · `variant: '3d' | 'flat'` · `keyboardInput = true` · `isEqual`
 
----
+**MultiWheelPicker** · `columns: { key, items, value, onChange, flex?, width?, loop? }[]` · `separator`
 
-## API
+**TimePicker** · `value: Date` (the date part is kept) · `onChange(date)` · `display: 'wheel' | 'dial' | 'input' | 'list'` (default from the design) · `format: '12h' | '24h' | 'auto'` · `minuteInterval` · `showSeconds` · `minTime` / `maxTime` · `locale`
 
-### WheelPicker
-
-| Prop | Type | Default | |
-|---|---|---|---|
-| `items` | `(T \| { label, value, disabled? })[]` | — | Primitives or objects |
-| `value` / `defaultValue` | `T` | — | |
-| `onChange` | `(value, index) => void` | — | Fires when the wheel settles |
-| `onValueChanging` | `(value, index) => void` | — | Fires on every tick — hook haptics here |
-| `itemHeight` | `number` | `40` | |
-| `visibleItems` | `number` (odd) | `5` | |
-| `loop` | `boolean` | `false` | Infinite wheel |
-| `keyboardInput` | `boolean` | `true` | Tap the selected row to type a value; the wheel jumps to the first matching label |
-| `variant` | `'3d' \| 'flat'` | `'3d'` | |
-| `rotation` | `number` | `20` | Degrees between rows (3d) |
-| `fadeTo` | `number` | `0.3` | Opacity of the farthest rows |
-| `isEqual` | `(a, b) => boolean` | `Object.is` | For object values |
-| `styles` | slots: `container item itemText selectedItemText disabledItemText indicator` | | |
-
-`MultiWheelPicker` renders several wheels sharing one selection band: `columns={[{ key, items, value, onChange, flex, loop }]}` and an optional `separator`.
-
-Haptics example (no dependency imposed — bring your own):
-
-```tsx
-import * as Haptics from 'expo-haptics';
-<WheelPicker onValueChanging={() => Haptics.selectionAsync()} ... />
-```
-
-### TimePicker
-
-| Prop | Type | Default |
-|---|---|---|
-| `value` / `defaultValue` | `Date` | now |
-| `onChange` / `onValueChanging` | `(date) => void` | |
-| `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` (from `locale`) |
-| `locale` | `string` | device |
-| `display` | `'wheel' \| 'dial' \| 'input' \| 'list'` | wheels on iOS, a clock dial in Material, columns to click on the web |
-| `minuteInterval` | `number` | `1` |
-| `showSeconds` / `secondInterval` | `boolean` / `number` | `false` / `1` |
-| `minTime` / `maxTime` | `Date` (time of day) | |
-| `loop` | `boolean` | `true` |
-| `dayPeriodLabels` | `[am, pm]` | from locale |
-| `dayPeriodFirst` | `boolean` | `false` |
-
-### DatePicker
-
-`display="calendar"` (default) or `display="wheel"`.
-
-Selection modes:
+**DatePicker** · `display: 'calendar' | 'wheel'` · `minDate` / `maxDate` · `isDateDisabled(date)` · `markedDates: { 'YYYY-MM-DD': { dots?, label?, textColor?, disabled? } }` · `locale` · `firstDayOfWeek` · `onMonthChange`
 
 ```ts
 mode?: 'single'   value: Date | null      onChange(date)
-mode: 'range'     value: { start, end }   onChange(range)   minRangeDays, maxRangeDays, allowSingleDayRange
+mode: 'range'     value: { start, end }   onChange(range)   minRangeDays  maxRangeDays  allowSingleDayRange
 mode: 'multiple'  value: Date[]           onChange(dates)   maxSelections
-mode: 'ranges'    value: DateRange[]      onChange(ranges)  maxRanges, minRangeDays, maxRangeDays, allowSingleDayRange
+mode: 'ranges'    value: DateRange[]      onChange(ranges)  maxRanges
 ```
 
-The modes are also exported as constants: `mode={CALENDAR_MODE.ranges}`.
+**DateTimePicker** · `value: Date` · `onChange(date)` · `display: 'wheel' | 'calendar'` · `minDate` / `maxDate` (moments) · `timePosition: 'beside' | 'below'` · `timeDisplay` · `minuteInterval` · `calendarProps`
 
-| Prop | Type | Default | |
-|---|---|---|---|
-| `minDate` / `maxDate` | `Date` | | |
-| `isDateDisabled` | `(date) => boolean` | | e.g. weekends |
-| `markedDates` | `{ 'YYYY-MM-DD': { dots?, label?, disabled?, textColor? } }` | | Dots, prices, events |
-| `locale` | `string` | device | Month & weekday names via `Intl` |
-| `firstDayOfWeek` | `0–6` | from locale | |
-| `showOutsideDays` / `fixedWeeks` | `boolean` | `true` | |
-| `enableSwipe` | `boolean` | `true` | Swipe between months |
-| `enableQuickJump` | `boolean` | `true` | Tap title → month grid → year grid |
-| `weekdayFormat` | `'short' \| 'narrow'` | `'short'` | |
-| `dayHeight` | `number` | `44` | |
-| `onMonthChange` | `(month) => void` | | |
-
-Ranges never cross disabled days — tapping past one starts a new range.
-
-Wheel mode: `order` (`['day','month','year']`, defaults from locale), `monthFormat` (`'long' | 'short' | 'numeric'`), `yearRange`.
-
-### SelectPicker / SelectList
-
-`SelectPicker` is a field that opens a bottom sheet, a modal or a dropdown (`presentation`); `SelectList` is the inline list.
-
-```ts
-options: { label, value, description?, icon?, group?, disabled?, keywords? }[]
-multiple?: false   value: T | null   onChange(value, option)
-multiple: true     value: T[]        onChange(values, options)   maxSelected
-```
-
-| Prop | Default | |
-|---|---|---|
-| `searchable` | `> 8 options` | Accent- and niqqud-insensitive |
-| `filterOption` | | Custom search |
-| `loadOptions` | | `(query) => Promise<options>`: search a server, with a loader, debounce and stale answers ignored |
-| `searchDebounce` | `300` | ms after typing stops before searching |
-| `onSearchChange` / `loading` / `onEndReached` | | Search yourself: fetch on each query, show a loader, load more |
-| `loadingText` / `renderLoading` | `'Loading…'` | Custom loader |
-| `searchPrompt` | `'Type to search'` | Shown before typing when a searched list has no options |
-| `placeholder` / `label` / `sheetTitle` | | |
-| `clearable` | `false` | |
-| `chips` | `true` | Removable chips in multi mode |
-| `presentation` | `'auto'` | `'bottomSheet'`, `'modal'` or `'dropdown'` (under the field). `auto`: dropdown on the web, bottom sheet on native |
-| `closeOnSelect` | `true` | Single mode |
-| `disabled` | `false` | |
-
-### HorizontalList
-
-A segmented control (default) or a row of chips that scrolls sideways. Tapping the item at the edge scrolls the next one into view, so users see there's more.
+**SelectPicker&lt;T&gt; / SelectList&lt;T&gt;** · `options: { label, value, description?, icon?, group?, disabled?, keywords? }[]` · `value` · `onChange(value, option)` · `multiple` (then `value: T[]`, `maxSelected`, `chips`) · `searchable` · `clearable` + `onClear` · `presentation: 'auto' | 'bottomSheet' | 'modal' | 'dropdown'`
 
 ```tsx
-import { HorizontalList } from '@elik56a/react-native-pickers';
-
-<HorizontalList
-  items={[
-    { label: 'Day', value: 'day' },
-    { label: 'Week', value: 'week' },
-    { label: 'Month', value: 'month' },
-  ]}
-  value={view}
-  onChange={setView}
-/>
+// Search a server: debounced, with a loader, stale answers ignored
+<SelectPicker label="City" loadOptions={(query) => api.searchCities(query)} value={city} onChange={setCity} />
 ```
 
-| Prop | Default | |
-|---|---|---|
-| `items` | — | `{ label, value, disabled?, icon? }[]` |
-| `value` / `onChange` | | Controlled; `onChange(value, item)` |
-| `variant` | `'segmented'` | or `'chips'` |
-| `renderItem` | | `({ item, selected, disabled, theme }) => ReactNode` |
+**HorizontalList&lt;T&gt;** · `items: { label, value, disabled?, icon? }[]` · `value` · `onChange(value, item)` · `variant: 'segmented' | 'chips'`
 
-### EmojiPicker
+**EmojiPicker** · `onSelect(emoji, data)` · `columns = 8` · `height = 380` · `categories` · `exclude` · `maxEmojiVersion` · `skinTone` / `onSkinToneChange` · `recent` / `onRecentChange` (persist with your own storage)
 
-| Prop | Default | |
-|---|---|---|
-| `onSelect` | — | `(emoji: string, data: Emoji) => void` |
-| `columns` / `emojiSize` / `height` | `8` / auto / `380` | |
-| `categories` | all | Filter & reorder |
-| `exclude` | | Characters to hide |
-| `maxEmojiVersion` | | Hide emojis older devices can't render |
-| `skinTone` / `defaultSkinTone` / `onSkinToneChange` | `0` | 0 = default, 1–5 light → dark |
-| `recent` / `defaultRecent` / `onRecentChange` / `maxRecent` | `[]` / `24` | Persist with your own storage |
-| `categoryBarPosition` | `'top'` | or `'bottom'` |
-| `categoryLabels` / `categoryIcons` | | i18n and custom icons |
-| `searchPlaceholder` / `emptyText` | | |
+**Sheets** · `visible` · `onClose` · `value` · `onConfirm` · `title` · `confirmLabel` / `cancelLabel` · `presentation` · `sheetProps` · plus the picker's props
 
-Persisting recents with AsyncStorage:
+**Fields** · the sheet's props without `visible` · `label` · `placeholder` · `displayValue` · `clearable` + `onClear` · `disabled` · `presentation` · `renderTrigger` · `renderChevron`
 
-```tsx
-const [recent, setRecent] = useState<string[]>([]);
-useEffect(() => { AsyncStorage.getItem('recent').then((v) => v && setRecent(JSON.parse(v))); }, []);
+**BottomSheet** · `visible` · `onClose` · `title` · `headerLeft` / `headerRight` · `footer` · `height` · `enableSwipeToClose` · `expandable` · `presentation`
 
-<EmojiPicker
-  recent={recent}
-  onRecentChange={(r) => { setRecent(r); AsyncStorage.setItem('recent', JSON.stringify(r)); }}
-  onSelect={...}
-/>
-```
+**Utilities** · `toDateKey` · `addDays` · `addMonths` · `isSameDay` · `formatDate` · `getAllEmojis` · `searchEmojis` · `findEmoji` · `withSkinTone` · `useDraft` · `usePickerTheme` · `createTheme` · `resolveDesign`
 
-Utilities: `getAllEmojis()`, `searchEmojis(query)`, `findEmoji(char)`, `withSkinTone(emoji, tone)`.
+## Platforms
 
-### Picker fields
+| | |
+|---|---|
+| Expo Go, dev builds, EAS | ✅ |
+| Bare React Native (iOS, Android), New Architecture, Hermes | ✅ |
+| React Native Web, Expo Router web, Next.js | ✅ |
+| Windows, macOS | Untested; core components only, uses the Material design |
 
-`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField` and `EmojiPickerField` take their sheet's props without `visible` (`value`, `onConfirm` or `onSelect`, `mode`, `locale`, `title`…), plus:
+To preview iOS or Android behavior in a browser (Storybook, a design system), set `<PickersProvider platform="ios">`.
 
-| Prop | Default | |
-|---|---|---|
-| `label` | | Above the field, and the sheet title unless `title` is set |
-| `placeholder` | `'Select…'` | |
-| `displayValue` | the value, formatted for `locale` | Text shown in the field |
-| `clearable` / `onClear` | `false` | × button while there's a value; reset your value in `onClear` |
-| `disabled` | `false` | |
-| `renderTrigger` | | `({ open, displayValue, disabled }) => node`: your own trigger |
-| `renderChevron` | | `({ open, theme }) => node` |
-| `presentation` | `'auto'` | `'auto'` (a dropdown on the web, a bottom sheet on native), `'dropdown'`, `'bottomSheet'` or `'modal'` |
-| `onOpen` / `onClose` | | |
-| `style` / `styles` | | `styles` takes the field slots (`label trigger triggerText placeholder chevron clear`) and the picker's |
+## For AI assistants
 
-`EmojiPickerField` also takes `value`, the emoji to show. `PickerField` is the field on its own, for any sheet:
+The complete documentation is one Markdown file, [`llms-full.txt`](https://elik56a.github.io/react-native-pickers/llms-full.txt), with an index at [`llms.txt`](https://elik56a.github.io/react-native-pickers/llms.txt). It also ships inside the package at `node_modules/@elik56a/react-native-pickers/llms-full.txt`, matching the installed version. A short cheat sheet for code generation is on the [For AI assistants](https://elik56a.github.io/react-native-pickers/docs/resources/ai) page.
 
-```tsx
-<PickerField label="Filters" displayValue={summary}>
-  {(sheet) => <BottomSheet {...sheet} title="Filters">…</BottomSheet>}
-</PickerField>
-```
+## Learn more
 
-### BottomSheet
+- **Guides:** [designs](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs) · [theming](https://elik56a.github.io/react-native-pickers/docs/guides/theming) · [styling with slots](https://elik56a.github.io/react-native-pickers/docs/guides/styling) · [render props](https://elik56a.github.io/react-native-pickers/docs/guides/render-props) · [i18n & RTL](https://elik56a.github.io/react-native-pickers/docs/guides/i18n-rtl) · [accessibility](https://elik56a.github.io/react-native-pickers/docs/guides/accessibility) · [haptics](https://elik56a.github.io/react-native-pickers/docs/guides/haptics) · [forms](https://elik56a.github.io/react-native-pickers/docs/guides/forms) · [TypeScript](https://elik56a.github.io/react-native-pickers/docs/guides/typescript)
+- **Recipes:** [hotel booking range](https://elik56a.github.io/react-native-pickers/docs/recipes/booking-range) · [birthday](https://elik56a.github.io/react-native-pickers/docs/recipes/birthday) · [alarm time](https://elik56a.github.io/react-native-pickers/docs/recipes/alarm-time) · [duration](https://elik56a.github.io/react-native-pickers/docs/recipes/duration) · [country select](https://elik56a.github.io/react-native-pickers/docs/recipes/country-select) · [server search](https://elik56a.github.io/react-native-pickers/docs/recipes/server-search) · [flight search form](https://elik56a.github.io/react-native-pickers/docs/recipes/flight-search-form) · [chat emoji](https://elik56a.github.io/react-native-pickers/docs/recipes/chat-emoji) · [filters sheet](https://elik56a.github.io/react-native-pickers/docs/recipes/filters-sheet)
+- **Coming from another library?** [Migration](https://elik56a.github.io/react-native-pickers/docs/resources/migration) maps the props of `@react-native-community/datetimepicker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `@react-native-picker/picker` and the native segmented control. [Comparison](https://elik56a.github.io/react-native-pickers/docs/resources/comparison) shows when to choose something else.
 
-Use the same sheet for your own content:
+## Contributing
 
-```tsx
-<BottomSheet visible={open} onClose={close} title="Filters" footer={<ApplyButton />}>
-  ...
-</BottomSheet>
-```
-
-Props: `title`, `headerLeft`, `headerRight`, `footer`, `presentation`, `enableSwipeToClose`, `draggable`, `expandable`, `expandedHeight`, `closeOnBackdropPress`, `height`, `maxHeightRatio`, `bottomInset`, `styles`.
-
----
-
-## RTL & i18n
-
-Layouts use logical `start` / `end`, so they flip automatically with `I18nManager.isRTL`; calendar arrows and swipe direction follow. All month, weekday, and AM/PM names come from `Intl` (Hermes supports it), with English fallbacks. Every user-facing string (Done, Cancel, Search, empty states, category labels) is a prop.
-
-On React Native Web, select labels are pinned to the left edge so options in different scripts line up (the browser would otherwise align Hebrew or Arabic labels right). For an RTL web app, set `textAlign: 'right'` through the `optionLabel`, `triggerText` and `placeholder` slot styles.
-
-## Accessibility
-
-Wheels are `adjustable` with increment / decrement actions for VoiceOver and TalkBack. Days announce their full date, and selected / disabled states are exposed everywhere.
-
-## Performance
-
-Animations run on the native driver. Wheels and the emoji grid are virtualized `FlatList`s with fixed row layouts, and rows are memoized so scrolling re-renders only the two rows that change.
-
-## Development
-
-A pnpm workspace: the library at the root, an Expo example app in [`example/`](example) that renders against `src/` (edits hot-reload), and the docs site in [`website/`](website).
-
-```sh
-pnpm install        # also installs the git hooks (lefthook)
-
-pnpm web            # example app in the browser
-pnpm ios            # example app in the iOS Simulator
-pnpm android        # example app in the Android emulator
-pnpm docs           # docs site at localhost:3001
-
-pnpm test           # Jest + React Native Testing Library
-pnpm lint           # Biome: lint, format and import order
-pnpm format         # fix whatever lint can fix
-pnpm typecheck
-pnpm build          # lib/ (ESM + .d.ts)
-pnpm gen:emoji      # regenerate emoji data from emojibase-data
-```
-
-### Project structure
-
-Each picker lives in its own folder under `src/` (`wheel`, `time`, `calendar`, `date`, `datetime`, `select`, `emoji`), on top of `sheet` (bottom sheets and fields) and `core` (theme, shared hooks and utils). Imports flow feature → `sheet` → `core`, and every folder has the same layout:
-
-```
-src/select/
-├─ SelectPicker.tsx        components render only
-├─ components/             smaller render-only parts
-├─ hooks/                  state and event handling
-├─ select.utils.ts         pure logic, with select.utils.test.ts next to it
-├─ select.types.ts · select.constants.ts · select.styles.ts
-├─ SelectPicker.test.tsx   interaction tests (React Native Testing Library)
-└─ index.ts                the folder's public API
-```
-
-### Conventions
-
-- Tests sit next to the file they test.
-- Arrow functions (`export const fn = () =>`), and returned objects with 2+ properties go one property per line. A Biome plugin in [`lint/`](lint) enforces this, and `pnpm format` fixes it.
-- Imports come in three blocks: React and React Native, other packages, then our own code.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) (`feat:`, `fix:`, `refactor(select):` …). The commit hook checks each commit, and CI checks the PR title, since PRs are squash-merged.
-
-The pre-commit hook formats and lints the staged files and runs typecheck. CI runs lint, typecheck, tests and the build on every pull request.
-
-### Releasing
-
-CI publishes to npm ([`.github/workflows/release.yml`](.github/workflows/release.yml)). Either run **Release** from the Actions tab and pick patch / minor / major, or push a version tag yourself:
-
-```sh
-npm version patch -m "chore(release): v%s"  # or minor / major: bumps package.json, commits, tags vX.Y.Z
-git push origin master --follow-tags        # tag → lint, typecheck, test, build, npm publish; master → docs deploy
-```
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, the example app and the docs site.
 
 Emoji data comes from [emojibase](https://emojibase.dev) (MIT).
 
 ## License
 
-MIT
+MIT © [Eliyahu Kriel](https://www.linkedin.com/in/elikri/)
