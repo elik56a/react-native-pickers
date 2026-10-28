@@ -33,17 +33,20 @@
 
 ```sh
 npm install @elik56a/react-native-pickers
-# or: yarn add / pnpm add / npx expo install @elik56a/react-native-pickers
 ```
 
-Needs `react >= 18` and `react-native >= 0.72`. Nothing else: no pod install, no rebuild, no config plugin.
+Or `yarn add`, `pnpm add`, `npx expo install`. Needs `react >= 18` and `react-native >= 0.72`. Nothing else: no pod install, no rebuild, no config plugin.
 
 ## Quick start
 
 ```tsx
 import { useState } from 'react';
 import { View } from 'react-native';
-import { DatePickerField, SelectPicker, TimePickerField } from '@elik56a/react-native-pickers';
+import {
+  DatePickerField,
+  SelectPicker,
+  TimePickerField,
+} from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
 const ROOMS = [
@@ -59,9 +62,26 @@ export default function Booking() {
 
   return (
     <View style={{ gap: 16, padding: 16 }}>
-      <DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} minDate={new Date()} placeholder="Add dates" />
-      <TimePickerField label="Arrival" value={arrival} onConfirm={setArrival} minuteInterval={15} />
-      <SelectPicker label="Room" options={ROOMS} value={room} onChange={setRoom} />
+      <DatePickerField
+        label="Stay"
+        mode="range"
+        value={stay}
+        onConfirm={setStay}
+        minDate={new Date()}
+        placeholder="Add dates"
+      />
+      <TimePickerField
+        label="Arrival"
+        value={arrival}
+        onConfirm={setArrival}
+        minuteInterval={15}
+      />
+      <SelectPicker
+        label="Room"
+        options={ROOMS}
+        value={room}
+        onChange={setRoom}
+      />
     </View>
   );
 }
@@ -83,8 +103,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,906 emojis: categories, search, skin tones, recents, version filtering |
 | [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
-| [`*PickerSheet`](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
-| [`*PickerField`](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
+| [Picker sheets](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
+| [Picker fields](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
 
 ## Inline, in a sheet, or behind a field
 
@@ -95,13 +115,20 @@ Every picker comes three ways, with the same props.
 <DatePicker value={date} onChange={setDate} />
 
 // In a sheet: keeps a draft, commits on Done, discards on Cancel
-<DatePickerSheet visible={open} onClose={() => setOpen(false)} value={date} onConfirm={setDate} />
+<DatePickerSheet
+  visible={open}
+  onClose={() => setOpen(false)}
+  value={date}
+  onConfirm={setDate}
+/>
 
-// Behind a field: the field owns the open state and shows the confirmed value
+// Behind a field: owns the open state, shows the confirmed value
 <DatePickerField label="Date" value={date} onConfirm={setDate} />
 ```
 
 Sheets open as a bottom sheet, or as a centered modal on wide web windows (`presentation="bottomSheet" | "modal"`). Fields and `SelectPicker` also open as a dropdown under the field, their default on the web (`presentation="dropdown"`). `PickerField` wraps any sheet of your own in a field.
+
+Button text is yours too: `confirmLabel`, `cancelLabel` and `showCancel` on any sheet or field.
 
 ## Designs: native on each platform
 
@@ -120,29 +147,37 @@ By default each platform gets its own design (`design="auto"`). A design changes
 Pick one design for the whole app, or for one component:
 
 ```tsx
-<PickersProvider design="ios">   {/* the iOS look on Android and the web too */}
+// The iOS look on Android and the web too
+<PickersProvider design="ios">
   <App />
 </PickersProvider>
 
-<TimePicker design="material" value={time} onChange={setTime} />   {/* one component */}
+// One component
+<TimePicker design="material" value={time} onChange={setTime} />
 ```
 
 Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs).
 
-> Upgrading from 0.10? Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
+> **Upgrading from 0.10?** Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
 
 ## Customize anything
 
-**Theme** your whole app once (optional; light and dark defaults follow the OS):
+**Theme** your whole app once. It's optional: light and dark defaults follow the OS.
 
 ```tsx
 import { PickersProvider } from '@elik56a/react-native-pickers';
 
 <PickersProvider
   colorScheme="auto" // 'auto' | 'light' | 'dark'
-  theme={{ colors: { primary: '#FF5A5F' }, radius: { md: 8 }, typography: { fontFamily: 'Inter' } }}
-  darkTheme={{ colors: { primary: '#FF8A8E', background: '#000' } }}
   design="auto" // 'auto' | 'ios' | 'material' | 'web'
+  theme={{
+    colors: { primary: '#FF5A5F' },
+    radius: { md: 8 },
+    typography: { fontFamily: 'Inter' },
+  }}
+  darkTheme={{
+    colors: { primary: '#FF8A8E', background: '#000' },
+  }}
 >
   <App />
 </PickersProvider>
@@ -150,21 +185,35 @@ import { PickersProvider } from '@elik56a/react-native-pickers';
 
 | Token group | Keys |
 |---|---|
-| `colors` | `background surface sheet text textSecondary textDisabled primary onPrimary primaryMuted border backdrop indicator handle hover ripple` |
-| `radius` | `sm md lg full sheet` |
-| `spacing` | `xs sm md lg xl` |
-| `typography` | `fontFamily fontFamilyMedium sizes weights` |
+| `colors` | `background` `surface` `sheet` `text` `textSecondary` `textDisabled` `primary` `onPrimary` `primaryMuted` `border` `backdrop` `indicator` `handle` `hover` `ripple` |
+| `radius` | `sm` `md` `lg` `full` `sheet` |
+| `spacing` | `xs` `sm` `md` `lg` `xl` |
+| `typography` | `fontFamily` `fontFamilyMedium` `sizes` `weights` |
 | `animation` | `duration` |
 
-Any component also takes `theme` (and `design`) for a local override.
+Any component also takes `theme` and `design` for a local override.
 
 **Slot styles** reach every visual part, so you never fork:
 
 ```tsx
-<DatePicker styles={{ selectedDay: { borderRadius: 8 }, dayText: { fontFamily: 'Inter' }, rangeBand: { backgroundColor: '#FFE4E6' } }} />
+<DatePicker
+  styles={{
+    selectedDay: { borderRadius: 8 },
+    dayText: { fontFamily: 'Inter' },
+    rangeBand: { backgroundColor: '#FFE4E6' },
+  }}
+/>
 ```
 
-**Render props** replace a part and keep its behavior and accessibility: `renderItem` (wheel, horizontal list), `renderDay` / `renderArrow` (calendar), `renderOption` / `renderGroupHeader` / `renderLoading` (select), `renderEmoji` (emoji), `renderTrigger` / `renderChevron` (fields and select).
+**Render props** replace a part and keep its behavior and accessibility:
+
+| Component | Render props |
+|---|---|
+| Wheels, `HorizontalList` | `renderItem` |
+| Calendar | `renderDay`, `renderArrow` |
+| `SelectPicker`, `SelectList` | `renderOption`, `renderGroupHeader`, `renderLoading`, `renderTrigger`, `renderChevron` |
+| `EmojiPicker` | `renderEmoji` |
+| Fields | `renderTrigger`, `renderChevron` |
 
 ## Good to know
 
@@ -172,51 +221,144 @@ Any component also takes `theme` (and `design`) for a local override.
 - **`onChange` is for user changes only.** Setting `value` in code moves the picker silently. Wheels fire `onChange` when they settle and `onValueChanging` on every row, which is the place for haptics.
 - **Sheets commit on Done.** `onConfirm` gets the value; Cancel, the backdrop and dragging down discard the draft.
 - **Dates are local time.** Days are compared by local year, month and day. Serialize them with `toDateKey(date)` (`'YYYY-MM-DD'`), not `toISOString()`.
-- **Smaller native bundles.** Metro doesn't tree-shake, so on native import from feature subpaths: `/wheel /time /date /calendar /datetime /select /list /emoji /sheet /core` (React Native 0.79+). For example `import { DatePicker } from '@elik56a/react-native-pickers/date'`.
+- **Smaller native bundles.** Metro doesn't tree-shake, so on native, import from a feature subpath (React Native 0.79+):
+
+  ```tsx
+  import { DatePicker } from '@elik56a/react-native-pickers/date';
+  ```
+
+  Subpaths: `/wheel` `/time` `/date` `/calendar` `/datetime` `/select` `/list` `/emoji` `/sheet` `/core`.
 
 ## API at a glance
 
-The [full API](https://elik56a.github.io/react-native-pickers/docs/api/reference) lists every prop. The ones you'll reach for:
+The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api/reference) lists every prop. These are the ones you'll reach for.
 
-**WheelPicker&lt;T&gt;** · `items: (T | { label, value, disabled? })[]` · `value` · `onChange(value, index)` · `onValueChanging` · `loop` · `itemHeight = 40` · `visibleItems = 5` · `variant: '3d' | 'flat'` · `keyboardInput = true` · `isEqual`
+### WheelPicker&lt;T&gt;
 
-**MultiWheelPicker** · `columns: { key, items, value, onChange, flex?, width?, loop? }[]` · `separator`
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `(T \| { label, value, disabled? })[]` | |
+| `value` | `T` | |
+| `onChange` | `(value, index) => void`, when the wheel settles | |
+| `onValueChanging` | `(value, index) => void`, on every row | |
+| `loop` | `boolean` | `false` |
+| `itemHeight` | `number` | `40` |
+| `visibleItems` | `number` (odd) | `5` |
+| `variant` | `'3d' \| 'flat'` | `'3d'` |
+| `keyboardInput` | `boolean`: tap the selected row to type | `true` |
+| `isEqual` | `(a, b) => boolean`, for object values | `Object.is` |
 
-**TimePicker** · `value: Date` (the date part is kept) · `onChange(date)` · `display: 'wheel' | 'dial' | 'input' | 'list'` (default from the design) · `format: '12h' | '24h' | 'auto'` · `minuteInterval` · `showSeconds` · `minTime` / `maxTime` · `locale`
+`MultiWheelPicker` takes `columns: { key, items, value, onChange, flex?, width?, loop? }[]` and an optional `separator`.
 
-**DatePicker** · `display: 'calendar' | 'wheel'` · `minDate` / `maxDate` · `isDateDisabled(date)` · `markedDates: { 'YYYY-MM-DD': { dots?, label?, textColor?, disabled? } }` · `locale` · `firstDayOfWeek` · `onMonthChange`
+### TimePicker
 
-```ts
-mode?: 'single'   value: Date | null      onChange(date)
-mode: 'range'     value: { start, end }   onChange(range)   minRangeDays  maxRangeDays  allowSingleDayRange
-mode: 'multiple'  value: Date[]           onChange(dates)   maxSelections
-mode: 'ranges'    value: DateRange[]      onChange(ranges)  maxRanges
-```
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `Date` (the date part is kept) | now |
+| `onChange` | `(date) => void` | |
+| `display` | `'wheel' \| 'dial' \| 'input' \| 'list'` | from the design |
+| `format` | `'12h' \| '24h' \| 'auto'` | `'auto'`, from `locale` |
+| `minuteInterval` | `number` | `1` |
+| `showSeconds` | `boolean` | `false` |
+| `minTime` / `maxTime` | `Date` (time of day) | |
+| `locale` | `string` | device |
 
-**DateTimePicker** · `value: Date` · `onChange(date)` · `display: 'wheel' | 'calendar'` · `minDate` / `maxDate` (moments) · `timePosition: 'beside' | 'below'` · `timeDisplay` · `minuteInterval` · `calendarProps`
+### DatePicker
 
-**SelectPicker&lt;T&gt; / SelectList&lt;T&gt;** · `options: { label, value, description?, icon?, group?, disabled?, keywords? }[]` · `value` · `onChange(value, option)` · `multiple` (then `value: T[]`, `maxSelected`, `chips`) · `searchable` · `clearable` + `onClear` · `presentation: 'auto' | 'bottomSheet' | 'modal' | 'dropdown'`
+| `mode` | `value` | `onChange` | Extra props |
+|---|---|---|---|
+| `'single'` (default) | `Date \| null` | `(date)` | |
+| `'range'` | `{ start, end }` | `(range)` | `minRangeDays` `maxRangeDays` `allowSingleDayRange` |
+| `'multiple'` | `Date[]` | `(dates)` | `maxSelections` |
+| `'ranges'` | `DateRange[]` | `(ranges)` | `maxRanges` |
+
+| Prop | Type | Default |
+|---|---|---|
+| `display` | `'calendar' \| 'wheel'` | `'calendar'` |
+| `minDate` / `maxDate` | `Date` | |
+| `isDateDisabled` | `(date) => boolean` | |
+| `markedDates` | `{ 'YYYY-MM-DD': { dots?, label?, textColor?, disabled? } }` | |
+| `locale` | `string` | device |
+| `firstDayOfWeek` | `0`–`6` (`0` = Sunday) | from `locale` |
+| `onMonthChange` | `(month) => void` | |
+
+### DateTimePicker
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `Date` | now |
+| `onChange` | `(date) => void` | |
+| `display` | `'wheel' \| 'calendar'` | `'wheel'` in the iOS design, else `'calendar'` |
+| `minDate` / `maxDate` | `Date` (date and time) | |
+| `timePosition` | `'beside' \| 'below'` | `'beside'` on the web |
+| `timeDisplay` | `'wheel' \| 'dial' \| 'input' \| 'list'` | from the design |
+| `minuteInterval` | `number` | `1` |
+| `calendarProps` | calendar props such as `markedDates` | |
+
+### SelectPicker&lt;T&gt; and SelectList&lt;T&gt;
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `{ label, value, description?, icon?, group?, disabled?, keywords? }[]` | `[]` |
+| `value` | `T \| null`, or `T[]` with `multiple` | |
+| `onChange` | `(value, option) => void` | |
+| `multiple` | `boolean`, with `maxSelected` and `chips` | `false` |
+| `searchable` | `boolean` | more than 8 options |
+| `loadOptions` | `(query) => Promise<options>`: search a server | |
+| `clearable` / `onClear` | `boolean` / `() => void` | `false` |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown'` | `'auto'`: dropdown on the web |
+
+`loadOptions` waits for a pause in typing, shows a loader and ignores answers to older queries:
 
 ```tsx
-// Search a server: debounced, with a loader, stale answers ignored
-<SelectPicker label="City" loadOptions={(query) => api.searchCities(query)} value={city} onChange={setCity} />
+<SelectPicker
+  label="City"
+  loadOptions={(query) => api.searchCities(query)}
+  value={city}
+  onChange={setCity}
+/>
 ```
 
-**HorizontalList&lt;T&gt;** · `items: { label, value, disabled?, icon? }[]` · `value` · `onChange(value, item)` · `variant: 'segmented' | 'chips'`
+### HorizontalList&lt;T&gt;
 
-**EmojiPicker** · `onSelect(emoji, data)` · `columns = 8` · `height = 380` · `categories` · `exclude` · `maxEmojiVersion` · `skinTone` / `onSkinToneChange` · `recent` / `onRecentChange` (persist with your own storage)
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `{ label, value, disabled?, icon? }[]` | |
+| `value` | `T` | |
+| `onChange` | `(value, item) => void` | |
+| `variant` | `'segmented' \| 'chips'` | `'segmented'` |
 
-**Sheets** · `visible` · `onClose` · `value` · `onConfirm` · `title` · `confirmLabel` / `cancelLabel` · `presentation` · `sheetProps` · plus the picker's props
+### EmojiPicker
 
-**Fields** · the sheet's props without `visible` · `label` · `placeholder` · `displayValue` · `clearable` + `onClear` · `disabled` · `presentation` · `renderTrigger` · `renderChevron`
+| Prop | Type | Default |
+|---|---|---|
+| `onSelect` | `(emoji, data) => void` | |
+| `columns` / `height` | `number` | `8` / `380` |
+| `categories` / `exclude` | which to show, in order / characters to hide | all |
+| `maxEmojiVersion` | `number`: hide emojis older devices can't render | |
+| `skinTone` / `onSkinToneChange` | `0`–`5` | `0` |
+| `recent` / `onRecentChange` | `string[]`: persist with your own storage | `[]` |
 
-**BottomSheet** · `visible` · `onClose` · `title` · `headerLeft` / `headerRight` · `footer` · `height` · `enableSwipeToClose` · `expandable` · `presentation`
+### Sheets, fields and BottomSheet
 
-**Utilities** · `toDateKey` · `addDays` · `addMonths` · `isSameDay` · `formatDate` · `getAllEmojis` · `searchEmojis` · `findEmoji` · `withSkinTone` · `useDraft` · `usePickerTheme` · `createTheme` · `resolveDesign`
+| Component | Props |
+|---|---|
+| Picker sheets | `visible` `onClose` `value` `onConfirm` `title` `confirmLabel` `cancelLabel` `showCancel` `presentation` `sheetProps`, plus the picker's props |
+| Picker fields | the sheet's props without `visible`, plus `label` `placeholder` `displayValue` `clearable` `onClear` `disabled` `presentation` `renderTrigger` `renderChevron` |
+| `BottomSheet` | `visible` `onClose` `title` `headerLeft` `headerRight` `footer` `height` `enableSwipeToClose` `expandable` `presentation` |
+
+### Utilities
+
+| Area | Exports |
+|---|---|
+| Dates | `toDateKey` `addDays` `addMonths` `isSameDay` `formatDate` |
+| Emoji | `getAllEmojis` `searchEmojis` `findEmoji` `withSkinTone` |
+| Theme | `usePickerTheme` `createTheme` `resolveDesign` |
+| Sheets | `useDraft`: draft state for your own sheets |
 
 ## Platforms
 
-| | |
+| Platform | Support |
 |---|---|
 | Expo Go, dev builds, EAS | ✅ |
 | Bare React Native (iOS, Android), New Architecture, Hermes | ✅ |
