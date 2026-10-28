@@ -1,0 +1,46 @@
+name: Bug report
+description: Something doesn't work or look right
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what you got instead. Screenshots or a screen recording help a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest code that shows the bug. A CodePen from any live example on the docs site, or an Expo Snack, is ideal.
+      render: tsx
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options: [iOS, Android, Web]
+    validations:
+      required: true
+  - type: dropdown
+    id: design
+    attributes:
+      label: Design
+      options: [auto, ios, material, web]
+  - type: input
+    id: version
+    attributes:
+      label: Library version
+      placeholder: 0.14.0
+    validations:
+      required: true
+  - type: input
+    id: rn
+    attributes:
+      label: React Native / Expo version
+      placeholder: RN 0.88, Expo SDK 58, New Architecture
+    validations:
+      required: true
