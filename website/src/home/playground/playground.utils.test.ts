@@ -37,6 +37,15 @@ describe('buildSnippet', () => {
     );
   });
 
+  it('writes the country props a visitor turned on, and no locale for the device one', () => {
+    expect(buildSnippet('country', { preferred: false, showDialCode: false, locale: 'auto' })).toContain(
+      '<CountryPicker\n  label="Country"\n  value={country}\n  onChange={setCountry}\n/>'
+    );
+    expect(buildSnippet('country', { preferred: true, showDialCode: true, locale: 'de' })).toContain(
+      "preferred={['US', 'GB', 'DE']}\n  showDialCode\n  locale=\"de\""
+    );
+  });
+
   it('switches select state and data with the multiple and groups toggles', () => {
     const single = buildSnippet('select', { multiple: false, searchable: false, groups: false, loading: true });
     expect(single).toContain('options={CITIES}\n  value={city}\n  onChange={setCity}\n  searchable={false}\n  loading');

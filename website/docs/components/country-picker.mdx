@@ -1,0 +1,225 @@
+---
+title: React Native Country Picker
+sidebar_label: CountryPicker
+description: "React Native country picker with flags and dialing codes: 250 countries, search by name in any language, ISO code or +dial code, preferred countries on top, localized names, single or multiple. Pure JS, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+
+# CountryPicker
+
+`CountryPicker` is a React Native form field for choosing a country: about 250 countries with flag emojis and international dialing codes, searchable by English or native name, ISO code or `+` dialing code. Country names follow the device's language. It's a [`SelectPicker`](./select-picker) with the country list built in, so it takes the same props: a bottom sheet on phones, a dropdown on the web, multiple selection, a clear button and the [iOS, Material or web design](../guides/designs).
+
+No images or data files to add: flags are emoji, and the list is about 11 KB, parsed on first use.
+
+```tsx
+import { CountryPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [country, setCountry] = useState<CountryCode | null>('IL');
+  return <CountryPicker label="Country" value={country} onChange={setCountry} />;
+}
+```
+
+Try searching `deutschland`, `usa`, `+44` or `JP`. The value is the ISO 3166-1 alpha-2 code, such as `'IL'`. [`getCountry`](#utilities) turns it into the name, flag and dialing code.
+
+## Try the props
+
+<PropPlayground
+  name="CountryPicker"
+  component={CountryPicker}
+  props={{ label: 'Country', preferred: ['US', 'GB', 'IL'] }}
+  value={(p) => (p.multiple ? ['FR', 'JP'] : 'FR')}
+  resetProp="onClear"
+  code="label=&quot;Country&quot; preferred={['US', 'GB', 'IL']} value={value} onChange={setValue}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'showDialCode', options: [false, true] },
+    { prop: 'multiple', options: [false, true] },
+    { prop: 'clearable', options: [false, true] },
+    { prop: 'locale', options: ['en', 'de', 'he', 'ja'], default: null },
+    { prop: 'disabled', options: [false, true] },
+  ]}
+/>
+
+## Preferred countries and dialing codes
+
+`preferred` pins countries to the top under their own header, in the order you give. `showDialCode` adds each country's code under its name.
+
+```tsx live
+import { useState } from 'react';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [country, setCountry] = useState<CountryCode | null>(null);
+  return (
+    <CountryPicker
+      label="Phone country"
+      preferred={['US', 'GB', 'CA']}
+      showDialCode
+      value={country}
+      onChange={setCountry}
+    />
+  );
+}
+```
+
+## Phone number prefix
+
+`renderTrigger` swaps the field for anything you like. Here a compact `🇮🇱 +972` button opens the list beside a `TextInput`.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CountryPicker, getCountry } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+export default function PhoneInput() {
+  const [country, setCountry] = useState<CountryCode | null>('IL');
+  const [phone, setPhone] = useState('');
+  const selected = country ? getCountry(country) : undefined;
+  return (
+    <View style={styles.row}>
+      <CountryPicker
+        sheetTitle="Country code"
+        showDialCode
+        value={country}
+        onChange={setCountry}
+        renderTrigger={({ open }) => (
+          <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="Country code" style={styles.prefix}>
+            <Text style={styles.prefixText}>{selected ? `${selected.flag} ${selected.dialCode}` : '+'}</Text>
+          </Pressable>
+        )}
+      />
+      <TextInput
+        value={phone}
+        onChangeText={setPhone}
+        placeholder="Phone number"
+        keyboardType="phone-pad"
+        style={styles.input}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: { flexDirection: 'row', gap: 8 },
+  prefix: { height: 48, paddingHorizontal: 12, justifyContent: 'center', borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12 },
+  prefixText: { fontSize: 16 },
+  input: { flex: 1, height: 48, paddingHorizontal: 12, borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12, fontSize: 16 },
+});
+```
+
+## Several countries
+
+`multiple` turns the field into chips, as with `SelectPicker`. `maxSelected` caps the count.
+
+```tsx live
+import { useState } from 'react';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [visited, setVisited] = useState<CountryCode[]>(['FR', 'JP']);
+  return <CountryPicker label="Countries you've visited" multiple value={visited} onChange={setVisited} />;
+}
+```
+
+## A subset of countries
+
+`countries` limits the list to the ones you ship to, and `exclude` drops some. Both take ISO codes, and the list is always sorted by name.
+
+```tsx live
+import { useState } from 'react';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+const EU_SHIPPING: CountryCode[] = ['AT', 'BE', 'DE', 'ES', 'FR', 'IE', 'IT', 'NL', 'PT'];
+
+export default function Example() {
+  const [country, setCountry] = useState<CountryCode | null>(null);
+  return <CountryPicker label="Ship to" countries={EU_SHIPPING} value={country} onChange={setCountry} />;
+}
+```
+
+Pass `countries`, `exclude` and `preferred` from a constant, not a new array on every render, so the list is built once.
+
+## Country names in other languages
+
+Names come from `Intl.DisplayNames` in `locale`, the device locale by default. Search still matches the English and native names in every language. Where the JavaScript engine has no `Intl.DisplayNames`, names fall back to English.
+
+```tsx live
+import { useState } from 'react';
+import { CountryPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [country, setCountry] = useState<CountryCode | null>('DE');
+  return (
+    <CountryPicker
+      label="Land"
+      placeholder="Land auswählen"
+      searchPlaceholder="Suchen"
+      locale="de"
+      value={country}
+      onChange={setCountry}
+    />
+  );
+}
+```
+
+## Utilities
+
+The country data is exported for your own UIs, such as a flag next to a username or a dialing code in a form.
+
+| Export | Description |
+| --- | --- |
+| `getCountry(code)` | `{ code, name, nativeName?, dialCode, flag, keywords }` for an ISO code in any case, or `undefined` |
+| `getAllCountries()` | Every `Country`, sorted by code |
+| `getCountryFlag(code)` | The flag emoji for an ISO code: `'jp'` → 🇯🇵 |
+
+```ts
+getCountry('il'); // { code: 'IL', name: 'Israel', nativeName: 'יִשְׂרָאֵל', dialCode: '+972', flag: '🇮🇱', keywords: [] }
+```
+
+## Props
+
+Every [`SelectPicker` prop](./select-picker#props) works, apart from the server search ones (`options`, `loadOptions`, `onSearchChange`, `loading` and the rest): the list is built in. `value` is a `CountryCode`, or `CountryCode[]` with `multiple`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `countries` | `CountryCode[]` | all | Only these countries. |
+| `exclude` | `CountryCode[]` | — | Leave these out. |
+| `preferred` | `CountryCode[]` | — | Shown first, in this order, under their own header. |
+| `preferredLabel` | `string` | `'Suggested'` | Header above `preferred`. |
+| `allCountriesLabel` | `string` | `'All countries'` | Header above the rest when `preferred` is set. |
+| `showDialCode` | `boolean` | `false` | Show each country's dialing code under its name. |
+| `locale` | `string` | device locale | Language of the country names. |
+| `placeholder` | `string` | `'Select a country'` | Shown while nothing is selected. |
+| `searchPlaceholder` | `string` | `'Search countries'` | Search field placeholder. |
+| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+
+### Types
+
+```ts
+type CountryCode = 'AD' | 'AE' | 'AF' | … ; // ISO 3166-1 alpha-2
+
+interface Country {
+  code: CountryCode;
+  name: string; // English
+  nativeName?: string; // in the country's own language, when different
+  dialCode: string; // '+972'
+  flag: string; // '🇮🇱'
+  keywords: string[]; // aliases ('USA') and other dialing codes
+}
+```
+
+Country data comes from [countries-list](https://github.com/annexare/Countries) (MIT).

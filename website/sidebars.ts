@@ -34,7 +34,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Select',
-          items: ['components/select-picker', 'components/select-list', 'components/horizontal-list'],
+          items: ['components/select-picker', 'components/select-list', 'components/country-picker', 'components/horizontal-list'],
         },
         {
           type: 'category',

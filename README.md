@@ -25,7 +25,7 @@
 - **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
 - **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
-- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, 1,923 emojis with skin tones and recents.
+- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, 1,923 emojis with skin tones and recents.
 - **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
@@ -100,6 +100,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`DateTimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
 | [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
 | [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
+| [`CountryPicker`](https://elik56a.github.io/react-native-pickers/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
 | [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
@@ -321,6 +322,20 @@ The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api
 />
 ```
 
+### CountryPicker
+
+A `SelectPicker` with about 250 countries built in. The value is the ISO code (`'IL'`), and search matches English and native names, ISO codes and dialing codes.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `CountryCode`, or `CountryCode[]` with `multiple` | |
+| `preferred` | `CountryCode[]`: pinned on top | |
+| `countries` / `exclude` | `CountryCode[]` | all |
+| `showDialCode` | `boolean` | `false` |
+| `locale` | `string`: names via `Intl.DisplayNames`, English fallback | device locale |
+
+`getCountry('IL')` returns `{ code, name, nativeName, dialCode, flag, keywords }`.
+
 ### HorizontalList&lt;T&gt;
 
 | Prop | Type | Default |
@@ -380,7 +395,7 @@ The complete documentation is one Markdown file, [`llms-full.txt`](https://elik5
 ## Learn more
 
 - **Guides:** [designs](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs) · [theming](https://elik56a.github.io/react-native-pickers/docs/guides/theming) · [styling with slots](https://elik56a.github.io/react-native-pickers/docs/guides/styling) · [render props](https://elik56a.github.io/react-native-pickers/docs/guides/render-props) · [i18n & RTL](https://elik56a.github.io/react-native-pickers/docs/guides/i18n-rtl) · [accessibility](https://elik56a.github.io/react-native-pickers/docs/guides/accessibility) · [haptics](https://elik56a.github.io/react-native-pickers/docs/guides/haptics) · [forms](https://elik56a.github.io/react-native-pickers/docs/guides/forms) · [TypeScript](https://elik56a.github.io/react-native-pickers/docs/guides/typescript)
-- **Recipes:** [hotel booking range](https://elik56a.github.io/react-native-pickers/docs/recipes/booking-range) · [birthday](https://elik56a.github.io/react-native-pickers/docs/recipes/birthday) · [alarm time](https://elik56a.github.io/react-native-pickers/docs/recipes/alarm-time) · [duration](https://elik56a.github.io/react-native-pickers/docs/recipes/duration) · [country select](https://elik56a.github.io/react-native-pickers/docs/recipes/country-select) · [server search](https://elik56a.github.io/react-native-pickers/docs/recipes/server-search) · [flight search form](https://elik56a.github.io/react-native-pickers/docs/recipes/flight-search-form) · [chat emoji](https://elik56a.github.io/react-native-pickers/docs/recipes/chat-emoji) · [filters sheet](https://elik56a.github.io/react-native-pickers/docs/recipes/filters-sheet)
+- **Recipes:** [hotel booking range](https://elik56a.github.io/react-native-pickers/docs/recipes/booking-range) · [birthday](https://elik56a.github.io/react-native-pickers/docs/recipes/birthday) · [alarm time](https://elik56a.github.io/react-native-pickers/docs/recipes/alarm-time) · [duration](https://elik56a.github.io/react-native-pickers/docs/recipes/duration) · [country and phone number](https://elik56a.github.io/react-native-pickers/docs/recipes/country-select) · [server search](https://elik56a.github.io/react-native-pickers/docs/recipes/server-search) · [flight search form](https://elik56a.github.io/react-native-pickers/docs/recipes/flight-search-form) · [chat emoji](https://elik56a.github.io/react-native-pickers/docs/recipes/chat-emoji) · [filters sheet](https://elik56a.github.io/react-native-pickers/docs/recipes/filters-sheet)
 - **Coming from another library?** [Migration](https://elik56a.github.io/react-native-pickers/docs/resources/migration) maps the props of `@react-native-community/datetimepicker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `@react-native-picker/picker` and the native segmented control. [Comparison](https://elik56a.github.io/react-native-pickers/docs/resources/comparison) shows when to choose something else.
 
 ## Contributing

@@ -56,6 +56,10 @@ SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,key
 SelectList<T>      same list inline: options value onChange multiple listHeight
                    server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
                    or manual: onSearchChange(query) + loading + onEndReached; loadingText renderLoading(theme); no local filtering with either
+CountryPicker      a SelectPicker with ~250 countries built in: value CountryCode ('IL') or CountryCode[] with multiple  onChange(code, option)
+                   preferred (pinned on top) countries exclude showDialCode locale (names via Intl.DisplayNames, English fallback; search matches English/native names, ISO code, +dial)
+                   every SelectPicker prop except options/loadOptions/server search; getCountry(code) → {code,name,nativeName?,dialCode,flag,keywords}  getAllCountries()  getCountryFlag(code)
+                   phone prefix: renderTrigger={({open}) => <Pressable onPress={open}>…{flag} {dialCode}</Pressable>}
 HorizontalList<T>  items: {label,value,disabled?,icon?}[] (icon: node or ({selected,disabled,color}) => node)  value  onChange(value, item)  variant 'segmented'|'chips'  iconPosition 'left'|'right'|'top'|'bottom'  showArrows (‹ › scroll buttons, default false)  arrowPosition 'outside'|'overlay' (default 'outside')  renderArrow(side, disabled)  renderItem  (tap at the edge scrolls the next item into view)
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange categoryBarPosition 'auto'(bottom on ios/material, top on web)|'top'|'bottom'
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight

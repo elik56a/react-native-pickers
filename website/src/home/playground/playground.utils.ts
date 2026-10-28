@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import { PREFERRED_COUNTRIES } from '../demo/demo.constants';
 import { PACKAGE } from '../home.constants';
 import { ACCENTS, DATE_STATE, TAB_COMPONENTS } from './playground.constants';
 import type { Accent, AccentColors, Control, ControlValue, DemoTab, PlaygroundOptions, TabOptions } from './playground.types';
@@ -9,6 +10,8 @@ export const jsxProp = (name: string, value: ControlValue) => {
   if (value === true) return name;
   return typeof value === 'string' ? `${name}="${value}"` : `${name}={${value}}`;
 };
+
+const PREFERRED_COUNTRIES_CODE = `[${PREFERRED_COUNTRIES.map((c) => `'${c}'`).join(', ')}]`;
 
 /** Props for the snippet, leaving out every value that matches the component's default. */
 const SNIPPET_PROPS: { [T in DemoTab]: (o: TabOptions<T>) => (string | false)[] } = {
@@ -55,6 +58,15 @@ const SNIPPET_PROPS: { [T in DemoTab]: (o: TabOptions<T>) => (string | false)[] 
     o.columns !== 8 && jsxProp('columns', o.columns),
     !o.showSkinTones && 'showSkinTones={false}',
     o.categoryBarPosition !== 'top' && jsxProp('categoryBarPosition', o.categoryBarPosition),
+  ],
+  country: (o) => [
+    'label="Country"',
+    'value={country}',
+    'onChange={setCountry}',
+    o.preferred && `preferred={${PREFERRED_COUNTRIES_CODE}}`,
+    o.showDialCode && 'showDialCode',
+    // 'auto' is the device locale: no prop.
+    o.locale !== 'auto' && jsxProp('locale', o.locale),
   ],
 };
 
