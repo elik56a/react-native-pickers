@@ -4,6 +4,7 @@ import { CALENDAR_DESIGN, EMPTY_RANGE } from './calendar.constants';
 import type { CalendarSelection, DayState } from './calendar.types';
 import {
   canGoToMonth,
+  canGoToWeek,
   chunkRows,
   getAnchorMonth,
   getArrowGlyph,
@@ -13,14 +14,15 @@ import {
   getHeaderLabel,
   getMonthCells,
   getQuickGridHeight,
-  getSwipeDelta,
+  getWeekDays,
+  getWeekMonth,
+  getWeekStart,
   getWeekStates,
   getYearBounds,
   getYearCells,
   getYearPageLabel,
   hasRangeEnd,
   isDayDisabled,
-  isHorizontalSwipe,
   nextRange,
   nextRanges,
   orderWeekdays,
@@ -302,17 +304,25 @@ describe('quick grid cells', () => {
   });
 });
 
-describe('swipe', () => {
-  it('claims clearly horizontal moves only', () => {
-    expect(isHorizontalSwipe(20, 5)).toBe(true);
-    expect(isHorizontalSwipe(20, 15)).toBe(false);
-    expect(isHorizontalSwipe(10, 0)).toBe(false);
+describe('weeks', () => {
+  const wed = new Date(2026, 9, 28, 15, 30);
+
+  it('starts the week on the locale day, at midnight', () => {
+    expect(getWeekStart(wed, 0)).toEqual(new Date(2026, 9, 25));
+    expect(getWeekStart(wed, 1)).toEqual(new Date(2026, 9, 26));
+    expect(getWeekStart(new Date(2026, 9, 25), 1)).toEqual(new Date(2026, 9, 19));
+    expect(getWeekDays(new Date(2026, 9, 25)).map((d) => d.getDate())).toEqual([25, 26, 27, 28, 29, 30, 31]);
   });
-  it('turns a long or fast swipe into a month step, mirrored in RTL', () => {
-    expect(getSwipeDelta(-60, 0, false)).toBe(1);
-    expect(getSwipeDelta(60, 0, false)).toBe(-1);
-    expect(getSwipeDelta(-20, -0.8, false)).toBe(1);
-    expect(getSwipeDelta(-60, 0, true)).toBe(-1);
-    expect(getSwipeDelta(-20, -0.1, false)).toBe(0);
+
+  it('pages to a week while any of its days is within min/max', () => {
+    const start = new Date(2026, 9, 25);
+    expect(canGoToWeek(start, -1, new Date(2026, 9, 24))).toBe(true);
+    expect(canGoToWeek(start, -1, new Date(2026, 9, 25))).toBe(false);
+    expect(canGoToWeek(start, 1, undefined, new Date(2026, 10, 1))).toBe(true);
+    expect(canGoToWeek(start, 1, undefined, new Date(2026, 9, 31))).toBe(false);
+  });
+
+  it("titles a week by its middle day's month", () => {
+    expect(getWeekMonth(new Date(2026, 8, 29)).getMonth()).toBe(9);
   });
 });

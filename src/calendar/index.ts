@@ -8,4 +8,6 @@ export type {
   DateRange,
   DayState,
   MarkedDate,
+  WeekStripProps,
 } from './calendar.types';
+export { WeekStrip } from './WeekStrip';

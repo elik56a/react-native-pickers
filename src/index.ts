@@ -6,6 +6,7 @@ export * from './datetime';
 export * from './duration';
 export * from './emoji';
 export * from './list';
+export * from './month';
 export * from './select';
 export * from './sheet';
 export * from './time';

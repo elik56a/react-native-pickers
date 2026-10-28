@@ -34,8 +34,8 @@ export const SHOWCASE: ShowcaseItem[] = [
   {
     key: SHOWCASE_SCREEN.table,
     title: 'Book a table',
-    blurb: 'Party size and time slots as chips around an inline calendar that greys out the days the place is closed.',
-    components: ['HorizontalList', 'DatePicker'],
+    blurb: 'Party size and time slots as chips around a week strip to swipe, which greys out the days the place is closed.',
+    components: ['HorizontalList', 'WeekStrip'],
     recipe: 'category-chips',
   },
   {

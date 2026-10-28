@@ -134,3 +134,9 @@ export interface Presence {
   /** 0 hidden → 1 shown. */
   progress: Animated.Value;
 }
+
+/** A page sliding in: its fade and its sideways offset. */
+export interface SlideStyle {
+  opacity: Animated.AnimatedInterpolation<number>;
+  transform: { translateX: Animated.AnimatedInterpolation<number> }[];
+}

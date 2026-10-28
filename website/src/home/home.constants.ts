@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, duration, date, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, month, week, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -56,6 +56,8 @@ export const COMPONENTS = [
   { doc: 'components/time-picker', name: 'TimePicker', body: 'Wheels, clock dial or columns, 12/24h' },
   { doc: 'components/duration-picker', name: 'DurationPicker', body: 'Timers and workouts: hours, minutes, seconds' },
   { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
+  { doc: 'components/month-picker', name: 'MonthPicker', body: 'Card expiry, reports: wheels or a month grid' },
+  { doc: 'components/week-strip', name: 'WeekStrip', body: 'A week of days to swipe, with marked days' },
   { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheels, or calendar + time' },
   { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },

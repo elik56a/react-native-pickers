@@ -17,12 +17,14 @@ import {
   EmojiPickerField,
   EmojiPickerSheet,
   formatDate,
+  MonthPickerField,
   PickersProvider,
   SelectPicker,
   TimePicker,
   TimePickerField,
   TimePickerSheet,
   usePickerTheme,
+  WeekStrip,
   WheelPicker,
   WheelPickerField,
 } from '@elik56a/react-native-pickers';
@@ -104,6 +106,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [time, setTime] = useState(new Date());
   const [meeting, setMeeting] = useState(new Date());
   const [timer, setTimer] = useState(25 * 60);
+  const [reportMonth, setReportMonth] = useState<Date | undefined>();
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
@@ -139,6 +142,8 @@ function Demo({ insets }: { insets: Insets }) {
               />
               <Button title={`Ranges: ${ranges.length} picked`} onPress={() => setSheet('ranges')} />
               <Button title="Birthday (wheel sheet)" onPress={() => setSheet('date')} />
+              <WeekStrip value={date} onChange={setDate} />
+              <MonthPickerField label="Report month" placeholder="Pick a month" value={reportMonth} onConfirm={setReportMonth} />
             </Section>
           )}
 

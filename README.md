@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![downloads](https://img.shields.io/npm/dw/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![bundle size](https://img.shields.io/bundlephobia/minzip/@elik56a/react-native-pickers)](https://bundlephobia.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/elik56a/react-native-pickers/badge)](https://scorecard.dev/viewer/?uri=github.com/elik56a/react-native-pickers)
 
-**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, date range, date & time, select, country, segmented control and emoji pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, segmented control and emoji pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <picture>
@@ -97,6 +97,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`MultiWheelPicker`](https://elik56a.github.io/react-native-pickers/docs/components/multi-wheel-picker) | Several wheels sharing one selection band: durations, units, compound values |
 | [`TimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, intervals, min / max |
 | [`DatePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
+| [`MonthPicker`](https://elik56a.github.io/react-native-pickers/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
+| [`WeekStrip`](https://elik56a.github.io/react-native-pickers/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
 | [`DurationPicker`](https://elik56a.github.io/react-native-pickers/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
 | [`DateTimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
 | [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
@@ -105,8 +107,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
 | [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
-| [Picker sheets](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
-| [Picker fields](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
+| [Picker sheets](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
+| [Picker fields](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
 
 ## Inline, in a sheet, or behind a field
 
@@ -266,6 +268,12 @@ The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api
 | `showSeconds` | `boolean` | `false` |
 | `minTime` / `maxTime` | `Date` (time of day) | |
 | `locale` | `string` | device |
+
+### MonthPicker and WeekStrip
+
+`MonthPicker` picks a month and year; the value is a `Date` on the first of the month. Wheels on iOS, a grid of months under the year in Material and on the web (`display`), with `minDate` / `maxDate`, `yearRange`, `monthFormat` and `locale`. `MonthPickerField` shows `October 2026`.
+
+`WeekStrip` is one week of days in a row: `value`, `onChange(date)`, swipe or arrows to page, `onWeekChange(weekStart)`, and the calendar's `markedDates`, `minDate` / `maxDate`, `isDateDisabled`, `firstDayOfWeek` and `renderDay`.
 
 ### DurationPicker
 

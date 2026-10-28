@@ -18,6 +18,8 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`DatePicker`](../components/date-picker) | Calendar (`display="calendar"`) or wheel (`display="wheel"`) |
 | [`Calendar`](../components/date-picker) | Month calendar: single / range / multiple / ranges |
 | [`DateWheelPicker`](../components/date-wheel-picker) | Day / month / year wheels |
+| [`MonthPicker`](../components/month-picker) | Month and year: wheels (iOS) or a grid of months (Material, web) |
+| [`WeekStrip`](../components/week-strip) | One week of days in a row, swipe or arrows to page |
 | [`DateTimePicker`](../components/date-time-picker) | Day + time wheels (`display="wheel"`) or calendar + time (`display="calendar"`) |
 | [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
 | [`SelectList<T>`](../components/select-list) | Inline searchable list |
@@ -35,6 +37,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`TimePickerSheet`](../components/picker-sheets#timepickersheet) | TimePicker in a sheet |
 | [`DateTimePickerSheet`](../components/date-time-picker#in-a-sheet) | DateTimePicker in a sheet |
 | [`DurationPickerSheet`](../components/duration-picker#in-a-sheet) | DurationPicker in a sheet |
+| [`MonthPickerSheet`](../components/month-picker#in-a-sheet) | MonthPicker in a sheet |
 | [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
 | [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
 | [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
@@ -48,6 +51,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`TimePickerField`](../components/picker-fields) | Field + TimePickerSheet; shows the time |
 | [`DateTimePickerField`](../components/picker-fields) | Field + DateTimePickerSheet; shows the date and time |
 | [`DurationPickerField`](../components/duration-picker#in-a-form-field) | Field + DurationPickerSheet; shows `1 h 30 min` |
+| [`MonthPickerField`](../components/month-picker#in-a-form-field) | Field + MonthPickerSheet; shows `October 2026` |
 | [`WheelPickerField<T>`](../components/picker-fields) | Field + WheelPickerSheet; shows the item's label |
 | [`EmojiPickerField`](../components/picker-fields) | Field + EmojiPickerSheet; shows `value` |
 
@@ -142,19 +146,20 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `visibleItems` | `5` | wheels |
 | `variant` | `'3d'` | wheels |
 | `rotation` / `fadeTo` | `20` / `0.3` | WheelPicker |
-| `loop` | `false` WheelPicker · `true` TimePicker, DurationPicker, DateWheelPicker | wheels |
+| `loop` | `false` WheelPicker · `true` TimePicker, DurationPicker, DateWheelPicker, MonthPicker | wheels |
 | `keyboardInput` | `true` | WheelPicker |
 | `minuteInterval` / `secondInterval` | `1` | TimePicker, DurationPicker |
 | `format` | `'auto'` | TimePicker |
 | `display` | `'wheel'` iOS · `'dial'` Material · `'list'` web | TimePicker |
 | `display` | `'wheel'` iOS · `'input'` Material · `'list'` web | DurationPicker |
+| `display` | `'wheel'` iOS · `'grid'` Material, web | MonthPicker |
 | `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
 | `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |
 | `fixedWeeks` / `showOutsideDays` | `true` | Calendar |
 | `enableSwipe` / `enableQuickJump` | `true` | Calendar |
 | `weekdayFormat` | `'short'` · `'narrow'` Material | Calendar |
-| `monthFormat` | `'long'` | DateWheelPicker |
+| `monthFormat` | `'long'` | DateWheelPicker, MonthPicker |
 | `searchable` | `options.length > 8` · `true` emoji | Select, Emoji |
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |
 | `chips` | `true` | SelectPicker |

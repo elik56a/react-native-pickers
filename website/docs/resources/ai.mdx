@@ -53,6 +53,10 @@ DatePicker         display 'calendar'(default)|'wheel'
   minDate maxDate isDateDisabled(date) markedDates{'YYYY-MM-DD':{dots?,label?,textColor?,disabled?}}
   locale firstDayOfWeek(0=Sun) initialMonth onMonthChange renderDay(state,theme) dayHeight=44
 DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFormat 'long'|'short'|'numeric'  min/maxDate
+MonthPicker        a month without a day: value: Date (first of the month)  onChange(month)  display 'wheel'(ios: month+year wheels) | 'grid'(material/web: months under the year, tap the year for years)
+                   minDate maxDate (any day in the month)  yearRange  monthFormat 'long'|'short'|'numeric' (wheels)  locale
+WeekStrip          one week of days in a row: value: Date|null  onChange(date)  swipe/arrows page weeks  onWeekChange(weekStart)  initialWeek
+                   minDate maxDate isDateDisabled markedDates firstDayOfWeek locale showHeader formatTitle(weekStart) weekdayFormat renderDay (calendar's day cells and slots)
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
@@ -74,9 +78,10 @@ Sheets (draft; commit on Done):
   EmojiPickerSheet visible onClose onSelect closeOnSelect=true
   DateTimePickerSheet visible onClose value onConfirm + DateTimePicker props
   DurationPickerSheet visible onClose value onConfirm(seconds) + DurationPicker props
+  MonthPickerSheet visible onClose value onConfirm(month) + MonthPicker props
   PickerSheet      visible onClose onConfirm children  +  useDraft(value, visible)
 Fields (a SelectPicker-style field that opens the sheet and shows the confirmed value; field owns open state):
-  DatePickerField / TimePickerField / DateTimePickerField / DurationPickerField / WheelPickerField / EmojiPickerField
+  DatePickerField / TimePickerField / DateTimePickerField / DurationPickerField / MonthPickerField / WheelPickerField / EmojiPickerField
                    = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
                    + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
                      disabled renderTrigger({open,displayValue,disabled}) renderChevron({open,theme}) onOpen onClose style testID

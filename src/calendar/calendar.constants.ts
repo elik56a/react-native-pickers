@@ -79,22 +79,10 @@ export const WEEKDAY_ROW_HEIGHT = 28;
 export const MAX_MARKING_DOTS = 3;
 
 export const YEARS_PER_PAGE = 12;
+export const DAYS_PER_WEEK = 7;
 export const QUICK_GRID_COLUMNS = 3;
 /** Year grid bounds when neither yearRange nor min/max dates are given. */
 export const DEFAULT_YEAR_SPAN = 100;
-
-export const SWIPE = {
-  /** Horizontal travel before the calendar claims the gesture */
-  activateDistance: 14,
-  /** How much more horizontal than vertical a move must be */
-  directionRatio: 1.5,
-  /** A release past either threshold changes the month */
-  minDistance: 50,
-  minVelocity: 0.5,
-} as const;
-
-/** How far (px) the month slides in from when it changes. */
-export const SLIDE_DISTANCE = 40;
 
 export const ARROW_DIRECTION = {
   prev: 'prev',
