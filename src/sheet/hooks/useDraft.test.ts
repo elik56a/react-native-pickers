@@ -17,7 +17,7 @@ describe('useDraft', () => {
     expect(result.current[0]).toBe(5);
   });
 
-  it('resets to the value when the reset key changes while open', async () => {
+  it('resets to the value when the reset key changes', async () => {
     const { result, rerender } = await renderHook(({ value, mode }: { value: number; mode: string }) => useDraft(value, true, mode), {
       initialProps: { value: 1, mode: 'single' },
     });

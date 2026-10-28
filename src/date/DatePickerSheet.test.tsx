@@ -73,4 +73,25 @@ describe('DatePickerSheet', () => {
     await fireEvent.press(done());
     expect(onConfirm.mock.calls[0][0].map(toDateKey)).toEqual(['2026-10-03']);
   });
+
+  it("reads the new draft in the same render the mode changes, so no mode sees another mode's value", async () => {
+    const range = { start: new Date(2026, 9, 10), end: new Date(2026, 9, 14) };
+    const { rerender } = await render(
+      <DatePickerSheet visible mode="range" value={range} onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} />
+    );
+    await rerender(<DatePickerSheet visible mode="ranges" value={[]} onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} />);
+    expect(done()).toBeTruthy();
+  });
+
+  it('starts a new draft when the mode changes while closed, since a field keeps its sheet mounted', async () => {
+    const range = { start: new Date(2026, 9, 10), end: new Date(2026, 9, 14) };
+    const { rerender } = await render(
+      <DatePickerSheet visible={false} mode="range" value={range} onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} />
+    );
+    await rerender(
+      <DatePickerSheet visible={false} mode="ranges" value={[]} onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} />
+    );
+    await rerender(<DatePickerSheet visible mode="ranges" value={[]} onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} />);
+    expect(done()).toBeTruthy();
+  });
 });
