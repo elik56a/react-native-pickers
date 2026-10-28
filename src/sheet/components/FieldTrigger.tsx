@@ -3,10 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { textStyle } from '../../core';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
-import { DISABLED_TRIGGER_OPACITY } from '../sheet.constants';
+import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FieldTriggerProps } from '../sheet.types';
 import { Chevron } from './Chevron';
+import { FloatingLabel } from './FloatingLabel';
 
 /** The field that opens a picker: placeholder or value (or custom `children`), clear button and chevron. */
 export const FieldTrigger = ({
@@ -26,6 +27,10 @@ export const FieldTrigger = ({
   testID,
 }: FieldTriggerProps) => {
   const c = theme.colors;
+  const look = FIELD_DESIGN[theme.design];
+  const borderWidth = open ? look.openBorderWidth : 1;
+  const floating = look.label === FIELD_LABEL.floating && !!label;
+  const raised = open || !!displayValue || children != null;
 
   return (
     <View
@@ -33,15 +38,29 @@ export const FieldTrigger = ({
       style={[
         styles.trigger,
         {
+          minHeight: look.minHeight,
           backgroundColor: c.background,
-          borderColor: open ? c.primary : c.border,
+          borderWidth,
+          borderColor: open ? c.primary : c[look.outline],
           borderRadius: theme.radius.md,
-          paddingHorizontal: theme.spacing.md,
+          // A thicker open border grows inward, so the content doesn't shift.
+          paddingHorizontal: theme.spacing.md - (borderWidth - 1),
           opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1,
         },
+        open && look.focusRing && { boxShadow: `0px 0px 0px ${FOCUS_RING_WIDTH}px ${c.primaryMuted}` },
         slots?.trigger,
       ]}
     >
+      {floating ? (
+        <FloatingLabel
+          label={label}
+          raised={raised}
+          open={open}
+          borderWidth={borderWidth}
+          theme={theme}
+          style={[{ marginStart: theme.spacing.md - FLOATING_LABEL_PADDING - (borderWidth - 1) }, slots?.label]}
+        />
+      ) : null}
       {/* Full-size press target behind the content, so chips and clear stay sibling buttons */}
       <Touchable
         theme={theme}
@@ -69,7 +88,7 @@ export const FieldTrigger = ({
               style={[textStyle(theme, 'md'), coreStyles.startAligned, { color: c.textSecondary }, slots?.placeholder]}
               numberOfLines={1}
             >
-              {placeholder}
+              {floating && !raised ? '' : placeholder}
             </Text>
           ))}
       </View>

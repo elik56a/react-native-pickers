@@ -13,16 +13,17 @@ describe('jsxProp', () => {
 describe('buildSnippet', () => {
   it('names the state after the date mode and leaves default props out', () => {
     expect(buildSnippet('date', { mode: 'single', prices: false, firstDayOfWeek: 0 })).toBe(
-      `import { DatePicker } from '@elik56a/react-native-pickers';
+      `import { DatePickerField } from '@elik56a/react-native-pickers';
 
-<DatePicker
+<DatePickerField
+  label="Dates"
   value={date}
-  onChange={setDate}
+  onConfirm={setDate}
   minDate={new Date()}
 />`
     );
     expect(buildSnippet('date', { mode: 'ranges', prices: true, firstDayOfWeek: 1 })).toContain(
-      'mode="ranges"\n  value={ranges}\n  onChange={setRanges}\n  minDate={new Date()}\n  markedDates={prices}\n  firstDayOfWeek={1}'
+      'mode="ranges"\n  value={ranges}\n  onConfirm={setRanges}\n  minDate={new Date()}\n  markedDates={prices}\n  firstDayOfWeek={1}'
     );
   });
 
@@ -32,25 +33,31 @@ describe('buildSnippet', () => {
       'format="24h"\n  minuteInterval={15}\n  showSeconds'
     );
     expect(buildSnippet('emoji', { columns: 8, showSkinTones: true, categoryBarPosition: 'top' })).toContain(
-      '<EmojiPicker\n  onSelect={setEmoji}\n/>'
+      '<EmojiPickerField\n  label="Vibe"\n  value={vibe}\n  onSelect={setVibe}\n/>'
     );
   });
 
   it('switches select state and data with the multiple and groups toggles', () => {
     const single = buildSnippet('select', { multiple: false, searchable: false, groups: false, loading: true });
     expect(single).toContain('options={CITIES}\n  value={city}\n  onChange={setCity}\n  searchable={false}\n  loading');
-    expect(buildSnippet('select', DEFAULT_OPTIONS.select)).toContain(
+    expect(buildSnippet('select', { ...DEFAULT_OPTIONS.select, multiple: true })).toContain(
       'options={CITIES_BY_REGION}\n  value={cities}\n  onChange={setCities}\n  multiple'
+    );
+  });
+
+  it('puts loop on each guests wheel, since it belongs to a column', () => {
+    expect(buildSnippet('wheel', { variant: 'flat', loop: true, visibleItems: 7 })).toContain(
+      'columns={[{ ...adults, loop: true }, { ...children, loop: true }]}\n  variant="flat"\n  visibleItems={7}'
     );
   });
 
   it('wraps the picker in a themed provider for a custom accent', () => {
     const blue = ACCENTS.find((a) => a.key === 'blue');
     const code = buildSnippet('wheel', DEFAULT_OPTIONS.wheel, blue);
-    expect(code.split('\n')[0]).toBe("import { WheelPicker, PickersProvider } from '@elik56a/react-native-pickers';");
+    expect(code.split('\n')[0]).toBe("import { MultiWheelPicker, PickersProvider } from '@elik56a/react-native-pickers';");
     expect(code).toContain("theme={{ colors: { primary: '#2563EB', primaryMuted: 'rgba(37,99,235,0.12)' } }}");
     expect(code).toContain("darkTheme={{ colors: { primary: '#60A5FA', primaryMuted: 'rgba(96,165,250,0.18)' } }}");
-    expect(code).toContain('  <WheelPicker\n    items={SIZES}');
+    expect(code).toContain('  <MultiWheelPicker\n    columns={[adults, children]}');
     expect(code.endsWith('</PickersProvider>')).toBe(true);
   });
 });

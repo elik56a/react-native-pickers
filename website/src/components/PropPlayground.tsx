@@ -5,7 +5,10 @@ import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 
 import { PickersProvider, SelectPicker } from '@elik56a/react-native-pickers';
+import { PLATFORM } from '../home/device/device.constants';
+import type { Platform } from '../home/device/device.types';
 import { Choices } from './Choices';
+import { PlatformSwitch } from './PlatformSwitch';
 import styles from './PropPlayground.module.css';
 
 export type Option = string | number | boolean | readonly string[];
@@ -18,9 +21,15 @@ interface Control {
   default?: Option | null;
   /** The option selected at first. Defaults to `default`, then the first option. */
   initial?: Option;
+  /** An option that leaves the prop out, so the component picks (e.g. 'auto': the design's default). Make it the first option. */
+  unset?: string;
 }
 
 interface PropPlaygroundProps {
+  /** A desktop-wide preview on the Web tab, for a picker that spreads out there (DateTimePicker's time beside its calendar). */
+  wide?: boolean;
+  /** Shows the iOS / Android / Web switch. Off for a component that looks and works the same everywhere, like the wheels. */
+  platforms?: boolean;
   /** Component name used in the generated code. */
   name: string;
   component: ElementType;
@@ -49,12 +58,18 @@ interface ControlRowProps {
 interface PreviewProps {
   component: ElementType;
   props: Record<string, unknown>;
+  platform: Platform;
   opener?: string;
   children?: ReactNode;
 }
 
-/** Option sets longer than this, like `presentation`, get a dropdown instead of the horizontal list. */
+/** Option sets longer than this, with more than LIST_MAX_OPTIONS, or with a label longer than LABEL_MAX_CHARS (`bottomSheet`), get a dropdown instead of the horizontal list. */
 const LIST_MAX_CHARS = 24;
+const LIST_MAX_OPTIONS = 4;
+const LABEL_MAX_CHARS = 10;
+
+export const needsSelect = (labels: readonly string[]) =>
+  labels.join('').length > LIST_MAX_CHARS || labels.length > LIST_MAX_OPTIONS || labels.some((l) => l.length > LABEL_MAX_CHARS);
 
 /** Sized to the panel: shorter and smaller than a form field. */
 const SELECT_STYLES = {
@@ -89,13 +104,13 @@ const toCode = (name: string, code: string | undefined, controls: readonly Contr
 
 const initialValue = (value: unknown, selection: Selection) => (typeof value === 'function' ? value(selection) : value);
 
-const Preview = ({ component: Component, props, opener, children }: PreviewProps) => {
+const Preview = ({ component: Component, props, platform, opener, children }: PreviewProps) => {
   const { colorMode } = useColorMode();
   const [open, setOpen] = useState(false);
   const sheet = opener ? { visible: open, onClose: () => setOpen(false) } : {};
 
   return (
-    <PickersProvider colorScheme={colorMode}>
+    <PickersProvider colorScheme={colorMode} platform={platform}>
       {opener ? (
         <button type="button" className="button button--primary button--block" onClick={() => setOpen(true)}>
           {opener}
@@ -116,7 +131,7 @@ interface PropSelectProps {
 }
 
 /** The library's own SelectPicker, as a dropdown; it renders in the browser only, like the previews. */
-const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
+export const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
   const { colorMode } = useColorMode();
   return (
     <BrowserOnly fallback={<div className={styles.selectFallback} />}>
@@ -143,7 +158,7 @@ const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProps) => {
 export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
   const { prop, options } = control;
   const isSwitch = options.length === 2 && options.every((o) => typeof o === 'boolean');
-  const isSelect = options.map(label).join('').length > LIST_MAX_CHARS;
+  const isSelect = needsSelect(options.map(label));
 
   if (isSwitch) {
     return (
@@ -189,12 +204,15 @@ export default function PropPlayground({
   changeProp = 'onChange',
   resetProp,
   opener,
+  wide,
+  platforms = true,
   children,
 }: PropPlaygroundProps) {
   const [selection, setSelection] = useState<Selection>(() =>
     Object.fromEntries(controls.map((c) => [c.prop, c.initial ?? c.default ?? c.options[0]]))
   );
   const [current, setCurrent] = useState(() => initialValue(value, selection));
+  const [platform, setPlatform] = useState<Platform>(PLATFORM.web);
 
   const choose = (prop: string, option: Option) => {
     const next = { ...selection, [prop]: option };
@@ -202,9 +220,12 @@ export default function PropPlayground({
     if (typeof value === 'function') setCurrent(initialValue(value, next));
   };
 
+  const chosen = Object.fromEntries(
+    Object.entries(selection).filter(([prop, option]) => controls.find((c) => c.prop === prop)?.unset !== option)
+  );
   const live = {
     ...props,
-    ...selection,
+    ...chosen,
     ...(value === undefined ? {} : { value: current, [changeProp]: setCurrent }),
     ...(resetProp ? { [resetProp]: () => setCurrent(initialValue(value, selection)) } : {}),
   };
@@ -212,11 +233,16 @@ export default function PropPlayground({
   return (
     <div className={styles.playground}>
       <div className={styles.body}>
-        <div className={styles.preview}>
+        <div
+          className={styles.preview}
+          data-wide={(wide && platform === PLATFORM.web) || undefined}
+          data-platforms={platforms || undefined}
+        >
+          {platforms ? <PlatformSwitch platform={platform} onChange={setPlatform} /> : null}
           <div className={styles.stage}>
             <BrowserOnly fallback={null}>
               {() => (
-                <Preview component={component} props={live} opener={opener}>
+                <Preview component={component} props={live} platform={platform} opener={opener}>
                   {children}
                 </Preview>
               )}

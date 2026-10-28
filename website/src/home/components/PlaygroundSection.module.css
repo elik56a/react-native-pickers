@@ -39,11 +39,6 @@
     justify-content: center;
     align-items: start;
   }
-
-  /* Lines the cards up with the device screen, below the platform tabs. */
-  .props {
-    margin-top: 3.5rem;
-  }
 }
 
 @media (min-width: 1200px) {
@@ -51,9 +46,5 @@
     grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1.2fr);
     grid-template-areas: "props device code";
     gap: 2rem;
-  }
-
-  .code {
-    margin-top: 3.5rem;
   }
 }

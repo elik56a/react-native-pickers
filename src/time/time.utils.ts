@@ -1,9 +1,37 @@
 import type React from 'react';
 
+import type { Design } from '../core/theme/theme.types';
 import { formatDate, uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
-import { LAST_SECOND_OF_DAY, NOON_SECONDS, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TIME_COLUMN, TIME_FORMAT } from './time.constants';
-import type { TimeBounds, TimeColumnKey, TimeColumnSpec, TimeFormat, TimeOptions, TimeParts } from './time.types';
+import {
+  CLOCK_MODE,
+  DEGREES_PER_HOUR,
+  DEGREES_PER_MINUTE,
+  DIAL_INNER_RADIUS,
+  DIAL_MINUTE_LABEL_STEP,
+  DIAL_OUTER_RADIUS,
+  DIAL_SIZE,
+  LAST_SECOND_OF_DAY,
+  NOON_SECONDS,
+  SECONDS_PER_HOUR,
+  SECONDS_PER_MINUTE,
+  TIME_COLUMN,
+  TIME_COLUMN_LABEL,
+  TIME_DISPLAY,
+  TIME_DISPLAY_DESIGN,
+  TIME_FORMAT,
+} from './time.constants';
+import type {
+  ClockMode,
+  DialNumber,
+  TimeBounds,
+  TimeColumnKey,
+  TimeColumnSpec,
+  TimeDisplay,
+  TimeFormat,
+  TimeOptions,
+  TimeParts,
+} from './time.types';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -56,7 +84,7 @@ export const clampTimeOfDay = (date: Date, [minSecond, maxSecond]: TimeBounds, s
 };
 
 /** An hour (or minute) is selectable when any second of it is within bounds. */
-const spanOutOfBounds = (start: number, length: number, [minSecond, maxSecond]: TimeBounds) =>
+export const spanOutOfBounds = (start: number, length: number, [minSecond, maxSecond]: TimeBounds) =>
   start + length - 1 < minSecond || start > maxSecond;
 
 /** In 12h mode the wheel values are 0–11 and 0 reads as 12. */
@@ -169,3 +197,114 @@ export const formatTimeValue = (
     second: showSeconds ? '2-digit' : undefined,
     hour12: is12HourFormat(format, locale),
   });
+
+/** The display to draw: the one asked for, else the design's; a dial or time input has no seconds, so it falls back to wheels. */
+export const resolveTimeDisplay = (display: TimeDisplay | undefined, design: Design, showSeconds: boolean): TimeDisplay => {
+  const chosen = display ?? TIME_DISPLAY_DESIGN[design];
+  const clock = chosen === TIME_DISPLAY.dial || chosen === TIME_DISPLAY.input;
+  return clock && showSeconds ? TIME_DISPLAY.wheel : chosen;
+};
+
+/** Degrees clockwise from 12 o'clock to a point `dx`, `dy` from the dial's centre (y grows downward). */
+export const getDialAngle = (dx: number, dy: number) => ((Math.atan2(dx, -dy) * 180) / Math.PI + 360) % 360;
+
+/** Where a number at `angle` sits, `radius` from the centre of a dial `size` wide. */
+export const getDialPoint = (angle: number, radius: number, size: number) => {
+  const rad = (angle * Math.PI) / 180;
+  return {
+    x: size / 2 + radius * Math.sin(rad),
+    y: size / 2 - radius * Math.cos(rad),
+  };
+};
+
+/**
+ * The hour under a touch. 12h dials show 12, 1–11 and keep the current half of the day; 24h dials, like Android's, show
+ * 12, 1–11 outside and 00, 13–23 on an inner ring.
+ */
+export const pickDialHour = (angle: number, distance: number, is12: boolean, isPM: boolean) => {
+  const slot = Math.round(angle / DEGREES_PER_HOUR) % 12;
+  if (is12) return slot + (isPM ? 12 : 0);
+  const inner = distance < (DIAL_OUTER_RADIUS + DIAL_INNER_RADIUS) / 2;
+  if (inner) return slot === 0 ? 0 : slot + 12;
+  return slot === 0 ? 12 : slot;
+};
+
+/** The minute under a touch, snapped to the interval. */
+export const pickDialMinute = (angle: number, interval: number) => {
+  const minute = Math.round(angle / DEGREES_PER_MINUTE) % 60;
+  return (Math.round(minute / interval) * interval) % 60;
+};
+
+/** Where the hand points, and how long it is: to the inner ring for 24h hours 00 and 13–23, else to the outer one. */
+export const getDialHand = (mode: ClockMode, hours: number, minutes: number, is12: boolean) => {
+  const inner = mode === CLOCK_MODE.hour && !is12 && (hours === 0 || hours > 12);
+  return {
+    angle: mode === CLOCK_MODE.hour ? (hours % 12) * DEGREES_PER_HOUR : minutes * DEGREES_PER_MINUTE,
+    radius: inner ? DIAL_INNER_RADIUS : DIAL_OUTER_RADIUS,
+  };
+};
+
+/** The numbers around a dial, dimmed when no time they lead to is within the bounds. */
+export const getDialNumbers = (params: {
+  mode: ClockMode;
+  hours: number;
+  is12: boolean;
+  padHours: boolean;
+  bounds: TimeBounds;
+}): DialNumber[] => {
+  const { mode, hours, is12, padHours, bounds } = params;
+  const hourLabel = (h: number) => (padHours ? pad2(h) : String(h));
+  if (mode === CLOCK_MODE.minute) {
+    return steps(60, DIAL_MINUTE_LABEL_STEP).map((minute) => ({
+      value: minute,
+      label: pad2(minute),
+      ...getDialPoint(minute * DEGREES_PER_MINUTE, DIAL_OUTER_RADIUS, DIAL_SIZE),
+      inner: false,
+      disabled: spanOutOfBounds(hours * SECONDS_PER_HOUR + minute * SECONDS_PER_MINUTE, SECONDS_PER_MINUTE, bounds),
+    }));
+  }
+  const pm = hours >= 12 ? 12 : 0;
+  const ring = (slot: number, inner: boolean) => {
+    const hour = is12 ? (slot % 12) + pm : inner ? (slot === 0 ? 0 : slot + 12) : slot === 0 ? 12 : slot;
+    return {
+      value: hour,
+      label: is12 ? String(slot === 0 ? 12 : slot) : hourLabel(hour),
+      ...getDialPoint(slot * DEGREES_PER_HOUR, inner ? DIAL_INNER_RADIUS : DIAL_OUTER_RADIUS, DIAL_SIZE),
+      inner,
+      disabled: spanOutOfBounds(hour * SECONDS_PER_HOUR, SECONDS_PER_HOUR, bounds),
+    };
+  };
+  const outer = steps(12).map((slot) => ring(slot, false));
+  return is12 ? outer : [...outer, ...steps(12).map((slot) => ring(slot, true))];
+};
+
+/** `to`, moved by whole turns to be as close as it can to `from`, so a hand turns the short way round (350° → 10° is +20°). */
+export const getNearestAngle = (from: number, to: number) => from + ((((to - from) % 360) + 540) % 360) - 180;
+
+/**
+ * The time a typed hour or minute sets, or null while it isn't one yet. 12h hours are 1–12 in the current half of the day;
+ * minutes snap down to the interval, as the dial shows them.
+ */
+export const parseTypedTime = (
+  mode: ClockMode,
+  text: string,
+  is12: boolean,
+  isPM: boolean,
+  minuteInterval: number
+): Partial<TimeParts> | null => {
+  if (!/^\d{1,2}$/.test(text)) return null;
+  const n = Number(text);
+  if (mode === CLOCK_MODE.minute) return n < 60 ? { minutes: Math.floor(n / minuteInterval) * minuteInterval } : null;
+  if (is12) return n >= 1 && n <= 12 ? { hours: (n % 12) + (isPM ? 12 : 0) } : null;
+  return n < 24 ? { hours: n } : null;
+};
+
+/** The first row a time panel column shows: the chosen cell in the middle, but never scrolled past either end. */
+export const getPanelTopRow = (index: number, count: number, rows: number) =>
+  Math.max(0, Math.min(index - Math.floor(rows / 2), count - rows));
+
+/** A time panel cell's screen-reader label: its column and value, like "Hour 09". */
+export const getPanelCellLabel = (column: TimeColumnKey, label: string) => {
+  const name = TIME_COLUMN_LABEL[column];
+  return name ? `${name} ${label}` : label;
+};

@@ -2,7 +2,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CALENDAR_MODE } from '../calendar/calendar.constants';
 import type { CalendarBaseProps, CalendarMode, CalendarProps, CalendarSlot, DateRange } from '../calendar/calendar.types';
-import type { Locale, SlotStyles, ThemableProps } from '../core';
+import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { PICKER_DISPLAY } from '../core/core.constants';
 import type { PickerDisplay, ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
@@ -79,3 +79,8 @@ export type DatePickerFieldProps = WithPickerField<DatePickerSheetProps, Calenda
 
 /** A date wheel column before its change handlers are attached. */
 export type DateColumnSpec = Omit<WheelColumn<number>, 'onChange' | 'onValueChanging'>;
+
+export interface DateHeadlineProps {
+  text: string;
+  theme: PickerTheme;
+}

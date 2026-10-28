@@ -1,11 +1,11 @@
 ---
 title: React Native Date Range Picker
-sidebar_label: Date range & multiple
+sidebar_label: Ranges & multiple dates
 description: React Native date range picker (check-in / check-out) with min/max nights, multiple ranges and multiple date selection. A pure-JS calendar, no native code.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePicker } from '@elik56a/react-native-pickers';
+import { DatePicker, DatePickerField } from '@elik56a/react-native-pickers';
 
 # Date range & multiple dates
 
@@ -265,11 +265,22 @@ export default function Example() {
 
 ## In a form field
 
-`DatePickerField` takes the same props without `visible`, and shows the confirmed range (`Oct 5, 2026 – Oct 9, 2026`) or dates in the field:
+`DatePickerField` takes the same props without `visible`, and shows the confirmed range (`Oct 5, 2026 – Oct 9, 2026`) or dates in the field. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-```tsx
-<DatePickerField label="Your stay" placeholder="Add dates" mode="range" value={range} onConfirm={setRange} minDate={new Date()} />
-```
+<PropPlayground
+  name="DatePickerField"
+  component={DatePickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Your stay', placeholder: 'Add dates' }}
+  value={(p) => (p.mode === 'range' ? { start: null, end: null } : [])}
+  code="label=&quot;Your stay&quot; placeholder=&quot;Add dates&quot; value={stay} onConfirm={setStay}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'mode', options: ['range', 'multiple', 'ranges'], default: null },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
 
 → [Picker fields](./picker-fields)
 

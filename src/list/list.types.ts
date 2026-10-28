@@ -52,9 +52,16 @@ export interface ScrollFrame {
   contentWidth: number;
 }
 
+export interface ListDesign {
+  /** Outlined segments and chips, the chosen one filled and checked, instead of a sliding thumb */
+  outlined: boolean;
+}
+
 export interface ListItemProps<T> {
   item: HorizontalListItem<T>;
   selected: boolean;
+  /** Not the first item, so an outlined segment draws a divider before it */
+  divided: boolean;
   variant: HorizontalListVariant;
   renderItem?: HorizontalListProps<T>['renderItem'];
   onPress: () => void;

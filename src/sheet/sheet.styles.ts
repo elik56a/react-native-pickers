@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { DIALOG_MARGIN, SHEET_MAX_WIDTH } from './sheet.constants';
+import { DIALOG_MARGIN, DROPDOWN_PADDING, FLOATING_LABEL_PADDING, SHEET_MAX_WIDTH } from './sheet.constants';
 
 export const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'flex-end' },
@@ -14,18 +14,16 @@ export const styles = StyleSheet.create({
   headerSide: { flex: 1, flexDirection: 'row', alignItems: 'center' },
   headerRight: { justifyContent: 'flex-end' },
   headerCenter: { flex: 2, alignItems: 'center' },
+  headerStart: { alignItems: 'flex-start' },
   flex: { flex: 1 },
   shrink: { flexShrink: 1 },
   /** Padded for a comfortable hover and ripple area; the negative margin keeps the label lined up with the edge. */
   button: { paddingVertical: 6, paddingHorizontal: 8, marginHorizontal: -8 },
   dropdownOverlay: { position: 'absolute' },
-  dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: 6, overflow: 'hidden' },
+  dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: DROPDOWN_PADDING, overflow: 'hidden' },
   dropdownScroll: { flexGrow: 0, flexShrink: 1 },
+  actions: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 24 },
   dropdownFooter: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    gap: 24,
     paddingTop: 8,
     paddingBottom: 2,
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -33,11 +31,22 @@ export const styles = StyleSheet.create({
   content: { paddingHorizontal: 16, paddingBottom: 8 },
   compactContent: { paddingHorizontal: 8 },
   fieldLabel: { marginBottom: 6 },
-  trigger: { flexDirection: 'row', alignItems: 'center', minHeight: 48, borderWidth: 1, paddingVertical: 6 },
+  trigger: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6 },
+  floatingLabelBox: { justifyContent: 'center', alignItems: 'flex-start' },
+  floatingLabel: { paddingHorizontal: FLOATING_LABEL_PADDING },
   triggerRow: { flexDirection: 'row', alignItems: 'center' },
   triggerIcon: { marginEnd: 8 },
   clear: { paddingHorizontal: 6 },
   clearButton: { justifyContent: 'center' },
   chevron: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginStart: 4 },
+  chevronTriangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderTopWidth: 5,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
   chevronMark: { width: 8, height: 8, borderRightWidth: 1.75, borderBottomWidth: 1.75, marginTop: -4, transform: [{ rotate: '45deg' }] },
 });

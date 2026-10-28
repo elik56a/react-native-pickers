@@ -22,20 +22,11 @@
   align-items: center;
   justify-content: center;
   min-height: 220px;
-  padding: 3.75rem 1.25rem 2rem;
+  padding: 2rem 1.25rem;
   background:
     var(--site-glow),
     radial-gradient(circle, var(--site-grid) 1px, transparent 1px) 0 0 / 18px 18px,
     var(--ifm-background-color);
-}
-
-/* How the example behaves, not its code: so it sits over the preview, not in the code toolbar. */
-.platforms {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  width: 210px;
-  max-width: calc(100% - 1.5rem);
 }
 
 /* Lay examples out like a React Native root view, so a <Text> stretches and its textAlign applies. */
@@ -46,6 +37,31 @@
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+}
+
+/* An example marked wide, on the Web tab: the desktop width a picker like DateTimePicker spreads out to. */
+/* Room above the stage for the platform switch. */
+.preview[data-platforms] {
+  padding-top: 3.75rem;
+}
+
+/* A `device` example fills the mock's screen, like an app, above the phone's home indicator. */
+.deviceScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.preview[data-device="ios"] .deviceScreen {
+  padding-bottom: 34px;
+}
+
+.preview[data-device="android"] .deviceScreen {
+  padding-bottom: 24px;
+}
+
+.preview[data-wide] .stage {
+  max-width: 560px;
 }
 
 .loading {

@@ -11,8 +11,8 @@ import type {
   ViewStyle,
 } from 'react-native';
 
-import type { PICKER_DISPLAY } from './core.constants';
-import type { PickerTheme } from './theme/theme.types';
+import type { PICKER_DISPLAY, PRESS_FEEDBACK } from './core.constants';
+import type { Design, PickerTheme } from './theme/theme.types';
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
@@ -35,6 +35,8 @@ export type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle
 export interface ThemableProps {
   /** Component-level theme override, merged on top of the provider theme */
   theme?: DeepPartial<PickerTheme>;
+  /** Draw this design instead of the provider's or the platform's: 'ios', 'material' or 'web' */
+  design?: Design;
 }
 
 export interface SearchInputProps {
@@ -53,8 +55,12 @@ export interface RippleOrigin {
   radius: number;
 }
 
+export type PressFeedback = ValueOf<typeof PRESS_FEEDBACK>;
+
 export interface TouchFeedbackProps {
   hovered: boolean;
+  /** Held down, in designs that dim what's pressed rather than ripple */
+  pressed: boolean;
   ripple: RippleOrigin | null;
   scale: Animated.Value;
   opacity: Animated.Value;
@@ -76,7 +82,7 @@ export interface TouchFeedbackState {
 
 export type TouchableProps = Omit<PressableProps, 'style' | 'children'> & {
   theme: PickerTheme;
-  /** Spread a ripple from the touch point on press. Default: true */
+  /** Show press feedback: a ripple from the touch point, or a dim while held, as the design does it. Default: true */
   ripple?: boolean;
   style?: StyleProp<ViewStyle> | ((state: PressableStateCallbackType) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: PressableStateCallbackType) => React.ReactNode);

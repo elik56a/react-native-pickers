@@ -1,11 +1,11 @@
 ---
 title: React Native Date Picker & Calendar
-sidebar_label: Date picker
+sidebar_label: DatePicker
 description: React Native calendar date picker with min/max dates, disabled days, marked dates and prices, locale-aware names and swipe between months. Pure JS.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePicker } from '@elik56a/react-native-pickers';
+import { DatePicker, DatePickerField } from '@elik56a/react-native-pickers';
 
 # DatePicker & Calendar
 
@@ -50,7 +50,7 @@ This page covers single selection and everything the calendar shares. **Range** 
   controls={[
     { prop: 'display', options: ['calendar', 'wheel'] },
     { prop: 'mode', options: ['single', 'range', 'multiple'] },
-    { prop: 'weekdayFormat', options: ['short', 'narrow'] },
+    { prop: 'weekdayFormat', options: ['auto', 'short', 'narrow'], unset: 'auto' },
     { prop: 'firstDayOfWeek', options: [0, 1, 6], default: null, initial: 0 },
     { prop: 'showOutsideDays', options: [true, false] },
     { prop: 'fixedWeeks', options: [true, false] },
@@ -375,7 +375,7 @@ export default function Example() {
 | `fixedWeeks` | `boolean` | `true` | Always 6 rows. |
 | `enableSwipe` | `boolean` | `true` | Swipe horizontally to change months. |
 | `enableQuickJump` | `boolean` | `true` | Tap the title to cycle days → months → years. |
-| `weekdayFormat` | `'short' \| 'narrow'` | `'short'` | `Mon` vs `M`. |
+| `weekdayFormat` | `'short' \| 'narrow'` | from the design: `'narrow'` in Material, else `'short'` | `Mon` vs `M`. |
 | `showWeekdays` | `boolean` | `true` | Show the weekday header. |
 | `formatTitle` | `(month: Date, locale?: string) => string` | `"October 2026"` | Custom title text. |
 | `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Custom day cell content. |
@@ -402,13 +402,23 @@ Each day is a button whose label is the full date ("Wednesday, October 14, 2026"
 
 ## In a form field
 
-`DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date:
+`DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-```tsx
-import { DatePickerField } from '@elik56a/react-native-pickers';
-
-<DatePickerField label="Due date" placeholder="Pick a date" value={date} onConfirm={setDate} minDate={new Date()} />
-```
+<PropPlayground
+  name="DatePickerField"
+  component={DatePickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Due date', placeholder: 'Pick a date' }}
+  value={null}
+  code="label=&quot;Due date&quot; placeholder=&quot;Pick a date&quot; value={date} onConfirm={setDate}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'display', options: ['calendar', 'wheel'] },
+    { prop: 'confirmOnSelect', options: [false, true] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
 
 → [Picker fields](./picker-fields)
 

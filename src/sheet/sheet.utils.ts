@@ -131,11 +131,13 @@ export const getDropdownFrame = (
 };
 
 type FieldPropKey = (typeof FIELD_PROP_KEYS)[number];
+type SharedFieldPropKey = 'theme' | 'design' | 'styles';
 
-/** Splits a `*PickerField`'s props into the field's and its sheet's; both get `theme` and `styles`. */
+/** Splits a `*PickerField`'s props into the field's and its sheet's; both get `theme`, `design` and `styles`. */
 export const splitFieldProps = <P extends PickerFieldBaseProps<string>>(props: P) => {
-  const field: Partial<Record<FieldPropKey | 'theme' | 'styles', unknown>> = {
+  const field: Partial<Record<FieldPropKey | SharedFieldPropKey, unknown>> = {
     theme: props.theme,
+    design: props.design,
     styles: props.styles,
   };
   const sheet: Record<string, unknown> = { ...(props as object) };
@@ -144,7 +146,16 @@ export const splitFieldProps = <P extends PickerFieldBaseProps<string>>(props: P
     delete sheet[key];
   }
   return {
-    field: field as Pick<PickerFieldBaseProps<string>, FieldPropKey | 'theme' | 'styles'>,
+    field: field as Pick<PickerFieldBaseProps<string>, FieldPropKey | SharedFieldPropKey>,
     sheet: sheet as DistributiveOmit<P, FieldPropKey>,
   };
 };
+
+/**
+ * Where a raised floating label moves from its resting place, centred in the field: up onto the top border, and left so it
+ * still starts at the same edge once scaled down (it scales around its centre).
+ */
+export const getFloatingLabelShift = (boxHeight: number, textWidth: number, scale: number, borderWidth: number) => ({
+  x: (-textWidth * (1 - scale)) / 2,
+  y: -(boxHeight + borderWidth) / 2,
+});

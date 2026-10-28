@@ -5,7 +5,7 @@ description: React Native date wheel picker (day / month / year) with locale-awa
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DateWheelPicker } from '@elik56a/react-native-pickers';
+import { DatePickerField, DateWheelPicker } from '@elik56a/react-native-pickers';
 
 # DateWheelPicker
 
@@ -16,7 +16,7 @@ import { DateWheelPicker } from '@elik56a/react-native-pickers';
 // or: <DatePicker display="wheel" … />
 ```
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { Text } from 'react-native';
 import { DateWheelPicker, formatDate } from '@elik56a/react-native-pickers';
@@ -43,6 +43,7 @@ export default function Example() {
 ## Try the props
 
 <PropPlayground
+  platforms={false}
   name="DateWheelPicker"
   component={DateWheelPicker}
   value={new Date(1990, 4, 17)}
@@ -59,7 +60,7 @@ export default function Example() {
 
 The order of the wheels follows the locale's date format: month / day / year for `en-US`, day / month / year for `en-GB`, `de`, `he`, `fr`, and year / month / day for `ja`, `zh`, `ko`. Override it with `order`.
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { View, Text } from 'react-native';
 import { DateWheelPicker } from '@elik56a/react-native-pickers';
@@ -111,7 +112,7 @@ When the month or year changes to one with fewer days, the day is clamped automa
 
 `minDate` and `maxDate` limit the selection; days and months outside the range are disabled and the value is clamped into the range. The year wheel spans `minDate`'s year to `maxDate`'s year. Without them it uses `yearRange` (default: 100 years before and after today).
 
-```tsx live
+```tsx live noplatforms
 import { useState } from 'react';
 import { DateWheelPicker } from '@elik56a/react-native-pickers';
 
@@ -137,6 +138,26 @@ Pass only the columns you need in `order`, for example `['month', 'year']` for c
 ## Looping
 
 The day and month wheels loop by default (`loop`); the year wheel never loops.
+
+## In a form field
+
+`DatePickerField` with `display="wheel"` opens these wheels in a sheet from a field, and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
+
+<PropPlayground
+  name="DatePickerField"
+  component={DatePickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Birthday', placeholder: 'Pick a date', display: 'wheel' }}
+  value={null}
+  code="label=&quot;Birthday&quot; placeholder=&quot;Pick a date&quot; display=&quot;wheel&quot; value={date} onConfirm={setDate}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
+
+→ [Picker fields](./picker-fields)
 
 ## Props
 

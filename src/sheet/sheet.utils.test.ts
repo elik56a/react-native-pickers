@@ -3,6 +3,7 @@ import {
   canScrollWithin,
   getDragFrame,
   getDropdownFrame,
+  getFloatingLabelShift,
   getReleaseTarget,
   getSheetDefaults,
   getWheelTarget,
@@ -178,20 +179,31 @@ describe('getDropdownFrame', () => {
 });
 
 describe('splitFieldProps', () => {
-  it('keeps the field props for the field and the rest for the sheet', () => {
+  it('keeps the field props for the field and the rest for the sheet, and gives both the theme and design', () => {
     const onClose = jest.fn();
     const theme = { radius: { md: 4 } };
     const styles = { trigger: { padding: 1 } };
-    const { field, sheet } = splitFieldProps({ label: 'Due', onClose, testID: 'due', theme, styles, title: 'Pick', locale: 'he' });
+    const { field, sheet } = splitFieldProps({
+      label: 'Due',
+      onClose,
+      testID: 'due',
+      theme,
+      design: 'material',
+      styles,
+      title: 'Pick',
+      locale: 'he',
+    });
     expect(field).toMatchObject({
       label: 'Due',
       onClose,
       testID: 'due',
       theme,
+      design: 'material',
       styles,
     });
     expect(sheet).toEqual({
       theme,
+      design: 'material',
       styles,
       title: 'Pick',
       locale: 'he',
@@ -224,5 +236,12 @@ describe('getSheetDefaults', () => {
       draggable: false,
       expandedTopInset: 0,
     });
+  });
+});
+
+describe('getFloatingLabelShift', () => {
+  it('moves the label onto the top border, and left by what scaling around its centre takes off its start', () => {
+    expect(getFloatingLabelShift(54, 80, 0.75, 2)).toEqual({ x: -10, y: -28 });
+    expect(getFloatingLabelShift(54, 80, 1, 1)).toEqual({ x: -0, y: -27.5 });
   });
 });

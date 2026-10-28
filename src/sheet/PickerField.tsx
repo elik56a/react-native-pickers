@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { FieldLabel } from './components/FieldLabel';
 import { FieldTrigger } from './components/FieldTrigger';
 import { FieldSheetContext } from './hooks/useFieldSheet';
@@ -23,10 +24,12 @@ export const PickerField = ({
   presentation,
   style,
   styles: slots,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   testID,
   children,
 }: PickerFieldProps) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const field = usePickerField({ disabled, presentation, onOpen, onClose });
 

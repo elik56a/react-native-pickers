@@ -1,24 +1,39 @@
 ---
 title: Chat input with emoji
-description: React Native chat composer with an emoji keyboard toggle, inserting emojis at the cursor position, persisted recents and skin tone.
+description: React Native chat screen with an emoji button that opens an emoji bottom sheet, inserting emojis at the cursor position, persisted recents and skin tone.
 ---
 
 # Chat input with emoji
 
-A message composer with an emoji button that toggles an inline emoji panel, and emojis inserted **at the cursor**, not just appended.
+A chat screen with message bubbles, a composer with an emoji button next to **Send** that opens the emojis in a bottom sheet, emojis inserted **at the cursor** (not just appended), and a send button. Switch between the iPhone, Pixel and browser above it; the colours come from `usePickerTheme()`, so it follows dark mode and your theme.
 
-```tsx live
+```tsx live device
 import { useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { EmojiPicker } from '@elik56a/react-native-pickers';
+import type { ComponentRef } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { EmojiPickerSheet, usePickerTheme } from '@elik56a/react-native-pickers';
 import type { SkinTone } from '@elik56a/react-native-pickers';
 
-export default function Composer() {
+type Message = { id: number; text: string; mine: boolean; time: string };
+
+const FIRST: Message[] = [
+  { id: 1, text: 'Are we still on for tonight? 🍕', mine: false, time: '6:02 PM' },
+  { id: 2, text: 'Yes! 8 at the usual place', mine: true, time: '6:04 PM' },
+  { id: 3, text: "Perfect, I'll book a table 🙌", mine: false, time: '6:05 PM' },
+];
+
+const timeNow = () => new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+export default function Chat() {
+  const { colors, radius } = usePickerTheme();
+  const [messages, setMessages] = useState(FIRST);
   const [text, setText] = useState('');
-  const [showEmoji, setShowEmoji] = useState(true);
+  const [showEmoji, setShowEmoji] = useState(false);
   const [tone, setTone] = useState<SkinTone>(0);
   const [recent, setRecent] = useState<string[]>(['😂', '❤️', '👍']);
   const selection = useRef({ start: 0, end: 0 });
+  const list = useRef<ComponentRef<typeof ScrollView>>(null);
+  const canSend = text.trim().length > 0;
 
   const insert = (emoji: string) => {
     const { start, end } = selection.current;
@@ -27,69 +42,128 @@ export default function Composer() {
     selection.current = { start: caret, end: caret };
   };
 
+  const send = () => {
+    setMessages((m) => [...m, { id: Date.now(), text: text.trim(), mine: true, time: timeNow() }]);
+    setText('');
+    selection.current = { start: 0, end: 0 };
+  };
+
   return (
-    <View style={styles.root}>
-      <View style={styles.bar}>
-        <Pressable
-          onPress={() => setShowEmoji((v) => !v)}
-          accessibilityLabel="Emoji"
-          style={styles.icon}
-        >
-          <Text style={styles.iconText}>{showEmoji ? '⌨️' : '😊'}</Text>
-        </Pressable>
+    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+      <View style={[styles.header, { borderColor: colors.border }]}>
+        <View style={[styles.avatar, { backgroundColor: colors.primaryMuted }]}>
+          <Text style={styles.avatarText}>🧑‍🍳</Text>
+        </View>
+        <View>
+          <Text style={[styles.name, { color: colors.text }]}>Maya</Text>
+          <Text style={[styles.status, { color: colors.textSecondary }]}>online</Text>
+        </View>
+      </View>
+
+      <ScrollView
+        ref={list}
+        style={styles.messages}
+        contentContainerStyle={styles.messagesContent}
+        onContentSizeChange={() => list.current?.scrollToEnd()}
+      >
+        {messages.map((m) => (
+          <View
+            key={m.id}
+            style={[
+              styles.bubble,
+              m.mine ? styles.mine : styles.theirs,
+              { borderRadius: radius.lg, backgroundColor: m.mine ? colors.primary : colors.surface },
+            ]}
+          >
+            <Text style={[styles.text, { color: m.mine ? colors.onPrimary : colors.text }]}>{m.text}</Text>
+            <Text style={[styles.time, { color: m.mine ? colors.onPrimary : colors.textSecondary }]}>{m.time}</Text>
+          </View>
+        ))}
+      </ScrollView>
+
+      <View style={[styles.composer, { borderColor: colors.border }]}>
         <TextInput
           value={text}
           onChangeText={setText}
-          onSelectionChange={(e) =>
-            (selection.current = e.nativeEvent.selection)
-          }
+          onSelectionChange={(e) => (selection.current = e.nativeEvent.selection)}
+          onSubmitEditing={() => canSend && send()}
           placeholder="Message"
-          style={styles.input}
-          multiline
+          placeholderTextColor={colors.textSecondary}
+          style={[styles.input, { backgroundColor: colors.surface, color: colors.text }]}
         />
+        <Pressable
+          onPress={() => setShowEmoji(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Emoji"
+          style={styles.iconButton}
+        >
+          <Text style={styles.iconText}>😊</Text>
+        </Pressable>
+        <Pressable
+          onPress={send}
+          disabled={!canSend}
+          accessibilityRole="button"
+          accessibilityLabel="Send"
+          style={[styles.send, { backgroundColor: canSend ? colors.primary : colors.surface }]}
+        >
+          <Text style={[styles.sendText, { color: canSend ? colors.onPrimary : colors.textDisabled }]}>↑</Text>
+        </Pressable>
       </View>
-      {showEmoji && (
-        <EmojiPicker
-          height={300}
-          onSelect={insert}
-          skinTone={tone}
-          onSkinToneChange={setTone}
-          recent={recent}
-          onRecentChange={setRecent}
-          categoryBarPosition="bottom"
-        />
-      )}
+
+      <EmojiPickerSheet
+        visible={showEmoji}
+        onClose={() => setShowEmoji(false)}
+        onSelect={insert}
+        skinTone={tone}
+        onSkinToneChange={setTone}
+        recent={recent}
+        onRecentChange={setRecent}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { gap: 8 },
-  bar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
-  icon: {
-    width: 40,
-    height: 40,
+  screen: { flex: 1 },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconText: { fontSize: 22 },
-  input: {
-    flex: 1,
-    minHeight: 40,
-    maxHeight: 120,
-    borderWidth: 1,
-    borderColor: '#E8E4DC',
-    borderRadius: 20,
+    gap: 10,
     paddingHorizontal: 14,
-    paddingVertical: 9,
-    fontSize: 16,
+    paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  avatar: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { fontSize: 20 },
+  name: { fontSize: 16, fontWeight: '600' },
+  status: { fontSize: 12 },
+  messages: { flex: 1 },
+  messagesContent: { padding: 12, gap: 6 },
+  bubble: { maxWidth: '78%', paddingHorizontal: 12, paddingVertical: 8 },
+  mine: { alignSelf: 'flex-end' },
+  theirs: { alignSelf: 'flex-start' },
+  text: { fontSize: 15, lineHeight: 20 },
+  time: { fontSize: 11, opacity: 0.7, alignSelf: 'flex-end', marginTop: 2 },
+  composer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 22 },
+  input: { flex: 1, height: 36, borderRadius: 18, paddingHorizontal: 14, fontSize: 15 },
+  send: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  sendText: { fontSize: 18, fontWeight: '700' },
 });
 ```
 
 ## In production
 
 - Persist `recent` and `tone` (AsyncStorage, MMKV) so they survive restarts; see [Recently used](../components/emoji-picker#recently-used).
-- When the panel opens, dismiss the keyboard with `Keyboard.dismiss()`. When the input is focused, hide the panel.
-- Size the panel to the last keyboard height (`Keyboard.addListener('keyboardDidShow', e => …)`) so switching doesn't jump.
+- Picking an emoji adds it at the cursor and closes the sheet. For several at once, pass `closeOnSelect={false}`; the sheet then closes on a drag down or a tap on the backdrop.
+- Dismiss the keyboard with `Keyboard.dismiss()` when the sheet opens, so the two don't stack.
+- To show the emojis in the keyboard's place instead, render an inline `EmojiPicker` under the composer and size it to the last keyboard height (`Keyboard.addListener('keyboardDidShow', e => …)`).
 - On older Android, set `maxEmojiVersion` to avoid emojis the device can't render.

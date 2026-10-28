@@ -1,7 +1,8 @@
 import { Platform, type PlatformOSType, StatusBar } from 'react-native';
 
 import { PLATFORM } from '../core/core.constants';
-import type { PickerFieldBaseProps } from './sheet.types';
+import type { Design } from '../core/theme/theme.types';
+import type { FieldDesign, PickerFieldBaseProps, SheetDesign } from './sheet.types';
 
 export const SHEET_PRESENTATION = {
   auto: 'auto',
@@ -21,7 +22,52 @@ export const SHEET_SNAP = {
   close: 'close',
 } as const;
 
-export const DEFAULT_CONFIRM_LABEL = 'Done';
+export const SHEET_ACTIONS = {
+  header: 'header',
+  footer: 'footer',
+} as const;
+
+export const TITLE_ALIGN = {
+  center: 'center',
+  start: 'start',
+} as const;
+
+/** iOS puts Cancel / Done beside a centered title; Material and the web put the title first and Cancel / OK at the bottom. */
+export const SHEET_DESIGN: Record<Design, SheetDesign> = {
+  ios: { actions: SHEET_ACTIONS.header, titleAlign: TITLE_ALIGN.center, confirmLabel: 'Done' },
+  material: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'OK' },
+  web: { actions: SHEET_ACTIONS.footer, titleAlign: TITLE_ALIGN.start, confirmLabel: 'Done' },
+};
+
+export const FIELD_LABEL = {
+  above: 'above',
+  floating: 'floating',
+} as const;
+
+export const FIELD_ARROW = {
+  chevron: 'chevron',
+  triangle: 'triangle',
+} as const;
+
+/** Material fields are outlined, with the label inside until there's a value and then on the border; web fields are compact, with a focus ring. */
+export const FIELD_DESIGN: Record<Design, FieldDesign> = {
+  ios: { label: FIELD_LABEL.above, arrow: FIELD_ARROW.chevron, minHeight: 48, outline: 'border', openBorderWidth: 1, focusRing: false },
+  material: {
+    label: FIELD_LABEL.floating,
+    arrow: FIELD_ARROW.triangle,
+    minHeight: 56,
+    outline: 'textSecondary',
+    openBorderWidth: 2,
+    focusRing: false,
+  },
+  web: { label: FIELD_LABEL.above, arrow: FIELD_ARROW.chevron, minHeight: 40, outline: 'border', openBorderWidth: 1, focusRing: true },
+};
+export const FOCUS_RING_WIDTH = 3;
+/** Space either side of a floating label, cut out of the border behind it. */
+export const FLOATING_LABEL_PADDING = 4;
+/** A raised floating label shrinks from the body text size to this one. */
+export const FLOATING_LABEL_RAISED_SIZE = 'xs';
+
 export const DEFAULT_CANCEL_LABEL = 'Cancel';
 export const DEFAULT_MAX_HEIGHT_RATIO = 0.9;
 /** Room under a bottom sheet for the iOS home indicator, and a smaller margin elsewhere. */
@@ -66,13 +112,14 @@ export const DIALOG_MARGIN = 24;
 export const DIALOG_RISE = 24;
 
 export const DROPDOWN_MAX_HEIGHT = 320;
+export const DROPDOWN_PADDING = 6;
 /** Space between the field and the dropdown. */
 export const DROPDOWN_GAP = 4;
 /** Space kept between the dropdown and the window edge. */
 export const DROPDOWN_EDGE_MARGIN = 8;
 /** A picker in a dropdown is at least this wide, so a calendar keeps its tap targets under a narrow field. */
 export const PICKER_DROPDOWN_MIN_WIDTH = 320;
-/** A calendar with its Done row is about 420 tall; with less room below than this, the dropdown opens above the field if there's more room there. */
+/** A picker dropdown's assumed height until its content is measured: about a calendar with its Done row. */
 export const PICKER_DROPDOWN_MAX_HEIGHT = 440;
 
 export const BUTTON_HIT_SLOP = 10;

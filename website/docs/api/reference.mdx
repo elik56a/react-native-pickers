@@ -51,11 +51,12 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 | Export | Description |
 | --- | --- |
-| [`PickersProvider`](../guides/theming#pickersprovider) | App-wide theme and colour scheme |
+| [`PickersProvider`](../guides/theming#pickersprovider) | App-wide theme, colour scheme, platform and design |
 | [`usePickerTheme(override?)`](./theme#usepickertheme) | Resolved active theme |
 | [`createTheme(overrides, base?)`](./theme#createtheme) | Full theme from overrides |
 | [`mergeTheme(base, override?)`](./theme#mergetheme) | Deep merge |
 | [`lightTheme`](./theme#lighttheme--darktheme) / [`darkTheme`](./theme#lighttheme--darktheme) | Built-in themes |
+| [`DESIGN`](./theme#designs) / [`DESIGN_TOKENS`](./theme#designs) / [`resolveDesign(preference, platform)`](./theme#designs) | The iOS, Material and web designs |
 | [`textStyle(theme, size, weight?)`](./theme#textstyle) | Text style from tokens |
 
 ## Date utilities
@@ -113,7 +114,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 
 | Where | Prop | Default |
 | --- | --- | --- |
-| Sheets | `confirmLabel` / `cancelLabel` | `Done` / `Cancel` |
+| Sheets | `confirmLabel` / `cancelLabel` | `Done` (iOS, web) · `OK` (Material) / `Cancel` |
 | SelectPicker, fields | `placeholder` | `Select…` |
 | SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
@@ -131,10 +132,13 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `keyboardInput` | `true` | WheelPicker |
 | `minuteInterval` / `secondInterval` | `1` | TimePicker |
 | `format` | `'auto'` | TimePicker |
+| `display` | `'wheel'` iOS · `'dial'` Material · `'list'` web | TimePicker |
+| `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
+| `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |
 | `fixedWeeks` / `showOutsideDays` | `true` | Calendar |
 | `enableSwipe` / `enableQuickJump` | `true` | Calendar |
-| `weekdayFormat` | `'short'` | Calendar |
+| `weekdayFormat` | `'short'` · `'narrow'` Material | Calendar |
 | `monthFormat` | `'long'` | DateWheelPicker |
 | `searchable` | `options.length > 8` · `true` emoji | Select, Emoji |
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |

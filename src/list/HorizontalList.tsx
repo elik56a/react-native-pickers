@@ -1,10 +1,11 @@
 import { Animated, ScrollView } from 'react-native';
 
 import { usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { ListItem } from './components/ListItem';
 import { useHorizontalList } from './hooks/useHorizontalList';
 import { useSegmentThumb } from './hooks/useSegmentThumb';
-import { HORIZONTAL_LIST_VARIANT } from './list.constants';
+import { HORIZONTAL_LIST_VARIANT, LIST_DESIGN } from './list.constants';
 import { styles } from './list.styles';
 import type { HorizontalListProps } from './list.types';
 import { findItemIndex } from './list.utils';
@@ -20,14 +21,17 @@ export const HorizontalList = <T,>({
   accessibilityLabel,
   style,
   styles: slots,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   testID,
 }: HorizontalListProps<T>) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const list = useHorizontalList(onChange, theme.spacing.lg);
   const selectedIndex = findItemIndex(items, value, isEqual);
   const thumb = useSegmentThumb(selectedIndex, theme.animation.duration);
   const segmented = variant === HORIZONTAL_LIST_VARIANT.segmented;
+  const { outlined } = LIST_DESIGN[theme.design];
   return (
     <ScrollView
       ref={list.scrollRef}
@@ -41,14 +45,21 @@ export const HorizontalList = <T,>({
       accessibilityLabel={accessibilityLabel}
       style={[
         styles.list,
-        segmented && [styles.track, { backgroundColor: theme.colors.border, borderRadius: theme.radius.md }],
+        segmented &&
+          (outlined
+            ? [styles.track, styles.outlinedTrack, { borderColor: theme.colors.textSecondary, borderRadius: theme.radius.full }]
+            : [styles.track, { backgroundColor: theme.colors.border, borderRadius: theme.radius.md }]),
         style,
         slots?.container,
       ]}
-      contentContainerStyle={[styles.content, segmented ? styles.trackContent : { gap: theme.spacing.sm }, slots?.content]}
+      contentContainerStyle={[
+        styles.content,
+        segmented ? (outlined ? styles.outlinedContent : styles.trackContent) : { gap: theme.spacing.sm },
+        slots?.content,
+      ]}
       testID={testID}
     >
-      {segmented && thumb.placed ? (
+      {segmented && !outlined && thumb.placed ? (
         <Animated.View
           style={[styles.thumb, thumb.style, { backgroundColor: theme.colors.background, borderRadius: theme.radius.sm }, slots?.thumb]}
         />
@@ -58,6 +69,7 @@ export const HorizontalList = <T,>({
           key={item.label}
           item={item}
           selected={index === selectedIndex}
+          divided={index > 0}
           variant={variant}
           renderItem={renderItem}
           onPress={() => list.press(item, index)}

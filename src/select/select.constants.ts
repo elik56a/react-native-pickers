@@ -1,4 +1,6 @@
+import type { Design } from '../core/theme/theme.types';
 import { FIELD_PRESENTATION } from '../sheet/sheet.constants';
+import type { SelectDesign } from './select.types';
 
 /** Lists with more options than this get a search field unless `searchable` says otherwise. */
 export const SEARCH_THRESHOLD = 8;
@@ -22,4 +24,32 @@ export const DEFAULT_SEARCH_DEBOUNCE_MS = 300;
 
 export const DISABLED_OPTION_OPACITY = 0.45;
 
-export const CHECK_MARK = '✓';
+export const SINGLE_INDICATOR = {
+  check: 'check',
+  radio: 'radio',
+} as const;
+
+/** Material lists run edge to edge, untinted, with a radio or a small square checkbox showing the choice. */
+export const SELECT_DESIGN: Record<Design, SelectDesign> = {
+  ios: {
+    singleIndicator: SINGLE_INDICATOR.check,
+    insetRows: true,
+    tintSelected: true,
+    rowHeight: 48,
+    checkbox: { size: 22, radius: 6, offColor: 'border' },
+  },
+  material: {
+    singleIndicator: SINGLE_INDICATOR.radio,
+    insetRows: false,
+    tintSelected: false,
+    rowHeight: 56,
+    checkbox: { size: 18, radius: 2, offColor: 'textSecondary' },
+  },
+  web: {
+    singleIndicator: SINGLE_INDICATOR.check,
+    insetRows: true,
+    tintSelected: true,
+    rowHeight: 40,
+    checkbox: { size: 18, radius: 4, offColor: 'textSecondary' },
+  },
+};

@@ -4,7 +4,15 @@ import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEven
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DistributiveOmit, ValueOf } from '../core/core.types';
-import type { FIELD_PRESENTATION, SHEET_PRESENTATION, SHEET_SNAP } from './sheet.constants';
+import type {
+  FIELD_ARROW,
+  FIELD_LABEL,
+  FIELD_PRESENTATION,
+  SHEET_ACTIONS,
+  SHEET_PRESENTATION,
+  SHEET_SNAP,
+  TITLE_ALIGN,
+} from './sheet.constants';
 
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
 export type SheetPresentation = ValueOf<typeof SHEET_PRESENTATION>;
@@ -57,7 +65,7 @@ export interface SheetChromeProps extends ThemableProps {
   visible: boolean;
   onClose: () => void;
   title?: React.ReactNode;
-  /** Default: 'Done' */
+  /** Default: 'OK' in the Material design, else 'Done' */
   confirmLabel?: string;
   /** Default: 'Cancel' */
   cancelLabel?: string;
@@ -99,6 +107,27 @@ export interface SheetButtonProps {
 
 /** Where a drag or a wheel gesture leaves the sheet. */
 export type SheetSnap = ValueOf<typeof SHEET_SNAP>;
+
+export interface SheetDesign {
+  /** Where Cancel and Done go: beside the title, or in a row at the bottom */
+  actions: ValueOf<typeof SHEET_ACTIONS>;
+  titleAlign: ValueOf<typeof TITLE_ALIGN>;
+  confirmLabel: string;
+}
+
+export interface FieldDesign {
+  /** Above the field, or inside it until there's a value and then on its top border */
+  label: ValueOf<typeof FIELD_LABEL>;
+  /** The open/close indicator: a chevron, or a filled triangle (Material) */
+  arrow: ValueOf<typeof FIELD_ARROW>;
+  minHeight: number;
+  /** The border color while closed */
+  outline: keyof PickerTheme['colors'];
+  /** The border, in the primary color, while open */
+  openBorderWidth: number;
+  /** A soft ring around the field while open */
+  focusRing: boolean;
+}
 
 export interface SheetDragFrame {
   height: number;
@@ -190,6 +219,8 @@ export interface DropdownProps extends ThemableProps {
   maxHeight?: number;
   /** Wider than the anchor when it's narrower than this, still within the window */
   minWidth?: number;
+  /** Stays invisible while false, e.g. until its content is measured and it knows which side of the field it fits on. Default: true */
+  ready?: boolean;
   testID?: string;
 }
 
@@ -271,4 +302,14 @@ export interface FieldTriggerProps {
   theme: PickerTheme;
   slots?: SlotStyles<PickerFieldSlot>;
   testID?: string;
+}
+
+export interface FloatingLabelProps {
+  label: string;
+  /** On the border, small; otherwise resting inside the empty field */
+  raised: boolean;
+  open: boolean;
+  borderWidth: number;
+  theme: PickerTheme;
+  style?: StyleProp<TextStyle>;
 }

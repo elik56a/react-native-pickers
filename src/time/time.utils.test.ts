@@ -2,8 +2,14 @@ import {
   buildTime,
   clampTimeOfDay,
   formatTimeValue,
+  getDialAngle,
+  getDialHand,
+  getDialNumbers,
   getHourItems,
   getMinuteItems,
+  getNearestAngle,
+  getPanelCellLabel,
+  getPanelTopRow,
   getPeriodItems,
   getSecondItems,
   getTimeBounds,
@@ -12,6 +18,10 @@ import {
   getTimeSeparator,
   is12HourFormat,
   pad2,
+  parseTypedTime,
+  pickDialHour,
+  pickDialMinute,
+  resolveTimeDisplay,
   secondsOfDay,
   snapTime,
   steps,
@@ -164,5 +174,115 @@ describe('formatTimeValue', () => {
 
   it('adds seconds when shown', () => {
     expect(formatTimeValue(time, { format: '24h', locale: 'en-US', showSeconds: true })).toBe('21:05:07');
+  });
+});
+
+describe('time display', () => {
+  it('follows the design unless asked, and turns a dial into wheels when seconds show', () => {
+    expect(resolveTimeDisplay(undefined, 'ios', false)).toBe('wheel');
+    expect(resolveTimeDisplay(undefined, 'material', false)).toBe('dial');
+    expect(resolveTimeDisplay(undefined, 'web', false)).toBe('list');
+    expect(resolveTimeDisplay('list', 'material', false)).toBe('list');
+    expect(resolveTimeDisplay(undefined, 'material', true)).toBe('wheel');
+    expect(resolveTimeDisplay('input', 'web', true)).toBe('wheel');
+    expect(resolveTimeDisplay('input', 'web', false)).toBe('input');
+  });
+});
+
+describe('clock dial', () => {
+  it("measures angles clockwise from 12 o'clock", () => {
+    expect(getDialAngle(0, -10)).toBe(0);
+    expect(getDialAngle(10, 0)).toBe(90);
+    expect(getDialAngle(0, 10)).toBe(180);
+    expect(getDialAngle(-10, 0)).toBe(270);
+  });
+
+  it('picks 12h hours in the current half of the day', () => {
+    expect(pickDialHour(90, 100, true, false)).toBe(3);
+    expect(pickDialHour(90, 100, true, true)).toBe(15);
+    expect(pickDialHour(0, 100, true, false)).toBe(0);
+    expect(pickDialHour(0, 100, true, true)).toBe(12);
+    expect(pickDialHour(352, 100, true, false)).toBe(0);
+  });
+
+  it('picks 24h hours from the outer ring (12, 1–11) or the inner one (00, 13–23)', () => {
+    expect(pickDialHour(90, 100, false, false)).toBe(3);
+    expect(pickDialHour(90, 60, false, false)).toBe(15);
+    expect(pickDialHour(0, 100, false, false)).toBe(12);
+    expect(pickDialHour(0, 60, false, false)).toBe(0);
+  });
+
+  it('snaps minutes to the interval, wrapping at the hour', () => {
+    expect(pickDialMinute(45, 1)).toBe(8);
+    expect(pickDialMinute(45, 5)).toBe(10);
+    expect(pickDialMinute(357, 5)).toBe(0);
+  });
+
+  it('points the hand at the hour or minute, to the inner ring for 24h 00 and 13–23', () => {
+    expect(getDialHand('hour', 15, 0, true)).toEqual({ angle: 90, radius: 104 });
+    expect(getDialHand('hour', 15, 0, false)).toEqual({ angle: 90, radius: 66 });
+    expect(getDialHand('minute', 15, 20, false)).toEqual({ angle: 120, radius: 104 });
+  });
+
+  it('lays out 12 numbers on a 12h dial, 24 on a 24h one, dimming those out of bounds', () => {
+    const all: [number, number] = [0, 86399];
+    const twelve = getDialNumbers({ mode: 'hour', hours: 14, is12: true, padHours: false, bounds: all });
+    expect(twelve.map((n) => n.label)).toEqual(['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
+    expect(twelve[3]).toMatchObject({ value: 15, x: 232, y: 128 });
+    const day = getDialNumbers({ mode: 'hour', hours: 9, is12: false, padHours: true, bounds: [9 * 3600, 17 * 3600] });
+    expect(day).toHaveLength(24);
+    expect(day.find((n) => n.value === 0)).toMatchObject({ label: '00', inner: true, disabled: true });
+    expect(day.find((n) => n.value === 9)?.disabled).toBe(false);
+    const minutes = getDialNumbers({ mode: 'minute', hours: 9, is12: false, padHours: true, bounds: [9 * 3600 + 30 * 60, 86399] });
+    expect(minutes.map((n) => n.label).slice(0, 3)).toEqual(['00', '05', '10']);
+    expect(minutes.find((n) => n.value === 25)?.disabled).toBe(true);
+    expect(minutes.find((n) => n.value === 30)?.disabled).toBe(false);
+  });
+});
+
+describe('getNearestAngle', () => {
+  it('turns the short way round, keeping whole turns already made', () => {
+    expect(getNearestAngle(0, 90)).toBe(90);
+    expect(getNearestAngle(350, 10)).toBe(370);
+    expect(getNearestAngle(10, 350)).toBe(-10);
+    expect(getNearestAngle(720, 30)).toBe(750);
+  });
+});
+
+describe('parseTypedTime', () => {
+  it('reads 12h hours in the current half of the day, and 24h hours as they are', () => {
+    expect(parseTypedTime('hour', '3', true, true, 1)).toEqual({ hours: 15 });
+    expect(parseTypedTime('hour', '12', true, false, 1)).toEqual({ hours: 0 });
+    expect(parseTypedTime('hour', '13', true, false, 1)).toBeNull();
+    expect(parseTypedTime('hour', '0', true, false, 1)).toBeNull();
+    expect(parseTypedTime('hour', '23', false, false, 1)).toEqual({ hours: 23 });
+    expect(parseTypedTime('hour', '24', false, false, 1)).toBeNull();
+  });
+
+  it('snaps minutes down to the interval, and waits while the text is not a number', () => {
+    expect(parseTypedTime('minute', '07', false, false, 5)).toEqual({ minutes: 5 });
+    expect(parseTypedTime('minute', '60', false, false, 1)).toBeNull();
+    expect(parseTypedTime('minute', '', false, false, 1)).toBeNull();
+    expect(parseTypedTime('minute', '1a', false, false, 1)).toBeNull();
+  });
+});
+
+describe('getPanelTopRow', () => {
+  it('puts the chosen cell in the middle of the column', () => {
+    expect(getPanelTopRow(30, 60, 7)).toBe(27);
+  });
+
+  it('stops at the first and last cells instead of leaving blank rows', () => {
+    expect(getPanelTopRow(1, 60, 7)).toBe(0);
+    expect(getPanelTopRow(58, 60, 7)).toBe(53);
+    expect(getPanelTopRow(1, 2, 7)).toBe(0);
+  });
+});
+
+describe('getPanelCellLabel', () => {
+  it('names the column, so an hour cell and a minute cell with the same number sound different', () => {
+    expect(getPanelCellLabel('hour', '09')).toBe('Hour 09');
+    expect(getPanelCellLabel('minute', '09')).toBe('Minute 09');
+    expect(getPanelCellLabel('period', 'PM')).toBe('PM');
   });
 });

@@ -27,11 +27,11 @@ export interface Accent {
 }
 
 export interface Playground {
-  tab: DemoTab;
+  /** The picker the props panel edits; null until the visitor touches a field */
+  tab: DemoTab | null;
   options: PlaygroundOptions;
   accent: Accent;
   selectTab: (tab: DemoTab) => void;
   setOption: (tab: DemoTab, key: string, value: ControlValue) => void;
   setAccent: (accent: Accent) => void;
-  stopAutoplay: () => void;
 }

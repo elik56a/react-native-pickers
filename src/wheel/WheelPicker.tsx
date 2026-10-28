@@ -5,6 +5,7 @@ import { Animated, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelRow } from './components/WheelRow';
 import { WheelTypingInput } from './components/WheelTypingInput';
@@ -39,10 +40,12 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
     isEqual = Object.is,
     style,
     styles: slots,
-    theme: themeOverride,
+    theme: themeProp,
+    design,
     accessibilityLabel,
     testID,
   } = props;
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const items = useMemo(() => rawItems.map((input) => normalizeItem<T>(input)), [rawItems]);
   const visibleItems = toOddCount(requestedVisibleItems);

@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelPicker } from './WheelPicker';
 import { DEFAULT_ITEM_HEIGHT, DEFAULT_VISIBLE_ITEMS, WHEEL_VARIANT } from './wheel.constants';
@@ -18,9 +19,11 @@ export const MultiWheelPicker = ({
   variant = WHEEL_VARIANT.threeD,
   style,
   styles: slots,
-  theme: themeOverride,
+  theme: themeProp,
+  design,
   testID,
 }: MultiWheelPickerProps) => {
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const visible = toOddCount(visibleItems);
   return (

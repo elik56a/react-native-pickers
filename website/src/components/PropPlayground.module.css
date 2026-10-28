@@ -13,6 +13,7 @@
 }
 
 .preview {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,6 +28,16 @@
 .stage {
   width: 100%;
   max-width: 380px;
+}
+
+/* An example marked wide, on the Web tab: the desktop width a picker like DateTimePicker spreads out to. */
+/* Room above the stage for the platform switch. */
+.preview[data-platforms] {
+  padding-top: 3.75rem;
+}
+
+.preview[data-wide] .stage {
+  max-width: 560px;
 }
 
 .panel {

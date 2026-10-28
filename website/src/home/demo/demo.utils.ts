@@ -1,7 +1,9 @@
 import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
 import { toDateKey } from '@elik56a/react-native-pickers';
-import type { DemoTab, PlaygroundOptions, TabOptions } from '../playground/playground.types';
-import { DATE_SUBTITLES, DAY_MS, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
+import { PLATFORM } from '../device/device.constants';
+import type { Platform } from '../device/device.types';
+import { DAY_MS, PHONE_STATUS_BAR, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
+import type { BookedDates, Guests } from './demo.types';
 
 export const startOfToday = () => {
   const today = new Date();
@@ -18,27 +20,39 @@ export const stay = (from: number, to: number): DateRange => ({
 
 const isWeekendNight = (day: Date) => day.getDay() === 5 || day.getDay() === 6;
 
-/** Nightly prices that rise on weekends, so the marked dates look like a real booking calendar. */
+/** The price of the night `daysAhead` from today, higher on weekends, so the marked dates look like a real booking calendar. */
+export const nightlyPrice = (daysAhead: number) =>
+  (isWeekendNight(daysFromNow(daysAhead)) ? WEEKEND_PRICE : WEEKDAY_PRICE) + ((daysAhead * 7) % 30);
+
 export const buildPrices = (): Record<string, MarkedDate> =>
-  Object.fromEntries(
-    Array.from({ length: PRICE_DAYS }, (_, i) => {
-      const day = daysFromNow(i);
-      const base = isWeekendNight(day) ? WEEKEND_PRICE : WEEKDAY_PRICE;
-      return [toDateKey(day), { label: `$${base + ((i * 7) % 30)}` }];
-    })
-  );
+  Object.fromEntries(Array.from({ length: PRICE_DAYS }, (_, i) => [toDateKey(daysFromNow(i)), { label: `$${nightlyPrice(i)}` }]));
 
-const SUBTITLES: { [T in DemoTab]: (o: TabOptions<T>) => string } = {
-  date: (o) => `${DATE_SUBTITLES[o.mode]}${o.prices ? ' · nightly prices' : ''}`,
-  time: (o) => `${o.minuteInterval}-minute steps, ${o.format === 'auto' ? 'locale' : o.format} clock`,
-  wheel: (o) => `${o.loop ? 'Looping' : 'Bounded'} ${o.variant === '3d' ? '3D' : 'flat'} wheel`,
-  select: () => 'Tap a field to pick',
-  emoji: () => '1,906 emojis with search',
+const daysBetween = (from: Date, to: Date) => Math.round((+to - +from) / DAY_MS);
+
+const rangeNights = ({ start, end }: DateRange) =>
+  start && end ? Array.from({ length: daysBetween(start, end) }, (_, i) => new Date(+start + i * DAY_MS)) : [];
+
+/** The nights a Dates pick books in any calendar mode: each day picked, or every night of each stay up to its check-out day. */
+export const bookedNights = (picked: BookedDates): Date[] => {
+  if (!picked) return [];
+  if (picked instanceof Date) return [picked];
+  if (Array.isArray(picked)) return (picked as (Date | DateRange)[]).flatMap((p) => (p instanceof Date ? [p] : rangeNights(p)));
+  return rangeNights(picked);
 };
 
-/** The line under the screen title, describing the props the visitor picked. */
-export const demoSubtitle = (tab: DemoTab, options: PlaygroundOptions) => {
-  // `options[tab]` is the entry for `tab`; TypeScript can't tie the two together through the index.
-  const subtitle = SUBTITLES[tab] as (o: PlaygroundOptions[DemoTab]) => string;
-  return subtitle(options[tab]);
-};
+export const nightsTotal = (nights: Date[]) => nights.reduce((sum, night) => sum + nightlyPrice(daysBetween(startOfToday(), night)), 0);
+
+const plural = (n: number, word: string, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
+
+export const adultsLabel = (n: number) => plural(n, 'adult');
+export const childrenLabel = (n: number) => plural(n, 'child', 'children');
+
+export const guestsLabel = ({ adults, children }: Guests) =>
+  children ? `${adultsLabel(adults)}, ${childrenLabel(children)}` : adultsLabel(adults);
+
+/** Sheets inside the mock phone stop under its status bar and clear its home indicator. */
+export const deviceSheetProps = (platform: Platform, screenHeight?: number) => ({
+  bottomInset: platform === PLATFORM.ios ? 30 : 16,
+  draggable: true,
+  expandedHeight: screenHeight ? screenHeight - PHONE_STATUS_BAR : undefined,
+});

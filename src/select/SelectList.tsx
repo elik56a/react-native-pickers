@@ -3,6 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../core';
 import { SearchInput } from '../core/components/SearchInput';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { GroupHeader } from './components/GroupHeader';
 import { LoadingState } from './components/LoadingState';
 import { OptionRow } from './components/OptionRow';
@@ -39,9 +40,11 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
     autoFocusSearch,
     style,
     styles: slots,
-    theme: themeOverride,
+    theme: themeProp,
+    design,
     testID,
   } = props;
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const { query, setQuery, rows, pending, atMax, isSelected, toggle } = useSelectList(props, filterOption, isEqual);
   const showLoader = loading || pending;

@@ -13,21 +13,40 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Components',
       collapsed: false,
+      // Grouped by what the user picks, not how: a date picker is a calendar or wheels, a time picker wheels, a dial or a list.
       items: [
-        'components/wheel-picker',
-        'components/multi-wheel-picker',
-        'components/time-picker',
-        'components/date-picker',
-        'components/date-range-picker',
-        'components/date-wheel-picker',
-        'components/date-time-picker',
-        'components/select-picker',
-        'components/select-list',
-        'components/horizontal-list',
+        {
+          type: 'category',
+          label: 'Date & time',
+          items: [
+            // Ranges are a mode of DatePicker, so their page sits under it; it stays a page of its own for search.
+            {
+              type: 'category',
+              label: 'DatePicker',
+              link: { type: 'doc', id: 'components/date-picker' },
+              items: ['components/date-range-picker'],
+            },
+            'components/date-wheel-picker',
+            'components/time-picker',
+            'components/date-time-picker',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Select',
+          items: ['components/select-picker', 'components/select-list', 'components/horizontal-list'],
+        },
+        {
+          type: 'category',
+          label: 'Wheels',
+          items: ['components/wheel-picker', 'components/multi-wheel-picker'],
+        },
         'components/emoji-picker',
-        'components/bottom-sheet',
-        'components/picker-sheets',
-        'components/picker-fields',
+        {
+          type: 'category',
+          label: 'Fields & sheets',
+          items: ['components/picker-fields', 'components/picker-sheets', 'components/bottom-sheet'],
+        },
       ],
     },
     {

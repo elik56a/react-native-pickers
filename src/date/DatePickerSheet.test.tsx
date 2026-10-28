@@ -21,6 +21,17 @@ describe('DatePickerSheet', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it('shows the picked day in large type above the calendar in the Material design only', async () => {
+    const { rerender } = await render(
+      <DatePickerSheet visible onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} design="material" />
+    );
+    expect(screen.getByRole('header', { name: 'Selected date' })).toBeTruthy();
+    await pressDay(15);
+    expect(screen.getByRole('header', { name: 'Thu, Oct 15' })).toBeTruthy();
+    await rerender(<DatePickerSheet visible onClose={jest.fn()} onConfirm={jest.fn()} initialMonth={OCTOBER} design="ios" />);
+    expect(screen.queryByRole('header', { name: /Oct 15/ })).toBeNull();
+  });
+
   it('confirms on tap with confirmOnSelect', async () => {
     const onConfirm = jest.fn();
     const onClose = jest.fn();
@@ -49,5 +60,17 @@ describe('DatePickerSheet', () => {
     const props = { mode, value, onConfirm: jest.fn() } as unknown as DatePickerSheetProps;
     await render(<DatePickerSheet {...props} visible display="wheel" onClose={jest.fn()} initialMonth={OCTOBER} />);
     expect(screen.getByLabelText(/October 15, 2026/)).toBeTruthy();
+  });
+
+  it('starts a new draft when the mode changes while open', async () => {
+    const onConfirm = jest.fn();
+    const range = { start: new Date(2026, 9, 10), end: new Date(2026, 9, 14) };
+    const { rerender } = await render(
+      <DatePickerSheet visible mode="range" value={range} onClose={jest.fn()} onConfirm={onConfirm} initialMonth={OCTOBER} />
+    );
+    await rerender(<DatePickerSheet visible mode="multiple" value={[]} onClose={jest.fn()} onConfirm={onConfirm} initialMonth={OCTOBER} />);
+    await pressDay(3);
+    await fireEvent.press(done());
+    expect(onConfirm.mock.calls[0][0].map(toDateKey)).toEqual(['2026-10-03']);
   });
 });

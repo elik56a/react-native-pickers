@@ -1,12 +1,13 @@
 import { lightTheme } from '../core';
 import { buildMonthGrid, toDateKey } from '../core/utils/date.utils';
-import { EMPTY_RANGE } from './calendar.constants';
+import { CALENDAR_DESIGN, EMPTY_RANGE } from './calendar.constants';
 import type { CalendarSelection, DayState } from './calendar.types';
 import {
   canGoToMonth,
   chunkRows,
   getAnchorMonth,
   getArrowGlyph,
+  getDayLook,
   getDayState,
   getDayTextColor,
   getHeaderLabel,
@@ -177,7 +178,12 @@ describe('getDayState / getWeekStates', () => {
     expect(getDayState({ ...base, selection: sel, date: day(3) })).toMatchObject({ selected: true, rangeStart: true });
     expect(getDayState({ ...base, selection: sel, date: day(4) })).toMatchObject({ selected: false, inRange: true });
     expect(getDayState({ ...base, selection: sel, date: day(5) })).toMatchObject({ selected: true, rangeEnd: true });
-    expect(getDayState({ ...base, selection: sel, date: day(20) })).toMatchObject({ selected: true, rangeStart: false, inRange: false });
+    expect(getDayState({ ...base, selection: sel, date: day(20) })).toMatchObject({
+      selected: true,
+      rangeStart: false,
+      inRange: false,
+      ranged: true,
+    });
   });
   it('marks every day in multiple mode and attaches markings', () => {
     const sel = selection({ mode: 'multiple', multiple: [day(3), day(9)] });
@@ -201,6 +207,7 @@ describe('showsRangeBand / getDayTextColor', () => {
     rangeStart: false,
     rangeEnd: false,
     inRange: false,
+    ranged: false,
     today: false,
     disabled: false,
     outside: false,
@@ -226,6 +233,16 @@ describe('showsRangeBand / getDayTextColor', () => {
     expect(getDayTextColor(state({ outside: true }), c)).toBe(c.textDisabled);
     expect(getDayTextColor(state({ today: true }), c)).toBe(c.primary);
     expect(getDayTextColor(state({}), c)).toBe(c.text);
+    expect(getDayTextColor(state({ selected: true }), c, true)).toBe(c.primary);
+  });
+  it('tints the chosen day on iOS but fills range ends, rings today in Material and shades it on the web', () => {
+    expect(getDayLook(state({ selected: true }), CALENDAR_DESIGN.ios)).toMatchObject({ tinted: true, filled: false });
+    expect(getDayLook(state({ selected: true, ranged: true }), CALENDAR_DESIGN.ios)).toMatchObject({ tinted: false, filled: true });
+    expect(getDayLook(state({ selected: true }), CALENDAR_DESIGN.material)).toMatchObject({ tinted: false, filled: true });
+    expect(getDayLook(state({ today: true }), CALENDAR_DESIGN.material)).toMatchObject({ todayRing: true, todaySurface: false });
+    expect(getDayLook(state({ today: true }), CALENDAR_DESIGN.web)).toMatchObject({ todayRing: false, todaySurface: true });
+    expect(getDayLook(state({ today: true, selected: true }), CALENDAR_DESIGN.web)).toMatchObject({ todaySurface: false, filled: true });
+    expect(getDayLook(state({ today: true, inRange: true }), CALENDAR_DESIGN.web)).toMatchObject({ todaySurface: false });
   });
 });
 

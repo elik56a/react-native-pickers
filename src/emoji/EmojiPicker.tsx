@@ -3,6 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import { textStyle, usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
+import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { CategoryBar } from './components/CategoryBar';
 import { EmojiGridRow } from './components/EmojiGridRow';
 import { EmojiHeader } from './components/EmojiHeader';
@@ -48,9 +49,11 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     renderEmoji,
     style,
     styles: slots,
-    theme: themeOverride,
+    theme: themeProp,
+    design,
     testID,
   } = props;
+  const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
   const selection = useEmojiSelection(props, showRecent, maxRecent);
   const grid = useEmojiGrid({

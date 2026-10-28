@@ -1,8 +1,9 @@
-import type { TextStyle } from 'react-native';
+import type { PlatformOSType, TextStyle } from 'react-native';
 
+import { PLATFORM } from '../core.constants';
 import type { DeepPartial } from '../core.types';
-import { darkTheme, lightTheme } from './theme.constants';
-import type { PickerTheme, TextSize, TextWeight } from './theme.types';
+import { DESIGN, darkTheme, lightTheme } from './theme.constants';
+import type { Design, DesignPreference, PickerTheme, TextSize, TextWeight } from './theme.types';
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> => {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -32,4 +33,11 @@ export const textStyle = (theme: PickerTheme, size: TextSize, weight: TextWeight
     fontFamily: weight === 'regular' ? theme.typography.fontFamily : (theme.typography.fontFamilyMedium ?? theme.typography.fontFamily),
     color: theme.colors.text,
   };
+};
+
+/** The design to draw: the one chosen, or for 'auto' the one that matches the platform. */
+export const resolveDesign = (preference: DesignPreference, platform: PlatformOSType): Design => {
+  if (preference !== DESIGN.auto) return preference;
+  if (platform === PLATFORM.ios) return DESIGN.ios;
+  return platform === PLATFORM.web ? DESIGN.web : DESIGN.material;
 };

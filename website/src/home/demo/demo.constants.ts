@@ -1,7 +1,3 @@
-import { DEMO_TABS, TAB_LABELS } from '../playground/playground.constants';
-import type { DemoTab, TabOptions } from '../playground/playground.types';
-
-export const TAB_FADE_MS = 280;
 export const DAY_MS = 864e5;
 /** Keeps an expanded sheet below the mock status bar. */
 export const PHONE_STATUS_BAR = 52;
@@ -10,25 +6,7 @@ export const WEEKDAY_PRICE = 89;
 export const WEEKEND_PRICE = 149;
 export const SELECT_LIST_HEIGHT = 240;
 export const MAX_CITIES = 4;
-export const DEFAULT_EMOJI = '🎉';
-export const DEFAULT_SIZE = 'M';
-
-export const TITLES: Record<DemoTab, string> = {
-  date: 'Book your stay',
-  time: 'Wake me at',
-  wheel: 'Pick a size',
-  select: 'Plan a trip',
-  emoji: 'React',
-};
-
-export const DATE_SUBTITLES: Record<TabOptions<'date'>['mode'], string> = {
-  single: 'Tap a day',
-  range: 'Tap check-in, then check-out',
-  multiple: 'Tap days to toggle them',
-  ranges: 'Pick as many stays as you like',
-};
-
-export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+export const DEFAULT_VIBE = '🌴';
 
 export const CITIES = [
   { label: 'Amsterdam', flag: '🇳🇱', group: 'Europe' },
@@ -45,12 +23,33 @@ export const CITIES = [
 
 export const DEFAULT_CITIES = ['Lisbon', 'Tokyo'];
 
-export const CABINS = ['Economy', 'Premium', 'Business', 'First'].map((c) => ({
-  label: c,
-  value: c,
-}));
+export const BOOKING_CITY = 'Lisbon';
+export const BOOKING_STAY = { from: 2, to: 5 };
+/** What the Dates field starts with in its other modes: days ahead of today, and stays as [from, to]. */
+export const BOOKING_DAY = 2;
+export const BOOKING_DAYS = [2, 5, 9];
+export const BOOKING_STAYS = [
+  [1, 3],
+  [8, 11],
+] as const;
+export const CHECK_IN_HOUR = 15;
+export const ADULTS = Array.from({ length: 8 }, (_, i) => i + 1);
+export const CHILDREN = Array.from({ length: 7 }, (_, i) => i);
+export const DEFAULT_GUESTS = { adults: 2, children: 0 };
+export const RESERVING_MS = 1400;
+export const RESERVED_MS = 2400;
+export const RESERVED_POP_FROM = 0.6;
 
-export const DEMO_TAB_ITEMS = DEMO_TABS.map((tab) => ({
-  label: TAB_LABELS[tab],
-  value: tab,
-}));
+export const RESERVE_PHASE = {
+  idle: 'idle',
+  reserving: 'reserving',
+  reserved: 'reserved',
+} as const;
+
+export const BOOKING_FIELD = {
+  where: 'Where',
+  dates: 'Dates',
+  checkIn: 'Check-in',
+  guests: 'Guests',
+  vibe: 'Vibe',
+} as const;
