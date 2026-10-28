@@ -27,6 +27,8 @@ const sidebars: SidebarsConfig = {
               items: ['components/date-range-picker'],
             },
             'components/date-wheel-picker',
+            'components/month-picker',
+            'components/week-strip',
             'components/time-picker',
             'components/duration-picker',
             'components/date-time-picker',

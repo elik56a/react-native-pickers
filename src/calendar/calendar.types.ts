@@ -131,6 +131,23 @@ export type CalendarSelectionProps =
 
 export type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
 
+export type WeekStripProps = Omit<
+  CalendarBaseProps,
+  'initialMonth' | 'onMonthChange' | 'showOutsideDays' | 'fixedWeeks' | 'enableQuickJump' | 'formatTitle' | 'yearRange'
+> & {
+  value?: Date | null;
+  defaultValue?: Date | null;
+  onChange?: (date: Date) => void;
+  /** A day in the week shown first. Default: the selected day or today */
+  initialWeek?: Date;
+  /** Fires with the first day of the week shown after an arrow or a swipe */
+  onWeekChange?: (weekStart: Date) => void;
+  /** Show the month title and the week arrows. Default: true */
+  showHeader?: boolean;
+  /** Override the title text. Default: the month and year most of the week falls in */
+  formatTitle?: (weekStart: Date, locale?: Locale) => string;
+};
+
 export type CalendarMode = NonNullable<CalendarSelectionProps['mode']>;
 
 export type CalendarView = ValueOf<typeof CALENDAR_VIEW>;

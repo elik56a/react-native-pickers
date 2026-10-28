@@ -1,16 +1,26 @@
 import type { PickerTheme } from '../core';
-import { addMonths, compareDay, isBetweenDays, isOutOfRange, isSameDay, startOfMonth, toDateKey } from '../core/utils/date.utils';
+import {
+  addDays,
+  addMonths,
+  compareDay,
+  isBetweenDays,
+  isOutOfRange,
+  isSameDay,
+  startOfDay,
+  startOfMonth,
+  toDateKey,
+} from '../core/utils/date.utils';
 import {
   ARROW_DIRECTION,
   CALENDAR_MODE,
   CALENDAR_VIEW,
   DAY_MS,
   DAY_SELECTION,
+  DAYS_PER_WEEK,
   DEFAULT_YEAR_SPAN,
   EMPTY_RANGE,
   MAX_DAY_SIZE,
   QUICK_GRID_COLUMNS,
-  SWIPE,
   TODAY_MARK,
   WEEKDAY_ROW_HEIGHT,
   YEARS_PER_PAGE,
@@ -240,16 +250,6 @@ export const chunkRows = <T>(cells: T[], columns = QUICK_GRID_COLUMNS): T[][] =>
 export const getQuickGridHeight = (dayHeight: number, fixedWeeks: boolean, showWeekdays: boolean) =>
   dayHeight * (fixedWeeks ? 6 : 5) + (showWeekdays ? WEEKDAY_ROW_HEIGHT : 0);
 
-export const isHorizontalSwipe = (dx: number, dy: number) =>
-  Math.abs(dx) > SWIPE.activateDistance && Math.abs(dx) > Math.abs(dy) * SWIPE.directionRatio;
-
-/** Month delta for a released swipe: swiping left goes forward, mirrored in RTL; 0 when too short and slow. */
-export const getSwipeDelta = (dx: number, vx: number, rtl: boolean) => {
-  if (Math.abs(dx) <= SWIPE.minDistance && Math.abs(vx) <= SWIPE.minVelocity) return 0;
-  const delta = dx < 0 ? 1 : -1;
-  return rtl ? -delta : delta;
-};
-
 /** How a day is drawn in the design: tinted or filled when chosen (range ends always filled), and how today is marked. */
 export const getDayLook = (state: DayState, design: CalendarDesign) => {
   const tinted = state.selected && design.selection === DAY_SELECTION.tint && !state.ranged;
@@ -261,3 +261,19 @@ export const getDayLook = (state: DayState, design: CalendarDesign) => {
     todaySurface: !state.selected && !state.inRange && state.today && design.today === TODAY_MARK.surface,
   };
 };
+
+/** The first day of the week holding `date`, at midnight. */
+export const getWeekStart = (date: Date, firstDayOfWeek: number) =>
+  addDays(startOfDay(date), -((date.getDay() - firstDayOfWeek + DAYS_PER_WEEK) % DAYS_PER_WEEK));
+
+export const getWeekDays = (weekStart: Date) => Array.from({ length: DAYS_PER_WEEK }, (_, i) => addDays(weekStart, i));
+
+/** A week can be shown while any of its days is within min/max. */
+export const canGoToWeek = (weekStart: Date, delta: number, minDate?: Date, maxDate?: Date) => {
+  const target = addDays(weekStart, delta * DAYS_PER_WEEK);
+  if (delta < 0) return !minDate || compareDay(addDays(target, DAYS_PER_WEEK - 1), minDate) >= 0;
+  return !maxDate || compareDay(target, maxDate) <= 0;
+};
+
+/** The month most of a week falls in, which is its middle day's: a week from Sep 29 to Oct 5 is October's. */
+export const getWeekMonth = (weekStart: Date) => addDays(weekStart, Math.floor(DAYS_PER_WEEK / 2));

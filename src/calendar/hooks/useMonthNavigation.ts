@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Animated, GestureResponderHandlers } from 'react-native';
-import { I18nManager, PanResponder } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { I18nManager } from 'react-native';
 
-import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
-import { timing } from '../../core/utils/animation.utils';
+import { useSlideIn } from '../../core/hooks/useSlideIn';
+import { useSwipe } from '../../core/hooks/useSwipe';
 import { addMonths, isSameMonth, startOfMonth, toDateKey } from '../../core/utils/date.utils';
-import { ARROW_DIRECTION, CALENDAR_VIEW, NEXT_VIEW, SLIDE_DISTANCE } from '../calendar.constants';
+import { ARROW_DIRECTION, CALENDAR_VIEW, NEXT_VIEW } from '../calendar.constants';
 import type { ArrowDirection, CalendarView } from '../calendar.types';
-import { canGoToMonth, getSwipeDelta, isHorizontalSwipe, shiftMonthForView } from '../calendar.utils';
+import { canGoToMonth, shiftMonthForView } from '../calendar.utils';
 
 interface UseMonthNavigationParams {
   anchor: Date;
@@ -31,7 +30,7 @@ export const useMonthNavigation = ({
   const rtl = !!I18nManager.isRTL;
   const [month, setMonth] = useState(anchor);
   const [view, setView] = useState<CalendarView>(CALENDAR_VIEW.days);
-  const slide: Animated.Value = useAnimatedValue(0);
+  const slide = useSlideIn(animationDuration);
 
   const canPrev = canGoToMonth(month, -1, minDate, maxDate);
   const canNext = canGoToMonth(month, 1, minDate, maxDate);
@@ -48,32 +47,12 @@ export const useMonthNavigation = ({
       const next = addMonths(month, delta);
       setMonth(next);
       onMonthChange?.(next);
-      slide.setValue(delta * (rtl ? -1 : 1));
-      timing(slide, 0, { duration: animationDuration }).start();
+      slide.from(delta);
     },
-    [animationDuration, canNext, canPrev, month, onMonthChange, rtl, slide]
+    [canNext, canPrev, month, onMonthChange, slide]
   );
 
-  // The responder is created once, so it reads the latest goMonth through a ref.
-  const goMonthRef = useRef(goMonth);
-  goMonthRef.current = goMonth;
-  const panHandlers: GestureResponderHandlers = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, g) => isHorizontalSwipe(g.dx, g.dy),
-      onPanResponderRelease: (_, g) => {
-        const delta = getSwipeDelta(g.dx, g.vx, !!I18nManager.isRTL);
-        if (delta) goMonthRef.current(delta);
-      },
-    })
-  ).current.panHandlers;
-
-  const slideStyle = useMemo(
-    () => ({
-      opacity: slide.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 1, 0] }),
-      transform: [{ translateX: slide.interpolate({ inputRange: [-1, 0, 1], outputRange: [-SLIDE_DISTANCE, 0, SLIDE_DISTANCE] }) }],
-    }),
-    [slide]
-  );
+  const panHandlers = useSwipe(goMonth);
 
   const isArrowDisabled = useCallback(
     (direction: ArrowDirection) => view === CALENDAR_VIEW.days && (direction === ARROW_DIRECTION.prev ? !canPrev : !canNext),
@@ -113,7 +92,7 @@ export const useMonthNavigation = ({
     month,
     view,
     rtl,
-    slideStyle,
+    slideStyle: slide.style,
     panHandlers,
     isArrowDisabled,
     onArrowPress,

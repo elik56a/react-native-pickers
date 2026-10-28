@@ -74,3 +74,16 @@ export const RIPPLE_GROW_RATIO = 1.5;
 export const RIPPLE_FADE_RATIO = 1.25;
 /** On a quick tap the ripple still spreads this far through its growth before it starts fading. */
 export const RIPPLE_MIN_VISIBLE_RATIO = 0.6;
+
+export const SWIPE = {
+  /** Horizontal travel before a pager claims the gesture */
+  activateDistance: 14,
+  /** How much more horizontal than vertical a move must be */
+  directionRatio: 1.5,
+  /** A release past either threshold changes the page */
+  minDistance: 50,
+  minVelocity: 0.5,
+} as const;
+
+/** How far (px) a new page slides in from. */
+export const SLIDE_DISTANCE = 40;

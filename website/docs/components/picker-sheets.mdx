@@ -1,7 +1,7 @@
 ---
 title: React Native Bottom Sheet Pickers
 sidebar_label: Picker sheets
-description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, DateTimePickerSheet, DurationPickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
+description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, DateTimePickerSheet, DurationPickerSheet, MonthPickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -12,7 +12,7 @@ import { DatePickerSheet } from '@elik56a/react-native-pickers';
 Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with **Cancel / Done**: in the header beside the title on iOS, under the content with **OK** in Material, per the [design](../guides/designs). They all share the same "chrome" props and the same draft behaviour.
 
 :::tip Opening a sheet from a form field?
-You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
+You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
 :::
 
 ## Inline, bottom sheet or modal

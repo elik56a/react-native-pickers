@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DatePicker, HorizontalList } from '@elik56a/react-native-pickers';
+import { HorizontalList, WeekStrip } from '@elik56a/react-native-pickers';
 import { ActionButton } from '../../home/demo/components/ActionButton';
 import { AppScreen } from '../../home/demo/components/AppScreen';
 import { daysFromNow, startOfToday } from '../../home/demo/demo.utils';
@@ -20,7 +20,7 @@ export const TableScreen = ({ platform }: ScreenProps) => {
       action={<ActionButton label={`Reserve for ${party} at ${slot}`} busyLabel="Reserving…" doneLabel="✓ Table booked" />}
     >
       <HorizontalList variant="chips" items={PARTY_SIZES} value={party} onChange={setParty} />
-      <DatePicker value={date} onChange={setDate} minDate={startOfToday()} isDateDisabled={isClosedDay} dayHeight={CALENDAR_DAY_HEIGHT} />
+      <WeekStrip value={date} onChange={setDate} minDate={startOfToday()} isDateDisabled={isClosedDay} dayHeight={CALENDAR_DAY_HEIGHT} />
       <HorizontalList variant="chips" items={TABLE_SLOTS} value={slot} onChange={setSlot} />
     </AppScreen>
   );

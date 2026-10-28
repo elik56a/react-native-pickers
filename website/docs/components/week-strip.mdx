@@ -1,0 +1,124 @@
+---
+title: React Native Week Strip
+sidebar_label: WeekStrip
+description: "React Native week strip date picker: one week of days under its month, swipe or arrows to change weeks, marked dates with dots, min/max and disabled days. For bookings, schedules and fitness apps. iOS, Material and web designs, zero native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { WeekStrip } from '@elik56a/react-native-pickers';
+
+# WeekStrip
+
+`WeekStrip` is one week of days in a row, the compact date picker at the top of booking, schedule, habit and fitness screens. Tap a day to pick it; swipe or use the arrows for the next or previous week. The month and year most of the week falls in sit above it.
+
+It's the [`Calendar`](./date-picker)'s day cells in a single week, so it follows the [design](../guides/designs) the same way and takes the same `markedDates`, `minDate`, `maxDate`, `isDateDisabled`, `renderDay` and styles.
+
+```tsx
+import { WeekStrip } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { WeekStrip } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [day, setDay] = useState(new Date());
+  return (
+    <>
+      <WeekStrip value={day} onChange={setDay} />
+      <Text style={{ textAlign: 'center', color: '#6E685E' }}>{day.toDateString()}</Text>
+    </>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground
+  name="WeekStrip"
+  component={WeekStrip}
+  value={new Date(2026, 9, 28)}
+  code="value={day} onChange={setDay}"
+  controls={[
+    { prop: 'firstDayOfWeek', options: [0, 1, 6], default: null },
+    { prop: 'weekdayFormat', options: ['short', 'narrow'], default: null },
+    { prop: 'showHeader', options: [true, false] },
+    { prop: 'showWeekdays', options: [true, false] },
+    { prop: 'enableSwipe', options: [true, false] },
+  ]}
+/>
+
+## Marked and disabled days
+
+`markedDates` adds dots, a label or a disabled flag to days, keyed by `YYYY-MM-DD` ([`toDateKey`](../api/date-utils#todatekey)), as on the calendar. `minDate`, `maxDate` and `isDateDisabled` disable days, and the arrows stop at the weeks holding `minDate` and `maxDate`.
+
+```tsx live
+import { useState } from 'react';
+import { WeekStrip, addDays, toDateKey } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const CLASSES = {
+  [toDateKey(today)]: { dots: ['#E4572E'] },
+  [toDateKey(addDays(today, 2))]: { dots: ['#E4572E', '#2E86AB'] },
+  [toDateKey(addDays(today, 4))]: { dots: ['#2E86AB'] },
+};
+
+export default function Schedule() {
+  const [day, setDay] = useState(today);
+  return (
+    <WeekStrip
+      value={day}
+      onChange={setDay}
+      markedDates={CLASSES}
+      minDate={today}
+      isDateDisabled={(date) => date.getDay() === 0}
+    />
+  );
+}
+```
+
+## Weeks
+
+The first day of the week comes from `locale` (Sunday in the US, Monday in most of Europe), or set `firstDayOfWeek`: `0` for Sunday to `6` for Saturday. The strip opens on the week of `value`, or of today, or of `initialWeek`, and moves to a new `value`'s week when you set one from outside.
+
+`onWeekChange` fires with the first day of the week after an arrow or a swipe, to load that week's data:
+
+```tsx
+<WeekStrip value={day} onChange={setDay} markedDates={marks} onWeekChange={(start) => loadWeek(start)} />
+```
+
+`showHeader={false}` hides the title and arrows, leaving the days and the swipe. `formatTitle(weekStart, locale)` changes the title.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `Date \| null` | — | Selected day (controlled). |
+| `defaultValue` | `Date \| null` | — | Initial day when uncontrolled. |
+| `onChange` | `(date: Date) => void` | — | Fires when a day is tapped. |
+| `initialWeek` | `Date` | the selected day or today | A day in the week shown first. |
+| `onWeekChange` | `(weekStart: Date) => void` | — | Fires with the first day of the week after paging. |
+| `firstDayOfWeek` | `0`–`6` | from `locale`, else `0` | `0` = Sunday. |
+| `locale` | `string` | device | Weekday and month names. |
+| `minDate` / `maxDate` | `Date` | — | Days outside are disabled, and paging stops at their weeks. |
+| `isDateDisabled` | `(date: Date) => boolean` | — | Disable a day. |
+| `markedDates` | `Record<string, MarkedDate>` | — | Dots, labels or disabled days, keyed by `YYYY-MM-DD`. |
+| `showHeader` | `boolean` | `true` | Show the month title and the week arrows. |
+| `formatTitle` | `(weekStart: Date, locale?: string) => string` | the month of the week's middle day | Title text. |
+| `showWeekdays` | `boolean` | `true` | Show the weekday names. |
+| `weekdayFormat` | `'short' \| 'narrow'` | from the design | Weekday names: `Mon` or `M`. |
+| `enableSwipe` | `boolean` | `true` | Swipe left or right to change weeks. |
+| `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Fully custom day cell, as on the [calendar](./date-picker#custom-days-and-arrows). |
+| `renderArrow` | `(direction, disabled) => ReactNode` | — | Custom arrows. |
+| `dayHeight` | `number` | `44` | Day cell height. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<CalendarSlot>` | — | The [calendar slots](./date-picker#slots). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. |
+
+## Related
+
+- [DatePicker](./date-picker): a whole month
+- [MonthPicker](./month-picker): a month and year
