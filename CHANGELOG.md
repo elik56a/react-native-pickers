@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.0](https://github.com/elik56a/react-native-pickers/compare/v0.10.0...v0.11.0) (2026-10-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* Android and web apps get the Material and web designs by default. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
+
+### ✨ Features
+
+* give each platform its own design: iOS, Material or web ([#24](https://github.com/elik56a/react-native-pickers/issues/24)) ([850ff9f](https://github.com/elik56a/react-native-pickers/commit/850ff9f74682734d2f9ef7ac99b45a4361e169cf))
+
 ## [0.10.0](https://github.com/elik56a/react-native-pickers/compare/v0.9.0...v0.10.0) (2026-10-27)
 
 
