@@ -327,6 +327,7 @@ The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api
 | `value` | `T` | |
 | `onChange` | `(value, item) => void` | |
 | `variant` | `'segmented' \| 'chips'` | `'segmented'` |
+| `iconPosition` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` |
 
 ### EmojiPicker
 

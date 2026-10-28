@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
@@ -26,6 +26,36 @@ describe('HorizontalList', () => {
     expect(screen.getAllByText('✓')).toHaveLength(1);
     await render(<HorizontalList items={items} value="range" onChange={jest.fn()} design="ios" />);
     expect(screen.queryByText('✓')).toBeNull();
+  });
+
+  it('puts the icon on the chosen side of the label', async () => {
+    const withIcon = [{ label: 'Day', value: 'day', icon: <Text>☀</Text> }];
+    const direction = () => StyleSheet.flatten(screen.getByLabelText('Day').props.style).flexDirection;
+    await render(<HorizontalList items={withIcon} />);
+    expect(direction()).toBe('row');
+    await render(<HorizontalList items={withIcon} iconPosition="right" />);
+    expect(direction()).toBe('row-reverse');
+    await render(<HorizontalList items={withIcon} iconPosition="top" />);
+    expect(direction()).toBe('column');
+    await render(<HorizontalList items={withIcon} iconPosition="bottom" />);
+    expect(direction()).toBe('column-reverse');
+  });
+
+  it("colors an icon function like its item's label", async () => {
+    const icon = jest.fn(({ selected }: { selected: boolean }) => <Text>{selected ? 'on' : 'off'}</Text>);
+    await render(
+      <HorizontalList
+        items={[
+          { label: 'Day', value: 'day', icon },
+          { label: 'Week', value: 'week', icon },
+        ]}
+        value="week"
+        design="ios"
+      />
+    );
+    expect(screen.getByText('on')).toBeTruthy();
+    expect(screen.getByText('off')).toBeTruthy();
+    expect(icon).toHaveBeenCalledWith(expect.objectContaining({ selected: true, disabled: false, color: expect.any(String) }));
   });
 
   it('ignores disabled items', async () => {

@@ -1,10 +1,27 @@
+import type { ViewStyle } from 'react-native';
+
 import type { Design } from '../core/theme/theme.types';
-import type { ListDesign } from './list.types';
+import type { HorizontalListIconPosition, ListDesign } from './list.types';
 
 export const HORIZONTAL_LIST_VARIANT = {
   segmented: 'segmented',
   chips: 'chips',
 } as const;
+
+export const ICON_POSITION = {
+  left: 'left',
+  right: 'right',
+  top: 'top',
+  bottom: 'bottom',
+} as const;
+
+/** The item's direction that puts its icon (rendered first) on that side of the label. */
+export const ICON_POSITION_DIRECTION: Record<HorizontalListIconPosition, ViewStyle['flexDirection']> = {
+  left: 'row',
+  right: 'row-reverse',
+  top: 'column',
+  bottom: 'column-reverse',
+};
 
 export const CHIP_HEIGHT = 34;
 export const SEGMENT_HEIGHT = 30;
