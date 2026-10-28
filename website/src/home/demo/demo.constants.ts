@@ -1,3 +1,5 @@
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
 export const DAY_MS = 864e5;
 /** Keeps an expanded sheet below the mock status bar. */
 export const PHONE_STATUS_BAR = 52;
@@ -24,6 +26,8 @@ export const CITIES = [
 export const DEFAULT_CITIES = ['Lisbon', 'Tokyo'];
 
 export const BOOKING_CITY = 'Lisbon';
+export const BOOKING_COUNTRY: CountryCode = 'US';
+export const PREFERRED_COUNTRIES: CountryCode[] = ['US', 'GB', 'DE'];
 export const BOOKING_STAY = { from: 2, to: 5 };
 /** What the Dates field starts with in its other modes: days ahead of today, and stays as [from, to]. */
 export const BOOKING_DAY = 2;
@@ -52,4 +56,5 @@ export const BOOKING_FIELD = {
   checkIn: 'Check-in',
   guests: 'Guests',
   vibe: 'Vibe',
+  country: 'Country',
 } as const;

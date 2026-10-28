@@ -1,5 +1,6 @@
 export * from './calendar';
 export * from './core';
+export * from './country';
 export * from './date';
 export * from './datetime';
 export * from './emoji';

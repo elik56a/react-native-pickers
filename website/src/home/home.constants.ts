@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, date, range, date-time, select and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, date, range, date-time, select, country and emoji pickers for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -59,6 +59,7 @@ export const COMPONENTS = [
   { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },
   { doc: 'components/select-list', name: 'SelectList', body: 'The searchable list, inline' },
+  { doc: 'components/country-picker', name: 'CountryPicker', body: 'Flags, dialing codes, localized names' },
   { doc: 'components/horizontal-list', name: 'HorizontalList', body: 'Segmented control or scrolling chips, with icons' },
   { doc: 'components/emoji-picker', name: 'EmojiPicker', body: '1,923 emojis, skin tones, recents, search' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Durations, units, dependent columns' },
@@ -79,7 +80,7 @@ export const HERO_CHIPS_FIRST_STEP = 6;
 export const STATS = [
   { value: COMPONENTS.length, label: 'components' },
   { value: 0, label: 'native modules' },
-  { value: 1906, label: 'emojis' },
+  { value: 1923, label: 'emojis' },
   { value: 100, suffix: '%', label: 'TypeScript' },
 ];
 

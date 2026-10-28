@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 
-import type { DateRange } from '@elik56a/react-native-pickers';
+import type { CountryCode, DateRange } from '@elik56a/react-native-pickers';
 import type { PlaygroundOptions } from '../../playground/playground.types';
 import {
   BOOKING_CITY,
+  BOOKING_COUNTRY,
   BOOKING_DAY,
   BOOKING_DAYS,
   BOOKING_STAY,
@@ -18,7 +19,7 @@ import type { Guests } from '../demo.types';
 import { bookedNights, buildPrices, daysFromNow, daysFromNowAt, guestsLabel, nightsTotal, plural, stay } from '../demo.utils';
 import { useFlagOptions } from './useFlagOptions';
 
-/** The booking app's state: where, when, who and the vibe, with the Dates field's pick kept for each calendar mode. */
+/** The booking app's state: where, when, who, where they're from and the vibe, with the Dates field's pick kept for each calendar mode. */
 export const useBooking = (options: PlaygroundOptions) => {
   const [city, setCity] = useState<string | null>(BOOKING_CITY);
   const [cities, setCities] = useState<string[]>(DEFAULT_CITIES);
@@ -29,6 +30,7 @@ export const useBooking = (options: PlaygroundOptions) => {
   const [checkIn, setCheckIn] = useState(() => daysFromNowAt(0, CHECK_IN_HOUR));
   const [guests, setGuests] = useState<Guests>(DEFAULT_GUESTS);
   const [vibe, setVibe] = useState(DEFAULT_VIBE);
+  const [country, setCountry] = useState<CountryCode | null>(BOOKING_COUNTRY);
   const prices = useMemo(buildPrices, []);
   const cityOptions = useFlagOptions(CITIES, options.select.groups);
 
@@ -57,6 +59,8 @@ export const useBooking = (options: PlaygroundOptions) => {
     guestsLabel: guestsLabel(guests),
     vibe,
     setVibe,
+    country,
+    setCountry,
     nights: nights.length,
     summary: `${where || 'Anywhere'} · ${plural(nights.length, 'night')}`,
     total: nightsTotal(nights),

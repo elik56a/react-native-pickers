@@ -1,18 +1,17 @@
 import { useState } from 'react';
 
-import { DatePickerField, HorizontalList, SelectPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+import { CountryPicker, DatePickerField, HorizontalList, SelectPicker } from '@elik56a/react-native-pickers';
 import { ActionButton } from '../../home/demo/components/ActionButton';
 import { AppScreen } from '../../home/demo/components/AppScreen';
 import { deviceSheetProps } from '../../home/demo/demo.utils';
-import { useFlagOptions } from '../../home/demo/hooks/useFlagOptions';
-import { COUNTRIES, INTERESTS, LANGUAGES, SIGN_UP } from '../showcase.constants';
+import { INTERESTS, LANGUAGES, SIGN_UP } from '../showcase.constants';
 import type { ScreenProps } from '../showcase.types';
 
 export const SignUpScreen = ({ platform, screenHeight }: ScreenProps) => {
   const sheetProps = deviceSheetProps(platform, screenHeight);
-  const countries = useFlagOptions(COUNTRIES);
   const [birthday, setBirthday] = useState<Date | null>(SIGN_UP.birthday);
-  const [country, setCountry] = useState<string | null>(SIGN_UP.country);
+  const [country, setCountry] = useState<CountryCode | null>(SIGN_UP.country);
   const [interests, setInterests] = useState(SIGN_UP.interests);
   const [language, setLanguage] = useState(SIGN_UP.language);
   return (
@@ -31,7 +30,7 @@ export const SignUpScreen = ({ platform, screenHeight }: ScreenProps) => {
         maxDate={new Date()}
         sheetProps={sheetProps}
       />
-      <SelectPicker label="Country" options={countries} value={country} onChange={setCountry} searchable sheet={{ sheetProps }} />
+      <CountryPicker label="Country" value={country} onChange={setCountry} sheet={{ sheetProps }} />
       <SelectPicker
         label="Interests"
         options={INTERESTS}

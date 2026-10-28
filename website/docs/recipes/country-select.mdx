@@ -1,71 +1,68 @@
 ---
-title: Country selector
-description: Searchable React Native country picker with flag emojis, regions as groups, multilingual keywords and a phone-code variant, built with SelectPicker.
+title: Country and phone number
+description: React Native sign-up form with a country picker and a phone number field whose dialing code follows the chosen country, built with CountryPicker. Flags, localized names, search by name, ISO code or +dial code.
 ---
 
-# Country selector
+# Country and phone number
 
-Flags generated from ISO codes, grouped by region, searchable in several languages.
+A sign-up form where choosing a country also sets the phone number's dialing code, and the code can still be changed on its own, for someone living abroad. Both pickers are [`CountryPicker`](../components/country-picker): the second one shows a compact `🇮🇱 +972` trigger.
 
 ```tsx live
 import { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { SelectPicker } from '@elik56a/react-native-pickers';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CountryPicker, getCountry } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
 
-// Defined first: the option icons below use it while the module loads.
-const styles = StyleSheet.create({ flag: { fontSize: 22 } });
+const PREFERRED: CountryCode[] = ['US', 'GB', 'IL'];
 
-const flag = (code: string) =>
-  String.fromCodePoint(...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+export default function SignUp() {
+  const [country, setCountry] = useState<CountryCode | null>(null);
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode | null>(null);
+  const [phone, setPhone] = useState('');
+  const prefix = phoneCountry ? getCountry(phoneCountry) : undefined;
 
-const COUNTRIES = [
-  ['US', 'United States', 'Americas', '+1', ['usa', 'america']],
-  ['CA', 'Canada', 'Americas', '+1', []],
-  ['BR', 'Brazil', 'Americas', '+55', ['brasil']],
-  ['GB', 'United Kingdom', 'Europe', '+44', ['uk', 'britain', 'england']],
-  ['DE', 'Germany', 'Europe', '+49', ['deutschland']],
-  ['FR', 'France', 'Europe', '+33', []],
-  ['ES', 'Spain', 'Europe', '+34', ['españa']],
-  ['IL', 'Israel', 'Middle East', '+972', ['ישראל']],
-  ['AE', 'United Arab Emirates', 'Middle East', '+971', ['uae', 'dubai']],
-  ['IN', 'India', 'Asia', '+91', ['bharat']],
-  ['JP', 'Japan', 'Asia', '+81', ['nippon', '日本']],
-  ['AU', 'Australia', 'Oceania', '+61', []],
-] as const;
+  const chooseCountry = (code: CountryCode) => {
+    setCountry(code);
+    setPhoneCountry(code);
+  };
 
-const options = COUNTRIES.map(([code, name, region, dial, keywords]) => ({
-  label: name,
-  value: code,
-  group: region,
-  description: dial,
-  keywords: [code, dial, ...keywords],
-  icon: <Text style={styles.flag}>{flag(code)}</Text>,
-}));
-
-export default function CountrySelect() {
-  const [country, setCountry] = useState<string | null>('IL');
   return (
-    <SelectPicker
-      label="Country"
-      placeholder="Select a country"
-      sheetTitle="Choose your country"
-      searchPlaceholder="Search name, code or +dial"
-      options={options}
-      value={country}
-      onChange={setCountry}
-      searchable
-      autoFocusSearch
-      sheet={{ sheetProps: { height: 0.8 } }}
-    />
+    <View style={styles.form}>
+      <CountryPicker label="Country" preferred={PREFERRED} value={country} onChange={chooseCountry} />
+      <Text style={styles.label}>Phone</Text>
+      <View style={styles.row}>
+        <CountryPicker
+          sheetTitle="Country code"
+          preferred={PREFERRED}
+          showDialCode
+          value={phoneCountry}
+          onChange={setPhoneCountry}
+          renderTrigger={({ open }) => (
+            <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="Country code" style={styles.prefix}>
+              <Text style={styles.text}>{prefix ? `${prefix.flag} ${prefix.dialCode}` : '+'}</Text>
+            </Pressable>
+          )}
+        />
+        <TextInput value={phone} onChangeText={setPhone} placeholder="Phone number" keyboardType="phone-pad" style={styles.input} />
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  form: { gap: 8 },
+  label: { fontSize: 14, fontWeight: '600', marginTop: 8 },
+  row: { flexDirection: 'row', gap: 8 },
+  prefix: { height: 48, paddingHorizontal: 12, justifyContent: 'center', borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12 },
+  text: { fontSize: 16 },
+  input: { flex: 1, height: 48, paddingHorizontal: 12, borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12, fontSize: 16 },
+});
 ```
 
-Try searching `deutsch`, `+44`, `uae` or `日本`.
+Try searching `deutschland`, `+44`, `usa` or `日本`.
 
 ## Tips
 
-- Use `keywords` for ISO codes, dialing codes and native names. Search matches them all, accent-insensitively.
-- `group` + `options` order controls the sections: sort by region, then name.
-- For phone inputs, use `renderTrigger` to show just `🇮🇱 +972` next to your `TextInput`.
-- For all ~250 countries, the list is virtualized. On phones, give the sheet a fixed height (`sheetProps.height`) so it opens at a consistent size; on the web the options open in a dropdown under the field, sized by `listHeight`.
+- Send `getCountry(phoneCountry).dialCode + phone` to your server, with spaces removed: `'+1 809'` is a North American area code written as `+1 809`.
+- `preferred` puts the countries most of your users pick at the top. Define it outside the component so the list is built once.
+- Need your own grouping, such as by region? Build options from [`getAllCountries()`](../components/country-picker#utilities) and pass them to a [`SelectPicker`](../components/select-picker) with a `group` on each option.

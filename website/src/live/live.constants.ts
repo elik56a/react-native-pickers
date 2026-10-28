@@ -18,6 +18,7 @@ const SHEETS = [
 const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet'];
 const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
+const SELECT = ['SelectPicker', 'CountryPicker'];
 
 /**
  * The side panel's props, offered for every live example that renders one of their components.
@@ -25,7 +26,7 @@ const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
  * A prop listed twice (e.g. `presentation`) becomes one control; the first entry an example matches sets its options.
  */
 export const LIVE_CONTROLS: readonly LiveControl[] = [
-  { prop: 'presentation', components: [...FIELDS, 'SelectPicker'], options: ['auto', 'dropdown', 'bottomSheet', 'modal'], default: 'auto' },
+  { prop: 'presentation', components: [...FIELDS, ...SELECT], options: ['auto', 'dropdown', 'bottomSheet', 'modal'], default: 'auto' },
   { prop: 'presentation', components: SHEETS, options: ['auto', 'bottomSheet', 'modal'], default: 'auto' },
   { prop: 'display', components: DATE_TIME, options: ['wheel', 'calendar'], default: 'wheel' },
   { prop: 'format', components: [...TIME, ...DATE_TIME], options: ['auto', '12h', '24h'], default: 'auto' },
@@ -43,8 +44,9 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'showOutsideDays', components: ['DatePicker', 'Calendar'], options: BOOLEAN, default: true },
   { prop: 'categoryBarPosition', components: EMOJI, options: ['auto', 'top', 'bottom'], default: 'auto' },
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
-  { prop: 'clearable', components: [...FIELDS, 'SelectPicker'], options: BOOLEAN, default: false, requires: /\bonClear=/ },
-  { prop: 'disabled', components: [...FIELDS, 'SelectPicker'], options: BOOLEAN, default: false },
+  { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },
+  { prop: 'clearable', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false, requires: /\bonClear=/ },
+  { prop: 'disabled', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false },
 ];
 
 export const SNACK_URL = 'https://snack.expo.dev/';
@@ -130,6 +132,7 @@ export const SOURCE_URL = 'https://github.com/elik56a/react-native-pickers/blob/
 /** Each component's folder under `src/`, for its source link and to name a sandbox's example file after it. */
 export const COMPONENT_FOLDERS: Record<string, string> = {
   Calendar: 'calendar',
+  CountryPicker: 'country',
   DatePicker: 'date',
   DatePickerField: 'date',
   DatePickerSheet: 'date',

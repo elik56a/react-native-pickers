@@ -1,3 +1,5 @@
+import { safe } from './intl.utils';
+
 /** Pure date helpers. All operate in local time and never mutate inputs. */
 
 export const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -87,15 +89,6 @@ const EN_MONTHS = [
   'December',
 ];
 const EN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-const safe = <T>(fn: () => T, fallback: T): T => {
-  try {
-    const v = fn();
-    return v ?? fallback;
-  } catch {
-    return fallback;
-  }
-};
 
 export const getMonthNames = (locale?: string, width: 'long' | 'short' = 'long'): string[] => {
   return EN_MONTHS.map((en, m) =>
