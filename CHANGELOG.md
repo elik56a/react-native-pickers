@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/elik56a/react-native-pickers/compare/v0.14.0...v0.15.0) (2026-10-28)
+
+
+### ✨ Features
+
+* **emoji:** update to Emoji 17, with 1,923 emojis ([#42](https://github.com/elik56a/react-native-pickers/issues/42)) ([b345440](https://github.com/elik56a/react-native-pickers/commit/b345440a14cc382e1e07b03950e6c60c5c298003))
+
 ## [0.14.0](https://github.com/elik56a/react-native-pickers/compare/v0.13.0...v0.14.0) (2026-10-28)
 
 
