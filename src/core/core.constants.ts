@@ -1,6 +1,6 @@
 import { Easing, Platform, type PlatformOSType } from 'react-native';
 
-import type { PressFeedback } from './core.types';
+import type { PressFeedback, SearchDesign } from './core.types';
 import type { Design } from './theme/theme.types';
 
 /** The `Platform.OS` values pickers tell apart. Anything else (windows, macos) behaves like native. */
@@ -41,6 +41,33 @@ export const PRESS_FEEDBACK_DESIGN: Record<Design, PressFeedback> = {
   material: PRESS_FEEDBACK.ripple,
   web: PRESS_FEEDBACK.highlight,
 };
+
+/** iOS: a short gray search bar. Material: the taller pill of its search bar. The web: an outlined input with a focus ring. */
+export const SEARCH_DESIGN: Record<Design, SearchDesign> = {
+  ios: {
+    height: 36,
+    radius: 'md',
+    outlined: false,
+    focusRing: false,
+    iconInset: 'sm',
+  },
+  material: {
+    height: 48,
+    radius: 'full',
+    outlined: false,
+    focusRing: false,
+    iconInset: 'lg',
+  },
+  web: {
+    height: 38,
+    radius: 'md',
+    outlined: true,
+    focusRing: true,
+    iconInset: 'md',
+  },
+};
+
+export const SEARCH_ICON_SIZE = 16;
 
 /** The ripple grows over this multiple of the theme's animation duration, and fades out over the other. */
 export const RIPPLE_GROW_RATIO = 1.5;

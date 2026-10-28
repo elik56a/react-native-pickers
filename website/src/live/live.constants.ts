@@ -41,7 +41,7 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'monthFormat', components: ['DateWheelPicker'], options: ['long', 'short', 'numeric'], default: 'long' },
   { prop: 'weekdayFormat', components: ['DatePicker', 'Calendar'], options: ['short', 'narrow'], default: 'short' },
   { prop: 'showOutsideDays', components: ['DatePicker', 'Calendar'], options: BOOLEAN, default: true },
-  { prop: 'categoryBarPosition', components: EMOJI, options: ['top', 'bottom'], default: 'top' },
+  { prop: 'categoryBarPosition', components: EMOJI, options: ['auto', 'top', 'bottom'], default: 'auto' },
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
   { prop: 'clearable', components: [...FIELDS, 'SelectPicker'], options: BOOLEAN, default: false, requires: /\bonClear=/ },
   { prop: 'disabled', components: [...FIELDS, 'SelectPicker'], options: BOOLEAN, default: false },

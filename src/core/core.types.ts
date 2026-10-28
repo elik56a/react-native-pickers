@@ -45,7 +45,10 @@ export interface SearchInputProps {
   placeholder: string;
   autoFocus?: boolean;
   theme: PickerTheme;
+  /** The text field itself: its fill, border, corners and text */
   style?: StyleProp<TextStyle>;
+  /** The box around the field and its magnifier, for layout (e.g. `flex: 1` in a row) */
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 /** Where a ripple starts inside its element, and how big it grows to cover the farthest corner. */
@@ -56,6 +59,18 @@ export interface RippleOrigin {
 }
 
 export type PressFeedback = ValueOf<typeof PRESS_FEEDBACK>;
+
+/** How a design draws its search field. */
+export interface SearchDesign {
+  height: number;
+  radius: keyof PickerTheme['radius'];
+  /** A border around the field, on the picker's background, instead of a gray fill */
+  outlined: boolean;
+  /** A primary-colored ring while focused. Designs without it rely on the caret, except on the web, where keyboard users need the ring */
+  focusRing: boolean;
+  /** Space before the magnifier */
+  iconInset: keyof PickerTheme['spacing'];
+}
 
 export interface TouchFeedbackProps {
   hovered: boolean;

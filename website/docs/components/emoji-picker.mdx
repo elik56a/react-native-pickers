@@ -1,7 +1,7 @@
 ---
 title: React Native Emoji Picker
 sidebar_label: EmojiPicker
-description: React Native emoji picker with 1,906 emojis, categories, search, skin tones, recents and Emoji-version filtering. No fonts or images to bundle.
+description: React Native emoji picker with 1,906 emojis, categories, search, skin tones, recents and Emoji-version filtering, in native iOS, Material and web designs. No fonts or images to bundle.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -41,7 +41,7 @@ export default function Example() {
   props={{ onSelect: () => {} }}
   code="onSelect={insert}"
   controls={[
-    { prop: 'categoryBarPosition', options: ['top', 'bottom'] },
+    { prop: 'categoryBarPosition', options: ['auto', 'top', 'bottom'] },
     { prop: 'columns', options: [6, 8, 10], default: 8 },
     { prop: 'searchable', options: [true, false] },
     { prop: 'showCategoryBar', options: [true, false] },
@@ -160,6 +160,19 @@ import { Platform } from 'react-native';
 />
 ```
 
+## Designs
+
+Like every picker, it follows the [design](../guides/designs) of the platform it runs on, after that platform's own emoji picker:
+
+| | `ios` | `material` | `web` |
+| --- | --- | --- | --- |
+| Categories | at the bottom, like the iOS emoji keyboard | at the bottom, like Gboard | on top |
+| Current category | a gray rounded fill | a tinted pill | an underline |
+| Search | a short gray search bar | a tall pill | an outlined input with a focus ring |
+| Section titles | UPPERCASE | Sentence case | Sentence case |
+
+Use the iOS / Android / Web switch on any example above to compare. `categoryBarPosition="top"` or `"bottom"` puts the bar in one place on every platform.
+
 ## Layout
 
 ```tsx live
@@ -182,7 +195,7 @@ export default function Example() {
 - `columns` (default 8) sets emojis per row. Cells are square and fill the width.
 - `emojiSize` sets the font size (default about 62% of the cell).
 - `height` (default 380) is the total height including search and category bar.
-- `categoryBarPosition`: `'top'` (default) or `'bottom'`. Hide the bar with `showCategoryBar={false}`.
+- `categoryBarPosition`: `'auto'` (default) puts the bar where the [design](#designs) does, at the bottom on iOS and Android and on top on the web; `'top'` or `'bottom'` fixes it. Hide the bar with `showCategoryBar={false}`.
 - `showSectionHeaders={false}` removes the "Smileys & Emotion" style headers.
 
 ## Translating labels and icons
@@ -273,7 +286,7 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 | `searchPlaceholder` | `string` | `'Search emoji'` | Search hint. |
 | `emptyText` | `string` | `'No emoji found'` | Empty search result text. |
 | `showCategoryBar` | `boolean` | `true` | Show the category tabs. |
-| `categoryBarPosition` | `'top' \| 'bottom'` | `'top'` | Tab bar position. |
+| `categoryBarPosition` | `'auto' \| 'top' \| 'bottom'` | `'auto'` | Tab bar position. `auto`: bottom in the iOS and Material designs, top on the web. |
 | `showSectionHeaders` | `boolean` | `true` | Section title rows. |
 | `categoryLabels` | `Partial<Record<EmojiCategory \| 'recent' \| 'search', string>>` | English | Section and tab labels. |
 | `categoryIcons` | `Partial<Record<EmojiCategory \| 'recent', ReactNode>>` | emoji icons | Tab icons. |
@@ -303,7 +316,7 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 | `skinToneButton` / `skinToneMenu` | Tone button / menu |
 | `categoryBar` | Tab bar |
 | `categoryTab` / `activeCategoryTab` | Tabs |
-| `categoryIndicator` | Active-tab underline |
+| `categoryIndicator` | Active-tab underline (web design; iOS and Material mark the tab itself) |
 | `sectionHeader` / `sectionHeaderText` | Section titles |
 | `emojiCell` / `emojiText` | Grid cells |
 | `empty` / `emptyText` | No search results |
