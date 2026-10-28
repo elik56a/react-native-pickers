@@ -19,6 +19,7 @@ import {
   DEFAULT_MAX_RECENT,
   DEFAULT_SEARCH_PLACEHOLDER,
   EMOJI_CATEGORIES,
+  EMOJI_DESIGN,
   EMOJI_ROW_TYPE,
 } from './emoji.constants';
 import { styles } from './emoji.styles';
@@ -39,7 +40,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     searchPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
     emptyText = DEFAULT_EMPTY_TEXT,
     showCategoryBar = true,
-    categoryBarPosition = CATEGORY_BAR_POSITION.top,
+    categoryBarPosition: categoryBarPositionProp = CATEGORY_BAR_POSITION.auto,
     showSectionHeaders = true,
     categoryLabels,
     categoryIcons,
@@ -55,6 +56,8 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   } = props;
   const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
+  const categoryBarPosition =
+    categoryBarPositionProp === CATEGORY_BAR_POSITION.auto ? EMOJI_DESIGN[theme.design].categoryBarPosition : categoryBarPositionProp;
   const selection = useEmojiSelection(props, showRecent, maxRecent);
   const grid = useEmojiGrid({
     recent: selection.recent,

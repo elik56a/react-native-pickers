@@ -159,6 +159,8 @@ Pick one design for the whole app, or for one component:
 Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs).
 
 > **Upgrading from 0.10?** Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
+>
+> **Upgrading from 0.12?** `EmojiPicker` follows the design too: on iOS and Android its category bar moves to the bottom, like the platform's emoji keyboard. Set `categoryBarPosition="top"` to keep it on top.
 
 ## Customize anything
 
@@ -339,6 +341,7 @@ The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api
 | `maxEmojiVersion` | `number`: hide emojis older devices can't render | |
 | `skinTone` / `onSkinToneChange` | `0`–`5` | `0` |
 | `recent` / `onRecentChange` | `string[]`: persist with your own storage | `[]` |
+| `categoryBarPosition` | `'auto' \| 'top' \| 'bottom'`: `auto` is bottom on iOS and Android, top on the web | `'auto'` |
 
 ### Sheets, fields and BottomSheet
 

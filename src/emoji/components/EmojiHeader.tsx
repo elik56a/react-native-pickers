@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import { SearchInput } from '../../core/components/SearchInput';
 import { Touchable } from '../../core/components/Touchable';
+import { SEARCH_DESIGN } from '../../core/core.constants';
 import { TONE_SWATCHES } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { EmojiHeaderProps } from '../emoji.types';
@@ -16,31 +17,44 @@ export const EmojiHeader = ({
   onToneButtonPress,
   theme,
   slots,
-}: EmojiHeaderProps) => (
-  <View
-    style={[styles.header, { paddingHorizontal: theme.spacing.sm, paddingTop: theme.spacing.sm, gap: theme.spacing.sm }, slots?.header]}
-  >
-    {searchable ? (
-      <SearchInput
-        value={query}
-        onChangeText={onQueryChange}
-        placeholder={searchPlaceholder}
-        theme={theme}
-        style={[styles.search, slots?.searchInput]}
-      />
-    ) : (
-      <View style={styles.flex} />
-    )}
-    {showSkinTones && (
-      <Touchable
-        theme={theme}
-        onPress={onToneButtonPress}
-        accessibilityRole="button"
-        accessibilityLabel="Skin tone"
-        style={[styles.toneButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }, slots?.skinToneButton]}
-      >
-        <Text style={styles.toneButtonText}>{TONE_SWATCHES[tone]}</Text>
-      </Touchable>
-    )}
-  </View>
-);
+}: EmojiHeaderProps) => {
+  const search = SEARCH_DESIGN[theme.design];
+  return (
+    <View
+      style={[styles.header, { paddingHorizontal: theme.spacing.sm, paddingTop: theme.spacing.sm, gap: theme.spacing.sm }, slots?.header]}
+    >
+      {searchable ? (
+        <SearchInput
+          value={query}
+          onChangeText={onQueryChange}
+          placeholder={searchPlaceholder}
+          theme={theme}
+          style={slots?.searchInput}
+          containerStyle={styles.flex}
+        />
+      ) : (
+        <View style={styles.flex} />
+      )}
+      {showSkinTones && (
+        <Touchable
+          theme={theme}
+          onPress={onToneButtonPress}
+          accessibilityRole="button"
+          accessibilityLabel="Skin tone"
+          style={[
+            styles.toneButton,
+            {
+              width: search.height,
+              height: search.height,
+              backgroundColor: theme.colors.surface,
+              borderRadius: theme.radius[search.radius],
+            },
+            slots?.skinToneButton,
+          ]}
+        >
+          <Text style={styles.toneButtonText}>{TONE_SWATCHES[tone]}</Text>
+        </Touchable>
+      )}
+    </View>
+  );
+};

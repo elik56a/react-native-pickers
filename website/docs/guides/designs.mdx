@@ -67,6 +67,8 @@ export default function Example() {
 | Time | wheels | a clock dial | columns of hours and minutes to click |
 | Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
 | HorizontalList | a sliding raised thumb; filled chips | outlined segments and chips, the chosen one filled with a ✓ | a sliding raised thumb; filled chips |
+| Search fields | a short gray search bar | a tall pill | an outlined input with a focus ring |
+| EmojiPicker | categories at the bottom, the current one on a gray fill, UPPERCASE titles | categories at the bottom, the current one in a tinted pill | categories on top, underlined |
 | Press | dims while held | ripple | dims while held |
 
 `design="auto"` (the default) picks `ios` on iOS, `web` on the web, and `material` everywhere else (Android, Windows, macOS).
@@ -131,6 +133,10 @@ const radius = theme.design === 'material' ? theme.radius.full : theme.radius.md
 ## Upgrading from 0.10
 
 Before 0.11, every platform got the iOS look: wheels for times, one row of wheels for `DateTimePicker`, **Done** in the sheet header. Android and web apps now get the Material and web designs. To keep the old look, set `design="ios"` on the provider. To keep only part of it, use the props in [Only part of a design](#only-part-of-a-design).
+
+## Upgrading from 0.12
+
+`EmojiPicker` now follows the design too: on iOS and Android its category bar moves to the bottom, like the platform's own emoji keyboard, and search fields (in `EmojiPicker`, `SelectList` and `SelectPicker`) take each design's shape. To keep the bar on top, set `categoryBarPosition="top"`.
 
 ## Previewing other platforms
 

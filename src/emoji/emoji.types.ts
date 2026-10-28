@@ -4,11 +4,22 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
-import type { CATEGORY_BAR_POSITION, EMOJI_CATEGORY, EMOJI_ROW_TYPE, EMOJI_SECTION } from './emoji.constants';
+import type { ACTIVE_TAB, CATEGORY_BAR_POSITION, EMOJI_CATEGORY, EMOJI_ROW_TYPE, EMOJI_SECTION } from './emoji.constants';
 
 export type EmojiCategory = ValueOf<typeof EMOJI_CATEGORY>;
 
 export type CategoryBarPosition = ValueOf<typeof CATEGORY_BAR_POSITION>;
+
+/** Where the bar ends up once `auto` is resolved. */
+export type CategoryBarSide = Exclude<CategoryBarPosition, typeof CATEGORY_BAR_POSITION.auto>;
+
+export type ActiveTab = ValueOf<typeof ACTIVE_TAB>;
+
+export interface EmojiDesign {
+  categoryBarPosition: CategoryBarSide;
+  activeTab: ActiveTab;
+  uppercaseSectionHeaders: boolean;
+}
 
 export interface Emoji {
   emoji: string;
@@ -65,6 +76,7 @@ export interface EmojiPickerProps extends ThemableProps {
   searchPlaceholder?: string;
   emptyText?: string;
   showCategoryBar?: boolean;
+  /** 'auto': at the bottom in the iOS and Material designs, like their emoji keyboards, and on top on the web. Default: 'auto' */
   categoryBarPosition?: CategoryBarPosition;
   showSectionHeaders?: boolean;
   categoryLabels?: Partial<Record<EmojiSectionKey, string>>;
@@ -175,7 +187,7 @@ export interface SkinToneMenuProps {
 export interface CategoryBarProps {
   tabs: EmojiTabKey[];
   active: EmojiSectionKey;
-  position: CategoryBarPosition;
+  position: CategoryBarSide;
   labels: Record<EmojiSectionKey, string>;
   icons: Partial<Record<EmojiTabKey, React.ReactNode>>;
   onSelect: (key: EmojiTabKey) => void;

@@ -1,4 +1,5 @@
-import type { EmojiCategory, EmojiSectionKey, EmojiTabKey } from './emoji.types';
+import type { Design } from '../core/theme/theme.types';
+import type { EmojiCategory, EmojiDesign, EmojiSectionKey, EmojiTabKey } from './emoji.types';
 
 export const EMOJI_CATEGORY = {
   smileys: 'smileys',
@@ -18,10 +19,41 @@ export const EMOJI_SECTION = {
   search: 'search',
 } as const;
 
+/** `auto`: where the design's own emoji picker keeps it. */
 export const CATEGORY_BAR_POSITION = {
+  auto: 'auto',
   top: 'top',
   bottom: 'bottom',
 } as const;
+
+/** How the current category's tab is marked: an underline, a gray rounded fill, or a tinted pill. */
+export const ACTIVE_TAB = {
+  underline: 'underline',
+  fill: 'fill',
+  pill: 'pill',
+} as const;
+
+/**
+ * As each platform's own emoji picker: the iOS emoji keyboard and Gboard keep the categories at the bottom, under the thumb,
+ * iOS with uppercase section titles; pickers on the web (Slack, GitHub) put them on top as underlined tabs.
+ */
+export const EMOJI_DESIGN: Record<Design, EmojiDesign> = {
+  ios: {
+    categoryBarPosition: CATEGORY_BAR_POSITION.bottom,
+    activeTab: ACTIVE_TAB.fill,
+    uppercaseSectionHeaders: true,
+  },
+  material: {
+    categoryBarPosition: CATEGORY_BAR_POSITION.bottom,
+    activeTab: ACTIVE_TAB.pill,
+    uppercaseSectionHeaders: false,
+  },
+  web: {
+    categoryBarPosition: CATEGORY_BAR_POSITION.top,
+    activeTab: ACTIVE_TAB.underline,
+    uppercaseSectionHeaders: false,
+  },
+};
 
 export const EMOJI_ROW_TYPE = {
   header: 'header',
