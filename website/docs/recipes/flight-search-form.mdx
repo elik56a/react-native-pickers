@@ -188,7 +188,7 @@ export default function FlightSearch() {
 - **Search by anything.** The server matches city, code and airport name, so `tlv`, `heathrow` and `new york` all work. The list shows what it returns without filtering again.
 - **The picked airport keeps its label** after a later search no longer returns it.
 - **Trip type** is a segmented [`HorizontalList`](../components/horizontal-list); it swaps the dates field between a range and a single date. **Cabin** is another, with four options that scroll if the screen is narrow.
-- **Theme colours.** The labels, errors and **Search flights** read `usePickerTheme()`, so the form matches the pickers in dark mode and in each [design](../guides/platforms#designs); Material's fields float their labels, the others show them above.
+- **Theme colours.** The labels, errors and **Search flights** read `usePickerTheme()`, so the form matches the pickers in dark mode and in each [design](../guides/designs); Material's fields float their labels, the others show them above.
 - **Validation** runs on submit and shows a message under each field, including **From** and **To** being the same airport.
 
 ## With your API

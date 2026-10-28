@@ -341,6 +341,7 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 | `style` | `StyleProp<ViewStyle>` | — | Wrapper style (label + field). |
 | `styles` | `SlotStyles<PickerFieldSlot \| …>` | — | Field slots plus the picker's slots. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme for the field and the sheet. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). Passed on to the sheet it opens. |
 | `testID` | `string` | — | Test ID on the field box. |
 
 `EmojiPickerField` also takes `value?: string`, the emoji to show. `PickerField` takes the props above (no sheet props) and `children: (sheet: { visible, onClose }) => ReactNode`.

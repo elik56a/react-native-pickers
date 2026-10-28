@@ -1,12 +1,12 @@
 ---
 title: Introduction
 slug: /intro
-description: "React Native Pickers: pure-JavaScript wheel, time, date, calendar, range, select and emoji pickers with bottom sheets, theming and TypeScript."
+description: "React Native Pickers: pure-JavaScript wheel, time, date, calendar, range, date-time, select and emoji pickers with bottom sheets and form fields. Native iOS, Material and web designs, fully themeable, TypeScript."
 ---
 
 # React Native Pickers
 
-**One dependency-free package for every picker a React Native app needs** — wheel, time, date (calendar, range, multiple, wheel), select / dropdown, emoji, the bottom sheets to put them in, and the form fields that open them.
+**One dependency-free package for every picker a React Native app needs** — wheel, time, date (calendar, range, multiple, wheel), date & time, select / dropdown, segmented control and chips, emoji, the bottom sheets to put them in, and the form fields that open them. Each one looks native on iOS, Android and the web, and every detail is yours to customize.
 
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -71,12 +71,12 @@ Edit the code and the result updates instantly. Each example is a complete file 
 
 | Component | What it is |
 | --- | --- |
-| [`WheelPicker`](./components/wheel-picker) | iOS-style 3D wheel with infinite loop, disabled items, tap-to-type, custom rows |
+| [`WheelPicker`](./components/wheel-picker) | 3D scrolling wheel with infinite loop, disabled items, tap-to-type, custom rows |
 | [`MultiWheelPicker`](./components/multi-wheel-picker) | Several wheels sharing one selection band (durations, units, anything multi-column) |
-| [`TimePicker`](./components/time-picker) | 12h / 24h (auto from locale), minute & second steps, min / max time |
+| [`TimePicker`](./components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, minute & second steps, min / max time |
 | [`DatePicker`](./components/date-picker) | Calendar with **single**, **range** and **multiple** selection, or a day/month/year **wheel** |
-| [`DateTimePicker`](./components/date-time-picker) | Day and time together: an iOS-style wheel row, or a calendar with time wheels |
-| [`SelectPicker`](./components/select-picker) | Form field that opens a searchable sheet; single or multi-select with chips, groups, icons; [search a server](./recipes/server-search) with `loadOptions` |
+| [`DateTimePicker`](./components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
+| [`SelectPicker`](./components/select-picker) | Form field that opens a searchable bottom sheet, modal or dropdown; single or multi-select with chips, groups, icons; [search a server](./recipes/server-search) with `loadOptions` |
 | [`SelectList`](./components/select-list) | The same list, inline |
 | [`HorizontalList`](./components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`EmojiPicker`](./components/emoji-picker) | 1,906 emojis, categories, search, skin tones, recents, version filtering |
@@ -86,9 +86,10 @@ Edit the code and the result updates instantly. Each example is a complete file 
 
 ## Why this library
 
-- **No native code.** Works in Expo Go and on the web with nothing to link. The UI and behaviour are identical on iOS, Android and web, so your design isn't at the mercy of each OS's picker.
+- **No native code.** Works in Expo Go and on the web with nothing to link, and ships in OTA updates.
+- **Native on every platform.** iOS on iPhone, [Material Design](./guides/designs) on Android, a web design in the browser, all from one code path. Prefer one look everywhere? `<PickersProvider design="ios">` and the iOS design runs on Android and the web too.
 - **One consistent API.** Every picker takes `value` + `onChange` (controlled) or `defaultValue` (uncontrolled), a `theme`, a `styles` object for each visual part, and render props for full control.
-- **Themeable to the pixel.** Light and dark themes are built in and follow the OS automatically. Override any token globally with `PickersProvider`, or per component.
+- **Yours to customize.** Light and dark themes are built in and follow the OS automatically. Override any token (colors, radius, spacing, fonts) globally with `PickersProvider` or per component, style any part through `styles`, and replace rows, days or triggers with render props. Your settings always win over the design.
 - **International.** Month, weekday and AM/PM names, the 12/24-hour clock, the first day of the week and the date-wheel order all come from `Intl` for any locale. Layouts flip for RTL.
 - **Accessible.** Wheels are `adjustable` (VoiceOver / TalkBack swipe up and down). Days announce their full date, and selected / disabled states are exposed.
 - **Fast.** Animations use the native driver. Wheels and the emoji grid are virtualized with fixed row layouts, and rows are memoized.
@@ -109,5 +110,7 @@ No other peer dependencies: no Reanimated, no Gesture Handler, no SVG.
 
 - [Installation](./getting-started/installation): install and optional setup
 - [Quick start](./getting-started/quick-start): every picker in five minutes
-- [Core concepts](./getting-started/core-concepts): controlled vs uncontrolled, sheets and drafts, theming, slots
+- [Core concepts](./getting-started/core-concepts): controlled vs uncontrolled, sheets and drafts, designs, theming, slots
+- [Designs](./guides/designs): the iOS, Material and web looks, and how to pick or customize one
+- [Showcase](/showcase): real app screens built with the pickers, live on iOS, Android and the web
 - [API reference](./api/reference): every export in one page

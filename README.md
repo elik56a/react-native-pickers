@@ -5,6 +5,8 @@
 Beautiful, fully customizable pickers for React Native — **100% JavaScript, zero native code.**
 Works with Expo Go, bare React Native, and React Native Web out of the box.
 
+**Native on every platform:** the iOS design on iOS, Material Design on Android and a web design in the browser, from one code path. Prefer one look everywhere? `<PickersProvider design="ios">`. Your theme, slot styles and props always win over the design.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/showcase-dark.png">
@@ -12,12 +14,12 @@ Works with Expo Go, bare React Native, and React Native Web out of the box.
   </picture>
 </p>
 
-**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [Changelog](CHANGELOG.md) · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
+**📖 [Documentation & live examples](https://elik56a.github.io/react-native-pickers/)** · [Showcase](https://elik56a.github.io/react-native-pickers/showcase) · [Designs](https://elik56a.github.io/react-native-pickers/docs/guides/designs) · [Changelog](CHANGELOG.md) · [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt) for AI assistants
 
 | | |
 |---|---|
 | 🎡 **WheelPicker** | iOS-style 3D wheel, infinite loop, disabled items, multi-column |
-| ⏰ **TimePicker** | 12h / 24h (auto from locale), minute & second intervals, min/max time |
+| ⏰ **TimePicker** | Wheels, a Material clock dial or columns to click; 12h / 24h (auto from locale), minute & second intervals, min/max time |
 | 📅 **DatePicker** | Calendar (single · range · multiple) or wheel, min/max, disabled days, marked dates, i18n |
 | 🗓️ **DateTimePicker** | Day + time in one wheel row (iOS) or a calendar with the time under it (Material) or beside it (web), min/max moments |
 | 📋 **SelectPicker** | Field + bottom sheet, search (local or on your server, with a loader), groups, multi-select with chips, icons |
@@ -378,7 +380,7 @@ pnpm install        # also installs the git hooks (lefthook)
 pnpm web            # example app in the browser
 pnpm ios            # example app in the iOS Simulator
 pnpm android        # example app in the Android emulator
-pnpm docs           # docs site at localhost:3000
+pnpm docs           # docs site at localhost:3001
 
 pnpm test           # Jest + React Native Testing Library
 pnpm lint           # Biome: lint, format and import order

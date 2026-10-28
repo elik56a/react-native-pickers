@@ -9,6 +9,26 @@ export const FAQS: FaqEntry[] = [
       'Yes. There is no native code, so it runs in Expo Go, dev builds, bare React Native and the web without a rebuild or a pod install.',
   },
   {
+    question: 'Does it look native on iOS and Android?',
+    answer: (
+      <>
+        Yes. Each platform gets its own design: iOS on iOS, Material Design on Android and a web design in the browser. For one look
+        everywhere, set <code>design=&quot;ios&quot;</code> on <code>PickersProvider</code>. See{' '}
+        <Link to="/docs/guides/platforms#designs">Designs</Link>.
+      </>
+    ),
+  },
+  {
+    question: 'Can I customize the look?',
+    answer: (
+      <>
+        Fully. Colors, radius, spacing and fonts are theme tokens with light and dark variants, every part takes a style through{' '}
+        <code>styles</code>, and render props replace rows, days and triggers. Your settings always win over the design. See{' '}
+        <Link to="/docs/guides/theming">Theming</Link>.
+      </>
+    ),
+  },
+  {
     question: 'Does it need Reanimated or Gesture Handler?',
     answer: (
       <>
@@ -20,7 +40,7 @@ export const FAQS: FaqEntry[] = [
   {
     question: 'Does it work with React Native Web?',
     answer:
-      'Yes, with the same components and props. On wide browser windows, sheets open as a centered modal and SelectPicker opens as a dropdown under the field.',
+      'Yes, with the same components and props, in a web design. Fields and SelectPicker open a dropdown under the field, and sheets open as a centered modal on wide windows.',
   },
   {
     question: 'Can users pick a date range or several dates?',

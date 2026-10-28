@@ -15,12 +15,16 @@ React Native apps usually combine several single-purpose packages for pickers. T
 | Wheel picker (any data) | ✅ | ✅ iOS · ⚠️ Android dropdown | ❌ | ✅ (native) |
 | Time picker | ✅ | ✅ | ❌ | ❌ |
 | Calendar | ✅ | ⚠️ OS dialog | ✅ | ❌ |
+| Date + time in one picker | ✅ | ⚠️ iOS only | ❌ | ❌ |
 | Date **range** selection | ✅ built in | ❌ | ⚠️ via manual marking | ❌ |
 | Multiple dates | ✅ | ❌ | ⚠️ manual | ❌ |
 | Searchable select / multi-select | ✅ | ❌ | ❌ | ⚠️ varies |
+| Server search (async options) | ✅ `loadOptions` | ❌ | ❌ | ❌ |
+| Segmented control / chips | ✅ `HorizontalList` | ⚠️ separate native package | ❌ | ❌ |
 | Emoji picker | ✅ | ❌ | ❌ | ❌ |
 | Bottom sheets | ✅ built in | ❌ | ❌ | ❌ |
-| Identical UI on iOS / Android / web | ✅ | ❌ | ✅ | ❌ |
+| Native look per platform (iOS, Material, web) | ✅ | ✅ | ❌ | ⚠️ iOS / Android only |
+| One look on every platform, if you want it | ✅ `design="ios"` | ❌ | ✅ | ❌ |
 | Full theming + dark mode | ✅ tokens + slots | ⚠️ limited | ✅ | ⚠️ limited |
 | Native code | **None** | Yes | Usually none | Yes |
 | Extra peer dependencies | **None** | — | Varies | Native picker module |
@@ -29,7 +33,7 @@ React Native apps usually combine several single-purpose packages for pickers. T
 
 ## Choose React Native Pickers when
 
-- you want **one consistent design** across iOS, Android and web, matching your brand
+- you want pickers that **look native on iOS, Android and the web** and still match your brand, or one design on every platform
 - you need **ranges, multiple dates, marked dates or prices** in a calendar
 - you need **several kinds of pickers** and want one API, one theme and one dependency
 - you ship through **Expo Go / OTA updates** or want to avoid native modules
@@ -37,7 +41,7 @@ React Native apps usually combine several single-purpose packages for pickers. T
 
 ## Choose something else when
 
-- **You must use the OS-native UI**, for example for strict platform conformance. Use `@react-native-community/datetimepicker` or `@react-native-picker/picker`.
+- **You must use the OS's own control**, for example to get every system accessibility feature or follow each OS update automatically. Our designs follow iOS and Material, but they're drawn in JavaScript. Use `@react-native-community/datetimepicker` or `@react-native-picker/picker`.
 - **You need an agenda / timeline / week calendar** with events laid out by hour. That's a scheduling component, not a picker.
 - **You need a full-featured gesture bottom sheet** (snap points, scrollable content interplay, detents) for non-picker screens. A dedicated sheet library such as `@gorhom/bottom-sheet` fits that; our `BottomSheet` covers simple modal sheets.
 

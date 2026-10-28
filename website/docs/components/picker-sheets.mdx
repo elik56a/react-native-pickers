@@ -1,7 +1,7 @@
 ---
 title: React Native Bottom Sheet Pickers
 sidebar_label: Picker sheets
-description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
+description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, DateTimePickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -9,7 +9,7 @@ import { DatePickerSheet } from '@elik56a/react-native-pickers';
 
 # Picker sheets
 
-Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with a **Cancel / Done** header. They all share the same "chrome" props and the same draft behaviour.
+Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with **Cancel / Done**: in the header beside the title on iOS, under the content with **OK** in Material, per the [design](../guides/designs). They all share the same "chrome" props and the same draft behaviour.
 
 :::tip Opening a sheet from a form field?
 You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
@@ -80,6 +80,7 @@ All sheets accept these (`SheetChromeProps`):
 | `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. `auto`: modal on wide web windows, bottom sheet elsewhere. |
 | `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [BottomSheet](./bottom-sheet#props) (`height`, `bottomInset`, `styles`, `enableSwipeToClose`…). |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme for the sheet and the picker. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
 
 ---
 

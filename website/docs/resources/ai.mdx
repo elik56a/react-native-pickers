@@ -23,6 +23,9 @@ Paste `llms-full.txt` into your assistant's context, or point Cursor / Claude / 
 Package: @elik56a/react-native-pickers   (npm i @elik56a/react-native-pickers)
 Pure JS, zero native code, no peer deps besides react >=18 and react-native >=0.72.
 Works in Expo Go, bare RN, React Native Web. All exports are named exports from the package root.
+Looks native per platform by default (design 'auto': iOS on iOS, Material on Android, web on web). One look everywhere:
+  <PickersProvider design="ios"> (or 'material' | 'web'); per component: design="material". theme/styles/explicit props always win over the design.
+Every component takes: theme (DeepPartial<PickerTheme>), design ('ios'|'material'|'web'), styles (slot styles), style, testID.
 Native apps: prefer subpaths so Metro skips unused pickers (root import bundles ~130 KB of emoji data):
   /wheel /time /date /calendar /datetime /select /list /emoji /sheet /core   e.g. '@elik56a/react-native-pickers/date'
   PickersProvider and theme/date utils live in /core. Subpaths need RN 0.79+ (Metro package exports).
@@ -35,6 +38,9 @@ WheelPicker<T>     items: (T | {label, value, disabled?})[]  value  onChange(val
                    variant '3d'|'flat'  keyboardInput=true  isEqual  renderItem({item,index,selected,theme})  styles
 MultiWheelPicker   columns: [{ key, items, value, onChange, flex?, width?, loop? }]  separator: node | (leftIndex)=>node
 TimePicker         value: Date  onChange(date)  format '12h'|'24h'|'auto'  minuteInterval  showSeconds  minTime/maxTime  locale
+                   display 'wheel'(ios) | 'dial'(material clock) | 'input'(typed fields) | 'list'(web columns); default from the design
+DateTimePicker     value: Date  onChange(date)  display 'wheel'(ios default)|'calendar'(material/web default)  minDate maxDate (moments)
+                   timePosition 'beside'|'below'  timeDisplay 'wheel'|'dial'|'input'|'list'  minuteInterval format locale calendarProps
 DatePicker         display 'calendar'(default)|'wheel'
   mode 'single'    value: Date|null       onChange(date)
   mode 'range'     value: {start,end}     onChange(range)   minRangeDays maxRangeDays allowSingleDayRange
@@ -46,6 +52,7 @@ DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFor
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
+                   presentation 'auto'(dropdown on web, bottom sheet on native)|'bottomSheet'|'modal'|'dropdown'
 SelectList<T>      same list inline: options value onChange multiple listHeight
                    server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
                    or manual: onSearchChange(query) + loading + onEndReached; loadingText renderLoading(theme); no local filtering with either
@@ -64,6 +71,7 @@ Fields (a SelectPicker-style field that opens the sheet and shows the confirmed 
                    = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
                    + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
                      disabled renderTrigger({open,displayValue,disabled}) renderChevron({open,theme}) onOpen onClose style testID
+                     presentation 'auto'(dropdown on web, bottom sheet on native)|'bottomSheet'|'modal'|'dropdown'; design is passed on to the sheet
                    styles = field slots (label trigger triggerText placeholder chevron clear) + the picker's slots
                    EmojiPickerField also takes value: string (the emoji shown). Sheet title defaults to label.
   PickerField      same field props, children: ({visible, onClose}) => <AnySheet .../>
@@ -79,7 +87,18 @@ Utils: toDateKey(d) 'YYYY-MM-DD' local; addDays addMonths isSameDay compareDay i
 
 ```tsx
 import { useState } from 'react';
-import { DatePicker, DatePickerField, DatePickerSheet, SelectPicker, TimePicker, TimePickerField, WheelPicker } from '@elik56a/react-native-pickers';
+import {
+  DatePicker,
+  DatePickerField,
+  DatePickerSheet,
+  DateTimePicker,
+  HorizontalList,
+  PickersProvider,
+  SelectPicker,
+  TimePicker,
+  TimePickerField,
+  WheelPicker,
+} from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
 function Examples() {
@@ -89,11 +108,14 @@ function Examples() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   const [country, setCountry] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [view, setView] = useState('day');
 
   return (
     <>
       <WheelPicker items={['S', 'M', 'L']} value={size} onChange={setSize} />
       <TimePicker value={time} onChange={setTime} minuteInterval={5} />
+      <DateTimePicker value={time} onChange={setTime} />
+      <HorizontalList items={[{ label: 'Day', value: 'day' }, { label: 'Week', value: 'week' }]} value={view} onChange={setView} />
       <DatePicker value={date} onChange={setDate} minDate={new Date()} />
       <DatePicker mode="range" value={range} onChange={setRange} />
       <SelectPicker label="Country" options={[{ label: 'Israel', value: 'IL' }]} value={country} onChange={setCountry} />
@@ -104,4 +126,11 @@ function Examples() {
     </>
   );
 }
+
+// Optional, once at the root: brand colors, and one design on every platform instead of the native one per OS
+export const App = () => (
+  <PickersProvider theme={{ colors: { primary: '#FF5A5F' } }} design="ios">
+    <Examples />
+  </PickersProvider>
+);
 ```

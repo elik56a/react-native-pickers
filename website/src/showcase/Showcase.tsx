@@ -13,7 +13,10 @@ import styles from './showcase.module.css';
 export const Showcase = () => {
   const [platform, setPlatform] = useState<Platform>(PLATFORM.ios);
   return (
-    <Layout title="Showcase" description="Real app screens built with React Native Pickers, live on iOS, Android and the web.">
+    <Layout
+      title="Showcase"
+      description="React Native picker examples: booking, flight search, alarm, chat, sign-up and filter screens built with React Native Pickers, live in their iOS, Material and web designs."
+    >
       <main className={styles.page}>
         <header className={styles.header}>
           <h1 className={styles.h1}>Showcase</h1>

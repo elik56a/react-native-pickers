@@ -5,6 +5,10 @@ description: "Fixes for common React Native Pickers issues: wheel not showing th
 
 # Troubleshooting
 
+### After upgrading, Android or the web no longer look like iOS
+
+Since 0.11 each platform gets its own [design](../guides/designs): Material on Android, a web design in the browser. To keep the iOS look everywhere, set `<PickersProvider design="ios">`.
+
 ### The wheel doesn't show my selected value
 
 - Values are matched with `Object.is`. If `value` is an object (or a `Date`) re-created each render, pass `isEqual`:

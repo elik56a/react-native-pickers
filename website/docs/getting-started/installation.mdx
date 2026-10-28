@@ -53,21 +53,24 @@ Peer dependencies are `react >= 18` and `react-native >= 0.72`, which your app a
 
 ## Optional: add the theme provider
 
-Every component works with sensible light and dark defaults that follow the OS appearance. To use your brand colours everywhere, wrap your app once:
+Every component works with sensible light and dark defaults that follow the OS appearance, and looks native on each platform (iOS, Material on Android, web). To use your brand colours everywhere, or one design on every platform, wrap your app once:
 
 ```tsx title="App.tsx"
 import { PickersProvider } from '@elik56a/react-native-pickers';
 
 export default function App() {
   return (
-    <PickersProvider theme={{ colors: { primary: '#FF5A5F' } }}>
+    <PickersProvider
+      theme={{ colors: { primary: '#FF5A5F' } }}
+      design="auto" // or 'ios' | 'material' | 'web' to use one look everywhere
+    >
       <RootNavigator />
     </PickersProvider>
   );
 }
 ```
 
-See [Theming](../guides/theming) for every token.
+See [Theming](../guides/theming) for every token and [Designs](../guides/designs) for the looks.
 
 ## React Native Web
 

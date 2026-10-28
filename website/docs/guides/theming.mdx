@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: "Theme every React Native picker with PickersProvider: colours, radius, spacing and typography tokens, automatic dark mode and createTheme."
+description: "Theme every React Native picker with PickersProvider: colours, radius, spacing and typography tokens, automatic dark mode, iOS / Material / web designs and createTheme."
 ---
 
 # Theming
@@ -37,7 +37,7 @@ export default function App() {
 | `theme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `lightTheme`. **Also applied to dark mode when `darkTheme` is not given.** |
 | `darkTheme` | `DeepPartial<PickerTheme>` | — | Overrides merged onto `darkTheme`. |
 | `platform` | `'ios' \| 'android' \| 'web' \| …` | `Platform.OS` | Pickers behave as on this platform. See [previewing other platforms](./platforms#previewing-other-platforms). |
-| `design` | `'auto' \| 'ios' \| 'material' \| 'web'` | `'auto'` | The look pickers follow. `'auto'` matches the platform. See [designs](./platforms#designs). |
+| `design` | `'auto' \| 'ios' \| 'material' \| 'web'` | `'auto'` | The look pickers follow. `'auto'` matches the platform. See [designs](./designs). |
 | `children` | `ReactNode` | **required** | |
 
 :::caution Light overrides leak into dark mode
@@ -108,7 +108,7 @@ Pass a constant or `useMemo`'d object rather than an inline literal, so the merg
 ```ts
 interface PickerTheme {
   dark: boolean;
-  design: 'ios' | 'material' | 'web'; // see Designs in the Platforms guide
+  design: 'ios' | 'material' | 'web'; // see the Designs guide
   colors: {
     background: string;    // picker surfaces
     surface: string;       // search inputs, chips, pressed rows

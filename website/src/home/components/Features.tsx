@@ -14,7 +14,7 @@ export const Features = () => (
           Built for real apps
         </h2>
         <p className={clsx(shared.lead, shared.leadLeft)}>
-          No native modules to link, no marking logic to write, and the same behavior on iOS, Android and the web.
+          No native modules to link, no marking logic to write, and a native look on iOS, Android and the web.
         </p>
         <Link to="/docs/intro">Why this library →</Link>
       </div>

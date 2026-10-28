@@ -1,7 +1,7 @@
 ---
 title: React Native Select & Dropdown Picker
 sidebar_label: SelectPicker
-description: React Native select and dropdown picker that opens a searchable bottom sheet. Single or multi-select with chips, groups, icons and a clear button.
+description: "React Native select and dropdown picker: a searchable bottom sheet, modal or dropdown. Single or multi-select with chips, groups, icons, a clear button and server search (autocomplete)."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -9,7 +9,7 @@ import { SelectPicker } from '@elik56a/react-native-pickers';
 
 # SelectPicker
 
-`SelectPicker` is a React Native form field that opens a bottom sheet with a searchable list: a dropdown / select that feels native on phones. Single or multiple selection, with groups, icons, descriptions, chips and a clear button.
+`SelectPicker` is a React Native form field that opens a searchable list: in a bottom sheet on phones, a dropdown under the field on the web, or a centered modal (`presentation`). Single or multiple selection, with groups, icons, descriptions, chips, a clear button and [search on your server](../recipes/server-search). It follows the [iOS, Material or web design](../guides/designs): a ✓ or radios, rounded or edge-to-edge rows.
 
 ```tsx
 import { SelectPicker } from '@elik56a/react-native-pickers';
@@ -671,6 +671,7 @@ export default function Example() {
 | `autoFocusSearch` | `boolean` | `false` | Focus search when the sheet opens. |
 | `styles` | `SlotStyles<SelectSlot \| SelectTriggerSlot>` | — | Slots for both the field and the list. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
 | `testID` | `string` | — | Test ID on the list. |
 
 ### Slots

@@ -1,7 +1,7 @@
 ---
 title: React Native Pickers FAQ
 sidebar_label: FAQ
-description: Frequently asked questions about React Native Pickers — Expo Go, native code, time zones, null values, controlled state, sizes, fonts and more.
+description: "Frequently asked questions about React Native Pickers: Expo Go, native code, the iOS and Material look, customizing, time zones, null values, controlled state, sizes, fonts and more."
 ---
 
 # FAQ
@@ -9,6 +9,18 @@ description: Frequently asked questions about React Native Pickers — Expo Go, 
 ## Does it work in Expo Go?
 
 Yes. There's no native code, so it runs in Expo Go, dev builds, bare React Native and the web without a rebuild.
+
+## Does it look native on iOS and Android?
+
+Yes. By default each platform gets its own design: the iOS design on iOS, Material Design on Android (outlined fields, radios, a clock dial, **OK** under the content) and a web design in the browser. See [Designs](../guides/designs).
+
+## Can I use the iOS look on Android too, or one look everywhere?
+
+Yes. `<PickersProvider design="ios">` uses the iOS design on every platform; `"material"` and `"web"` work the same way. A component's own `design` prop wins over the provider's.
+
+## How much can I customize?
+
+Everything. Colors, radius, spacing and fonts are theme tokens (light and dark), every visual part takes a style through `styles`, and render props replace rows, days, triggers and chevrons. Your settings always win over the design. See [Theming](../guides/theming) and [Styling with slots](../guides/styling).
 
 ## Does it need Reanimated or Gesture Handler?
 
@@ -40,11 +52,10 @@ No. It only changes hours, minutes and seconds, and the date part of `value` is 
 
 ## Can I select a date and a time together?
 
-Use one `Date` in state for both:
+Yes, with [`DateTimePicker`](../components/date-time-picker): one row of wheels on iOS, a calendar with the time under it in Material, or beside it on the web. In a form, use `DateTimePickerField`.
 
 ```tsx
-<DatePicker value={when} onChange={(d) => setWhen(new Date(d.getFullYear(), d.getMonth(), d.getDate(), when.getHours(), when.getMinutes()))} />
-<TimePicker value={when} onChange={setWhen} />
+<DateTimePicker value={when} onChange={setWhen} minuteInterval={5} />
 ```
 
 ## How big is it?
@@ -62,6 +73,10 @@ Yes: `theme={{ typography: { fontFamily: 'Inter-Regular', fontFamilyMedium: 'Int
 ## How do I load options from an API?
 
 Pass `loadOptions={(query) => api.search(query)}` to `SelectPicker` or `SelectList`. The list waits for a pause in typing, shows a loader until the results arrive, and ignores answers to older queries. For pagination or your own caching, use `onSearchChange` with `loading` and `onEndReached` instead. See [Search a server](../recipes/server-search).
+
+## Does it work with React Native Web?
+
+Yes, with the same components and props. On the web, fields and `SelectPicker` open a dropdown under the field, sheets open as a centered modal on wide windows, and pickers use the web design. See [Platforms](../guides/platforms).
 
 ## How do I use it in a ScrollView?
 

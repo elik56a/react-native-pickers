@@ -53,6 +53,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Guides',
       items: [
+        'guides/designs',
         'guides/theming',
         'guides/styling',
         'guides/render-props',
