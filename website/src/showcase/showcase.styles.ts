@@ -1,0 +1,38 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  chat: { flex: 1, height: '100%', paddingBottom: 18 },
+  browserChat: { paddingTop: 8, paddingBottom: 0 },
+  chatHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  avatar: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { fontSize: 20 },
+  name: { fontSize: 16, fontWeight: '600' },
+  status: { fontSize: 12 },
+  messages: { flex: 1 },
+  messagesContent: { padding: 12, gap: 6 },
+  bubble: { maxWidth: '78%', paddingHorizontal: 12, paddingVertical: 8 },
+  mine: { alignSelf: 'flex-end' },
+  theirs: { alignSelf: 'flex-start' },
+  messageText: { fontSize: 15, lineHeight: 20 },
+  messageTime: { fontSize: 11, opacity: 0.7, alignSelf: 'flex-end', marginTop: 2 },
+  composer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  input: { flex: 1, height: 36, borderRadius: 18, paddingHorizontal: 14, fontSize: 15 },
+  iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 22 },
+  send: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  sendText: { fontSize: 18, fontWeight: '700' },
+});

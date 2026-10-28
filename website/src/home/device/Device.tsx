@@ -17,10 +17,12 @@ interface DeviceProps {
   /** Controls the tabs from outside, e.g. a docs example that renders its preview through the platform. */
   platform?: Platform;
   onPlatformChange?: (platform: Platform) => void;
+  /** Shows the iOS / Android / Web rail beside the device. Default: true */
+  rail?: boolean;
 }
 
 /** An iPhone, Pixel or browser window, switched with the rail beside it: the body morphs while the screen crossfades. */
-export const Device = ({ children, platform: platformProp, onPlatformChange }: DeviceProps) => {
+export const Device = ({ children, platform: platformProp, onPlatformChange, rail = true }: DeviceProps) => {
   const [ownPlatform, setOwnPlatform] = useState<Platform>(PLATFORM.ios);
   const platform = platformProp ?? ownPlatform;
   const setPlatform = onPlatformChange ?? setOwnPlatform;
@@ -30,7 +32,7 @@ export const Device = ({ children, platform: platformProp, onPlatformChange }: D
   usePortalsInside(frameRef, shown !== PLATFORM.web);
   return (
     <div className={clsx(styles.device, platform === PLATFORM.web && styles.deviceWide)} data-platform={platform}>
-      <PlatformRail value={platform} onChange={setPlatform} />
+      {rail ? <PlatformRail value={platform} onChange={setPlatform} /> : null}
       <div className={styles.slot}>
         <div
           className={clsx(

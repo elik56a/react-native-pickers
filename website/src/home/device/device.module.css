@@ -1,8 +1,9 @@
 .device {
   --screen-bg: #ffffff;
   --screen-fg: #17150f;
-  /* Phones are about twice as tall as wide, so this keeps the whole phone on a laptop screen, under the navbar. */
-  --phone-width: clamp(240px, min(calc((100dvh - 7.5rem) / 2.06), 100cqw), 330px);
+  /* Phones are about twice as tall as wide, so this keeps the whole phone on a laptop screen, under the navbar. A page that scrolls past
+     its phones can set --device-phone-width instead. */
+  --phone-width: var(--device-phone-width, clamp(240px, min(calc((100dvh - 7.5rem) / 2.06), 100cqw), 330px));
   --morph: 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
   display: flex;
   align-items: center;

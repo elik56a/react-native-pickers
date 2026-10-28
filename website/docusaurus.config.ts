@@ -198,6 +198,7 @@ const config: Config = {
         { to: '/docs/components/wheel-picker', label: 'Components', position: 'left' },
         { to: '/docs/api/reference', label: 'API', position: 'left' },
         { to: '/docs/recipes/booking-range', label: 'Recipes', position: 'left' },
+        { to: '/showcase', label: 'Showcase', position: 'left' },
         {
           type: 'docsVersionDropdown',
           position: 'right',

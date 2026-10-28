@@ -5,11 +5,21 @@ import { RESERVE_PHASE } from '../demo.constants';
 import { styles } from '../demo.styles';
 import { useReserve } from '../hooks/useReserve';
 
-export const ReserveButton = ({ total, disabled }: { total: number; disabled: boolean }) => {
+interface ActionButtonProps {
+  label: string;
+  /** Shown with a spinner while the button fills like a progress bar */
+  busyLabel: string;
+  /** Pops in once it's done, then the button goes back to `label` */
+  doneLabel: string;
+  disabled?: boolean;
+}
+
+/** A primary button that acts out a request when pressed: busy with a spinner and a filling bar, then done, then ready again. */
+export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false }: ActionButtonProps) => {
   const { colors, radius } = usePickerTheme();
   const { phase, progress, pop, reserve } = useReserve();
   const busy = phase === RESERVE_PHASE.reserving;
-  const label = [styles.reserveText, { color: colors.onPrimary }];
+  const text = [styles.reserveText, { color: colors.onPrimary }];
   return (
     <Pressable
       accessibilityRole="button"
@@ -30,12 +40,12 @@ export const ReserveButton = ({ total, disabled }: { total: number; disabled: bo
       {busy ? (
         <View style={styles.reserveRow}>
           <ActivityIndicator size="small" color={colors.onPrimary} />
-          <Text style={label}>Reserving…</Text>
+          <Text style={text}>{busyLabel}</Text>
         </View>
       ) : phase === RESERVE_PHASE.reserved ? (
-        <Animated.Text style={[label, { transform: [{ scale: pop }] }]}>✓ Reserved</Animated.Text>
+        <Animated.Text style={[text, { transform: [{ scale: pop }] }]}>{doneLabel}</Animated.Text>
       ) : (
-        <Text style={label}>Reserve · ${total}</Text>
+        <Text style={text}>{label}</Text>
       )}
     </Pressable>
   );

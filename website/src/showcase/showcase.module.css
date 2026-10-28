@@ -1,0 +1,88 @@
+.page {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 3rem 1rem 5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 40rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 1.1rem;
+}
+
+/* Phones three or four across; browser windows need more room, so two across. The page scrolls, so phones keep their full size
+   instead of shrinking to fit the window's height, which would squeeze fixed-size pickers like the clock dial. */
+.grid {
+  --device-phone-width: min(330px, 100cqw);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 3.5rem 2rem;
+}
+
+.grid[data-wide] {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 330px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.blurb {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+}
+
+.components {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.components code {
+  font-size: 0.72rem;
+}
+
+.recipe {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
