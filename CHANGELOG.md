@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.2](https://github.com/elik56a/react-native-pickers/compare/v0.15.1...v0.15.2) (2026-10-28)
+
+
+### 🐛 Bug Fixes
+
+* **select:** a dropdown opened from renderTrigger was as narrow as the trigger ([#48](https://github.com/elik56a/react-native-pickers/issues/48)) ([0cb61e5](https://github.com/elik56a/react-native-pickers/commit/0cb61e5809b2c5174e5b666ac1ad56dc1156fe9b))
+
 ## [0.15.1](https://github.com/elik56a/react-native-pickers/compare/v0.15.0...v0.15.1) (2026-10-28)
 
 
