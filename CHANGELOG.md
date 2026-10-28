@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/elik56a/react-native-pickers/compare/v0.11.1...v0.12.0) (2026-10-28)
+
+
+### ✨ Features
+
+* **list:** place HorizontalList icons on any side, colored like their label ([#31](https://github.com/elik56a/react-native-pickers/issues/31)) ([1217b1e](https://github.com/elik56a/react-native-pickers/commit/1217b1eed1e611147f3e8db3b664deb6c318f44b))
+
 ## [0.11.1](https://github.com/elik56a/react-native-pickers/compare/v0.11.0...v0.11.1) (2026-10-28)
 
 
