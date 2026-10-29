@@ -1,0 +1,51 @@
+---
+title: Migrate from react-native-otp-entry
+sidebar_label: 'otp-entry'
+description: "Switch from react-native-otp-entry to React Native Pickers: OtpField with the same cells and blinking caret, SMS code autofill, paste, a PIN mode, and iOS, Material and web designs from your theme."
+---
+
+# Migrate from `react-native-otp-entry`
+
+```diff
+- import { OtpInput } from 'react-native-otp-entry';
++ import { OtpField } from '@elik56a/react-native-pickers';
+
+- <OtpInput
+-   numberOfDigits={6}
+-   focusColor="#007AFF"
+-   onTextChange={setCode}
+-   onFilled={verify}
+-   theme={{ pinCodeContainerStyle: styles.cell, focusedPinCodeContainerStyle: styles.focused }}
+- />
++ <OtpField
++   autoFocus
++   onChange={setCode}
++   onComplete={verify}
++   theme={{ colors: { primary: '#007AFF' } }}
++   styles={{ cell: styles.cell, focusedCell: styles.focused }}
++ />
+```
+
+| otp-entry | React Native Pickers |
+| --- | --- |
+| `numberOfDigits` | `length` (default `6`) |
+| `onTextChange` | `onChange` |
+| `onFilled` | `onComplete` |
+| `autoFocus` (default `true`) | `autoFocus` (default `false`) |
+| `focusColor` | `theme={{ colors: { primary } }}` |
+| `type="numeric"` / `"alphanumeric"` | `inputMode="numeric"` / `"text"` |
+| `secureTextEntry` / `disabled` | `secureTextEntry` / `disabled` |
+| `blurOnFilled` | `onComplete={(code) => { Keyboard.dismiss(); verify(code); }}` |
+| `hideStick` | `styles={{ caret: { opacity: 0 } }}` |
+| `theme.containerStyle` | `styles.container` |
+| `theme.pinCodeContainerStyle` | `styles.cell` |
+| `theme.focusedPinCodeContainerStyle` | `styles.focusedCell` |
+| `theme.filledPinCodeContainerStyle` | `styles.filledCell` |
+| `theme.pinCodeTextStyle` | `styles.cellText` |
+| `theme.focusStickStyle` | `styles.caret` |
+| `ref.clear()` / `ref.setValue(code)` | a controlled `value` |
+| `textInputProps.accessibilityLabel` | `accessibilityLabel` (default *Verification code*) |
+
+Without a `styles` override, [`OtpField`](../../components/otp-field)'s cells look like the [design's](../../guides/designs.mdx) text fields: iOS on iPhone, Material on Android and outlined boxes with a focus ring on the web.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

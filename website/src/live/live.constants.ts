@@ -34,6 +34,7 @@ const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
 const SELECT = ['SelectPicker', 'CountryPicker'];
 const SLIDER = ['Slider'];
+const OTP = ['OtpField'];
 
 /**
  * The side panel's props, offered for every live example that renders one of their components.
@@ -76,7 +77,8 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },
   { prop: 'clearable', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false, requires: /\bonClear=/ },
   { prop: 'showSteps', components: SLIDER, options: BOOLEAN, default: false },
-  { prop: 'disabled', components: [...FIELDS, ...SELECT, ...SLIDER], options: BOOLEAN, default: false },
+  { prop: 'secureTextEntry', components: OTP, options: BOOLEAN, default: false },
+  { prop: 'disabled', components: [...FIELDS, ...SELECT, ...SLIDER, ...OTP], options: BOOLEAN, default: false },
 ];
 
 export const SNACK_URL = 'https://snack.expo.dev/';

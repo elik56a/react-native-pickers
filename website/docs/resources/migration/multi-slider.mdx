@@ -1,0 +1,52 @@
+---
+title: Migrate from @ptomasroos/react-native-multi-slider
+sidebar_label: 'multi-slider'
+description: "Switch from @ptomasroos/react-native-multi-slider to React Native Pickers: a range Slider with two thumbs that fills its width, labelled marks, a value bubble and screen-reader support, in iOS, Material and web designs."
+---
+
+# Migrate from `@ptomasroos/react-native-multi-slider`
+
+```diff
+- import MultiSlider from '@ptomasroos/react-native-multi-slider';
++ import { Slider } from '@elik56a/react-native-pickers';
+
+- <MultiSlider
+-   values={price}
+-   min={0}
+-   max={500}
+-   step={10}
+-   sliderLength={280}
+-   onValuesChangeFinish={setPrice}
+-   enableLabel
+- />
++ <Slider
++   range
++   value={price}
++   min={0}
++   max={500}
++   step={10}
++   onChange={setPrice}
++   valueLabel="always"
++ />
+```
+
+| multi-slider | React Native Pickers |
+| --- | --- |
+| `values` (`[a]` or `[a, b]`) | `value`: a number, or `[start, end]` with `range` |
+| `min` / `max` / `step` | `min` / `max` / `step` |
+| `onValuesChange` | `onValueChanging` |
+| `onValuesChangeFinish` | `onChange` |
+| `onValuesChangeStart` | — |
+| `sliderLength` | not needed: the slider fills its container, or set `style={{ width }}` |
+| `optionsArray` / `snapped` | `marks={[…]}` with `snapToMarks` |
+| `enableLabel` / `customLabel` | `valueLabel="always"` or `"drag"`, with `formatValue` |
+| `valuePrefix` / `valueSuffix` | ``formatValue={(v) => `$${v}`}`` |
+| `allowOverlap` / `minMarkerOverlapDistance` | the thumbs can meet but not cross |
+| `selectedStyle` / `unselectedStyle` | `styles={{ activeTrack, track }}` |
+| `markerStyle` / `customMarker` | `styles={{ thumb }}` |
+| `enabledOne` / `enabledTwo` | `disabled` for the whole slider |
+| `vertical` | — |
+
+[`Slider`](../../components/slider) has no native code or Reanimated, gives each thumb a screen-reader label (`thumbLabels`), and moves with arrow keys on the web.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

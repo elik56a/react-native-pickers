@@ -1,0 +1,53 @@
+---
+title: Migrate from @react-native-community/slider
+sidebar_label: 'slider'
+description: "Switch from @react-native-community/slider to React Native Pickers: Slider with no native code, a range with two thumbs, step dots, labelled marks and a value bubble, in iOS, Material and web designs. Works in Expo Go."
+---
+
+# Migrate from `@react-native-community/slider`
+
+```diff
+- import Slider from '@react-native-community/slider';
++ import { Slider } from '@elik56a/react-native-pickers';
+
+- <Slider
+-   minimumValue={0}
+-   maximumValue={100}
+-   step={1}
+-   value={volume}
+-   onValueChange={setPreview}
+-   onSlidingComplete={setVolume}
+-   minimumTrackTintColor="#007AFF"
+- />
++ <Slider
++   min={0}
++   max={100}
++   value={volume}
++   onValueChanging={setPreview}
++   onChange={setVolume}
++   theme={{ colors: { primary: '#007AFF' } }}
++ />
+```
+
+| @react-native-community/slider | React Native Pickers |
+| --- | --- |
+| `minimumValue` / `maximumValue` (default `0` / `1`) | `min` / `max` (default `0` / `100`) |
+| `step` (default `0`, continuous) | `step` (default `1`; `0` for continuous) |
+| `value` (write-only, read once) | `value` (controlled) or `defaultValue` |
+| `onValueChange` | `onValueChanging`, on every step of a drag |
+| `onSlidingComplete` | `onChange`, once the finger lifts, or on a key or screen-reader step |
+| `onSlidingStart` | — |
+| `lowerLimit` / `upperLimit` | `min` / `max` |
+| `minimumTrackTintColor` / `thumbTintColor` | `theme={{ colors: { primary } }}`, or `styles={{ activeTrack, thumb }}` |
+| `maximumTrackTintColor` | `styles={{ track }}` |
+| `thumbSize` / `thumbImage` | `styles={{ thumb }}` |
+| `StepMarker` / `renderStepNumber` | `showSteps`, or `marks` with labels |
+| `inverted` | follows the layout direction: right to left in RTL |
+| `tapToSeek` | always on |
+| — | `range` for two thumbs, `valueLabel` bubble, `snapToMarks`, `minimumIcon` / `maximumIcon`, keyboard steps on the web |
+
+Two defaults differ: `max` is `100` rather than `1`, and `step` is `1` rather than continuous. Pass `max={1} step={0}` to keep a 0–1 slider.
+
+[`Slider`](../../components/slider) has no native code, so it runs in Expo Go, ships in OTA updates and draws the same on the web.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

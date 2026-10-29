@@ -1,0 +1,56 @@
+---
+title: Migrate from react-native-ui-datepicker
+sidebar_label: 'ui-datepicker'
+description: "Switch from react-native-ui-datepicker to React Native Pickers: DatePicker with plain Date values instead of dayjs, single, range and multiple modes, marked dates, a bottom sheet and a form field, in iOS, Material and web designs."
+---
+
+# Migrate from `react-native-ui-datepicker`
+
+```diff
+- import DateTimePicker from 'react-native-ui-datepicker';
++ import { DatePicker } from '@elik56a/react-native-pickers';
+
+- <DateTimePicker
+-   mode="range"
+-   startDate={range.startDate}
+-   endDate={range.endDate}
+-   onChange={({ startDate, endDate }) => setRange({ startDate, endDate })}
+-   minDate={new Date()}
+-   min={2}
+- />
++ <DatePicker
++   mode="range"
++   value={range}
++   onChange={setRange}
++   minDate={new Date()}
++   minRangeDays={2}
++ />
+```
+
+Values are plain `Date`s in local time, not dayjs objects, and the callbacks pass the value itself rather than an object to unpack.
+
+| ui-datepicker | React Native Pickers |
+| --- | --- |
+| `mode="single"` + `date` + `onChange({ date })` | `value` + `onChange(date)` |
+| `mode="range"` + `startDate` / `endDate` | `value: { start, end }` + `onChange(range)` |
+| `mode="multiple"` + `dates` + `onChange({ dates })` | `value: Date[]` + `onChange(dates)` |
+| `min` / `max` (nights, range) | `minRangeDays` / `maxRangeDays` (nights) |
+| `max` (multiple) | `maxSelections` |
+| `minDate` / `maxDate` | `minDate` / `maxDate` (`Date`) |
+| `disabledDates` (array or function) | `isDateDisabled(date)`, or `markedDates[key].disabled` |
+| `enabledDates` | `isDateDisabled={(d) => !isAllowed(d)}` |
+| `firstDayOfWeek` | `firstDayOfWeek` |
+| `month` / `year` / `onMonthChange` / `onYearChange` | `initialMonth` (`Date`) / `onMonthChange(month: Date)` |
+| `initialView="month"` / `"year"` | `enableQuickJump`: tap the title for months and years |
+| `timePicker` / `use12Hours` | [`DateTimePicker`](../../components/date-time-picker) with `format="12h"` |
+| `showOutsideDays` | `showOutsideDays` |
+| `hideWeekdays` / `weekdaysFormat` | `showWeekdays={false}` / `weekdayFormat` |
+| `locale` | `locale` (names from `Intl`, no dayjs locale imports) |
+| `timeZone` | — (dates are the device's local time) |
+| `calendar="jalali"` | — |
+| `styles` / `classNames` / `components` | `theme`, `styles` slots, `renderDay`, `renderArrow` |
+| — | `mode="ranges"`, `markedDates` with dots and labels (prices), `DatePickerSheet` and `DatePickerField` |
+
+[`DatePicker`](../../components/date-picker) has no dependency, so dayjs isn't needed. See [ranges and multiple dates](../../components/date-range-picker) for the range rules.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.
