@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.0](https://github.com/elik56a/react-native-pickers/compare/v0.21.0...v0.22.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **country:** add PhoneField ([#66](https://github.com/elik56a/react-native-pickers/issues/66)) ([43d6b87](https://github.com/elik56a/react-native-pickers/commit/43d6b87775b726750d639150f6152bb13c751bf8))
+
 ## [0.21.0](https://github.com/elik56a/react-native-pickers/compare/v0.20.0...v0.21.0) (2026-10-29)
 
 
