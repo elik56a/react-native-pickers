@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, duration, date, month, week, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider and an OTP code input for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, month, week, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider, a star rating and an OTP code input for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 
 export const COUNT_UP_MS = 1400;
 export const COPIED_MS = 1500;
@@ -70,6 +70,7 @@ export const COMPONENTS = [
   { doc: 'components/color-picker', name: 'ColorPicker', body: "iOS's grid, Google's circles, a web spectrum" },
   { doc: 'components/slider', name: 'Slider', body: 'One value or a range, with steps and icons' },
   { doc: 'components/otp-field', name: 'OtpField', body: 'Verification codes, SMS autofill, paste' },
+  { doc: 'components/rating', name: 'Rating', body: 'Stars to tap or drag, half steps, scores' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Units, compound values, dependent columns' },
   { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet or modal' },
   { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet, a dropdown or inline' },

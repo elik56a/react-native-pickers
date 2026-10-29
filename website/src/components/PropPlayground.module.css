@@ -25,7 +25,10 @@
     var(--ifm-background-color);
 }
 
+/* Laid out like a React Native root view, as the live examples are, so a component can centre itself with alignSelf. */
 .stage {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 380px;
 }

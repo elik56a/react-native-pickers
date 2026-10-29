@@ -38,17 +38,13 @@ const FOOTER_BRAND = `
   ${socialLink('LinkedIn', LINKEDIN, `${AUTHOR} on LinkedIn`)}
 </div>`;
 const DESCRIPTION =
-  'Wheel, time, duration, date, calendar, month, week strip, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider and an OTP code input for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, calendar, month, week strip, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider, a star rating and an OTP code input for React Native, with bottom sheets and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
 // Written by scripts/prepare.mts from the git tags, newest first. The line npm currently serves gets its exact version.
 // Only the latest release is indexed by search engines; Next and older lines would compete with it as duplicates.
 const releasedLines: string[] = fs.existsSync(path.join(__dirname, 'versions.json')) ? require('./versions.json') : [];
-// Older release lines aren't built (see scripts/prepare.mts); the versions menu links to their docs on GitHub.
-const archivedLines: { line: string; tag: string }[] = fs.existsSync(path.join(__dirname, 'archived-versions.json'))
-  ? require('./archived-versions.json')
-  : [];
 const versionOptions = Object.fromEntries(
   releasedLines.map((line, i) => [line, { label: version.startsWith(`${line}.`) ? `v${version}` : `v${line}.x`, noIndex: i > 0 }])
 );
@@ -70,7 +66,7 @@ const structuredData = {
       version,
       author: { '@type': 'Person', name: AUTHOR, url: 'https://github.com/elik56a', sameAs: [LINKEDIN] },
       keywords:
-        'react native date picker, time picker, duration picker, month picker, week strip, date time picker, wheel picker, calendar, date range picker, select, dropdown, inline picker, multi-select, autocomplete, segmented control, country picker, phone code picker, phone number input, time zone picker, emoji picker, color picker, slider, range slider, otp input, verification code input, bottom sheet, material design, ios picker, expo, react native web, keyboard accessible',
+        'react native date picker, time picker, duration picker, month picker, week strip, date time picker, wheel picker, calendar, date range picker, select, dropdown, inline picker, multi-select, autocomplete, segmented control, country picker, phone code picker, phone number input, time zone picker, emoji picker, color picker, slider, range slider, otp input, verification code input, star rating, bottom sheet, material design, ios picker, expo, react native web, keyboard accessible',
     },
   ],
 };
@@ -95,7 +91,7 @@ const config: Config = {
       attributes: {
         name: 'keywords',
         content:
-          'react native picker, react native date picker, react native time picker, react native duration picker, countdown timer picker, react native month picker, month year picker, credit card expiry picker, react native week calendar strip, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, react native country picker, country code picker, emoji picker, react native color picker, hex color picker, react native slider, range slider, react native otp input, otp verification code input, sms code autofill, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
+          'react native picker, react native date picker, react native time picker, react native duration picker, countdown timer picker, react native month picker, month year picker, credit card expiry picker, react native week calendar strip, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, react native country picker, country code picker, emoji picker, react native color picker, hex color picker, react native slider, range slider, react native otp input, otp verification code input, sms code autofill, react native star rating, rating stars, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
       },
     },
     { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: `${BASE_URL}llms.txt` } },
@@ -209,10 +205,8 @@ const config: Config = {
           type: 'docsVersionDropdown',
           position: 'right',
           dropdownItemsAfter: [
-            ...archivedLines.map(({ line, tag }) => ({
-              href: `${REPO}/tree/${tag}/website/docs`,
-              label: `v${line}.x`,
-            })),
+            // Older release lines aren't built (see scripts/prepare.mts); each tag on GitHub has its docs.
+            { href: `${REPO}/tags`, label: 'Older versions' },
             { to: '/changelog', label: 'Changelog' },
             { href: `${REPO}/releases`, label: 'GitHub releases' },
           ],

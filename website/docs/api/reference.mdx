@@ -31,6 +31,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`ColorPicker`](../components/color-picker) | iOS's tabs, Google's swatch circles or the browser's spectrum; hex with opacity |
 | [`Slider`](../components/slider) | iOS's knob, Material 3's handle or a range input; one value or a range |
 | [`OtpField`](../components/otp-field) | One-time code in a box per character, with SMS autofill and paste |
+| [`Rating`](../components/rating) | Stars to tap or drag, whole or half steps, or a read-only score |
 | [`BottomSheet`](../components/bottom-sheet) | Animated sheet |
 
 ## Sheets
@@ -179,6 +180,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `min` / `max` / `step` | `0` / `100` / `1` | Slider |
 | `valueLabel` | `'drag'` Material · `'never'` iOS, web | Slider |
 | `length` / `inputMode` | `6` / `'numeric'` | OtpField |
+| `max` / `step` / `size` | `5` / `1` / `32` | Rating |
 | `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
 | `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |

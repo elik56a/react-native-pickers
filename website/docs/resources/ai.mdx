@@ -90,6 +90,9 @@ Slider             value: number  onChange(value) (on release, or a key/screen-r
 OtpField           value: string (the code so far)  onChange(code) (typing, deleting, pasting)  onComplete(code) (last cell filled)  length=6  inputMode 'numeric'|'text' (digits on a number pad | letters and digits)  secureTextEntry (dots)  autoFocus  disabled  accessibilityLabel='Verification code'
                    one hidden TextInput over the cells: paste and SMS autofill work (oneTimeCode on iOS/web, sms-otp on Android); a pasted message keeps only the code chars; no ref: clear with value='', blur with Keyboard.dismiss() in onComplete
                    cells look like the design's text fields; slots container cell focusedCell filledCell cellText caret
+Rating             value: number  onChange(value) (tap, end of a drag, key/screen-reader step)  max=5 step=1 (0.5: half stars)  size=32  color='#FFB400' (filled)  emptyColor=theme border
+                   readOnly (shows any fraction, e.g. 4.3; no touches)  disabled  renderIcon({index,filled,color,size}) (drawn empty + filled, cut to the value; default ★ text, no SVG)  formatValue(v,max)='3 of 5'  accessibilityLabel='Rating'
+                   adjustable for screen readers; arrows step, Home 0, End max; web: pointer previews the value; RTL; the row stretches like a View (stars at its start, taps past them ignored; alignSelf:'center' to centre); slots container item icon
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight
 Sheets (draft; commit on Done):
   DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect

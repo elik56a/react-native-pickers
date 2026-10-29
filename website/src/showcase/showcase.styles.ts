@@ -43,4 +43,7 @@ export const styles = StyleSheet.create({
   settingLabel: { fontSize: 15, fontWeight: '500' },
   settingValue: { fontSize: 15 },
   icon: { fontSize: 16 },
+  hint: { fontSize: 13 },
+  scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  categoryRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
 });

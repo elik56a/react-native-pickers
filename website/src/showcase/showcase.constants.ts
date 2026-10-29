@@ -16,6 +16,8 @@ export const SHOWCASE_SCREEN = {
   trips: 'trips',
   delivery: 'delivery',
   display: 'display',
+  verify: 'verify',
+  review: 'review',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -99,6 +101,18 @@ export const SHOWCASE: ShowcaseItem[] = [
     title: 'Display & text',
     blurb: 'Brightness and text size preview live as you drag; the text size snaps to its marks, and focus hours are a range.',
     components: ['Slider'],
+  },
+  {
+    key: SHOWCASE_SCREEN.verify,
+    title: 'Verify your phone',
+    blurb: 'A phone number, then the code texted to it: the keyboard offers it from the message, and a paste fills every box.',
+    components: ['PhoneField', 'OtpField'],
+  },
+  {
+    key: SHOWCASE_SCREEN.review,
+    title: 'Rate your stay',
+    blurb: 'Half stars for the stay, a row of stars per category, and the place’s average shown read-only.',
+    components: ['Rating'],
   },
   {
     key: SHOWCASE_SCREEN.trips,
@@ -289,3 +303,16 @@ export const FOCUS_MARKS = [
 
 /** The preview is never fully dark, so it stays readable at the lowest brightness. */
 export const MIN_PREVIEW_OPACITY = 0.3;
+
+export const VERIFY = {
+  phone: '+12015550123',
+  codeLength: 6,
+} as const;
+
+export const REVIEW = {
+  place: 'Casa do Mar',
+  city: 'Lisbon',
+  average: 4.6,
+  reviews: 312,
+} as const;
+export const REVIEW_CATEGORIES = ['Cleanliness', 'Location', 'Value'] as const;

@@ -111,6 +111,8 @@ const sidebars: SidebarsConfig = {
             'resources/migration/slider',
             'resources/migration/multi-slider',
             'resources/migration/otp-entry',
+            'resources/migration/ratings',
+            'resources/migration/star-rating-widget',
             'resources/migration/confirmation-code-field',
           ],
         },

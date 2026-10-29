@@ -1,0 +1,42 @@
+---
+title: Migrate from react-native-ratings
+sidebar_label: 'ratings'
+description: "Switch from react-native-ratings to React Native Pickers: Rating with tap and drag, half steps, read-only fractions, your own icon instead of images, and keyboard and screen-reader support. No images or native code."
+---
+
+# Migrate from `react-native-ratings`
+
+```diff
+- import { AirbnbRating, Rating } from 'react-native-ratings';
++ import { Rating } from '@elik56a/react-native-pickers';
+
+- <AirbnbRating
+-   count={5}
+-   defaultRating={3}
+-   size={24}
+-   selectedColor="#f1c40f"
+-   showRating={false}
+-   onFinishRating={setStars}
+- />
++ <Rating defaultValue={3} size={24} color="#f1c40f" onChange={setStars} />
+```
+
+| react-native-ratings | React Native Pickers |
+| --- | --- |
+| `count` / `ratingCount` | `max` (default `5`) |
+| `defaultRating` / `startingValue` | `defaultValue`, or `value` to control it |
+| `onFinishRating` | `onChange`, once on a tap or the end of a drag |
+| `onStartRating` / `onSwipeRating` | — |
+| `size` / `imageSize` | `size` (default `32`) |
+| `selectedColor` / `ratingColor` | `color` |
+| `unSelectedColor` / `ratingBackgroundColor` | `emptyColor` |
+| `jumpValue={0.5}` / `fractions` | `step={0.5}` |
+| `minValue` | taps pick at least one step; keys can go to `0` |
+| `isDisabled` / `readonly` | `readOnly` to show a score, or `disabled` to dim it |
+| `type="heart"` / `starImage` / `ratingImage` | `renderIcon={({ color, size }) => …}` |
+| `reviews` + `showRating` | render your own label from `value` |
+| `starContainerStyle` / `style` | `styles={{ container, item }}` / `style` |
+
+There are no images to bundle: stars are text, and `renderIcon` takes any icon you already use. [`Rating`](../../components/rating) is adjustable for screen readers and steps with arrow keys on the web.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

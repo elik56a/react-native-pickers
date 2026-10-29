@@ -1,4 +1,4 @@
-import { clamp } from '../core/utils/track.utils';
+import { clamp, roundTo, stepDecimals } from '../core/utils/track.utils';
 import { CONTINUOUS_DECIMALS, CONTINUOUS_STEP_FRACTION, HALO_LEVEL, MIN_MARK_SPACING } from './slider.constants';
 import type {
   HaloLevel,
@@ -11,15 +11,12 @@ import type {
   TrackSegment,
 } from './slider.types';
 
-const decimalsOf = (step: number) => (step > 0 ? (String(step).split('.')[1]?.length ?? 0) : CONTINUOUS_DECIMALS);
-
-/** Rounds away float noise, so 0.1 + 0.2 lands on 0.3. */
-const round = (n: number, decimals: number) => Number(n.toFixed(decimals));
+const decimalsOf = (step: number) => (step > 0 ? stepDecimals(step) : CONTINUOUS_DECIMALS);
 
 /** The value in range, on the nearest step counted from `min`. */
 export const snapValue = (value: number, min: number, max: number, step: number) => {
   const snapped = step > 0 ? min + Math.round((value - min) / step) * step : value;
-  return clamp(round(snapped, decimalsOf(step)), min, max);
+  return clamp(roundTo(snapped, decimalsOf(step)), min, max);
 };
 
 export const valueToFraction = (value: number, min: number, max: number) => (max > min ? clamp((value - min) / (max - min), 0, 1) : 0);
@@ -54,7 +51,7 @@ export const sameValues = (a: readonly number[], b: readonly number[]) => a.leng
 export const toThumbValues = (value: number | SliderRange, min: number, max: number) =>
   (Array.isArray(value) ? [...value].sort((a, b) => a - b) : [value]).map((v) => clamp(v, min, max));
 
-export const formatSliderValue = (value: number, step: number) => String(round(value, decimalsOf(step)));
+export const formatSliderValue = (value: number, step: number) => String(roundTo(value, decimalsOf(step)));
 
 /**
  * The track cut at the thumbs, `cut` px either side of each (Material's gap). A single slider is active from its start

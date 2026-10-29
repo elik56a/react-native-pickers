@@ -1,0 +1,131 @@
+---
+title: React Native Star Rating
+description: "React Native star rating: tap or drag across the stars, whole or half steps, a read-only score with any fraction, your own icon (hearts, thumbs), keyboard and screen-reader steps, RTL. Pure JS, no SVG, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# Rating
+
+`Rating` is a React Native star rating: tap a star, or drag across the row and let go. Use it to ask for a review, or with `readOnly` to show a score such as 4.3.
+
+The stars are a ★ character, so there is no SVG or image to install; pass `renderIcon` for hearts, thumbs or your own icon. On the web the pointer previews the rating a click would pick.
+
+```tsx
+import { Rating } from '@elik56a/react-native-pickers';
+```
+
+```tsx live noplatforms
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { Rating } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [stars, setStars] = useState(0);
+  return (
+    <View style={{ gap: 8, alignItems: 'center' }}>
+      <Rating value={stars} onChange={setStars} accessibilityLabel="Rate your stay" />
+      <Text>{stars ? `${stars} of 5` : 'Tap a star'}</Text>
+    </View>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.rating} />
+
+## Half stars
+
+`step={0.5}` picks half stars: the left half of a star gives .5, the right half the whole star. A drag shows the value as it moves and calls `onChange` once, when the finger lifts.
+
+```tsx live noplatforms
+import { useState } from 'react';
+import { Rating } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [stars, setStars] = useState(3.5);
+  return <Rating step={0.5} value={stars} onChange={setStars} style={{ alignSelf: 'center' }} />;
+}
+```
+
+## Showing a score
+
+`readOnly` shows any value, filling part of a star for a fraction, and takes no touches. Screen readers hear *Rating, 4.3 of 5*.
+
+```tsx live noplatforms
+import { Text, View } from 'react-native';
+import { Rating } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+      <Rating value={4.3} readOnly size={20} accessibilityLabel="Average rating" />
+      <Text>4.3 · 1,284 reviews</Text>
+    </View>
+  );
+}
+```
+
+## Your own icon
+
+`renderIcon` draws each icon twice, empty and filled, and the filled one is cut to the rating, so half steps and fractions work with any icon. It gets `{ index, filled, color, size }`.
+
+```tsx live noplatforms
+import { Text } from 'react-native';
+import { Rating } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return (
+    <Rating
+      defaultValue={3}
+      color="#E0245E"
+      style={{ alignSelf: 'center' }}
+      renderIcon={({ color, size }) => <Text style={{ color, fontSize: size, lineHeight: size }}>♥</Text>}
+    />
+  );
+}
+```
+
+Colour your icon with the `color` it receives: the filled stars get `color` (gold by default) and the empty ones `emptyColor` (the theme's border colour).
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | — | The rating (controlled). |
+| `defaultValue` | `number` | `0` | Starting rating when `value` isn't set. |
+| `onChange` | `(value: number) => void` | — | On a tap, when a drag ends on a new value, or on a key or screen-reader step. |
+| `max` | `number` | `5` | How many stars. |
+| `step` | `number` | `1` | The value moves in steps this big: `0.5` for half stars. |
+| `readOnly` | `boolean` | `false` | Shows the value, any fraction, and takes no touches or keys. |
+| `disabled` | `boolean` | `false` | Dims the stars and ignores touches and keys. |
+| `size` | `number` | `32` | Each star's width and height. |
+| `color` | `string` | gold, `#FFB400` | The filled stars. |
+| `emptyColor` | `string` | theme `border` | The empty stars. |
+| `renderIcon` | `(info: RatingIconInfo) => ReactNode` | ★ | Your own icon, drawn empty and filled. |
+| `formatValue` | `(value: number, max: number) => string` | `'3 of 5'` | The value as screen readers hear it. |
+| `accessibilityLabel` | `string` | `'Rating'` | What screen readers call the rating. |
+| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
+| `style` | `ViewStyle` | — | The row. It stretches with its parent like any `View`, the stars at its start; taps after the last star do nothing. Centre it with `alignSelf: 'center'`. |
+| `styles` | `{ container, item, icon }` | — | [Slot styles](../guides/styling): the row, each star's box, and the ★ text. |
+| `testID` | `string` | — | On the row; star `i` gets `${testID}-star-${i}`. |
+
+```ts
+interface RatingIconInfo {
+  index: number; // 0 for the first star
+  filled: boolean;
+  color: string; // color or emptyColor
+  size: number;
+}
+```
+
+## Accessibility
+
+The row is one adjustable control, as a slider is: swipe up or down with VoiceOver or TalkBack to change the rating by a step. On the web, arrow keys step it, and Home and End go to 0 and to `max`. With `readOnly`, it's text: the label and the score.
+
+## Related
+
+- [Slider](./slider): any number in a range
+- [Migrate from react-native-ratings](../resources/migration/ratings) or [react-native-star-rating-widget](../resources/migration/star-rating-widget)
