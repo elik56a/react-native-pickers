@@ -133,3 +133,7 @@ export const ARROW_DIRECTION: Record<string, ValueOf<typeof DIRECTION>> = {
 /** What arrow-key focus moves to: what Tab stops at, text fields included. */
 export const FOCUS_TARGETS = '[tabindex="0"], input:not([disabled]), textarea:not([disabled])';
 export const TEXT_FIELD_TAGS = ['INPUT', 'TEXTAREA'];
+/** How far (px) a box may overlap the one focus leaves and still count as lying that way. */
+export const EDGE_TOLERANCE = 1;
+/** A step across counts double a step along, so moving down keeps to the column and moving right to the row. */
+export const CROSS_WEIGHT = 2;

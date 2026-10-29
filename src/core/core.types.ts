@@ -171,6 +171,24 @@ export interface TrackPanOptions {
   insetX?: number;
 }
 
+/** The few DOM members arrow-key focus needs; the library is typed without the DOM. */
+export interface WebElement {
+  getBoundingClientRect: () => Rect;
+  focus: () => void;
+  tagName: string;
+  contains: (node: WebElement) => boolean;
+  querySelectorAll: (selectors: string) => ArrayLike<WebElement>;
+  parentElement: WebElement | null;
+  dispatchEvent: (event: unknown) => boolean;
+  ownerDocument: {
+    activeElement: WebElement | null;
+    defaultView: {
+      getComputedStyle: (element: WebElement) => { direction: string };
+      KeyboardEvent: new (type: string, init: { key: string; bubbles: boolean; cancelable: boolean }) => unknown;
+    } | null;
+  };
+}
+
 /** A box on screen, as `getBoundingClientRect` gives it. */
 export interface Rect {
   left: number;

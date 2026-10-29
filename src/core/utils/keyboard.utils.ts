@@ -1,7 +1,7 @@
 import type { KeyDownEvent, TextInputKeyPressEvent } from 'react-native';
 
-import { ARROW_DIRECTION, DIRECTION, FOCUS_TARGETS, IS_WEB, KEY, TEXT_FIELD_TAGS } from '../core.constants';
-import type { Direction, Key, KeyHandlers, Rect } from '../core.types';
+import { ARROW_DIRECTION, CROSS_WEIGHT, DIRECTION, EDGE_TOLERANCE, FOCUS_TARGETS, IS_WEB, KEY, TEXT_FIELD_TAGS } from '../core.constants';
+import type { Direction, Key, KeyHandlers, Rect, WebElement } from '../core.types';
 
 /** Lets a control take focus and answer keys. The keys it answers don't scroll the page or reach the grid around it. */
 export const keyboardProps = (handlers: KeyHandlers) => ({
@@ -14,10 +14,6 @@ export const keyboardProps = (handlers: KeyHandlers) => ({
     handle();
   },
 });
-
-const EDGE_TOLERANCE = 1;
-/** A step across counts double a step along, so moving down keeps to the column and moving right to the row. */
-const CROSS_WEIGHT = 2;
 
 /** How far `point` is outside the span from `start` to `end`. */
 const outside = (point: number, start: number, end: number) => Math.max(0, start - point, point - end);
@@ -83,24 +79,6 @@ export const nextFocusIndex = (key: string, current: number, rects: readonly Rec
   const wrapped = current + ((direction === DIRECTION.right) !== rtl ? 1 : -1);
   return wrapped >= 0 && wrapped < rects.length ? wrapped : -1;
 };
-
-/** The few DOM members arrow-key focus needs; the library is typed without the DOM. */
-interface WebElement {
-  getBoundingClientRect: () => Rect;
-  focus: () => void;
-  tagName: string;
-  contains: (node: WebElement) => boolean;
-  querySelectorAll: (selectors: string) => ArrayLike<WebElement>;
-  parentElement: WebElement | null;
-  dispatchEvent: (event: unknown) => boolean;
-  ownerDocument: {
-    activeElement: WebElement | null;
-    defaultView: {
-      getComputedStyle: (element: WebElement) => { direction: string };
-      KeyboardEvent: new (type: string, init: { key: string; bubbles: boolean; cancelable: boolean }) => unknown;
-    } | null;
-  };
-}
 
 const moveFocus = (e: KeyDownEvent) => {
   const root = e.currentTarget as unknown as WebElement;
