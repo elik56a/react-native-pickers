@@ -71,7 +71,7 @@ export const COMPONENTS = [
   { doc: 'components/slider', name: 'Slider', body: 'One value or a range, with steps and icons' },
   { doc: 'components/multi-wheel-picker', name: 'MultiWheelPicker', body: 'Units, compound values, dependent columns' },
   { doc: 'components/picker-sheets', name: 'Sheets', body: 'Every picker in a bottom sheet or modal' },
-  { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet or dropdown' },
+  { doc: 'components/picker-fields', name: 'Fields', body: 'Tap a field, pick in a sheet, a dropdown or inline' },
 ];
 
 export const HERO_CHIPS = [

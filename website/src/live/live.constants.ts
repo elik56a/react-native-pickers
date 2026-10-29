@@ -41,7 +41,12 @@ const SLIDER = ['Slider'];
  * A prop listed twice (e.g. `presentation`) becomes one control; the first entry an example matches sets its options.
  */
 export const LIVE_CONTROLS: readonly LiveControl[] = [
-  { prop: 'presentation', components: [...FIELDS, ...SELECT], options: ['auto', 'dropdown', 'bottomSheet', 'modal'], default: 'auto' },
+  {
+    prop: 'presentation',
+    components: [...FIELDS, ...SELECT],
+    options: ['auto', 'dropdown', 'bottomSheet', 'modal', 'inline'],
+    default: 'auto',
+  },
   { prop: 'presentation', components: SHEETS, options: ['auto', 'bottomSheet', 'modal'], default: 'auto' },
   { prop: 'display', components: DATE_TIME, options: ['wheel', 'calendar'], default: 'wheel' },
   { prop: 'format', components: [...TIME, ...DATE_TIME], options: ['auto', '12h', '24h'], default: 'auto' },

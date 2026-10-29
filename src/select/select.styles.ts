@@ -1,4 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, type ViewStyle } from 'react-native';
+
+import { DROPDOWN_MAX_HEIGHT } from '../sheet/sheet.constants';
+import { SELECT_PRESENTATION } from './select.constants';
+import type { SelectPresentation } from './select.types';
 
 export const styles = StyleSheet.create({
   flex: { flex: 1 },
@@ -17,4 +21,14 @@ export const styles = StyleSheet.create({
   chip: { paddingHorizontal: 10, paddingVertical: 4 },
   dropdownList: { flexShrink: 1 },
   sheetList: { flexGrow: 1, flexShrink: 1 },
+  /** Inline, the list scrolls on its own instead of stretching the page. */
+  inlineList: { maxHeight: DROPDOWN_MAX_HEIGHT },
 });
+
+export const LIST_STYLE: Record<SelectPresentation, ViewStyle> = {
+  [SELECT_PRESENTATION.auto]: styles.sheetList,
+  [SELECT_PRESENTATION.bottomSheet]: styles.sheetList,
+  [SELECT_PRESENTATION.modal]: styles.sheetList,
+  [SELECT_PRESENTATION.dropdown]: styles.dropdownList,
+  [SELECT_PRESENTATION.inline]: styles.inlineList,
+};

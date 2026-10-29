@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.0](https://github.com/elik56a/react-native-pickers/compare/v0.24.0...v0.25.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **sheet:** an inline presentation that expands the picker under its field ([#79](https://github.com/elik56a/react-native-pickers/issues/79)) ([4bdbf56](https://github.com/elik56a/react-native-pickers/commit/4bdbf564fab62d867b55fcd6d6dd6cbf157fa8f7))
+
 ## [0.24.0](https://github.com/elik56a/react-native-pickers/compare/v0.23.2...v0.24.0) (2026-10-29)
 
 

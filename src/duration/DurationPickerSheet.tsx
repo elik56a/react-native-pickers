@@ -21,7 +21,7 @@ export const DurationPickerSheet = ({
   ...rest
 }: DurationPickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft(snapDuration(value ?? 0, rest), visible);
+  const [draft, setDraft] = useDraft(snapDuration(value ?? 0, rest), visible, { commit: onConfirm });
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}

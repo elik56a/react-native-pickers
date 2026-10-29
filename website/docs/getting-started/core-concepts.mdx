@@ -72,7 +72,7 @@ Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `D
 
 ## Fields
 
-In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field. By default it opens a bottom sheet on iOS and Android and a dropdown under the field on the web; `presentation` picks `'bottomSheet'`, `'modal'` or `'dropdown'`.
+In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field. By default it opens a bottom sheet on iOS and Android and a dropdown under the field on the web; `presentation` picks `'bottomSheet'`, `'modal'`, `'dropdown'` or `'inline'` (expanded in place under the field).
 
 ```tsx
 <TimePickerField label="Alarm" value={time} onConfirm={setTime} />

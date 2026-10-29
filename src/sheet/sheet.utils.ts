@@ -95,6 +95,9 @@ export const resolvePresentation = (
 export const resolveFieldPresentation = (presentation: FieldPresentation, platform: PlatformOSType): FieldPresentation =>
   presentation === FIELD_PRESENTATION.auto && platform === PLATFORM.web ? FIELD_PRESENTATION.dropdown : presentation;
 
+/** A tap on an open inline field collapses it; any other tap opens the picker. */
+export const shouldCollapseOnPress = (presentation: FieldPresentation, open: boolean) => open && presentation === FIELD_PRESENTATION.inline;
+
 /** Platform defaults for a bottom sheet. Mouse drags on the header would select its text on the web, so there only the handle drags. */
 export const getSheetDefaults = (platform: PlatformOSType) => ({
   bottomInset: platform === PLATFORM.ios ? IOS_BOTTOM_INSET : DEFAULT_BOTTOM_INSET,

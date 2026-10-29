@@ -45,7 +45,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
 | [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
 | [`ColorPickerSheet`](../components/color-picker#in-a-sheet) | ColorPicker in a sheet |
-| [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
+| [`useDraft(value, visible, { resetKey?, commit? })`](../components/picker-sheets#usedraft) | Draft state that resets on open; commits each change inline |
 
 ## Fields
 
@@ -130,8 +130,8 @@ type SkinTone = 0 | 1 | 2 | 3 | 4 | 5;
 /** Every sheet's `presentation`. */
 type SheetPresentation = 'auto' | 'bottomSheet' | 'modal';
 
-/** A field's `presentation`: a sheet presentation, or a dropdown under the field. Its `auto` (the default) is a dropdown on the web. */
-type FieldPresentation = SheetPresentation | 'dropdown';
+/** A field's `presentation`: a sheet presentation, a dropdown under the field, or inline: expanded in place under it. Its `auto` (the default) is a dropdown on the web. */
+type FieldPresentation = SheetPresentation | 'dropdown' | 'inline';
 
 /** SelectPicker's `presentation`; its `auto` is a dropdown on the web. */
 type SelectPresentation = FieldPresentation;

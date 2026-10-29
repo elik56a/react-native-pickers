@@ -11,7 +11,7 @@ import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
 import { DEFAULT_SEARCH_PLACEHOLDER, SELECT_DROPDOWN_MIN_WIDTH, SELECT_PRESENTATION } from './select.constants';
-import { styles } from './select.styles';
+import { LIST_STYLE } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
 export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
@@ -51,7 +51,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}
-      style={picker.presentation === SELECT_PRESENTATION.dropdown ? styles.dropdownList : styles.sheetList}
+      style={LIST_STYLE[picker.presentation]}
     />
   );
 
@@ -60,7 +60,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
       <View ref={picker.anchor.ref} collapsable={false}>
         {renderTrigger ? (
-          renderTrigger({ open: picker.show, selected: picker.selected, disabled })
+          renderTrigger({ open: picker.toggle, selected: picker.selected, disabled })
         ) : (
           <SelectTrigger
             selected={picker.selected}
@@ -71,7 +71,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
             open={picker.open}
             disabled={disabled}
             clearable={clearable}
-            onOpen={picker.show}
+            onOpen={picker.toggle}
             onRemove={picker.removeOption}
             onClear={picker.clear}
             renderChevron={renderChevron}

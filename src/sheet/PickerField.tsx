@@ -39,7 +39,7 @@ export const PickerField = ({
       {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
       <View ref={field.anchor.ref} collapsable={false}>
         {renderTrigger ? (
-          renderTrigger({ open: field.show, displayValue, disabled })
+          renderTrigger({ open: field.toggle, displayValue, disabled })
         ) : (
           <FieldTrigger
             displayValue={displayValue}
@@ -49,7 +49,7 @@ export const PickerField = ({
             open={field.open}
             disabled={disabled}
             clearable={clearable}
-            onOpen={field.show}
+            onOpen={field.toggle}
             onClear={onClear}
             renderChevron={renderChevron}
             theme={theme}

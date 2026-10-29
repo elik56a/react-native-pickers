@@ -22,7 +22,7 @@ export const ColorPickerSheet = ({
   ...rest
 }: ColorPickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft((value && normalizeHex(value)) ?? DEFAULT_COLOR, visible);
+  const [draft, setDraft] = useDraft((value && normalizeHex(value)) ?? DEFAULT_COLOR, visible, { commit: onConfirm });
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}

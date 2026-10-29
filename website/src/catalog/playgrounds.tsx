@@ -33,7 +33,7 @@ import {
 import { styles } from './catalog.styles';
 import type { PlaygroundConfig, PlaygroundKey, PlaygroundSelection } from './catalog.types';
 
-const PRESENTATION = { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] } as const;
+const PRESENTATION = { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal', 'inline'] } as const;
 const CLEARABLE = { prop: 'clearable', options: [false, true] } as const;
 
 const toOptions = (labels: string[]) =>

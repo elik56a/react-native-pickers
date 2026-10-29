@@ -21,7 +21,7 @@ export const WheelPickerSheet = <T,>({
   ...rest
 }: WheelPickerSheetProps<T>) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft<T>(value ?? (firstItemValue(rest.items) as T), visible);
+  const [draft, setDraft] = useDraft<T>(value ?? (firstItemValue(rest.items) as T), visible, { commit: onConfirm });
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
