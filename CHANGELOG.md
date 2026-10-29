@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.26.0](https://github.com/elik56a/react-native-pickers/compare/v0.25.0...v0.26.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **slider:** add Slider, with iOS's knob, Material 3's handle or a range input ([#81](https://github.com/elik56a/react-native-pickers/issues/81)) ([8f88b00](https://github.com/elik56a/react-native-pickers/commit/8f88b00aa88a7975f93d2801c2188544599bf9df))
+
 ## [0.25.0](https://github.com/elik56a/react-native-pickers/compare/v0.24.0...v0.25.0) (2026-10-29)
 
 
