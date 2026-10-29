@@ -1,0 +1,50 @@
+---
+title: Migrate from react-native-confirmation-code-field
+sidebar_label: 'confirmation-code-field'
+description: "Switch from react-native-confirmation-code-field to React Native Pickers: OtpField draws the cells, caret and focus for you, reads the code from a text message on iOS, Android and the web, and follows iOS, Material and web designs."
+---
+
+# Migrate from `react-native-confirmation-code-field`
+
+`react-native-confirmation-code-field` gives you the hidden input and leaves the cells to you. [`OtpField`](../../components/otp-field) works the same way underneath and draws the cells, the caret and the focus for you.
+
+```diff
+- import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
++ import { OtpField } from '@elik56a/react-native-pickers';
+
+- const ref = useBlurOnFulfill({ value, cellCount: 6 });
+- const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
+-
+- <CodeField
+-   ref={ref}
+-   {...props}
+-   value={value}
+-   onChangeText={setValue}
+-   cellCount={6}
+-   keyboardType="number-pad"
+-   textContentType="oneTimeCode"
+-   autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+-   renderCell={({ index, symbol, isFocused }) => (
+-     <Text key={index} style={[styles.cell, isFocused && styles.focusCell]} onLayout={getCellOnLayoutHandler(index)}>
+-       {symbol || (isFocused && <Cursor />)}
+-     </Text>
+-   )}
+- />
++ <OtpField value={value} onChange={setValue} onComplete={verify} />
+```
+
+| confirmation-code-field | React Native Pickers |
+| --- | --- |
+| `cellCount` | `length` (default `6`) |
+| `value` / `onChangeText` | `value` / `onChange`, or leave them out and use `onComplete` |
+| `keyboardType`, `textContentType`, `autoComplete` | set for you: a number pad, and the code from a text message on iOS, Android and the web |
+| `renderCell` + `Cursor` | drawn for you, with a blinking caret; restyle with `styles={{ cell, focusedCell, filledCell, cellText, caret }}` |
+| `rootStyle` | `styles={{ container }}` or `style` |
+| `MaskSymbol` | `secureTextEntry` |
+| `useBlurOnFulfill` | `onComplete={(code) => { Keyboard.dismiss(); verify(code); }}` |
+| `useClearByFocusCell` | set `value` to `''` to start over |
+| — | `inputMode="text"` for letters and digits, pasted messages reduced to the code, `disabled` |
+
+Typing or pasting keeps only the characters the code can have, so pasting *Your code is 482-913* fills `482913`.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

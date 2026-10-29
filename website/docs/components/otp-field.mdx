@@ -1,0 +1,134 @@
+---
+title: React Native OTP Input
+description: "React Native OTP input for verification codes and PINs: a box per character with a blinking caret, SMS code autofill on iOS, Android and the web, paste from a message, numeric or letters, secure dots. iOS, Material and web designs, zero native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# OtpField
+
+`OtpField` is a React Native OTP input: the one-time code from a text message or an authenticator app, a box per character. It's the step after [`PhoneField`](./phone-field) in a phone sign-in.
+
+One text field sits under the boxes, so everything a text field does works: the keyboard offers the code from the latest text message (iOS, Android and Safari), long-press pastes, and screen readers hear one field rather than six. The boxes look like the [design's](../guides/designs) text fields.
+
+```tsx
+import { OtpField } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { OtpField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [code, setCode] = useState('');
+  const [sent, setSent] = useState<string | null>(null);
+  return (
+    <View style={{ gap: 12 }}>
+      <OtpField value={code} onChange={setCode} onComplete={setSent} />
+      <Text>{sent ? `Checking ${sent}…` : 'Enter the 6-digit code'}</Text>
+    </View>
+  );
+}
+```
+
+Paste *Your code is 482-913* and the boxes fill with `482913`: the field keeps only the characters a code can have.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.otpField} />
+
+## Checking the code
+
+`onComplete` fires once the user fills the last box, with the whole code: send it to your server there. `onChange` fires on every key, delete and paste, for a controlled field. Neither fires when you change `value` yourself.
+
+For a wrong code, set `value` to `''`: the boxes empty and the field stays focused for another try. To hide the keyboard while you check, call `Keyboard.dismiss()` in `onComplete`.
+
+```tsx live
+import { useState } from 'react';
+import { Keyboard, Text, View } from 'react-native';
+import { OtpField } from '@elik56a/react-native-pickers';
+
+const CORRECT = '1234';
+
+export default function Example() {
+  const [code, setCode] = useState('');
+  const [error, setError] = useState(false);
+  return (
+    <View style={{ gap: 12 }}>
+      <OtpField
+        length={4}
+        value={code}
+        onChange={(next) => {
+          setCode(next);
+          setError(false);
+        }}
+        onComplete={(full) => {
+          if (full === CORRECT) Keyboard.dismiss();
+          else {
+            setError(true);
+            setCode('');
+          }
+        }}
+        styles={error ? { cell: { borderColor: '#D93025' } } : undefined}
+      />
+      <Text>{error ? 'Wrong code, try again' : 'Hint: 1234'}</Text>
+    </View>
+  );
+}
+```
+
+## Letters, and PINs
+
+`inputMode="text"` takes letters and digits on the full keyboard, for codes like `A7K2Q9`. `secureTextEntry` shows each character as a dot, for a PIN.
+
+```tsx live
+import { View } from 'react-native';
+import { OtpField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  return (
+    <View style={{ gap: 16 }}>
+      <OtpField inputMode="text" length={6} accessibilityLabel="Backup code" />
+      <OtpField secureTextEntry length={4} accessibilityLabel="PIN" />
+    </View>
+  );
+}
+```
+
+## Designs
+
+| iOS | Material | Web |
+| --- | --- | --- |
+| bordered boxes, the focused one in the primary colour | outlined boxes, the focused one with a 2dp primary outline | compact outlined boxes, the focused one with a focus ring |
+
+Each box is up to 56 wide and as tall as the design's fields, sharing the row's width, so six fit on the narrowest phone. Restyle any part with `styles`.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | The code so far (controlled). |
+| `defaultValue` | `string` | `''` | Starting code when `value` isn't set. |
+| `onChange` | `(code: string) => void` | — | As the user types, deletes or pastes. |
+| `onComplete` | `(code: string) => void` | — | Once the user fills the last box. |
+| `length` | `number` | `6` | How many characters the code has. |
+| `inputMode` | `'numeric' \| 'text'` | `'numeric'` | Digits on a number pad, or letters and digits. |
+| `secureTextEntry` | `boolean` | `false` | Dots instead of characters. |
+| `autoFocus` | `boolean` | `false` | Focus the field when it mounts. |
+| `disabled` | `boolean` | `false` | Dims the boxes and ignores typing. |
+| `accessibilityLabel` | `string` | `'Verification code'` | What screen readers call the field. |
+| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
+| `style` | `ViewStyle` | — | The field's container. |
+| `styles` | `{ container, cell, focusedCell, filledCell, cellText, caret }` | — | [Slot styles](../guides/styling). `container` is the row of boxes. |
+| `testID` | `string` | — | On the text input; box `i` gets `${testID}-cell-${i}`. |
+
+## Accessibility
+
+Screen readers see one text field, named by `accessibilityLabel`, with the code as its value; the boxes are hidden from them. Typing, deleting and pasting work as in any field, with a hardware keyboard too.
+
+## Related
+
+- [PhoneField](./phone-field): the number to send the code to
+- [Migrate from react-native-otp-entry](../resources/migration/otp-entry) or [react-native-confirmation-code-field](../resources/migration/confirmation-code-field)
