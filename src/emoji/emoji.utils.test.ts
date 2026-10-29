@@ -160,8 +160,8 @@ describe('row helpers', () => {
     expect(getRowHeight(header, 40)).toBe(SECTION_HEADER_HEIGHT);
     expect(getRowHeight(row, 40)).toBe(40);
     expect(getRowHeight(undefined, 40)).toBe(40);
-    expect(getRowKey(header, 0)).toBe('h-food');
-    expect(getRowKey(row, 3)).toBe('r-food-3');
+    expect(getRowKey(header)).toBe('h-food');
+    expect(getRowKey(row)).toBe('r-food-🍕');
   });
 });
 

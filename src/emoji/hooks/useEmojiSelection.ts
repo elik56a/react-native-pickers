@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useControllableState } from '../../core/hooks/useControllableState';
 import type { Emoji, EmojiPickerProps, SkinTone } from '../emoji.types';
@@ -21,12 +21,17 @@ export const useEmojiSelection = (props: EmojiPickerProps, showRecent: boolean, 
     [setTone]
   );
 
+  // Read at press time, so `select` keeps one identity and the memoized cells don't re-render when the parent passes a new onSelect.
+  const latest = useRef({ onSelect, tone, recent, setRecent });
+  latest.current = { onSelect, tone, recent, setRecent };
+
   const select = useCallback(
     (e: Emoji) => {
-      onSelect(withSkinTone(e, tone), e);
-      if (showRecent) setRecent(addRecent(recent, e, maxRecent));
+      const current = latest.current;
+      current.onSelect(withSkinTone(e, current.tone), e);
+      if (showRecent) current.setRecent(addRecent(current.recent, e, maxRecent));
     },
-    [maxRecent, onSelect, recent, setRecent, showRecent, tone]
+    [maxRecent, showRecent]
   );
 
   return {
