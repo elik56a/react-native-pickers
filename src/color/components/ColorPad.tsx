@@ -5,9 +5,8 @@ import { keyboardProps } from '../../core/utils/keyboard.utils';
 import { COLOR_A11Y_ACTIONS, COLOR_STEP, PAD_ACTION } from '../color.constants';
 import { styles } from '../color.styles';
 import type { ColorPadProps } from '../color.types';
+import { clamp01 } from '../color.utils';
 import { useTrackPan } from '../hooks/useTrackPan';
-
-const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /**
  * A square of colour to tap or drag across. Screen readers step it across with increment and decrement, and up and down
