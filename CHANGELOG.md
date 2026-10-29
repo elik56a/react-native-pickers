@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.1](https://github.com/elik56a/react-native-pickers/compare/v0.19.0...v0.19.1) (2026-10-29)
+
+
+### 🐛 Bug Fixes
+
+* **emoji:** pick without a delay, and keep the grid still while a dropdown closes ([#59](https://github.com/elik56a/react-native-pickers/issues/59)) ([48f4fbe](https://github.com/elik56a/react-native-pickers/commit/48f4fbe200f1e0c84d9c6408851e689b17df4368))
+
 ## [0.19.0](https://github.com/elik56a/react-native-pickers/compare/v0.18.0...v0.19.0) (2026-10-29)
 
 
