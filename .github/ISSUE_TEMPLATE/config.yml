@@ -1,10 +1,10 @@
 blank_issues_enabled: false
 contact_links:
   - name: Docs
-    url: https://elik56a.github.io/react-native-pickers/
+    url: https://react-native-pickers.dev/
     about: Every component, prop and recipe, with live examples.
   - name: Troubleshooting
-    url: https://elik56a.github.io/react-native-pickers/docs/resources/troubleshooting
+    url: https://react-native-pickers.dev/docs/resources/troubleshooting
     about: Fixes for the most common setup problems.
   - name: Security vulnerability
     url: https://github.com/elik56a/react-native-pickers/security/advisories/new

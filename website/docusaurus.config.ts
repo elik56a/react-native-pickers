@@ -7,8 +7,8 @@ import { CODE_THEME } from './src/theme/Playground/playground.constants';
 
 const PACKAGE = '@elik56a/react-native-pickers';
 const REPO = 'https://github.com/elik56a/react-native-pickers';
-const SITE = 'https://elik56a.github.io/react-native-pickers/';
-const BASE_URL = '/react-native-pickers/';
+const SITE = 'https://react-native-pickers.dev/';
+const BASE_URL = '/';
 const AUTHOR = 'Eliyahu Kriel';
 const LINKEDIN = 'https://www.linkedin.com/in/elikri/';
 const NPM = `https://www.npmjs.com/package/${PACKAGE}`;
@@ -79,7 +79,7 @@ const config: Config = {
   title: 'React Native Pickers',
   tagline: DESCRIPTION,
   favicon: 'img/logo.svg',
-  url: 'https://elik56a.github.io',
+  url: 'https://react-native-pickers.dev',
   baseUrl: BASE_URL,
   customFields: { version },
   organizationName: 'elik56a',
@@ -98,7 +98,7 @@ const config: Config = {
           'react native picker, react native date picker, react native time picker, react native duration picker, countdown timer picker, react native month picker, month year picker, credit card expiry picker, react native week calendar strip, react native date time picker, react native wheel picker, react native calendar, date range picker, react native select, react native dropdown, multi-select, autocomplete, segmented control, chips, react native country picker, country code picker, emoji picker, react native color picker, hex color picker, bottom sheet, material design date picker, material time picker clock, ios style picker, expo, react native web',
       },
     },
-    { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: '/react-native-pickers/llms.txt' } },
+    { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: `${BASE_URL}llms.txt` } },
     { tagName: 'script', attributes: { type: 'application/ld+json' }, innerHTML: JSON.stringify(structuredData) },
   ],
 
@@ -192,7 +192,7 @@ const config: Config = {
     ],
     announcementBar: {
       id: 'llms',
-      content: `Using an AI assistant? Point it at <a href="/react-native-pickers/llms-full.txt">llms-full.txt</a>: the whole API in one file.`,
+      content: `Using an AI assistant? Point it at <a href="${BASE_URL}llms-full.txt">llms-full.txt</a>: the whole API in one file.`,
       isCloseable: true,
     },
     navbar: {

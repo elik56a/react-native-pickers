@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping out! The full guide, with the project structure and every script, is on the docs site: **[Contributing](https://elik56a.github.io/react-native-pickers/docs/resources/contributing)**.
+Thanks for helping out! The full guide, with the project structure and every script, is on the docs site: **[Contributing](https://react-native-pickers.dev/docs/resources/contributing)**.
 
 ## Quick start
 

@@ -12,10 +12,10 @@
 </p>
 
 <p align="center">
-  <a href="https://elik56a.github.io/react-native-pickers/"><b>Documentation & live examples</b></a> ·
-  <a href="https://elik56a.github.io/react-native-pickers/showcase">Showcase</a> ·
-  <a href="https://elik56a.github.io/react-native-pickers/docs/getting-started/quick-start">Quick start</a> ·
-  <a href="https://elik56a.github.io/react-native-pickers/llms-full.txt">llms-full.txt</a> ·
+  <a href="https://react-native-pickers.dev/"><b>Documentation & live examples</b></a> ·
+  <a href="https://react-native-pickers.dev/showcase">Showcase</a> ·
+  <a href="https://react-native-pickers.dev/docs/getting-started/quick-start">Quick start</a> ·
+  <a href="https://react-native-pickers.dev/llms-full.txt">llms-full.txt</a> ·
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
@@ -93,25 +93,25 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 
 | Component | What it is |
 |---|---|
-| [`WheelPicker`](https://elik56a.github.io/react-native-pickers/docs/components/wheel-picker) | 3D scrolling wheel: infinite loop, disabled items, tap-to-type |
-| [`MultiWheelPicker`](https://elik56a.github.io/react-native-pickers/docs/components/multi-wheel-picker) | Several wheels sharing one selection band: durations, units, compound values |
-| [`TimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, intervals, min / max |
-| [`DatePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
-| [`MonthPicker`](https://elik56a.github.io/react-native-pickers/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
-| [`WeekStrip`](https://elik56a.github.io/react-native-pickers/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
-| [`DurationPicker`](https://elik56a.github.io/react-native-pickers/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
-| [`DateTimePicker`](https://elik56a.github.io/react-native-pickers/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
-| [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
-| [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
-| [`CountryPicker`](https://elik56a.github.io/react-native-pickers/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
-| [`PhoneField`](https://elik56a.github.io/react-native-pickers/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
-| [`TimeZonePicker`](https://elik56a.github.io/react-native-pickers/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
-| [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
-| [`ColorPicker`](https://elik56a.github.io/react-native-pickers/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
-| [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
-| [`BottomSheet`](https://elik56a.github.io/react-native-pickers/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
-| [Picker sheets](https://elik56a.github.io/react-native-pickers/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
-| [Picker fields](https://elik56a.github.io/react-native-pickers/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
+| [`WheelPicker`](https://react-native-pickers.dev/docs/components/wheel-picker) | 3D scrolling wheel: infinite loop, disabled items, tap-to-type |
+| [`MultiWheelPicker`](https://react-native-pickers.dev/docs/components/multi-wheel-picker) | Several wheels sharing one selection band: durations, units, compound values |
+| [`TimePicker`](https://react-native-pickers.dev/docs/components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, intervals, min / max |
+| [`DatePicker`](https://react-native-pickers.dev/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
+| [`MonthPicker`](https://react-native-pickers.dev/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
+| [`WeekStrip`](https://react-native-pickers.dev/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
+| [`DurationPicker`](https://react-native-pickers.dev/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
+| [`DateTimePicker`](https://react-native-pickers.dev/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
+| [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
+| [`SelectList`](https://react-native-pickers.dev/docs/components/select-list) | The same list, inline |
+| [`CountryPicker`](https://react-native-pickers.dev/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
+| [`PhoneField`](https://react-native-pickers.dev/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
+| [`TimeZonePicker`](https://react-native-pickers.dev/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
+| [`HorizontalList`](https://react-native-pickers.dev/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
+| [`ColorPicker`](https://react-native-pickers.dev/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
+| [`EmojiPicker`](https://react-native-pickers.dev/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
+| [`BottomSheet`](https://react-native-pickers.dev/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
+| [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
+| [Picker fields](https://react-native-pickers.dev/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
 
 ## Inline, in a sheet, or behind a field
 
@@ -163,7 +163,7 @@ Pick one design for the whole app, or for one component:
 <TimePicker design="material" value={time} onChange={setTime} />
 ```
 
-Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs).
+Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://react-native-pickers.dev/docs/next/guides/designs).
 
 > **Upgrading from 0.10?** Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
 >
@@ -240,7 +240,7 @@ Any component also takes `theme` and `design` for a local override.
 
 ## API at a glance
 
-The [full API reference](https://elik56a.github.io/react-native-pickers/docs/api/reference) lists every prop. These are the ones you'll reach for.
+The [full API reference](https://react-native-pickers.dev/docs/api/reference) lists every prop. These are the ones you'll reach for.
 
 ### WheelPicker&lt;T&gt;
 
@@ -458,13 +458,13 @@ To preview iOS or Android behavior in a browser (Storybook, a design system), se
 
 ## For AI assistants
 
-The complete documentation is one Markdown file, [`llms-full.txt`](https://elik56a.github.io/react-native-pickers/llms-full.txt), with an index at [`llms.txt`](https://elik56a.github.io/react-native-pickers/llms.txt). It also ships inside the package at `node_modules/@elik56a/react-native-pickers/llms-full.txt`, matching the installed version. A short cheat sheet for code generation is on the [For AI assistants](https://elik56a.github.io/react-native-pickers/docs/resources/ai) page.
+The complete documentation is one Markdown file, [`llms-full.txt`](https://react-native-pickers.dev/llms-full.txt), with an index at [`llms.txt`](https://react-native-pickers.dev/llms.txt). It also ships inside the package at `node_modules/@elik56a/react-native-pickers/llms-full.txt`, matching the installed version. A short cheat sheet for code generation is on the [For AI assistants](https://react-native-pickers.dev/docs/resources/ai) page.
 
 ## Learn more
 
-- **Guides:** [designs](https://elik56a.github.io/react-native-pickers/docs/next/guides/designs) · [theming](https://elik56a.github.io/react-native-pickers/docs/guides/theming) · [styling with slots](https://elik56a.github.io/react-native-pickers/docs/guides/styling) · [render props](https://elik56a.github.io/react-native-pickers/docs/guides/render-props) · [i18n & RTL](https://elik56a.github.io/react-native-pickers/docs/guides/i18n-rtl) · [accessibility](https://elik56a.github.io/react-native-pickers/docs/guides/accessibility) · [haptics](https://elik56a.github.io/react-native-pickers/docs/guides/haptics) · [forms](https://elik56a.github.io/react-native-pickers/docs/guides/forms) · [TypeScript](https://elik56a.github.io/react-native-pickers/docs/guides/typescript)
-- **Recipes:** [hotel booking range](https://elik56a.github.io/react-native-pickers/docs/recipes/booking-range) · [birthday](https://elik56a.github.io/react-native-pickers/docs/recipes/birthday) · [alarm time](https://elik56a.github.io/react-native-pickers/docs/recipes/alarm-time) · [duration](https://elik56a.github.io/react-native-pickers/docs/recipes/duration) · [country and phone number](https://elik56a.github.io/react-native-pickers/docs/recipes/country-select) · [server search](https://elik56a.github.io/react-native-pickers/docs/recipes/server-search) · [flight search form](https://elik56a.github.io/react-native-pickers/docs/recipes/flight-search-form) · [chat emoji](https://elik56a.github.io/react-native-pickers/docs/recipes/chat-emoji) · [filters sheet](https://elik56a.github.io/react-native-pickers/docs/recipes/filters-sheet)
-- **Coming from another library?** [Migration](https://elik56a.github.io/react-native-pickers/docs/resources/migration/) maps the props of `@react-native-community/datetimepicker`, `react-native-date-picker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `react-native-dropdown-picker`, `react-native-element-dropdown`, `@react-native-picker/picker`, the native segmented control, `react-native-country-picker-modal`, `react-native-phone-number-input` and `rn-emoji-keyboard`. [Comparison](https://elik56a.github.io/react-native-pickers/docs/resources/comparison) shows when to choose something else.
+- **Guides:** [designs](https://react-native-pickers.dev/docs/next/guides/designs) · [theming](https://react-native-pickers.dev/docs/guides/theming) · [styling with slots](https://react-native-pickers.dev/docs/guides/styling) · [render props](https://react-native-pickers.dev/docs/guides/render-props) · [i18n & RTL](https://react-native-pickers.dev/docs/guides/i18n-rtl) · [accessibility](https://react-native-pickers.dev/docs/guides/accessibility) · [haptics](https://react-native-pickers.dev/docs/guides/haptics) · [forms](https://react-native-pickers.dev/docs/guides/forms) · [TypeScript](https://react-native-pickers.dev/docs/guides/typescript)
+- **Recipes:** [hotel booking range](https://react-native-pickers.dev/docs/recipes/booking-range) · [birthday](https://react-native-pickers.dev/docs/recipes/birthday) · [alarm time](https://react-native-pickers.dev/docs/recipes/alarm-time) · [duration](https://react-native-pickers.dev/docs/recipes/duration) · [country and phone number](https://react-native-pickers.dev/docs/recipes/country-select) · [server search](https://react-native-pickers.dev/docs/recipes/server-search) · [flight search form](https://react-native-pickers.dev/docs/recipes/flight-search-form) · [chat emoji](https://react-native-pickers.dev/docs/recipes/chat-emoji) · [filters sheet](https://react-native-pickers.dev/docs/recipes/filters-sheet)
+- **Coming from another library?** [Migration](https://react-native-pickers.dev/docs/resources/migration/) maps the props of `@react-native-community/datetimepicker`, `react-native-date-picker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `react-native-dropdown-picker`, `react-native-element-dropdown`, `@react-native-picker/picker`, the native segmented control, `react-native-country-picker-modal`, `react-native-phone-number-input` and `rn-emoji-keyboard`. [Comparison](https://react-native-pickers.dev/docs/resources/comparison) shows when to choose something else.
 
 ## Contributing
 
