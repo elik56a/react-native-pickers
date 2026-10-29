@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.28.0](https://github.com/elik56a/react-native-pickers/compare/v0.27.0...v0.28.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **action:** add ActionSheet and useActionSheet, plus migration guides for sheets and modals ([#87](https://github.com/elik56a/react-native-pickers/issues/87)) ([3965afc](https://github.com/elik56a/react-native-pickers/commit/3965afcd3c0c7cdb0c3e845e77f875e129c863f9))
+* **action:** add Menu, a dropdown and long-press context menu of actions, plus migration guides ([#88](https://github.com/elik56a/react-native-pickers/issues/88)) ([c577980](https://github.com/elik56a/react-native-pickers/commit/c577980c48ac789fba36e93d3e01aa286877f093))
+* **rating:** add Rating, a star rating to tap or drag, plus showcase screens for it and OtpField ([#85](https://github.com/elik56a/react-native-pickers/issues/85)) ([d8ba390](https://github.com/elik56a/react-native-pickers/commit/d8ba390e260030f04653448c89694abd5599a1d5))
+
 ## [0.27.0](https://github.com/elik56a/react-native-pickers/compare/v0.26.0...v0.27.0) (2026-10-29)
 
 
