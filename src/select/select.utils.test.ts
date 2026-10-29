@@ -12,6 +12,7 @@ import {
   shouldShowSearch,
   toggleValue,
   toValueList,
+  withSheetHeight,
 } from './select.utils';
 
 const option = (label: string, extra: Partial<SelectOption<string>> = {}): SelectOption<string> => ({
@@ -135,5 +136,12 @@ describe('shouldSearchInField', () => {
     expect(shouldSearchInField(true, false, false)).toBe(false);
     expect(shouldSearchInField(true, undefined, true)).toBe(false);
     expect(shouldSearchInField(false, true, false)).toBe(false);
+  });
+});
+
+describe('withSheetHeight', () => {
+  it('opens at a fixed height unless the sheet sets its own', () => {
+    expect(withSheetHeight(undefined, 0.8)?.sheetProps?.height).toBe(0.8);
+    expect(withSheetHeight({ sheetProps: { height: 0.5 } }, 0.8)?.sheetProps?.height).toBe(0.5);
   });
 });

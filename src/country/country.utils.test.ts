@@ -1,5 +1,4 @@
 import { defaultFilter } from '../select';
-import { COUNTRY_SHEET_HEIGHT } from './country.constants';
 import type { Country } from './country.types';
 import {
   buildCountryOptions,
@@ -14,7 +13,6 @@ import {
   parsePhone,
   toE164,
   toNationalNumber,
-  withSheetHeight,
 } from './country.utils';
 
 const labels = (options: { label: string }[]) => options.map((o) => o.label);
@@ -104,13 +102,6 @@ describe('buildCountryOptions', () => {
     expect(find('usa')).toContain('US');
     expect(find('+972')).toEqual(['IL']);
     expect(find('jp')).toContain('JP');
-  });
-});
-
-describe('withSheetHeight', () => {
-  it('opens at a fixed height unless the sheet sets its own', () => {
-    expect(withSheetHeight(undefined)?.sheetProps?.height).toBe(COUNTRY_SHEET_HEIGHT);
-    expect(withSheetHeight({ sheetProps: { height: 0.5 } })?.sheetProps?.height).toBe(0.5);
   });
 });
 
