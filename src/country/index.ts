@@ -1,3 +1,13 @@
 export { CountryPicker } from './CountryPicker';
-export type { Country, CountryCode, CountryListOptions, CountryPickerProps } from './country.types';
-export { getAllCountries, getCountry, getCountryFlag } from './country.utils';
+export type {
+  Country,
+  CountryCode,
+  CountryListOptions,
+  CountryPickerProps,
+  ParsedPhone,
+  PhoneDetails,
+  PhoneFieldProps,
+  PhoneFieldSlot,
+} from './country.types';
+export { formatNationalNumber, getAllCountries, getCountry, getCountryFlag, isValidPhone, parsePhone, toE164 } from './country.utils';
+export { PhoneField } from './PhoneField';

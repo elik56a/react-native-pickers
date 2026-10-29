@@ -14,6 +14,7 @@ export const SHOWCASE_SCREEN = {
   shop: 'shop',
   habit: 'habit',
   trips: 'trips',
+  delivery: 'delivery',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -71,6 +72,13 @@ export const SHOWCASE: ShowcaseItem[] = [
     blurb: 'A birthday on date wheels, a country with flags, interests as chips and the app language.',
     components: ['DatePickerField', 'CountryPicker', 'SelectPicker', 'HorizontalList'],
     recipe: 'birthday',
+  },
+  {
+    key: SHOWCASE_SCREEN.delivery,
+    title: 'Delivery details',
+    blurb:
+      'Where to ship, a phone number for the courier that takes the shipping country’s code until you type one, the day and a time window.',
+    components: ['CountryPicker', 'PhoneField', 'DatePickerField', 'HorizontalList'],
   },
   {
     key: SHOWCASE_SCREEN.shop,
@@ -195,6 +203,15 @@ export const SIGN_UP = {
   maxInterests: 4,
   language: 'English',
 };
+
+export const DELIVERY = {
+  country: 'PT' as CountryCode,
+  phone: '+351912345678',
+  day: 2,
+  window: '12–15',
+};
+
+export const DELIVERY_WINDOWS = labelOptions(['9–12', '12–15', '15–18', '18–21']);
 
 export const INTERESTS = labelOptions(['Hiking', 'Coffee', 'Jazz', 'Design', 'Running', 'Photography', 'Cooking', 'Travel']);
 

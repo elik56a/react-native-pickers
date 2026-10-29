@@ -5,6 +5,7 @@ import { PickersProvider } from '@elik56a/react-native-pickers';
 import { BookingScreen } from '../home/demo/components/BookingScreen';
 import { AlarmScreen } from './components/AlarmScreen';
 import { ChatScreen } from './components/ChatScreen';
+import { DeliveryScreen } from './components/DeliveryScreen';
 import { FlightsScreen } from './components/FlightsScreen';
 import { HabitScreen } from './components/HabitScreen';
 import { MeetingScreen } from './components/MeetingScreen';
@@ -27,6 +28,7 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   shop: ShopScreen,
   habit: HabitScreen,
   trips: TripsScreen,
+  delivery: DeliveryScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {

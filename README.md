@@ -25,7 +25,7 @@
 - **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
 - **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
-- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, 1,923 emojis with skin tones and recents.
+- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, a phone number field, 1,923 emojis with skin tones and recents.
 - **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
@@ -104,6 +104,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`SelectPicker`](https://elik56a.github.io/react-native-pickers/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
 | [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
 | [`CountryPicker`](https://elik56a.github.io/react-native-pickers/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
+| [`PhoneField`](https://elik56a.github.io/react-native-pickers/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`ColorPicker`](https://elik56a.github.io/react-native-pickers/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
 | [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
@@ -375,6 +376,19 @@ A `SelectPicker` with about 250 countries built in. The value is the ISO code (`
 | `locale` | `string`: names via `Intl.DisplayNames`, English fallback | device locale |
 
 `getCountry('IL')` returns `{ code, name, nativeName, dialCode, flag, keywords }`.
+
+### PhoneField
+
+A phone number input: a flag and calling code button that opens the country list, then the number, grouped the way the country writes it. The value is E.164 (`'+972541234567'`); a pasted `+44…` number switches the country.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `string` (E.164), `onChange(value, { country, nationalNumber, valid })` | |
+| `country` / `defaultCountry` / `onCountryChange` | `CountryCode` | `'US'` |
+| `preferred` / `countries` / `exclude` / `locale` | as `CountryPicker` | |
+| `label` / `placeholder` | `string` | an example in the country's format |
+
+`parsePhone('+44 7911 123456')` returns `{ country: 'GB', nationalNumber: '7911123456' }`.
 
 ### HorizontalList&lt;T&gt;
 

@@ -24,6 +24,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
 | [`SelectList<T>`](../components/select-list) | Inline searchable list |
 | [`CountryPicker`](../components/country-picker) | Country field: flags, dialing codes, localized names |
+| [`PhoneField`](../components/phone-field) | Phone number input: country code button, formats as you type, E.164 value |
 | [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
 | [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
 | [`ColorPicker`](../components/color-picker) | iOS's tabs, Google's swatch circles or the browser's spectrum; hex with opacity |
@@ -88,6 +89,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 [`getCountry`](../components/country-picker#utilities) · [`getAllCountries`](../components/country-picker#utilities) · [`getCountryFlag`](../components/country-picker#utilities)
 
+## Phone utilities
+
+[`parsePhone`](../components/phone-field#utilities) · [`formatNationalNumber`](../components/phone-field#utilities) · [`isValidPhone`](../components/phone-field#utilities) · [`toE164`](../components/phone-field#utilities)
+
 ## Duration utilities
 
 [`formatDuration(seconds, { showHours?, labels? })`](../components/duration-picker#formatduration): `5400` → `'1 h 30 min'`
@@ -141,6 +146,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | SelectPicker, fields | `placeholder` | `Select…` |
 | SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
+| PhoneField | `label` / `countrySheetTitle` | none (read as `Phone number`) / `Country code` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
 | ColorPicker | `labels` | `Grid`, `Spectrum`, `Sliders`, `Hue`, `Opacity`, `Red`, `Green`, `Blue`, `Hex`, `Copy`, `Copied`, `Custom colour`… |

@@ -67,7 +67,12 @@ SelectList<T>      same list inline: options value onChange multiple listHeight
 CountryPicker      a SelectPicker with ~250 countries built in: value CountryCode ('IL') or CountryCode[] with multiple  onChange(code, option)
                    preferred (pinned on top) countries exclude showDialCode locale (names via Intl.DisplayNames, English fallback; search matches English/native names, ISO code, +dial)
                    every SelectPicker prop except options/loadOptions/server search; getCountry(code) → {code,name,nativeName?,dialCode,flag,keywords}  getAllCountries()  getCountryFlag(code)
-                   phone prefix: renderTrigger={({open}) => <Pressable onPress={open}>…{flag} {dialCode}</Pressable>}
+PhoneField         phone number input: flag + calling code button (CountryPicker list) then the number, formatted as typed ('(201) 555-0123', '54-123-4567')
+                   value/defaultValue: E.164 string ('+972541234567', '' when empty)  onChange(value, {country, nationalNumber, valid})  valid = length fits the country
+                   country/defaultCountry='US'/onCountryChange  label placeholder(default example) disabled presentation countrySheetTitle='Country code' sheet
+                   preferred countries exclude locale preferredLabel allCountriesLabel; styles: label field input countryButton dialCode chevron
+                   a leading trunk 0 is dropped (not IT/SM/VA); pasting '+44…' switches country; ~50 country formats, others grouped in threes
+                   utils: parsePhone(intl, current?) → {country?, nationalNumber}  formatNationalNumber(digits, code)  isValidPhone(digits, code)  toE164(digits, code)
 HorizontalList<T>  items: {label,value,disabled?,icon?}[] (icon: node or ({selected,disabled,color}) => node)  value  onChange(value, item)  variant 'segmented'|'chips'  iconPosition 'left'|'right'|'top'|'bottom'  showArrows (‹ › scroll buttons, default false)  arrowPosition 'outside'|'overlay' (default 'outside')  renderArrow(side, disabled)  renderItem  (tap at the edge scrolls the next item into view)
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange categoryBarPosition 'auto'(bottom on ios/material, top on web)|'top'|'bottom'
 ColorPicker        value: hex ('#E4572E', or '#E4572E80' with showAlpha)  onChange('#RRGGBB'|'#RRGGBBAA', fires while dragging)

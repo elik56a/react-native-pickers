@@ -56,51 +56,9 @@ export default function Example() {
 }
 ```
 
-## Phone number prefix
+## Phone numbers
 
-`renderTrigger` swaps the field for anything you like. Here a compact `🇮🇱 +972` button opens the list beside a `TextInput`.
-
-```tsx live
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { CountryPicker, getCountry } from '@elik56a/react-native-pickers';
-import type { CountryCode } from '@elik56a/react-native-pickers';
-
-export default function PhoneInput() {
-  const [country, setCountry] = useState<CountryCode | null>('IL');
-  const [phone, setPhone] = useState('');
-  const selected = country ? getCountry(country) : undefined;
-  return (
-    <View style={styles.row}>
-      <CountryPicker
-        sheetTitle="Country code"
-        showDialCode
-        value={country}
-        onChange={setCountry}
-        renderTrigger={({ open }) => (
-          <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="Country code" style={styles.prefix}>
-            <Text style={styles.prefixText}>{selected ? `${selected.flag} ${selected.dialCode}` : '+'}</Text>
-          </Pressable>
-        )}
-      />
-      <TextInput
-        value={phone}
-        onChangeText={setPhone}
-        placeholder="Phone number"
-        keyboardType="phone-pad"
-        style={styles.input}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: 8 },
-  prefix: { height: 48, paddingHorizontal: 12, justifyContent: 'center', borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12 },
-  prefixText: { fontSize: 16 },
-  input: { flex: 1, height: 48, paddingHorizontal: 12, borderWidth: 1, borderColor: '#D9D4CA', borderRadius: 12, fontSize: 16 },
-});
-```
+For a phone number, use [`PhoneField`](./phone-field): this country list behind a flag and calling code button, with the number formatted as it's typed and stored in E.164.
 
 ## Several countries
 
