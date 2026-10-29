@@ -26,7 +26,7 @@
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
 - **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
 - **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, 1,923 emojis with skin tones and recents.
-- **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout.
+- **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout, and full keyboard use on the web.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
 ## Install

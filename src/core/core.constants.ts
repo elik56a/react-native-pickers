@@ -1,6 +1,6 @@
 import { Easing, Platform, type PlatformOSType } from 'react-native';
 
-import type { PressFeedback, SearchDesign } from './core.types';
+import type { PressFeedback, SearchDesign, ValueOf } from './core.types';
 import type { Design } from './theme/theme.types';
 
 /** The `Platform.OS` values pickers tell apart. Anything else (windows, macos) behaves like native. */
@@ -89,3 +89,31 @@ export const SWIPE = {
 
 /** How far (px) a new page slides in from. */
 export const SLIDE_DISTANCE = 40;
+
+/** `KeyboardEvent.key` values the pickers answer, on the web and on hardware keyboards. */
+export const KEY = {
+  up: 'ArrowUp',
+  down: 'ArrowDown',
+  left: 'ArrowLeft',
+  right: 'ArrowRight',
+  home: 'Home',
+  end: 'End',
+} as const;
+
+export const DIRECTION = {
+  up: 'up',
+  down: 'down',
+  left: 'left',
+  right: 'right',
+} as const;
+
+export const ARROW_DIRECTION: Record<string, ValueOf<typeof DIRECTION>> = {
+  [KEY.up]: DIRECTION.up,
+  [KEY.down]: DIRECTION.down,
+  [KEY.left]: DIRECTION.left,
+  [KEY.right]: DIRECTION.right,
+};
+
+/** What arrow-key focus moves to: what Tab stops at, text fields included. */
+export const FOCUS_TARGETS = '[tabindex="0"], input:not([disabled]), textarea:not([disabled])';
+export const TEXT_FIELD_TAGS = ['INPUT', 'TEXTAREA'];

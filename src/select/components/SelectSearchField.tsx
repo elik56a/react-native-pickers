@@ -2,6 +2,7 @@ import { TextInput, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { coreStyles } from '../../core/core.styles';
+import { SEARCH_FIELD_ARROWS } from '../../core/utils/keyboard.utils';
 import { Chevron } from '../../sheet/components/Chevron';
 import { styles as sheetStyles } from '../../sheet/sheet.styles';
 import { styles } from '../select.styles';
@@ -31,6 +32,7 @@ export const SelectSearchField = ({ query, onChangeQuery, placeholder, renderChe
       autoCorrect={false}
       autoCapitalize="none"
       accessibilityLabel={placeholder}
+      {...SEARCH_FIELD_ARROWS}
       style={[textStyle(theme, 'md'), styles.flex, coreStyles.noOutline, slots?.triggerText]}
     />
     <Chevron open renderChevron={renderChevron} theme={theme} style={slots?.chevron} />

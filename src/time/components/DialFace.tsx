@@ -1,6 +1,8 @@
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { KEY } from '../../core/core.constants';
+import { keyboardProps } from '../../core/utils/keyboard.utils';
 import { CLOCK_MODE_LABEL, DIAL_NUMBER_SIZE, DIAL_SIZE } from '../time.constants';
 import { styles } from '../time.styles';
 import type { ClockPartProps } from '../time.types';
@@ -18,6 +20,12 @@ export const DialFace = ({ dial, theme, testID }: ClockPartProps) => {
       accessibilityValue={{ text: dial.valueText }}
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => dial.step(e.nativeEvent.actionName === 'increment' ? 1 : -1)}
+      {...keyboardProps({
+        [KEY.up]: () => dial.step(1),
+        [KEY.right]: () => dial.step(1),
+        [KEY.down]: () => dial.step(-1),
+        [KEY.left]: () => dial.step(-1),
+      })}
       style={[styles.dial, { backgroundColor: c.surface }]}
       testID={testID}
     >

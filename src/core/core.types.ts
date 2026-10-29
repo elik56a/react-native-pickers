@@ -11,7 +11,7 @@ import type {
   ViewStyle,
 } from 'react-native';
 
-import type { PICKER_DISPLAY, PRESS_FEEDBACK } from './core.constants';
+import type { DIRECTION, KEY, PICKER_DISPLAY, PRESS_FEEDBACK } from './core.constants';
 import type { Design, PickerTheme } from './theme/theme.types';
 
 export type DeepPartial<T> = {
@@ -139,4 +139,16 @@ export interface Presence {
 export interface SlideStyle {
   opacity: Animated.AnimatedInterpolation<number>;
   transform: { translateX: Animated.AnimatedInterpolation<number> }[];
+}
+
+export type Key = ValueOf<typeof KEY>;
+export type Direction = ValueOf<typeof DIRECTION>;
+export type KeyHandlers = Partial<Record<Key, () => void>>;
+
+/** A box on screen, as `getBoundingClientRect` gives it. */
+export interface Rect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
 }

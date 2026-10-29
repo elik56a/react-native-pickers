@@ -81,6 +81,19 @@ describe('WheelPicker', () => {
     await fireEvent(screen.getByTestId('wheel'), 'accessibilityAction', { nativeEvent: { actionName: 'increment' } });
     expect(scrollToOffset).toHaveBeenLastCalledWith({ offset: 2 * H, animated: true });
     await fireEvent(screen.getByTestId('wheel'), 'accessibilityAction', { nativeEvent: { actionName: 'decrement' } });
+    expect(scrollToOffset).toHaveBeenLastCalledWith({ offset: H, animated: true });
+  });
+
+  it('steps with the arrow keys, quickly pressed too, and jumps to the ends with Home and End', async () => {
+    await render(<WheelPicker items={[1, 2, 3]} defaultValue={2} testID="wheel" />);
+    const press = (key: string) =>
+      fireEvent(screen.getByTestId('wheel'), 'keyDown', { nativeEvent: { key }, preventDefault: jest.fn(), stopPropagation: jest.fn() });
+    expect(screen.getByTestId('wheel').props.focusable).toBe(true);
+    await press('End');
+    expect(scrollToOffset).toHaveBeenLastCalledWith({ offset: 2 * H, animated: true });
+    // Pressed again before the wheel gets there, each step goes on from where the last is heading.
+    await press('ArrowUp');
+    await press('ArrowUp');
     expect(scrollToOffset).toHaveBeenLastCalledWith({ offset: 0, animated: true });
   });
 

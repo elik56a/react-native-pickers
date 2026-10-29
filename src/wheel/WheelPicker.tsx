@@ -5,7 +5,9 @@ import { Animated, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
+import { KEY } from '../core/core.constants';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { keyboardProps } from '../core/utils/keyboard.utils';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelRow } from './components/WheelRow';
 import { WheelTypingInput } from './components/WheelTypingInput';
@@ -63,7 +65,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
     onValueChanging,
     onDragStart: typeToSelect.stopTyping,
   });
-  const { active, move, scrollToData, toLogical, scrollY } = wheel;
+  const { active, move, scrollToData, scrollToLogical, toLogical, scrollY } = wheel;
   const { toggleTyping } = typeToSelect;
 
   const onRowPress = useCallback(
@@ -136,6 +138,14 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
       accessibilityValue={{ text: wheel.activeItem?.label }}
       accessibilityActions={A11Y_ACTIONS}
       onAccessibilityAction={onAccessibilityAction}
+      {...(disabled
+        ? null
+        : keyboardProps({
+            [KEY.up]: () => move(-1),
+            [KEY.down]: () => move(1),
+            [KEY.home]: () => scrollToLogical(0, true),
+            [KEY.end]: () => scrollToLogical(items.length - 1, true),
+          }))}
       testID={testID}
     >
       {showIndicator && <WheelIndicator itemHeight={itemHeight} theme={theme} style={slots?.indicator} renderIndicator={renderIndicator} />}

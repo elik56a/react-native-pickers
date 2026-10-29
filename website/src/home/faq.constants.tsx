@@ -57,7 +57,8 @@ export const FAQS: FaqEntry[] = [
     answer: (
       <>
         Wheels are adjustable for VoiceOver and TalkBack, days announce their full date, and selected and disabled states are exposed
-        everywhere. See <Link to="/docs/guides/accessibility">Accessibility</Link>.
+        everywhere. On the web, arrow keys move through calendars, lists and grids and step wheels and sliders. See{' '}
+        <Link to="/docs/guides/accessibility">Accessibility</Link>.
       </>
     ),
   },

@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 
+import { ARROW_FOCUS } from '../../core/utils/keyboard.utils';
 import { useClockDial } from '../hooks/useClockDial';
 import { styles } from '../time.styles';
 import type { ClockDialProps } from '../time.types';
@@ -11,7 +12,7 @@ import { EntryToggle } from './EntryToggle';
 export const ClockDial = ({ inputOnly = false, date, onChange, options, theme, style, testID }: ClockDialProps) => {
   const dial = useClockDial(date, onChange, options, theme.animation.duration, inputOnly);
   return (
-    <View style={[styles.clock, { gap: theme.spacing.lg, paddingVertical: theme.spacing.md }, style]} testID={testID}>
+    <View style={[styles.clock, { gap: theme.spacing.lg, paddingVertical: theme.spacing.md }, style]} {...ARROW_FOCUS} testID={testID}>
       <ClockHeader dial={dial} theme={theme} testID={testID} />
       {dial.typing ? null : <DialFace dial={dial} theme={theme} testID={testID ? `${testID}-dial` : undefined} />}
       {inputOnly ? null : <EntryToggle dial={dial} theme={theme} testID={testID} />}
