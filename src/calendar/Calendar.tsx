@@ -4,6 +4,7 @@ import { Animated, View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CALENDAR_DESIGN, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
 import {
@@ -93,6 +94,7 @@ export const Calendar = (props: CalendarProps) => {
   return (
     <View
       style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style, slots?.container]}
+      {...ARROW_FOCUS}
       testID={testID}
     >
       <CalendarHeader

@@ -46,7 +46,7 @@ export const FEATURES = [
   },
   {
     title: 'Accessible',
-    body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, and selected and disabled states everywhere.',
+    body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, arrow keys on the web, and selected and disabled states everywhere.',
   },
   { title: 'Fast', body: 'Native-driver animations, virtualized fixed-layout lists and memoized rows keep it at 60 fps.' },
 ];

@@ -1,6 +1,8 @@
 import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { KEY } from '../../core/core.constants';
+import { keyboardProps } from '../../core/utils/keyboard.utils';
 import { COLOR_A11Y_ACTIONS, COLOR_DESIGN, COLOR_STEP, SLIDER_THUMB_SIZE } from '../color.constants';
 import { styles } from '../color.styles';
 import type { ColorSliderProps } from '../color.types';
@@ -26,6 +28,7 @@ export const ColorSlider = ({
   testID,
 }: ColorSliderProps) => {
   const pan = useTrackPan((x) => onChange(x), INSET);
+  const step = (by: number) => onChange(Math.min(1, Math.max(0, value + by)));
   const { trackHeight } = COLOR_DESIGN[theme.design];
   const caption = [textStyle(theme, 'sm'), { color: theme.colors.textSecondary }, slots?.sliderLabel];
   return (
@@ -45,10 +48,15 @@ export const ColorSlider = ({
         accessibilityLabel={label}
         accessibilityValue={{ text: valueText }}
         accessibilityActions={COLOR_A11Y_ACTIONS}
-        onAccessibilityAction={(e) => {
-          const step = e.nativeEvent.actionName === 'increment' ? COLOR_STEP : -COLOR_STEP;
-          onChange(Math.min(1, Math.max(0, value + step)));
-        }}
+        onAccessibilityAction={(e) => step(e.nativeEvent.actionName === 'increment' ? COLOR_STEP : -COLOR_STEP)}
+        {...keyboardProps({
+          [KEY.right]: () => step(COLOR_STEP),
+          [KEY.up]: () => step(COLOR_STEP),
+          [KEY.left]: () => step(-COLOR_STEP),
+          [KEY.down]: () => step(-COLOR_STEP),
+          [KEY.home]: () => onChange(0),
+          [KEY.end]: () => onChange(1),
+        })}
         testID={testID}
       >
         <View pointerEvents="none" style={[styles.rail, { height: trackHeight, marginHorizontal: INSET }]}>

@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 
 import { textStyle, usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelPicker } from './WheelPicker';
 import { DEFAULT_ITEM_HEIGHT, DEFAULT_VISIBLE_ITEMS, WHEEL_VARIANT } from './wheel.constants';
@@ -27,7 +28,7 @@ export const MultiWheelPicker = ({
   const theme = usePickerTheme(themeOverride);
   const visible = toOddCount(visibleItems);
   return (
-    <View style={[{ height: itemHeight * visible }, style, slots?.container]} testID={testID}>
+    <View style={[{ height: itemHeight * visible }, style, slots?.container]} {...ARROW_FOCUS} testID={testID}>
       <WheelIndicator itemHeight={itemHeight} theme={theme} style={slots?.indicator} />
       <View style={styles.columns}>
         {columns.map(({ key, flex, width, suffix, styles: columnSlots, ...column }, i) => {

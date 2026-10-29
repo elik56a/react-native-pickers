@@ -58,6 +58,8 @@ export const useWheelScroll = <T>({
     momentum: false,
     timer: undefined as ReturnType<typeof setTimeout> | undefined,
     mounted: false,
+    // Where an animated scroll is going, so a second key press steps on from there rather than from the row passing by.
+    heading: null as number | null,
   }).current;
 
   const callbacks = useRef({ onChange, onValueChanging, onDragStart });
@@ -66,6 +68,7 @@ export const useWheelScroll = <T>({
   const scrollToData = useCallback(
     (dataIndex: number, animated: boolean) => {
       listRef.current?.scrollToOffset({ offset: dataIndex * h, animated });
+      st.heading = animated ? dataIndex : null;
       if (!animated) {
         st.y = dataIndex * h;
         st.tick = dataIndex;
@@ -87,6 +90,7 @@ export const useWheelScroll = <T>({
       scrollToData(result.dataIndex, true);
       return;
     }
+    st.heading = null;
     if (result.changed) {
       st.committed = result.logicalIndex;
       const item = items[result.logicalIndex];
@@ -152,7 +156,7 @@ export const useWheelScroll = <T>({
 
   const move = useCallback(
     (delta: number) => {
-      const target = st.tick + delta;
+      const target = (st.heading ?? st.tick) + delta;
       if (!loop && (target < 0 || target >= count)) return;
       scrollToData(target, true);
     },
@@ -166,6 +170,7 @@ export const useWheelScroll = <T>({
       onScroll,
       onScrollBeginDrag: () => {
         st.dragging = true;
+        st.heading = null;
         callbacks.current.onDragStart?.();
       },
       onScrollEndDrag: () => {

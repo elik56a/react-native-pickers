@@ -2,6 +2,7 @@ import { Animated, ScrollView, View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { ListItem } from './components/ListItem';
 import { ScrollArrow } from './components/ScrollArrow';
 import { useHorizontalList } from './hooks/useHorizontalList';
@@ -64,6 +65,7 @@ export const HorizontalList = <T,>({
         segmented ? (outlined ? styles.outlinedContent : styles.trackContent) : { gap: theme.spacing.sm },
         slots?.content,
       ]}
+      {...ARROW_FOCUS}
       testID={testID}
     >
       {segmented && !outlined && thumb.placed ? (
