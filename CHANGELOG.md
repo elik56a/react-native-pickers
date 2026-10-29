@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.0](https://github.com/elik56a/react-native-pickers/compare/v0.20.0...v0.21.0) (2026-10-29)
+
+
+### ✨ Features
+
+* keyboard support on the web ([#64](https://github.com/elik56a/react-native-pickers/issues/64)) ([a0e17a2](https://github.com/elik56a/react-native-pickers/commit/a0e17a2d0fa3424d72c1554f2447681a1c65a5c5))
+
 ## [0.20.0](https://github.com/elik56a/react-native-pickers/compare/v0.19.1...v0.20.0) (2026-10-29)
 
 
