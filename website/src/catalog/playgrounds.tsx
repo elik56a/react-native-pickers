@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 
 import {
+  ActionSheet,
   BottomSheet,
   ColorPicker,
   ColorPickerField,
@@ -551,5 +552,19 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
         ))}
       </View>
     ),
+  },
+  actionSheet: {
+    name: 'ActionSheet',
+    component: ActionSheet,
+    opener: 'Photo options',
+    props: {
+      title: 'Profile photo',
+      actions: [{ label: 'Take photo' }, { label: 'Choose from library' }, { label: 'Remove photo', destructive: true }],
+    },
+    code: 'visible={open} onClose={() => setOpen(false)} title="Profile photo" actions={actions}',
+    controls: [
+      { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
+      { prop: 'showCancel', options: ['auto', true, false], unset: 'auto' },
+    ],
   },
 };

@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![downloads](https://img.shields.io/npm/dw/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![bundle size](https://img.shields.io/bundlephobia/minzip/@elik56a/react-native-pickers)](https://bundlephobia.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/elik56a/react-native-pickers/badge)](https://scorecard.dev/viewer/?uri=github.com/elik56a/react-native-pickers)
 
-**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, a slider, a star rating and an OTP code input, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, a slider, a star rating and an OTP code input, plus bottom sheets, action sheets and the form fields to put pickers in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <img alt="React Native Pickers on an iPhone and an Android phone side by side: a date range picker with prices, wheel and clock-dial time pickers, a searchable select, an emoji picker, a phone number field, a color picker, a duration picker, and light and dark mode" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/demo.gif" width="900">
@@ -110,6 +110,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`Rating`](https://react-native-pickers.dev/docs/components/rating) | Star rating: tap or drag, half steps, a read-only score with any fraction, your own icon |
 | [`EmojiPicker`](https://react-native-pickers.dev/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones (long-press for one emoji's), recents, version filtering |
 | [`BottomSheet`](https://react-native-pickers.dev/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
+| [`ActionSheet`](https://react-native-pickers.dev/docs/components/action-sheet) | A list of actions such as Share or Delete: iOS cards or Material rows, destructive and disabled actions |
 | [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
 | [Picker fields](https://react-native-pickers.dev/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
 
@@ -464,13 +465,15 @@ A `SelectPicker` with every IANA time zone built in, each with its city, GMT off
 | `recent` / `onRecentChange` | `string[]`: persist with your own storage | `[]` |
 | `categoryBarPosition` | `'auto' \| 'top' \| 'bottom'`: `auto` is bottom on iOS and Android, top on the web | `'auto'` |
 
-### Sheets, fields and BottomSheet
+### Sheets, fields, BottomSheet and ActionSheet
 
 | Component | Props |
 |---|---|
 | Picker sheets | `visible` `onClose` `value` `onConfirm` `title` `confirmLabel` `cancelLabel` `showCancel` `presentation` `sheetProps`, plus the picker's props |
 | Picker fields | the sheet's props without `visible`, plus `label` `placeholder` `displayValue` `clearable` `onClear` `disabled` `presentation` `renderTrigger` `renderChevron` |
-| `BottomSheet` | `visible` `onClose` `title` `headerLeft` `headerRight` `footer` `height` `enableSwipeToClose` `expandable` `presentation` |
+| `BottomSheet` | `visible` `onClose` `title` `headerLeft` `headerRight` `footer` `height` `enableSwipeToClose` `expandable` `showHandle` `presentation` |
+| `ActionSheet` | `visible` `onClose` `actions` (`{ label, onPress, description, icon, selected, destructive, disabled }`) `title` `message` `showCancel` `cancelLabel` `presentation`; `onPress` runs after the sheet closes |
+| `useActionSheet()` | returns `{ show, hide, actionSheet }`: render `actionSheet` once and call `show({ title, actions })` from any handler, no provider |
 
 ### Utilities
 

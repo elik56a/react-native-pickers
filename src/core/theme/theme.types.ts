@@ -31,6 +31,8 @@ export interface PickerTheme {
     hover: string;
     /** The ripple that spreads from the touch point on press. 'transparent' turns it off */
     ripple: string;
+    /** Destructive actions, such as Delete in an action sheet */
+    danger: string;
   };
   radius: { sm: number; md: number; lg: number; full: number; sheet: number };
   spacing: { xs: number; sm: number; md: number; lg: number; xl: number };

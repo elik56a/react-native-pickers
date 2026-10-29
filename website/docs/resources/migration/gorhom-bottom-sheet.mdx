@@ -1,0 +1,64 @@
+---
+title: Migrate from @gorhom/bottom-sheet
+sidebar_label: 'gorhom bottom-sheet'
+description: "Switch from @gorhom/bottom-sheet to React Native Pickers: a modal BottomSheet with drag to close, a second expanded height, keyboard avoidance and a centered modal on the web. No Reanimated, no Gesture Handler, no provider and no native code."
+---
+
+# Migrate from `@gorhom/bottom-sheet`
+
+`@gorhom/bottom-sheet` needs Reanimated and Gesture Handler. [`BottomSheet`](../../components/bottom-sheet) uses React Native's `Modal`, `Animated` and `PanResponder` only, so it covers the common case, a modal sheet over a backdrop, with nothing to install or configure. Check [what it doesn't do](#what-bottomsheet-doesnt-do) first.
+
+```diff
+- import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
++ import { BottomSheet } from '@elik56a/react-native-pickers';
+
+- const ref = useRef<BottomSheetModal>(null);
+- ref.current?.present();
++ const [open, setOpen] = useState(false);
++ setOpen(true);
+
+- <BottomSheetModal ref={ref} snapPoints={['50%', '90%']} enablePanDownToClose onDismiss={onDismiss}>
+-   <BottomSheetView>
+-     <Filters />
+-   </BottomSheetView>
+- </BottomSheetModal>
++ <BottomSheet visible={open} onClose={() => setOpen(false)} height={0.5} expandedHeight={0.9} onClosed={onDismiss}>
++   <Filters />
++ </BottomSheet>
+```
+
+Remove `<BottomSheetModalProvider>` and `<GestureHandlerRootView>` if nothing else needs them.
+
+| @gorhom/bottom-sheet | React Native Pickers |
+| --- | --- |
+| `present()` / `dismiss()` / `close()` | `visible`, set to `false` in `onClose` |
+| `enableDynamicSizing` (default) | the default: the sheet fits its content, up to `maxHeightRatio` |
+| `snapPoints={['50%']}` | `height={0.5}`, or px: `height={400}` |
+| `snapPoints={['50%', '90%']}` | `height={0.5}` and `expandedHeight={0.9}`: drag up to expand |
+| `snapToIndex` / `expand()` / `collapse()` | — |
+| `enablePanDownToClose` | `enableSwipeToClose` (default `true`) |
+| `enableContentPanningGesture` / `enableHandlePanningGesture` | the content scrolls and never drags; the handle always drags, the header with `draggable` |
+| `onChange(index)` / `onAnimate` | `onOpened` / `onClosed` |
+| `onDismiss` | `onClosed` |
+| `backdropComponent={BottomSheetBackdrop}` | built in; `closeOnBackdropPress`, `styles={{ backdrop }}` |
+| `pressBehavior="none"` on the backdrop | `closeOnBackdropPress={false}` |
+| `handleComponent={null}` | `showHandle={false}` |
+| `handleIndicatorStyle` / `backgroundStyle` | `styles={{ handle }}` / `styles={{ sheet }}` |
+| `footerComponent` | `footer` |
+| `BottomSheetView` | a plain `View` |
+| `BottomSheetScrollView` / `BottomSheetFlatList` | React Native's `ScrollView` / `FlatList`, with a fixed `height` |
+| `BottomSheetTextInput` / `keyboardBehavior` | React Native's `TextInput`; the sheet avoids the keyboard |
+| `bottomInset` / `topInset` | `bottomInset` (padding for the home indicator) |
+
+On wide web windows the sheet becomes a centered modal by default (`presentation="auto"`); pass `presentation="bottomSheet"` to keep it a sheet.
+
+## What BottomSheet doesn't do
+
+Stay on `@gorhom/bottom-sheet` if you need:
+
+- a sheet that stays on screen with no backdrop while the screen behind it still scrolls and takes taps, like a map's place list (`BottomSheet` without `Modal`);
+- three or more snap points, or snapping from code (`snapToIndex`);
+- `animatedIndex` / `animatedPosition` to animate other views as the sheet moves;
+- detached sheets, or several modals stacked from one provider.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

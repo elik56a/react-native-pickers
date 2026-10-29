@@ -1,6 +1,6 @@
 import type { CountryCode } from '@elik56a/react-native-pickers';
 import { labelOptions } from '../home/demo/demo.utils';
-import type { ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
+import type { Album, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
 
 export const SHOWCASE_SCREEN = {
   booking: 'booking',
@@ -18,6 +18,7 @@ export const SHOWCASE_SCREEN = {
   display: 'display',
   verify: 'verify',
   review: 'review',
+  albums: 'albums',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -113,6 +114,12 @@ export const SHOWCASE: ShowcaseItem[] = [
     title: 'Rate your stay',
     blurb: 'Half stars for the stay, a row of stars per category, and the place’s average shown read-only.',
     components: ['Rating'],
+  },
+  {
+    key: SHOWCASE_SCREEN.albums,
+    title: 'Photo albums',
+    blurb: 'Sort the albums from a sheet that ticks the current order, and open each album’s ⋯ menu to share, rename or delete it.',
+    components: ['ActionSheet', 'useActionSheet'],
   },
   {
     key: SHOWCASE_SCREEN.trips,
@@ -316,3 +323,18 @@ export const REVIEW = {
   reviews: 312,
 } as const;
 export const REVIEW_CATEGORIES = ['Cleanliness', 'Location', 'Value'] as const;
+
+export const ALBUMS: Album[] = [
+  { name: 'Summer in Lisbon', emoji: '🌊', photos: 214 },
+  { name: 'Maya’s birthday', emoji: '🎂', photos: 86 },
+  { name: 'Hiking the Alps', emoji: '🏔️', photos: 152 },
+  { name: 'Recipes', emoji: '🍝', photos: 37 },
+];
+
+export const ALBUM_SORT = {
+  recent: 'Recently added',
+  name: 'Name',
+  photos: 'Most photos',
+} as const;
+
+export const ALBUM_SORTS = Object.values(ALBUM_SORT);

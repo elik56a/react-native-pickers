@@ -2,11 +2,19 @@ import type { ReactNode } from 'react';
 
 import type { BookingScreenProps } from '../home/demo/demo.types';
 import type { ValueOf } from '../home/home.types';
-import type { SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
+import type { ALBUM_SORT, SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
 
 export type ShowcaseScreenKey = ValueOf<typeof SHOWCASE_SCREEN>;
 
 export type TripType = ValueOf<typeof TRIP_TYPE>;
+
+export type AlbumSort = ValueOf<typeof ALBUM_SORT>;
+
+export interface Album {
+  name: string;
+  emoji: string;
+  photos: number;
+}
 
 export interface ShowcaseItem {
   key: ShowcaseScreenKey;

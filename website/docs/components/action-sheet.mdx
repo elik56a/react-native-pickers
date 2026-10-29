@@ -1,0 +1,269 @@
+---
+title: React Native Action Sheet
+description: "React Native action sheet with iOS-style grouped buttons and a separate Cancel, or Material and web rows with icons and descriptions. Destructive, disabled and selected actions, a useActionSheet hook to show it from a call, and the action runs after the sheet closes. Zero native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# ActionSheet
+
+`ActionSheet` asks "what do you want to do with this?": a short list of actions in a [`BottomSheet`](./bottom-sheet), such as Share, Edit or Delete. The iOS design floats the actions in a rounded card with Cancel in a card of its own; Material and the web list them as rows on the sheet, with icons if you pass them.
+
+```tsx
+import { ActionSheet } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { ActionSheet } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  const [last, setLast] = useState('Nothing yet');
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
+      >
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
+          Photo options
+        </Text>
+      </Pressable>
+      <Text style={{ marginTop: 12, textAlign: 'center' }}>Last action: {last}</Text>
+      <ActionSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Profile photo"
+        actions={[
+          { label: 'Take photo', onPress: () => setLast('Take photo') },
+          { label: 'Choose from library', onPress: () => setLast('Choose from library') },
+          { label: 'Remove photo', destructive: true, onPress: () => setLast('Remove photo') },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.actionSheet} />
+
+## Actions
+
+Each action is `{ label, onPress, description, icon, selected, destructive, disabled, testID }`:
+
+- `description` adds a second line under the label.
+- `icon` is any node shown before the label, such as a 24 px icon from the icon set you already use.
+- `selected` marks the current choice with a ✓.
+- `destructive` draws the label in the theme's `danger` colour, for Delete, Remove or Sign out.
+- `disabled` greys the action out and ignores taps.
+
+A tap closes the sheet through `onClose`, and the action's `onPress` runs once the sheet has finished closing. That way an action can open another sheet, a modal or the image picker: iOS shows only one modal at a time.
+
+### Icons and descriptions
+
+Icons suit the Material and web rows, where they line up at the start. Switch the example to Android or Web to see them as rows.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { ActionSheet } from '@elik56a/react-native-pickers';
+
+const icon = (emoji) => <Text style={{ fontSize: 20 }}>{emoji}</Text>;
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
+      >
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
+          Share
+        </Text>
+      </Pressable>
+      <ActionSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Share “Summer trip”"
+        actions={[
+          { label: 'Copy link', description: 'Anyone with the link can view', icon: icon('🔗') },
+          { label: 'Send in a message', icon: icon('💬') },
+          { label: 'Invite people', description: 'They can add photos too', icon: icon('👥') },
+          { label: 'Download all', icon: icon('⬇️'), disabled: true },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+### A choice with a ✓
+
+For a short choice that applies right away, such as a sort order or video quality, mark the current one with `selected`.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { ActionSheet } from '@elik56a/react-native-pickers';
+
+const SORTS = ['Newest', 'Oldest', 'Most liked', 'Name'];
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  const [sort, setSort] = useState('Newest');
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
+      >
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
+          Sort by: {sort}
+        </Text>
+      </Pressable>
+      <ActionSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Sort by"
+        actions={SORTS.map((label) => ({
+          label,
+          selected: label === sort,
+          onPress: () => setSort(label),
+        }))}
+      />
+    </>
+  );
+}
+```
+
+For a longer list, or one with search, use [`SelectPicker`](./select-picker).
+
+## Confirm a delete
+
+`title` names what the actions apply to; `message` adds a line under it, such as what a Delete removes. With one destructive action, the sheet is a confirmation.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+import { ActionSheet } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  const [notes, setNotes] = useState(3);
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        disabled={notes === 0}
+        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12, opacity: notes ? 1 : 0.4 }}
+      >
+        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
+          Delete a note ({notes} left)
+        </Text>
+      </Pressable>
+      <ActionSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        title="Delete this note?"
+        message="It's removed from all your devices."
+        showCancel
+        actions={[{ label: 'Delete note', destructive: true, onPress: () => setNotes((n) => n - 1) }]}
+      />
+    </>
+  );
+}
+```
+
+## Show it from a call
+
+`useActionSheet` shows a sheet without a `visible` state of your own, as `showActionSheetWithOptions` does in `@expo/react-native-action-sheet`. Render the `actionSheet` it returns once, then call `show` with the sheet's props from any handler. It needs no provider.
+
+```tsx live
+import { useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { useActionSheet } from '@elik56a/react-native-pickers';
+
+const FILES = ['Invoice.pdf', 'Photo.jpg', 'Notes.txt'];
+
+export default function Example() {
+  const { show, actionSheet } = useActionSheet();
+  const [last, setLast] = useState('Nothing yet');
+  const openMenu = (file) =>
+    show({
+      title: file,
+      actions: [
+        { label: 'Rename', onPress: () => setLast(`Rename ${file}`) },
+        { label: 'Delete', destructive: true, onPress: () => setLast(`Delete ${file}`) },
+      ],
+    });
+  return (
+    <View style={{ gap: 8 }}>
+      {FILES.map((file) => (
+        <Pressable key={file} onPress={() => openMenu(file)} style={{ padding: 14, borderRadius: 12, backgroundColor: '#F4F2EE' }}>
+          <Text>{file} ⋯</Text>
+        </Pressable>
+      ))}
+      <Text style={{ textAlign: 'center' }}>Last action: {last}</Text>
+      {actionSheet}
+    </View>
+  );
+}
+```
+
+`show` takes every `ActionSheet` prop except `visible`, and `onClose` is optional. `hide()` closes the sheet from code.
+
+## Cancel
+
+The iOS design ends with a Cancel button in its own card, as iOS does. Material and web sheets don't: they close on a backdrop tap, a swipe down or Back. `showCancel` turns it on or off for any design, and `cancelLabel` renames it. Cancel, the backdrop, a swipe and Back all call `onClose` without running an action.
+
+## Bottom sheet or modal
+
+`presentation` is the same as on [`BottomSheet`](./bottom-sheet#bottom-sheet-or-modal): `'auto'` (default) is a centered modal on wide web windows and a bottom sheet everywhere else. Anything else the sheet takes, such as `bottomInset` or `onClosed`, goes in `sheetProps`.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `visible` | `boolean` | **required** | Show or hide (animated). |
+| `onClose` | `() => void` | **required** | Set `visible` to `false` here. Called on any action, Cancel, a backdrop tap, a swipe down and Back. |
+| `actions` | `ActionSheetAction[]` | **required** | The actions, top to bottom. |
+| `title` | `string` | — | What the actions apply to. |
+| `message` | `string` | — | A line under the title. |
+| `showCancel` | `boolean` | `true` iOS / `false` Material and web | A Cancel button after the actions. |
+| `cancelLabel` | `string` | `'Cancel'` | |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. |
+| `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [`BottomSheet`](./bottom-sheet#props). |
+| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
+| `styles` | `{ group, header, title, message, action, actionLabel, actionDescription, check, cancel, cancelLabel }` | — | [Slot styles](../guides/styling): the iOS cards, the title block, each action row, its label, description and ✓, and Cancel. |
+| `testID` | `string` | — | On the sheet; Cancel gets `${testID}-cancel`. |
+
+```ts
+interface ActionSheetAction {
+  label: string;
+  onPress?: () => void; // runs after the sheet has closed
+  description?: string; // a second line under the label
+  icon?: ReactNode;
+  selected?: boolean; // a ✓ for the current choice
+  destructive?: boolean; // theme danger colour
+  disabled?: boolean;
+  testID?: string;
+}
+
+const { show, hide, actionSheet } = useActionSheet();
+show(options: Omit<ActionSheetProps, 'visible' | 'onClose'> & { onClose?: () => void });
+```
+
+## Accessibility
+
+Each action is a button named by its label and description, marked disabled or selected, and the title is a header. On the web, arrow keys move between actions and Escape closes the sheet.
+
+## Related
+
+- [BottomSheet](./bottom-sheet): the sheet underneath, for your own content
+- [Migrate from @expo/react-native-action-sheet](../resources/migration/expo-action-sheet) or [react-native-actions-sheet](../resources/migration/actions-sheet)

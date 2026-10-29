@@ -25,6 +25,7 @@ export const BottomSheet = ({
   draggable: draggableProp,
   expandable = true,
   expandedHeight,
+  showHandle = true,
   closeOnBackdropPress = true,
   maxHeightRatio = DEFAULT_MAX_HEIGHT_RATIO,
   height,
@@ -103,7 +104,7 @@ export const BottomSheet = ({
             >
               {/* collapsable={false}: not flattened away, so a touch anywhere on the strip reaches the drag handlers */}
               <View style={dialog && styles.dialogHeader}>
-                {!dialog && (
+                {!dialog && showHandle && (
                   <View {...resize.panHandlers} collapsable={false} style={styles.handleArea}>
                     <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
                   </View>

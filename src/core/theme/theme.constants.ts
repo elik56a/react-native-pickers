@@ -43,6 +43,7 @@ export const lightTheme: PickerTheme = {
     handle: '#D8D3C9',
     hover: 'rgba(23,21,15,0.05)',
     ripple: 'rgba(23,21,15,0.18)',
+    danger: '#D92D20',
   },
   ...SHARED_TOKENS,
 };
@@ -65,6 +66,7 @@ export const darkTheme: PickerTheme = {
     handle: '#3D3930',
     hover: 'rgba(255,255,255,0.06)',
     ripple: 'rgba(255,255,255,0.2)',
+    danger: '#FF6B5F',
   },
   ...SHARED_TOKENS,
 };
