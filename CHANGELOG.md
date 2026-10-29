@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.1](https://github.com/elik56a/react-native-pickers/compare/v0.23.0...v0.23.1) (2026-10-29)
+
+
+### 🐛 Bug Fixes
+
+* **duration:** fit the Material number boxes on narrow screens ([#72](https://github.com/elik56a/react-native-pickers/issues/72)) ([f1147b1](https://github.com/elik56a/react-native-pickers/commit/f1147b10373f888c23d541b6596ac2a1a7124634))
+
 ## [0.23.0](https://github.com/elik56a/react-native-pickers/compare/v0.22.0...v0.23.0) (2026-10-29)
 
 
