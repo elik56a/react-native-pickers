@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.2](https://github.com/elik56a/react-native-pickers/compare/v0.23.1...v0.23.2) (2026-10-29)
+
+
+### 🐛 Bug Fixes
+
+* **docs:** show the current npm download count on the home page ([#75](https://github.com/elik56a/react-native-pickers/issues/75)) ([969212d](https://github.com/elik56a/react-native-pickers/commit/969212d99b3e220958b96995ad703ddf54ea5db6))
+
 ## [0.23.1](https://github.com/elik56a/react-native-pickers/compare/v0.23.0...v0.23.1) (2026-10-29)
 
 
