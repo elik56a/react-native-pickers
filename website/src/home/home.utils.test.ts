@@ -1,13 +1,5 @@
 import { NPM_DOWNLOADS_STATUS } from './home.constants';
-import { easeOutCubic, npmDownloadsUrl, parseDownloads, revealDelay } from './home.utils';
-
-describe('npmDownloadsUrl', () => {
-  it('ends the range on the UTC day npm counts by', () => {
-    expect(npmDownloadsUrl(new Date('2026-10-27T23:30:00-05:00'))).toBe(
-      'https://api.npmjs.org/downloads/point/2020-01-01:2026-10-28/@elik56a/react-native-pickers'
-    );
-  });
-});
+import { easeOutCubic, parseDownloads, revealDelay } from './home.utils';
 
 describe('parseDownloads', () => {
   it('reads the count and treats anything else as unavailable', () => {

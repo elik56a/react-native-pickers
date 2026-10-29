@@ -3,8 +3,8 @@ import type { CompareRow, Support } from './home.types';
 export const PACKAGE = '@elik56a/react-native-pickers';
 export const INSTALL = `npm install ${PACKAGE}`;
 export const NPM_PACKAGE_URL = `https://www.npmjs.com/package/${PACKAGE}`;
-/** Predates the first publish, so the range covers every download. */
-export const NPM_DOWNLOADS_SINCE = '2020-01-01';
+/** npm's own `last-year` period: a dated range gets cached by npm's CDN and can serve a day-old count for hours. */
+export const NPM_DOWNLOADS_URL = `https://api.npmjs.org/downloads/point/last-year/${PACKAGE}`;
 
 export const NPM_DOWNLOADS_STATUS = {
   loading: 'loading',

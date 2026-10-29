@@ -24,7 +24,7 @@ export const normalizeHex = (input: string) => {
   return `#${full.endsWith(OPAQUE) && full.length === 8 ? full.slice(0, 6) : full}`;
 };
 
-const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
+export const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const toHexByte = (n: number) =>
   Math.round(clamp01(n) * 255)
     .toString(16)
