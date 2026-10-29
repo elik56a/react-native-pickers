@@ -20,7 +20,7 @@ describe('findControls', () => {
     const props = findControls(fields).map((c) => c.prop);
     expect(props).toEqual(['presentation', 'clearable', 'disabled']);
     expect(control(fields, 'presentation')).toMatchObject({
-      options: ['auto', 'dropdown', 'bottomSheet', 'modal'],
+      options: ['auto', 'dropdown', 'bottomSheet', 'modal', 'inline'],
       components: ['DatePickerField', 'SelectPicker'],
     });
   });

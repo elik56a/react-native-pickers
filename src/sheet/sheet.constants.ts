@@ -10,10 +10,11 @@ export const SHEET_PRESENTATION = {
   modal: 'modal',
 } as const;
 
-/** A field opens its picker in one of the sheet presentations, or in a dropdown under the field. */
+/** A field opens its picker in one of the sheet presentations, in a dropdown under the field, or inline: expanded under it. */
 export const FIELD_PRESENTATION = {
   ...SHEET_PRESENTATION,
   dropdown: 'dropdown',
+  inline: 'inline',
 } as const;
 
 export const SHEET_SNAP = {

@@ -50,6 +50,18 @@ describe('usePickerField', () => {
     expect(result.current.sheet.presentation).toBe('dropdown');
   });
 
+  it('toggles an inline picker, and only opens the others', async () => {
+    const inline = await renderHook(() => usePickerField({ presentation: 'inline' }));
+    await act(() => inline.result.current.toggle());
+    expect(inline.result.current.open).toBe(true);
+    await act(() => inline.result.current.toggle());
+    expect(inline.result.current.open).toBe(false);
+    const sheet = await renderHook(() => usePickerField({ presentation: 'bottomSheet' }));
+    await act(() => sheet.result.current.toggle());
+    await act(() => sheet.result.current.toggle());
+    expect(sheet.result.current.open).toBe(true);
+  });
+
   it('stays closed while disabled', async () => {
     const onOpen = jest.fn();
     const { result } = await renderHook(() => usePickerField({ disabled: true, onOpen }));

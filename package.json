@@ -51,6 +51,7 @@
     "range-picker",
     "select",
     "dropdown",
+    "inline-picker",
     "emoji-picker",
     "country-picker",
     "country-code-picker",

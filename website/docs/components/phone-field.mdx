@@ -106,7 +106,7 @@ const shown = country ? formatNationalNumber(nationalNumber, country) : user.pho
 | `countries` / `exclude` / `preferred` | `CountryCode[]` | — | Which countries the list offers, and which come first. See [CountryPicker](./country-picker#a-subset-of-countries). |
 | `preferredLabel` / `allCountriesLabel` | `string` | `'Suggested'` / `'All countries'` | Headers of the list. |
 | `locale` | `string` | device locale | Language of the country names. |
-| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal'` | `'auto'` | Where the country list opens: a dropdown on the web, a bottom sheet on native. |
+| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal' \| 'inline'` | `'auto'` | Where the country list opens: a dropdown on the web, a bottom sheet on native. |
 | `countrySheetTitle` | `string` | `'Country code'` | Title of the country sheet. |
 | `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Options for the country sheet, as [`CountryPicker`](./country-picker#props)'s. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |

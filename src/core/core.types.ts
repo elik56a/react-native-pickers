@@ -124,6 +124,8 @@ export interface PresenceOptions {
   /** Exit duration, and the entry duration unless `enterDuration` is set. */
   duration: number;
   enterDuration?: number;
+  /** Default: the native driver wherever it exists. Off for layout props such as `height`, which it can't animate. */
+  native?: boolean;
   onShown?: () => void;
   onHidden?: () => void;
 }

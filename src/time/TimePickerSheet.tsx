@@ -21,12 +21,13 @@ export const TimePickerSheet = ({
   ...rest
 }: TimePickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft(value ?? new Date(), visible);
+  const commit = (next: Date) => onConfirm(snapTime(next, rest));
+  const [draft, setDraft] = useDraft(value ?? new Date(), visible, { commit });
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
-        onConfirm(snapTime(draft, rest));
+        commit(draft);
         onClose();
       }}
     >

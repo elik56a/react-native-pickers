@@ -1,6 +1,6 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
-description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
+description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal, or expand it inline under the field, and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -105,13 +105,13 @@ export default function Example() {
 }
 ```
 
-Each field takes the props of the sheet it opens, without `visible`, plus the [field props](#props). The field owns the open state; you keep the value. As with the sheets, `onConfirm` fires only on **Done**, so your state changes only when the user confirms. On the web they open as dropdowns; switch `presentation` in the panel to see the same form with bottom sheets or modals.
+Each field takes the props of the sheet it opens, without `visible`, plus the [field props](#props). The field owns the open state; you keep the value. As with the sheets, `onConfirm` fires only on **Done**, so your state changes only when the user confirms (except `inline`, which has no **Done** and commits each change). On the web they open as dropdowns; switch `presentation` in the panel to see the same form with bottom sheets or modals.
 
 ## Try the props
 
 <PropPlayground {...PLAYGROUNDS.pickerField} />
 
-## Dropdown, bottom sheet or modal
+## Dropdown, bottom sheet, modal or inline
 
 `presentation` sets where the picker opens:
 
@@ -121,13 +121,32 @@ Each field takes the props of the sheet it opens, without `visible`, plus the [f
 | `'dropdown'` | Under the field, like a menu, or above it when there's more room there. **Cancel** and **Done** sit below the picker; a tap outside cancels. It's at least 320 px wide, so a calendar fits under a narrow field. It opens on the side with room for the whole picker; in a window too short for it, the dropdown scrolls. |
 | `'bottomSheet'` | A bottom sheet with the title and buttons in its header. |
 | `'modal'` | A centered dialog. |
+| `'inline'` | In place, under the field: the picker expands down, pushing the content below it, and folds back up on a second tap on the field. There's no **Cancel** or **Done**: each change goes to `onConfirm` (or `onSelect`) right away, like the iOS Settings and Clock apps. A date range commits once both ends are picked. |
 
 ```tsx
 <DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} />
 <DatePickerField label="Stay" mode="range" value={stay} onConfirm={setStay} presentation="dropdown" />
+<DurationPickerField label="Snooze" value={snooze} onConfirm={setSnooze} presentation="inline" />
 ```
 
-`sheetProps` and `title` apply to the bottom sheet and the modal; the dropdown has no header. [`SelectPicker`](./select-picker#presentation) takes the same values and the same `'auto'` default.
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { DurationPickerField, TimePickerField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [alarm, setAlarm] = useState(new Date(2026, 0, 1, 7, 30));
+  const [snooze, setSnooze] = useState(9 * 60);
+  return (
+    <View style={{ gap: 16 }}>
+      <TimePickerField label="Alarm" value={alarm} onConfirm={setAlarm} presentation="inline" />
+      <DurationPickerField label="Snooze" value={snooze} onConfirm={setSnooze} showHours={false} presentation="inline" />
+    </View>
+  );
+}
+```
+
+`sheetProps` and `title` apply to the bottom sheet and the modal; the dropdown and the inline picker have no header. With `renderTrigger`, `open()` toggles an inline picker, so your trigger collapses it too. [`SelectPicker`](./select-picker#presentation) takes the same values and the same `'auto'` default.
 
 ## What the field shows
 
@@ -322,7 +341,7 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 | `onClear` | `() => void` | — | Called by ×. Reset your value here. |
 | `renderTrigger` | `(info: { open, displayValue, disabled }) => ReactNode` | — | Replace the field box. |
 | `renderChevron` | `(info: { open, theme }) => ReactNode` | — | Custom chevron icon. It still rotates on open and close. |
-| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal'` | `'auto'` | Where the picker opens: a dropdown on the web, a bottom sheet on native. See [Dropdown, bottom sheet or modal](#dropdown-bottom-sheet-or-modal). |
+| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal' \| 'inline'` | `'auto'` | Where the picker opens: a dropdown on the web, a bottom sheet on native. See [Dropdown, bottom sheet, modal or inline](#dropdown-bottom-sheet-modal-or-inline). |
 | `onOpen` / `onClose` | `() => void` | — | The picker opened / closed (Done, Cancel or dismiss). |
 | `style` | `StyleProp<ViewStyle>` | — | Wrapper style (label + field). |
 | `styles` | `SlotStyles<PickerFieldSlot \| …>` | — | Field slots plus the picker's slots. |

@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { BottomSheet } from './BottomSheet';
+import { InlinePanel } from './components/InlinePanel';
 import { SheetButton } from './components/SheetButton';
 import { Dropdown } from './Dropdown';
 import { useDropdownFit } from './hooks/useDropdownFit';
@@ -11,7 +12,10 @@ import { DEFAULT_CANCEL_LABEL, FIELD_PRESENTATION, PICKER_DROPDOWN_MIN_WIDTH, SH
 import { styles } from './sheet.styles';
 import type { PickerSheetProps } from './sheet.types';
 
-/** BottomSheet with Cancel / Done buttons where the design puts them; inside a field set to `dropdown`, a dropdown under it with the buttons below. */
+/**
+ * BottomSheet with Cancel / Done buttons where the design puts them; inside a field set to `dropdown`, a dropdown under it with the buttons
+ * below; inside one set to `inline`, the content alone, expanded under it.
+ */
 export const PickerSheet = ({
   visible,
   onClose,
@@ -47,6 +51,14 @@ export const PickerSheet = ({
   );
   // A sheet opened from inside this one isn't in the field.
   const content = <FieldSheetContext.Provider value={null}>{children}</FieldSheetContext.Provider>;
+
+  if (presentation === FIELD_PRESENTATION.inline) {
+    return (
+      <InlinePanel visible={visible} theme={theme}>
+        {content}
+      </InlinePanel>
+    );
+  }
 
   if (presentation === FIELD_PRESENTATION.dropdown) {
     return (

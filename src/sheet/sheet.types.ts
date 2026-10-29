@@ -17,7 +17,7 @@ import type {
 /** `auto`: a centered modal on web windows wider than the sheet, a bottom sheet everywhere else. */
 export type SheetPresentation = ValueOf<typeof SHEET_PRESENTATION>;
 
-/** A sheet presentation, or `dropdown`: a popover under the field. */
+/** A sheet presentation, `dropdown`: a popover under the field, or `inline`: expanded in place under the field. */
 export type FieldPresentation = ValueOf<typeof FIELD_PRESENTATION>;
 
 export interface FieldSheetContextValue {
@@ -77,10 +77,19 @@ export interface SheetChromeProps extends ThemableProps {
   sheetProps?: Partial<Omit<BottomSheetProps, 'visible' | 'onClose' | 'children'>>;
 }
 
-export interface PickerSheetProps extends SheetChromeProps {
+export interface PickerSheetProps extends Omit<SheetChromeProps, 'presentation'> {
+  /** Default: the field's presentation, else 'auto' */
+  presentation?: FieldPresentation;
   onConfirm?: () => void;
   confirmDisabled?: boolean;
   children: React.ReactNode;
+}
+
+export interface DraftOptions<V> {
+  /** Resets the draft to `value` when it changes, open or not */
+  resetKey?: unknown;
+  /** Called with each change in an `inline` field, which has no Done button */
+  commit?: (v: V) => void;
 }
 
 export interface SheetContentProps {
@@ -200,6 +209,19 @@ export interface AnchorRect {
   height: number;
 }
 
+/** An inline picker's animated height and fade, and the `onLayout` that measures its content. */
+export interface InlineExpand {
+  mounted: boolean;
+  style: { height: Animated.AnimatedInterpolation<number>; opacity: Animated.Value };
+  onLayout: (e: LayoutChangeEvent) => void;
+}
+
+export interface InlinePanelProps {
+  visible: boolean;
+  children: React.ReactNode;
+  theme: PickerTheme;
+}
+
 export interface DropdownFrame {
   left: number;
   width: number;
@@ -239,6 +261,7 @@ export interface ChevronProps {
 export type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';
 
 export interface PickerFieldTriggerInfo {
+  /** With the `inline` presentation, a second call collapses the picker */
   open: () => void;
   displayValue: string;
   disabled: boolean;
@@ -262,7 +285,10 @@ export interface PickerFieldBaseProps<S extends string = never> extends Themable
   renderChevron?: (info: ChevronInfo) => React.ReactNode;
   onOpen?: () => void;
   onClose?: () => void;
-  /** Where the picker opens: `dropdown` under the field, `bottomSheet`, `modal`, or `auto`: a dropdown on the web, a bottom sheet on native. Default: 'auto' */
+  /**
+   * Where the picker opens: `dropdown` under the field, `bottomSheet`, `modal`, `inline`: expanded in place under the field, committing each
+   * change (no Cancel / Done) and collapsing on a second tap, or `auto`: a dropdown on the web, a bottom sheet on native. Default: 'auto'
+   */
   presentation?: FieldPresentation;
   style?: StyleProp<ViewStyle>;
   styles?: SlotStyles<PickerFieldSlot | S>;

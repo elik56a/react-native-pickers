@@ -30,7 +30,7 @@ The sheets take `presentation`: `'auto'` (default), `'bottomSheet'` or `'modal'`
 <TimePickerSheet presentation="modal" visible={open} onClose={close} value={time} onConfirm={setTime} />
 ```
 
-[`SelectPicker`](./select-picker#presentation) also supports `'dropdown'`, which opens under the field. It's `SelectPicker`'s default on the web.
+[`SelectPicker`](./select-picker#presentation) and the [fields](./picker-fields#dropdown-bottom-sheet-modal-or-inline) also support `'dropdown'`, which opens under the field, and `'inline'`, which expands under it. It's `SelectPicker`'s default on the web.
 
 ```tsx
 import { DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, PickerSheet, useDraft } from '@elik56a/react-native-pickers';
@@ -415,7 +415,13 @@ export default function Example() {
 ## `useDraft`
 
 ```ts
-function useDraft<V>(value: V, visible: boolean): [draft: V, setDraft: (v: V) => void];
+function useDraft<V>(
+  value: V,
+  visible: boolean,
+  options?: { resetKey?: unknown; commit?: (v: V) => void }
+): [draft: V, setDraft: (v: V) => void];
 ```
 
-Returns a draft copy of `value` that **resets to `value` each time `visible` turns true**. It's the hook the built-in sheets use; use it for your own `PickerSheet`s as shown above.
+Returns a draft copy of `value` that **resets to `value` each time `visible` turns true** (and whenever `resetKey` changes). It's the hook the built-in sheets use; use it for your own `PickerSheet`s as shown above.
+
+Inside a [`PickerField`](./picker-fields#dropdown-bottom-sheet-modal-or-inline) set to `presentation="inline"` there's no **Done** button, so `setDraft` also calls `commit` with each change. Pass your save function there to support inline: `useDraft(prefs, visible, { commit: onSave })`.

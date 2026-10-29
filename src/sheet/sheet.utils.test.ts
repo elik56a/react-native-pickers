@@ -11,6 +11,7 @@ import {
   resolveFieldPresentation,
   resolvePresentation,
   resolveSheetHeight,
+  shouldCollapseOnPress,
   shouldDismiss,
   splitFieldProps,
 } from './sheet.utils';
@@ -217,6 +218,15 @@ describe('resolveFieldPresentation', () => {
     expect(resolveFieldPresentation('auto', 'ios')).toBe('auto');
     expect(resolveFieldPresentation('modal', 'web')).toBe('modal');
     expect(resolveFieldPresentation('bottomSheet', 'web')).toBe('bottomSheet');
+  });
+});
+
+describe('shouldCollapseOnPress', () => {
+  it('collapses only an open inline field', () => {
+    expect(shouldCollapseOnPress('inline', true)).toBe(true);
+    expect(shouldCollapseOnPress('inline', false)).toBe(false);
+    expect(shouldCollapseOnPress('dropdown', true)).toBe(false);
+    expect(shouldCollapseOnPress('bottomSheet', true)).toBe(false);
   });
 });
 

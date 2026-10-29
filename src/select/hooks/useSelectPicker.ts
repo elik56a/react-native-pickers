@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { usePickerPlatform } from '../../core/theme/ThemeProvider';
 import { useAnchor } from '../../sheet/hooks/useAnchor';
-import { resolveFieldPresentation } from '../../sheet/sheet.utils';
+import { resolveFieldPresentation, shouldCollapseOnPress } from '../../sheet/sheet.utils';
 import { NO_OPTIONS, SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
 import { findOptions, shouldSearchInField, toValueList } from '../select.utils';
@@ -37,6 +37,8 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     setQuery('');
     onClose?.();
   }, [onClose]);
+
+  const toggle = shouldCollapseOnPress(presentation, open) ? hide : show;
 
   const valueProps: SelectValueProps<T> = props.multiple
     ? {
@@ -80,6 +82,7 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     anchor,
     show,
     hide,
+    toggle,
     selected,
     valueProps,
     removeOption,
