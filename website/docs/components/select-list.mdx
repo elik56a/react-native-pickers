@@ -1,11 +1,10 @@
 ---
 title: React Native Searchable Select List
-sidebar_label: SelectList
 description: Inline, searchable React Native selection list with single or multiple selection, groups, icons, descriptions and custom rows — the list inside SelectPicker.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { SelectList } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # SelectList
 
@@ -49,22 +48,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="SelectList"
-  component={SelectList}
-  props={{
-    listHeight: 260,
-    options: ['Canada', 'France', 'Germany', 'Israel', 'Italy', 'Japan', 'Mexico', 'Spain', 'Sweden', 'United States'].map((c) => ({ label: c, value: c })),
-  }}
-  value={(p) => (p.multiple ? ['Japan'] : 'Japan')}
-  code="options={countries} value={value} onChange={setValue}"
-  controls={[
-    { prop: 'multiple', options: [false, true] },
-    { prop: 'searchable', options: [true, false], default: null },
-    { prop: 'showCheckmarks', options: [true, false] },
-    { prop: 'loading', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.selectList} />
 
 ## Multiple, with search
 

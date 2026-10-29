@@ -1,8 +1,9 @@
 import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 
+import { needsSelect } from '../../../catalog/catalog.utils';
 import { Choices } from '../../../components/Choices';
-import { needsSelect, PropSelect } from '../../../components/PropPlayground';
+import { PropSelect } from '../../../components/PropPlayground';
 import { CONTROLS, PICK_A_FIELD, TAB_COMPONENTS } from '../playground.constants';
 import styles from '../playground.module.css';
 import type { Control, ControlValue, DemoTab, Playground } from '../playground.types';

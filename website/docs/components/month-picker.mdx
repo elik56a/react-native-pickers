@@ -1,11 +1,10 @@
 ---
 title: React Native Month Picker
-sidebar_label: MonthPicker
 description: "React Native month and year picker for card expiry dates, reports and billing periods: iOS month and year wheels, or a Material and web grid of months with a year grid. Min/max, locale month names, in a bottom sheet or a form field. Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { MonthPicker, MonthPickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # MonthPicker
 
@@ -33,18 +32,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="MonthPicker"
-  component={MonthPicker}
-  value={new Date(2026, 9, 1)}
-  code="value={month} onChange={setMonth}"
-  controls={[
-    { prop: 'display', options: ['auto', 'wheel', 'grid'], unset: 'auto' },
-    { prop: 'monthFormat', options: ['long', 'short', 'numeric'] },
-    { prop: 'locale', options: ['en-US', 'de-DE', 'ja-JP'], default: null },
-    { prop: 'loop', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.monthPicker} />
 
 ## The value is the first of the month
 
@@ -96,20 +84,7 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 
 `MonthPickerField` opens the sheet and shows the confirmed month for `locale`, like `October 2026`. For a card's `10/29`, pass your own `displayValue`.
 
-<PropPlayground
-  name="MonthPickerField"
-  component={MonthPickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Report month', placeholder: 'Pick a month' }}
-  value={() => undefined}
-  code="label=&quot;Report month&quot; placeholder=&quot;Pick a month&quot; value={month} onConfirm={setMonth}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'display', options: ['auto', 'wheel', 'grid'], unset: 'auto' },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.monthPickerField} />
 
 ```tsx
 <MonthPickerField

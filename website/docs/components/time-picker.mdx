@@ -1,11 +1,10 @@
 ---
 title: React Native Time Picker
-sidebar_label: TimePicker
 description: "React Native time picker: iOS wheels, a Material clock dial or columns to click on the web. 12h/24h from the locale, minute intervals, min/max time. Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { TimePicker, TimePickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # TimePicker
 
@@ -37,21 +36,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="TimePicker"
-  component={TimePicker}
-  value={new Date(2026, 9, 26, 9, 41, 0)}
-  code="value={time} onChange={setTime}"
-  controls={[
-    { prop: 'display', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
-    { prop: 'format', options: ['auto', '12h', '24h'] },
-    { prop: 'showSeconds', options: [false, true] },
-    { prop: 'minuteInterval', options: [1, 5, 15, 30] },
-    { prop: 'dayPeriodFirst', options: [false, true] },
-    { prop: 'loop', options: [true, false] },
-    { prop: 'variant', options: ['3d', 'flat'] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.timePicker} />
 
 ## The value is a `Date`
 
@@ -198,21 +183,7 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 
 `TimePickerField` is a field that opens the sheet and shows the confirmed time (`9:30 AM` or `09:30`, from `format` and `locale`). Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="TimePickerField"
-  component={TimePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Alarm', placeholder: 'Set a time' }}
-  value={() => undefined}
-  code="label=&quot;Alarm&quot; placeholder=&quot;Set a time&quot; value={time} onConfirm={setTime}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'display', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
-    { prop: 'format', options: ['auto', '12h', '24h'] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.timePickerField} />
 
 → [Picker fields](./picker-fields)
 

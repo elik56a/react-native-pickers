@@ -1,11 +1,10 @@
 ---
 title: React Native Select & Dropdown Picker
-sidebar_label: SelectPicker
 description: "React Native select and dropdown picker: a searchable bottom sheet, modal or dropdown. Single or multi-select with chips, groups, icons, a clear button and server search (autocomplete)."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { SelectPicker } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # SelectPicker
 
@@ -55,28 +54,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="SelectPicker"
-  component={SelectPicker}
-  props={{
-    label: 'Fruit',
-    options: ['Apple', 'Banana', 'Cherry', 'Grape', 'Mango', 'Orange', 'Peach', 'Pear', 'Plum'].map((f) => ({ label: f, value: f })),
-  }}
-  value={(p) => (p.multiple ? ['Banana'] : 'Banana')}
-  resetProp="onClear"
-  code="label=&quot;Fruit&quot; options={fruits} value={value} onChange={setValue}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'multiple', options: [false, true] },
-    { prop: 'clearable', options: [false, true] },
-    { prop: 'searchable', options: [true, false], default: null },
-    { prop: 'chips', options: [true, false] },
-    { prop: 'closeOnSelect', options: [true, false] },
-    { prop: 'showCheckmarks', options: [true, false] },
-    { prop: 'disabled', options: [false, true] },
-    { prop: 'loading', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.selectPicker} />
 
 ## Options
 

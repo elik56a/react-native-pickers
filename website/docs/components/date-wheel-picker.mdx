@@ -1,11 +1,10 @@
 ---
 title: React Native Date Wheel Picker
-sidebar_label: DateWheelPicker
 description: "React Native date wheel picker (day / month / year) with locale-aware column order, min/max dates and day clamping. Ideal for birthdays. Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePickerField, DateWheelPicker } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # DateWheelPicker
 
@@ -42,19 +41,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  platforms={false}
-  name="DateWheelPicker"
-  component={DateWheelPicker}
-  value={new Date(1990, 4, 17)}
-  code="value={date} onChange={setDate}"
-  controls={[
-    { prop: 'order', options: [['day', 'month', 'year'], ['month', 'day', 'year'], ['year', 'month', 'day']], default: null },
-    { prop: 'monthFormat', options: ['long', 'short', 'numeric'] },
-    { prop: 'loop', options: [true, false] },
-    { prop: 'variant', options: ['3d', 'flat'] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.dateWheelPicker} />
 
 ## Column order from the locale
 
@@ -143,19 +130,7 @@ The day and month wheels loop by default (`loop`); the year wheel never loops.
 
 `DatePickerField` with `display="wheel"` opens these wheels in a sheet from a field, and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="DatePickerField"
-  component={DatePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Birthday', placeholder: 'Pick a date', display: 'wheel' }}
-  value={null}
-  code="label=&quot;Birthday&quot; placeholder=&quot;Pick a date&quot; display=&quot;wheel&quot; value={date} onConfirm={setDate}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.birthdayField} />
 
 → [Picker fields](./picker-fields)
 

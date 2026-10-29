@@ -1,11 +1,10 @@
 ---
 title: React Native Bottom Sheet Pickers
-sidebar_label: Picker sheets
 description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, DateTimePickerSheet, DurationPickerSheet, MonthPickerSheet, ColorPickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePickerSheet } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # Picker sheets
 
@@ -39,22 +38,7 @@ import { DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, P
 
 ## Try the props
 
-<PropPlayground
-  name="DatePickerSheet"
-  component={DatePickerSheet}
-  opener="Pick dates"
-  changeProp="onConfirm"
-  props={{ title: 'Dates' }}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
-  code="visible={open} onClose={() => setOpen(false)} value={value} onConfirm={setValue}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
-    { prop: 'mode', options: ['single', 'range', 'multiple'] },
-    { prop: 'display', options: ['calendar', 'wheel'] },
-    { prop: 'confirmOnSelect', options: [false, true] },
-    { prop: 'showCancel', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.pickerSheet} />
 
 ## How drafts work
 

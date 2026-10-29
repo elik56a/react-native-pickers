@@ -1,11 +1,10 @@
 ---
 title: React Native Date Time Picker
-sidebar_label: DateTimePicker
 description: "React Native date and time picker in one component: one row of wheels on iOS, or a calendar with the time under it (Material) or beside it (web). Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DateTimePicker, DateTimePickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # DateTimePicker
 
@@ -38,22 +37,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  wide
-  name="DateTimePicker"
-  component={DateTimePicker}
-  value={new Date(2026, 9, 26, 9, 41, 0)}
-  code="value={date} onChange={setDate}"
-  controls={[
-    { prop: 'display', options: ['auto', 'wheel', 'calendar'], unset: 'auto' },
-    { prop: 'timePosition', options: ['auto', 'beside', 'below'], unset: 'auto' },
-    { prop: 'timeDisplay', options: ['auto', 'wheel', 'dial', 'input', 'list'], unset: 'auto' },
-    { prop: 'format', options: ['auto', '12h', '24h'] },
-    { prop: 'minuteInterval', options: [1, 5, 15, 30] },
-    { prop: 'showSeconds', options: [false, true] },
-    { prop: 'variant', options: ['3d', 'flat'] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.dateTimePicker} />
 
 ## Calendar display
 
@@ -129,21 +113,7 @@ It takes the same props as `DateTimePicker`, plus the [sheet props](./picker-she
 
 `DateTimePickerField` opens the same sheet from a field, and shows the confirmed moment (`Oct 26, 2026, 9:30 AM`). Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="DateTimePickerField"
-  component={DateTimePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Reminder', placeholder: 'Set a reminder' }}
-  value={() => undefined}
-  code="label=&quot;Reminder&quot; placeholder=&quot;Set a reminder&quot; value={date} onConfirm={setDate}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'display', options: ['auto', 'wheel', 'calendar'], unset: 'auto' },
-    { prop: 'minuteInterval', options: [1, 5, 15, 30] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.dateTimePickerField} />
 
 → [Picker fields](./picker-fields)
 

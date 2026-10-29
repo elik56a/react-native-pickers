@@ -1,12 +1,10 @@
 ---
 title: React Native Horizontal List
-sidebar_label: HorizontalList
 description: "React Native segmented control and horizontal chips with icons on any side, that scroll sideways, reveal the next item when you tap one at the edge, and can show scroll arrows. Zero native code."
 ---
 
-import { Text } from 'react-native';
 import PropPlayground from '@site/src/components/PropPlayground';
-import { HorizontalList } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # HorizontalList
 
@@ -307,26 +305,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="HorizontalList"
-  component={HorizontalList}
-  props={{
-    items: [
-      { label: 'Walk', value: 'walk', icon: <Text>🚶</Text> },
-      { label: 'Bike', value: 'bike', icon: <Text>🚲</Text> },
-      { label: 'Bus', value: 'bus', icon: <Text>🚌</Text> },
-      { label: 'Car', value: 'car', icon: <Text>🚗</Text> },
-    ],
-  }}
-  value="bike"
-  code="items={modes} value={mode} onChange={setMode}"
-  controls={[
-    { prop: 'variant', options: ['segmented', 'chips'] },
-    { prop: 'iconPosition', options: ['left', 'right', 'top', 'bottom'] },
-    { prop: 'showArrows', options: [false, true] },
-    { prop: 'arrowPosition', options: ['outside', 'overlay'] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.horizontalList} />
 
 ## Behaviour
 

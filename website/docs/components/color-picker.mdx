@@ -1,11 +1,10 @@
 ---
 title: React Native Color Picker
-sidebar_label: ColorPicker
 description: "React Native color picker that looks native: iOS's Grid, Spectrum and Sliders, Google's swatch circles with a custom color, or the browser's spectrum with an eyedropper. Hex with opacity, copy button, in a bottom sheet or a form field. Zero native code, no gradient library."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { ColorPicker, ColorPickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # ColorPicker
 
@@ -29,17 +28,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="ColorPicker"
-  component={ColorPicker}
-  value="#E91E63"
-  code="value={color} onChange={setColor}"
-  controls={[
-    { prop: 'display', options: ['auto', 'tabs', 'swatches', 'spectrum'], unset: 'auto' },
-    { prop: 'showAlpha', options: [false, true] },
-    { prop: 'showCustom', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.colorPicker} />
 
 ## Three layouts
 
@@ -140,21 +129,7 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 
 `ColorPickerField` opens the sheet and shows the confirmed colour: a small swatch and its hex code.
 
-<PropPlayground
-  name="ColorPickerField"
-  component={ColorPickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Label colour', placeholder: 'Pick a colour' }}
-  value={() => undefined}
-  code="label=&quot;Label colour&quot; placeholder=&quot;Pick a colour&quot; value={color} onConfirm={setColor}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'display', options: ['auto', 'tabs', 'swatches', 'spectrum'], unset: 'auto' },
-    { prop: 'showAlpha', options: [false, true] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.colorPickerField} />
 
 → [Picker fields](./picker-fields)
 

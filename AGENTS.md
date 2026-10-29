@@ -52,7 +52,7 @@ Every feature folder has the same layout:
 
 When a change affects what users see or call (a new component, prop, default, behavior or design), update in the same PR:
 
-- `website/docs/components/<page>.mdx`: the prose, a live example and the props table. New pages go in `website/sidebars.ts`.
+- `website/docs/components/<page>.mdx`: the prose, a live example and the props table. New pages and their prop playgrounds go in `website/src/catalog/`, which builds the docs sidebar, each page's playground and the example app's drawer.
 - `website/docs/api/reference.mdx` for new exports, and every guide or recipe that mentions what changed (`guides/designs.mdx`, `guides/theming.mdx`, `guides/platforms.mdx`…).
 - `website/docs/resources/ai.mdx`: the cheat sheet AI assistants read. `llms.txt` and `llms-full.txt` are generated from the docs, so they follow.
 - `README.md`.
