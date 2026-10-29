@@ -10,6 +10,9 @@ export const DURATION_UNIT = {
 
 export const DURATION_UNITS: DurationUnit[] = [DURATION_UNIT.hours, DURATION_UNIT.minutes, DURATION_UNIT.seconds];
 
+/** The narrowest a typed box gets on a small screen: two digits still fit. */
+export const DURATION_FIELD_MIN_WIDTH = 56;
+
 export const DEFAULT_DURATION_LABELS: DurationLabels = {
   hours: 'h',
   minutes: 'min',

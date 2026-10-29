@@ -5,10 +5,7 @@
 **Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/showcase-dark.png">
-    <img alt="React Native date range picker, time picker, emoji picker, select picker and date-time picker from react-native-pickers" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/showcase-light.png" width="720">
-  </picture>
+  <img alt="React Native Pickers on an iPhone and an Android phone side by side: a date range picker with prices, wheel and clock-dial time pickers, a searchable select, an emoji picker, a phone number field, a color picker, a duration picker, and light and dark mode" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/demo.gif" width="900">
 </p>
 
 <p align="center">
