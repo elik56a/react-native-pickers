@@ -10,7 +10,6 @@ website/.docusaurus/
 website/versioned_docs/
 website/versioned_sidebars/
 website/versions.json
-website/archived-versions.json
 website/src/pages/changelog.md
 
 # The demo GIF recorder and the page it records: local only, see reel/README.md
