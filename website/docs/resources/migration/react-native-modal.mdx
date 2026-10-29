@@ -1,0 +1,50 @@
+---
+title: Migrate from react-native-modal
+sidebar_label: 'react-native-modal'
+description: "Switch from react-native-modal to React Native Pickers: BottomSheet as a bottom sheet or a centered modal, with the backdrop, swipe to close, Back button and keyboard avoidance built in, and the sheet surface drawn for you. No native code."
+---
+
+# Migrate from `react-native-modal`
+
+Most `react-native-modal` code builds a bottom sheet or a dialog by hand: `style={{ justifyContent: 'flex-end', margin: 0 }}`, a white box with rounded corners, and the same close function passed to three callbacks. [`BottomSheet`](../../components/bottom-sheet) is that sheet: one `onClose` for every way of closing, and the surface, handle and padding drawn for you.
+
+```diff
+- import Modal from 'react-native-modal';
++ import { BottomSheet } from '@elik56a/react-native-pickers';
+
+- <Modal
+-   isVisible={open}
+-   onBackdropPress={close}
+-   onBackButtonPress={close}
+-   onSwipeComplete={close}
+-   swipeDirection="down"
+-   style={{ justifyContent: 'flex-end', margin: 0 }}
+- >
+-   <View style={{ backgroundColor: 'white', borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 16 }}>
+-     <Filters />
+-   </View>
+- </Modal>
++ <BottomSheet visible={open} onClose={close}>
++   <Filters />
++ </BottomSheet>
+```
+
+For a centered dialog, the default `react-native-modal` look, pass `presentation="modal"`.
+
+| react-native-modal | React Native Pickers |
+| --- | --- |
+| `isVisible` | `visible` |
+| `onBackdropPress` / `onBackButtonPress` / `onSwipeComplete` | one `onClose` |
+| `swipeDirection="down"` | `enableSwipeToClose` (default `true`) |
+| `swipeDirection` `up`, `left` or `right` | — |
+| no `onBackdropPress` | `closeOnBackdropPress={false}` |
+| `style={{ justifyContent: 'flex-end', margin: 0 }}` | the default (`presentation="bottomSheet"`) |
+| a centered modal | `presentation="modal"` |
+| `backdropColor` / `backdropOpacity` | `styles={{ backdrop: { backgroundColor } }}`, or the theme's `backdrop` colour |
+| `animationIn` / `animationOut` / `animationInTiming` | slide up, or fade and rise as a modal; `theme={{ animation: { duration } }}` |
+| `onModalShow` / `onModalHide` | `onOpened` / `onClosed` |
+| `avoidKeyboard` | built in |
+| `propagateSwipe` | a `ScrollView` inside just scrolls; the handle and header drag the sheet |
+| `coverScreen={false}` / `hasBackdrop={false}` | — |
+
+See [all migration guides](./index.mdx) for other libraries.

@@ -4,6 +4,7 @@ import type { PickersProviderProps } from '@elik56a/react-native-pickers';
 import { PickersProvider } from '@elik56a/react-native-pickers';
 import { BookingScreen } from '../home/demo/components/BookingScreen';
 import { AlarmScreen } from './components/AlarmScreen';
+import { AlbumsScreen } from './components/AlbumsScreen';
 import { ChatScreen } from './components/ChatScreen';
 import { DeliveryScreen } from './components/DeliveryScreen';
 import { DisplayScreen } from './components/DisplayScreen';
@@ -35,6 +36,7 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   display: DisplayScreen,
   verify: VerifyScreen,
   review: ReviewScreen,
+  albums: AlbumsScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {

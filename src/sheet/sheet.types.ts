@@ -45,6 +45,8 @@ export interface BottomSheetProps extends ThemableProps {
   expandable?: boolean;
   /** Expanded height (px, or a fraction of the window when <= 1). Default: the window below the status bar */
   expandedHeight?: number;
+  /** The grab bar at the top of a bottom sheet. Default: true */
+  showHandle?: boolean;
   /** Tap the backdrop to dismiss. Default: true */
   closeOnBackdropPress?: boolean;
   /** Max sheet height as a fraction of the window. Default: 0.9 */

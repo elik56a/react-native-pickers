@@ -235,6 +235,7 @@ On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside s
 | `expandable` | `boolean` | `true` | Grow to `expandedHeight`: drag up on native, wheel up on the web. |
 | `expandedHeight` | `number` | window − status bar | Expanded height: fraction (≤ 1) or px. |
 | `closeOnBackdropPress` | `boolean` | `true` | Tap outside to dismiss. |
+| `showHandle` | `boolean` | `true` | The grab bar at the top of a bottom sheet. Without it, only the header drags. |
 | `maxHeightRatio` | `number` | `0.9` | Max height as a fraction of the window. |
 | `height` | `number` | content | Fixed height: fraction (≤ 1) or px. |
 | `bottomInset` | `number` | `24` iOS / `12` | Bottom padding. |
@@ -264,4 +265,6 @@ On iOS the sheet is wrapped in a `KeyboardAvoidingView`, so text inputs inside s
 ## Related
 
 - [PickerSheet](./picker-sheets#pickersheet): a BottomSheet with Cancel / Done buttons
+- [ActionSheet](./action-sheet): a list of actions, such as Share or Delete
+- [Migrate from @gorhom/bottom-sheet](../resources/migration/gorhom-bottom-sheet) or [react-native-modal](../resources/migration/react-native-modal)
 - [Filters sheet recipe](../recipes/filters-sheet)

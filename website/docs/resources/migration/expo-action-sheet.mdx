@@ -1,0 +1,63 @@
+---
+title: Migrate from @expo/react-native-action-sheet
+sidebar_label: 'expo action-sheet'
+description: "Switch from @expo/react-native-action-sheet to React Native Pickers: the same useActionSheet hook, an onPress per action instead of button indexes, destructive and disabled actions, icons, and the same look on iOS, Android and the web. No provider and no native code."
+---
+
+# Migrate from `@expo/react-native-action-sheet`
+
+Keep calling a function: `useActionSheet` has the same name and returns `show`, which opens [`ActionSheet`](../../components/action-sheet). Each action carries its own `onPress`, so there are no indexes to match up. Render the returned `actionSheet` once in the component, and remove `<ActionSheetProvider>` from your app root.
+
+```diff
+- import { useActionSheet } from '@expo/react-native-action-sheet';
++ import { useActionSheet } from '@elik56a/react-native-pickers';
+
+- const { showActionSheetWithOptions } = useActionSheet();
++ const { show, actionSheet } = useActionSheet();
+  const openMenu = () =>
+-   showActionSheetWithOptions(
+-     { options: ['Share', 'Delete', 'Cancel'], destructiveButtonIndex: 1, cancelButtonIndex: 2, title: 'Photo' },
+-     (index) => {
+-       if (index === 0) share();
+-       if (index === 1) remove();
+-     }
+-   );
++   show({
++     title: 'Photo',
++     actions: [
++       { label: 'Share', onPress: share },
++       { label: 'Delete', destructive: true, onPress: remove },
++     ],
++   });
+
+  return (
+    <>
+      <Button title="Photo options" onPress={openMenu} />
++     {actionSheet}
+    </>
+  );
+```
+
+Prefer state? `<ActionSheet visible={open} onClose={() => setOpen(false)} actions={…} />` takes the same props.
+
+| @expo/react-native-action-sheet | React Native Pickers |
+| --- | --- |
+| `showActionSheetWithOptions(options, callback)` | `show(options)` from `useActionSheet`, or `<ActionSheet visible>` |
+| `options` | `actions`: `{ label, onPress }` each |
+| `callback(index)` | each action's `onPress`, run after the sheet closes |
+| `cancelButtonIndex` | `showCancel` and `cancelLabel`; Cancel isn't one of the `actions` |
+| `destructiveButtonIndex` | `destructive: true` on the action |
+| `disabledButtonIndices` | `disabled: true` on the action |
+| `title` / `message` | `title` / `message` |
+| `icons` | `icon` on the action |
+| `cancelButtonTintColor` | `styles={{ cancelLabel: { color } }}` |
+| `tintColor` / `destructiveColor` | `theme={{ colors: { primary, danger } }}` |
+| `textStyle` / `titleTextStyle` / `messageTextStyle` | `styles={{ actionLabel, title, message }}` |
+| `containerStyle` | `styles={{ group }}` (iOS) or `sheetProps={{ styles: { sheet } }}` |
+| `showSeparators` / `separatorStyle` | separators come with the iOS design; `styles={{ action }}` |
+| `userInterfaceStyle` | `PickersProvider colorScheme` |
+| `anchor` (iPad popover) | — |
+
+On iOS, `@expo/react-native-action-sheet` shows the system `ActionSheetIOS`, and on Android and the web its own JavaScript sheet. `ActionSheet` draws the iOS design on iOS and Material on Android, so each platform still looks like itself, and you can set one `design` for all of them.
+
+See [all migration guides](./index.mdx) for other libraries.

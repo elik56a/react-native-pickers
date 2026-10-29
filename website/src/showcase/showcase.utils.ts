@@ -1,5 +1,5 @@
-import { CLOSED_WEEKDAY, HOURS_IN_DAY, MIN_PREVIEW_OPACITY, TEXT_SIZES, TIMER_PRESETS } from './showcase.constants';
-import type { TextSelection } from './showcase.types';
+import { ALBUM_SORT, CLOSED_WEEKDAY, HOURS_IN_DAY, MIN_PREVIEW_OPACITY, TEXT_SIZES, TIMER_PRESETS } from './showcase.constants';
+import type { Album, AlbumSort, TextSelection } from './showcase.types';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -39,3 +39,10 @@ export const previewOpacity = (brightness: number) => MIN_PREVIEW_OPACITY + ((1 
 
 /** A text size's name on its mark, such as M for 17 pt. */
 export const textSizeLabel = (size: number) => TEXT_SIZES.find((option) => option.value === size)?.label ?? `${size} pt`;
+
+/** Albums in the chosen order; `recent` keeps the list's own order, newest first. */
+export const sortAlbums = (albums: Album[], sort: AlbumSort) => {
+  if (sort === ALBUM_SORT.name) return [...albums].sort((a, b) => a.name.localeCompare(b.name));
+  if (sort === ALBUM_SORT.photos) return [...albums].sort((a, b) => b.photos - a.photos);
+  return albums;
+};

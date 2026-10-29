@@ -1,5 +1,14 @@
-import { CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
-import { findPreset, formatClock, formatHour, insertAtSelection, isClosedDay, previewOpacity, textSizeLabel } from './showcase.utils';
+import { ALBUM_SORT, ALBUMS, CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
+import {
+  findPreset,
+  formatClock,
+  formatHour,
+  insertAtSelection,
+  isClosedDay,
+  previewOpacity,
+  sortAlbums,
+  textSizeLabel,
+} from './showcase.utils';
 
 describe('formatClock', () => {
   it('reads like a clock, with hours only once there are some', () => {
@@ -60,5 +69,13 @@ describe('textSizeLabel', () => {
   it('names a size by its mark, or in points off the marks', () => {
     expect(textSizeLabel(17)).toBe('M');
     expect(textSizeLabel(16)).toBe('16 pt');
+  });
+});
+
+describe('sortAlbums', () => {
+  it('sorts by name or by photo count, and keeps the list order for recent', () => {
+    expect(sortAlbums(ALBUMS, ALBUM_SORT.name)[0].name).toBe('Hiking the Alps');
+    expect(sortAlbums(ALBUMS, ALBUM_SORT.photos)[0].photos).toBe(214);
+    expect(sortAlbums(ALBUMS, ALBUM_SORT.recent)).toBe(ALBUMS);
   });
 });

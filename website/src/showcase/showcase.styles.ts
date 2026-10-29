@@ -46,4 +46,8 @@ export const styles = StyleSheet.create({
   hint: { fontSize: 13 },
   scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   categoryRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  albumRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8 },
+  albumCover: { width: 44, height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  albumText: { flex: 1 },
+  more: { fontSize: 20, paddingHorizontal: 8 },
 });

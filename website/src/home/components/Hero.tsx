@@ -30,8 +30,8 @@ export const Hero = () => {
           </h1>
           <p className={clsx(styles.subtitle, styles.reveal)} style={revealDelay(2)}>
             Wheel, time, duration, date, month, range, select, country, phone, time zone, emoji and color pickers, a slider, a rating, an
-            OTP input, plus the sheets and fields to put them in. Native on iOS, Android and the web, yours to customize, and{' '}
-            <strong>100% JavaScript</strong> with zero native code.
+            OTP input, plus bottom sheets, action sheets and fields to put them in. Native on iOS, Android and the web, yours to customize,
+            and <strong>100% JavaScript</strong> with zero native code.
           </p>
           <div className={styles.reveal} style={revealDelay(3)}>
             <CopyInstall />

@@ -93,7 +93,10 @@ OtpField           value: string (the code so far)  onChange(code) (typing, dele
 Rating             value: number  onChange(value) (tap, end of a drag, key/screen-reader step)  max=5 step=1 (0.5: half stars)  size=32  color='#FFB400' (filled)  emptyColor=theme border
                    readOnly (shows any fraction, e.g. 4.3; no touches)  disabled  renderIcon({index,filled,color,size}) (drawn empty + filled, cut to the value; default ★ text, no SVG)  formatValue(v,max)='3 of 5'  accessibilityLabel='Rating'
                    adjustable for screen readers; arrows step, Home 0, End max; web: pointer previews the value; RTL; the row stretches like a View (stars at its start, taps past them ignored; alignSelf:'center' to centre); slots container item icon
-BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight
+BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight showHandle=true
+ActionSheet        visible onClose actions: {label, onPress?, description? (2nd line), icon?, selected? (✓), destructive? (theme colors.danger), disabled?, testID?}[]  title  message  showCancel (default true on iOS design, false Material/web)  cancelLabel='Cancel'  presentation  sheetProps
+                   a tap calls onClose, then runs the action's onPress after the sheet has closed (so it can open another modal); iOS: grouped cards + separate Cancel; Material/web: rows with icons; slots group header title message action actionLabel actionDescription check cancel cancelLabel
+useActionSheet()    → { show(options), hide(), actionSheet }: render actionSheet once, show({title, actions, …ActionSheet props}) from any handler; no provider (like @expo/react-native-action-sheet's showActionSheetWithOptions)
 Sheets (draft; commit on Done):
   DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect
   TimePickerSheet  visible onClose value onConfirm + TimePicker props

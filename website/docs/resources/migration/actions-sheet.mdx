@@ -1,0 +1,44 @@
+---
+title: Migrate from react-native-actions-sheet
+sidebar_label: 'actions-sheet'
+description: "Switch from react-native-actions-sheet to React Native Pickers: BottomSheet for your own content with visible instead of refs and SheetManager, or ActionSheet for a list of actions. Drag to close, expand, keyboard avoidance. No native code."
+---
+
+# Migrate from `react-native-actions-sheet`
+
+Despite its name, `react-native-actions-sheet` is a bottom sheet for any content. Your own content moves to [`BottomSheet`](../../components/bottom-sheet). A sheet that only lists actions (Share, Edit, Delete) is shorter as an [`ActionSheet`](../../components/action-sheet).
+
+```diff
+- import ActionSheet, { type ActionSheetRef } from 'react-native-actions-sheet';
++ import { BottomSheet } from '@elik56a/react-native-pickers';
+
+- const ref = useRef<ActionSheetRef>(null);
+- ref.current?.show();
++ const [open, setOpen] = useState(false);
++ setOpen(true);
+
+- <ActionSheet ref={ref} gestureEnabled onClose={onClose}>
++ <BottomSheet visible={open} onClose={() => setOpen(false)} onClosed={onClose}>
+    <Filters />
+- </ActionSheet>
++ </BottomSheet>
+```
+
+| react-native-actions-sheet | React Native Pickers |
+| --- | --- |
+| `ref.show()` / `ref.hide()` | `visible`, set to `false` in `onClose` |
+| `SheetManager.show(id, { payload })` / `registerSheet` | render the sheet where you use it, pass the payload as props |
+| `gestureEnabled` | `enableSwipeToClose` (default `true`) |
+| `closeOnTouchBackdrop` | `closeOnBackdropPress` |
+| `closeOnPressBack` | `onClose` is called on Android Back |
+| `snapPoints={[50, 100]}` | `height={0.5}` and `expandedHeight={1}` |
+| `onOpen` / `onClose` | `onOpened` / `onClosed`, after the animation |
+| `containerStyle` | `styles={{ sheet }}` |
+| `indicatorStyle` | `styles={{ handle }}` |
+| `CustomHeaderComponent` / `headerAlwaysVisible` | `title`, `headerLeft`, `headerRight` |
+| `keyboardHandlerEnabled` | built in |
+| `ScrollView` / `FlatList` from the library | React Native's own, with a fixed `height` |
+| `isModal={false}` (no backdrop, taps pass through) | — |
+| `useSheetRouter` (pages inside one sheet) | — |
+
+See [all migration guides](./index.mdx) for other libraries.

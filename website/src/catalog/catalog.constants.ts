@@ -36,6 +36,7 @@ export const PLAYGROUND = {
   pickerField: 'pickerField',
   pickerSheet: 'pickerSheet',
   bottomSheet: 'bottomSheet',
+  actionSheet: 'actionSheet',
 } as const;
 
 /**
@@ -108,6 +109,7 @@ export const CATALOG: readonly CatalogEntry[] = [
       { doc: 'components/picker-fields', label: 'Picker fields', playgrounds: [PLAYGROUND.pickerField] },
       { doc: 'components/picker-sheets', label: 'Picker sheets', playgrounds: [PLAYGROUND.pickerSheet] },
       { doc: 'components/bottom-sheet', label: 'BottomSheet', playgrounds: [PLAYGROUND.bottomSheet] },
+      { doc: 'components/action-sheet', label: 'ActionSheet', playgrounds: [PLAYGROUND.actionSheet] },
     ],
   },
 ];
