@@ -4,6 +4,7 @@ import { textStyle, usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CategoryBar } from './components/CategoryBar';
 import { EmojiGridRow } from './components/EmojiGridRow';
 import { EmojiHeader } from './components/EmojiHeader';
@@ -101,7 +102,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   );
 
   return (
-    <View style={[{ height, backgroundColor: theme.colors.background }, style, slots?.container]} testID={testID}>
+    <View style={[{ height, backgroundColor: theme.colors.background }, style, slots?.container]} {...ARROW_FOCUS} testID={testID}>
       {(searchable || showSkinTones) && (
         <EmojiHeader
           searchable={searchable}

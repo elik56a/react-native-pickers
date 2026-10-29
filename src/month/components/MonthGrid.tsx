@@ -3,6 +3,7 @@ import { I18nManager, View } from 'react-native';
 import { CALENDAR_VIEW } from '../../calendar/calendar.constants';
 import { CalendarHeader } from '../../calendar/components/CalendarHeader';
 import { QuickGrid } from '../../calendar/components/QuickGrid';
+import { ARROW_FOCUS } from '../../core/utils/keyboard.utils';
 import { useMonthGrid } from '../hooks/useMonthGrid';
 import { MONTH_GRID_HEIGHT } from '../month.constants';
 import type { MonthGridProps } from '../month.types';
@@ -12,7 +13,7 @@ export const MonthGrid = (props: MonthGridProps) => {
   const { theme, style, styles: slots, testID } = props;
   const grid = useMonthGrid(props);
   return (
-    <View style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style]} testID={testID}>
+    <View style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style]} {...ARROW_FOCUS} testID={testID}>
       <CalendarHeader
         label={grid.title}
         accessibilityLabel={grid.title}

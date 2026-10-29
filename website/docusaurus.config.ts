@@ -70,7 +70,7 @@ const structuredData = {
       version,
       author: { '@type': 'Person', name: AUTHOR, url: 'https://github.com/elik56a', sameAs: [LINKEDIN] },
       keywords:
-        'react native date picker, time picker, duration picker, month picker, week strip, date time picker, wheel picker, calendar, date range picker, select, dropdown, multi-select, autocomplete, segmented control, country picker, phone code picker, emoji picker, color picker, bottom sheet, material design, ios picker, expo, react native web',
+        'react native date picker, time picker, duration picker, month picker, week strip, date time picker, wheel picker, calendar, date range picker, select, dropdown, multi-select, autocomplete, segmented control, country picker, phone code picker, emoji picker, color picker, bottom sheet, material design, ios picker, expo, react native web, keyboard accessible',
     },
   ],
 };

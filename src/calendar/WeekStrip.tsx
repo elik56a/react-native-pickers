@@ -4,6 +4,7 @@ import { Animated, View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { formatMonthYear, getFirstDayOfWeek, getWeekdayNames } from '../core/utils/date.utils';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CALENDAR_DESIGN, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { WeekStripProps } from './calendar.types';
 import { getDayState, getWeekDays, getWeekMonth, isDayDisabled, orderWeekdays } from './calendar.utils';
@@ -76,6 +77,7 @@ export const WeekStrip = ({
   return (
     <View
       style={[{ backgroundColor: theme.colors.background, paddingVertical: theme.spacing.sm }, style, slots?.container]}
+      {...ARROW_FOCUS}
       testID={testID}
     >
       {showHeader ? (

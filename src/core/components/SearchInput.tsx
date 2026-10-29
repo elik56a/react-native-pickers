@@ -7,6 +7,7 @@ import type { SearchInputProps } from '../core.types';
 import { useFocus } from '../hooks/useFocus';
 import { usePickerPlatform } from '../theme/ThemeProvider';
 import { textStyle } from '../theme/theme.utils';
+import { SEARCH_FIELD_ARROWS } from '../utils/keyboard.utils';
 import { SearchIcon } from './SearchIcon';
 
 /** A search field drawn as the design's own: the iOS search bar, Material's pill, or an outlined web input. */
@@ -33,6 +34,7 @@ export const SearchInput = ({ value, onChangeText, placeholder, autoFocus, theme
         autoCapitalize="none"
         clearButtonMode="while-editing"
         accessibilityLabel={placeholder}
+        {...SEARCH_FIELD_ARROWS}
         style={[
           textStyle(theme, 'md'),
           styles.input,

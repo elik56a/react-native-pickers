@@ -2,6 +2,7 @@ import { View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { COLOR_DISPLAY, COLOR_DISPLAY_DESIGN, DEFAULT_COLORS } from './color.constants';
 import { styles } from './color.styles';
 import type { ColorPickerProps } from './color.types';
@@ -39,7 +40,7 @@ export const ColorPicker = ({
   const picker = useColorPicker({ value, defaultValue, onChange, showAlpha });
   const Layout = showCustom ? LAYOUTS[display ?? COLOR_DISPLAY_DESIGN[theme.design]] : SwatchesOnly;
   return (
-    <View style={[styles.column, style, slots?.container]} testID={testID}>
+    <View style={[styles.column, style, slots?.container]} {...ARROW_FOCUS} testID={testID}>
       <Layout
         picker={picker}
         colors={colors}

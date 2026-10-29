@@ -4,6 +4,7 @@ import { textStyle, usePickerTheme } from '../core';
 import { SearchInput } from '../core/components/SearchInput';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { GroupHeader } from './components/GroupHeader';
 import { LoadingState } from './components/LoadingState';
 import { OptionRow } from './components/OptionRow';
@@ -73,7 +74,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
   };
 
   return (
-    <View style={[style, slots?.container]} testID={testID}>
+    <View style={[style, slots?.container]} {...ARROW_FOCUS} testID={testID}>
       {props.query === undefined && shouldShowSearch(searchable, options.length, remote) && (
         <View style={[{ paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.sm }, slots?.search]}>
           <SearchInput

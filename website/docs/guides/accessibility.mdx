@@ -1,11 +1,11 @@
 ---
 title: Accessibility
-description: How React Native Pickers support VoiceOver and TalkBack — adjustable wheels, labelled calendar days, selection and disabled states, and what you should add.
+description: How React Native Pickers support VoiceOver, TalkBack and the keyboard — adjustable wheels, labelled calendar days, arrow keys on the web, selection and disabled states, and what you should add.
 ---
 
 # Accessibility
 
-Accessibility is built in. Here's what each component exposes to VoiceOver (iOS), TalkBack (Android) and screen readers on the web.
+Accessibility is built in. Here's what each component exposes to VoiceOver (iOS), TalkBack (Android), screen readers on the web and the keyboard.
 
 ## Wheels
 
@@ -57,6 +57,21 @@ Every emoji cell is a button labelled with its name ("thumbs up"). Category tabs
 ## Sheets
 
 The sheet is marked `accessibilityViewIsModal`, so focus stays inside it. The backdrop is a button labelled **Close**, string titles have the `header` role, and Android back closes the sheet.
+
+## Keyboard
+
+On the web, every picker works without a mouse:
+
+| Key | What it does |
+| --- | --- |
+| <kbd>Tab</kbd> | Moves between fields, buttons, wheels and sliders |
+| <kbd>Enter</kbd> / <kbd>Space</kbd> | Opens a field, picks the focused day, option or emoji |
+| <kbd>↑</kbd> <kbd>↓</kbd> | On a wheel, steps one row. In a calendar, list or grid, moves to the cell above or below. From a search field, goes into the results, and back |
+| <kbd>←</kbd> <kbd>→</kbd> | Moves to the next cell, wrapping to the next row, or to the next wheel of a date or time |
+| <kbd>Home</kbd> / <kbd>End</kbd> | Jumps to the first or last cell, or to the ends of a wheel or slider |
+| <kbd>Esc</kbd> | Closes a sheet or dropdown |
+
+Arrows follow what's drawn, so they go the right way in RTL and in any custom layout. Colour sliders and the colour square move with the arrows, and the clock dial steps its hand. When a sheet or dropdown closes, focus goes back to the field that opened it.
 
 ## Your checklist
 

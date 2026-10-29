@@ -2,7 +2,9 @@ import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet,
 
 import { usePickerTheme } from '../core';
 import { PLATFORM } from '../core/core.constants';
+import { useReturnFocus } from '../core/hooks/useReturnFocus';
 import { useDesignOverride, usePickerPlatform } from '../core/theme/ThemeProvider';
+import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSheetResize } from './hooks/useSheetResize';
@@ -62,6 +64,7 @@ export const BottomSheet = ({
     onClose,
   });
   const radius = theme.radius.sheet;
+  useReturnFocus(mounted);
 
   if (!mounted) return null;
   const resolvedHeight = resolveSheetHeight(height, windowHeight);
@@ -82,6 +85,7 @@ export const BottomSheet = ({
           <Animated.View style={[styles.sheetFrame, { transform: [{ translateY }] }, dialog && { opacity: progress }]}>
             <Animated.View
               ref={resize.sheetRef}
+              {...ARROW_FOCUS}
               onLayout={resize.onLayout}
               style={[
                 styles.sheet,
