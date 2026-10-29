@@ -16,5 +16,7 @@ export const CODE_THEME: PrismTheme = {
     { types: ['function', 'method'], style: { color: 'var(--code-function)' } },
     { types: ['builtin'], style: { color: 'var(--code-type)' } },
     { types: ['number', 'boolean', 'constant'], style: { color: 'var(--code-number)' } },
+    { types: ['inserted'], style: { color: 'var(--code-inserted)' } },
+    { types: ['deleted'], style: { color: 'var(--code-deleted)' } },
   ],
 };

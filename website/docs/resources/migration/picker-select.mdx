@@ -1,0 +1,38 @@
+---
+title: Migrate from react-native-picker-select
+sidebar_label: 'picker-select'
+description: "Switch from react-native-picker-select to React Native Pickers: SelectPicker with search, multi-select, chips, groups and server search, in a bottom sheet or a dropdown."
+---
+
+# Migrate from `react-native-picker-select`
+
+```diff
+- <RNPickerSelect
+-   items={[{ label: 'Football', value: 'football' }]}
+-   onValueChange={setSport}
+-   value={sport}
+-   placeholder={{ label: 'Select a sport…', value: null }}
+- />
++ <SelectPicker
++   options={[{ label: 'Football', value: 'football' }]}
++   onChange={setSport}
++   value={sport}
++   placeholder="Select a sport…"
++ />
+```
+
+| react-native-picker-select | React Native Pickers |
+| --- | --- |
+| `items` | `options` (adds `description`, `icon`, `group`, `keywords`) |
+| `onValueChange(value, index)` | `onChange(value, option)` |
+| `value` | `value` |
+| `placeholder={{ label }}` | `placeholder="…"` |
+| `disabled` | `disabled` |
+| `onOpen` / `onClose` | `onOpen` / `onClose` |
+| `doneText` | `sheet={{ confirmLabel }}` (Done shown with `closeOnSelect={false}` / multiple) |
+| `style={{ inputIOS, inputAndroid }}` | `styles={{ trigger, triggerText, placeholder }}` |
+| — | `multiple`, `searchable`, `clearable`, `maxSelected`, `renderTrigger`, `renderOption` |
+
+Want an iOS-style wheel instead of a list? Use [`WheelPickerSheet`](../../components/picker-sheets#wheelpickersheet).
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

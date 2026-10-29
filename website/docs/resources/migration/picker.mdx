@@ -1,0 +1,23 @@
+---
+title: Migrate from @react-native-picker/picker
+sidebar_label: '@react-native-picker/picker'
+description: "Switch from @react-native-picker/picker to React Native Pickers: WheelPicker with the iOS wheel on every platform, or SelectPicker for a dropdown. No native module."
+---
+
+# Migrate from `@react-native-picker/picker`
+
+```diff
+- <Picker selectedValue={lang} onValueChange={setLang}>
+-   <Picker.Item label="Java" value="java" />
+-   <Picker.Item label="JavaScript" value="js" />
+- </Picker>
++ <WheelPicker
++   items={[{ label: 'Java', value: 'java' }, { label: 'JavaScript', value: 'js' }]}
++   value={lang}
++   onChange={setLang}
++ />
+```
+
+`Picker.Item enabled={false}` → `{ disabled: true }`. Android `mode="dropdown"` → [`SelectPicker`](../../components/select-picker).
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

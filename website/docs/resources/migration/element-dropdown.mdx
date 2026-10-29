@@ -1,0 +1,55 @@
+---
+title: Migrate from react-native-element-dropdown
+sidebar_label: 'react-native-element-dropdown'
+description: "Switch from react-native-element-dropdown to React Native Pickers: Dropdown and MultiSelect become one SelectPicker, with search, chips, groups and server search, in iOS, Material and web designs."
+---
+
+# Migrate from `react-native-element-dropdown`
+
+`Dropdown` and `MultiSelect` are one component, `SelectPicker`, with `multiple` for the second. Options always have `label` and `value`, so `labelField` and `valueField` go away, and `onChange` gets the value with the option next to it.
+
+```diff
+- import { Dropdown } from 'react-native-element-dropdown';
++ import { SelectPicker } from '@elik56a/react-native-pickers';
+
+- <Dropdown
+-   data={fruits}
+-   labelField="label"
+-   valueField="value"
+-   placeholder="Select a fruit"
+-   search
+-   searchPlaceholder="Search..."
+-   value={value}
+-   onChange={(item) => setValue(item.value)}
+- />
++ <SelectPicker
++   options={fruits}
++   placeholder="Select a fruit"
++   searchable
++   searchPlaceholder="Search..."
++   value={value}
++   onChange={setValue}
++ />
+```
+
+| react-native-element-dropdown | React Native Pickers |
+| --- | --- |
+| `Dropdown` / `MultiSelect` | `SelectPicker` / `SelectPicker multiple` |
+| `data` + `labelField` + `valueField` | `options`, mapped to `{ label, value }` once: `data.map((d) => ({ label: d.name, value: d.id }))` |
+| `value` | `value` (an array with `multiple`) |
+| `onChange(item)` | `onChange(value, option)` |
+| `placeholder` | `placeholder` |
+| `search` | `searchable` (on by default past 8 options) |
+| `searchPlaceholder` | `searchPlaceholder` |
+| `searchQuery` | `filterOption(option, query)`; `keywords` on an option are searched too |
+| `maxSelect` | `maxSelected` |
+| `disable` | `disabled` |
+| `mode="modal"` | `presentation="modal"` |
+| `renderItem(item, selected)` | `renderOption({ option, selected, disabled, theme })` |
+| `renderLeftIcon` | `icon` on each option, shown in the field for the selected one |
+| `renderSelectedItem` | chips by default; `renderTrigger` for your own field |
+| `maxHeight` | `listHeight` |
+
+See [SelectPicker](../../components/select-picker) for groups, icons and server search.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

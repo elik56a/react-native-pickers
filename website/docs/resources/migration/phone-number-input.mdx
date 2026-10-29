@@ -1,0 +1,50 @@
+---
+title: Migrate from react-native-phone-number-input
+sidebar_label: 'react-native-phone-number-input'
+description: "Switch from react-native-phone-number-input to React Native Pickers: PhoneField with a country code button, formatting as you type and an E.164 value in onChange, with no ref calls."
+---
+
+# Migrate from `react-native-phone-number-input`
+
+`PhoneField` gives you the E.164 number in `onChange`, with the country and a length check next to it, so there's no ref to call. It formats the number as it's typed for about 50 countries and picks the country from a pasted `+44…` number. It doesn't bundle libphonenumber, so `valid` checks the length only; verify the number on your server, as with an SMS code.
+
+```diff
+- import PhoneInput from 'react-native-phone-number-input';
++ import { PhoneField } from '@elik56a/react-native-pickers';
+
+- const phoneInput = useRef<PhoneInput>(null);
+- <PhoneInput
+-   ref={phoneInput}
+-   defaultCode="US"
+-   defaultValue={value}
+-   onChangeFormattedText={setPhone}
+- />
+- const valid = phoneInput.current?.isValidNumber(value);
++ <PhoneField
++   defaultCountry="US"
++   value={phone}
++   onChange={(value, { valid }) => {
++     setPhone(value);
++     setValid(valid);
++   }}
++ />
+```
+
+| react-native-phone-number-input | React Native Pickers |
+| --- | --- |
+| `defaultCode` | `defaultCountry`, or `country` + `onCountryChange` |
+| `defaultValue` / `value` | `defaultValue` / `value`, both E.164 |
+| `onChangeFormattedText` | `onChange(value)`: `'+12015550123'` |
+| `onChangeText` | `onChange`'s `details.nationalNumber` |
+| `onChangeCountry(country)` | `onCountryChange(code)`; `getCountry(code)` for the details |
+| `ref.isValidNumber(number)` | `onChange`'s `details.valid`, or `isValidPhone(digits, country)` |
+| `ref.getCallingCode()` | `getCountry(code).dialCode` |
+| `ref.getNumberAfterPossiblyEliminatingZero()` | done for you: a leading trunk 0 is dropped |
+| `placeholder` | `placeholder` (default: an example in the country's format) |
+| `disabled` | `disabled` |
+| `withDarkTheme` | `<PickersProvider colorScheme="dark">`, or `'auto'` |
+| `containerStyle` / `textInputStyle` / `codeTextStyle` / `flagButtonStyle` | `styles={{ field, input, dialCode, countryButton }}` |
+| `countryPickerProps` | `preferred`, `countries`, `exclude`, `locale`, `presentation`, `sheet` |
+| `layout="first" \| "second"` | one layout: the flag and code, then the number |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

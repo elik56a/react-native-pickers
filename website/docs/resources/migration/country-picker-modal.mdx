@@ -1,0 +1,43 @@
+---
+title: Migrate from react-native-country-picker-modal
+sidebar_label: 'react-native-country-picker-modal'
+description: "Switch from react-native-country-picker-modal to React Native Pickers: CountryPicker with emoji flags, dialing codes, search in any language, preferred countries and a phone number field."
+---
+
+# Migrate from `react-native-country-picker-modal`
+
+`CountryPicker` is a form field like the others: it shows the chosen country and opens a searchable list, a bottom sheet on phones and a dropdown on the web. Flags are emoji, so nothing is downloaded, and names follow the device language through `Intl`. The value is the ISO code; [`getCountry`](../../components/country-picker#utilities) gives the name, flag and dialing code.
+
+```diff
+- import CountryPicker from 'react-native-country-picker-modal';
++ import { CountryPicker } from '@elik56a/react-native-pickers';
+
+- <CountryPicker
+-   countryCode={code}
+-   withFilter
+-   withCallingCode
+-   onSelect={(country) => setCode(country.cca2)}
+- />
++ <CountryPicker label="Country" showDialCode value={code} onChange={setCode} />
+```
+
+| react-native-country-picker-modal | React Native Pickers |
+| --- | --- |
+| `countryCode` | `value` |
+| `onSelect(country)` | `onChange(code, option)`; `getCountry(code)` for the details |
+| `countryCodes` | `countries` |
+| `excludeCountries` | `exclude` |
+| `preferredCountries` | `preferred` (kept on top under their own header, with search too) |
+| `region` / `subregion` | `countries` with that region's codes |
+| `withFilter` | search is built in |
+| `withCallingCode` | `showDialCode` |
+| `withFlag` / `withEmoji` | always on: emoji flags, nothing to download |
+| `translation` | `locale`, any language `Intl` knows |
+| `withAlphaFilter` | search instead; it also matches native names, ISO codes and `+44` |
+| `placeholder` | `placeholder` |
+| `visible` / `onOpen` / `onClose` | `onOpen` / `onClose`; `renderTrigger` for your own button |
+| `withCallingCodeButton` for a phone input | [`PhoneField`](../../components/phone-field) |
+| `withCurrency` / `withCurrencyButton` | no equivalent |
+| — | `multiple`, `clearable`, iOS, Material and web designs |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.
