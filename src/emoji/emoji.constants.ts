@@ -1,5 +1,5 @@
 import type { Design } from '../core/theme/theme.types';
-import type { EmojiCategory, EmojiDesign, EmojiSectionKey, EmojiTabKey } from './emoji.types';
+import type { EmojiCategory, EmojiDesign, EmojiSectionKey, EmojiTabKey, SkinTone } from './emoji.types';
 
 export const EMOJI_CATEGORY = {
   smileys: 'smileys',
@@ -104,6 +104,12 @@ export const GROUP_TO_CATEGORY: Record<string, EmojiCategory> = {
 
 /** Index = skin tone. */
 export const TONE_SWATCHES = ['✋', '✋🏻', '✋🏼', '✋🏽', '✋🏾', '✋🏿'];
+
+export const SKIN_TONES: SkinTone[] = [0, 1, 2, 3, 4, 5];
+
+/** Padding inside the long-press popover of an emoji's skin tones, and its gap from the pressed emoji. */
+export const TONE_POPOVER_PADDING = 4;
+export const TONE_POPOVER_GAP = 4;
 
 export const DEFAULT_COLUMNS = 8;
 export const DEFAULT_HEIGHT = 380;

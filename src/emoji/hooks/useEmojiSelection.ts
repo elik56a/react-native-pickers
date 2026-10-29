@@ -4,7 +4,10 @@ import { useControllableState } from '../../core/hooks/useControllableState';
 import type { Emoji, EmojiPickerProps, SkinTone } from '../emoji.types';
 import { addRecent, withSkinTone } from '../emoji.utils';
 
-/** Skin tone (and its menu) plus recents; `select` reports the toned emoji and records it as recent. */
+/**
+ * Skin tone (and its menu) plus recents. `select` reports the character that was picked and records it as recent: as the base
+ * emoji when it's in the current tone, so it follows later tone changes, or as picked when a long press gave it a tone of its own.
+ */
 export const useEmojiSelection = (props: EmojiPickerProps, showRecent: boolean, maxRecent: number) => {
   const { onSelect } = props;
   const [tone, setTone] = useControllableState<SkinTone>(props.skinTone, props.defaultSkinTone ?? 0, props.onSkinToneChange);
@@ -26,10 +29,10 @@ export const useEmojiSelection = (props: EmojiPickerProps, showRecent: boolean, 
   latest.current = { onSelect, tone, recent, setRecent };
 
   const select = useCallback(
-    (e: Emoji) => {
+    (e: Emoji, char: string) => {
       const current = latest.current;
-      current.onSelect(withSkinTone(e, current.tone), e);
-      if (showRecent) current.setRecent(addRecent(current.recent, e, maxRecent));
+      current.onSelect(char, e);
+      if (showRecent) current.setRecent(addRecent(current.recent, e, char === withSkinTone(e, current.tone) ? e.emoji : char, maxRecent));
     },
     [maxRecent, showRecent]
   );

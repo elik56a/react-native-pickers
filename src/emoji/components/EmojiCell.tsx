@@ -5,10 +5,11 @@ import { Touchable } from '../../core/components/Touchable';
 import { styles } from '../emoji.styles';
 import type { EmojiCellProps } from '../emoji.types';
 
-export const EmojiCell = memo(({ emoji, char, size, fontSize, renderEmoji, onSelect, theme, slots }: EmojiCellProps) => (
+export const EmojiCell = memo(({ emoji, char, size, fontSize, renderEmoji, onSelect, onLongPress, theme, slots }: EmojiCellProps) => (
   <Touchable
     theme={theme}
-    onPress={() => onSelect(emoji)}
+    onPress={() => onSelect(emoji, char)}
+    onLongPress={onLongPress && (() => onLongPress(emoji))}
     accessibilityRole="button"
     accessibilityLabel={emoji.name}
     style={({ pressed }) => [
@@ -21,7 +22,9 @@ export const EmojiCell = memo(({ emoji, char, size, fontSize, renderEmoji, onSel
     {renderEmoji ? (
       renderEmoji(char, emoji, fontSize)
     ) : (
-      <Text style={[{ fontSize, lineHeight: fontSize * 1.2 }, slots?.emojiText]}>{char}</Text>
+      <Text selectable={false} style={[{ fontSize, lineHeight: fontSize * 1.2 }, slots?.emojiText]}>
+        {char}
+      </Text>
     )}
   </Touchable>
 ));
