@@ -83,6 +83,10 @@ EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude
 ColorPicker        value: hex ('#E4572E', or '#E4572E80' with showAlpha)  onChange('#RRGGBB'|'#RRGGBBAA', fires while dragging)
                    display 'tabs'(ios: Grid/Spectrum/Sliders) | 'swatches'(material: circles + Custom) | 'spectrum'(web: square, hue, hex, eyedropper); default from the design
                    colors (hex | {value,label})[]=DEFAULT_COLORS  showCustom=true  showAlpha=false  onCopy(hex) (copy button; web clipboard by default, native needs it, e.g. expo-clipboard)  labels  normalizeHex hexToHsv hsvToHex withAlpha
+Slider             value: number  onChange(value) (on release, or a key/screen-reader step)  onValueChanging(value) (every step while dragging)  min=0 max=100 step=1 (0: continuous)
+                   range → value [start,end], onChange([start,end]), thumbLabels=['Minimum','Maximum']; a touch grabs the nearest thumb, thumbs never cross
+                   showSteps (dots per step)  marks (number | {value,label})[] (dots + labels under the track)  snapToMarks (only the marks)  valueLabel 'never'|'drag'|'always' (default 'drag' Material, else 'never')  formatValue(v) (bubble + screen readers)  minimumIcon maximumIcon (nodes beside the track)  disabled
+                   looks: ios white knob on a 4pt track | material M3 bar handle, 16dp track, gaps, stop dots | web 18px dot on a 6px track; web: pointer cursor + a halo on hover/focus/press; slots container track activeTrack thumb mark markLabel valueLabel valueLabelText
 BottomSheet        visible onClose title headerLeft headerRight footer height(<=1 fraction | px) enableSwipeToClose draggable(header drags too; native:true web:false; handle always drags) expandable expandedHeight
 Sheets (draft; commit on Done):
   DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect

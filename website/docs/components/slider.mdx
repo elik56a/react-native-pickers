@@ -1,0 +1,253 @@
+---
+title: React Native Slider
+description: "A React Native slider that looks native everywhere: iOS's knob, Material 3's handle with a value bubble, or a browser's range input. Range sliders with two thumbs, steps, labelled marks, snapping to marks, icons, keyboard and screen-reader support. Zero native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# Slider
+
+`Slider` picks a number by dragging along a track, drawn the platform's way:
+
+- **iOS**: a thin track and a white knob with a soft shadow, like `UISlider`.
+- **Material**: Material 3's thick track with a slim handle, a gap either side of it, stop dots at the ends and a value bubble while dragging.
+- **Web**: a browser's range input, with a dot in the primary colour, a pointer cursor, and a halo around the thumb on hover and focus that grows while you press and drag.
+
+Tap anywhere on the track to jump there, or drag. Pass `range` for two thumbs.
+
+```tsx
+import { Slider } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { Slider } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [volume, setVolume] = useState(40);
+  return (
+    <View style={{ gap: 8 }}>
+      <Slider
+        value={volume}
+        onChange={setVolume}
+        minimumIcon={<Text>🔈</Text>}
+        maximumIcon={<Text>🔊</Text>}
+        accessibilityLabel="Volume"
+      />
+      <Text>Volume: {volume}</Text>
+    </View>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.slider} />
+
+## `onChange` and `onValueChanging`
+
+Like the wheels, the slider has two callbacks:
+
+| Callback | When | Use it for |
+| --- | --- | --- |
+| `onChange` | Once, when the finger lifts on a new value, or on each arrow key or screen-reader step | Updating state, saving |
+| `onValueChanging` | On **every step** while dragging | Haptics, live previews |
+
+The thumb follows the finger on its own while dragging, so a controlled slider doesn't need `onValueChanging` to move. Use it to preview the value as it changes:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { Slider } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [size, setSize] = useState(24);
+  const [preview, setPreview] = useState(24);
+  return (
+    <View style={{ gap: 16 }}>
+      <View style={{ height: 64, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ width: preview, height: preview, borderRadius: preview / 2, backgroundColor: '#C8460D' }} />
+      </View>
+      <Slider
+        min={8}
+        max={64}
+        value={size}
+        onValueChanging={setPreview}
+        onChange={(next) => {
+          setSize(next);
+          setPreview(next);
+        }}
+        accessibilityLabel="Dot size"
+      />
+    </View>
+  );
+}
+```
+
+## Ranges
+
+`range` gives the slider two thumbs, and its value becomes `[start, end]`. A touch grabs the nearest thumb, and neither can pass the other. Screen readers call them **Minimum** and **Maximum**; translate them with `thumbLabels`.
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { Slider } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [price, setPrice] = useState<[number, number]>([120, 480]);
+  return (
+    <View style={{ gap: 8 }}>
+      <Text>
+        ${price[0]} – ${price[1]}
+      </Text>
+      <Slider
+        range
+        min={0}
+        max={600}
+        step={10}
+        value={price}
+        onChange={setPrice}
+        formatValue={(v) => `$${v}`}
+        accessibilityLabel="Price"
+      />
+    </View>
+  );
+}
+```
+
+## Steps and marks
+
+`step` sets how far the value moves (default `1`); `0` lets it take any value. `showSteps` puts a dot on the track at each step, left out when they'd be too close to tell apart. The Material design marks the track's inactive ends with stop dots, as Material 3 does.
+
+```tsx live
+import { useState } from 'react';
+import { Slider } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [rating, setRating] = useState(3);
+  return <Slider min={1} max={5} step={1} showSteps value={rating} onChange={setRating} accessibilityLabel="Rating" />;
+}
+```
+
+## Marks with labels
+
+`marks` puts dots on the track at the values you pick; give one a `label` to write it under the track. Labels inside the filled part of the track read stronger.
+
+```tsx live
+import { useState } from 'react';
+import { Slider } from '@elik56a/react-native-pickers';
+
+const marks = [
+  { value: 0, label: '0°C' },
+  { value: 20, label: '20°C' },
+  { value: 37, label: '37°C' },
+  { value: 100, label: '100°C' },
+];
+
+export default function Example() {
+  const [temperature, setTemperature] = useState(20);
+  return <Slider marks={marks} value={temperature} onChange={setTemperature} accessibilityLabel="Temperature" />;
+}
+```
+
+### Only the marks
+
+`snapToMarks` restricts the value to the marks: a drag jumps to the nearest one, and arrow keys and screen readers step from mark to mark.
+
+```tsx live
+import { useState } from 'react';
+import { Slider } from '@elik56a/react-native-pickers';
+
+const marks = [
+  { value: 0, label: '0°C' },
+  { value: 20, label: '20°C' },
+  { value: 37, label: '37°C' },
+  { value: 100, label: '100°C' },
+];
+
+export default function Example() {
+  const [temperature, setTemperature] = useState(20);
+  return (
+    <Slider
+      marks={marks}
+      snapToMarks
+      value={temperature}
+      onChange={setTemperature}
+      formatValue={(v) => `${v}°C`}
+      accessibilityLabel="Temperature"
+    />
+  );
+}
+```
+
+## Value bubble
+
+`valueLabel` sets when a bubble shows the value over the thumb: `'drag'` while dragging (the Material design's default), `'always'`, or `'never'` (the default elsewhere). With `'always'` the slider keeps room above the track for it. `formatValue` sets the bubble's text, which screen readers read too.
+
+```tsx live
+import { useState } from 'react';
+import { Slider } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [opacity, setOpacity] = useState(0.8);
+  return (
+    <Slider
+      min={0}
+      max={1}
+      step={0.05}
+      valueLabel="always"
+      formatValue={(v) => `${Math.round(v * 100)}%`}
+      value={opacity}
+      onChange={setOpacity}
+      accessibilityLabel="Opacity"
+    />
+  );
+}
+```
+
+## Keyboard and screen readers
+
+Each thumb is an adjustable control: screen readers step it with swipe up and down (iOS) or the volume keys (Android), and read `formatValue`'s text. On the web, Tab focuses a thumb; arrow keys step it, Page Up and Page Down move a tenth of the range, and Home and End go to the ends.
+
+The track's touch area is 44 pt tall however thin it looks, as iOS asks, and a sheet's swipe to close doesn't take over a drag on it.
+
+## Right to left
+
+In an RTL layout the track fills from the right, and dragging follows.
+
+## Styling
+
+`styles` takes these slots: `container`, `track` (every piece of the track), `activeTrack` (the filled part), `thumb`, `mark`, `markLabel`, `valueLabel` and `valueLabelText`. The filled track and Material's handle use the theme's `primary` colour.
+
+```tsx
+<Slider value={value} onChange={setValue} styles={{ activeTrack: { backgroundColor: '#34C759' }, thumb: { borderWidth: 1 } }} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number`, or `[number, number]` with `range` | | Controlled value. |
+| `defaultValue` | `number`, or `[number, number]` with `range` | `min`, or `[min, max]` | Uncontrolled starting value. |
+| `onChange` | `(value) => void` | | When the finger lifts on a new value, or on a key or screen-reader step. |
+| `onValueChanging` | `(value) => void` | | On every step while dragging. |
+| `range` | `boolean` | `false` | Two thumbs; the value is `[start, end]`. |
+| `min` | `number` | `0` | |
+| `max` | `number` | `100` | |
+| `step` | `number` | `1` | The value moves in steps this big; `0` for any value. |
+| `showSteps` | `boolean` | `false` | A dot on the track at each step. |
+| `marks` | `(number \| { value, label? })[]` | | Dots at these values, with labels under the track. |
+| `snapToMarks` | `boolean` | `false` | Only the marks can be picked. |
+| `valueLabel` | `'never' \| 'drag' \| 'always'` | `'drag'` in Material, else `'never'` | When a bubble shows the value over the thumb. |
+| `formatValue` | `(value: number) => string` | the number, with the step's decimals | Text for the bubble and screen readers. |
+| `minimumIcon` | `ReactNode` | | Before the track, like a quiet speaker beside a volume slider. |
+| `maximumIcon` | `ReactNode` | | After the track. |
+| `disabled` | `boolean` | `false` | Dims the slider and ignores touches and keys. |
+| `accessibilityLabel` | `string` | | What screen readers call the slider. |
+| `thumbLabels` | `[string, string]` | `['Minimum', 'Maximum']` | With `range`, what screen readers call each thumb. |
+| `design` | `'auto' \| 'ios' \| 'material' \| 'web'` | `'auto'` | |
+| `theme` | `DeepPartial<PickerTheme>` | | |
+| `style` / `styles` | | | Root style, and the slots above. |
+| `testID` | `string` | | On the root; the track gets `${testID}-track`, the thumbs `${testID}-thumb-0` and `-1`. |

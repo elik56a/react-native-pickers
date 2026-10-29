@@ -30,6 +30,7 @@ export const PLAYGROUND = {
   emojiPickerField: 'emojiPickerField',
   colorPicker: 'colorPicker',
   colorPickerField: 'colorPickerField',
+  slider: 'slider',
   pickerField: 'pickerField',
   pickerSheet: 'pickerSheet',
   bottomSheet: 'bottomSheet',
@@ -96,6 +97,7 @@ export const CATALOG: readonly CatalogEntry[] = [
   },
   { doc: 'components/emoji-picker', label: 'EmojiPicker', playgrounds: [PLAYGROUND.emojiPicker, PLAYGROUND.emojiPickerField] },
   { doc: 'components/color-picker', label: 'ColorPicker', playgrounds: [PLAYGROUND.colorPicker, PLAYGROUND.colorPickerField] },
+  { doc: 'components/slider', label: 'Slider', playgrounds: [PLAYGROUND.slider] },
   {
     label: 'Fields & sheets',
     pages: [

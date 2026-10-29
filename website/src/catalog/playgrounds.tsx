@@ -22,6 +22,7 @@ import {
   PhoneField,
   SelectList,
   SelectPicker,
+  Slider,
   TimePicker,
   TimePickerField,
   TimeZonePicker,
@@ -436,6 +437,19 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'display', options: ['auto', 'tabs', 'swatches', 'spectrum'], unset: 'auto' },
       { prop: 'showAlpha', options: [false, true] },
       { prop: 'showCustom', options: [true, false] },
+    ],
+  },
+  slider: {
+    name: 'Slider',
+    component: Slider,
+    props: { accessibilityLabel: 'Volume' },
+    value: 40,
+    code: 'value={volume} onChange={setVolume} accessibilityLabel="Volume"',
+    controls: [
+      { prop: 'step', options: [1, 10, 0], default: 1 },
+      { prop: 'showSteps', options: [false, true] },
+      { prop: 'valueLabel', options: ['auto', 'never', 'drag', 'always'], unset: 'auto' },
+      { prop: 'disabled', options: [false, true] },
     ],
   },
   colorPickerField: {

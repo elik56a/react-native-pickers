@@ -98,7 +98,23 @@ export const KEY = {
   right: 'ArrowRight',
   home: 'Home',
   end: 'End',
+  pageUp: 'PageUp',
+  pageDown: 'PageDown',
 } as const;
+
+/** The screen-reader actions of an adjustable control, a slider or a wheel. */
+export const A11Y_ACTION = {
+  increment: 'increment',
+  decrement: 'decrement',
+} as const;
+export const ADJUSTABLE_ACTIONS = [{ name: A11Y_ACTION.increment }, { name: A11Y_ACTION.decrement }];
+
+/** A slider's touch area, 44pt as iOS asks, however thin its track. */
+export const TOUCH_TARGET = 44;
+/** iOS's slider knob: white on any colour, with a soft shadow. */
+export const KNOB_SIZE = 28;
+export const KNOB_COLOR = '#FFFFFF';
+export const KNOB_SHADOW = '0 1px 4px rgba(0, 0, 0, 0.3)';
 
 export const DIRECTION = {
   up: 'up',

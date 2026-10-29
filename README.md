@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![downloads](https://img.shields.io/npm/dw/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![bundle size](https://img.shields.io/bundlephobia/minzip/@elik56a/react-native-pickers)](https://bundlephobia.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/elik56a/react-native-pickers/badge)](https://scorecard.dev/viewer/?uri=github.com/elik56a/react-native-pickers)
 
-**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers and a slider, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <img alt="React Native Pickers on an iPhone and an Android phone side by side: a date range picker with prices, wheel and clock-dial time pickers, a searchable select, an emoji picker, a phone number field, a color picker, a duration picker, and light and dark mode" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/demo.gif" width="900">
@@ -105,6 +105,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`TimeZonePicker`](https://react-native-pickers.dev/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
 | [`HorizontalList`](https://react-native-pickers.dev/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`ColorPicker`](https://react-native-pickers.dev/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
+| [`Slider`](https://react-native-pickers.dev/docs/components/slider) | iOS's knob, Material 3's handle with a value bubble, or a range input; one thumb or a range, steps, icons |
 | [`EmojiPicker`](https://react-native-pickers.dev/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones (long-press for one emoji's), recents, version filtering |
 | [`BottomSheet`](https://react-native-pickers.dev/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
 | [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
@@ -288,6 +289,20 @@ The [full API reference](https://react-native-pickers.dev/docs/api/reference) li
 | `onCopy` | `(hex) => unknown`: the copy button; the browser's clipboard on the web | |
 
 `ColorPickerField` shows a swatch and the hex code.
+
+### Slider
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number`, or `[number, number]` with `range` | `min` |
+| `onChange` | `(value) => void`: on release, or a key or screen-reader step | |
+| `onValueChanging` | `(value) => void`: every step while dragging | |
+| `min` / `max` / `step` | `number`; `step={0}` for any value | `0` / `100` / `1` |
+| `range` | `boolean`: two thumbs | `false` |
+| `showSteps` | `boolean`: a dot per step | `false` |
+| `marks` / `snapToMarks` | `(number \| { value, label? })[]`: dots with labels / only the marks can be picked | / `false` |
+| `valueLabel` | `'never' \| 'drag' \| 'always'`: the value bubble | `'drag'` in Material |
+| `minimumIcon` / `maximumIcon` | `ReactNode` beside the track | |
 
 ### DurationPicker
 

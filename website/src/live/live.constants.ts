@@ -33,6 +33,7 @@ const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet
 const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
 const SELECT = ['SelectPicker', 'CountryPicker'];
+const SLIDER = ['Slider'];
 
 /**
  * The side panel's props, offered for every live example that renders one of their components.
@@ -69,7 +70,8 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
   { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },
   { prop: 'clearable', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false, requires: /\bonClear=/ },
-  { prop: 'disabled', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false },
+  { prop: 'showSteps', components: SLIDER, options: BOOLEAN, default: false },
+  { prop: 'disabled', components: [...FIELDS, ...SELECT, ...SLIDER], options: BOOLEAN, default: false },
 ];
 
 export const SNACK_URL = 'https://snack.expo.dev/';

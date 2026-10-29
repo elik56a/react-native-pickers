@@ -1,16 +1,17 @@
 import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
-import { KEY } from '../../core/core.constants';
-import { keyboardProps } from '../../core/utils/keyboard.utils';
-import { COLOR_A11Y_ACTIONS, COLOR_DESIGN, COLOR_STEP, SLIDER_THUMB_SIZE } from '../color.constants';
+import { KNOB_SIZE } from '../../core/core.constants';
+import { useTrackPan } from '../../core/hooks/useTrackPan';
+import { adjustableProps } from '../../core/utils/adjustable.utils';
+import { clamp01 } from '../../core/utils/track.utils';
+import { COLOR_DESIGN, COLOR_STEP } from '../color.constants';
 import { styles } from '../color.styles';
 import type { ColorSliderProps } from '../color.types';
 import { toSlices } from '../color.utils';
-import { useTrackPan } from '../hooks/useTrackPan';
 import { Checkerboard } from './Checkerboard';
 
-const INSET = SLIDER_THUMB_SIZE / 2;
+const INSET = KNOB_SIZE / 2;
 
 /** A slider over its own gradient, drawn as slices of solid colour; 44pt to touch however thin the track. */
 export const ColorSlider = ({
@@ -27,8 +28,7 @@ export const ColorSlider = ({
   slots,
   testID,
 }: ColorSliderProps) => {
-  const pan = useTrackPan((x) => onChange(x), INSET);
-  const step = (by: number) => onChange(Math.min(1, Math.max(0, value + by)));
+  const pan = useTrackPan({ onMove: (x) => onChange(x), insetX: INSET });
   const { trackHeight } = COLOR_DESIGN[theme.design];
   const caption = [textStyle(theme, 'sm'), { color: theme.colors.textSecondary }, slots?.sliderLabel];
   return (
@@ -43,19 +43,12 @@ export const ColorSlider = ({
         style={[styles.slider, slots?.slider]}
         onLayout={pan.onLayout}
         {...pan.panHandlers}
-        accessible
-        accessibilityRole="adjustable"
-        accessibilityLabel={label}
-        accessibilityValue={{ text: valueText }}
-        accessibilityActions={COLOR_A11Y_ACTIONS}
-        onAccessibilityAction={(e) => step(e.nativeEvent.actionName === 'increment' ? COLOR_STEP : -COLOR_STEP)}
-        {...keyboardProps({
-          [KEY.right]: () => step(COLOR_STEP),
-          [KEY.up]: () => step(COLOR_STEP),
-          [KEY.left]: () => step(-COLOR_STEP),
-          [KEY.down]: () => step(-COLOR_STEP),
-          [KEY.home]: () => onChange(0),
-          [KEY.end]: () => onChange(1),
+        {...adjustableProps({
+          label,
+          valueText,
+          onStep: (direction) => onChange(clamp01(value + direction * COLOR_STEP)),
+          onMin: () => onChange(0),
+          onMax: () => onChange(1),
         })}
         testID={testID}
       >
@@ -69,7 +62,7 @@ export const ColorSlider = ({
           <View
             style={[
               styles.sliderThumb,
-              { left: `${value * 100}%`, top: (trackHeight - SLIDER_THUMB_SIZE) / 2, backgroundColor: thumbColor },
+              { left: `${value * 100}%`, top: (trackHeight - KNOB_SIZE) / 2, backgroundColor: thumbColor },
               slots?.sliderThumb,
             ]}
           />

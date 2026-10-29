@@ -1,5 +1,5 @@
 import { CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
-import { findPreset, formatClock, insertAtSelection, isClosedDay } from './showcase.utils';
+import { findPreset, formatClock, formatHour, insertAtSelection, isClosedDay, previewOpacity, textSizeLabel } from './showcase.utils';
 
 describe('formatClock', () => {
   it('reads like a clock, with hours only once there are some', () => {
@@ -35,5 +35,30 @@ describe('insertAtSelection', () => {
       text: 'So 🔥',
       selection: { start: 5, end: 5 },
     });
+  });
+});
+
+describe('formatHour', () => {
+  it('reads an hour of the day on a 12-hour clock', () => {
+    expect(formatHour(0)).toBe('12 AM');
+    expect(formatHour(9)).toBe('9 AM');
+    expect(formatHour(12)).toBe('12 PM');
+    expect(formatHour(17)).toBe('5 PM');
+    expect(formatHour(24)).toBe('12 AM');
+  });
+});
+
+describe('previewOpacity', () => {
+  it('dims with brightness but never fully', () => {
+    expect(previewOpacity(100)).toBe(1);
+    expect(previewOpacity(0)).toBe(0.3);
+    expect(previewOpacity(50)).toBeCloseTo(0.65);
+  });
+});
+
+describe('textSizeLabel', () => {
+  it('names a size by its mark, or in points off the marks', () => {
+    expect(textSizeLabel(17)).toBe('M');
+    expect(textSizeLabel(16)).toBe('16 pt');
   });
 });
