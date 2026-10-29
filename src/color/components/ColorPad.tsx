@@ -1,12 +1,12 @@
 import { View } from 'react-native';
 
-import { KEY } from '../../core/core.constants';
+import { A11Y_ACTION, ADJUSTABLE_ACTIONS, KEY } from '../../core/core.constants';
+import { useTrackPan } from '../../core/hooks/useTrackPan';
 import { keyboardProps } from '../../core/utils/keyboard.utils';
-import { COLOR_A11Y_ACTIONS, COLOR_STEP, PAD_ACTION } from '../color.constants';
+import { clamp01 } from '../../core/utils/track.utils';
+import { COLOR_STEP, PAD_ACTION } from '../color.constants';
 import { styles } from '../color.styles';
 import type { ColorPadProps } from '../color.types';
-import { clamp01 } from '../color.utils';
-import { useTrackPan } from '../hooks/useTrackPan';
 
 /**
  * A square of colour to tap or drag across. Screen readers step it across with increment and decrement, and up and down
@@ -27,7 +27,7 @@ export const ColorPad = ({
   slots,
   testID,
 }: ColorPadProps) => {
-  const pan = useTrackPan(onChange);
+  const pan = useTrackPan({ onMove: onChange });
   const moveX = (by: number) => onChange(clamp01(x + by), y);
   const moveY = (by: number) => onChange(x, clamp01(y + by));
   return (
@@ -39,10 +39,11 @@ export const ColorPad = ({
       accessibilityRole="adjustable"
       accessibilityLabel={label}
       accessibilityValue={{ text: valueText }}
-      accessibilityActions={[...COLOR_A11Y_ACTIONS, { name: PAD_ACTION.up, label: upLabel }, { name: PAD_ACTION.down, label: downLabel }]}
+      accessibilityActions={[...ADJUSTABLE_ACTIONS, { name: PAD_ACTION.up, label: upLabel }, { name: PAD_ACTION.down, label: downLabel }]}
       onAccessibilityAction={({ nativeEvent: { actionName } }) => {
-        if (actionName === 'increment' || actionName === 'decrement') moveX(actionName === 'increment' ? COLOR_STEP : -COLOR_STEP);
-        else moveY(actionName === PAD_ACTION.up ? -COLOR_STEP : COLOR_STEP);
+        if (actionName === A11Y_ACTION.increment || actionName === A11Y_ACTION.decrement) {
+          moveX(actionName === A11Y_ACTION.increment ? COLOR_STEP : -COLOR_STEP);
+        } else moveY(actionName === PAD_ACTION.up ? -COLOR_STEP : COLOR_STEP);
       }}
       {...keyboardProps({
         [KEY.right]: () => moveX(COLOR_STEP),

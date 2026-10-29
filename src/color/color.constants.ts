@@ -75,20 +75,13 @@ export const SLIDER_SEGMENTS = 36;
 export const PAD_SEGMENTS = 32;
 /** How far a screen reader's step moves a slider or pad: 1/36 of the hue circle is 10°. */
 export const COLOR_STEP = 1 / 36;
-export const SLIDER_THUMB_SIZE = 28;
-/** The slider's touch area, 44pt as iOS asks, however thin its track. */
-export const SLIDER_HIT_HEIGHT = 44;
 export const PAD_THUMB_SIZE = 22;
-export const COLOR_A11Y_ACTIONS = [{ name: 'increment' }, { name: 'decrement' }];
 /** The pad's second axis, for screen readers, which step one axis at a time. */
 export const PAD_ACTION = { up: 'up', down: 'down' } as const;
 export const COPIED_MS = 1500;
 export const CHECKER_SIZE = 6;
 export const CHECKER_COLUMNS = 80;
 
-/** The thumb's ring and shadow, white on any colour as in the platforms' own colour sliders. */
-export const THUMB_RING = '#FFFFFF';
-export const THUMB_SHADOW = '0 1px 4px rgba(0, 0, 0, 0.3)';
 export const PAD_WHITE = '#FFFFFF';
 export const PAD_BLACK = '#000000';
 export const CHECKER_LIGHT = '#FFFFFF';

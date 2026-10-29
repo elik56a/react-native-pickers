@@ -29,6 +29,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
 | [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
 | [`ColorPicker`](../components/color-picker) | iOS's tabs, Google's swatch circles or the browser's spectrum; hex with opacity |
+| [`Slider`](../components/slider) | iOS's knob, Material 3's handle or a range input; one value or a range |
 | [`BottomSheet`](../components/bottom-sheet) | Animated sheet |
 
 ## Sheets
@@ -174,6 +175,8 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `display` | `'wheel'` iOS · `'input'` Material · `'list'` web | DurationPicker |
 | `display` | `'wheel'` iOS · `'grid'` Material, web | MonthPicker |
 | `display` | `'tabs'` iOS · `'swatches'` Material · `'spectrum'` web | ColorPicker |
+| `min` / `max` / `step` | `0` / `100` / `1` | Slider |
+| `valueLabel` | `'drag'` Material · `'never'` iOS, web | Slider |
 | `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
 | `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |

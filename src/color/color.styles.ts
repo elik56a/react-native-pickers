@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-import { CHECKER_SIZE, PAD_THUMB_SIZE, SLIDER_HIT_HEIGHT, SLIDER_THUMB_SIZE, THUMB_RING, THUMB_SHADOW } from './color.constants';
+import { KNOB_COLOR, KNOB_SHADOW, KNOB_SIZE, TOUCH_TARGET } from '../core/core.constants';
+import { CHECKER_SIZE, PAD_THUMB_SIZE } from './color.constants';
 
+/** The platforms' colour sliders ring the colour in white, so it shows on any colour. */
 const thumb = {
   position: 'absolute',
   borderWidth: 3,
-  borderColor: THUMB_RING,
-  boxShadow: THUMB_SHADOW,
+  borderColor: KNOB_COLOR,
+  boxShadow: KNOB_SHADOW,
 } as const;
 
 export const styles = StyleSheet.create({
@@ -18,16 +20,16 @@ export const styles = StyleSheet.create({
   swatches: { flexDirection: 'row', flexWrap: 'wrap' },
   swatchRow: { flexDirection: 'row' },
   swatch: { alignItems: 'center', justifyContent: 'center', borderWidth: StyleSheet.hairlineWidth },
-  slider: { height: SLIDER_HIT_HEIGHT, justifyContent: 'center' },
+  slider: { height: TOUCH_TARGET, justifyContent: 'center' },
   sliderHeader: { flexDirection: 'row', justifyContent: 'space-between' },
   rail: { justifyContent: 'center' },
   track: { ...StyleSheet.absoluteFill, flexDirection: 'row', overflow: 'hidden' },
   sliderThumb: {
     ...thumb,
-    width: SLIDER_THUMB_SIZE,
-    height: SLIDER_THUMB_SIZE,
-    borderRadius: SLIDER_THUMB_SIZE / 2,
-    marginLeft: -SLIDER_THUMB_SIZE / 2,
+    width: KNOB_SIZE,
+    height: KNOB_SIZE,
+    borderRadius: KNOB_SIZE / 2,
+    marginLeft: -KNOB_SIZE / 2,
   },
   pad: { overflow: 'hidden' },
   layer: { ...StyleSheet.absoluteFill },

@@ -2,7 +2,8 @@ import { View } from 'react-native';
 
 import type { PickerTheme } from '../../core';
 import { Touchable } from '../../core/components/Touchable';
-import { IOS_GRID_CELL_HEIGHT, THUMB_RING } from '../color.constants';
+import { KNOB_COLOR } from '../../core/core.constants';
+import { IOS_GRID_CELL_HEIGHT } from '../color.constants';
 import { styles } from '../color.styles';
 import { getIosGridColors } from '../color.utils';
 
@@ -27,7 +28,7 @@ export const IosGrid = ({ selected, onSelect, theme }: { selected: string; onSel
               style={[
                 styles.gridCell,
                 { height: IOS_GRID_CELL_HEIGHT, backgroundColor: color },
-                chosen && [styles.gridCellSelected, { borderColor: THUMB_RING }],
+                chosen && [styles.gridCellSelected, { borderColor: KNOB_COLOR }],
               ]}
             />
           );

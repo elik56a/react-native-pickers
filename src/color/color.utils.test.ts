@@ -17,7 +17,6 @@ import {
   resolveColorLabels,
   spectrumToHsv,
   splitAlpha,
-  toFraction,
   toSwatchCells,
   withAlpha,
 } from './color.utils';
@@ -113,15 +112,6 @@ describe('swatches', () => {
     expect(getCheckColor('#FFEB3B')).toBe(getCheckColor('#FFFFFF'));
     expect(getCheckColor('#3F51B5')).toBe(getCheckColor('#000000'));
     expect(getCheckColor('#FFFFFF')).not.toBe(getCheckColor('#000000'));
-  });
-});
-
-describe('toFraction', () => {
-  it('turns a touch into 0–1, clamped', () => {
-    expect(toFraction(50, 200)).toBe(0.25);
-    expect(toFraction(-10, 200)).toBe(0);
-    expect(toFraction(300, 200)).toBe(1);
-    expect(toFraction(10, 0)).toBe(0);
   });
 });
 

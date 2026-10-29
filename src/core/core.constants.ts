@@ -98,7 +98,23 @@ export const KEY = {
   right: 'ArrowRight',
   home: 'Home',
   end: 'End',
+  pageUp: 'PageUp',
+  pageDown: 'PageDown',
 } as const;
+
+/** The screen-reader actions of an adjustable control, a slider or a wheel. */
+export const A11Y_ACTION = {
+  increment: 'increment',
+  decrement: 'decrement',
+} as const;
+export const ADJUSTABLE_ACTIONS = [{ name: A11Y_ACTION.increment }, { name: A11Y_ACTION.decrement }];
+
+/** A slider's touch area, 44pt as iOS asks, however thin its track. */
+export const TOUCH_TARGET = 44;
+/** iOS's slider knob: white on any colour, with a soft shadow. */
+export const KNOB_SIZE = 28;
+export const KNOB_COLOR = '#FFFFFF';
+export const KNOB_SHADOW = '0 1px 4px rgba(0, 0, 0, 0.3)';
 
 export const DIRECTION = {
   up: 'up',
@@ -117,3 +133,7 @@ export const ARROW_DIRECTION: Record<string, ValueOf<typeof DIRECTION>> = {
 /** What arrow-key focus moves to: what Tab stops at, text fields included. */
 export const FOCUS_TARGETS = '[tabindex="0"], input:not([disabled]), textarea:not([disabled])';
 export const TEXT_FIELD_TAGS = ['INPUT', 'TEXTAREA'];
+/** How far (px) a box may overlap the one focus leaves and still count as lying that way. */
+export const EDGE_TOLERANCE = 1;
+/** A step across counts double a step along, so moving down keeps to the column and moving right to the row. */
+export const CROSS_WEIGHT = 2;

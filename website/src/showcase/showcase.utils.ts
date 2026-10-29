@@ -1,4 +1,4 @@
-import { CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
+import { CLOSED_WEEKDAY, HOURS_IN_DAY, MIN_PREVIEW_OPACITY, TEXT_SIZES, TIMER_PRESETS } from './showcase.constants';
 import type { TextSelection } from './showcase.types';
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -27,3 +27,15 @@ export const insertAtSelection = (text: string, { start, end }: TextSelection, i
     },
   };
 };
+
+/** An hour of the day on a 12-hour clock: 0 → 12 AM, 13 → 1 PM, 24 → 12 AM. */
+export const formatHour = (hour: number) => {
+  const h = hour % HOURS_IN_DAY;
+  return `${h % 12 || 12} ${h < 12 ? 'AM' : 'PM'}`;
+};
+
+/** How bright the preview shows for a 0–100 brightness. */
+export const previewOpacity = (brightness: number) => MIN_PREVIEW_OPACITY + ((1 - MIN_PREVIEW_OPACITY) * brightness) / 100;
+
+/** A text size's name on its mark, such as M for 17 pt. */
+export const textSizeLabel = (size: number) => TEXT_SIZES.find((option) => option.value === size)?.label ?? `${size} pt`;

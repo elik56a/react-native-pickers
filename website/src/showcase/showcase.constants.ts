@@ -15,6 +15,7 @@ export const SHOWCASE_SCREEN = {
   habit: 'habit',
   trips: 'trips',
   delivery: 'delivery',
+  display: 'display',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -92,6 +93,12 @@ export const SHOWCASE: ShowcaseItem[] = [
     title: 'Habit streak',
     blurb: 'Tap the days you ran on a multi-select calendar, set a daily reminder, and pick the colour that marks your runs.',
     components: ['DatePicker', 'TimePickerField', 'ColorPickerField'],
+  },
+  {
+    key: SHOWCASE_SCREEN.display,
+    title: 'Display & text',
+    blurb: 'Brightness and text size preview live as you drag; the text size snaps to its marks, and focus hours are a range.',
+    components: ['Slider'],
   },
   {
     key: SHOWCASE_SCREEN.trips,
@@ -253,3 +260,32 @@ export const TRIPS = {
   ] as const,
   cities: ['Lisbon', 'Paris'],
 };
+
+export const DISPLAY = {
+  brightness: 70,
+  textSize: 17,
+  focus: [9, 17] as [number, number],
+};
+
+/** Text sizes in points, like iOS's Larger Text slider: only these can be picked. */
+export const TEXT_SIZES = [
+  { value: 13, label: 'XS' },
+  { value: 15, label: 'S' },
+  { value: 17, label: 'M' },
+  { value: 20, label: 'L' },
+  { value: 24, label: 'XL' },
+];
+export const TEXT_SIZE_RANGE = { min: 13, max: 24 };
+
+export const HOURS_IN_DAY = 24;
+/** Every six hours, labelled under the focus-hours track. */
+export const FOCUS_MARKS = [
+  { value: 0, label: '12a' },
+  { value: 6, label: '6a' },
+  { value: 12, label: 'Noon' },
+  { value: 18, label: '6p' },
+  { value: 24, label: '12a' },
+];
+
+/** The preview is never fully dark, so it stays readable at the lowest brightness. */
+export const MIN_PREVIEW_OPACITY = 0.3;

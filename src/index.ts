@@ -10,6 +10,7 @@ export * from './list';
 export * from './month';
 export * from './select';
 export * from './sheet';
+export * from './slider';
 export * from './time';
 export * from './timezone';
 export * from './wheel';

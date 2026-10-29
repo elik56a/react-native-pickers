@@ -35,4 +35,12 @@ export const styles = StyleSheet.create({
   iconText: { fontSize: 22 },
   send: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   sendText: { fontSize: 18, fontWeight: '700' },
+  preview: { padding: 16, borderRadius: 16, gap: 4 },
+  previewTitle: { fontWeight: '600' },
+  previewBody: { flexShrink: 1 },
+  setting: { gap: 2 },
+  settingHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  settingLabel: { fontSize: 15, fontWeight: '500' },
+  settingValue: { fontSize: 15 },
+  icon: { fontSize: 16 },
 });

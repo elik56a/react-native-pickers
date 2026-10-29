@@ -147,6 +147,48 @@ export type Key = ValueOf<typeof KEY>;
 export type Direction = ValueOf<typeof DIRECTION>;
 export type KeyHandlers = Partial<Record<Key, () => void>>;
 
+export interface AdjustableOptions {
+  label?: string;
+  /** What a screen reader reads as the value */
+  valueText: string;
+  disabled?: boolean;
+  /** 1 to step up, -1 to step down */
+  onStep: (direction: 1 | -1) => void;
+  /** Page Up and Page Down: 1 or -1 */
+  onPage?: (direction: 1 | -1) => void;
+  onMin?: () => void;
+  onMax?: () => void;
+}
+
+export interface TrackPanOptions {
+  /** Where the drag is, 0–1 across and down */
+  onMove: (x: number, y: number) => void;
+  /** Where the touch lands. Default: `onMove` */
+  onStart?: (x: number, y: number) => void;
+  /** The finger lifts, or the gesture is taken away */
+  onEnd?: () => void;
+  /** Keeps the ends this far in, where a slider's thumb centre stops */
+  insetX?: number;
+}
+
+/** The few DOM members arrow-key focus needs; the library is typed without the DOM. */
+export interface WebElement {
+  getBoundingClientRect: () => Rect;
+  focus: () => void;
+  tagName: string;
+  contains: (node: WebElement) => boolean;
+  querySelectorAll: (selectors: string) => ArrayLike<WebElement>;
+  parentElement: WebElement | null;
+  dispatchEvent: (event: unknown) => boolean;
+  ownerDocument: {
+    activeElement: WebElement | null;
+    defaultView: {
+      getComputedStyle: (element: WebElement) => { direction: string };
+      KeyboardEvent: new (type: string, init: { key: string; bubbles: boolean; cancelable: boolean }) => unknown;
+    } | null;
+  };
+}
+
 /** A box on screen, as `getBoundingClientRect` gives it. */
 export interface Rect {
   left: number;

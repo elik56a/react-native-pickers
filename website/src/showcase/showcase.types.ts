@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type { BookingScreenProps } from '../home/demo/demo.types';
 import type { ValueOf } from '../home/home.types';
 import type { SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
@@ -27,6 +29,12 @@ export interface ChatMessage {
 export interface TextSelection {
   start: number;
   end: number;
+}
+
+export interface SliderSettingProps {
+  label: string;
+  value: string;
+  children: ReactNode;
 }
 
 export interface TimerPreset {

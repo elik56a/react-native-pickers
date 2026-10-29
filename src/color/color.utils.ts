@@ -1,4 +1,5 @@
 import { IS_WEB } from '../core/core.constants';
+import { clamp01 } from '../core/utils/track.utils';
 import {
   CHECK_ON_DARK,
   CHECK_ON_LIGHT,
@@ -24,7 +25,6 @@ export const normalizeHex = (input: string) => {
   return `#${full.endsWith(OPAQUE) && full.length === 8 ? full.slice(0, 6) : full}`;
 };
 
-export const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const toHexByte = (n: number) =>
   Math.round(clamp01(n) * 255)
     .toString(16)
@@ -150,9 +150,6 @@ export const toSwatchCells = (colors: ColorOption[]): SwatchCell[] =>
     key: cell.value,
     ...cell,
   }));
-
-/** A value between 0 and 1 from a touch `at` along a length. */
-export const toFraction = (at: number, length: number) => (length > 0 ? clamp01(at / length) : 0);
 
 export const percent = (value: number) => `${Math.round(value * 100)}%`;
 
