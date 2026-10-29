@@ -11,6 +11,7 @@ const FIELDS = [
   'DateTimePickerField',
   'DurationPickerField',
   'MonthPickerField',
+  'ColorPickerField',
   'WheelPickerField',
   'EmojiPickerField',
   'PickerField',
@@ -21,6 +22,7 @@ const SHEETS = [
   'DateTimePickerSheet',
   'DurationPickerSheet',
   'MonthPickerSheet',
+  'ColorPickerSheet',
   'WheelPickerSheet',
   'EmojiPickerSheet',
   'PickerSheet',
@@ -153,6 +155,9 @@ export const SOURCE_URL = 'https://github.com/elik56a/react-native-pickers/blob/
 /** Each component's folder under `src/`, for its source link and to name a sandbox's example file after it. */
 export const COMPONENT_FOLDERS: Record<string, string> = {
   Calendar: 'calendar',
+  ColorPicker: 'color',
+  ColorPickerField: 'color',
+  ColorPickerSheet: 'color',
   WeekStrip: 'calendar',
   CountryPicker: 'country',
   DatePicker: 'date',

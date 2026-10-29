@@ -45,6 +45,7 @@ const sidebars: SidebarsConfig = {
           items: ['components/wheel-picker', 'components/multi-wheel-picker'],
         },
         'components/emoji-picker',
+        'components/color-picker',
         {
           type: 'category',
           label: 'Fields & sheets',

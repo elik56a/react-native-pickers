@@ -14,6 +14,7 @@ export const PickerField = ({
   label,
   placeholder = DEFAULT_PLACEHOLDER,
   displayValue = '',
+  icon,
   disabled = false,
   clearable = false,
   onClear,
@@ -42,6 +43,7 @@ export const PickerField = ({
         ) : (
           <FieldTrigger
             displayValue={displayValue}
+            icon={icon}
             placeholder={placeholder}
             label={label}
             open={field.open}

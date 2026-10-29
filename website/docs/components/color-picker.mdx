@@ -1,0 +1,195 @@
+---
+title: React Native Color Picker
+sidebar_label: ColorPicker
+description: "React Native color picker that looks native: iOS's Grid, Spectrum and Sliders, Google's swatch circles with a custom color, or the browser's spectrum with an eyedropper. Hex with opacity, copy button, in a bottom sheet or a form field. Zero native code, no gradient library."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { ColorPicker, ColorPickerField } from '@elik56a/react-native-pickers';
+
+# ColorPicker
+
+`ColorPicker` picks a colour the way each platform does: [iOS's colour picker, Google's swatch circles, or the browser's colour input](#three-layouts). The value is a hex string such as `'#E4572E'`.
+
+It needs no native module, SVG or gradient library: the gradients are drawn as slices of solid colour.
+
+```tsx
+import { ColorPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { ColorPicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [color, setColor] = useState('#2196F3');
+  return <ColorPicker value={color} onChange={setColor} />;
+}
+```
+
+## Try the props
+
+<PropPlayground
+  name="ColorPicker"
+  component={ColorPicker}
+  value="#E91E63"
+  code="value={color} onChange={setColor}"
+  controls={[
+    { prop: 'display', options: ['auto', 'tabs', 'swatches', 'spectrum'], unset: 'auto' },
+    { prop: 'showAlpha', options: [false, true] },
+    { prop: 'showCustom', options: [true, false] },
+  ]}
+/>
+
+## Three layouts
+
+Each [design](../guides/designs) has its own, or pick one with `display`:
+
+| `display` | Default in | What it is |
+| --- | --- | --- |
+| `'tabs'` | iOS | Like `UIColorPickerViewController`: **Grid** (one block of colours, the chosen one ringed in white), **Spectrum** (every hue across, white to black down) and **Sliders** (red, green and blue with the hex code), then the colour beside your swatches in a row to scroll |
+| `'swatches'` | Material | Like Google's apps: circles with a check on the chosen one, and a **Custom** circle at the end that opens a saturation square, a hue slider and the hex code. A colour off the palette opens it already |
+| `'spectrum'` | web | Like the browser's colour input: a saturation square, the colour beside a hue slider, the hex code, then your swatches. Where the browser has an eyedropper (Chrome, Edge), a button picks a colour from the screen |
+
+Squares and the spectrum take a tap anywhere, as well as a drag. Screen readers step them across with increment and decrement, and up and down with two named actions.
+
+## The value is a hex code
+
+`value` and `defaultValue` take a hex code with 3 or 6 digits, with or without `#`, in any case. `onChange` always gives `'#RRGGBB'` in capitals, so you can compare it with `===`. Without `value` or `defaultValue`, the picker starts on blue, `#2196F3`.
+
+`onChange` fires on every step while dragging, so the colour can preview live. Use [`ColorPickerSheet`](#in-a-sheet) or [`ColorPickerField`](#in-a-form-field) to commit only on **Done**.
+
+## Opacity
+
+`showAlpha` adds an opacity slider over a checkerboard. Below full opacity, the value gains two hex digits: `'#E4572E80'` is half see-through. Fully opaque colours stay six digits. Without `showAlpha`, a value with opacity is shown and returned opaque.
+
+```tsx live
+import { useState } from 'react';
+import { ColorPicker } from '@elik56a/react-native-pickers';
+
+export default function Overlay() {
+  const [color, setColor] = useState('#3F51B580');
+  return <ColorPicker value={color} onChange={setColor} showAlpha />;
+}
+```
+
+## Your own swatches
+
+`colors` replaces the palette. Each colour is a hex code, or `{ value, label }` to give it a name for screen readers; a colour without a name is read as its code. They wrap to fill the width, except on iOS, where they sit in one row to scroll. `showCustom={false}` leaves only the swatches, in the design's shape.
+
+```tsx live
+import { useState } from 'react';
+import { ColorPicker } from '@elik56a/react-native-pickers';
+
+const LABELS = [
+  { value: '#D73A4A', label: 'Bug' },
+  { value: '#0075CA', label: 'Documentation' },
+  { value: '#A2EEEF', label: 'Enhancement' },
+  { value: '#7057FF', label: 'Good first issue' },
+  { value: '#008672', label: 'Help wanted' },
+  { value: '#E4E669', label: 'Invalid' },
+  { value: '#D876E3', label: 'Question' },
+  { value: '#FFFFFF', label: 'Wontfix' },
+];
+
+export default function LabelColor() {
+  const [color, setColor] = useState('#7057FF');
+  return <ColorPicker value={color} onChange={setColor} colors={LABELS} showCustom={false} />;
+}
+```
+
+The default palette is exported as `DEFAULT_COLORS`, to add to rather than replace.
+
+## Copy the hex code
+
+The hex field has a copy button in its corner. On the web it uses the browser's clipboard. React Native has no clipboard of its own without a native module, so on iOS and Android the button shows when you pass `onCopy`, for example from [`expo-clipboard`](https://docs.expo.dev/versions/latest/sdk/clipboard/):
+
+```tsx
+import * as Clipboard from 'expo-clipboard';
+
+<ColorPicker value={color} onChange={setColor} onCopy={Clipboard.setStringAsync} />
+```
+
+`onCopy` also replaces the browser's clipboard on the web, to show your own toast, say.
+
+## Other languages
+
+`labels` renames the tabs, sliders and buttons, which screen readers read too:
+
+```tsx
+<ColorPicker
+  value={color}
+  onChange={setColor}
+  labels={{ grid: 'Raster', spectrum: 'Spektrum', sliders: 'Regler', opacity: 'Deckkraft', copy: 'Kopieren', copied: 'Kopiert' }}
+/>
+```
+
+The keys are `grid`, `spectrum`, `sliders`, `hue`, `saturation`, `brightness`, `opacity`, `red`, `green`, `blue`, `hex`, `copy`, `copied`, `eyedropper` and `custom`.
+
+## In a sheet
+
+```tsx
+import { ColorPickerSheet } from '@elik56a/react-native-pickers';
+
+<ColorPickerSheet visible={open} onClose={() => setOpen(false)} title="Label colour" value={color} onConfirm={setColor} />
+```
+
+It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's, and keeps a draft until **Done**, like the other [picker sheets](./picker-sheets#how-drafts-work).
+
+## In a form field
+
+`ColorPickerField` opens the sheet and shows the confirmed colour: a small swatch and its hex code.
+
+<PropPlayground
+  name="ColorPickerField"
+  component={ColorPickerField}
+  changeProp="onConfirm"
+  resetProp="onClear"
+  props={{ label: 'Label colour', placeholder: 'Pick a colour' }}
+  value={() => undefined}
+  code="label=&quot;Label colour&quot; placeholder=&quot;Pick a colour&quot; value={color} onConfirm={setColor}"
+  controls={[
+    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
+    { prop: 'display', options: ['auto', 'tabs', 'swatches', 'spectrum'], unset: 'auto' },
+    { prop: 'showAlpha', options: [false, true] },
+    { prop: 'clearable', options: [false, true] },
+  ]}
+/>
+
+→ [Picker fields](./picker-fields)
+
+## Utilities
+
+| Export | Description |
+| --- | --- |
+| `normalizeHex(input)` | `'#RRGGBB'` in capitals for a 3- or 6-digit code with or without `#`, `'#RRGGBBAA'` for 4 or 8 digits below full opacity, or `null` |
+| `hexToHsv(hex)` | `{ hue, saturation, brightness }`, each 0–1 |
+| `hsvToHex(hsv)` | `'#RRGGBB'` |
+| `withAlpha(hex, alpha)` | Adds an opacity 0–1: `withAlpha('#E4572E', 0.5)` is `'#E4572E80'` |
+| `DEFAULT_COLORS` | The default palette: `{ value, label }[]` |
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Selected colour as hex (controlled). |
+| `defaultValue` | `string` | `'#2196F3'` | Initial colour when uncontrolled. |
+| `onChange` | `(color: string) => void` | — | Fires with `'#RRGGBB'`, or `'#RRGGBBAA'` below full opacity. |
+| `display` | `'tabs' \| 'swatches' \| 'spectrum'` | from the design | iOS's tabs, Google's circles, or the browser's spectrum. |
+| `colors` | `(string \| { value, label? })[]` | `DEFAULT_COLORS` | Your swatches. |
+| `showCustom` | `boolean` | `true` | Show the grid, spectrum, sliders and hex field. Without them only `colors` show. |
+| `showAlpha` | `boolean` | `false` | Add an opacity slider. |
+| `onCopy` | `(hex: string) => unknown` | the browser's clipboard on the web | Copy the hex code; shows the copy button. |
+| `labels` | `Partial<ColorLabels>` | English | Names of the tabs, sliders and buttons. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<ColorPickerSlot>` | — | `container`, `swatch`, `pad`, `slider`, `sliderThumb`, `sliderLabel`, `hexInput` and `preview`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. The parts get `${testID}-hex`, `-hue`, `-opacity`, `-pad`, `-spectrum`, `-red`, `-green` and `-blue`. |
+
+`ColorPickerSheet` takes these plus the [sheet props](./picker-sheets#shared-props) and `onConfirm(color)`. `ColorPickerField` takes the sheet's props plus the [field props](./picker-fields#props).
+
+## Related
+
+- [EmojiPicker](./emoji-picker)
+- [Picker fields](./picker-fields)

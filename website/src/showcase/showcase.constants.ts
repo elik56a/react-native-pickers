@@ -82,8 +82,8 @@ export const SHOWCASE: ShowcaseItem[] = [
   {
     key: SHOWCASE_SCREEN.habit,
     title: 'Habit streak',
-    blurb: 'Tap the days you ran on a multi-select calendar, and set a daily reminder.',
-    components: ['DatePicker', 'TimePickerField'],
+    blurb: 'Tap the days you ran on a multi-select calendar, set a daily reminder, and pick the colour that marks your runs.',
+    components: ['DatePicker', 'TimePickerField', 'ColorPickerField'],
   },
   {
     key: SHOWCASE_SCREEN.trips,
@@ -216,6 +216,15 @@ export const BRANDS = labelOptions(['Arc', 'Fjord', 'Kōen', 'Mesa', 'Nord', 'Ti
 
 export const HABIT = {
   ranDaysAgo: [1, 2, 4, 5, 7, 9, 10, 12],
+  color: '#4CAF50',
+  colors: [
+    { value: '#4CAF50', label: 'Green' },
+    { value: '#2196F3', label: 'Blue' },
+    { value: '#9C27B0', label: 'Purple' },
+    { value: '#E91E63', label: 'Pink' },
+    { value: '#FF9800', label: 'Orange' },
+    { value: '#795548', label: 'Brown' },
+  ],
   reminder: { hours: 6, minutes: 45 },
   minuteInterval: 5,
 };

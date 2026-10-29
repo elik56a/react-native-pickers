@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { CountryCode, DateRange } from '@elik56a/react-native-pickers';
 import {
   CALENDAR_MODE,
+  ColorPickerField,
   CountryPicker,
   DatePicker,
   DatePickerField,
@@ -106,6 +107,7 @@ function Demo({ insets }: { insets: Insets }) {
   const [time, setTime] = useState(new Date());
   const [meeting, setMeeting] = useState(new Date());
   const [timer, setTimer] = useState(25 * 60);
+  const [labelColor, setLabelColor] = useState('#E4572E');
   const [reportMonth, setReportMonth] = useState<Date | undefined>();
   const [size, setSize] = useState('M');
   const [lang, setLang] = useState<string | null>(null);
@@ -193,6 +195,7 @@ function Demo({ insets }: { insets: Insets }) {
 
           {tab === 'form' && (
             <Section title="Form fields">
+              <ColorPickerField label="Label colour" value={labelColor} onConfirm={setLabelColor} />
               <DatePickerField
                 label="Stay"
                 placeholder="Add dates"

@@ -13,8 +13,10 @@ export const PLATFORM = {
 /** Desktop browsers can draw a permanent scrollbar track, which looks out of place in phone-style lists. */
 export const SHOWS_SCROLL_INDICATOR = Platform.select({ web: false, default: true });
 
+export const IS_WEB = Platform.OS === PLATFORM.web;
+
 /** react-native-web has no native animated module. Layout props (height) never run on it, whatever the platform. */
-export const USE_NATIVE_DRIVER = Platform.OS !== PLATFORM.web;
+export const USE_NATIVE_DRIVER = !IS_WEB;
 
 export const PICKER_DISPLAY = {
   calendar: 'calendar',

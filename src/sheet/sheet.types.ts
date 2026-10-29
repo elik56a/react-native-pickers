@@ -271,6 +271,8 @@ export interface PickerFieldBaseProps<S extends string = never> extends Themable
 }
 
 export interface PickerFieldProps extends PickerFieldBaseProps {
+  /** Shown before the value, such as a colour swatch or a flag */
+  icon?: React.ReactNode;
   /** Render the sheet the field opens, passing it `visible` and `onClose` */
   children: (sheet: Pick<SheetChromeProps, 'visible' | 'onClose'>) => React.ReactNode;
 }
