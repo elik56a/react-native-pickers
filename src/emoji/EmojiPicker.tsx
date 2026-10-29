@@ -10,6 +10,7 @@ import { EmojiGridRow } from './components/EmojiGridRow';
 import { EmojiHeader } from './components/EmojiHeader';
 import { SectionHeader } from './components/SectionHeader';
 import { SkinToneMenu } from './components/SkinToneMenu';
+import { SkinTonePopover } from './components/SkinTonePopover';
 import {
   CATEGORY_BAR_POSITION,
   DEFAULT_CATEGORY_ICONS,
@@ -28,6 +29,7 @@ import type { EmojiPickerProps, EmojiRow } from './emoji.types';
 import { getEmojiFontSize, getInitialRowCount, getRowKey, getVisibleTabs } from './emoji.utils';
 import { useEmojiGrid } from './hooks/useEmojiGrid';
 import { useEmojiSelection } from './hooks/useEmojiSelection';
+import { useTonePopover } from './hooks/useTonePopover';
 
 export const EmojiPicker = (props: EmojiPickerProps) => {
   const {
@@ -70,6 +72,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     columns,
   });
   const fontSize = getEmojiFontSize(grid.cellSize, emojiSize);
+  const popover = useTonePopover(grid.cellSize, selection.select);
   const labels = { ...DEFAULT_CATEGORY_LABELS, ...categoryLabels };
 
   const renderRow = ({ item }: { item: EmojiRow }) =>
@@ -78,11 +81,13 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     ) : (
       <EmojiGridRow
         items={item.items}
+        chars={item.chars}
         tone={selection.tone}
         size={grid.cellSize}
         fontSize={fontSize}
         renderEmoji={renderEmoji}
         onSelect={selection.select}
+        onLongPress={showSkinTones ? popover.open : undefined}
         theme={theme}
         slots={slots}
       />
@@ -102,7 +107,12 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   );
 
   return (
-    <View style={[{ height, backgroundColor: theme.colors.background }, style, slots?.container]} {...ARROW_FOCUS} testID={testID}>
+    <View
+      ref={popover.rootRef}
+      style={[{ height, backgroundColor: theme.colors.background }, style, slots?.container]}
+      {...ARROW_FOCUS}
+      testID={testID}
+    >
       {(searchable || showSkinTones) && (
         <EmojiHeader
           searchable={searchable}
@@ -148,6 +158,18 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
         )}
       </View>
       {categoryBarPosition === CATEGORY_BAR_POSITION.bottom && categoryBar}
+      {popover.target && (
+        <SkinTonePopover
+          {...popover.target}
+          size={grid.cellSize}
+          fontSize={fontSize}
+          renderEmoji={renderEmoji}
+          onSelect={popover.pick}
+          onClose={popover.close}
+          theme={theme}
+          slots={slots}
+        />
+      )}
     </View>
   );
 };

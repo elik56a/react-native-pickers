@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   toneMenu: { flexDirection: 'row', justifyContent: 'space-around', padding: 4, marginTop: 6 },
   toneOption: { padding: 6 },
   toneOptionText: { fontSize: 22 },
+  tonePopover: { position: 'absolute', flexDirection: 'row', borderWidth: StyleSheet.hairlineWidth },
   bar: { flexDirection: 'row', marginTop: 6 },
   barTop: { borderBottomWidth: StyleSheet.hairlineWidth },
   barBottom: { borderTopWidth: StyleSheet.hairlineWidth },

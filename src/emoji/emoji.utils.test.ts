@@ -1,4 +1,4 @@
-import { FALLBACK_CELL_SIZE, SECTION_HEADER_HEIGHT } from './emoji.constants';
+import { FALLBACK_CELL_SIZE, SECTION_HEADER_HEIGHT, TONE_POPOVER_GAP, TONE_POPOVER_PADDING } from './emoji.constants';
 import type { Emoji, EmojiSection } from './emoji.types';
 import {
   addRecent,
@@ -10,6 +10,7 @@ import {
   getInitialRowCount,
   getRowHeight,
   getRowKey,
+  getTonePopoverPosition,
   getVisibleTabs,
   resolveRecent,
   rowIndexAtOffset,
@@ -79,13 +80,16 @@ describe('filterEmojis', () => {
 });
 
 describe('recent', () => {
-  it('resolves characters in the pool, in order', () => {
-    expect(resolveRecent(['🍕', 'nope', '👋🏽', '😀'], [emoji('😀'), emoji('👋')])).toEqual([emoji('👋'), emoji('😀')]);
+  it('resolves characters in the pool, in order, keeping their skin tone', () => {
+    expect(resolveRecent(['🍕', 'nope', '👋🏽', '😀'], [emoji('😀'), emoji('👋')])).toEqual({
+      items: [emoji('👋'), emoji('😀')],
+      chars: ['👋🏽', '😀'],
+    });
   });
 
-  it('moves the pick to the front, dedupes tone variants and caps the length', () => {
-    expect(addRecent(['😀', '👋🏽', '🍕'], emoji('👋'), 3)).toEqual(['👋', '😀', '🍕']);
-    expect(addRecent(['😀', '🍕'], emoji('👋'), 2)).toEqual(['👋', '😀']);
+  it('moves the pick to the front in its tone, dedupes tone variants and caps the length', () => {
+    expect(addRecent(['😀', '👋🏽', '🍕'], emoji('👋'), '👋🏿', 3)).toEqual(['👋🏿', '😀', '🍕']);
+    expect(addRecent(['😀', '🍕'], emoji('👋'), '👋', 2)).toEqual(['👋', '😀']);
   });
 });
 
@@ -94,7 +98,10 @@ describe('buildSections', () => {
   const base = {
     query: '',
     pool,
-    recent: [emoji('🍕')],
+    recent: {
+      items: [emoji('🍕')],
+      chars: ['🍕'],
+    },
     showRecent: true,
     categories: ['smileys' as const, 'animals' as const, 'food' as const],
   };
@@ -105,7 +112,7 @@ describe('buildSections', () => {
 
   it('hides recent when disabled or empty', () => {
     expect(buildSections({ ...base, showRecent: false })[0]?.key).toBe('smileys');
-    expect(buildSections({ ...base, recent: [] })[0]?.key).toBe('smileys');
+    expect(buildSections({ ...base, recent: { items: [], chars: [] } })[0]?.key).toBe('smileys');
   });
 
   it('shows a single search section while searching', () => {
@@ -125,6 +132,12 @@ describe('buildLayout', () => {
     expect(rows.map((r) => (r.type === 'header' ? r.key : r.items.length))).toEqual(['recent', 1, 'food', 2, 1]);
     expect(offsets).toEqual([0, 32, 72, 104, 144]);
     expect(headerIndex.get('food')).toBe(2);
+  });
+
+  it('keeps the characters a section shows with their row', () => {
+    const toned: EmojiSection[] = [{ key: 'recent', items: [emoji('👋'), emoji('🍕'), emoji('😀')], chars: ['👋🏽', '🍕', '😀'] }];
+    const { rows } = buildLayout(toned, 2, 40, false);
+    expect(rows.map((r) => r.type === 'emojis' && r.chars)).toEqual([['👋🏽', '🍕'], ['😀']]);
   });
 
   it('points sections at their first emoji row without headers', () => {
@@ -182,5 +195,33 @@ describe('getVisibleTabs', () => {
       ['food' as const, 2],
     ]);
     expect(getVisibleTabs(['smileys', 'food'], headerIndex)).toEqual(['recent', 'food']);
+  });
+});
+
+describe('getTonePopoverPosition', () => {
+  const size = 40;
+  const width = 6 * size + 2 * TONE_POPOVER_PADDING;
+  const height = size + 2 * TONE_POPOVER_PADDING;
+  const cell = (x: number, y: number) => ({
+    x,
+    y,
+    width: size,
+    height: size,
+  });
+
+  it('centers the tones above the emoji', () => {
+    expect(getTonePopoverPosition(cell(140, 200), 400, size)).toEqual({
+      left: 160 - width / 2,
+      top: 200 - height - TONE_POPOVER_GAP,
+    });
+  });
+
+  it('keeps the tones within the picker at either edge', () => {
+    expect(getTonePopoverPosition(cell(0, 200), 400, size).left).toBe(0);
+    expect(getTonePopoverPosition(cell(360, 200), 400, size).left).toBe(400 - width);
+  });
+
+  it('opens below the emoji when there is no room above', () => {
+    expect(getTonePopoverPosition(cell(140, 10), 400, size).top).toBe(10 + size + TONE_POPOVER_GAP);
   });
 });

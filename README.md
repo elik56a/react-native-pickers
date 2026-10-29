@@ -105,7 +105,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`TimeZonePicker`](https://react-native-pickers.dev/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
 | [`HorizontalList`](https://react-native-pickers.dev/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`ColorPicker`](https://react-native-pickers.dev/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
-| [`EmojiPicker`](https://react-native-pickers.dev/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
+| [`EmojiPicker`](https://react-native-pickers.dev/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones (long-press for one emoji's), recents, version filtering |
 | [`BottomSheet`](https://react-native-pickers.dev/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
 | [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
 | [Picker fields](https://react-native-pickers.dev/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
@@ -421,7 +421,7 @@ A `SelectPicker` with every IANA time zone built in, each with its city, GMT off
 | `columns` / `height` | `number` | `8` / `380` |
 | `categories` / `exclude` | which to show, in order / characters to hide | all |
 | `maxEmojiVersion` | `number`: hide emojis older devices can't render | |
-| `skinTone` / `onSkinToneChange` | `0`–`5` | `0` |
+| `skinTone` / `onSkinToneChange` | `0`–`5`, from the ✋ button; a long press picks one emoji's tone | `0` |
 | `recent` / `onRecentChange` | `string[]`: persist with your own storage | `[]` |
 | `categoryBarPosition` | `'auto' \| 'top' \| 'bottom'`: `auto` is bottom on iOS and Android, top on the web | `'auto'` |
 

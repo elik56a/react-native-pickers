@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { HostInstance, StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
@@ -45,6 +45,7 @@ export type EmojiPickerSlot =
   | 'searchInput'
   | 'skinToneButton'
   | 'skinToneMenu'
+  | 'skinTonePopover'
   | 'categoryBar'
   | 'categoryTab'
   | 'activeCategoryTab'
@@ -112,11 +113,18 @@ export type EmojiPickerFieldProps = WithPickerField<EmojiPickerSheetProps, Emoji
 export interface EmojiSection {
   key: EmojiSectionKey;
   items: Emoji[];
+  /** The characters to show instead of the items in the current skin tone: recents, as they were picked. */
+  chars?: string[];
+}
+
+export interface RecentEmojis {
+  items: Emoji[];
+  chars: string[];
 }
 
 export type EmojiRow =
   | { type: typeof EMOJI_ROW_TYPE.header; key: EmojiSectionKey }
-  | { type: typeof EMOJI_ROW_TYPE.emojis; items: Emoji[]; section: EmojiSectionKey };
+  | { type: typeof EMOJI_ROW_TYPE.emojis; items: Emoji[]; chars?: string[]; section: EmojiSectionKey };
 
 /** Rows with their y offsets, and the row each section starts at (so the category bar can jump to it). */
 export interface EmojiLayout {
@@ -128,7 +136,7 @@ export interface EmojiLayout {
 export interface EmojiSectionsOptions {
   query: string;
   pool: Emoji[];
-  recent: Emoji[];
+  recent: RecentEmojis;
   showRecent: boolean;
   categories: EmojiCategory[];
 }
@@ -149,15 +157,41 @@ export interface EmojiCellProps {
   size: number;
   fontSize: number;
   renderEmoji?: EmojiRenderer;
-  onSelect: (emoji: Emoji) => void;
+  /** Gets the character the cell shows. */
+  onSelect: (emoji: Emoji, char: string) => void;
+  /** Opens the emoji's skin tones; the row passes it only to emojis that have them. */
+  onLongPress?: (emoji: Emoji) => void;
   theme: PickerTheme;
   slots?: SlotStyles<EmojiPickerSlot>;
 }
 
-export type EmojiGridRowProps = Omit<EmojiCellProps, 'emoji' | 'char'> & {
+/** A long press on the emoji at `index` in a row; the row is measured to place the skin tone popover over it. */
+export type EmojiLongPress = (emoji: Emoji, row: HostInstance | null, index: number) => void;
+
+export type EmojiGridRowProps = Omit<EmojiCellProps, 'emoji' | 'char' | 'onLongPress'> & {
   items: Emoji[];
+  /** Shown instead of the items in `tone` */
+  chars?: string[];
   tone: SkinTone;
+  onLongPress?: EmojiLongPress;
 };
+
+/** The long-pressed emoji, and where its skin tone popover sits inside the picker. */
+export interface TonePopoverTarget {
+  emoji: Emoji;
+  left: number;
+  top: number;
+}
+
+export interface SkinTonePopoverProps extends TonePopoverTarget {
+  size: number;
+  fontSize: number;
+  renderEmoji?: EmojiRenderer;
+  onSelect: (tone: SkinTone) => void;
+  onClose: () => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<EmojiPickerSlot>;
+}
 
 export interface SectionHeaderProps {
   label?: string;

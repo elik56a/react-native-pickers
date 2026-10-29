@@ -8,7 +8,7 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # EmojiPicker
 
-`EmojiPicker` is a full React Native emoji keyboard: 1,923 emojis in 9 categories, keyword search, skin tones, recently used, a category bar, and filtering by Emoji version so older devices never show empty boxes. Emojis render with the system font; no images or fonts are bundled.
+`EmojiPicker` is a full React Native emoji keyboard: 1,923 emojis in 9 categories, keyword search, skin tones (for all emojis, or one at a time with a long press), recently used, a category bar, and filtering by Emoji version so older devices never show empty boxes. Emojis render with the system font; no images or fonts are bundled.
 
 ```tsx
 import { EmojiPicker } from '@elik56a/react-native-pickers';
@@ -101,9 +101,11 @@ const [tone, setTone] = useState<SkinTone>(0);
 
 Use `defaultSkinTone` for uncontrolled, or `showSkinTones={false}` to hide the button.
 
+**Long-press an emoji** for its tones in a popup above it, like an emoji keyboard. Picking one there sends that emoji in that tone, keeps it in that tone under **Recently used**, and leaves `skinTone` as it was. Only emojis that have tones open it, and `showSkinTones={false}` turns it off too.
+
 ## Recently used
 
-Picked emojis go to a **Recently used** section at the top (up to `maxRecent`, default 24, most recent first). The list stores **base** emojis, so they re-render in whatever tone is current.
+Picked emojis go to a **Recently used** section at the top (up to `maxRecent`, default 24, most recent first). The list stores **base** emojis, so they re-render in whatever tone is current. An emoji you gave a tone of its own with a long press is kept in that tone.
 
 In `EmojiPickerSheet` and `EmojiPickerField`, the sheet keeps them, so they last between openings. A pick that closes the sheet shows up under **Recently used** the next time it opens, not while it closes, so the grid doesn't jump as it fades or slides away, as on the iOS emoji keyboard.
 
@@ -266,9 +268,9 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 | `categoryIcons` | `Partial<Record<EmojiCategory \| 'recent', ReactNode>>` | emoji icons | Tab icons. |
 | `skinTone` | `SkinTone` | — | Controlled tone. |
 | `defaultSkinTone` | `SkinTone` | `0` | Initial tone. |
-| `onSkinToneChange` | `(tone: SkinTone) => void` | — | Tone picked in the menu. |
-| `showSkinTones` | `boolean` | `true` | Show the tone button. |
-| `recent` | `string[]` | — | Controlled recents (base characters). |
+| `onSkinToneChange` | `(tone: SkinTone) => void` | — | Tone picked in the menu (a long-press pick doesn't change it). |
+| `showSkinTones` | `boolean` | `true` | Show the tone button and the long-press tones. |
+| `recent` | `string[]` | — | Controlled recents: base characters, or toned ones picked with a long press. |
 | `defaultRecent` | `string[]` | `[]` | Initial recents. |
 | `onRecentChange` | `(recent: string[]) => void` | — | New recents after each pick. |
 | `showRecent` | `boolean` | `true` | Show and update recents. |
@@ -288,6 +290,7 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 | `header` | Search + tone row |
 | `searchInput` | Search `TextInput` |
 | `skinToneButton` / `skinToneMenu` | Tone button / menu |
+| `skinTonePopover` | The tones a long press opens |
 | `categoryBar` | Tab bar |
 | `categoryTab` / `activeCategoryTab` | Tabs |
 | `categoryIndicator` | Active-tab underline (web design; iOS and Material mark the tab itself) |

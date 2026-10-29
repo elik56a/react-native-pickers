@@ -57,6 +57,15 @@ describe('EmojiPicker', () => {
     expect(screen.getByText('Nothing')).toBeTruthy();
   });
 
+  it('records a pick in the current tone as the base emoji, so recents follow the tone', async () => {
+    const onRecentChange = jest.fn();
+    await render(<EmojiPicker testID="emoji" onSelect={jest.fn()} defaultSkinTone={3} onRecentChange={onRecentChange} />);
+    await layoutGrid();
+    await fireEvent.changeText(screen.getByLabelText('Search emoji'), 'waving hand');
+    await fireEvent.press(screen.getByLabelText('waving hand'));
+    expect(onRecentChange).toHaveBeenLastCalledWith(['👋']);
+  });
+
   it('applies the chosen skin tone', async () => {
     const onSelect = jest.fn();
     const onSkinToneChange = jest.fn();
@@ -69,6 +78,51 @@ describe('EmojiPicker', () => {
     await fireEvent.changeText(screen.getByLabelText('Search emoji'), 'waving hand');
     await fireEvent.press(screen.getByLabelText('waving hand'));
     expect(onSelect).toHaveBeenCalledWith('👋🏽', findEmoji('👋'));
+  });
+
+  describe('skin tones on long press', () => {
+    // The preset's View mock shares these instance methods; measureInWindow never calls back unless told to.
+    const { measureInWindow }: { measureInWindow: jest.Mock } = jest.requireActual(
+      '@react-native/jest-preset/jest/MockNativeMethods'
+    ).default;
+    beforeEach(() => measureInWindow.mockImplementation((callback: (...rect: number[]) => void) => callback(0, 100, 320, 40)));
+    afterEach(() => measureInWindow.mockReset());
+
+    it('picks one emoji in a tone without changing the skin tone', async () => {
+      const onSelect = jest.fn();
+      const onSkinToneChange = jest.fn();
+      await render(<EmojiPicker testID="emoji" onSelect={onSelect} onSkinToneChange={onSkinToneChange} />);
+      await layoutGrid();
+      await fireEvent.changeText(screen.getByLabelText('Search emoji'), 'waving hand');
+      await fireEvent(screen.getByLabelText('waving hand'), 'longPress');
+      await fireEvent.press(screen.getByLabelText('waving hand, skin tone 4'));
+      expect(onSelect).toHaveBeenCalledWith('👋🏾', findEmoji('👋'));
+      expect(onSkinToneChange).not.toHaveBeenCalled();
+      await fireEvent.changeText(screen.getByLabelText('Search emoji'), '');
+      // Recents show it in the tone it was picked in, and send that tone again.
+      await fireEvent.press(screen.getByText('👋🏾'));
+      expect(onSelect).toHaveBeenLastCalledWith('👋🏾', findEmoji('👋'));
+      expect(screen.queryByLabelText('waving hand, skin tone 4')).toBeNull();
+    });
+
+    it('opens only for emojis that have skin tones, and closes on a tap outside', async () => {
+      await render(<EmojiPicker testID="emoji" onSelect={jest.fn()} />);
+      await layoutGrid();
+      await fireEvent(screen.getByLabelText('grinning face'), 'longPress');
+      expect(screen.queryByLabelText('grinning face, skin tone 1')).toBeNull();
+      await fireEvent.changeText(screen.getByLabelText('Search emoji'), 'waving hand');
+      await fireEvent(screen.getByLabelText('waving hand'), 'longPress');
+      await fireEvent.press(screen.getByLabelText('Close'));
+      expect(screen.queryByLabelText('waving hand, skin tone 1')).toBeNull();
+    });
+
+    it('stays off with showSkinTones={false}', async () => {
+      await render(<EmojiPicker testID="emoji" onSelect={jest.fn()} showSkinTones={false} />);
+      await layoutGrid();
+      await fireEvent.changeText(screen.getByLabelText('Search emoji'), 'waving hand');
+      await fireEvent(screen.getByLabelText('waving hand'), 'longPress');
+      expect(screen.queryByLabelText('waving hand, skin tone 1')).toBeNull();
+    });
   });
 
   it('marks the pressed category tab as active', async () => {

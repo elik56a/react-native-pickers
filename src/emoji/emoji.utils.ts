@@ -1,3 +1,4 @@
+import type { AnchorRect } from '../sheet/sheet.types';
 import {
   EMOJI_ROW_TYPE,
   EMOJI_SECTION,
@@ -5,6 +6,9 @@ import {
   FALLBACK_CELL_SIZE,
   INITIAL_ROW_BUFFER,
   SECTION_HEADER_HEIGHT,
+  SKIN_TONES,
+  TONE_POPOVER_GAP,
+  TONE_POPOVER_PADDING,
 } from './emoji.constants';
 import type {
   Emoji,
@@ -15,11 +19,26 @@ import type {
   EmojiSectionKey,
   EmojiSectionsOptions,
   EmojiTabKey,
+  RecentEmojis,
   SkinTone,
 } from './emoji.types';
 import { findEmoji, getAllEmojis } from './emojis';
 
 export const withSkinTone = (e: Emoji, tone: SkinTone): string => (tone > 0 && e.skins ? (e.skins[tone - 1] ?? e.emoji) : e.emoji);
+
+/**
+ * Where a long-pressed emoji's skin tones open, inside the picker: centered over the emoji and kept within the picker's width,
+ * above it like an emoji keyboard, or below when there's no room above.
+ */
+export const getTonePopoverPosition = (cell: AnchorRect, containerWidth: number, size: number) => {
+  const width = SKIN_TONES.length * size + 2 * TONE_POPOVER_PADDING;
+  const height = size + 2 * TONE_POPOVER_PADDING;
+  const above = cell.y - height - TONE_POPOVER_GAP;
+  return {
+    left: Math.min(Math.max(0, cell.x + (cell.width - width) / 2), Math.max(0, containerWidth - width)),
+    top: above >= 0 ? above : cell.y + cell.height + TONE_POPOVER_GAP,
+  };
+};
 
 /** Name prefix beats word prefix beats keyword prefix beats substring; every term must match. */
 const scoreTerm = (e: Emoji, term: string) => {
@@ -66,17 +85,27 @@ export const filterEmojis = (all: Emoji[], categories: EmojiCategory[], exclude?
 };
 
 /** Recent characters that resolve to an emoji in `pool`, in order. */
-export const resolveRecent = (recent: string[], pool: Emoji[]): Emoji[] => {
+/** The recents the pool allows, with the characters as they were picked, skin tone included. */
+export const resolveRecent = (recent: string[], pool: Emoji[]): RecentEmojis => {
   const allowed = new Set(pool);
-  return recent.flatMap((char) => {
+  const items: Emoji[] = [];
+  const chars: string[] = [];
+  for (const char of recent) {
     const e = findEmoji(char);
-    return e && allowed.has(e) ? [e] : [];
-  });
+    if (e && allowed.has(e)) {
+      items.push(e);
+      chars.push(char);
+    }
+  }
+  return {
+    items,
+    chars,
+  };
 };
 
-/** Puts `e` first, drops other skin-tone variants of it, and keeps at most `max`. */
-export const addRecent = (recent: string[], e: Emoji, max: number): string[] =>
-  [e.emoji, ...recent.filter((char) => findEmoji(char) !== e)].slice(0, max);
+/** Puts `char` (a variant of `e`) first, drops the other skin-tone variants of `e`, and keeps at most `max`. */
+export const addRecent = (recent: string[], e: Emoji, char: string, max: number): string[] =>
+  [char, ...recent.filter((c) => findEmoji(c) !== e)].slice(0, max);
 
 /**
  * While searching: one "search" section, or none when nothing matches so the list shows its empty text.
@@ -87,7 +116,8 @@ export const buildSections = ({ query, pool, recent, showRecent, categories }: E
     const items = searchEmojis(query, pool);
     return items.length ? [{ key: EMOJI_SECTION.search, items }] : [];
   }
-  const sections: EmojiSection[] = showRecent && recent.length ? [{ key: EMOJI_SECTION.recent, items: recent }] : [];
+  const sections: EmojiSection[] =
+    showRecent && recent.items.length ? [{ key: EMOJI_SECTION.recent, items: recent.items, chars: recent.chars }] : [];
   for (const key of categories) {
     const items = pool.filter((e) => e.category === key);
     if (items.length) sections.push({ key, items });
@@ -110,7 +140,15 @@ export const buildLayout = (sections: EmojiSection[], columns: number, cellSize:
     headerIndex.set(section.key, rows.length);
     if (showSectionHeaders) push({ type: EMOJI_ROW_TYPE.header, key: section.key }, SECTION_HEADER_HEIGHT);
     for (let i = 0; i < section.items.length; i += columns) {
-      push({ type: EMOJI_ROW_TYPE.emojis, items: section.items.slice(i, i + columns), section: section.key }, cellSize);
+      push(
+        {
+          type: EMOJI_ROW_TYPE.emojis,
+          items: section.items.slice(i, i + columns),
+          chars: section.chars?.slice(i, i + columns),
+          section: section.key,
+        },
+        cellSize
+      );
     }
   }
   return {
