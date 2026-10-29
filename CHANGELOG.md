@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.27.0](https://github.com/elik56a/react-native-pickers/compare/v0.26.0...v0.27.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **otp:** add OtpField, a verification code input with SMS autofill, plus migration guides ([#83](https://github.com/elik56a/react-native-pickers/issues/83)) ([de3ccad](https://github.com/elik56a/react-native-pickers/commit/de3ccad9c3b418cd47a8a926dd35b887538f2fe7))
+
 ## [0.26.0](https://github.com/elik56a/react-native-pickers/compare/v0.25.0...v0.26.0) (2026-10-29)
 
 
