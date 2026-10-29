@@ -1,0 +1,54 @@
+---
+title: Migrate from react-native-date-picker
+sidebar_label: 'react-native-date-picker'
+description: "Switch from react-native-date-picker to React Native Pickers: the same date, time and date-time wheels and modal, in pure JavaScript, so it runs in Expo Go and on the web."
+---
+
+# Migrate from `react-native-date-picker`
+
+`react-native-date-picker` draws native wheels, so it needs a development build and has no web support. React Native Pickers draws the same wheels in JavaScript: it runs in Expo Go, ships in OTA updates and works on the web. Each platform gets its own design by default (wheels on iOS, a calendar and clock dial in Material); add `display="wheel"` to keep wheels everywhere.
+
+```diff
+- import DatePicker from 'react-native-date-picker';
++ import { DatePickerSheet, DateWheelPicker, TimePicker } from '@elik56a/react-native-pickers';
+
+- <DatePicker mode="date" date={date} onDateChange={setDate} />
++ <DateWheelPicker value={date} onChange={setDate} />
+
+- <DatePicker mode="time" date={time} onDateChange={setTime} minuteInterval={5} />
++ <TimePicker display="wheel" value={time} onChange={setTime} minuteInterval={5} />
+
+- <DatePicker
+-   modal
+-   open={open}
+-   date={date}
+-   onConfirm={(d) => {
+-     setOpen(false);
+-     setDate(d);
+-   }}
+-   onCancel={() => setOpen(false)}
+- />
++ <DatePickerSheet display="wheel" visible={open} value={date} onConfirm={setDate} onClose={() => setOpen(false)} />
+```
+
+| react-native-date-picker | React Native Pickers |
+| --- | --- |
+| `mode="date"` | [`DateWheelPicker`](../../components/date-wheel-picker), or [`DatePicker`](../../components/date-picker) for a calendar |
+| `mode="time"` | [`TimePicker`](../../components/time-picker) with `display="wheel"` |
+| `mode="datetime"` | [`DateTimePicker`](../../components/date-time-picker) with `display="wheel"` |
+| `modal` + `open` | `DatePickerSheet` / `TimePickerSheet` / `DateTimePickerSheet` with `visible` |
+| `date` | `value` |
+| `onDateChange` | `onChange` |
+| `onConfirm(date)` | `onConfirm(date)`; `onClose` is called right after, so you don't close it yourself |
+| `onCancel` | `onClose` |
+| `title` | `title` |
+| `confirmText` / `cancelText` | `confirmLabel` / `cancelLabel` |
+| `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+| `minuteInterval` | `minuteInterval` |
+| `locale` | `locale` (names and order from `Intl`) |
+| `is24hourSource` | `format="12h"` or `"24h"` (default `'auto'`, from the locale) |
+| `theme="light" \| "dark" \| "auto"` | `<PickersProvider colorScheme="light" \| "dark" \| "auto">` |
+| `dividerColor` / `buttonColor` | `theme={{ colors: { indicator, primary } }}` |
+| A button that opens the modal | [`DatePickerField`](../../components/picker-fields) / `TimePickerField` / `DateTimePickerField`, which hold the open state and show the value |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

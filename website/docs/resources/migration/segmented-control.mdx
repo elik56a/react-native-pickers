@@ -1,0 +1,36 @@
+---
+title: Migrate from @react-native-segmented-control/segmented-control
+sidebar_label: 'segmented-control'
+description: "Switch from @react-native-segmented-control/segmented-control to React Native Pickers: HorizontalList, a segmented control or chips that scroll sideways, on iOS, Android and the web."
+---
+
+# Migrate from `@react-native-segmented-control/segmented-control`
+
+```diff
+- import SegmentedControl from '@react-native-segmented-control/segmented-control';
++ import { HorizontalList } from '@elik56a/react-native-pickers';
+
+- <SegmentedControl
+-   values={['Day', 'Week', 'Month']}
+-   selectedIndex={index}
+-   onChange={(e) => setIndex(e.nativeEvent.selectedSegmentIndex)}
+- />
++ <HorizontalList
++   items={[{ label: 'Day', value: 'day' }, { label: 'Week', value: 'week' }, { label: 'Month', value: 'month' }]}
++   value={view}
++   onChange={setView}
++ />
+```
+
+| segmented-control | React Native Pickers |
+| --- | --- |
+| `values` (strings) | `items` (`{ label, value, disabled?, icon? }`) |
+| `selectedIndex` | `value` (the item's value, not its index) |
+| `onChange(event)` / `onValueChange(label)` | `onChange(value, item)` |
+| `enabled={false}` | `disabled: true` on each item |
+| `tintColor` / `backgroundColor` | `theme={{ colors: { primary, surface } }}` or `styles={{ thumb, container }}` |
+| — | scrolls sideways when the items don't fit, `variant="chips"`, `renderItem`, works on the web |
+
+[`HorizontalList`](../../components/horizontal-list) has no native code, so it runs in Expo Go and on the web.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

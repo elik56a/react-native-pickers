@@ -1,0 +1,26 @@
+---
+title: Migrate from react-native-modal-datetime-picker
+sidebar_label: 'modal-datetime-picker'
+description: "Switch from react-native-modal-datetime-picker to React Native Pickers: DatePickerSheet, TimePickerSheet and DateTimePickerSheet with Cancel / Done, or a field that opens them. No native module."
+---
+
+# Migrate from `react-native-modal-datetime-picker`
+
+```diff
+- <DateTimePickerModal isVisible={open} mode="date" date={date} onConfirm={setDate} onCancel={close} />
++ <DatePickerSheet visible={open} value={date} onConfirm={setDate} onClose={close} />
+```
+
+| modal-datetime-picker | React Native Pickers |
+| --- | --- |
+| `isVisible` | `visible` |
+| `mode="date" \| "time" \| "datetime"` | `DatePickerSheet` · `TimePickerSheet` · `DateTimePickerSheet` |
+| `date` | `value` |
+| `onConfirm(date)` | `onConfirm(date)` (`onClose` is called right after) |
+| `onCancel` | `onClose` |
+| `confirmTextIOS` / `cancelTextIOS` | `confirmLabel` / `cancelLabel` |
+| `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+
+If `isVisible` was only toggled by a field that shows the date, drop the state and use [`DatePickerField`](../../components/picker-fields) / `TimePickerField` / `DateTimePickerField` with the same props minus `visible`.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

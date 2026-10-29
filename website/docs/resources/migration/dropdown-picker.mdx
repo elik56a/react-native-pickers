@@ -1,0 +1,50 @@
+---
+title: Migrate from react-native-dropdown-picker
+sidebar_label: 'react-native-dropdown-picker'
+description: "Switch from react-native-dropdown-picker to React Native Pickers: SelectPicker with no open state to manage, search, multi-select chips, groups and server search, as a dropdown or a bottom sheet."
+---
+
+# Migrate from `react-native-dropdown-picker`
+
+`SelectPicker` keeps its own open state, so `open`, `setOpen` and `setItems` go away, and `onChange` gets the new value rather than an updater. It opens as a dropdown on the web and a bottom sheet on phones, where a dropdown is cramped; set `presentation="dropdown"` to keep the dropdown everywhere.
+
+```diff
+- import DropDownPicker from 'react-native-dropdown-picker';
++ import { SelectPicker } from '@elik56a/react-native-pickers';
+
+- const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+- const [items, setItems] = useState([
+-   { label: 'Apple', value: 'apple' },
+-   { label: 'Banana', value: 'banana' },
+- ]);
+-
+- <DropDownPicker open={open} value={value} items={items} setOpen={setOpen} setValue={setValue} setItems={setItems} />
++ <SelectPicker
++   options={[{ label: 'Apple', value: 'apple' }, { label: 'Banana', value: 'banana' }]}
++   value={value}
++   onChange={setValue}
++ />
+```
+
+| react-native-dropdown-picker | React Native Pickers |
+| --- | --- |
+| `items` + `setItems` | `options` (adds `description`, `icon`, `group`, `keywords`) |
+| `value` + `setValue` | `value` + `onChange(value, option)` |
+| `open` + `setOpen` | not needed; `onOpen` / `onClose` if you want to know |
+| `onChangeValue` | `onChange` |
+| `multiple` | `multiple` (selected items show as removable chips) |
+| `min` / `max` | `maxSelected`; check a minimum in your form |
+| `searchable` | `searchable` (on by default past 8 options) |
+| `searchPlaceholder` | `searchPlaceholder` |
+| `onChangeSearchText` + `disableLocalSearch` + `loading` | `onSearchChange` + `loading`, or `loadOptions(query)` that returns a promise |
+| `placeholder` | `placeholder` |
+| `disabled` | `disabled` |
+| `listMode="MODAL"` | `presentation="modal"` |
+| `listMode="FLATLIST"` / `"SCROLLVIEW"` | `presentation="dropdown"` |
+| `renderListItem` | `renderOption({ option, selected, disabled, theme })` |
+| `addCustomItem` | no equivalent; add the typed text to `options` yourself |
+
+See [SelectPicker](../../components/select-picker) for groups, icons and render props, and [server search](../../recipes/server-search).
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

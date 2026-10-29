@@ -1,0 +1,39 @@
+---
+title: Migrate from rn-emoji-keyboard
+sidebar_label: 'rn-emoji-keyboard'
+description: "Switch from rn-emoji-keyboard to React Native Pickers: EmojiPickerSheet with search, recents, skin tones and a category bar that follows the platform, or an inline EmojiPicker."
+---
+
+# Migrate from `rn-emoji-keyboard`
+
+`EmojiPickerSheet` takes `visible` and `onClose` like the other sheets, and `onSelect` gets the emoji string first. Search and recently used are on by default. Skin tones are built in, and the category bar sits where the platform's own emoji keyboard has it. For a picker inside your own layout, use [`EmojiPicker`](../../components/emoji-picker).
+
+```diff
+- import EmojiPicker from 'rn-emoji-keyboard';
++ import { EmojiPickerSheet } from '@elik56a/react-native-pickers';
+
+- <EmojiPicker open={open} onClose={() => setOpen(false)} onEmojiSelected={(e) => setEmoji(e.emoji)} />
++ <EmojiPickerSheet visible={open} onClose={() => setOpen(false)} onSelect={setEmoji} />
+```
+
+| rn-emoji-keyboard | React Native Pickers |
+| --- | --- |
+| `open` | `visible` |
+| `onClose` / `onRequestClose` | `onClose` |
+| `onEmojiSelected({ emoji, name, … })` | `onSelect(emoji, data)`; `data` has `name`, `keywords`, `category`, `version`, `skins` |
+| `allowMultipleSelections` | `closeOnSelect={false}` |
+| `enableSearchBar` | `searchable` (on by default) |
+| `enableRecentlyUsed` | `showRecent` (on by default); `recent` / `onRecentChange` to keep them |
+| `categoryPosition="top" \| "bottom"` | `categoryBarPosition="top" \| "bottom"` |
+| `disabledCategories` | `categories` lists the ones to show |
+| `categoryOrder` | the order of `categories` |
+| `emojiSize` | `emojiSize` |
+| `defaultHeight` | `sheetProps={{ height }}` |
+| `translation` | `categoryLabels`, `searchPlaceholder`, `emptyText` |
+| `theme` / `styles` | `theme` tokens and `styles` slots |
+| `selectedEmojis` | no equivalent |
+| — | `maxEmojiVersion` to hide emoji older phones can't draw, `exclude` |
+
+See [EmojiPicker](../../components/emoji-picker) for skin tones, recents and the field.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

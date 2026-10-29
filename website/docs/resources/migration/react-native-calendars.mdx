@@ -1,0 +1,46 @@
+---
+title: Migrate from react-native-calendars
+sidebar_label: 'react-native-calendars'
+description: "Switch from react-native-calendars to React Native Pickers: the same marked dates, built-in range and multiple selection, localized names from Intl, and iOS, Material and web designs."
+---
+
+# Migrate from `react-native-calendars`
+
+```diff
+- <Calendar
+-   current="2026-10-01"
+-   minDate="2026-10-05"
+-   onDayPress={(day) => setSelected(day.dateString)}
+-   markedDates={{ [selected]: { selected: true }, '2026-10-22': { marked: true, dotColor: 'green' } }}
+-   firstDay={1}
+- />
++ <DatePicker
++   initialMonth={new Date(2026, 9, 1)}
++   minDate={new Date(2026, 9, 5)}
++   value={selected}
++   onChange={setSelected}
++   markedDates={{ '2026-10-22': { dots: ['green'] } }}
++   firstDayOfWeek={1}
++ />
+```
+
+| react-native-calendars | React Native Pickers |
+| --- | --- |
+| `current` (string) | `initialMonth` (`Date`) |
+| `minDate` / `maxDate` (strings) | `minDate` / `maxDate` (`Date`) |
+| `onDayPress(day)` | `onChange(date)`; selection is managed for you |
+| `markedDates[k].selected` | `value` (no manual marking) |
+| `markingType="period"` + manual start/end marking | `mode="range"` |
+| `markedDates[k].marked` + `dotColor` | `markedDates[k].dots: [color]` |
+| `markingType="multi-dot"` `dots: [{ color }]` | `dots: ['#hex', …]` (max 3) |
+| `markedDates[k].disabled` / `disableTouchEvent` | `markedDates[k].disabled` or `isDateDisabled` |
+| `firstDay` | `firstDayOfWeek` |
+| `onMonthChange` | `onMonthChange(month: Date)` |
+| `hideExtraDays` | `showOutsideDays={false}` |
+| `enableSwipeMonths` | `enableSwipe` (on by default) |
+| `dayComponent` | `renderDay(state, theme)` |
+| `renderArrow(direction)` | `renderArrow(direction, disabled)` |
+| `theme={{ selectedDayBackgroundColor, todayTextColor, … }}` | `theme={{ colors: { primary, … } }}` + `styles` slots |
+| `LocaleConfig` | `locale="fr-FR"` (names from `Intl`) |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

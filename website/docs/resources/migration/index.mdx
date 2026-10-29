@@ -1,0 +1,28 @@
+---
+title: Migrate to React Native Pickers
+sidebar_label: Overview
+description: "Prop-by-prop guides to move from datetimepicker, react-native-date-picker, react-native-calendars, dropdown and select libraries, the country and phone pickers and rn-emoji-keyboard to React Native Pickers."
+---
+
+# Migration
+
+Prop-by-prop guides from popular packages. Most migrations are a rename plus switching callbacks to `(value) => …`.
+
+Compared with native pickers, your users keep a native look: the iOS design on iOS and Material Design on Android, by default. Set `design="ios"` on `PickersProvider` if you'd rather show the same look everywhere. See [Designs](../../guides/designs.mdx).
+
+| Coming from | Use |
+| --- | --- |
+| [`@react-native-community/datetimepicker`](./datetimepicker.mdx) | `DatePicker`, `TimePicker`, `DateTimePicker` |
+| [`react-native-date-picker`](./react-native-date-picker.mdx) | `DateWheelPicker`, `TimePicker`, `DatePickerSheet` |
+| [`react-native-modal-datetime-picker`](./modal-datetime-picker.mdx) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet` |
+| [`react-native-calendars`](./react-native-calendars.mdx) | `DatePicker` |
+| [`react-native-picker-select`](./picker-select.mdx) | `SelectPicker` |
+| [`react-native-dropdown-picker`](./dropdown-picker.mdx) | `SelectPicker` |
+| [`react-native-element-dropdown`](./element-dropdown.mdx) | `SelectPicker` |
+| [`@react-native-picker/picker`](./picker.mdx) | `WheelPicker` or `SelectPicker` |
+| [`@react-native-segmented-control/segmented-control`](./segmented-control.mdx) | `HorizontalList` |
+| [`react-native-country-picker-modal`](./country-picker-modal.mdx) | `CountryPicker` |
+| [`react-native-phone-number-input`](./phone-number-input.mdx) | `PhoneField` |
+| [`rn-emoji-keyboard`](./emoji-keyboard.mdx) | `EmojiPickerSheet` |
+
+Not sure it's the right fit? [Comparison](../comparison.mdx) shows when another library is the better choice.

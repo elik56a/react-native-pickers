@@ -1,0 +1,43 @@
+---
+title: Migrate from @react-native-community/datetimepicker
+sidebar_label: 'datetimepicker'
+description: "Switch from @react-native-community/datetimepicker to React Native Pickers: DatePicker, TimePicker and DateTimePicker with the same props, a calendar or wheels on every platform, no native module."
+---
+
+# Migrate from `@react-native-community/datetimepicker`
+
+```diff
+- import DateTimePicker from '@react-native-community/datetimepicker';
++ import { DatePicker, DateTimePicker, TimePicker } from '@elik56a/react-native-pickers';
+
+- <DateTimePicker mode="date" value={date} onChange={(event, d) => d && setDate(d)} minimumDate={min} />
++ <DatePicker value={date} onChange={setDate} minDate={min} />
+
+- <DateTimePicker mode="time" value={time} is24Hour onChange={(e, d) => d && setTime(d)} minuteInterval={5} />
++ <TimePicker value={time} onChange={setTime} format="24h" minuteInterval={5} />
+
+- <DateTimePicker mode="datetime" value={when} onChange={(e, d) => d && setWhen(d)} />
++ <DateTimePicker value={when} onChange={setWhen} />
+```
+
+| datetimepicker | React Native Pickers |
+| --- | --- |
+| `mode="date"` | `DatePicker` (calendar) or `DatePicker display="wheel"` |
+| `mode="time"` | `TimePicker` |
+| `mode="datetime"` | [`DateTimePicker`](../../components/date-time-picker) |
+| `display="spinner"` | `DatePicker display="wheel"`, `TimePicker display="wheel"` |
+| `display="clock"` (Android) | `TimePicker display="dial"` (the default in the Material design) |
+| `display="calendar"` / `"inline"` | `DatePicker` |
+| `value` | `value` |
+| `onChange(event, date)` | `onChange(date)` (no event, never `undefined`) |
+| `minimumDate` / `maximumDate` | `minDate` / `maxDate` |
+| `minuteInterval` | `minuteInterval` |
+| `is24Hour` | `format="24h"` (default `'auto'` from locale) |
+| `locale` | `locale` |
+| `firstDayOfWeek` (Android) | `firstDayOfWeek` (0 = Sunday) |
+| `themeVariant` | `PickersProvider colorScheme` |
+| `accentColor` / `textColor` | `theme={{ colors: { primary, text } }}` |
+| Android dialog (shown on mount) | `DatePickerSheet` / `TimePickerSheet` with `visible` |
+| A button or input that opens the picker | `DatePickerField` / `TimePickerField` / `DateTimePickerField` ([picker fields](../../components/picker-fields)) |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.
