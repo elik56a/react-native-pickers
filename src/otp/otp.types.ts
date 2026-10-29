@@ -44,6 +44,17 @@ export interface OtpCellState {
   caret: boolean;
 }
 
+/** What `useOtpField` hands the field. Named so the build can emit the hook returning it. */
+export interface OtpFieldState {
+  code: string;
+  length: number;
+  cells: OtpCellState[];
+  caretOpacity: Animated.Value;
+  changeText: (text: string) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+}
+
 export interface OtpCellProps {
   cell: OtpCellState;
   caretOpacity: Animated.Value;

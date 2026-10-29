@@ -6,7 +6,7 @@ import { timing } from '../../core/utils/animation.utils';
 import { CARET_BLINK_MS } from '../otp.constants';
 
 /** The caret's opacity: blinking while `visible`, and shown solid again each time it moves to `position`. */
-export const useCaretBlink = (visible: boolean, position: number) => {
+export const useCaretBlink = (visible: boolean, position: number): Animated.Value => {
   const opacity = useAnimatedValue(1);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: restarts when the caret moves, so it shows as soon as a character is typed
