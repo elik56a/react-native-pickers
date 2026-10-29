@@ -118,8 +118,8 @@ export const SHOWCASE: ShowcaseItem[] = [
   {
     key: SHOWCASE_SCREEN.albums,
     title: 'Photo albums',
-    blurb: 'Sort the albums from a sheet that ticks the current order, and open each album’s ⋯ menu to share, rename or delete it.',
-    components: ['ActionSheet', 'useActionSheet'],
+    blurb: 'Sort the albums from a menu that ticks the current order, and open each album’s ⋯ sheet to share, rename or delete it.',
+    components: ['Menu', 'ActionSheet', 'useActionSheet'],
   },
   {
     key: SHOWCASE_SCREEN.trips,

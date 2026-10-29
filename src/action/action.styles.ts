@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   groupedSheet: { backgroundColor: 'transparent', paddingHorizontal: GROUP_GAP },
   group: { flexShrink: 1, overflow: 'hidden' },
   cancelGroup: { marginTop: GROUP_GAP },
-  list: { flexGrow: 0 },
+  list: { flexGrow: 0, flexShrink: 1 },
   header: { gap: 4 },
   groupedHeader: { alignItems: 'center' },
   centered: { textAlign: 'center' },

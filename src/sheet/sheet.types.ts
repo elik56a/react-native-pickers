@@ -245,6 +245,9 @@ export interface DropdownProps extends ThemableProps {
   minWidth?: number;
   /** Stays invisible while false, e.g. until its content is measured and it knows which side of the field it fits on. Default: true */
   ready?: boolean;
+  /** After it has faded out and unmounted */
+  onClosed?: () => void;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 

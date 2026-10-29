@@ -17,6 +17,7 @@ import {
   EmojiPicker,
   EmojiPickerField,
   HorizontalList,
+  Menu,
   MonthPicker,
   MonthPickerField,
   MultiWheelPicker,
@@ -566,5 +567,28 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
       { prop: 'showCancel', options: ['auto', true, false], unset: 'auto' },
     ],
+  },
+  menu: {
+    name: 'Menu',
+    component: Menu,
+    props: {
+      accessibilityLabel: 'Note options',
+      style: { alignSelf: 'center' },
+      actions: [
+        { label: 'Edit', icon: <Text>✏️</Text> },
+        { label: 'Duplicate', icon: <Text>📄</Text> },
+        { label: 'Pin to top', icon: <Text>📌</Text>, selected: true },
+        { label: 'Delete', icon: <Text>🗑️</Text>, destructive: true },
+      ],
+    },
+    code: 'actions={actions} accessibilityLabel="Note options"',
+    controls: [
+      { prop: 'align', options: ['auto', 'start', 'end'] },
+      { prop: 'title', options: ['none', 'Note'], unset: 'none' },
+      { prop: 'presentation', options: ['menu', 'sheet'] },
+      { prop: 'openOnLongPress', options: [false, true] },
+      { prop: 'disabled', options: [false, true] },
+    ],
+    children: <Text style={styles.menuTrigger}>⋯ Options</Text>,
   },
 };

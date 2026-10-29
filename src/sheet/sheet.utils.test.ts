@@ -14,6 +14,7 @@ import {
   shouldCollapseOnPress,
   shouldDismiss,
   splitFieldProps,
+  toLocalRect,
 } from './sheet.utils';
 
 describe('resolveSheetHeight', () => {
@@ -253,5 +254,12 @@ describe('getFloatingLabelShift', () => {
   it('moves the label onto the top border, and left by what scaling around its centre takes off its start', () => {
     expect(getFloatingLabelShift(54, 80, 0.75, 2)).toEqual({ x: -10, y: -28 });
     expect(getFloatingLabelShift(54, 80, 1, 1)).toEqual({ x: -0, y: -27.5 });
+  });
+});
+
+describe('toLocalRect', () => {
+  it('moves a window rect into an area that starts elsewhere', () => {
+    const area = { x: 100, y: 50, width: 390, height: 844 };
+    expect(toLocalRect({ x: 116, y: 150, width: 40, height: 40 }, area)).toEqual({ x: 16, y: 100, width: 40, height: 40 });
   });
 });

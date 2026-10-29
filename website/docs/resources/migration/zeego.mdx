@@ -1,0 +1,54 @@
+---
+title: Migrate from zeego
+sidebar_label: 'zeego'
+description: "Switch from zeego's DropdownMenu and ContextMenu to React Native Pickers: one Menu with an actions array, icons, subtitles, destructive, disabled and checked items, and a long-press context menu. Pure JavaScript: runs in Expo Go."
+---
+
+# Migrate from `zeego`
+
+`zeego` composes a menu from parts (`Root`, `Trigger`, `Content`, `Item`, `ItemTitle`…) and shows native menus, so it needs a development build. [`Menu`](../../components/menu) takes one `actions` array and is pure JavaScript, so it runs in Expo Go too.
+
+```diff
+- import * as DropdownMenu from 'zeego/dropdown-menu';
++ import { Menu } from '@elik56a/react-native-pickers';
+
+- <DropdownMenu.Root>
+-   <DropdownMenu.Trigger>
+-     <MoreIcon />
+-   </DropdownMenu.Trigger>
+-   <DropdownMenu.Content>
+-     <DropdownMenu.Item key="edit" onSelect={edit}>
+-       <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
+-     </DropdownMenu.Item>
+-     <DropdownMenu.Item key="delete" destructive onSelect={remove}>
+-       <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
+-     </DropdownMenu.Item>
+-   </DropdownMenu.Content>
+- </DropdownMenu.Root>
++ <Menu
++   accessibilityLabel="More options"
++   actions={[
++     { label: 'Edit', onPress: edit },
++     { label: 'Delete', destructive: true, onPress: remove },
++   ]}
++ >
++   <MoreIcon />
++ </Menu>
+```
+
+| zeego | React Native Pickers |
+| --- | --- |
+| `DropdownMenu.Root` + `Trigger` | `Menu`, with the trigger as `children` |
+| `ContextMenu.Root` | `Menu openOnLongPress` |
+| `Item` + `onSelect` | an action with `onPress` |
+| `ItemTitle` / `ItemSubtitle` | `label` / `description` |
+| `ItemIcon` / `ItemImage` | `icon`: any node |
+| `destructive` / `disabled` on `Item` | `destructive` / `disabled` |
+| `CheckboxItem value="on"` + `ItemIndicator` | `selected: true` (a ✓); toggle it in `onPress` |
+| `Label` | `title` |
+| `Group` / `Separator` / `Sub` | — |
+| `Root onOpenChange` | `onOpen` / `onClose` |
+| `Content align` | `align` |
+| `ContextMenu.Preview` | — |
+
+See [all migration guides](./index.mdx) for other libraries.
