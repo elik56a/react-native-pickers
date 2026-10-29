@@ -1,7 +1,21 @@
 import { defaultFilter } from '../select';
 import { COUNTRY_SHEET_HEIGHT } from './country.constants';
 import type { Country } from './country.types';
-import { buildCountryOptions, getAllCountries, getCountry, getCountryFlag, getLocalizedName, withSheetHeight } from './country.utils';
+import {
+  buildCountryOptions,
+  formatNationalNumber,
+  getAllCountries,
+  getCallingCode,
+  getCountry,
+  getCountryFlag,
+  getLocalizedName,
+  getPhonePlaceholder,
+  isValidPhone,
+  parsePhone,
+  toE164,
+  toNationalNumber,
+  withSheetHeight,
+} from './country.utils';
 
 const labels = (options: { label: string }[]) => options.map((o) => o.label);
 
@@ -97,5 +111,47 @@ describe('withSheetHeight', () => {
   it('opens at a fixed height unless the sheet sets its own', () => {
     expect(withSheetHeight(undefined)?.sheetProps?.height).toBe(COUNTRY_SHEET_HEIGHT);
     expect(withSheetHeight({ sheetProps: { height: 0.5 } })?.sheetProps?.height).toBe(0.5);
+  });
+});
+
+describe('phone numbers', () => {
+  it('groups digits as the country writes them, adding a separator only once a digit follows', () => {
+    expect(formatNationalNumber('2015550123', 'US')).toBe('(201) 555-0123');
+    expect(formatNationalNumber('201', 'US')).toBe('(201');
+    expect(formatNationalNumber('541234567', 'IL')).toBe('54-123-4567');
+    expect(formatNationalNumber('612345678', 'FR')).toBe('6 12 34 56 78');
+  });
+
+  it('uses the main country’s pattern for islands sharing its calling code, and groups of three elsewhere', () => {
+    expect(getCallingCode('JM')).toBe('1');
+    expect(formatNationalNumber('8765551234', 'JM')).toBe('(876) 555-1234');
+    expect(formatNationalNumber('1234567', 'IS')).toBe('123 456 7');
+  });
+
+  it('drops a trunk 0 and separators, keeps Italy’s 0, and stops at the longest number', () => {
+    expect(toNationalNumber('054-123-4567', 'IL')).toBe('541234567');
+    expect(toNationalNumber('06 1234 5678', 'IT')).toBe('0612345678');
+    expect(toNationalNumber('2015550123999', 'US')).toBe('2015550123');
+  });
+
+  it('writes E.164 and checks the length', () => {
+    expect(toE164('541234567', 'IL')).toBe('+972541234567');
+    expect(toE164('', 'IL')).toBe('');
+    expect(isValidPhone('541234567', 'IL')).toBe(true);
+    expect(isValidPhone('5412', 'IL')).toBe(false);
+    expect(isValidPhone('12345', 'IS')).toBe(true);
+  });
+
+  it('finds the country of an international number, keeping the current one when its code matches', () => {
+    expect(parsePhone('+972 54-123-4567')).toEqual({ country: 'IL', nationalNumber: '541234567' });
+    expect(parsePhone('+12015550123')).toEqual({ country: 'US', nationalNumber: '2015550123' });
+    expect(parsePhone('+18765551234')).toEqual({ country: 'JM', nationalNumber: '8765551234' });
+    expect(parsePhone('+18765551234', 'US')).toEqual({ country: 'US', nationalNumber: '8765551234' });
+    expect(parsePhone('+16135550123', 'CA')).toEqual({ country: 'CA', nationalNumber: '6135550123' });
+    expect(parsePhone('+999')).toEqual({ nationalNumber: '999' });
+  });
+
+  it('shows an example in the country’s format as the placeholder', () => {
+    expect(getPhonePlaceholder('US')).toBe('(123) 456-7890');
   });
 });

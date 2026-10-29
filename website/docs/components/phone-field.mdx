@@ -1,0 +1,125 @@
+---
+title: React Native Phone Number Input
+description: "React Native phone number input with a country code picker: flags and dialing codes for 250 countries, formatting as you type, E.164 value, paste detection and length validation. Pure JS, no libphonenumber, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# PhoneField
+
+`PhoneField` is a React Native phone number input: a country button with the flag and calling code, then the number, grouped the way that country writes it as the user types. The value is one string in E.164, such as `'+972541234567'`, ready to store or send to an SMS service.
+
+The country list is [`CountryPicker`](./country-picker): searchable, in the device language, a bottom sheet on phones and a dropdown on the web. The field follows the [iOS, Material or web design](../guides/designs). No dependency and no metadata download: formats for about 50 countries add 2 KB.
+
+```tsx
+import { PhoneField } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { PhoneField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [phone, setPhone] = useState('');
+  return <PhoneField label="Phone" defaultCountry="IL" value={phone} onChange={setPhone} />;
+}
+```
+
+Type `054 123 4567`: the leading 0 is dropped, the number shows as `54-123-4567`, and the value is `+972541234567`. Paste `+44 7911 123456` and the field switches to the United Kingdom.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.phoneField} />
+
+## Checking the number
+
+`onChange` passes the E.164 value and the details: the country, the digits after the calling code, and `valid`, whether the number has as many digits as that country's numbers do.
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { PhoneField } from '@elik56a/react-native-pickers';
+import type { PhoneDetails } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [phone, setPhone] = useState('');
+  const [details, setDetails] = useState<PhoneDetails | null>(null);
+  return (
+    <View style={{ gap: 8 }}>
+      <PhoneField
+        label="Mobile"
+        preferred={['US', 'GB', 'CA']}
+        value={phone}
+        onChange={(value, info) => {
+          setPhone(value);
+          setDetails(info);
+        }}
+      />
+      <Text>{details ? `${details.country} · ${details.valid ? 'looks right' : 'too short or too long'}` : 'Type a number'}</Text>
+    </View>
+  );
+}
+```
+
+`valid` checks the length only, which catches most typos. For carrier checks, verify on your server, as with an SMS code.
+
+## The country
+
+The country follows the number: a `value` or a pasted number with another calling code shows its own country. Before there is a number, `defaultCountry` picks it, or control it with `country` and `onCountryChange`, for example from the device region.
+
+Countries sharing a calling code keep the one chosen: a US number with a Caribbean area code stays American. Picking another country keeps the digits and moves them to its calling code.
+
+## How numbers are formatted
+
+About 50 countries, those with the most phone users, have their own pattern: `(201) 555-0123` in the US, `6 12 34 56 78` in France, `54-123-4567` in Israel. Countries sharing a calling code with one of them use its pattern, so Canada and the Caribbean look American. The rest are grouped in threes. Grouping is only for display; the value is always digits.
+
+A leading 0, the trunk prefix most countries dial at home, is dropped, except in Italy, San Marino and the Vatican, where it's part of the number.
+
+## Utilities
+
+| Export | Description |
+| --- | --- |
+| `parsePhone(international, current?)` | `{ country?, nationalNumber }` for a number like `'+44 7911 123456'` |
+| `formatNationalNumber(digits, country)` | `'2015550123'`, `'US'` → `'(201) 555-0123'` |
+| `isValidPhone(digits, country)` | Whether the digits after the calling code have a valid length |
+| `toE164(digits, country)` | `'541234567'`, `'IL'` → `'+972541234567'` |
+
+```ts
+const { country, nationalNumber } = parsePhone(user.phone);
+const shown = country ? formatNationalNumber(nationalNumber, country) : user.phone;
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | The number in E.164, `''` when empty. Leave it out to keep the number inside. |
+| `defaultValue` | `string` | `''` | Starting number when `value` isn't set. |
+| `onChange` | `(value: string, details: PhoneDetails) => void` | — | Called as the user types or picks a country. |
+| `country` | `CountryCode` | — | The country whose calling code is used. |
+| `defaultCountry` | `CountryCode` | `'US'` | Starting country when `country` isn't set. |
+| `onCountryChange` | `(country: CountryCode) => void` | — | Called when the user picks a country or pastes a number from another. |
+| `label` | `string` | — | Above the field, or on its border in Material. Screen readers hear *Phone number* without one. |
+| `placeholder` | `string` | an example, e.g. `(123) 456-7890` | Shown while empty. |
+| `disabled` | `boolean` | `false` | |
+| `countries` / `exclude` / `preferred` | `CountryCode[]` | — | Which countries the list offers, and which come first. See [CountryPicker](./country-picker#a-subset-of-countries). |
+| `preferredLabel` / `allCountriesLabel` | `string` | `'Suggested'` / `'All countries'` | Headers of the list. |
+| `locale` | `string` | device locale | Language of the country names. |
+| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal'` | `'auto'` | Where the country list opens: a dropdown on the web, a bottom sheet on native. |
+| `countrySheetTitle` | `string` | `'Country code'` | Title of the country sheet. |
+| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Options for the country sheet, as [`CountryPicker`](./country-picker#props)'s. |
+| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
+| `style` | `ViewStyle` | — | The field's container. |
+| `styles` | `{ label, field, input, countryButton, dialCode, chevron }` | — | [Slot styles](../guides/styling). |
+| `testID` | `string` | — | On the text input; the country button gets `${testID}-country`. |
+
+### Types
+
+```ts
+interface PhoneDetails {
+  country: CountryCode;
+  nationalNumber: string; // digits after the calling code, e.g. '541234567'
+  valid: boolean; // has as many digits as the country's numbers do
+}
+```
