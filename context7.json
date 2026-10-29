@@ -3,7 +3,7 @@
   "url": "https://context7.com/elik56a/react-native-pickers",
   "public_key": "pk_EfgECmIIv32CQlZpPe9GW",
   "projectTitle": "React Native Pickers",
-  "description": "Wheel, time, duration, date, month, week strip, date-time, select, country, phone number, time zone, horizontal list, emoji and color pickers, a slider, a star rating, an OTP code input plus bottom sheets, action sheets and form fields for React Native, Expo and React Native Web. Looks native on iOS, Android and the web, with zero native code (pure JavaScript).",
+  "description": "Wheel, time, duration, date, month, week strip, date-time, select, country, phone number, time zone, horizontal list, emoji and color pickers, a slider, a star rating, an OTP code input plus bottom sheets, action sheets, menus and form fields for React Native, Expo and React Native Web. Looks native on iOS, Android and the web, with zero native code (pure JavaScript).",
   "folders": ["website/docs"],
   "rules": [
     "Install @elik56a/react-native-pickers. It has zero native code (pure JavaScript), so it works in Expo Go without a rebuild.",

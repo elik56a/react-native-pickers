@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { ActionSheet, useActionSheet, usePickerTheme } from '@elik56a/react-native-pickers';
+import { Menu, useActionSheet, usePickerTheme } from '@elik56a/react-native-pickers';
 import { AppScreen } from '../../home/demo/components/AppScreen';
 import { deviceSheetProps } from '../../home/demo/demo.utils';
 import { ALBUM_SORTS, ALBUMS } from '../showcase.constants';
@@ -14,7 +14,6 @@ export const AlbumsScreen = ({ platform, screenHeight }: ScreenProps) => {
   const sheetProps = deviceSheetProps(platform, screenHeight);
   const [albums, setAlbums] = useState(ALBUMS);
   const [sort, setSort] = useState<AlbumSort>(ALBUM_SORTS[0]);
-  const [sorting, setSorting] = useState(false);
   const [notice, setNotice] = useState('Tap ⋯ on an album');
   const { show, actionSheet } = useActionSheet();
 
@@ -38,10 +37,20 @@ export const AlbumsScreen = ({ platform, screenHeight }: ScreenProps) => {
 
   return (
     <AppScreen platform={platform} title="Albums" subtitle={notice}>
-      <Pressable style={styles.settingHeader} onPress={() => setSorting(true)} accessibilityRole="button">
+      <View style={styles.settingHeader}>
         <Text style={[styles.settingLabel, { color: colors.text }]}>Sort by</Text>
-        <Text style={[styles.settingValue, { color: colors.primary }]}>{sort} ▾</Text>
-      </Pressable>
+        <Menu
+          title="Sort albums by"
+          accessibilityLabel={`Sort by ${sort}`}
+          actions={ALBUM_SORTS.map((label) => ({
+            label,
+            selected: label === sort,
+            onPress: () => setSort(label),
+          }))}
+        >
+          <Text style={[styles.settingValue, { color: colors.primary }]}>{sort} ▾</Text>
+        </Menu>
+      </View>
       {sortAlbums(albums, sort).map((album) => (
         <View key={album.name} style={styles.albumRow}>
           <View style={[styles.albumCover, { backgroundColor: colors.surface }]}>
@@ -56,17 +65,6 @@ export const AlbumsScreen = ({ platform, screenHeight }: ScreenProps) => {
           </Pressable>
         </View>
       ))}
-      <ActionSheet
-        visible={sorting}
-        onClose={() => setSorting(false)}
-        title="Sort albums by"
-        sheetProps={sheetProps}
-        actions={ALBUM_SORTS.map((label) => ({
-          label,
-          selected: label === sort,
-          onPress: () => setSort(label),
-        }))}
-      />
       {actionSheet}
     </AppScreen>
   );

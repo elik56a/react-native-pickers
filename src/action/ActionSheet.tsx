@@ -58,6 +58,7 @@ export const ActionSheet = ({
               onPress={press}
               grouped={grouped}
               separated={grouped && (i > 0 || hasHeader)}
+              rowHeight={look.rowHeight}
               theme={theme}
               slots={slots}
             />
@@ -72,6 +73,7 @@ export const ActionSheet = ({
             grouped={grouped}
             cancel
             separated={!grouped}
+            rowHeight={look.rowHeight}
             theme={theme}
             slots={slots}
           />

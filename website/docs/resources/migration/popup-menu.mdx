@@ -1,0 +1,51 @@
+---
+title: Migrate from react-native-popup-menu
+sidebar_label: 'popup-menu'
+description: "Switch from react-native-popup-menu to React Native Pickers: one Menu with an actions array instead of MenuTrigger, MenuOptions and MenuOption, no MenuProvider, iOS, Material and web designs, and a sheet presentation."
+---
+
+# Migrate from `react-native-popup-menu`
+
+[`Menu`](../../components/menu) takes the options as one `actions` array, and its `children` is the trigger. There's no `MenuProvider` to wrap the app in.
+
+```diff
+- import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
++ import { Menu } from '@elik56a/react-native-pickers';
+
+- <Menu onSelect={(value) => (value === 'save' ? save() : remove())}>
+-   <MenuTrigger text="Options" />
+-   <MenuOptions>
+-     <MenuOption value="save" text="Save" />
+-     <MenuOption value="delete">
+-       <Text style={{ color: 'red' }}>Delete</Text>
+-     </MenuOption>
+-   </MenuOptions>
+- </Menu>
++ <Menu
++   actions={[
++     { label: 'Save', onPress: save },
++     { label: 'Delete', destructive: true, onPress: remove },
++   ]}
++ >
++   <Text>Options</Text>
++ </Menu>
+```
+
+Remove `<MenuProvider>` from your app root.
+
+| react-native-popup-menu | React Native Pickers |
+| --- | --- |
+| `MenuTrigger` / `text` | the trigger as `children` |
+| `MenuTrigger triggerOnLongPress` | `openOnLongPress` |
+| `MenuOption text` | `label` |
+| `MenuOption onSelect` / `Menu onSelect(value)` | `onPress` on each action |
+| `MenuOption disabled` | `disabled` |
+| a red `MenuOption` child | `destructive: true` |
+| custom `MenuOption` children | `icon` and `description`, or `styles` |
+| `renderer={renderers.SlideInMenu}` | `presentation="sheet"` |
+| `renderer={renderers.Popover}` / `rendererProps` | — |
+| `opened` (controlled) | — |
+| `onOpen` / `onClose` | `onOpen` / `onClose` |
+| `customStyles` | `styles={{ trigger, menu, action, actionLabel }}` |
+
+See [all migration guides](./index.mdx) for other libraries.

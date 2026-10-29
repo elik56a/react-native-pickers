@@ -105,6 +105,13 @@ export const getSheetDefaults = (platform: PlatformOSType) => ({
   expandedTopInset: EXPANDED_TOP_INSET[platform] ?? 0,
 });
 
+/** `rect`, measured in the window, as it sits inside `area`. */
+export const toLocalRect = (rect: AnchorRect, area: AnchorRect): AnchorRect => ({
+  ...rect,
+  x: rect.x - area.x,
+  y: rect.y - area.y,
+});
+
 /** Opens below the anchor, or above it when there's more room there and not enough below. Grows to `minWidth`, kept inside the window. */
 export const getDropdownFrame = (
   anchor: AnchorRect,

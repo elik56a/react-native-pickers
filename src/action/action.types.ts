@@ -1,7 +1,10 @@
 import type React from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { BottomSheetProps, SheetPresentation } from '../sheet/sheet.types';
+import type { ValueOf } from '../core/core.types';
+import type { BottomSheetProps, FieldAnchor, SheetPresentation } from '../sheet/sheet.types';
+import type { MENU_ALIGN, MENU_PRESENTATION } from './action.constants';
 
 export interface ActionSheetAction {
   label: string;
@@ -74,6 +77,9 @@ export interface ActionSheetRowProps {
   cancel?: boolean;
   /** A hairline above the row, between grouped actions */
   separated: boolean;
+  rowHeight: number;
+  /** After the label, as iOS menus put it */
+  iconAtEnd?: boolean;
   theme: PickerTheme;
   slots?: SlotStyles<ActionSheetSlot>;
 }
@@ -92,4 +98,65 @@ export interface ActionSheetController {
 export interface ActionPress {
   press: (action: ActionSheetAction) => void;
   onClosed: () => void;
+}
+
+/** A menu takes the same actions as an action sheet. */
+export type MenuAction = ActionSheetAction;
+
+/** Which edge of the trigger the menu lines up with; `auto`: its end when the trigger is in the window's far half. */
+export type MenuAlign = ValueOf<typeof MENU_ALIGN>;
+
+/** `menu`: a popover by the trigger; `sheet`: an ActionSheet. */
+export type MenuPresentation = ValueOf<typeof MENU_PRESENTATION>;
+
+export interface MenuTriggerInfo {
+  open: () => void;
+  visible: boolean;
+}
+
+export type MenuSlot = 'trigger' | 'menu' | 'header' | 'title' | 'message' | 'action' | 'actionLabel' | 'actionDescription' | 'check';
+
+export interface MenuProps extends ThemableProps {
+  actions: MenuAction[];
+  /** The trigger: a node that opens the menu on press, or a function that gets `open` for your own button */
+  children: React.ReactNode | ((info: MenuTriggerInfo) => React.ReactNode);
+  /** A small heading above the actions */
+  title?: string;
+  /** Default: 'auto' */
+  align?: MenuAlign;
+  /** Default: 250 in the iOS design, 200 otherwise */
+  width?: number;
+  /** Default: 'menu' */
+  presentation?: MenuPresentation;
+  /** Open on a long press instead of a tap, as a context menu. Default: false */
+  openOnLongPress?: boolean;
+  disabled?: boolean;
+  onOpen?: () => void;
+  /** On a tap outside, Back or Escape, and before any action runs */
+  onClose?: () => void;
+  /** What screen readers call the trigger, such as 'More options' */
+  accessibilityLabel?: string;
+  /** The box around the trigger */
+  style?: StyleProp<ViewStyle>;
+  styles?: SlotStyles<MenuSlot>;
+  /** On the trigger; the menu gets `${testID}-menu` */
+  testID?: string;
+}
+
+export interface MenuDesign {
+  width: number;
+  rowHeight: number;
+  /** iOS puts icons after the label and a hairline between actions */
+  iconAtEnd: boolean;
+  separators: boolean;
+  /** A small centered title (iOS), or one at the start */
+  centeredTitle: boolean;
+}
+
+/** What `useMenu` hands the menu. Named so the build can emit the hook returning it. */
+export interface MenuState extends ActionPress {
+  anchor: FieldAnchor;
+  visible: boolean;
+  open: () => void;
+  close: () => void;
 }

@@ -37,6 +37,7 @@ export const PLAYGROUND = {
   pickerSheet: 'pickerSheet',
   bottomSheet: 'bottomSheet',
   actionSheet: 'actionSheet',
+  menu: 'menu',
 } as const;
 
 /**
@@ -110,6 +111,7 @@ export const CATALOG: readonly CatalogEntry[] = [
       { doc: 'components/picker-sheets', label: 'Picker sheets', playgrounds: [PLAYGROUND.pickerSheet] },
       { doc: 'components/bottom-sheet', label: 'BottomSheet', playgrounds: [PLAYGROUND.bottomSheet] },
       { doc: 'components/action-sheet', label: 'ActionSheet', playgrounds: [PLAYGROUND.actionSheet] },
+      { doc: 'components/menu', label: 'Menu', playgrounds: [PLAYGROUND.menu] },
     ],
   },
 ];

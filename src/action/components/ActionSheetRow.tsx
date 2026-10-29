@@ -2,11 +2,21 @@ import { Text, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { Touchable } from '../../core/components/Touchable';
-import { ACTION_SHEET_DESIGN, CHECK_MARK } from '../action.constants';
+import { CHECK_MARK } from '../action.constants';
 import { styles } from '../action.styles';
 import type { ActionSheetRowProps } from '../action.types';
 
-export const ActionSheetRow = ({ action, onPress, grouped, cancel = false, separated, theme, slots }: ActionSheetRowProps) => {
+export const ActionSheetRow = ({
+  action,
+  onPress,
+  grouped,
+  cancel = false,
+  separated,
+  rowHeight,
+  iconAtEnd = false,
+  theme,
+  slots,
+}: ActionSheetRowProps) => {
   const c = theme.colors;
   const color = action.disabled ? c.textDisabled : action.destructive ? c.danger : grouped ? c.primary : c.text;
   return (
@@ -22,7 +32,7 @@ export const ActionSheetRow = ({ action, onPress, grouped, cancel = false, separ
         styles.row,
         grouped && styles.groupedRow,
         {
-          minHeight: ACTION_SHEET_DESIGN[theme.design].rowHeight,
+          minHeight: rowHeight,
           paddingHorizontal: theme.spacing.lg,
           paddingVertical: theme.spacing.sm,
           gap: theme.spacing.md,
@@ -31,7 +41,7 @@ export const ActionSheetRow = ({ action, onPress, grouped, cancel = false, separ
         slots?.[cancel ? 'cancel' : 'action'],
       ]}
     >
-      {action.icon}
+      {iconAtEnd ? null : action.icon}
       <View style={grouped ? styles.groupedText : styles.text}>
         <Text
           style={[
@@ -61,6 +71,7 @@ export const ActionSheetRow = ({ action, onPress, grouped, cancel = false, separ
           {CHECK_MARK}
         </Text>
       ) : null}
+      {iconAtEnd ? action.icon : null}
     </Touchable>
   );
 };

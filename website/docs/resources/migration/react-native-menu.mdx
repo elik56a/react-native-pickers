@@ -1,0 +1,55 @@
+---
+title: Migrate from @react-native-menu/menu
+sidebar_label: '@react-native-menu/menu'
+description: "Switch from @react-native-menu/menu to React Native Pickers: Menu with an onPress per action instead of event ids, icons, subtitles, destructive, disabled and checked items, and a long-press context menu. Pure JavaScript: runs in Expo Go and on the web."
+---
+
+# Migrate from `@react-native-menu/menu`
+
+`MenuView` shows the system menu, so it needs a development build and its icons are SF Symbols and Android drawables. [`Menu`](../../components/menu) is pure JavaScript: it runs in Expo Go and on the web, looks like your other pickers, and takes any icon node. Each action has its own `onPress`, so there's no switch on the event id.
+
+```diff
+- import { MenuView } from '@react-native-menu/menu';
++ import { Menu } from '@elik56a/react-native-pickers';
+
+- <MenuView
+-   title="Note"
+-   onPressAction={({ nativeEvent }) => {
+-     if (nativeEvent.event === 'edit') edit();
+-     if (nativeEvent.event === 'delete') remove();
+-   }}
+-   actions={[
+-     { id: 'edit', title: 'Edit', image: 'pencil' },
+-     { id: 'delete', title: 'Delete', attributes: { destructive: true }, image: 'trash' },
+-   ]}
+- >
++ <Menu
++   title="Note"
++   accessibilityLabel="Note options"
++   actions={[
++     { label: 'Edit', onPress: edit, icon: <PencilIcon /> },
++     { label: 'Delete', destructive: true, onPress: remove, icon: <TrashIcon /> },
++   ]}
++ >
+    <MoreIcon />
+- </MenuView>
++ </Menu>
+```
+
+| @react-native-menu/menu | React Native Pickers |
+| --- | --- |
+| `actions[].id` + `onPressAction` | `onPress` on each action |
+| `actions[].title` / `subtitle` | `label` / `description` |
+| `actions[].image` / `imageColor` | `icon`: any node |
+| `actions[].titleColor` | `styles={{ actionLabel }}` |
+| `attributes.destructive` / `attributes.disabled` | `destructive` / `disabled` |
+| `attributes.hidden` | leave the action out of the array |
+| `state: 'on'` | `selected: true` (a ✓) |
+| `subactions` / `displayInline` | — |
+| `title` | `title` |
+| `shouldOpenOnLongPress` | `openOnLongPress` |
+| `onOpenMenu` / `onCloseMenu` | `onOpen` / `onClose` |
+| `isAnchoredToRight` | `align="end"` |
+| `themeVariant` | `PickersProvider colorScheme` |
+
+See [all migration guides](./index.mdx) for other libraries.
