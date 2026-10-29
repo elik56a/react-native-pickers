@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.0](https://github.com/elik56a/react-native-pickers/compare/v0.23.2...v0.24.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **emoji:** long-press an emoji for its skin tones ([#77](https://github.com/elik56a/react-native-pickers/issues/77)) ([a691b60](https://github.com/elik56a/react-native-pickers/commit/a691b603a73b609ee2335ab6529cfb03613ebd57))
+
 ## [0.23.2](https://github.com/elik56a/react-native-pickers/compare/v0.23.1...v0.23.2) (2026-10-29)
 
 
