@@ -3,10 +3,10 @@ import { useCallback, useMemo, useState } from 'react';
 import { usePickerPlatform } from '../../core/theme/ThemeProvider';
 import { FIELD_PRESENTATION } from '../sheet.constants';
 import type { FieldPresentation, FieldSheetContextValue, PickerFieldBaseProps } from '../sheet.types';
-import { resolveFieldPresentation } from '../sheet.utils';
+import { resolveFieldPresentation, shouldCollapseOnPress } from '../sheet.utils';
 import { useAnchor } from './useAnchor';
 
-/** Whether the field's picker is open, and where; opening does nothing while `disabled`. */
+/** Whether the field's picker is open, and where; opening does nothing while `disabled`. `toggle` is the field's tap. */
 export const usePickerField = ({
   disabled,
   presentation: presentationProp = FIELD_PRESENTATION.auto,
@@ -30,6 +30,8 @@ export const usePickerField = ({
     onClose?.();
   }, [onClose]);
 
+  const toggle = shouldCollapseOnPress(presentation, open) ? hide : show;
+
   const sheet = useMemo<FieldSheetContextValue>(
     () => ({
       presentation,
@@ -42,6 +44,7 @@ export const usePickerField = ({
     open,
     show,
     hide,
+    toggle,
     anchor,
     sheet,
   };

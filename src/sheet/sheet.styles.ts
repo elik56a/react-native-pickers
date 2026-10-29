@@ -22,6 +22,8 @@ export const styles = StyleSheet.create({
   dropdownOverlay: { position: 'absolute' },
   dropdown: { position: 'absolute', borderWidth: StyleSheet.hairlineWidth, paddingVertical: DROPDOWN_PADDING, overflow: 'hidden' },
   dropdownScroll: { flexGrow: 0, flexShrink: 1 },
+  inline: { overflow: 'hidden' },
+  inlineContent: { position: 'absolute', top: 0, left: 0, right: 0 },
   actions: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 24 },
   dropdownFooter: {
     paddingTop: 8,

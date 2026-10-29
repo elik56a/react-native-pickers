@@ -23,14 +23,15 @@ export const DateTimePickerSheet = ({
   ...rest
 }: DateTimePickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft(value ?? new Date(), visible);
+  const commit = (next: Date) => onConfirm(snapTime(next, rest));
+  const [draft, setDraft] = useDraft(value ?? new Date(), visible, { commit });
   const { design: resolvedDesign } = usePickerTheme(theme);
   const display = rest.display ?? DATETIME_DESIGN[resolvedDesign].display;
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}
       onConfirm={() => {
-        onConfirm(snapTime(draft, rest));
+        commit(draft);
         onClose();
       }}
     >

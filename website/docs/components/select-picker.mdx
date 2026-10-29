@@ -1,6 +1,6 @@
 ---
 title: React Native Select & Dropdown Picker
-description: "React Native select and dropdown picker: a searchable bottom sheet, modal or dropdown. Single or multi-select with chips, groups, icons, a clear button and server search (autocomplete)."
+description: "React Native select and dropdown picker: a searchable bottom sheet, modal, dropdown or inline list. Single or multi-select with chips, groups, icons, a clear button and server search (autocomplete)."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -499,6 +499,7 @@ export default function Example() {
 - `'bottomSheet'`: always a bottom sheet.
 - `'modal'`: always a centered modal.
 - `'dropdown'`: a popover under the field, as wide as the field. It flips above the field when there's more room there, and a tap outside closes it.
+- `'inline'`: the list expands under the field, pushing the content below it, and folds back up on a second tap or once an option is picked (with `closeOnSelect`). It's at most 320 px tall and scrolls past that.
 
 ```tsx live
 import { useState } from 'react';
@@ -625,7 +626,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown'` | `'auto'` | How the options open. `auto`: dropdown on the web, bottom sheet on native. |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown' \| 'inline'` | `'auto'` | How the options open. `auto`: dropdown on the web, bottom sheet on native. |
 | `sheetTitle` | `string` | `label` | Sheet header title. |
 | `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
 | `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |

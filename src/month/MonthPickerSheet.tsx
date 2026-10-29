@@ -21,7 +21,9 @@ export const MonthPickerSheet = ({
   ...rest
 }: MonthPickerSheetProps) => {
   const theme = useDesignOverride(themeProp, design);
-  const [draft, setDraft] = useDraft(startOfMonth(clampDate(value ?? new Date(), rest.minDate, rest.maxDate)), visible);
+  const [draft, setDraft] = useDraft(startOfMonth(clampDate(value ?? new Date(), rest.minDate, rest.maxDate)), visible, {
+    commit: onConfirm,
+  });
   return (
     <PickerSheet
       {...{ visible, onClose, title, confirmLabel, cancelLabel, showCancel, presentation, sheetProps, theme }}

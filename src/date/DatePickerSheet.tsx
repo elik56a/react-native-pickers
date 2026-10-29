@@ -35,12 +35,19 @@ export const DatePickerSheet = (props: DatePickerSheetProps) => {
   const display = getSheetDisplay(mode, displayProp);
   // The sheet holds whichever value shape the mode uses; `mode` ties value, draft and onConfirm together, so a new mode starts a new draft.
   const confirmDraft = onConfirm as (draft: DateDraft) => void;
-  const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible, mode);
+  const confirmsOnSelect = !!confirmOnSelect && mode === CALENDAR_MODE.single && display === PICKER_DISPLAY.calendar;
+  // Inline, a range commits once both ends are picked; confirmOnSelect commits on its own.
+  const commit = (next: DateDraft) => {
+    if (isDraftReady(mode, next)) confirmDraft(next);
+  };
+  const [draft, setDraft] = useDraft<DateDraft>(value ?? getEmptyDraft(mode, display), visible, {
+    resetKey: mode,
+    commit: confirmsOnSelect ? undefined : commit,
+  });
   const ready = isDraftReady(mode, draft);
   const resolved = usePickerTheme(theme);
   const headline =
     DATE_HEADLINE[resolved.design] && display === PICKER_DISPLAY.calendar ? formatDateHeadline(mode, draft, calendarProps.locale) : null;
-  const confirmsOnSelect = !!confirmOnSelect && mode === CALENDAR_MODE.single && display === PICKER_DISPLAY.calendar;
 
   const confirm = () => {
     if (!ready) return;

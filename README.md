@@ -130,7 +130,7 @@ Every picker comes three ways, with the same props.
 <DatePickerField label="Date" value={date} onConfirm={setDate} />
 ```
 
-Sheets open as a bottom sheet, or as a centered modal on wide web windows (`presentation="bottomSheet" | "modal"`). Fields and `SelectPicker` also open as a dropdown under the field, their default on the web (`presentation="dropdown"`). `PickerField` wraps any sheet of your own in a field.
+Sheets open as a bottom sheet, or as a centered modal on wide web windows (`presentation="bottomSheet" | "modal"`). Fields and `SelectPicker` also open as a dropdown under the field, their default on the web (`presentation="dropdown"`), or expand inline under it, pushing the content below, like the iOS Settings app (`presentation="inline"`). `PickerField` wraps any sheet of your own in a field.
 
 Button text is yours too: `confirmLabel`, `cancelLabel` and `showCancel` on any sheet or field.
 
@@ -348,7 +348,7 @@ A length of time, such as a timer or a workout, rather than a time of day. The v
 | `searchable` | `boolean` | more than 8 options |
 | `loadOptions` | `(query) => Promise<options>`: search a server | |
 | `clearable` / `onClear` | `boolean` / `() => void` | `false` |
-| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown'` | `'auto'`: dropdown on the web |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown' \| 'inline'` | `'auto'`: dropdown on the web |
 
 `loadOptions` waits for a pause in typing, shows a loader and ignores answers to older queries:
 
