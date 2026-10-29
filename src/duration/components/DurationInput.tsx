@@ -28,6 +28,7 @@ export const DurationInput = ({ columns, theme, style, testID }: DurationInputPr
             style={[
               textStyle(theme, 'xl'),
               timeStyles.fieldInput,
+              styles.field,
               {
                 borderRadius: theme.radius.sm,
                 backgroundColor: c.surface,

@@ -17,10 +17,13 @@ export const usePortalsInside = (frameRef: RefObject<HTMLDivElement | null>, ena
     if (!enabled || !frame) return;
     const pinned = new Set<HTMLElement>();
     // A touch on the phone or a sheet it opened claims the next portal; a touch anywhere else, like the props panel, lets it go.
+    // Focus only claims: an open sheet's focus trap pulls focus back into it when the other phone is touched.
     const track = (e: Event) => {
       const target = e.target as Node;
       const inside = frame.contains(target) || [...pinned].some((node) => node.isConnected && node.contains(target));
-      if (inside) activeFrame = frame;
+      if (e.type === 'focusin') {
+        if (frame.contains(target)) activeFrame = frame;
+      } else if (inside) activeFrame = frame;
       else if (activeFrame === frame) activeFrame = null;
     };
     document.addEventListener('pointerdown', track, true);
