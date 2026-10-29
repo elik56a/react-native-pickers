@@ -137,8 +137,9 @@ export const sectionOfRow = (row: EmojiRow): EmojiSectionKey => (row.type === EM
 export const getRowHeight = (row: EmojiRow | undefined, cellSize: number) =>
   row?.type === EMOJI_ROW_TYPE.header ? SECTION_HEADER_HEIGHT : cellSize;
 
-export const getRowKey = (row: EmojiRow, index: number) =>
-  row.type === EMOJI_ROW_TYPE.header ? `h-${row.key}` : `r-${row.section}-${index}`;
+/** Keyed by section and first emoji, not position, so rows keep their cells when recents are added above them. */
+export const getRowKey = (row: EmojiRow) =>
+  row.type === EMOJI_ROW_TYPE.header ? `h-${row.key}` : `r-${row.section}-${row.items[0]?.emoji}`;
 
 export const getCellSize = (width: number, columns: number) => (width > 0 ? Math.floor(width / columns) : FALLBACK_CELL_SIZE);
 

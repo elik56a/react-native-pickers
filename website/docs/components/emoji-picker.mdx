@@ -120,6 +120,8 @@ Use `defaultSkinTone` for uncontrolled, or `showSkinTones={false}` to hide the b
 
 Picked emojis go to a **Recently used** section at the top (up to `maxRecent`, default 24, most recent first). The list stores **base** emojis, so they re-render in whatever tone is current.
 
+In `EmojiPickerSheet` and `EmojiPickerField`, the sheet keeps them, so they last between openings. A pick that closes the sheet shows up under **Recently used** the next time it opens, not while it closes, so the grid doesn't jump as it fades or slides away, as on the iOS emoji keyboard.
+
 The picker keeps recents in memory by default. To persist them across launches, control them:
 
 ```tsx title="Persisting recents with AsyncStorage"

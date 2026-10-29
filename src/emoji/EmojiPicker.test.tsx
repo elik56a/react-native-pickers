@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 
 import { lightTheme } from '../core/theme/theme.constants';
 import type { Design } from '../core/theme/theme.types';
@@ -123,5 +123,19 @@ describe('EmojiPickerSheet', () => {
     await fireEvent.press(screen.getByLabelText('grinning face'));
     expect(onSelect).toHaveBeenCalledWith('😀', findEmoji('😀'));
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it('keeps the grid still while closing, and shows the pick under Recently used next time', async () => {
+    const sheet = (visible: boolean) => <EmojiPickerSheet visible={visible} onClose={jest.fn()} onSelect={jest.fn()} testID="emoji" />;
+    const { rerender } = await render(sheet(true));
+    await layoutGrid();
+    await fireEvent.press(screen.getByLabelText('grinning face'));
+    expect(screen.queryByText('Recently used')).toBeNull();
+
+    await rerender(sheet(false));
+    await act(() => jest.runAllTimers());
+    await rerender(sheet(true));
+    await layoutGrid();
+    expect(screen.getByText('Recently used')).toBeTruthy();
   });
 });
