@@ -2,7 +2,6 @@ import type { Locale } from '../core';
 import { safe } from '../core/utils/intl.utils';
 import type { SelectOption } from '../select';
 import {
-  COUNTRY_SHEET_HEIGHT,
   DEFAULT_ALL_COUNTRIES_LABEL,
   DEFAULT_PHONE_PATTERN,
   DEFAULT_PREFERRED_LABEL,
@@ -13,7 +12,7 @@ import {
   PHONE_PLACEHOLDER_DIGITS,
   REGIONAL_INDICATOR_A,
 } from './country.constants';
-import type { Country, CountryCode, CountryListOptions, CountryPickerProps, ParsedPhone, PhoneFormat } from './country.types';
+import type { Country, CountryCode, CountryListOptions, ParsedPhone, PhoneFormat } from './country.types';
 import { RAW_COUNTRY_DATA } from './data';
 
 let cache: Country[] | null = null;
@@ -103,15 +102,6 @@ export const buildCountryOptions = ({
     .sort((a, b) => compare(a.label, b.label));
   return [...pinned.map((c) => toOption(c, preferredLabel)), ...rest];
 };
-
-/** A long list opens the sheet at a fixed height, so it doesn't jump as search narrows it. */
-export const withSheetHeight = (sheet: CountryPickerProps['sheet']): CountryPickerProps['sheet'] => ({
-  ...sheet,
-  sheetProps: {
-    height: COUNTRY_SHEET_HEIGHT,
-    ...sheet?.sheetProps,
-  },
-});
 
 const digitsOf = (text: string) => text.replace(/\D/g, '');
 

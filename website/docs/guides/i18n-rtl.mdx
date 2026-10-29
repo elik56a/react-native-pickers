@@ -47,6 +47,8 @@ const locale = getLocales()[0]?.languageTag; // 'fr-CA'
 
 Hermes (the default engine) supports `Intl.DateTimeFormat` on iOS and Android. If a locale or feature is missing at runtime, every helper falls back to English names instead of throwing. `firstDayOfWeek` uses `Intl.Locale` week info where available; otherwise it defaults to Sunday, so pass `firstDayOfWeek={1}` explicitly if you need Monday everywhere.
 
+Hermes can't list or name countries and time zones (`Intl.DisplayNames`, `Intl.supportedValuesOf`), so [`CountryPicker`](../components/country-picker) and [`TimeZonePicker`](../components/time-zone-picker) ship their lists. Names show in the user's language where the engine provides them, and in English otherwise.
+
 ## Translating UI strings
 
 | Component | String props (defaults) |

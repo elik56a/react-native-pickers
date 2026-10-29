@@ -73,6 +73,11 @@ PhoneField         phone number input: flag + calling code button (CountryPicker
                    preferred countries exclude locale preferredLabel allCountriesLabel; styles: label field input countryButton dialCode chevron
                    a leading trunk 0 is dropped (not IT/SM/VA); pasting '+44…' switches country; ~50 country formats, others grouped in threes
                    utils: parsePhone(intl, current?) → {country?, nationalNumber}  formatNationalNumber(digits, code)  isValidPhone(digits, code)  toE164(digits, code)
+TimeZonePicker     a SelectPicker with all 418 IANA zones built in: value IANA name ('Europe/Lisbon') or string[] with multiple  onChange(id, option)
+                   label = city, description 'GMT+1 · Central European Standard Time' (zone name where the engine has it, else region); sorted by offset
+                   preferred (default: the device's zone, under 'Your time zone'; [] pins none) timeZones (only these) date (offsets for that moment, DST-aware) locale
+                   old names ('Asia/Calcutta', 'Europe/Kiev') accepted as value, reported as current ('Asia/Kolkata'); search matches city, IANA name, region, GMT/UTC offset, zone name
+                   utils: getDeviceTimeZone()  getTimeZoneOffset(id, date?) → minutes  formatGmtOffset(330) → 'GMT+5:30'  getTimeZoneName(id, locale?, date?)  normalizeTimeZone(id)  getTimeZone(id)  getAllTimeZones()
 HorizontalList<T>  items: {label,value,disabled?,icon?}[] (icon: node or ({selected,disabled,color}) => node)  value  onChange(value, item)  variant 'segmented'|'chips'  iconPosition 'left'|'right'|'top'|'bottom'  showArrows (‹ › scroll buttons, default false)  arrowPosition 'outside'|'overlay' (default 'outside')  renderArrow(side, disabled)  renderItem  (tap at the edge scrolls the next item into view)
 EmojiPicker        onSelect(emoji, data) columns=8 height=380 categories exclude maxEmojiVersion skinTone recent onRecentChange categoryBarPosition 'auto'(bottom on ios/material, top on web)|'top'|'bottom'
 ColorPicker        value: hex ('#E4572E', or '#E4572E80' with showAlpha)  onChange('#RRGGBB'|'#RRGGBBAA', fires while dragging)

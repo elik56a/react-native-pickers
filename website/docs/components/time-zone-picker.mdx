@@ -1,0 +1,108 @@
+---
+title: React Native Time Zone Picker
+description: "React Native time zone picker: every IANA zone with its GMT offset and name, sorted by offset, search by city, offset or IANA name, the device's zone on top. Works on Hermes; pure JS, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# TimeZonePicker
+
+`TimeZonePicker` is a React Native form field for choosing a time zone: all 418 IANA zones, each with its city, its offset from GMT and, where the JavaScript engine has it, its name, such as *Central European Summer Time*. The list is sorted by offset, with the device's own zone on top. It's a [`SelectPicker`](./select-picker) with the list built in, so it takes the same props: a bottom sheet on phones, a dropdown on the web, multiple selection, a clear button and the [iOS, Material or web design](../guides/designs).
+
+The value is the IANA name, such as `'Europe/Lisbon'`, ready to store or pass to `Intl.DateTimeFormat`.
+
+```tsx
+import { TimeZonePicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { TimeZonePicker } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [timeZone, setTimeZone] = useState<string | null>('Europe/Lisbon');
+  return <TimeZonePicker label="Time zone" value={timeZone} onChange={setTimeZone} />;
+}
+```
+
+Try searching `tokyo`, `utc+5:30`, `pacific` or `America/New_York`.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.timeZonePicker} />
+
+## Offsets and daylight saving
+
+Offsets are worked out for the current moment, so a zone with daylight saving shows its summer offset in summer and its winter one in winter. To show them for another moment, such as the date of a meeting being scheduled, pass `date`.
+
+```tsx live
+import { useState } from 'react';
+import { TimeZonePicker } from '@elik56a/react-native-pickers';
+
+const MEETING = new Date(2027, 0, 15, 15, 0);
+
+export default function Example() {
+  const [timeZone, setTimeZone] = useState<string | null>(null);
+  return <TimeZonePicker label="Meeting time zone" date={MEETING} value={timeZone} onChange={setTimeZone} />;
+}
+```
+
+## The device's zone and preferred zones
+
+The device's zone is shown first, under *Your time zone*. Pass `preferred` to pin others instead, in the order you give, or an empty array to pin none. `timeZones` limits the list to the zones you support.
+
+```tsx live
+import { useState } from 'react';
+import { TimeZonePicker } from '@elik56a/react-native-pickers';
+
+const OFFICES = ['America/New_York', 'Europe/London', 'Asia/Singapore'];
+
+export default function Example() {
+  const [timeZone, setTimeZone] = useState<string | null>(null);
+  return (
+    <TimeZonePicker label="Office" preferred={OFFICES} preferredLabel="Our offices" value={timeZone} onChange={setTimeZone} />
+  );
+}
+```
+
+## Old and new zone names
+
+Some zones were renamed: `Asia/Calcutta` is now `Asia/Kolkata`, `Europe/Kiev` is `Europe/Kyiv`. Phones report the new names, while some browsers still report the old ones. The picker accepts either as `value` and always reports the new one, so a value saved on one device shows on another. [`normalizeTimeZone`](#utilities) does the same for your own data.
+
+## On Hermes
+
+Hermes, React Native's default engine, can't list time zones, so the list ships with the library (8 KB, read on first use). Offsets come from `Intl.DateTimeFormat`, which Hermes has. Zone names such as *India Standard Time* show where the engine provides them; where it doesn't, each zone shows its region instead, as *GMT+5:30 · Asia*.
+
+## Utilities
+
+| Export | Description |
+| --- | --- |
+| `getDeviceTimeZone()` | The device's zone, e.g. `'Europe/Lisbon'`, or `undefined` |
+| `getTimeZoneOffset(id, date?)` | Minutes ahead of UTC at `date` (default: now), e.g. `330` for `'Asia/Kolkata'` |
+| `formatGmtOffset(minutes)` | `330` → `'GMT+5:30'`, `0` → `'GMT'` |
+| `getTimeZoneName(id, locale?, date?)` | `'Central European Summer Time'`, where the engine has names |
+| `normalizeTimeZone(id)` | `'Asia/Calcutta'` → `'Asia/Kolkata'` |
+| `getTimeZone(id)` | `{ id, alias?, city, region }` |
+| `getAllTimeZones()` | Every zone, sorted by name |
+
+```ts
+const zone = getDeviceTimeZone() ?? 'UTC';
+const label = `${getTimeZone(zone)?.city} (${formatGmtOffset(getTimeZoneOffset(zone) ?? 0)})`; // 'Lisbon (GMT+1)'
+```
+
+## Props
+
+Every [`SelectPicker` prop](./select-picker#props) works, apart from the server search ones (`options`, `loadOptions`, `onSearchChange`, `loading` and the rest): the list is built in. `value` is an IANA name, or an array of them with `multiple`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `timeZones` | `string[]` | all | Only these zones. |
+| `preferred` | `string[]` | the device's zone | Shown first, in this order, under their own header. `[]` pins none. |
+| `preferredLabel` | `string` | `'Your time zone'` | Header above `preferred`. |
+| `allTimeZonesLabel` | `string` | `'All time zones'` | Header above the rest. |
+| `date` | `Date` | now | The moment offsets are worked out for. |
+| `locale` | `string` | device locale | Language of the zone names, where the engine has them. |
+| `placeholder` | `string` | `'Select a time zone'` | Shown while nothing is selected. |
+| `searchPlaceholder` | `string` | `'Search time zones'` | Search field placeholder. |
+| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |

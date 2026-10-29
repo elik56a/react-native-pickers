@@ -1,5 +1,5 @@
 import { SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
-import type { SelectOption, SelectRow } from './select.types';
+import type { SelectOption, SelectPickerProps, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
 const fold = (s: string) =>
@@ -79,3 +79,14 @@ export const isOptionDisabled = <T>(option: SelectOption<T>, selected: boolean, 
   !!option.disabled || (atMax && !selected);
 
 export const getSelectedLabel = <T>(selected: SelectOption<T>[]) => selected.map((o) => o.label).join(', ');
+
+type SheetOptions = SelectPickerProps<unknown>['sheet'];
+
+/** A long built-in list opens its sheet at a fixed `height`, so it doesn't jump as search narrows it; the app's own height wins. */
+export const withSheetHeight = (sheet: SheetOptions, height: number): SheetOptions => ({
+  ...sheet,
+  sheetProps: {
+    height,
+    ...sheet?.sheetProps,
+  },
+});

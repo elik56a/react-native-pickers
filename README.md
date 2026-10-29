@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![downloads](https://img.shields.io/npm/dw/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![bundle size](https://img.shields.io/bundlephobia/minzip/@elik56a/react-native-pickers)](https://bundlephobia.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/elik56a/react-native-pickers/badge)](https://scorecard.dev/viewer/?uri=github.com/elik56a/react-native-pickers)
 
-**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, segmented control, emoji and color pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, plus the bottom sheets and form fields to put them in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <picture>
@@ -25,7 +25,7 @@
 - **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
 - **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
-- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, a phone number field, 1,923 emojis with skin tones and recents.
+- **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, a phone number field, a time zone picker, 1,923 emojis with skin tones and recents.
 - **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout, and full keyboard use on the web.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
 
@@ -105,6 +105,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`SelectList`](https://elik56a.github.io/react-native-pickers/docs/components/select-list) | The same list, inline |
 | [`CountryPicker`](https://elik56a.github.io/react-native-pickers/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
 | [`PhoneField`](https://elik56a.github.io/react-native-pickers/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
+| [`TimeZonePicker`](https://elik56a.github.io/react-native-pickers/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
 | [`HorizontalList`](https://elik56a.github.io/react-native-pickers/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`ColorPicker`](https://elik56a.github.io/react-native-pickers/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
 | [`EmojiPicker`](https://elik56a.github.io/react-native-pickers/docs/components/emoji-picker) | 1,923 emojis: categories, search, skin tones, recents, version filtering |
@@ -389,6 +390,19 @@ A phone number input: a flag and calling code button that opens the country list
 | `label` / `placeholder` | `string` | an example in the country's format |
 
 `parsePhone('+44 7911 123456')` returns `{ country: 'GB', nationalNumber: '7911123456' }`.
+
+### TimeZonePicker
+
+A `SelectPicker` with every IANA time zone built in, each with its city, GMT offset and name, sorted by offset with the device's zone on top. The value is the IANA name (`'Europe/Lisbon'`); old names like `'Asia/Calcutta'` are accepted and reported as the new ones.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `string`, or `string[]` with `multiple` | |
+| `preferred` | `string[]`: pinned on top | the device's zone |
+| `timeZones` | `string[]` | all |
+| `date` | `Date`: the moment offsets are for | now |
+
+`getDeviceTimeZone()`, `getTimeZoneOffset(id)` (minutes) and `formatGmtOffset(330)` → `'GMT+5:30'` are exported too.
 
 ### HorizontalList&lt;T&gt;
 
