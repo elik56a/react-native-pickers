@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://github.com/elik56a/react-native-pickers/compare/v0.18.0...v0.19.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **color:** add ColorPicker, with iOS tabs, Material swatches or a web spectrum ([#57](https://github.com/elik56a/react-native-pickers/issues/57)) ([3c318dc](https://github.com/elik56a/react-native-pickers/commit/3c318dc07a3e997cb836e5081eb9a01aad9aa195))
+
 ## [0.18.0](https://github.com/elik56a/react-native-pickers/compare/v0.17.0...v0.18.0) (2026-10-28)
 
 
