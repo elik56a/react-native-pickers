@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repository. To *use* the library in an app, read the API docs instead: [llms-full.txt](https://elik56a.github.io/react-native-pickers/llms-full.txt).
+Guidance for AI coding agents working in this repository. To *use* the library in an app, read the API docs instead: [llms-full.txt](https://react-native-pickers.dev/llms-full.txt).
 
 ## Project
 
