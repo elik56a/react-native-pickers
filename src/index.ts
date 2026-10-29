@@ -1,4 +1,5 @@
 export * from './calendar';
+export * from './color';
 export * from './core';
 export * from './country';
 export * from './date';

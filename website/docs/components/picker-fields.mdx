@@ -1,7 +1,7 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
 sidebar_label: Picker fields
-description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, WheelPickerField, EmojiPickerField and PickerField."
+description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -18,6 +18,7 @@ In a form, a picker usually isn't on screen. The user taps a field, picks in a b
 | `DateTimePickerField` | [`DateTimePickerSheet`](./date-time-picker#in-a-sheet) | `Oct 26, 2026, 9:30 AM` |
 | `DurationPickerField` | [`DurationPickerSheet`](./duration-picker#in-a-sheet) | `1 h 30 min` |
 | `MonthPickerField` | [`MonthPickerSheet`](./month-picker#in-a-sheet) | `October 2026` |
+| `ColorPickerField` | [`ColorPickerSheet`](./color-picker#in-a-sheet) | A swatch and `#E4572E` |
 | `WheelPickerField` | [`WheelPickerSheet`](./picker-sheets#wheelpickersheet) | The selected item's `label` |
 | `EmojiPickerField` | [`EmojiPickerSheet`](./picker-sheets#emojipickersheet) | `value`, the emoji you pass |
 | `PickerField` | Any sheet you render | `displayValue` |
@@ -346,7 +347,7 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 | `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). Passed on to the sheet it opens. |
 | `testID` | `string` | — | Test ID on the field box. |
 
-`EmojiPickerField` also takes `value?: string`, the emoji to show. `PickerField` takes the props above (no sheet props) and `children: (sheet: { visible, onClose }) => ReactNode`.
+`EmojiPickerField` also takes `value?: string`, the emoji to show. `PickerField` takes the props above (no sheet props), `children: (sheet: { visible, onClose }) => ReactNode`, and `icon`, a node shown before the value such as a colour swatch or a flag.
 
 ### Types
 

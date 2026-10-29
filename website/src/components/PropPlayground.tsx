@@ -64,7 +64,7 @@ interface PreviewProps {
 }
 
 /** Option sets longer than this, with more than LIST_MAX_OPTIONS, or with a label longer than LABEL_MAX_CHARS (`bottomSheet`), get a dropdown instead of the horizontal list. */
-const LIST_MAX_CHARS = 24;
+const LIST_MAX_CHARS = 20;
 const LIST_MAX_OPTIONS = 4;
 const LABEL_MAX_CHARS = 10;
 

@@ -26,6 +26,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`CountryPicker`](../components/country-picker) | Country field: flags, dialing codes, localized names |
 | [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
 | [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
+| [`ColorPicker`](../components/color-picker) | iOS's tabs, Google's swatch circles or the browser's spectrum; hex with opacity |
 | [`BottomSheet`](../components/bottom-sheet) | Animated sheet |
 
 ## Sheets
@@ -40,6 +41,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`MonthPickerSheet`](../components/month-picker#in-a-sheet) | MonthPicker in a sheet |
 | [`WheelPickerSheet<T>`](../components/picker-sheets#wheelpickersheet) | WheelPicker in a sheet |
 | [`EmojiPickerSheet`](../components/picker-sheets#emojipickersheet) | EmojiPicker in a sheet |
+| [`ColorPickerSheet`](../components/color-picker#in-a-sheet) | ColorPicker in a sheet |
 | [`useDraft(value, visible)`](../components/picker-sheets#usedraft) | Draft state that resets on open |
 
 ## Fields
@@ -54,6 +56,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`MonthPickerField`](../components/month-picker#in-a-form-field) | Field + MonthPickerSheet; shows `October 2026` |
 | [`WheelPickerField<T>`](../components/picker-fields) | Field + WheelPickerSheet; shows the item's label |
 | [`EmojiPickerField`](../components/picker-fields) | Field + EmojiPickerSheet; shows `value` |
+| [`ColorPickerField`](../components/color-picker#in-a-form-field) | Field + ColorPickerSheet; shows a swatch and the hex code |
 
 ## Theme
 
@@ -76,6 +79,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 ## Emoji utilities
 
 [`getAllEmojis`](./emoji-utils#getallemojis) · [`searchEmojis`](./emoji-utils#searchemojis) · [`findEmoji`](./emoji-utils#findemoji) · [`withSkinTone`](./emoji-utils#withskintone) · [`EMOJI_CATEGORIES`](./emoji-utils#constants) · [`DEFAULT_CATEGORY_LABELS`](./emoji-utils#constants) · [`DEFAULT_CATEGORY_ICONS`](./emoji-utils#constants)
+
+## Color utilities
+
+[`normalizeHex`](../components/color-picker#utilities) · [`hexToHsv`](../components/color-picker#utilities) · [`hsvToHex`](../components/color-picker#utilities) · [`withAlpha`](../components/color-picker#utilities) · [`DEFAULT_COLORS`](../components/color-picker#utilities)
 
 ## Country utilities
 
@@ -136,6 +143,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
+| ColorPicker | `labels` | `Grid`, `Spectrum`, `Sliders`, `Hue`, `Opacity`, `Red`, `Green`, `Blue`, `Hex`, `Copy`, `Copied`, `Custom colour`… |
 | DurationPicker | `labels` | `{ hours: 'h', minutes: 'min', seconds: 's' }` |
 
 ## Default values at a glance
@@ -153,6 +161,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `display` | `'wheel'` iOS · `'dial'` Material · `'list'` web | TimePicker |
 | `display` | `'wheel'` iOS · `'input'` Material · `'list'` web | DurationPicker |
 | `display` | `'wheel'` iOS · `'grid'` Material, web | MonthPicker |
+| `display` | `'tabs'` iOS · `'swatches'` Material · `'spectrum'` web | ColorPicker |
 | `display` / `timeDisplay` | `'wheel'` / `'wheel'` iOS · `'calendar'` / `'input'` Material · `'calendar'` / `'list'` web | DateTimePicker |
 | `timePosition` | `'beside'` web · `'below'` other | DateTimePicker |
 | `dayHeight` | `44` | Calendar |
