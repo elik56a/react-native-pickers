@@ -1,11 +1,10 @@
 ---
 title: React Native Country Picker
-sidebar_label: CountryPicker
 description: "React Native country picker with flags and dialing codes: 250 countries, search by name in any language, ISO code or +dial code, preferred countries on top, localized names, single or multiple. Pure JS, works in Expo Go."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { CountryPicker } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # CountryPicker
 
@@ -32,22 +31,7 @@ Try searching `deutschland`, `usa`, `+44` or `JP`. The value is the ISO 3166-1 a
 
 ## Try the props
 
-<PropPlayground
-  name="CountryPicker"
-  component={CountryPicker}
-  props={{ label: 'Country', preferred: ['US', 'GB', 'IL'] }}
-  value={(p) => (p.multiple ? ['FR', 'JP'] : 'FR')}
-  resetProp="onClear"
-  code="label=&quot;Country&quot; preferred={['US', 'GB', 'IL']} value={value} onChange={setValue}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'showDialCode', options: [false, true] },
-    { prop: 'multiple', options: [false, true] },
-    { prop: 'clearable', options: [false, true] },
-    { prop: 'locale', options: ['en', 'de', 'he', 'ja'], default: null },
-    { prop: 'disabled', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.countryPicker} />
 
 ## Preferred countries and dialing codes
 

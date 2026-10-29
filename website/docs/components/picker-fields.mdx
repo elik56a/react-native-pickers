@@ -1,11 +1,10 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
-sidebar_label: Picker fields
 description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # Picker fields
 
@@ -110,23 +109,7 @@ Each field takes the props of the sheet it opens, without `visible`, plus the [f
 
 ## Try the props
 
-<PropPlayground
-  name="DatePickerField"
-  component={DatePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Dates', placeholder: 'Pick dates' }}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' || p.mode === 'ranges' ? [] : null)}
-  code="label=&quot;Dates&quot; placeholder=&quot;Pick dates&quot; value={value} onConfirm={setValue}"
-  controls={[
-    { prop: 'mode', options: ['single', 'range', 'multiple', 'ranges'] },
-    { prop: 'display', options: ['calendar', 'wheel'] },
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'clearable', options: [false, true] },
-    { prop: 'confirmOnSelect', options: [false, true] },
-    { prop: 'disabled', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.pickerField} />
 
 ## Dropdown, bottom sheet or modal
 

@@ -1,5 +1,36 @@
 import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
+import { CATALOG } from './src/catalog/catalog.constants';
+import type { CatalogEntry, CatalogPage } from './src/catalog/catalog.types';
+
+type SidebarItemConfig = Extract<SidebarsConfig[string], unknown[]>[number];
+
+const toSidebarPage = (page: CatalogPage): SidebarItemConfig =>
+  page.pages
+    ? {
+        type: 'category',
+        label: page.label,
+        link: { type: 'doc', id: page.doc },
+        items: page.pages.map(toSidebarPage),
+      }
+    : {
+        type: 'doc',
+        id: page.doc,
+        label: page.label,
+      };
+
+/** The component pages come from the catalog, which the example app's drawer shows too. */
+const toSidebarItems = (catalog: readonly CatalogEntry[]): SidebarItemConfig[] =>
+  catalog.map((entry) =>
+    'doc' in entry
+      ? toSidebarPage(entry)
+      : {
+          type: 'category',
+          label: entry.label,
+          items: entry.pages.map(toSidebarPage),
+        }
+  );
+
 const sidebars: SidebarsConfig = {
   docs: [
     'intro',
@@ -13,45 +44,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Components',
       collapsed: false,
-      // Grouped by what the user picks, not how: a date picker is a calendar or wheels, a time picker wheels, a dial or a list.
-      items: [
-        {
-          type: 'category',
-          label: 'Date & time',
-          items: [
-            // Ranges are a mode of DatePicker, so their page sits under it; it stays a page of its own for search.
-            {
-              type: 'category',
-              label: 'DatePicker',
-              link: { type: 'doc', id: 'components/date-picker' },
-              items: ['components/date-range-picker'],
-            },
-            'components/date-wheel-picker',
-            'components/month-picker',
-            'components/week-strip',
-            'components/time-picker',
-            'components/duration-picker',
-            'components/date-time-picker',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Select',
-          items: ['components/select-picker', 'components/select-list', 'components/country-picker', 'components/horizontal-list'],
-        },
-        {
-          type: 'category',
-          label: 'Wheels',
-          items: ['components/wheel-picker', 'components/multi-wheel-picker'],
-        },
-        'components/emoji-picker',
-        'components/color-picker',
-        {
-          type: 'category',
-          label: 'Fields & sheets',
-          items: ['components/picker-fields', 'components/picker-sheets', 'components/bottom-sheet'],
-        },
-      ],
+      items: toSidebarItems(CATALOG),
     },
     {
       type: 'category',

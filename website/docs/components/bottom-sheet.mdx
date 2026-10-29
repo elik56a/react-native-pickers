@@ -1,12 +1,10 @@
 ---
 title: React Native Bottom Sheet
-sidebar_label: BottomSheet
 description: "Animated React Native bottom sheet with drag-to-dismiss, backdrop, header, footer and keyboard avoidance. Zero native code: no Reanimated or Gesture Handler."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { Text, View } from 'react-native';
-import { BottomSheet } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # BottomSheet
 
@@ -69,26 +67,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="BottomSheet"
-  component={BottomSheet}
-  opener="Open sheet"
-  props={{ title: 'Share' }}
-  code="visible={open} onClose={() => setOpen(false)} title=&quot;Share&quot;"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'bottomSheet', 'modal'] },
-    { prop: 'enableSwipeToClose', options: [true, false] },
-    { prop: 'draggable', options: [true, false], default: null },
-    { prop: 'expandable', options: [true, false] },
-    { prop: 'closeOnBackdropPress', options: [true, false] },
-  ]}
->
-  <View style={{ padding: 16, gap: 12 }}>
-    {['Copy link', 'Send via message', 'Share to…'].map((a) => (
-      <Text key={a} style={{ fontSize: 16 }}>{a}</Text>
-    ))}
-  </View>
-</PropPlayground>
+<PropPlayground {...PLAYGROUNDS.bottomSheet} />
 
 ## Bottom sheet or modal
 

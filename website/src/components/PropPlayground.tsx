@@ -5,52 +5,19 @@ import { useColorMode } from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
 
 import { PickersProvider, SelectPicker } from '@elik56a/react-native-pickers';
+import type { PlaygroundConfig, PlaygroundControl, PlaygroundOption, PlaygroundSelection } from '../catalog/catalog.types';
+import { isSwitch, needsSelect, optionLabel, sameOption } from '../catalog/catalog.utils';
+import { usePlayground } from '../catalog/hooks/usePlayground';
 import { PLATFORM } from '../home/device/device.constants';
 import type { Platform } from '../home/device/device.types';
 import { Choices } from './Choices';
 import { PlatformRow } from './PlatformSwitch';
 import styles from './PropPlayground.module.css';
 
-export type Option = string | number | boolean | readonly string[];
-type Selection = Record<string, Option>;
-
-interface Control {
-  prop: string;
-  options: readonly Option[];
-  /** The component's own default, left out of the code. `null` when it has none of these (always shown). Defaults to the first option. */
-  default?: Option | null;
-  /** The option selected at first. Defaults to `default`, then the first option. */
-  initial?: Option;
-  /** An option that leaves the prop out, so the component picks (e.g. 'auto': the design's default). Make it the first option. */
-  unset?: string;
-}
-
-interface PropPlaygroundProps {
-  /** A desktop-wide preview on the Web tab, for a picker that spreads out there (DateTimePicker's time beside its calendar). */
-  wide?: boolean;
-  /** Shows the iOS / Android / Web switch. Off for a component that looks and works the same everywhere, like the wheels. */
-  platforms?: boolean;
-  /** Component name used in the generated code. */
-  name: string;
-  component: ElementType;
-  controls: readonly Control[];
-  /** Props that never change, passed as-is. */
-  props?: Record<string, unknown>;
-  /** The fixed attributes as they should read in the code, e.g. `items={sizes} value={size} onChange={setSize}`. */
-  code?: string;
-  /** Makes the demo controlled. A function of the selection is re-run when a control changes (e.g. `mode` changes the value's type). */
-  value?: unknown;
-  /** The callback that receives the new value. */
-  changeProp?: string;
-  /** A callback that resets the value, e.g. `onClear`. */
-  resetProp?: string;
-  /** Renders a button that opens the component, which gets `visible` and `onClose`. */
-  opener?: string;
-  children?: ReactNode;
-}
+export type Option = PlaygroundOption;
 
 interface ControlRowProps {
-  control: Control;
+  control: PlaygroundControl;
   selected: Option;
   onChoose: (prop: string, option: Option) => void;
 }
@@ -63,14 +30,6 @@ interface PreviewProps {
   children?: ReactNode;
 }
 
-/** Option sets longer than this, with more than LIST_MAX_OPTIONS, or with a label longer than LABEL_MAX_CHARS (`bottomSheet`), get a dropdown instead of the horizontal list. */
-const LIST_MAX_CHARS = 20;
-const LIST_MAX_OPTIONS = 4;
-const LABEL_MAX_CHARS = 10;
-
-export const needsSelect = (labels: readonly string[]) =>
-  labels.join('').length > LIST_MAX_CHARS || labels.length > LIST_MAX_OPTIONS || labels.some((l) => l.length > LABEL_MAX_CHARS);
-
 /** Sized to the panel: shorter and smaller than a form field. */
 const SELECT_STYLES = {
   trigger: { minHeight: 38 },
@@ -79,10 +38,6 @@ const SELECT_STYLES = {
   optionLabel: { fontSize: 13 },
 };
 
-const label = (option: Option) => (Array.isArray(option) ? option.join(' · ') : String(option));
-
-const sameOption = (a: Option, b: Option | null) => JSON.stringify(a) === JSON.stringify(b);
-
 const toAttribute = (prop: string, option: Option) => {
   if (option === true) return prop;
   if (typeof option === 'string') return `${prop}="${option}"`;
@@ -90,7 +45,13 @@ const toAttribute = (prop: string, option: Option) => {
   return `${prop}={${String(option)}}`;
 };
 
-const toCode = (name: string, code: string | undefined, controls: readonly Control[], selection: Selection, hasChildren: boolean) => {
+const toCode = (
+  name: string,
+  code: string | undefined,
+  controls: readonly PlaygroundControl[],
+  selection: PlaygroundSelection,
+  hasChildren: boolean
+) => {
   const changed = controls
     .filter((c) => !sameOption(selection[c.prop], c.default === undefined ? c.options[0] : c.default))
     .map((c) => toAttribute(c.prop, selection[c.prop]));
@@ -101,8 +62,6 @@ const toCode = (name: string, code: string | undefined, controls: readonly Contr
   if (!hasChildren) return inline ? `${head} />` : `${head}/>`;
   return `${head}>\n  …\n</${name}>`;
 };
-
-const initialValue = (value: unknown, selection: Selection) => (typeof value === 'function' ? value(selection) : value);
 
 const Preview = ({ component: Component, props, platform, opener, children }: PreviewProps) => {
   const { colorMode } = useColorMode();
@@ -142,7 +101,7 @@ export const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProp
             presentation="dropdown"
             searchable={false}
             options={options.map((option, i) => ({
-              label: label(option),
+              label: optionLabel(option),
               value: i,
             }))}
             value={options.findIndex((o) => sameOption(selected, o))}
@@ -157,10 +116,9 @@ export const PropSelect = ({ prop, options, selected, onChoose }: PropSelectProp
 
 export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => {
   const { prop, options } = control;
-  const isSwitch = options.length === 2 && options.every((o) => typeof o === 'boolean');
-  const isSelect = needsSelect(options.map(label));
+  const isSelect = needsSelect(options.map(optionLabel));
 
-  if (isSwitch) {
+  if (isSwitch(options)) {
     return (
       <label className={`${styles.row} ${styles.inline}`}>
         <code className={styles.prop}>{prop}</code>
@@ -184,7 +142,7 @@ export const ControlRow = ({ control, selected, onChoose }: ControlRowProps) => 
       ) : (
         <Choices
           label={prop}
-          labels={options.map(label)}
+          labels={options.map(optionLabel)}
           selected={options.findIndex((o) => sameOption(selected, o))}
           onChoose={(i) => onChoose(prop, options[i])}
         />
@@ -201,34 +159,15 @@ export default function PropPlayground({
   props,
   code,
   value,
-  changeProp = 'onChange',
+  changeProp,
   resetProp,
   opener,
   wide,
   platforms = true,
   children,
-}: PropPlaygroundProps) {
-  const [selection, setSelection] = useState<Selection>(() =>
-    Object.fromEntries(controls.map((c) => [c.prop, c.initial ?? c.default ?? c.options[0]]))
-  );
-  const [current, setCurrent] = useState(() => initialValue(value, selection));
+}: PlaygroundConfig) {
+  const { selection, choose, live } = usePlayground({ name, component, controls, props, value, changeProp, resetProp });
   const [platform, setPlatform] = useState<Platform>(PLATFORM.web);
-
-  const choose = (prop: string, option: Option) => {
-    const next = { ...selection, [prop]: option };
-    setSelection(next);
-    if (typeof value === 'function') setCurrent(initialValue(value, next));
-  };
-
-  const chosen = Object.fromEntries(
-    Object.entries(selection).filter(([prop, option]) => controls.find((c) => c.prop === prop)?.unset !== option)
-  );
-  const live = {
-    ...props,
-    ...chosen,
-    ...(value === undefined ? {} : { value: current, [changeProp]: setCurrent }),
-    ...(resetProp ? { [resetProp]: () => setCurrent(initialValue(value, selection)) } : {}),
-  };
 
   return (
     <div className={styles.playground}>

@@ -7,6 +7,8 @@ description: Set up the repo, run the example app on web, iOS and Android, and f
 
 The repo is a pnpm workspace: the library at the root, an Expo example app in `example/` that renders against the library source (edits hot-reload), and this docs site in `website/`.
 
+The component pages and their prop playgrounds are listed once, in `website/src/catalog/` (`catalog.constants.ts` and `playgrounds.tsx`): the docs sidebar, each page's playground and the example app's drawer all read it, and the example app shows the docs' showcase screens. A new component or prop control goes there.
+
 ## Setup
 
 ```sh

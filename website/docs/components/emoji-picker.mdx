@@ -1,11 +1,10 @@
 ---
 title: React Native Emoji Picker
-sidebar_label: EmojiPicker
 description: React Native emoji picker with 1,923 emojis, categories, search, skin tones, recents and Emoji-version filtering, in native iOS, Material and web designs. No fonts or images to bundle.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { EmojiPicker, EmojiPickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # EmojiPicker
 
@@ -35,21 +34,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="EmojiPicker"
-  component={EmojiPicker}
-  props={{ onSelect: () => {} }}
-  code="onSelect={insert}"
-  controls={[
-    { prop: 'categoryBarPosition', options: ['auto', 'top', 'bottom'] },
-    { prop: 'columns', options: [6, 8, 10], default: 8 },
-    { prop: 'searchable', options: [true, false] },
-    { prop: 'showCategoryBar', options: [true, false] },
-    { prop: 'showSectionHeaders', options: [true, false] },
-    { prop: 'showSkinTones', options: [true, false] },
-    { prop: 'showRecent', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.emojiPicker} />
 
 ## `onSelect`
 
@@ -254,20 +239,7 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 
 `EmojiPickerField` opens the sheet from a field and shows `value`, the emoji you keep in state. Use `renderTrigger` for an icon button instead of a field. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="EmojiPickerField"
-  component={EmojiPickerField}
-  changeProp="onSelect"
-  resetProp="onClear"
-  props={{ label: 'Icon', placeholder: 'Pick an icon' }}
-  value={() => undefined}
-  code="label=&quot;Icon&quot; placeholder=&quot;Pick an icon&quot; value={icon} onSelect={setIcon}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'closeOnSelect', options: [true, false] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.emojiPickerField} />
 
 → [Picker fields](./picker-fields#custom-trigger)
 

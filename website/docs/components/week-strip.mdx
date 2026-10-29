@@ -1,11 +1,10 @@
 ---
 title: React Native Week Strip
-sidebar_label: WeekStrip
 description: "React Native week strip date picker: one week of days under its month, swipe or arrows to change weeks, marked dates with dots, min/max and disabled days. For bookings, schedules and fitness apps. iOS, Material and web designs, zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { WeekStrip } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # WeekStrip
 
@@ -35,19 +34,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="WeekStrip"
-  component={WeekStrip}
-  value={new Date(2026, 9, 28)}
-  code="value={day} onChange={setDay}"
-  controls={[
-    { prop: 'firstDayOfWeek', options: [0, 1, 6], default: null },
-    { prop: 'weekdayFormat', options: ['short', 'narrow'], default: null },
-    { prop: 'showHeader', options: [true, false] },
-    { prop: 'showWeekdays', options: [true, false] },
-    { prop: 'enableSwipe', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.weekStrip} />
 
 ## Marked and disabled days
 

@@ -1,11 +1,10 @@
 ---
 title: React Native Wheel Picker
-sidebar_label: WheelPicker
 description: "iOS-style 3D wheel picker for React Native with infinite loop, disabled items, tap-to-type, a flat variant, custom rows and haptics hooks. Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { WheelPicker, WheelPickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # WheelPicker
 
@@ -33,23 +32,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  platforms={false}
-  name="WheelPicker"
-  component={WheelPicker}
-  props={{ items: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] }}
-  value="M"
-  code="items={sizes} value={size} onChange={setSize}"
-  controls={[
-    { prop: 'variant', options: ['3d', 'flat'] },
-    { prop: 'loop', options: [false, true] },
-    { prop: 'visibleItems', options: [3, 5, 7], default: 5 },
-    { prop: 'textAlign', options: ['center', 'left', 'right'] },
-    { prop: 'showIndicator', options: [true, false] },
-    { prop: 'keyboardInput', options: [true, false] },
-    { prop: 'disabled', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.wheelPicker} />
 
 ## Items
 
@@ -350,20 +333,7 @@ import * as Haptics from 'expo-haptics';
 
 `WheelPickerField` opens the wheel in a sheet from a field, and shows the confirmed item's `label`. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="WheelPickerField"
-  component={WheelPickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Size', placeholder: 'Choose a size', items: ['XS', 'S', 'M', 'L', 'XL'] }}
-  value={() => undefined}
-  code="label=&quot;Size&quot; placeholder=&quot;Choose a size&quot; items={sizes} value={size} onConfirm={setSize}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'variant', options: ['3d', 'flat'] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.wheelPickerField} />
 
 → [Picker fields](./picker-fields)
 

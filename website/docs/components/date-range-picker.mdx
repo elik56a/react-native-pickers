@@ -1,11 +1,10 @@
 ---
 title: React Native Date Range Picker
-sidebar_label: Ranges & multiple dates
 description: React Native date range picker (check-in / check-out) with min/max nights, multiple ranges and multiple date selection, built on the calendar.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePicker, DatePickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # Date range & multiple dates
 
@@ -22,19 +21,7 @@ The modes are also exported as constants: `mode={CALENDAR_MODE.ranges}`.
 
 ## Try the props
 
-<PropPlayground
-  name="DatePicker"
-  component={DatePicker}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' || p.mode === 'ranges' ? [] : null)}
-  code="value={value} onChange={setValue}"
-  controls={[
-    { prop: 'mode', options: ['single', 'range', 'multiple', 'ranges'], initial: 'range' },
-    { prop: 'allowSingleDayRange', options: [true, false] },
-    { prop: 'maxRangeDays', options: [7, 14, 30], default: null, initial: 14 },
-    { prop: 'maxSelections', options: [3, 5, 10], default: null, initial: 5 },
-    { prop: 'maxRanges', options: [2, 3, 5], default: null, initial: 3 },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.dateRange} />
 
 ## Range
 
@@ -267,20 +254,7 @@ export default function Example() {
 
 `DatePickerField` takes the same props without `visible`, and shows the confirmed range (`Oct 5, 2026 – Oct 9, 2026`) or dates in the field. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="DatePickerField"
-  component={DatePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Your stay', placeholder: 'Add dates' }}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : [])}
-  code="label=&quot;Your stay&quot; placeholder=&quot;Add dates&quot; value={stay} onConfirm={setStay}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'mode', options: ['range', 'multiple', 'ranges'], default: null },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.dateRangeField} />
 
 → [Picker fields](./picker-fields)
 

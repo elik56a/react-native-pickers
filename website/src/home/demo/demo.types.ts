@@ -1,6 +1,4 @@
-import type { ColorMode } from '@docusaurus/theme-common';
-
-import type { DateRange } from '@elik56a/react-native-pickers';
+import type { DateRange, PickersProviderProps } from '@elik56a/react-native-pickers';
 import type { Platform } from '../device/device.types';
 import type { ValueOf } from '../home.types';
 import type { Playground } from '../playground/playground.types';
@@ -23,7 +21,7 @@ export interface BookingScreenProps {
 }
 
 export interface BookingAppProps extends BookingScreenProps {
-  colorMode: ColorMode;
+  colorMode: PickersProviderProps['colorScheme'];
 }
 
 /** A place shown with its flag, e.g. a city grouped by region */

@@ -1,11 +1,11 @@
 ---
 title: React Native Date Picker & Calendar
-sidebar_label: DatePicker
 description: "React Native calendar date picker with min/max dates, disabled days, marked dates and prices, any locale and swipe between months. iOS, Material and web designs. Zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DatePicker, DatePickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+import { DatePicker } from '@elik56a/react-native-pickers';
 
 # DatePicker & Calendar
 
@@ -42,22 +42,7 @@ This page covers single selection and everything the calendar shares. **Range** 
 
 ## Try the props
 
-<PropPlayground
-  name="DatePicker"
-  component={DatePicker}
-  value={(p) => (p.mode === 'range' ? { start: null, end: null } : p.mode === 'multiple' ? [] : null)}
-  code="value={value} onChange={setValue}"
-  controls={[
-    { prop: 'display', options: ['calendar', 'wheel'] },
-    { prop: 'mode', options: ['single', 'range', 'multiple'] },
-    { prop: 'weekdayFormat', options: ['auto', 'short', 'narrow'], unset: 'auto' },
-    { prop: 'firstDayOfWeek', options: [0, 1, 6], default: null, initial: 0 },
-    { prop: 'showOutsideDays', options: [true, false] },
-    { prop: 'fixedWeeks', options: [true, false] },
-    { prop: 'showWeekdays', options: [true, false] },
-    { prop: 'enableQuickJump', options: [true, false] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.datePicker} />
 
 ## Min and max dates
 
@@ -405,21 +390,7 @@ Each day is a button whose label is the full date ("Wednesday, October 14, 2026"
 
 `DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="DatePickerField"
-  component={DatePickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Due date', placeholder: 'Pick a date' }}
-  value={null}
-  code="label=&quot;Due date&quot; placeholder=&quot;Pick a date&quot; value={date} onConfirm={setDate}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'display', options: ['calendar', 'wheel'] },
-    { prop: 'confirmOnSelect', options: [false, true] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.datePickerField} />
 
 → [Picker fields](./picker-fields)
 

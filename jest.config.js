@@ -1,8 +1,19 @@
 module.exports = {
   preset: '@react-native/jest-preset',
-  roots: ['<rootDir>/src', '<rootDir>/website/src/live', '<rootDir>/website/src/home', '<rootDir>/website/src/showcase'],
+  roots: [
+    '<rootDir>/src',
+    '<rootDir>/website/src/live',
+    '<rootDir>/website/src/home',
+    '<rootDir>/website/src/showcase',
+    '<rootDir>/website/src/catalog',
+    '<rootDir>/example/src',
+  ],
   // The website imports the library by its package name; Docusaurus aliases it to the source, so Jest does too.
-  moduleNameMapper: { '^@elik56a/react-native-pickers$': '<rootDir>/src/index.ts' },
+  // React resolves from the root too: the example app pins its own copy, and hooks there must share the renderer's.
+  moduleNameMapper: {
+    '^@elik56a/react-native-pickers$': '<rootDir>/src/index.ts',
+    '^react$': '<rootDir>/node_modules/react',
+  },
   // pnpm nests packages under node_modules/.pnpm/<id>/node_modules, which the preset's default pattern doesn't expect.
   transformIgnorePatterns: ['node_modules/(?!(\\.pnpm/[^/]+/node_modules/)?((jest-)?react-native|@react-native(-community)?)/)'],
   // A file's first test also pays for loading React Native, which can pass 5s on a busy CI runner.

@@ -1,7 +1,6 @@
 import type { ComponentType } from 'react';
 
-import type { ColorMode } from '@docusaurus/theme-common';
-
+import type { PickersProviderProps } from '@elik56a/react-native-pickers';
 import { PickersProvider } from '@elik56a/react-native-pickers';
 import { BookingScreen } from '../home/demo/components/BookingScreen';
 import { AlarmScreen } from './components/AlarmScreen';
@@ -32,14 +31,16 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
 
 interface ShowcaseAppProps extends ScreenProps {
   screen: ShowcaseScreenKey;
-  colorMode: ColorMode;
+  colorMode: PickersProviderProps['colorScheme'];
+  /** The look, over the platform's own; the example app switches it. */
+  design?: PickersProviderProps['design'];
 }
 
 /** One showcase app, running the real pickers in the device's design. */
-export const ShowcaseApp = ({ screen, colorMode, ...props }: ShowcaseAppProps) => {
+export const ShowcaseApp = ({ screen, colorMode, design, ...props }: ShowcaseAppProps) => {
   const Screen = SCREENS[screen];
   return (
-    <PickersProvider colorScheme={colorMode} platform={props.platform}>
+    <PickersProvider colorScheme={colorMode} platform={props.platform} design={design}>
       <Screen {...props} />
     </PickersProvider>
   );

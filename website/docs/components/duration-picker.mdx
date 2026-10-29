@@ -1,11 +1,10 @@
 ---
 title: React Native Duration Picker
-sidebar_label: DurationPicker
 description: "React Native duration and countdown timer picker: iOS wheels, Material number boxes or columns to click on the web, with unit labels, the value in seconds, min/max and minute intervals. In a bottom sheet or a form field. Zero native code, works in Expo Go."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
-import { DurationPicker, DurationPickerField } from '@elik56a/react-native-pickers';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # DurationPicker
 
@@ -37,20 +36,7 @@ export default function Example() {
 
 ## Try the props
 
-<PropPlayground
-  name="DurationPicker"
-  component={DurationPicker}
-  value={5400}
-  code="value={seconds} onChange={setSeconds}"
-  controls={[
-    { prop: 'display', options: ['auto', 'wheel', 'input', 'list'], unset: 'auto' },
-    { prop: 'showHours', options: [true, false] },
-    { prop: 'showSeconds', options: [false, true] },
-    { prop: 'minuteInterval', options: [1, 5, 15], default: 1 },
-    { prop: 'loop', options: [true, false] },
-    { prop: 'variant', options: ['3d', 'flat'] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.durationPicker} />
 
 ## The value is in seconds
 
@@ -143,20 +129,7 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 
 `DurationPickerField` opens the sheet and shows the confirmed duration, like `1 h 30 min`. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
 
-<PropPlayground
-  name="DurationPickerField"
-  component={DurationPickerField}
-  changeProp="onConfirm"
-  resetProp="onClear"
-  props={{ label: 'Timer', placeholder: 'Set a timer', minuteInterval: 5 }}
-  value={() => undefined}
-  code="label=&quot;Timer&quot; placeholder=&quot;Set a timer&quot; minuteInterval={5} value={seconds} onConfirm={setSeconds}"
-  controls={[
-    { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal'] },
-    { prop: 'showSeconds', options: [false, true] },
-    { prop: 'clearable', options: [false, true] },
-  ]}
-/>
+<PropPlayground {...PLAYGROUNDS.durationPickerField} />
 
 → [Picker fields](./picker-fields)
 
