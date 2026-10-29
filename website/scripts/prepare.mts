@@ -30,14 +30,19 @@ const releaseLines = () => {
   return lines;
 };
 
-const sidebarsAt = (tag: string): unknown => {
-  const { outputText } = ts.transpileModule(git('show', `${tag}:website/sidebars.ts`), {
+// Runs a TS module as it was at the tag. Its relative imports (sidebars.ts reads the catalog) load from the same tag;
+// package imports are type-only, so the transpiler drops them.
+const moduleAt = (tag: string, file: string): Record<string, unknown> => {
+  const { outputText } = ts.transpileModule(git('show', `${tag}:${file}`), {
     compilerOptions: { module: ts.ModuleKind.CommonJS },
   });
-  const module = { exports: {} as { default?: unknown } };
-  vm.runInNewContext(outputText, { module, exports: module.exports });
-  return module.exports.default;
+  const module = { exports: {} as Record<string, unknown> };
+  const require = (spec: string) => moduleAt(tag, `${path.posix.join(path.posix.dirname(file), spec)}.ts`);
+  vm.runInNewContext(outputText, { module, exports: module.exports, require });
+  return module.exports;
 };
+
+const sidebarsAt = (tag: string): unknown => moduleAt(tag, 'website/sidebars.ts').default;
 
 const writeVersions = () => {
   const docsDir = path.join(site, 'versioned_docs');
