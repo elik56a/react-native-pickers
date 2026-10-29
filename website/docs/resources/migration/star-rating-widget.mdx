@@ -1,0 +1,38 @@
+---
+title: Migrate from react-native-star-rating-widget
+sidebar_label: 'star-rating-widget'
+description: "Switch from react-native-star-rating-widget to React Native Pickers: Rating with tap and drag, half steps, read-only fractions, your own icon, and iOS, Material and web theming. No SVG dependency."
+---
+
+# Migrate from `react-native-star-rating-widget`
+
+```diff
+- import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
++ import { Rating } from '@elik56a/react-native-pickers';
+
+- <StarRating rating={stars} onChange={setStars} />
++ <Rating step={0.5} value={stars} onChange={setStars} />
+
+- <StarRatingDisplay rating={4.5} />
++ <Rating readOnly value={4.5} />
+```
+
+| star-rating-widget | React Native Pickers |
+| --- | --- |
+| `rating` / `onChange` | `value` / `onChange`, once on a tap or the end of a drag |
+| `StarRatingDisplay` | `readOnly` |
+| `maxStars` | `max` |
+| `starSize` | `size` |
+| `color` / `emptyColor` | `color` / `emptyColor` |
+| `step="half"` (default) | `step={0.5}`; the default here is `1` |
+| `step="quarter"` | `step={0.25}` |
+| `enableSwiping` | always on: tap or drag |
+| `onRatingStart` / `onRatingEnd` | `onChange` fires once, when the drag ends |
+| `StarIconComponent` | `renderIcon={({ index, filled, color, size }) => …}` |
+| `starStyle` / `starContainerStyle` | `styles={{ item }}` / `styles={{ container }}` |
+| `accessibilityLabel` | `accessibilityLabel`, and `formatValue` for the value |
+| `animationConfig` | — |
+
+Mind the default step: half stars here need `step={0.5}`. [`Rating`](../../components/rating) has no SVG dependency, so there's nothing else to install.
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

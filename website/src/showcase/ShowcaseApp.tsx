@@ -10,11 +10,13 @@ import { DisplayScreen } from './components/DisplayScreen';
 import { FlightsScreen } from './components/FlightsScreen';
 import { HabitScreen } from './components/HabitScreen';
 import { MeetingScreen } from './components/MeetingScreen';
+import { ReviewScreen } from './components/ReviewScreen';
 import { ShopScreen } from './components/ShopScreen';
 import { SignUpScreen } from './components/SignUpScreen';
 import { TableScreen } from './components/TableScreen';
 import { TimerScreen } from './components/TimerScreen';
 import { TripsScreen } from './components/TripsScreen';
+import { VerifyScreen } from './components/VerifyScreen';
 import type { ScreenProps, ShowcaseScreenKey } from './showcase.types';
 
 const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
@@ -31,6 +33,8 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   trips: TripsScreen,
   delivery: DeliveryScreen,
   display: DisplayScreen,
+  verify: VerifyScreen,
+  review: ReviewScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {

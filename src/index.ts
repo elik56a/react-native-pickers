@@ -9,6 +9,7 @@ export * from './emoji';
 export * from './list';
 export * from './month';
 export * from './otp';
+export * from './rating';
 export * from './select';
 export * from './sheet';
 export * from './slider';

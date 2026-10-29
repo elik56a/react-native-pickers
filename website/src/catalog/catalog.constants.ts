@@ -32,6 +32,7 @@ export const PLAYGROUND = {
   colorPickerField: 'colorPickerField',
   slider: 'slider',
   otpField: 'otpField',
+  rating: 'rating',
   pickerField: 'pickerField',
   pickerSheet: 'pickerSheet',
   bottomSheet: 'bottomSheet',
@@ -100,6 +101,7 @@ export const CATALOG: readonly CatalogEntry[] = [
   { doc: 'components/color-picker', label: 'ColorPicker', playgrounds: [PLAYGROUND.colorPicker, PLAYGROUND.colorPickerField] },
   { doc: 'components/slider', label: 'Slider', playgrounds: [PLAYGROUND.slider] },
   { doc: 'components/otp-field', label: 'OtpField', playgrounds: [PLAYGROUND.otpField] },
+  { doc: 'components/rating', label: 'Rating', playgrounds: [PLAYGROUND.rating] },
   {
     label: 'Fields & sheets',
     pages: [
