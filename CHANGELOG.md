@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/elik56a/react-native-pickers/compare/v0.19.1...v0.20.0) (2026-10-29)
+
+
+### ✨ Features
+
+* **example:** every component with its docs playground, and the showcase screens ([#60](https://github.com/elik56a/react-native-pickers/issues/60)) ([1f77194](https://github.com/elik56a/react-native-pickers/commit/1f7719470858fca43db2203f51098fa426b0181d))
+
 ## [0.19.1](https://github.com/elik56a/react-native-pickers/compare/v0.19.0...v0.19.1) (2026-10-29)
 
 
