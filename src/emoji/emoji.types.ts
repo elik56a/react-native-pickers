@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { RefObject } from 'react';
 import type { HostInstance, StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
@@ -181,6 +182,14 @@ export interface TonePopoverTarget {
   emoji: Emoji;
   left: number;
   top: number;
+}
+
+export interface TonePopover {
+  rootRef: RefObject<HostInstance | null>;
+  target: TonePopoverTarget | null;
+  open: EmojiLongPress;
+  close: () => void;
+  pick: (tone: SkinTone) => void;
 }
 
 export interface SkinTonePopoverProps extends TonePopoverTarget {

@@ -1,14 +1,14 @@
 import { useCallback, useRef, useState } from 'react';
 import type { HostInstance } from 'react-native';
 
-import type { Emoji, EmojiLongPress, SkinTone, TonePopoverTarget } from '../emoji.types';
+import type { Emoji, EmojiLongPress, SkinTone, TonePopover, TonePopoverTarget } from '../emoji.types';
 import { getTonePopoverPosition, withSkinTone } from '../emoji.utils';
 
 /**
  * The skin tones a long press on an emoji opens, like an emoji keyboard. `rootRef` goes on the picker: the popover is placed inside it,
  * measured against it in the same coordinates as the pressed row, so it lines up in a sheet or a modal too.
  */
-export const useTonePopover = (size: number, select: (emoji: Emoji, char: string) => void) => {
+export const useTonePopover = (size: number, select: (emoji: Emoji, char: string) => void): TonePopover => {
   const rootRef = useRef<HostInstance>(null);
   const [target, setTarget] = useState<TonePopoverTarget | null>(null);
 
