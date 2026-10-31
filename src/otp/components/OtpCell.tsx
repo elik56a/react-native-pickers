@@ -7,7 +7,7 @@ import { styles } from '../otp.styles';
 import type { OtpCellProps } from '../otp.types';
 
 /** One character of the code in a box drawn like the design's text fields, with the caret while it's next to fill. */
-export const OtpCell = ({ cell, caretOpacity, look, theme, slots, testID }: OtpCellProps) => {
+export const OtpCell = ({ cell, caretOpacity, invalid, look, theme, slots, testID }: OtpCellProps) => {
   const c = theme.colors;
   const borderWidth = cell.focused ? look.openBorderWidth : 1;
   const fontSize = theme.typography.sizes.xl;
@@ -20,7 +20,7 @@ export const OtpCell = ({ cell, caretOpacity, look, theme, slots, testID }: OtpC
           height: look.minHeight,
           backgroundColor: c.background,
           borderWidth,
-          borderColor: cell.focused ? c.primary : c[look.outline],
+          borderColor: invalid ? c.danger : cell.focused ? c.primary : c[look.outline],
           borderRadius: theme.radius.md,
         },
         cell.focused && look.focusRing && { boxShadow: `0px 0px 0px ${FOCUS_RING_WIDTH}px ${c.primaryMuted}` },

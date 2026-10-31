@@ -3,7 +3,9 @@ import { TextInput, View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { coreStyles } from '../core/core.styles';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { FieldFrame } from '../sheet/components/FieldFrame';
 import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN } from '../sheet/sheet.constants';
+import { getFieldAccessibility } from '../sheet/sheet.utils';
 import { OtpCell } from './components/OtpCell';
 import { useOtpField } from './hooks/useOtpField';
 import { DEFAULT_OTP_LABEL, OTP_AUTO_COMPLETE, OTP_INPUT_MODE } from './otp.constants';
@@ -17,6 +19,8 @@ export const OtpField = (props: OtpFieldProps) => {
     secureTextEntry = false,
     autoFocus,
     disabled = false,
+    error,
+    helperText,
     accessibilityLabel = DEFAULT_OTP_LABEL,
     style,
     styles: slots,
@@ -30,23 +34,26 @@ export const OtpField = (props: OtpFieldProps) => {
 
   return (
     <View style={[{ opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1 }, style]}>
-      <View
-        style={[styles.row, { gap: theme.spacing.sm }, slots?.container]}
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-      >
-        {otp.cells.map((cell) => (
-          <OtpCell
-            key={cell.key}
-            cell={cell}
-            caretOpacity={otp.caretOpacity}
-            look={look}
-            theme={theme}
-            slots={slots}
-            testID={testID ? `${testID}-cell-${cell.key}` : undefined}
-          />
-        ))}
-      </View>
+      <FieldFrame error={error} helperText={helperText} centered theme={theme} slots={slots}>
+        <View
+          style={[styles.row, { gap: theme.spacing.sm }, slots?.container]}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
+          {otp.cells.map((cell) => (
+            <OtpCell
+              key={cell.key}
+              cell={cell}
+              caretOpacity={otp.caretOpacity}
+              invalid={!!error}
+              look={look}
+              theme={theme}
+              slots={slots}
+              testID={testID ? `${testID}-cell-${cell.key}` : undefined}
+            />
+          ))}
+        </View>
+      </FieldFrame>
       <TextInput
         value={otp.code}
         onChangeText={otp.changeText}
@@ -61,7 +68,7 @@ export const OtpField = (props: OtpFieldProps) => {
         secureTextEntry={secureTextEntry}
         autoFocus={autoFocus}
         editable={!disabled}
-        accessibilityLabel={accessibilityLabel}
+        {...getFieldAccessibility({ name: accessibilityLabel, error })}
         style={[styles.input, coreStyles.noOutline]}
         testID={testID}
       />

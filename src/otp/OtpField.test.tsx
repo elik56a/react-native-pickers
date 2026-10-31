@@ -18,6 +18,15 @@ describe('OtpField', () => {
     expect(cellText(3)).toHaveTextContent('4');
   });
 
+  it('shows the helper text, replaced by the error message, which screen readers hear on the field', async () => {
+    const { rerender } = await render(<OtpField helperText="Sent to •••• 0123" />);
+    expect(screen.getByText('Sent to •••• 0123')).toBeTruthy();
+    await rerender(<OtpField helperText="Sent to •••• 0123" error="That code didn’t match" />);
+    expect(screen.queryByText('Sent to •••• 0123')).toBeNull();
+    expect(screen.getByText('That code didn’t match')).toBeTruthy();
+    expect(input().props.accessibilityHint).toBe('That code didn’t match');
+  });
+
   it('takes the code out of a pasted message and ignores letters on a numeric field', async () => {
     const onChange = jest.fn();
     await render(<OtpField onChange={onChange} />);
