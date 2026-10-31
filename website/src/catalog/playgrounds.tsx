@@ -36,6 +36,7 @@ import {
 } from '@elik56a/react-native-pickers';
 import { styles } from './catalog.styles';
 import type { PlaygroundConfig, PlaygroundKey, PlaygroundSelection } from './catalog.types';
+import { MenuTrigger } from './components/MenuTrigger';
 
 const PRESENTATION = { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal', 'inline'] } as const;
 const CLEARABLE = { prop: 'clearable', options: [false, true] } as const;
@@ -583,6 +584,7 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
     props: {
       accessibilityLabel: 'Note options',
       style: { alignSelf: 'center' },
+      styles: { trigger: styles.pill },
       actions: [
         { label: 'Edit', icon: <Text>✏️</Text> },
         { label: 'Duplicate', icon: <Text>📄</Text> },
@@ -598,6 +600,6 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'openOnLongPress', options: [false, true] },
       { prop: 'disabled', options: [false, true] },
     ],
-    children: <Text style={styles.menuTrigger}>⋯ Options</Text>,
+    children: <MenuTrigger />,
   },
 };

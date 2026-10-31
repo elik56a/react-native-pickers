@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import type { CountryCode } from '@elik56a/react-native-pickers';
 import type { BookingScreenProps } from '../home/demo/demo.types';
 import type { ValueOf } from '../home/home.types';
 import type { ALBUM_SORT, SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
@@ -44,6 +45,22 @@ export interface SliderSettingProps {
   value: string;
   children: ReactNode;
 }
+
+export interface ApplicationValues {
+  role: string | null;
+  country: CountryCode | null;
+  /** E.164, '' when empty */
+  phone: string;
+  /** From PhoneField: the number has the country's length */
+  phoneValid: boolean;
+  startDate: Date | null;
+  interview?: Date;
+  skills: string[];
+}
+
+export type ApplicationField = Exclude<keyof ApplicationValues, 'phoneValid'>;
+
+export type ApplicationErrors = Partial<Record<ApplicationField, string>>;
 
 export interface TimerPreset {
   label: string;

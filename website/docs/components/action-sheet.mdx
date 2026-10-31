@@ -16,22 +16,16 @@ import { ActionSheet } from '@elik56a/react-native-pickers';
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text } from 'react-native';
+import { Text } from 'react-native';
 import { ActionSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   const [last, setLast] = useState('Nothing yet');
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
-          Photo options
-        </Text>
-      </Pressable>
+      <DemoButton title="Photo options" onPress={() => setOpen(true)} />
       <Text style={{ marginTop: 12, textAlign: 'center' }}>Last action: {last}</Text>
       <ActionSheet
         visible={open}
@@ -70,8 +64,9 @@ Icons suit the Material and web rows, where they line up at the start. Switch th
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text } from 'react-native';
+import { Text } from 'react-native';
 import { ActionSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const icon = (emoji) => <Text style={{ fontSize: 20 }}>{emoji}</Text>;
 
@@ -79,14 +74,7 @@ export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
-          Share
-        </Text>
-      </Pressable>
+      <DemoButton title="Share" onPress={() => setOpen(true)} />
       <ActionSheet
         visible={open}
         onClose={() => setOpen(false)}
@@ -109,8 +97,8 @@ For a short choice that applies right away, such as a sort order or video qualit
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text } from 'react-native';
 import { ActionSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const SORTS = ['Newest', 'Oldest', 'Most liked', 'Name'];
 
@@ -119,14 +107,7 @@ export default function Example() {
   const [sort, setSort] = useState('Newest');
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
-          Sort by: {sort}
-        </Text>
-      </Pressable>
+      <DemoButton title={`Sort by: ${sort}`} onPress={() => setOpen(true)} />
       <ActionSheet
         visible={open}
         onClose={() => setOpen(false)}
@@ -150,23 +131,15 @@ For a longer list, or one with search, use [`SelectPicker`](./select-picker).
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text } from 'react-native';
 import { ActionSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   const [notes, setNotes] = useState(3);
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        disabled={notes === 0}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12, opacity: notes ? 1 : 0.4 }}
-      >
-        <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}>
-          Delete a note ({notes} left)
-        </Text>
-      </Pressable>
+      <DemoButton title={`Delete a note (${notes} left)`} onPress={() => setOpen(true)} disabled={!notes} />
       <ActionSheet
         visible={open}
         onClose={() => setOpen(false)}
