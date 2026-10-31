@@ -9,6 +9,7 @@ import {
   PEN_IMPORT_URLS,
   PEN_IMPORTS,
   PEN_JSX_PRAGMA,
+  PEN_NAMESPACES,
   ROOT_CSS,
   SANDBOX_TITLE,
   SNACK_URL,
@@ -21,7 +22,7 @@ import {
   WEB_DEV_DEPENDENCIES,
   WEB_TEMPLATE_FILES,
 } from './live.constants';
-import type { ProjectFiles } from './live.types';
+import type { ExampleModules, ProjectFiles } from './live.types';
 
 /** Only a whole file (imports + a default export) runs outside the docs; bare snippets lean on the docs' scope. */
 export const canOpenInSandbox = (code: string) => /export\s+default\s+function/.test(code);
@@ -44,15 +45,26 @@ export const toExampleName = (code: string) => {
   return component ? `${component}Example` : 'Example';
 };
 
-export const toSnackUrl = (code: string) => {
+const importsModule = (code: string, name: string) => new RegExp(`from\\s*['"]\\./${name}['"]`).test(code);
+
+/** The docs' modules the example imports, such as `./DemoButton`, as `[name, source]`. */
+export const findExampleModules = (code: string, modules: ExampleModules) =>
+  Object.entries(modules).filter(([name]) => importsModule(code, name));
+
+/** The example's modules as files in `dir`, next to the example. */
+const toModuleFiles = (code: string, modules: ExampleModules, dir = ''): ProjectFiles =>
+  Object.fromEntries(findExampleModules(code, modules).map(([name, source]) => [`${dir}${name}.tsx`, source]));
+
+export const toSnackUrl = (code: string, modules: ExampleModules = {}) => {
   const name = toExampleName(code);
+  const files = { ...toModuleFiles(code, modules), [`${name}.tsx`]: code };
   const params = {
     name: SANDBOX_TITLE,
     platform: 'web',
     dependencies: PACKAGE,
     files: JSON.stringify({
       'App.tsx': { type: 'CODE', contents: toSandboxApp(name) },
-      [`${name}.tsx`]: { type: 'CODE', contents: code },
+      ...Object.fromEntries(Object.entries(files).map(([path, contents]) => [path, { type: 'CODE', contents }])),
     }),
   };
   const query = Object.entries(params)
@@ -62,7 +74,7 @@ export const toSnackUrl = (code: string) => {
 };
 
 /** A Vite + react-native-web project running the example as `src/<name>.tsx`. */
-export const toWebProject = (code: string): ProjectFiles => {
+export const toWebProject = (code: string, modules: ExampleModules = {}): ProjectFiles => {
   const name = toExampleName(code);
   return {
     'package.json': JSON.stringify(
@@ -82,6 +94,7 @@ export const toWebProject = (code: string): ProjectFiles => {
     ),
     ...WEB_TEMPLATE_FILES,
     'src/App.tsx': toSandboxApp(name),
+    ...toModuleFiles(code, modules, 'src/'),
     [`src/${name}.tsx`]: code,
   };
 };
@@ -90,22 +103,40 @@ export const toWebProject = (code: string): ProjectFiles => {
 export const toStackBlitzUrl = (code: string) => `${STACKBLITZ_URL}?file=src/${toExampleName(code)}.tsx`;
 
 /** The form fields StackBlitz's POST API takes. */
-export const toStackBlitzFields = (code: string): Record<string, string> => ({
+export const toStackBlitzFields = (code: string, modules: ExampleModules = {}): Record<string, string> => ({
   'project[title]': SANDBOX_TITLE,
   'project[template]': 'node',
-  ...Object.fromEntries(Object.entries(toWebProject(code)).map(([path, content]) => [`project[files][${path}]`, content])),
+  ...Object.fromEntries(Object.entries(toWebProject(code, modules)).map(([path, content]) => [`project[files][${path}]`, content])),
 });
 
 /** A package import's quoted specifier: not relative (`./x`) or already a URL. */
 const PACKAGE_IMPORT = /(\bfrom\s*)(['"])(?![./]|https?:)([^'"]+)\2/g;
+const NAMED_IMPORT = /import\s*\{([^}]+)\}\s*from\s*['"]([^'"]+)['"];?/g;
 
 /**
  * The example as a pen's JS: types stripped, JSX kept for CodePen's Babel, packages from esm.sh, rendered in the platform switch's Preview.
  * A pen is one file with nothing to export to, and CodePen's Babel turns an `export` into CommonJS the browser can't run.
  */
-export const toPenJs = (code: string) => {
+/**
+ * An example's module inlined into the pen, which has no files to import it from: wrapped so its names can't clash with the
+ * example's, reading what it imports from the namespaces the pen already loads.
+ */
+const toPenModule = (name: string, source: string) => {
+  const body = source
+    .replace(NAMED_IMPORT, (_, names: string, specifier: string) => `const {${names}} = ${PEN_NAMESPACES[specifier]};`)
+    .replace(/export\s+const\s+/g, 'const ');
+  return `const ${name} = (() => {\n${body}\nreturn ${name};\n})();\n`;
+};
+
+export const toPenJs = (code: string, modules: ExampleModules = {}) => {
   const name = /export\s+default\s+function\s+(\w+)/.exec(code)?.[1] ?? 'Example';
-  const js = transform(code, { transforms: ['typescript', 'jsx'], jsxRuntime: 'preserve' })
+  const inlined = findExampleModules(code, modules);
+  const withoutImports = inlined.reduce(
+    (example, [module]) => example.replace(new RegExp(`^import[^;]*from\\s*['"]\\./${module}['"];?\\n`, 'm'), ''),
+    code
+  );
+  const source = [withoutImports, ...inlined.map(([module, moduleSource]) => toPenModule(module, moduleSource))].join('\n');
+  const js = transform(source, { transforms: ['typescript', 'jsx'], jsxRuntime: 'preserve' })
     .code.replace(/export\s+default\s+/, '')
     .trim();
   const react = /import\s+React\b/.test(js) ? '' : "import React from 'react';\n";
@@ -117,13 +148,13 @@ export const toPenJs = (code: string) => {
 };
 
 /** The form fields CodePen's prefill API takes: one `data` field of JSON. */
-export const toCodePenFields = (code: string): Record<string, string> => ({
+export const toCodePenFields = (code: string, modules: ExampleModules = {}): Record<string, string> => ({
   data: JSON.stringify({
     title: `${SANDBOX_TITLE}: ${toExampleName(code)}`,
     head: PEN_HEAD,
     html: PEN_HTML,
     css: ROOT_CSS,
-    js: toPenJs(code),
+    js: toPenJs(code, modules),
     js_pre_processor: 'babel',
     editors: '001',
   }),

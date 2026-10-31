@@ -1,5 +1,15 @@
-import { ALBUM_SORT, CLOSED_WEEKDAY, HOURS_IN_DAY, MIN_PREVIEW_OPACITY, TEXT_SIZES, TIMER_PRESETS } from './showcase.constants';
-import type { Album, AlbumSort, TextSelection } from './showcase.types';
+import { toDateKey } from '@elik56a/react-native-pickers';
+import {
+  ALBUM_SORT,
+  APPLICATION,
+  APPLICATION_ERRORS,
+  CLOSED_WEEKDAY,
+  HOURS_IN_DAY,
+  MIN_PREVIEW_OPACITY,
+  TEXT_SIZES,
+  TIMER_PRESETS,
+} from './showcase.constants';
+import type { Album, AlbumSort, ApplicationErrors, ApplicationValues, TextSelection } from './showcase.types';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -46,3 +56,29 @@ export const sortAlbums = (albums: Album[], sort: AlbumSort) => {
   if (sort === ALBUM_SORT.photos) return [...albums].sort((a, b) => b.photos - a.photos);
   return albums;
 };
+
+const phoneError = ({ phone, phoneValid }: ApplicationValues) => {
+  if (!phone) return APPLICATION_ERRORS.phone;
+  return phoneValid ? undefined : APPLICATION_ERRORS.phoneIncomplete;
+};
+
+/** The pickers keep each value in range; the interview falling before the first day spans two fields, so the form checks it. */
+const interviewError = ({ interview, startDate }: ApplicationValues) => {
+  if (!interview) return APPLICATION_ERRORS.interview;
+  return startDate && toDateKey(interview) >= toDateKey(startDate) ? APPLICATION_ERRORS.interviewAfterStart : undefined;
+};
+
+/** The application's errors by field, empty once it can be sent. */
+export const validateApplication = (values: ApplicationValues): ApplicationErrors => {
+  const errors: ApplicationErrors = {
+    role: values.role ? undefined : APPLICATION_ERRORS.role,
+    country: values.country ? undefined : APPLICATION_ERRORS.country,
+    phone: phoneError(values),
+    startDate: values.startDate ? undefined : APPLICATION_ERRORS.startDate,
+    interview: interviewError(values),
+    skills: values.skills.length < APPLICATION.minSkills ? APPLICATION_ERRORS.skills : undefined,
+  };
+  return Object.fromEntries(Object.entries(errors).filter(([, error]) => error));
+};
+
+export const attentionLabel = (count: number) => `${count} ${count === 1 ? 'field needs' : 'fields need'} attention`;

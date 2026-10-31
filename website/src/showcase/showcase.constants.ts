@@ -1,6 +1,6 @@
 import type { CountryCode } from '@elik56a/react-native-pickers';
 import { labelOptions } from '../home/demo/demo.utils';
-import type { Album, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
+import type { Album, ApplicationValues, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
 
 export const SHOWCASE_SCREEN = {
   booking: 'booking',
@@ -19,6 +19,7 @@ export const SHOWCASE_SCREEN = {
   verify: 'verify',
   review: 'review',
   albums: 'albums',
+  application: 'application',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -76,6 +77,13 @@ export const SHOWCASE: ShowcaseItem[] = [
     blurb: 'A birthday on date wheels, a country with flags, interests as chips and the app language.',
     components: ['DatePickerField', 'CountryPicker', 'SelectPicker', 'HorizontalList'],
     recipe: 'birthday',
+  },
+  {
+    key: SHOWCASE_SCREEN.application,
+    title: 'Job application',
+    blurb:
+      'Send it empty to see every field’s error, then watch each clear as you fix it. The interview has to fall before the first day, a rule the form checks across two fields.',
+    components: ['SelectPicker', 'CountryPicker', 'PhoneField', 'DatePickerField', 'DateTimePickerField'],
   },
   {
     key: SHOWCASE_SCREEN.delivery,
@@ -338,3 +346,36 @@ export const ALBUM_SORT = {
 } as const;
 
 export const ALBUM_SORTS = Object.values(ALBUM_SORT);
+
+export const APPLICATION = {
+  minSkills: 2,
+  maxSkills: 4,
+  /** Days from today: interviews from tomorrow, a first day from next week */
+  firstInterviewDay: 1,
+  firstStartDay: 7,
+  minuteInterval: 30,
+} as const;
+
+export const EMPTY_APPLICATION: ApplicationValues = {
+  role: null,
+  country: null,
+  phone: '',
+  phoneValid: false,
+  startDate: null,
+  skills: [],
+};
+
+export const ROLES = labelOptions(['Frontend engineer', 'Mobile engineer', 'Product designer', 'Data analyst']);
+
+export const SKILLS = labelOptions(['React Native', 'TypeScript', 'Design systems', 'Accessibility', 'Testing', 'Animation']);
+
+export const APPLICATION_ERRORS = {
+  role: 'Choose the role you’re applying for',
+  country: 'Choose where you live',
+  phone: 'Enter a phone number',
+  phoneIncomplete: 'Enter the full number',
+  startDate: 'Choose when you can start',
+  interview: 'Choose an interview slot',
+  interviewAfterStart: 'Pick an interview before your first day',
+  skills: `Pick at least ${APPLICATION.minSkills} skills`,
+} as const;
