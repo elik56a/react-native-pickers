@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
-import { FieldLabel } from './components/FieldLabel';
+import { FieldFrame } from './components/FieldFrame';
 import { FieldTrigger } from './components/FieldTrigger';
 import { FieldSheetContext } from './hooks/useFieldSheet';
 import { usePickerField } from './hooks/usePickerField';
@@ -23,6 +23,9 @@ export const PickerField = ({
   onOpen,
   onClose,
   presentation,
+  error,
+  helperText,
+  required,
   style,
   styles: slots,
   theme: themeProp,
@@ -36,28 +39,31 @@ export const PickerField = ({
 
   return (
     <View style={style}>
-      {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      <View ref={field.anchor.ref} collapsable={false}>
-        {renderTrigger ? (
-          renderTrigger({ open: field.toggle, displayValue, disabled })
-        ) : (
-          <FieldTrigger
-            displayValue={displayValue}
-            icon={icon}
-            placeholder={placeholder}
-            label={label}
-            open={field.open}
-            disabled={disabled}
-            clearable={clearable}
-            onOpen={field.toggle}
-            onClear={onClear}
-            renderChevron={renderChevron}
-            theme={theme}
-            slots={slots}
-            testID={testID}
-          />
-        )}
-      </View>
+      <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
+        <View ref={field.anchor.ref} collapsable={false}>
+          {renderTrigger ? (
+            renderTrigger({ open: field.toggle, displayValue, disabled, error })
+          ) : (
+            <FieldTrigger
+              displayValue={displayValue}
+              icon={icon}
+              placeholder={placeholder}
+              label={label}
+              open={field.open}
+              disabled={disabled}
+              clearable={clearable}
+              error={error}
+              required={required}
+              onOpen={field.toggle}
+              onClear={onClear}
+              renderChevron={renderChevron}
+              theme={theme}
+              slots={slots}
+              testID={testID}
+            />
+          )}
+        </View>
+      </FieldFrame>
       <FieldSheetContext.Provider value={field.sheet}>{children({ visible: field.open, onClose: field.hide })}</FieldSheetContext.Provider>
     </View>
   );

@@ -2,11 +2,12 @@ import { Animated, StyleSheet, View } from 'react-native';
 
 import { textStyle } from '../../core';
 import { useFloatingLabel } from '../hooks/useFloatingLabel';
+import { REQUIRED_MARK } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FloatingLabelProps } from '../sheet.types';
 
 /** A Material label: inside the empty field like a placeholder, raised onto the border once the field opens or has a value. */
-export const FloatingLabel = ({ label, raised, open, borderWidth, theme, style }: FloatingLabelProps) => {
+export const FloatingLabel = ({ label, raised, open, invalid, required, borderWidth, theme, style }: FloatingLabelProps) => {
   const floating = useFloatingLabel(raised, borderWidth, theme);
   const c = theme.colors;
   return (
@@ -17,11 +18,12 @@ export const FloatingLabel = ({ label, raised, open, borderWidth, theme, style }
         style={[
           textStyle(theme, 'md'),
           styles.floatingLabel,
-          { backgroundColor: c.background, color: open ? c.primary : c.textSecondary, transform: floating.transform },
+          { backgroundColor: c.background, color: invalid ? c.danger : open ? c.primary : c.textSecondary, transform: floating.transform },
           style,
         ]}
       >
         {label}
+        {required ? REQUIRED_MARK : null}
       </Animated.Text>
     </View>
   );

@@ -64,6 +64,33 @@ export default function Example() {
 
 `valid` checks the length only, which catches most typos. For carrier checks, verify on your server, as with an SMS code.
 
+## Errors and helper text
+
+`error` shows the field as invalid: a red border and label, and the message under the field when it's a string. `helperText` is the line under the field while there's no error message, and `required` adds an asterisk to the label. Pair `error` with `valid`; in a form, set it on submit rather than while the user is still typing:
+
+```tsx live
+import { useState } from 'react';
+import { PhoneField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [valid, setValid] = useState(false);
+  const [phone, setPhone] = useState('');
+  return (
+    <PhoneField
+      label="Mobile"
+      required
+      helperText="We'll text you a code"
+      error={phone !== '' && !valid && 'Enter a full number'}
+      value={phone}
+      onChange={(value, details) => {
+        setPhone(value);
+        setValid(details.valid);
+      }}
+    />
+  );
+}
+```
+
 ## The country
 
 The country follows the number: a `value` or a pasted number with another calling code shows its own country. Before there is a number, `defaultCountry` picks it, or control it with `country` and `onCountryChange`, for example from the device region.
@@ -103,6 +130,9 @@ const shown = country ? formatNationalNumber(nationalNumber, country) : user.pho
 | `label` | `string` | — | Above the field, or on its border in Material. Screen readers hear *Phone number* without one. |
 | `placeholder` | `string` | an example, e.g. `(123) 456-7890` | Shown while empty. |
 | `disabled` | `boolean` | `false` | |
+| `error` | `string \| boolean` | — | Shows the field as invalid, with the message under it when it's a string. See [Errors and helper text](#errors-and-helper-text). |
+| `helperText` | `string` | — | Shown under the field, replaced by the `error` message. |
+| `required` | `boolean` | `false` | Adds an asterisk to the label and tells screen readers the field is required. The number isn't checked. |
 | `countries` / `exclude` / `preferred` | `CountryCode[]` | — | Which countries the list offers, and which come first. See [CountryPicker](./country-picker#a-subset-of-countries). |
 | `preferredLabel` / `allCountriesLabel` | `string` | `'Suggested'` / `'All countries'` | Headers of the list. |
 | `locale` | `string` | device locale | Language of the country names. |
@@ -111,7 +141,7 @@ const shown = country ? formatNationalNumber(nationalNumber, country) : user.pho
 | `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Options for the country sheet, as [`CountryPicker`](./country-picker#props)'s. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
 | `style` | `ViewStyle` | — | The field's container. |
-| `styles` | `{ label, field, input, countryButton, dialCode, chevron }` | — | [Slot styles](../guides/styling). |
+| `styles` | `{ label, field, input, countryButton, dialCode, chevron, helperText }` | — | [Slot styles](../guides/styling). |
 | `testID` | `string` | — | On the text input; the country button gets `${testID}-country`. |
 
 ### Types

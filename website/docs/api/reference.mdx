@@ -142,7 +142,17 @@ type FieldPresentation = SheetPresentation | 'dropdown' | 'inline';
 type SelectPresentation = FieldPresentation;
 
 /** The field slots every `*PickerField` and `PickerField` takes in `styles`. */
-type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';
+type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear' | 'helperText';
+
+/** Validation shown on every field, SelectPicker and PhoneField. Set from your form; the field doesn't check the value. */
+/** A message shown under the field, or `true` to mark it invalid without one. */
+type FieldError = string | boolean;
+
+interface FieldStatusProps {
+  error?: FieldError;       // invalid: red border and label, the message under the field when it's a string
+  helperText?: string;      // under the field, replaced by the error message
+  required?: boolean;       // asterisk on the label, "required" for screen readers
+}
 
 type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 
@@ -195,6 +205,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |
 | `chips` | `true` | SelectPicker |
 | `clearable` / `disabled` | `false` | SelectPicker, fields |
+| `required` | `false` | SelectPicker, fields, PhoneField |
 | `columns` / `height` | `8` / `380` (`420` in sheet) | EmojiPicker |
 | `maxRecent` | `24` | EmojiPicker |
 | `maxHeightRatio` | `0.9` | BottomSheet |

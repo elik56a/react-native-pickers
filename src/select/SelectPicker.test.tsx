@@ -18,6 +18,12 @@ describe('SelectPicker', () => {
     expect(screen.getByText('Expo')).toBeTruthy();
   });
 
+  it('shows the error message under the field and announces it', async () => {
+    await render(<SelectPicker label="Stack" options={options} value={null} required error="Pick a stack" />);
+    expect(screen.getByText('Pick a stack')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Stack, required' }).props.accessibilityHint).toBe('Pick a stack');
+  });
+
   it('opens the sheet, selects and closes in single mode', async () => {
     const onChange = jest.fn();
     const onOpen = jest.fn();

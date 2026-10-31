@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { PickerSheet } from '../sheet';
-import { FieldLabel } from '../sheet/components/FieldLabel';
+import { FieldFrame } from '../sheet/components/FieldFrame';
 import { Dropdown } from '../sheet/Dropdown';
 import { DEFAULT_PLACEHOLDER } from '../sheet/sheet.constants';
 import { SelectSearchField } from './components/SelectSearchField';
@@ -21,6 +21,9 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     disabled = false,
     clearable = false,
     onClear: _onClear,
+    error,
+    helperText,
+    required,
     chips = true,
     closeOnSelect = true,
     renderTrigger,
@@ -57,29 +60,32 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
 
   return (
     <View style={style}>
-      {label ? <FieldLabel label={label} theme={theme} style={slots?.label} /> : null}
-      <View ref={picker.anchor.ref} collapsable={false}>
-        {renderTrigger ? (
-          renderTrigger({ open: picker.toggle, selected: picker.selected, disabled })
-        ) : (
-          <SelectTrigger
-            selected={picker.selected}
-            multiple={!!props.multiple}
-            chips={chips}
-            placeholder={placeholder}
-            label={label}
-            open={picker.open}
-            disabled={disabled}
-            clearable={clearable}
-            onOpen={picker.toggle}
-            onRemove={picker.removeOption}
-            onClear={picker.clear}
-            renderChevron={renderChevron}
-            theme={theme}
-            slots={slots}
-          />
-        )}
-      </View>
+      <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
+        <View ref={picker.anchor.ref} collapsable={false}>
+          {renderTrigger ? (
+            renderTrigger({ open: picker.toggle, selected: picker.selected, disabled, error })
+          ) : (
+            <SelectTrigger
+              selected={picker.selected}
+              multiple={!!props.multiple}
+              chips={chips}
+              placeholder={placeholder}
+              label={label}
+              open={picker.open}
+              disabled={disabled}
+              clearable={clearable}
+              error={error}
+              required={required}
+              onOpen={picker.toggle}
+              onRemove={picker.removeOption}
+              onClear={picker.clear}
+              renderChevron={renderChevron}
+              theme={theme}
+              slots={slots}
+            />
+          )}
+        </View>
+      </FieldFrame>
       {picker.presentation === SELECT_PRESENTATION.dropdown ? (
         <Dropdown
           visible={picker.open}

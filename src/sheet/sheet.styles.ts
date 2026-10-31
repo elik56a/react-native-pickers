@@ -33,6 +33,7 @@ export const styles = StyleSheet.create({
   content: { paddingHorizontal: 16, paddingBottom: 8 },
   compactContent: { paddingHorizontal: 8 },
   fieldLabel: { marginBottom: 6 },
+  fieldMessage: { marginTop: 4 },
   trigger: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6 },
   floatingLabelBox: { justifyContent: 'center', alignItems: 'flex-start' },
   floatingLabel: { paddingHorizontal: FLOATING_LABEL_PADDING },

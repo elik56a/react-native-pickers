@@ -39,6 +39,8 @@ import type { PlaygroundConfig, PlaygroundKey, PlaygroundSelection } from './cat
 
 const PRESENTATION = { prop: 'presentation', options: ['auto', 'dropdown', 'bottomSheet', 'modal', 'inline'] } as const;
 const CLEARABLE = { prop: 'clearable', options: [false, true] } as const;
+const REQUIRED = { prop: 'required', options: [false, true] } as const;
+const ERROR = { prop: 'error', options: ['none', 'This field is required'], unset: 'none' } as const;
 
 const toOptions = (labels: string[]) =>
   labels.map((label) => ({
@@ -279,6 +281,8 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'chips', options: [true, false] },
       { prop: 'closeOnSelect', options: [true, false] },
       { prop: 'showCheckmarks', options: [true, false] },
+      REQUIRED,
+      ERROR,
       { prop: 'disabled', options: [false, true] },
       { prop: 'loading', options: [false, true] },
     ],
@@ -324,6 +328,8 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
     controls: [
       PRESENTATION,
       { prop: 'locale', options: ['en', 'de', 'he', 'ja'], default: null },
+      REQUIRED,
+      ERROR,
       { prop: 'disabled', options: [false, true] },
     ],
   },
@@ -512,6 +518,8 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       PRESENTATION,
       CLEARABLE,
       { prop: 'confirmOnSelect', options: [false, true] },
+      REQUIRED,
+      ERROR,
       { prop: 'disabled', options: [false, true] },
     ],
   },

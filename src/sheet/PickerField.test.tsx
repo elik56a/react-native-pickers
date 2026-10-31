@@ -66,6 +66,24 @@ describe('PickerField', () => {
     expect(onClear).toHaveBeenCalled();
   });
 
+  it('shows the helper text, replaced by the error message, and keeps both out of the sheet', async () => {
+    const { rerender } = await render(
+      <PickerField label="Due" required helperText="Within 30 days">
+        {renderSheet}
+      </PickerField>
+    );
+    expect(screen.getByText('Within 30 days')).toBeTruthy();
+    expect(screen.getByText('Due *')).toBeTruthy();
+    await rerender(
+      <PickerField label="Due" required helperText="Within 30 days" error="Pick a date">
+        {renderSheet}
+      </PickerField>
+    );
+    expect(screen.queryByText('Within 30 days')).toBeNull();
+    expect(screen.getByText('Pick a date')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Due, required' }).props.accessibilityHint).toBe('Pick a date');
+  });
+
   it('renders a custom trigger that can open the sheet', async () => {
     await render(
       <PickerField displayValue="🍕" renderTrigger={({ open, displayValue }) => <Text onPress={open}>Emoji: {displayValue}</Text>}>
@@ -74,5 +92,14 @@ describe('PickerField', () => {
     );
     await fireEvent.press(screen.getByText('Emoji: 🍕'));
     expect(screen.getByText('Close sheet')).toBeTruthy();
+  });
+
+  it('passes the error to a custom trigger', async () => {
+    await render(
+      <PickerField error="Pick an emoji" renderTrigger={({ error }) => <Text>{error ? 'invalid' : 'valid'}</Text>}>
+        {renderSheet}
+      </PickerField>
+    );
+    expect(screen.getByText('invalid')).toBeTruthy();
   });
 });

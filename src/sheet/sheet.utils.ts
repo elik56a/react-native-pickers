@@ -15,7 +15,9 @@ import {
   EXPANDED_TOP_INSET,
   FIELD_PRESENTATION,
   FIELD_PROP_KEYS,
+  INVALID_ACCESSIBILITY_HINT,
   IOS_BOTTOM_INSET,
+  REQUIRED_ACCESSIBILITY_LABEL,
   SCROLLABLE_OVERFLOW,
   SHEET_MAX_WIDTH,
   SHEET_PRESENTATION,
@@ -24,6 +26,8 @@ import {
 import type {
   AnchorRect,
   DropdownFrame,
+  FieldAccessibilityOptions,
+  FieldError,
   FieldPresentation,
   PickerFieldBaseProps,
   ScrollNode,
@@ -169,3 +173,15 @@ export const getFloatingLabelShift = (boxHeight: number, textWidth: number, scal
   x: (-textWidth * (1 - scale)) / 2,
   y: -(boxHeight + borderWidth) / 2,
 });
+
+/** The line under a field: the `error` message, or the helper text while there's none. */
+export const getFieldMessage = (error?: FieldError, helperText?: string) => (typeof error === 'string' && error ? error : helperText);
+
+/** What a screen reader says on a field: its name and whether it's required, then its value and error. */
+export const getFieldAccessibility = ({ name, value, error, required }: FieldAccessibilityOptions) => {
+  const errorHint = typeof error === 'string' && error ? error : error ? INVALID_ACCESSIBILITY_HINT : '';
+  return {
+    accessibilityLabel: required ? `${name}, ${REQUIRED_ACCESSIBILITY_LABEL}` : name,
+    accessibilityHint: [value, errorHint].filter(Boolean).join('. ') || undefined,
+  };
+};
