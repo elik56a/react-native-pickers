@@ -2,15 +2,16 @@ import type { Animated, StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
-import type { FieldDesign } from '../sheet/sheet.types';
+import type { FieldDesign, FieldStatusProps } from '../sheet/sheet.types';
 import type { OTP_INPUT_MODE } from './otp.constants';
 
 /** 'numeric': digits on a number pad. 'text': letters and digits. */
 export type OtpInputMode = ValueOf<typeof OTP_INPUT_MODE>;
 
-export type OtpFieldSlot = 'container' | 'cell' | 'focusedCell' | 'filledCell' | 'cellText' | 'caret';
+export type OtpFieldSlot = 'container' | 'cell' | 'focusedCell' | 'filledCell' | 'cellText' | 'caret' | 'helperText';
 
-export interface OtpFieldProps extends ThemableProps {
+/** `error` and `helperText` work as on the fields; there's no label to mark `required`. */
+export interface OtpFieldProps extends ThemableProps, Omit<FieldStatusProps, 'required'> {
   /** How many characters the code has. Default: 6 */
   length?: number;
   value?: string;
@@ -58,6 +59,7 @@ export interface OtpFieldState {
 export interface OtpCellProps {
   cell: OtpCellState;
   caretOpacity: Animated.Value;
+  invalid: boolean;
   look: FieldDesign;
   theme: PickerTheme;
   slots?: SlotStyles<OtpFieldSlot>;

@@ -486,6 +486,7 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'length', options: [6, 4, 8], default: 6 },
       { prop: 'inputMode', options: ['numeric', 'text'], default: 'numeric' },
       { prop: 'secureTextEntry', options: [false, true] },
+      { prop: 'error', options: ['none', 'That code didn’t match'], unset: 'none' },
       { prop: 'disabled', options: [false, true] },
     ],
   },
