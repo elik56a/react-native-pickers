@@ -16,40 +16,21 @@ import { BottomSheet } from '@elik56a/react-native-pickers';
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { BottomSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text
-          style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}
-        >
-          Open sheet
-        </Text>
-      </Pressable>
+      <DemoButton title="Open sheet" onPress={() => setOpen(true)} />
       <BottomSheet
         visible={open}
         onClose={() => setOpen(false)}
         title="Share"
         footer={
-          <Pressable
-            onPress={() => setOpen(false)}
-            style={{
-              backgroundColor: '#F4F2EE',
-              padding: 14,
-              borderRadius: 12,
-            }}
-          >
-            <Text style={{ textAlign: 'center', fontWeight: '600' }}>
-              Close
-            </Text>
-          </Pressable>
+          <DemoButton variant="secondary" title="Close" onPress={() => setOpen(false)} />
         }
       >
         <View style={{ padding: 16, gap: 12 }}>
@@ -143,8 +124,9 @@ Try it: open the sheet, then scroll the wheel up over it (or drag the header, si
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { BottomSheet } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const comments = Array.from(
   { length: 30 },
@@ -155,16 +137,7 @@ export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text
-          style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}
-        >
-          Open comments
-        </Text>
-      </Pressable>
+      <DemoButton title="Open comments" onPress={() => setOpen(true)} />
       <BottomSheet
         visible={open}
         onClose={() => setOpen(false)}
