@@ -20,6 +20,7 @@ import { Menu } from '@elik56a/react-native-pickers';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Menu } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const icon = (emoji) => <Text style={{ fontSize: 16 }}>{emoji}</Text>;
 
@@ -30,7 +31,6 @@ export default function Example() {
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <Text>Last action: {last}</Text>
       <Menu
-        accessibilityLabel="Note options"
         actions={[
           { label: 'Edit', icon: icon('✏️'), onPress: () => setLast('Edit') },
           { label: 'Duplicate', icon: icon('📄'), onPress: () => setLast('Duplicate') },
@@ -38,7 +38,9 @@ export default function Example() {
           { label: 'Delete', icon: icon('🗑️'), destructive: true, onPress: () => setLast('Delete') },
         ]}
       >
-        <Text style={{ fontSize: 22, paddingHorizontal: 12 }}>⋯</Text>
+        {({ open }) => (
+          <DemoButton size="icon" variant="secondary" title="⋯" accessibilityLabel="Note options" onPress={open} />
+        )}
       </Menu>
     </View>
   );
@@ -63,8 +65,9 @@ This one is a "Sort" button with a title, a ✓ on the current order and a line 
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Menu } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const SORTS = [
   { label: 'Relevance', description: 'Best match first' },
@@ -82,14 +85,7 @@ export default function Example() {
         actions={SORTS.map((s) => ({ ...s, selected: s.label === sort, onPress: () => setSort(s.label) }))}
       >
         {({ open, visible }) => (
-          <Pressable
-            onPress={open}
-            accessibilityRole="button"
-            style={{ flexDirection: 'row', gap: 6, paddingVertical: 8, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: '#E8E4DC' }}
-          >
-            <Text>Sort: {sort}</Text>
-            <Text>{visible ? '▴' : '▾'}</Text>
-          </Pressable>
+          <DemoButton size="sm" variant="secondary" title={`Sort: ${sort} ${visible ? '▴' : '▾'}`} onPress={open} />
         )}
       </Menu>
     </View>
@@ -103,9 +99,10 @@ export default function Example() {
 
 ```tsx live
 import { Text, View } from 'react-native';
-import { Menu } from '@elik56a/react-native-pickers';
+import { Menu, usePickerTheme } from '@elik56a/react-native-pickers';
 
 export default function Example() {
+  const { colors } = usePickerTheme();
   return (
     <View style={{ alignItems: 'center' }}>
       <Menu
@@ -117,10 +114,17 @@ export default function Example() {
           { label: 'Forward', description: 'To a chat or a group' },
           { label: 'Delete', destructive: true },
         ]}
+        styles={{
+          trigger: {
+            backgroundColor: colors.primary,
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            borderRadius: 18,
+            borderBottomRightRadius: 4,
+          },
+        }}
       >
-        <View style={{ backgroundColor: '#F4F2EE', padding: 12, borderRadius: 16 }}>
-          <Text>Long-press me 👋</Text>
-        </View>
+        <Text style={{ color: colors.onPrimary, fontSize: 15 }}>Long-press me 👋</Text>
       </Menu>
     </View>
   );
