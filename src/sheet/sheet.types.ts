@@ -368,6 +368,8 @@ export interface FloatingLabelProps {
 
 export interface FieldFrameProps extends FieldStatusProps {
   label?: string;
+  /** The message centered under the box, for content centered in its row */
+  centered?: boolean;
   theme: PickerTheme;
   slots?: SlotStyles<'label' | 'helperText'>;
   /** The field's box */
@@ -375,6 +377,8 @@ export interface FieldFrameProps extends FieldStatusProps {
 }
 
 export interface FieldMessageProps extends Omit<FieldStatusProps, 'required'> {
+  /** Under content centered in its row, such as a code's boxes, rather than a field's text */
+  centered?: boolean;
   theme: PickerTheme;
   style?: StyleProp<TextStyle>;
 }

@@ -318,6 +318,7 @@ The [full API reference](https://react-native-pickers.dev/docs/api/reference) li
 | `length` | `number` | `6` |
 | `inputMode` | `'numeric' \| 'text'` | `'numeric'` |
 | `secureTextEntry` | `boolean`: dots, for a PIN | `false` |
+| `error` / `helperText` | `string \| boolean` / `string`: red boxes, the message under them | |
 
 ### Rating
 

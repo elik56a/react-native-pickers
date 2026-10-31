@@ -1,6 +1,6 @@
 ---
 title: React Native OTP Input
-description: "React Native OTP input for verification codes and PINs: a box per character with a blinking caret, SMS code autofill on iOS, Android and the web, paste from a message, numeric or letters, secure dots. iOS, Material and web designs, zero native code."
+description: "React Native OTP input for verification codes and PINs: a box per character with a blinking caret, SMS code autofill on iOS, Android and the web, paste from a message, numeric or letters, secure dots, wrong-code errors. iOS, Material and web designs, zero native code."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -43,41 +43,42 @@ Paste *Your code is 482-913* and the boxes fill with `482913`: the field keeps o
 
 `onComplete` fires once the user fills the last box, with the whole code: send it to your server there. `onChange` fires on every key, delete and paste, for a controlled field. Neither fires when you change `value` yourself.
 
-For a wrong code, set `value` to `''`: the boxes empty and the field stays focused for another try. To hide the keyboard while you check, call `Keyboard.dismiss()` in `onComplete`.
+For a wrong code, set `error` and `value` to `''`: the boxes turn red and empty, the message shows under them, and the field stays focused for another try. Clear `error` in `onChange`, so it goes once the user types again. `helperText` sits under the boxes until there's an error message, a good place for where the code was sent. To hide the keyboard while you check, call `Keyboard.dismiss()` in `onComplete`.
 
 ```tsx live
 import { useState } from 'react';
-import { Keyboard, Text, View } from 'react-native';
+import { Keyboard } from 'react-native';
 import { OtpField } from '@elik56a/react-native-pickers';
 
 const CORRECT = '1234';
 
 export default function Example() {
   const [code, setCode] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   return (
-    <View style={{ gap: 12 }}>
-      <OtpField
-        length={4}
-        value={code}
-        onChange={(next) => {
-          setCode(next);
-          setError(false);
-        }}
-        onComplete={(full) => {
-          if (full === CORRECT) Keyboard.dismiss();
-          else {
-            setError(true);
-            setCode('');
-          }
-        }}
-        styles={error ? { cell: { borderColor: '#D93025' } } : undefined}
-      />
-      <Text>{error ? 'Wrong code, try again' : 'Hint: 1234'}</Text>
-    </View>
+    <OtpField
+      length={4}
+      value={code}
+      onChange={(next) => {
+        setCode(next);
+        setError('');
+      }}
+      onComplete={(full) => {
+        if (full === CORRECT) {
+          Keyboard.dismiss();
+          return;
+        }
+        setError('That code didn’t match. Try again.');
+        setCode('');
+      }}
+      error={error}
+      helperText="Sent to •••• 0123. Hint: 1234"
+    />
   );
 }
 ```
+
+`error={true}` marks the boxes red without a message. Screen readers hear the error after the field's name, and the message is announced as it appears.
 
 ## Letters, and PINs
 
@@ -118,15 +119,17 @@ Each box is up to 56 wide and as tall as the design's fields, sharing the row's 
 | `secureTextEntry` | `boolean` | `false` | Dots instead of characters. |
 | `autoFocus` | `boolean` | `false` | Focus the field when it mounts. |
 | `disabled` | `boolean` | `false` | Dims the boxes and ignores typing. |
+| `error` | `string \| boolean` | — | Shows the boxes as invalid, with the message under them when it's a string. See [Checking the code](#checking-the-code). |
+| `helperText` | `string` | — | Shown under the boxes, replaced by the `error` message. |
 | `accessibilityLabel` | `string` | `'Verification code'` | What screen readers call the field. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
 | `style` | `ViewStyle` | — | The field's container. |
-| `styles` | `{ container, cell, focusedCell, filledCell, cellText, caret }` | — | [Slot styles](../guides/styling). `container` is the row of boxes. |
+| `styles` | `{ container, cell, focusedCell, filledCell, cellText, caret, helperText }` | — | [Slot styles](../guides/styling). `container` is the row of boxes; `helperText` the line under them. |
 | `testID` | `string` | — | On the text input; box `i` gets `${testID}-cell-${i}`. |
 
 ## Accessibility
 
-Screen readers see one text field, named by `accessibilityLabel`, with the code as its value; the boxes are hidden from them. Typing, deleting and pasting work as in any field, with a hardware keyboard too.
+Screen readers see one text field, named by `accessibilityLabel`, with the code as its value and the `error` message as its hint; the boxes are hidden from them, and a new error is announced. Typing, deleting and pasting work as in any field, with a hardware keyboard too.
 
 ## Related
 
