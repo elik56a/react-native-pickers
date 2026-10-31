@@ -13,6 +13,12 @@ describe('PhoneField', () => {
     expect(onChange).toHaveBeenLastCalledWith('+972541234567', { country: 'IL', nationalNumber: '541234567', valid: true });
   });
 
+  it('shows the error message under the field and on the input', async () => {
+    await render(<PhoneField label="Phone" error="Enter a full number" />);
+    expect(screen.getByText('Enter a full number')).toBeTruthy();
+    expect(screen.getByLabelText('Phone').props.accessibilityHint).toBe('Enter a full number');
+  });
+
   it('drops a separator with the digit after it, so backspace never sticks', async () => {
     await render(<PhoneField label="Phone" defaultValue="+12015550123" />);
     expect(input().props.value).toBe('(201) 555-0123');

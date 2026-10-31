@@ -104,6 +104,7 @@
     "autocomplete",
     "combobox",
     "form-field",
+    "react-hook-form",
     "typescript"
   ],
   "scripts": {

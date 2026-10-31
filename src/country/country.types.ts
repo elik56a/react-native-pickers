@@ -3,6 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DistributiveOmit } from '../core/core.types';
 import type { SelectPickerProps } from '../select';
+import type { FieldStatusProps } from '../sheet';
 import type { CountryCode } from './data';
 
 export type { CountryCode };
@@ -81,9 +82,9 @@ export interface PhoneDetails {
   valid: boolean;
 }
 
-export type PhoneFieldSlot = 'label' | 'field' | 'input' | 'countryButton' | 'dialCode' | 'chevron';
+export type PhoneFieldSlot = 'label' | 'field' | 'input' | 'countryButton' | 'dialCode' | 'chevron' | 'helperText';
 
-export interface PhoneFieldProps extends ThemableProps, Omit<CountryListOptions, 'showDialCode'> {
+export interface PhoneFieldProps extends ThemableProps, FieldStatusProps, Omit<CountryListOptions, 'showDialCode'> {
   /** The number in E.164, e.g. '+972541234567'; '' when empty */
   value?: string;
   defaultValue?: string;

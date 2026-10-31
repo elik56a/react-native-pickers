@@ -53,6 +53,16 @@ export const FAQS: FaqEntry[] = [
     ),
   },
   {
+    question: 'Does it work with React Hook Form, Formik or Zod?',
+    answer: (
+      <>
+        Yes. Every picker is controlled, and every field shows your form&apos;s errors: pass the message as <code>error</code> and the field
+        turns red with it underneath, with <code>helperText</code> and <code>required</code> too. See{' '}
+        <Link to="/docs/guides/forms">Forms</Link>.
+      </>
+    ),
+  },
+  {
     question: 'Is it accessible?',
     answer: (
       <>

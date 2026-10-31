@@ -21,7 +21,7 @@
 - **Native on every platform.** The iOS design on iPhone, Material Design on Android and a web design in the browser, from one code path. Prefer one look everywhere? Set `design="ios"` once.
 - **Zero native code.** Pure JavaScript on React Native core APIs. Works in Expo Go, bare React Native and React Native Web, ships in OTA updates. No Reanimated, Gesture Handler or SVG.
 - **Yours to customize.** Theme tokens with automatic dark mode, a style slot for every visual part, and render props for full control. Your settings always win over the design.
-- **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value.
+- **Built for forms.** Every picker comes inline, in a bottom sheet or modal with Cancel / Done, and as a form field that opens it and shows the value, with error and helper text from React Hook Form, Formik or Zod.
 - **Real features built in.** Date ranges with min/max nights, multiple dates, marked dates and prices, searchable selects with server search, a country picker with flags and dialing codes, a phone number field, a time zone picker, 1,923 emojis with skin tones and recents.
 - **International and accessible.** Names, the 12/24h clock and the week start come from `Intl` for any locale; layouts flip for RTL. VoiceOver and TalkBack support throughout, and full keyboard use on the web.
 - **Typed.** Generic value types and mode-discriminated unions: `mode="range"` gives you a typed `{ start, end }`.
@@ -389,6 +389,7 @@ A length of time, such as a timer or a workout, rather than a time of day. The v
 | `searchable` | `boolean` | more than 8 options |
 | `loadOptions` | `(query) => Promise<options>`: search a server | |
 | `clearable` / `onClear` | `boolean` / `() => void` | `false` |
+| `error` / `helperText` / `required` | `string \| boolean` / `string` / `boolean`: the field turns red with the message under it | |
 | `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown' \| 'inline'` | `'auto'`: dropdown on the web |
 
 `loadOptions` waits for a pause in typing, shows a loader and ignores answers to older queries:
@@ -471,7 +472,7 @@ A `SelectPicker` with every IANA time zone built in, each with its city, GMT off
 | Component | Props |
 |---|---|
 | Picker sheets | `visible` `onClose` `value` `onConfirm` `title` `confirmLabel` `cancelLabel` `showCancel` `presentation` `sheetProps`, plus the picker's props |
-| Picker fields | the sheet's props without `visible`, plus `label` `placeholder` `displayValue` `clearable` `onClear` `disabled` `presentation` `renderTrigger` `renderChevron` |
+| Picker fields | the sheet's props without `visible`, plus `label` `placeholder` `displayValue` `clearable` `onClear` `disabled` `error` `helperText` `required` `presentation` `renderTrigger` `renderChevron` |
 | `BottomSheet` | `visible` `onClose` `title` `headerLeft` `headerRight` `footer` `height` `enableSwipeToClose` `expandable` `showHandle` `presentation` |
 | `ActionSheet` | `visible` `onClose` `actions` (`{ label, onPress, description, icon, selected, destructive, disabled }`) `title` `message` `showCancel` `cancelLabel` `presentation`; `onPress` runs after the sheet closes |
 | `Menu` | `actions` `children` (the trigger, or `({ open }) => …`) `title` `align` `width` `presentation` (`'menu' \| 'sheet'`) `openOnLongPress` `disabled` `onOpen` `onClose` |

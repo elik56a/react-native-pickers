@@ -127,6 +127,10 @@ export const BUTTON_HIT_SLOP = 10;
 
 export const DEFAULT_PLACEHOLDER = 'Select…';
 export const DISABLED_TRIGGER_OPACITY = 0.5;
+export const REQUIRED_MARK = ' *';
+export const REQUIRED_ACCESSIBILITY_LABEL = 'required';
+/** Read for an `error` set to `true`, which has no message of its own. */
+export const INVALID_ACCESSIBILITY_HINT = 'Invalid';
 
 /** The `PickerField` props a `*PickerField` keeps for itself; the rest go to its sheet. `theme` and `styles` go to both. */
 export const FIELD_PROP_KEYS = [
@@ -141,6 +145,9 @@ export const FIELD_PROP_KEYS = [
   'onOpen',
   'onClose',
   'presentation',
+  'error',
+  'helperText',
+  'required',
   'style',
   'testID',
 ] as const satisfies ReadonlyArray<keyof PickerFieldBaseProps>;

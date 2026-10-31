@@ -3,7 +3,7 @@ import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { ValueOf } from '../core/core.types';
-import type { ChevronInfo, PickerFieldSlot, SheetChromeProps } from '../sheet';
+import type { ChevronInfo, FieldError, FieldStatusProps, PickerFieldSlot, SheetChromeProps } from '../sheet';
 import type { FieldTriggerProps } from '../sheet/sheet.types';
 import type { SELECT_PRESENTATION, SELECT_ROW_TYPE, SINGLE_INDICATOR } from './select.constants';
 
@@ -105,10 +105,13 @@ export interface SelectTriggerInfo<T> {
   open: () => void;
   selected: SelectOption<T>[];
   disabled: boolean;
+  /** The field's `error`, to show your trigger as invalid */
+  error?: FieldError;
 }
 
 export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'styles'> &
-  SelectValueProps<T> & {
+  SelectValueProps<T> &
+  FieldStatusProps & {
     placeholder?: string;
     /** Label rendered above the field */
     label?: string;

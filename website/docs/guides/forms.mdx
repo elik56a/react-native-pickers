@@ -7,11 +7,13 @@ description: Use React Native date, time and select pickers in React Hook Form a
 
 Every picker is a controlled component, so it plugs into any form library. In a form you usually want a field that opens the picker: [`SelectPicker`](../components/select-picker) and the [picker fields](../components/picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `EmojiPickerField`) render one, and report the value through `onChange` (select) or `onConfirm` (fields). Their `onClose` is the natural place for `onBlur`.
 
+Every field, plus `SelectPicker`, `CountryPicker`, `TimeZonePicker` and `PhoneField`, shows your form's errors: pass the message as `error` and the field turns red with the message under it. `helperText` is the line under the field while there's no error, and `required` adds an asterisk to the label. The fields don't validate anything themselves; your form library decides what's invalid and when to show it.
+
 ## React Hook Form
 
 ```tsx
 import { useForm, Controller } from 'react-hook-form';
-import { Text, View, Button } from 'react-native';
+import { View, Button } from 'react-native';
 import { SelectPicker, DatePickerField, TimePickerField } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
 
@@ -24,7 +26,7 @@ type FormValues = {
 };
 
 export function BookingForm() {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: { country: null, tags: [], date: null, time: new Date(), stay: { start: null, end: null } },
   });
 
@@ -34,27 +36,39 @@ export function BookingForm() {
         control={control}
         name="country"
         rules={{ required: 'Pick a country' }}
-        render={({ field }) => (
-          <SelectPicker label="Country" options={countries} value={field.value} onChange={field.onChange} onClose={field.onBlur} />
+        render={({ field, fieldState }) => (
+          <SelectPicker
+            label="Country"
+            required
+            error={fieldState.error?.message}
+            options={countries}
+            value={field.value}
+            onChange={field.onChange}
+            onClose={field.onBlur}
+          />
         )}
       />
-      {errors.country && <Text style={{ color: 'crimson' }}>{errors.country.message}</Text>}
 
       <Controller
         control={control}
         name="tags"
         rules={{ validate: (v) => v.length > 0 || 'Pick at least one tag' }}
-        render={({ field }) => <SelectPicker multiple label="Tags" options={tags} value={field.value} onChange={field.onChange} />}
+        render={({ field, fieldState }) => (
+          <SelectPicker multiple label="Tags" error={fieldState.error?.message} options={tags} value={field.value} onChange={field.onChange} />
+        )}
       />
 
       <Controller
         control={control}
         name="stay"
         rules={{ validate: (r) => (!!r.start && !!r.end) || 'Choose check-in and check-out' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <DatePickerField
             label="Stay"
             placeholder="Add dates"
+            required
+            helperText="Free cancellation until the day before"
+            error={fieldState.error?.message}
             mode="range"
             value={field.value}
             onConfirm={field.onChange}
@@ -63,7 +77,6 @@ export function BookingForm() {
           />
         )}
       />
-      {errors.stay && <Text style={{ color: 'crimson' }}>{errors.stay.message}</Text>}
 
       <Controller
         control={control}
@@ -77,7 +90,33 @@ export function BookingForm() {
 }
 ```
 
-`field.onChange` receives the first argument, which is the value, so extra arguments such as the `option` from `SelectPicker` are ignored.
+`field.onChange` receives the first argument, which is the value, so extra arguments such as the `option` from `SelectPicker` are ignored. `fieldState.error` is set after a submit, or after a blur in `onBlur` mode; since `onClose` calls `field.onBlur`, closing a picker counts as leaving the field.
+
+### Phone numbers
+
+`PhoneField` passes `details.valid` to `onChange`, whether the number has the country's length. Check it in `validate`:
+
+```tsx
+<Controller
+  control={control}
+  name="phone"
+  rules={{ validate: (v) => isValidPhoneNumber(v) || 'Enter a full number' }}
+  render={({ field, fieldState }) => (
+    <PhoneField label="Mobile" required error={fieldState.error?.message} value={field.value} onChange={field.onChange} />
+  )}
+/>
+```
+
+`isValidPhoneNumber` here is your own check on the E.164 value: `parsePhone` and `isValidPhone` from the library build it in two lines:
+
+```ts
+import { isValidPhone, parsePhone } from '@elik56a/react-native-pickers';
+
+const isValidPhoneNumber = (e164: string) => {
+  const { country, nationalNumber } = parsePhone(e164);
+  return !!country && isValidPhone(nationalNumber, country);
+};
+```
 
 ### Options from your API
 

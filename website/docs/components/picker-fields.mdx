@@ -1,6 +1,6 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
-description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal, or expand it inline under the field, and show the picked value: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
+description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal, or expand it inline under the field, and show the picked value, with error and helper text for forms: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -181,9 +181,51 @@ When `displayValue` is empty and there's no value, the field shows `placeholder`
 <DatePickerField label="Due" value={due} onConfirm={setDue} clearable onClear={() => setDue(null)} />
 ```
 
+## Errors and helper text
+
+`error` shows the field as invalid: a red border and label, and the message under the field when it's a string. `helperText` is the line under the field while there's no error message. `required` adds an asterisk to the label. The field doesn't check the value itself: your form decides what's invalid and when to say so, so set `error` from [React Hook Form, Formik or Zod](../guides/forms).
+
+```tsx live
+import { useState } from 'react';
+import { Button, View } from 'react-native';
+import { DatePickerField, SelectPicker } from '@elik56a/react-native-pickers';
+
+const rooms = ['Standard', 'Deluxe', 'Suite'].map((r) => ({ label: r, value: r }));
+
+export default function Example() {
+  const [day, setDay] = useState<Date | null>(null);
+  const [room, setRoom] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  return (
+    <View style={{ gap: 14 }}>
+      <DatePickerField
+        label="Check-in"
+        required
+        helperText="You can change it until the day before"
+        error={submitted && !day && 'Choose a check-in date'}
+        value={day}
+        onConfirm={setDay}
+        minDate={new Date()}
+      />
+      <SelectPicker
+        label="Room"
+        required
+        error={submitted && !room && 'Choose a room'}
+        options={rooms}
+        value={room}
+        onChange={setRoom}
+      />
+      <Button title="Book" onPress={() => setSubmitted(true)} />
+    </View>
+  );
+}
+```
+
+`error={true}` marks the field without a message, and shows `helperText` in red. [`SelectPicker`](./select-picker#errors-and-helper-text), [`CountryPicker`](./country-picker), [`TimeZonePicker`](./time-zone-picker) and [`PhoneField`](./phone-field#errors-and-helper-text) take the same three props.
+
 ## Custom trigger
 
-`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled }`. The label still renders above it, and the sheet still opens from the field.
+`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled, error }`. The label and the line under the field still render around it, and the sheet still opens from the field; use `error` to show your trigger as invalid.
 
 ```tsx live
 import { useState } from 'react';
@@ -324,6 +366,7 @@ export default function Example() {
 | `placeholder` | Placeholder text |
 | `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size) |
 | `clear` | × button text |
+| `helperText` | The line under the field: helper text or the error message |
 
 The theme (`theme` prop or [`PickersProvider`](../guides/theming)) applies to the field and the sheet.
 
@@ -339,7 +382,10 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 | `disabled` | `boolean` | `false` | The field doesn't open. |
 | `clearable` | `boolean` | `false` | Show a × button while there's a value. |
 | `onClear` | `() => void` | — | Called by ×. Reset your value here. |
-| `renderTrigger` | `(info: { open, displayValue, disabled }) => ReactNode` | — | Replace the field box. |
+| `error` | `string \| boolean` | — | Shows the field as invalid, with the message under it when it's a string. See [Errors and helper text](#errors-and-helper-text). |
+| `helperText` | `string` | — | Shown under the field, replaced by the `error` message. |
+| `required` | `boolean` | `false` | Adds an asterisk to the label and tells screen readers the field is required. The value isn't checked. |
+| `renderTrigger` | `(info: { open, displayValue, disabled, error }) => ReactNode` | — | Replace the field box. |
 | `renderChevron` | `(info: { open, theme }) => ReactNode` | — | Custom chevron icon. It still rotates on open and close. |
 | `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal' \| 'inline'` | `'auto'` | Where the picker opens: a dropdown on the web, a bottom sheet on native. See [Dropdown, bottom sheet, modal or inline](#dropdown-bottom-sheet-modal-or-inline). |
 | `onOpen` / `onClose` | `() => void` | — | The picker opened / closed (Done, Cancel or dismiss). |
@@ -365,15 +411,17 @@ import type {
   PickerFieldSlot,
   PickerFieldTriggerInfo,
   FieldPresentation,
+  FieldStatusProps,
+  FieldError,
   WithPickerField,
 } from '@elik56a/react-native-pickers';
 ```
 
-`WithPickerField<SheetProps, Slot>` turns a sheet's props into a field's, for wrapping your own sheet the same way.
+`WithPickerField<SheetProps, Slot>` turns a sheet's props into a field's, for wrapping your own sheet the same way. `FieldStatusProps` is `{ error, helperText, required }`, for your own fields.
 
 ## Accessibility
 
-The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the picker is open. The dropdown closes on a tap outside it and on the Android back button. The × button is labelled `Clear`.
+The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the picker is open. With `required`, the label ends in `, required`; with `error`, the message follows the value in the hint (`Invalid` for `error={true}`), and the line under the field is a live region, so screen readers announce an error as it appears. The dropdown closes on a tap outside it and on the Android back button. The × button is labelled `Clear`.
 
 ## Related
 

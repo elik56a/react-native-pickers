@@ -59,7 +59,8 @@ WeekStrip          one week of days in a row: value: Date|null  onChange(date)  
                    minDate maxDate isDateDisabled markedDates firstDayOfWeek locale showHeader formatTitle(weekStart) weekdayFormat renderDay (calendar's day cells and slots)
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips
-                   label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected}) renderChevron({open,theme})
+                   label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected,disabled,error}) renderChevron({open,theme})
+                   error (string|boolean: red field, message under it) helperText required (asterisk) — display only, set error from your form library
                    presentation 'auto'(dropdown on web, bottom sheet on native)|'bottomSheet'|'modal'|'dropdown'|'inline'(expands under the field)
 SelectList<T>      same list inline: options value onChange multiple listHeight
                    server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
@@ -69,8 +70,8 @@ CountryPicker      a SelectPicker with ~250 countries built in: value CountryCod
                    every SelectPicker prop except options/loadOptions/server search; getCountry(code) → {code,name,nativeName?,dialCode,flag,keywords}  getAllCountries()  getCountryFlag(code)
 PhoneField         phone number input: flag + calling code button (CountryPicker list) then the number, formatted as typed ('(201) 555-0123', '54-123-4567')
                    value/defaultValue: E.164 string ('+972541234567', '' when empty)  onChange(value, {country, nationalNumber, valid})  valid = length fits the country
-                   country/defaultCountry='US'/onCountryChange  label placeholder(default example) disabled presentation countrySheetTitle='Country code' sheet
-                   preferred countries exclude locale preferredLabel allCountriesLabel; styles: label field input countryButton dialCode chevron
+                   country/defaultCountry='US'/onCountryChange  label placeholder(default example) disabled error helperText required presentation countrySheetTitle='Country code' sheet
+                   preferred countries exclude locale preferredLabel allCountriesLabel; styles: label field input countryButton dialCode chevron helperText
                    a leading trunk 0 is dropped (not IT/SM/VA); pasting '+44…' switches country; ~50 country formats, others grouped in threes
                    utils: parsePhone(intl, current?) → {country?, nationalNumber}  formatNationalNumber(digits, code)  isValidPhone(digits, code)  toE164(digits, code)
 TimeZonePicker     a SelectPicker with all 418 IANA zones built in: value IANA name ('Europe/Lisbon') or string[] with multiple  onChange(id, option)
@@ -113,9 +114,10 @@ Fields (a SelectPicker-style field that opens the sheet and shows the confirmed 
   DatePickerField / TimePickerField / DateTimePickerField / DurationPickerField / MonthPickerField / ColorPickerField / WheelPickerField / EmojiPickerField
                    = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
                    + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
-                     disabled renderTrigger({open,displayValue,disabled}) renderChevron({open,theme}) onOpen onClose style testID
+                     error (string|boolean: red field, message under it) helperText required (asterisk); display only, set error from the form
+                     disabled renderTrigger({open,displayValue,disabled,error}) renderChevron({open,theme}) onOpen onClose style testID
                      presentation 'auto'(dropdown on web, bottom sheet on native)|'bottomSheet'|'modal'|'dropdown'|'inline'(expands under the field, no Done: each change fires onConfirm, second tap collapses); design is passed on to the sheet
-                   styles = field slots (label trigger triggerText placeholder chevron clear) + the picker's slots
+                   styles = field slots (label trigger triggerText placeholder chevron clear helperText) + the picker's slots
                    EmojiPickerField also takes value: string (the emoji shown). Sheet title defaults to label.
   PickerField      same field props, children: ({visible, onClose}) => <AnySheet .../>
 Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...} platform?='ios'|'android'|'web' design='auto'|'ios'|'material'|'web'>; per-component `theme` and `design` props. `platform` makes pickers behave as on that OS (preview native in a browser). `design` is the look: 'auto' = ios on iOS, web on web, material elsewhere; sheet actions in the header (ios: Cancel/Done) or footer (material: Cancel/OK), radios for single select and outlined floating-label fields in material, a date headline above Material calendars, TimePicker display: 'wheel' (ios) | 'dial' (material clock dial with a keyboard-entry toggle) | 'input' (typed hour/minute fields) | 'list' (web: hour/minute/AM-PM columns to click); dial and input fall back to wheels with showSeconds. DateTimePicker display defaults: 'wheel' on ios, 'calendar' in material (time input under it) and web (time columns beside it); timePosition 'beside'|'below' overrides where the time goes (beside moves below when both don't fit), timeDisplay 'wheel'|'dial'|'input'|'list' how it's picked. Calendar: ios tints the chosen day, material fills it and rings today with narrow S M T weekdays, web uses filled rounded squares, ripple in material and a dim while pressed on ios/web.

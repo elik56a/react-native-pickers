@@ -3,6 +3,8 @@ import {
   canScrollWithin,
   getDragFrame,
   getDropdownFrame,
+  getFieldAccessibility,
+  getFieldMessage,
   getFloatingLabelShift,
   getReleaseTarget,
   getSheetDefaults,
@@ -261,5 +263,27 @@ describe('toLocalRect', () => {
   it('moves a window rect into an area that starts elsewhere', () => {
     const area = { x: 100, y: 50, width: 390, height: 844 };
     expect(toLocalRect({ x: 116, y: 150, width: 40, height: 40 }, area)).toEqual({ x: 16, y: 100, width: 40, height: 40 });
+  });
+});
+
+describe('getFieldMessage', () => {
+  it('shows the error message in place of the helper text', () => {
+    expect(getFieldMessage('Pick a date', 'Within 30 days')).toBe('Pick a date');
+    expect(getFieldMessage(true, 'Within 30 days')).toBe('Within 30 days');
+    expect(getFieldMessage(false, 'Within 30 days')).toBe('Within 30 days');
+    expect(getFieldMessage('', undefined)).toBeUndefined();
+  });
+});
+
+describe('getFieldAccessibility', () => {
+  it('names the field and says it is required', () => {
+    expect(getFieldAccessibility({ name: 'Date' })).toEqual({ accessibilityLabel: 'Date', accessibilityHint: undefined });
+    expect(getFieldAccessibility({ name: 'Date', required: true }).accessibilityLabel).toBe('Date, required');
+  });
+
+  it('hints the value, then the error message or that it is invalid', () => {
+    expect(getFieldAccessibility({ name: 'Date', value: 'Oct 31' }).accessibilityHint).toBe('Oct 31');
+    expect(getFieldAccessibility({ name: 'Date', value: 'Oct 31', error: 'Too late' }).accessibilityHint).toBe('Oct 31. Too late');
+    expect(getFieldAccessibility({ name: 'Date', error: true }).accessibilityHint).toBe('Invalid');
   });
 });

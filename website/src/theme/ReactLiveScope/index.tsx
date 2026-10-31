@@ -3,7 +3,7 @@ import * as RN from 'react-native';
 
 import * as Pickers from '@elik56a/react-native-pickers';
 
-const { View, Text, Pressable, StyleSheet, ScrollView, TextInput, Switch, Image, Platform, I18nManager } = RN;
+const { View, Text, Pressable, Button, StyleSheet, ScrollView, TextInput, Switch, Image, Platform, I18nManager } = RN;
 
 export default {
   React,
@@ -12,6 +12,7 @@ export default {
   View,
   Text,
   Pressable,
+  Button,
   StyleSheet,
   ScrollView,
   TextInput,

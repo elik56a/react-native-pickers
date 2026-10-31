@@ -6,6 +6,7 @@ import { coreStyles } from '../../core/core.styles';
 import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FieldTriggerProps } from '../sheet.types';
+import { getFieldAccessibility } from '../sheet.utils';
 import { Chevron } from './Chevron';
 import { FloatingLabel } from './FloatingLabel';
 
@@ -19,6 +20,8 @@ export const FieldTrigger = ({
   open,
   disabled,
   clearable,
+  error,
+  required,
   onOpen,
   onClear,
   renderChevron,
@@ -31,6 +34,7 @@ export const FieldTrigger = ({
   const borderWidth = open ? look.openBorderWidth : 1;
   const floating = look.label === FIELD_LABEL.floating && !!label;
   const raised = open || !!displayValue || children != null;
+  const invalid = !!error;
 
   return (
     <View
@@ -41,7 +45,7 @@ export const FieldTrigger = ({
           minHeight: look.minHeight,
           backgroundColor: c.background,
           borderWidth,
-          borderColor: open ? c.primary : c[look.outline],
+          borderColor: invalid ? c.danger : open ? c.primary : c[look.outline],
           borderRadius: theme.radius.md,
           // A thicker open border grows inward, so the content doesn't shift.
           paddingHorizontal: theme.spacing.md - (borderWidth - 1),
@@ -56,6 +60,8 @@ export const FieldTrigger = ({
           label={label}
           raised={raised}
           open={open}
+          invalid={invalid}
+          required={required}
           borderWidth={borderWidth}
           theme={theme}
           style={[{ marginStart: theme.spacing.md - FLOATING_LABEL_PADDING - (borderWidth - 1) }, slots?.label]}
@@ -69,8 +75,7 @@ export const FieldTrigger = ({
         onPress={onOpen}
         disabled={disabled}
         accessibilityRole="button"
-        accessibilityLabel={label ?? placeholder}
-        accessibilityHint={displayValue || undefined}
+        {...getFieldAccessibility({ name: label ?? placeholder, value: displayValue, error, required })}
         accessibilityState={{ disabled, expanded: open }}
       />
       <View style={styles.flex} pointerEvents="box-none">

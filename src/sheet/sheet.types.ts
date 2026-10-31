@@ -263,17 +263,32 @@ export interface ChevronProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear';
+export type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear' | 'helperText';
+
+/** A field's error: a message shown under it, or `true` to mark it invalid without one. */
+export type FieldError = string | boolean;
+
+/** A field's validation state, set from your form: the field shows it, it doesn't check the value. */
+export interface FieldStatusProps {
+  /** Shows the field as invalid, with the message under it when it's a string */
+  error?: FieldError;
+  /** Shown under the field, replaced by the `error` message */
+  helperText?: string;
+  /** Marks the label with an asterisk and tells screen readers the field is required */
+  required?: boolean;
+}
 
 export interface PickerFieldTriggerInfo {
   /** With the `inline` presentation, a second call collapses the picker */
   open: () => void;
   displayValue: string;
   disabled: boolean;
+  /** The field's `error`, to show your trigger as invalid */
+  error?: FieldError;
 }
 
 /** The props every `*PickerField` shares; `styles` also reaches the picker inside the sheet, so it takes the picker's slots `S` too. */
-export interface PickerFieldBaseProps<S extends string = never> extends ThemableProps {
+export interface PickerFieldBaseProps<S extends string = never> extends ThemableProps, FieldStatusProps {
   /** Label rendered above the field, and the sheet title unless `title` is set */
   label?: string;
   /** Default: 'Select…' */
@@ -314,11 +329,13 @@ export type WithPickerField<SheetProps, S extends string> = DistributiveOmit<She
 
 export interface FieldLabelProps {
   label: string;
+  invalid?: boolean;
+  required?: boolean;
   theme: PickerTheme;
   style?: StyleProp<TextStyle>;
 }
 
-export interface FieldTriggerProps {
+export interface FieldTriggerProps extends Omit<FieldStatusProps, 'helperText'> {
   displayValue: string;
   /** Leading element before `displayValue` */
   icon?: React.ReactNode;
@@ -342,7 +359,28 @@ export interface FloatingLabelProps {
   /** On the border, small; otherwise resting inside the empty field */
   raised: boolean;
   open: boolean;
+  invalid?: boolean;
+  required?: boolean;
   borderWidth: number;
   theme: PickerTheme;
   style?: StyleProp<TextStyle>;
+}
+
+export interface FieldFrameProps extends FieldStatusProps {
+  label?: string;
+  theme: PickerTheme;
+  slots?: SlotStyles<'label' | 'helperText'>;
+  /** The field's box */
+  children: React.ReactNode;
+}
+
+export interface FieldMessageProps extends Omit<FieldStatusProps, 'required'> {
+  theme: PickerTheme;
+  style?: StyleProp<TextStyle>;
+}
+
+export interface FieldAccessibilityOptions extends Omit<FieldStatusProps, 'helperText'> {
+  /** What the field is called: its label, or the placeholder without one */
+  name: string;
+  value?: string;
 }
