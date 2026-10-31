@@ -1,5 +1,6 @@
 import {
   canOpenInSandbox,
+  findExampleModules,
   findMainComponent,
   toCodePenFields,
   toExampleName,
@@ -150,5 +151,44 @@ describe('toCodePenFields', () => {
     const importMap = JSON.parse(/<script type="importmap">([\s\S]*)<\/script>/.exec(data.head)?.[1] ?? '{}');
     expect(importMap.imports['react-native']).toBe('https://esm.sh/react-native-web@0.21.4?deps=react@19.1.0,react-dom@19.1.0');
     expect(importMap.imports['react/jsx-runtime']).toBe('https://esm.sh/react@19.1.0/jsx-runtime');
+  });
+});
+
+describe('example modules', () => {
+  const modules = {
+    DemoButton: `import { useState } from 'react';
+import { Pressable, Text } from 'react-native';
+
+import { usePickerTheme } from '@elik56a/react-native-pickers';
+
+export const DemoButton = ({ title }: { title: string }) => <Text>{title}</Text>;`,
+  };
+  const withButton = `import { Text } from 'react-native';
+import { DemoButton } from './DemoButton';
+
+export default function Example() {
+  return <DemoButton title="Go" />;
+}`;
+
+  it('finds only the modules the example imports', () => {
+    expect(findExampleModules(withButton, modules).map(([name]) => name)).toEqual(['DemoButton']);
+    expect(findExampleModules(code, modules)).toEqual([]);
+  });
+
+  it('ships them next to the example in Snack and StackBlitz', () => {
+    const files = JSON.parse(new URL(toSnackUrl(withButton, modules)).searchParams.get('files') ?? '');
+    expect(files['DemoButton.tsx'].contents).toBe(modules.DemoButton);
+    expect(toWebProject(withButton, modules)['src/DemoButton.tsx']).toBe(modules.DemoButton);
+    expect(toWebProject(code, modules)).not.toHaveProperty('src/DemoButton.tsx');
+  });
+
+  it('inlines them into the pen in their own scope, reading the namespaces the pen loads', () => {
+    const js = toPenJs(withButton, modules);
+    expect(js).not.toContain("from './DemoButton'");
+    expect(js).toContain('const DemoButton = (() => {');
+    expect(js).toContain('const { useState } = React;');
+    expect(js).toContain('const { Pressable, Text } = ReactNative;');
+    expect(js).toContain('const { usePickerTheme } = Pickers;');
+    expect(js).not.toMatch(/\bexport\b/);
   });
 });

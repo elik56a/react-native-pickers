@@ -20,3 +20,6 @@ export interface JsxTag {
 
 /** Project files by path, as text. */
 export type ProjectFiles = Record<string, string>;
+
+/** The docs' own modules examples import from `./<name>`, such as `DemoButton`, by name: their source, shipped with an example that imports them. */
+export type ExampleModules = Record<string, string>;
