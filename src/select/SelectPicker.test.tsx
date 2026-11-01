@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text } from 'react-native';
 
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
@@ -9,6 +10,24 @@ const options: SelectOption<string>[] = ['React', 'TypeScript', 'Expo'].map((lab
   label,
   value: label.toLowerCase(),
 }));
+
+const CreatablePicker = ({ onClose }: { onClose: () => void }) => {
+  const [value, setValue] = React.useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Stack"
+      options={options}
+      searchable
+      value={value}
+      onChange={setValue}
+      onCreate={(text) => ({
+        label: text,
+        value: text.toLowerCase(),
+      })}
+      onClose={onClose}
+    />
+  );
+};
 
 describe('SelectPicker', () => {
   it('shows the placeholder until something is selected', async () => {
@@ -34,6 +53,16 @@ describe('SelectPicker', () => {
     await fireEvent.press(screen.getByLabelText('TypeScript'));
     expect(onChange).toHaveBeenCalledWith('typescript', options[1]);
     await waitFor(() => expect(onClose).toHaveBeenCalled());
+  });
+
+  it('creates an option from the search, selects it and shows it before options include it', async () => {
+    const onClose = jest.fn();
+    await render(<CreatablePicker onClose={onClose} />);
+    await fireEvent.press(screen.getByRole('button', { name: 'Stack' }));
+    await fireEvent.changeText(screen.getByLabelText('Search'), 'Svelte');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add "Svelte"' }));
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
+    expect(screen.getByText('Svelte')).toBeTruthy();
   });
 
   it('keeps the selected label when new options no longer include it', async () => {

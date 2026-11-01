@@ -3,6 +3,7 @@ import {
   buildRows,
   defaultFilter,
   findOptions,
+  getCreateText,
   getEmptyMessage,
   getRowKey,
   getSelectedLabel,
@@ -43,6 +44,17 @@ describe('defaultFilter', () => {
   it('requires every word to match', () => {
     expect(defaultFilter(option('New York'), 'york new')).toBe(true);
     expect(defaultFilter(option('New York'), 'new jersey')).toBe(false);
+  });
+});
+
+describe('getCreateText', () => {
+  it('offers the trimmed text unless an option has that label, ignoring case and accents', () => {
+    const options = [option('Crème Brûlée'), option('React')];
+    expect(getCreateText('  Expo ', options)).toBe('Expo');
+    expect(getCreateText('creme brulee', options)).toBeNull();
+    expect(getCreateText('REACT', options)).toBeNull();
+    expect(getCreateText('Rea', options)).toBe('Rea');
+    expect(getCreateText('   ', options)).toBeNull();
   });
 });
 
@@ -88,7 +100,8 @@ describe('buildRows', () => {
     option('Jordan', { group: 'Middle East' }),
     option('Other'),
   ];
-  const labels = (rows: ReturnType<typeof buildRows<string>>) => rows.map((r) => (r.type === 'header' ? `# ${r.group}` : r.option.label));
+  const labels = (rows: ReturnType<typeof buildRows<string>>) =>
+    rows.map((r) => (r.type === 'header' ? `# ${r.group}` : r.type === 'create' ? `+ ${r.text}` : r.option.label));
 
   it('groups options under headers in order of first appearance', () => {
     expect(labels(buildRows(options, '', defaultFilter))).toEqual(['# Middle East', 'Israel', 'Jordan', '# Europe', 'France', 'Other']);

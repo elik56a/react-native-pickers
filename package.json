@@ -102,6 +102,8 @@
     "segmented-control",
     "chips",
     "autocomplete",
+    "creatable-select",
+    "tags-input",
     "combobox",
     "form-field",
     "react-hook-form",

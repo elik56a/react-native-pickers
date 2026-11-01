@@ -1,6 +1,6 @@
 ---
 title: React Native Select & Dropdown Picker
-description: "React Native select and dropdown picker: a searchable bottom sheet, modal, dropdown or inline list. Single or multi-select with chips, groups, icons, a clear button and server search (autocomplete)."
+description: "React Native select and dropdown picker: a searchable bottom sheet, modal, dropdown or inline list. Single or multi-select with chips, groups, icons, a clear button, server search (autocomplete) and new options created from the search (tags)."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -198,6 +198,43 @@ import { defaultFilter } from '@elik56a/react-native-pickers';
 
 filterOption={(o, q) => defaultFilter(o, q) || o.value === q.toUpperCase()}
 ```
+
+## Create new options
+
+`onCreate` lets the user add what they typed: while no option's label matches the search, ignoring case and accents, a last row offers **Add "…"**. It gets the trimmed text; add the new option to `options` and return it to select it, as for tags, recipients or your own categories. The search clears, so the next one can be typed straight away.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+import type { SelectOption } from '@elik56a/react-native-pickers';
+
+const initialTags: SelectOption<string>[] = ['Bug', 'Design', 'Docs'].map((label) => ({
+  label,
+  value: label.toLowerCase(),
+}));
+
+export default function Example() {
+  const [tags, setTags] = useState(initialTags);
+  const [selected, setSelected] = useState<string[]>(['bug']);
+  return (
+    <SelectPicker
+      label="Tags"
+      multiple
+      searchable
+      options={tags}
+      value={selected}
+      onChange={setSelected}
+      onCreate={(text) => {
+        const tag = { label: text, value: text.toLowerCase() };
+        setTags((current) => [...current, tag]);
+        return tag;
+      }}
+    />
+  );
+}
+```
+
+`createLabel` words the row, e.g. ``createLabel={(text) => `Create tag "${text}"`}``. Return nothing from `onCreate` to add the option without selecting it, or to save it on your server first and select it once it's there. The row isn't offered at `maxSelected`, and with [server search](#search-on-a-server) it waits for the results and checks their labels.
 
 ## Search on a server
 
@@ -672,6 +709,8 @@ export default function Example() {
 | `loadingText` | `string` | `'Loading…'` | Text next to the spinner. |
 | `renderLoading` | `(theme) => ReactNode` | — | Custom loader. |
 | `emptyText` | `string` | `'No results'` | Shown when nothing matches. |
+| `onCreate` | `(text: string) => SelectOption<T> \| void` | — | [Offer the typed text as a new option](#create-new-options) when no label matches. Return the option to select it. |
+| `createLabel` | `(text: string) => string` | `` (text) => `Add "${text}"` `` | The create row's text. |
 | `showCheckmarks` | `boolean` | `true` | Check marks / checkboxes on rows. |
 | `renderOption` | `(info: { option, selected, disabled, theme }) => ReactNode` | — | Custom row content. |
 | `renderGroupHeader` | `(group: string, theme) => ReactNode` | — | Custom section header. |

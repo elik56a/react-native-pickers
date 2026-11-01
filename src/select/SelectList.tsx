@@ -5,11 +5,13 @@ import { SearchInput } from '../core/components/SearchInput';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
+import { CreateRow } from './components/CreateRow';
 import { GroupHeader } from './components/GroupHeader';
 import { LoadingState } from './components/LoadingState';
 import { OptionRow } from './components/OptionRow';
 import { useSelectList } from './hooks/useSelectList';
 import {
+  DEFAULT_CREATE_LABEL,
   DEFAULT_EMPTY_TEXT,
   DEFAULT_LOADING_TEXT,
   DEFAULT_SEARCH_PLACEHOLDER,
@@ -29,6 +31,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
     filterOption = props.loadOptions || props.onSearchChange ? keepAll : defaultFilter,
     renderOption,
     renderGroupHeader,
+    createLabel = DEFAULT_CREATE_LABEL,
     emptyText = DEFAULT_EMPTY_TEXT,
     searchPrompt = DEFAULT_SEARCH_PROMPT,
     loading = false,
@@ -47,7 +50,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
   } = props;
   const themeOverride = useDesignOverride(themeProp, design);
   const theme = usePickerTheme(themeOverride);
-  const { query, setQuery, rows, pending, atMax, isSelected, toggle } = useSelectList(props, filterOption, isEqual);
+  const { query, setQuery, rows, pending, atMax, isSelected, toggle, create } = useSelectList(props, filterOption, isEqual);
   const showLoader = loading || pending;
   const remote = !!(props.loadOptions || props.onSearchChange);
 
@@ -56,6 +59,9 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
   const renderRow = ({ item }: { item: SelectRow<T> }) => {
     if (item.type === SELECT_ROW_TYPE.header) {
       return <GroupHeader group={item.group} renderGroupHeader={renderGroupHeader} theme={theme} slots={slots} />;
+    }
+    if (item.type === SELECT_ROW_TYPE.create) {
+      return <CreateRow text={item.text} label={createLabel(item.text)} onCreate={create} theme={theme} slots={slots} />;
     }
     const selected = isSelected(item.option.value);
     return (

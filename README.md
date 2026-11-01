@@ -98,7 +98,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`WeekStrip`](https://react-native-pickers.dev/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
 | [`DurationPicker`](https://react-native-pickers.dev/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
 | [`DateTimePicker`](https://react-native-pickers.dev/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
-| [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search |
+| [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search, new options from the search |
 | [`SelectList`](https://react-native-pickers.dev/docs/components/select-list) | The same list, inline |
 | [`CountryPicker`](https://react-native-pickers.dev/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
 | [`PhoneField`](https://react-native-pickers.dev/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |

@@ -10,6 +10,7 @@ export const SELECT_PRESENTATION = FIELD_PRESENTATION;
 export const SELECT_ROW_TYPE = {
   header: 'header',
   option: 'option',
+  create: 'create',
 } as const;
 
 /** One empty list for a missing `options`, so memos that depend on it don't rerun every render. */
@@ -19,6 +20,8 @@ export const DEFAULT_SEARCH_PLACEHOLDER = 'Search';
 export const DEFAULT_EMPTY_TEXT = 'No results';
 export const DEFAULT_LOADING_TEXT = 'Loading…';
 export const DEFAULT_SEARCH_PROMPT = 'Type to search';
+export const DEFAULT_CREATE_LABEL = (text: string) => `Add "${text}"`;
+export const CREATE_ICON = '+';
 /** Wait for a pause in typing before searching a server. */
 export const DEFAULT_SEARCH_DEBOUNCE_MS = 300;
 
