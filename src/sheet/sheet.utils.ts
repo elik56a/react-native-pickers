@@ -1,10 +1,12 @@
-import type { PlatformOSType } from 'react-native';
+import type { PlatformOSType, StyleProp, ViewStyle } from 'react-native';
 
 import { PLATFORM } from '../core/core.constants';
 import type { DistributiveOmit } from '../core/core.types';
+import type { PickerTheme } from '../core/theme/theme.types';
 import {
   DEFAULT_BOTTOM_INSET,
   DIALOG_MARGIN,
+  DISABLED_TRIGGER_OPACITY,
   DISMISS_DISTANCE,
   DISMISS_HEIGHT_RATIO,
   DISMISS_VELOCITY,
@@ -14,8 +16,10 @@ import {
   DROPDOWN_GAP,
   EXPAND_FLICK_VELOCITY,
   EXPANDED_TOP_INSET,
+  FIELD_DESIGN,
   FIELD_PRESENTATION,
   FIELD_PROP_KEYS,
+  FOCUS_RING_WIDTH,
   INVALID_ACCESSIBILITY_HINT,
   IOS_BOTTOM_INSET,
   REQUIRED_ACCESSIBILITY_LABEL,
@@ -29,6 +33,7 @@ import type {
   AnchorRect,
   DropdownFrame,
   FieldAccessibilityOptions,
+  FieldBoxState,
   FieldError,
   FieldPresentation,
   PickerFieldBaseProps,
@@ -209,4 +214,27 @@ export const getFieldAccessibility = ({ name, value, error, required }: FieldAcc
     accessibilityLabel: required ? `${name}, ${REQUIRED_ACCESSIBILITY_LABEL}` : name,
     accessibilityHint: [value, errorHint].filter(Boolean).join('. ') || undefined,
   };
+};
+
+/** The field's border thickens while open, as the design draws it. */
+export const getFieldBorderWidth = (theme: PickerTheme, open: boolean) => (open ? FIELD_DESIGN[theme.design].openBorderWidth : 1);
+
+/** The field's box: red when invalid, the primary color while open, and a focus ring where the design has one. */
+export const getFieldBoxStyle = (theme: PickerTheme, { open, invalid, disabled }: FieldBoxState): StyleProp<ViewStyle> => {
+  const look = FIELD_DESIGN[theme.design];
+  const borderWidth = getFieldBorderWidth(theme, open);
+  const c = theme.colors;
+  return [
+    {
+      minHeight: look.minHeight,
+      backgroundColor: c.background,
+      borderWidth,
+      borderColor: invalid ? c.danger : open ? c.primary : c[look.outline],
+      borderRadius: theme.radius.md,
+      // A thicker open border grows inward, so the content doesn't shift.
+      paddingHorizontal: theme.spacing.md - (borderWidth - 1),
+      opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1,
+    },
+    open && look.focusRing && { boxShadow: `0px 0px 0px ${FOCUS_RING_WIDTH}px ${c.primaryMuted}` },
+  ];
 };

@@ -152,6 +152,13 @@ export type CalendarSelectionProps =
 
 export type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
 
+/** What every calendar sets up the same way before it draws. */
+export type DayCalendarProps = Pick<
+  CalendarBaseProps,
+  'locale' | 'minDate' | 'maxDate' | 'isDateDisabled' | 'markedDates' | 'firstDayOfWeek' | 'weekdayFormat' | 'theme' | 'design'
+> &
+  CalendarSelectionProps;
+
 export type WeekStripProps = Omit<
   CalendarBaseProps,
   'initialMonth' | 'onMonthChange' | 'showOutsideDays' | 'fixedWeeks' | 'enableQuickJump' | 'formatTitle' | 'yearRange'

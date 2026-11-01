@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Animated, View } from 'react-native';
 
-import { useComponentTheme } from '../core/theme/ThemeProvider';
-import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
+import { buildMonthGrid, formatMonthYear, getMonthNames } from '../core/utils/date.utils';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
-import { CALENDAR_DESIGN, CALENDAR_MODE, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
+import { CALENDAR_MODE, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
 import {
   getAnchorMonth,
@@ -15,14 +14,12 @@ import {
   getYearBounds,
   getYearCells,
   hasRangeEnd,
-  isDayDisabled,
-  orderWeekdays,
 } from './calendar.utils';
 import { CalendarHeader } from './components/CalendarHeader';
 import { DayGrid } from './components/DayGrid';
 import { QuickGrid } from './components/QuickGrid';
 import { RangePresets } from './components/RangePresets';
-import { useCalendarSelection } from './hooks/useCalendarSelection';
+import { useDayCalendar } from './hooks/useDayCalendar';
 import { useMonthNavigation } from './hooks/useMonthNavigation';
 
 export const Calendar = (props: CalendarProps) => {
@@ -30,7 +27,6 @@ export const Calendar = (props: CalendarProps) => {
     locale,
     minDate,
     maxDate,
-    isDateDisabled,
     markedDates,
     initialMonth,
     onMonthChange,
@@ -38,7 +34,6 @@ export const Calendar = (props: CalendarProps) => {
     fixedWeeks = true,
     enableSwipe = true,
     enableQuickJump = true,
-    weekdayFormat: weekdayFormatProp,
     showWeekdays = true,
     formatTitle,
     renderDay,
@@ -47,20 +42,9 @@ export const Calendar = (props: CalendarProps) => {
     dayHeight = DEFAULT_DAY_HEIGHT,
     style,
     styles: slots,
-    theme: themeProp,
-    design,
     testID,
   } = props;
-  const { theme, themeOverride } = useComponentTheme(themeProp, design);
-  const weekdayFormat = weekdayFormatProp ?? CALENDAR_DESIGN[theme.design].weekdayFormat;
-  const firstDayOfWeek = props.firstDayOfWeek ?? getFirstDayOfWeek(locale);
-  const today = useMemo(() => new Date(), []);
-
-  const isDisabled = useCallback(
-    (day: Date) => isDayDisabled(day, { minDate, maxDate, isDateDisabled, markedDates }),
-    [isDateDisabled, markedDates, maxDate, minDate]
-  );
-  const { selection, select, selectRange } = useCalendarSelection(props, isDisabled);
+  const { theme, themeOverride, firstDayOfWeek, today, isDisabled, selection, select, selectRange, weekdays } = useDayCalendar(props);
   const range = props.mode === CALENDAR_MODE.range ? props : undefined;
   const nav = useMonthNavigation({
     anchor: getAnchorMonth(initialMonth, selection),
@@ -82,10 +66,6 @@ export const Calendar = (props: CalendarProps) => {
         markedDates,
       }),
     [firstDayOfWeek, fixedWeeks, isDisabled, markedDates, month, selection, today]
-  );
-  const weekdays = useMemo(
-    () => orderWeekdays(getWeekdayNames(locale, weekdayFormat), firstDayOfWeek),
-    [firstDayOfWeek, locale, weekdayFormat]
   );
 
   const title = formatTitle ? formatTitle(month, locale) : formatMonthYear(month, locale);

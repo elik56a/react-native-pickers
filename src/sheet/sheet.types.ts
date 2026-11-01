@@ -390,6 +390,12 @@ export interface FieldTriggerProps extends Omit<FieldStatusProps, 'helperText'> 
   testID?: string;
 }
 
+export interface FieldBoxState {
+  open: boolean;
+  invalid: boolean;
+  disabled: boolean;
+}
+
 export interface FloatingLabelProps {
   label: string;
   /** On the border, small; otherwise resting inside the empty field */
