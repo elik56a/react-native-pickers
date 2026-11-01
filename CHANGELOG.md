@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.29.0](https://github.com/elik56a/react-native-pickers/compare/v0.28.0...v0.29.0) (2026-11-01)
+
+
+### ✨ Features
+
+* **date:** presets for range calendars, such as Last 7 days ([#93](https://github.com/elik56a/react-native-pickers/issues/93)) ([284e1b2](https://github.com/elik56a/react-native-pickers/commit/284e1b2c5e2e81b9cbe8ca4838a00b926aa711a7))
+* **otp:** error and helper text on OtpField ([e46301c](https://github.com/elik56a/react-native-pickers/commit/e46301cadaa9c9adc815f66dc1bc1b41649b3cc5))
+* **select:** create new options from the search, such as tags ([#95](https://github.com/elik56a/react-native-pickers/issues/95)) ([24a6063](https://github.com/elik56a/react-native-pickers/commit/24a606356e812ce816ef6079cac5e4fe431e0514))
+* **sheet:** error, helper text and required on fields, SelectPicker and PhoneField ([#89](https://github.com/elik56a/react-native-pickers/issues/89)) ([80ba41d](https://github.com/elik56a/react-native-pickers/commit/80ba41d73fe6dab25b31f71f7affefceca4c4676))
+* **time:** add TimeRangePicker for opening hours, shifts and overnight ranges ([#98](https://github.com/elik56a/react-native-pickers/issues/98)) ([0a12881](https://github.com/elik56a/react-native-pickers/commit/0a12881798ddedfd414e9cc7d649fb4da141a66a))
+
+
+### ⚡ Performance
+
+* **calendar:** update day cells in place when the month changes ([a50a4d7](https://github.com/elik56a/react-native-pickers/commit/a50a4d79aa0b9f49745ce45ca4825b50e1b98a13))
+* **sheet:** drag the sheet on the UI thread ([05572e0](https://github.com/elik56a/react-native-pickers/commit/05572e0bd70c59826b515373cc5ea180445b1092))
+
 ## [0.28.0](https://github.com/elik56a/react-native-pickers/compare/v0.27.0...v0.28.0) (2026-10-29)
 
 
