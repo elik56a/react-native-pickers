@@ -1,6 +1,16 @@
 import type React from 'react';
 import type { RefObject } from 'react';
-import type { Animated, GestureResponderHandlers, HostInstance, LayoutChangeEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type {
+  Animated,
+  GestureResponderHandlers,
+  HostInstance,
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DistributiveOmit, ValueOf } from '../core/core.types';
@@ -149,23 +159,42 @@ export interface SheetDragFrame {
 export interface SheetResizeOptions {
   /** True while the sheet is shown. */
   active: boolean;
-  drag: Animated.Value;
+  /** The open and close slide, added to the drag. */
+  slide: Animated.AnimatedInterpolation<number>;
   draggable: boolean;
   expandable: boolean;
   swipeToClose: boolean;
   expandedHeight: number;
-  duration: number;
   onClose: () => void;
+}
+
+/** Scroll offsets of the drag area where the sheet is closed, at its base height and expanded; pulling down lowers it. */
+export interface SheetDragStops {
+  close: number;
+  base: number;
+  expanded: number;
+}
+
+export interface SheetDragAreaProps {
+  contentHeight: number;
+  initialOffset: number;
+  snapToOffsets: number[];
+  onScroll: ReturnType<typeof Animated.event>;
+  onDragEnd: (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  /** Cancels the sheet's own drag, so the area stays put under the finger while the sheet moves. */
+  style: { transform: { translateY: Animated.AnimatedSubtraction }[] };
 }
 
 export interface SheetResize {
   sheetRef: RefObject<HostInstance | null>;
-  panHandlers: GestureResponderHandlers;
+  /** The web's drag: a pointer can't scroll the native drag area. */
+  panHandlers: GestureResponderHandlers | undefined;
   onLayout: (e: LayoutChangeEvent) => void;
-  /** The sheet's height while `sized`. */
-  height: Animated.Value;
-  /** True while dragging or expanded: `height` drives the sheet instead of its content. */
-  sized: boolean;
+  expanded: boolean;
+  /** The sheet frame's slide and drag. Expanded, it hangs below the window by the extra height and is lifted back by the drag. */
+  frameStyle: { marginBottom: number; transform: { translateY: Animated.AnimatedAddition }[] };
+  /** The native drag: null on the web and before the sheet is measured. */
+  dragArea: SheetDragAreaProps | null;
 }
 
 /** The parts of a DOM element the web wheel handling reads; the library builds without DOM typings. */
@@ -185,6 +214,13 @@ export interface WheelEventLike {
 export interface WheelHost extends ScrollNode {
   addEventListener: (type: 'wheel', listener: (e: WheelEventLike) => void, options: { passive: boolean }) => void;
   removeEventListener: (type: 'wheel', listener: (e: WheelEventLike) => void) => void;
+}
+
+export interface SheetAnimation {
+  mounted: boolean;
+  progress: Animated.Value;
+  /** How far below its place the sheet is, sliding in or out. */
+  slide: Animated.AnimatedInterpolation<number>;
 }
 
 export interface SheetAnimationOptions {

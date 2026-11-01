@@ -8,7 +8,7 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # BottomSheet
 
-`BottomSheet` is the React Native bottom sheet every picker sheet is built on, exported so your own content can use it: filters, menus, confirmations, forms. It slides up over a dimmed backdrop, can be dragged down to dismiss, and is built on React Native's `Modal`, `Animated` and `PanResponder` only.
+`BottomSheet` is the React Native bottom sheet every picker sheet is built on, exported so your own content can use it: filters, menus, confirmations, forms. It slides up over a dimmed backdrop, can be dragged down to dismiss, and is built on React Native core only. The drag runs on the UI thread, so the sheet follows your finger even while JavaScript is busy.
 
 ```tsx
 import { BottomSheet } from '@elik56a/react-native-pickers';
@@ -69,7 +69,7 @@ export default function Example() {
 `BottomSheet` is fully controlled: render it with `visible` and change `visible` in `onClose`. `onClose` is called when the user:
 
 - taps the backdrop (`closeOnBackdropPress`, default `true`)
-- drags the sheet down past about 30% of its height (max 140 px), or flicks it down; on the web, scrolls the wheel down over it (`enableSwipeToClose`, default `true`)
+- drags the sheet down past about half its height, or flicks it down; on the web, drags past about 30% of its height (max 140 px) or scrolls the wheel down over it (`enableSwipeToClose`, default `true`)
 - presses Android's back button
 
 When `visible` turns `false`, the sheet animates out and then unmounts its children. `onOpened` and `onClosed` fire when the animations finish, which is handy for focusing inputs or running work after the sheet is gone.

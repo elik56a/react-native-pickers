@@ -8,6 +8,7 @@ import {
   DISMISS_DISTANCE,
   DISMISS_HEIGHT_RATIO,
   DISMISS_VELOCITY,
+  DRAG_REACH,
   DRAG_START_DISTANCE,
   DROPDOWN_EDGE_MARGIN,
   DROPDOWN_GAP,
@@ -22,6 +23,7 @@ import {
   SHEET_MAX_WIDTH,
   SHEET_PRESENTATION,
   SHEET_SNAP,
+  SNAP_TOLERANCE,
 } from './sheet.constants';
 import type {
   AnchorRect,
@@ -32,6 +34,7 @@ import type {
   PickerFieldBaseProps,
   ScrollNode,
   SheetDragFrame,
+  SheetDragStops,
   SheetPresentation,
   SheetSnap,
 } from './sheet.types';
@@ -60,6 +63,28 @@ export const getReleaseTarget = (frame: SheetDragFrame, vy: number, base: number
   if (vy < -EXPAND_FLICK_VELOCITY) return SHEET_SNAP.expanded;
   if (vy > EXPAND_FLICK_VELOCITY) return SHEET_SNAP.base;
   return frame.height - base > (max - base) / 2 ? SHEET_SNAP.expanded : SHEET_SNAP.base;
+};
+
+/** Where the drag area rests for each snap. With swipe to close it rests `DRAG_REACH` down, so it can scroll the sheet away. */
+export const getDragStops = (base: number, expandedHeight: number, expandable: boolean, swipeToClose: boolean): SheetDragStops => {
+  const rest = swipeToClose ? DRAG_REACH : 0;
+  return {
+    close: rest - base,
+    base: rest,
+    expanded: rest + (expandable ? Math.max(0, expandedHeight - base) : 0),
+  };
+};
+
+/** The drag area's snap points, without the close stop when it can't close (it's then below the content). */
+export const getSnapOffsets = ({ close, base, expanded }: SheetDragStops) =>
+  [close, base, expanded].filter((offset, i, all) => offset >= 0 && all.indexOf(offset) === i);
+
+/** The snap a drag area has come to rest on, or null while it's still on its way. Anywhere past the close stop is closed. */
+export const getSettledSnap = (offset: number, stops: SheetDragStops): SheetSnap | null => {
+  if (offset <= stops.close + SNAP_TOLERANCE) return SHEET_SNAP.close;
+  if (stops.expanded > stops.base && Math.abs(offset - stops.expanded) < SNAP_TOLERANCE) return SHEET_SNAP.expanded;
+  if (Math.abs(offset - stops.base) < SNAP_TOLERANCE) return SHEET_SNAP.base;
+  return null;
 };
 
 /** Wheel up expands, wheel down collapses an expanded sheet or closes one at its base height. */

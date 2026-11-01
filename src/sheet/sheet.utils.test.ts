@@ -1,13 +1,17 @@
+import { DRAG_REACH } from './sheet.constants';
 import type { ScrollNode } from './sheet.types';
 import {
   canScrollWithin,
   getDragFrame,
+  getDragStops,
   getDropdownFrame,
   getFieldAccessibility,
   getFieldMessage,
   getFloatingLabelShift,
   getReleaseTarget,
+  getSettledSnap,
   getSheetDefaults,
+  getSnapOffsets,
   getWheelTarget,
   isVerticalDrag,
   resolveFieldPresentation,
@@ -51,6 +55,40 @@ describe('getDragFrame', () => {
   it('collapses an expanded sheet first, then pulls it down', () => {
     expect(getDragFrame(760, 200, 400, 760, true)).toEqual({ height: 560, offset: 0 });
     expect(getDragFrame(760, 400, 400, 760, true)).toEqual({ height: 400, offset: 40 });
+  });
+});
+
+describe('getDragStops', () => {
+  it('rests DRAG_REACH down with the close stop a sheet height below and the expanded stop the extra height above', () => {
+    expect(getDragStops(400, 760, true, true)).toEqual({ close: DRAG_REACH - 400, base: DRAG_REACH, expanded: DRAG_REACH + 360 });
+  });
+
+  it('rests at the top without swipe to close, and has no room above when not expandable', () => {
+    expect(getDragStops(400, 760, false, false)).toEqual({ close: -400, base: 0, expanded: 0 });
+    expect(getDragStops(800, 760, true, true).expanded).toBe(DRAG_REACH);
+  });
+});
+
+describe('getSnapOffsets', () => {
+  it('drops stops below the content and duplicates', () => {
+    expect(getSnapOffsets({ close: 3600, base: 4000, expanded: 4360 })).toEqual([3600, 4000, 4360]);
+    expect(getSnapOffsets({ close: -400, base: 0, expanded: 0 })).toEqual([0]);
+  });
+});
+
+describe('getSettledSnap', () => {
+  const stops = { close: 3600, base: 4000, expanded: 4360 };
+
+  it('names the stop it rests on, counting anywhere past close as closed', () => {
+    expect(getSettledSnap(3600, stops)).toBe('close');
+    expect(getSettledSnap(100, stops)).toBe('close');
+    expect(getSettledSnap(4000.5, stops)).toBe('base');
+    expect(getSettledSnap(4360, stops)).toBe('expanded');
+  });
+
+  it('is null between stops, and never expanded when there is no room to', () => {
+    expect(getSettledSnap(3900, stops)).toBeNull();
+    expect(getSettledSnap(4000, { close: 3600, base: 4000, expanded: 4000 })).toBe('base');
   });
 });
 

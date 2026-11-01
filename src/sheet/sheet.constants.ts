@@ -94,10 +94,16 @@ export const EXPANDED_TOP_INSET: Partial<Record<PlatformOSType, number>> = {
 };
 /** A flick faster than this (px/ms) snaps an expandable sheet up or down regardless of distance. */
 export const EXPAND_FLICK_VELOCITY = 0.5;
-/** Expanding and collapsing run quicker than opening, as a fraction of the theme's animation duration. */
-export const RESIZE_DURATION_RATIO = 0.6;
 /** Spring speed for the sheet settling back after a drag. */
 export const SNAP_BACK_SPEED = 20;
+
+/**
+ * On native, the sheet drags with an invisible scroll view, so the UI thread moves it even while JS is busy. It rests this far
+ * down its content, which leaves room to pull any sheet closed.
+ */
+export const DRAG_REACH = 4000;
+/** A drag area within this many px of a stop has settled on it. */
+export const SNAP_TOLERANCE = 1;
 
 export const IS_WEB = Platform.OS === PLATFORM.web;
 /** Wheel distance (px) that expands, collapses or closes the sheet. */

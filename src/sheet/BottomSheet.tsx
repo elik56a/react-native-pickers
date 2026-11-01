@@ -5,6 +5,7 @@ import { PLATFORM } from '../core/core.constants';
 import { useReturnFocus } from '../core/hooks/useReturnFocus';
 import { useDesignOverride, usePickerPlatform } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
+import { SheetDragArea } from './components/SheetDragArea';
 import { SheetHeader } from './components/SheetHeader';
 import { useSheetAnimation } from './hooks/useSheetAnimation';
 import { useSheetResize } from './hooks/useSheetResize';
@@ -46,7 +47,7 @@ export const BottomSheet = ({
   const draggable = draggableProp ?? defaults.draggable;
   const bottomInset = bottomInsetProp ?? defaults.bottomInset;
   const dialog = resolvePresentation(presentation, platform, windowWidth) === SHEET_PRESENTATION.modal;
-  const { mounted, progress, drag, translateY } = useSheetAnimation({
+  const { mounted, progress, slide } = useSheetAnimation({
     visible,
     duration: theme.animation.duration,
     slideDistance: dialog ? DIALOG_RISE : windowHeight,
@@ -56,12 +57,11 @@ export const BottomSheet = ({
   const expandedPx = resolveSheetHeight(expandedHeight, windowHeight) ?? windowHeight - defaults.expandedTopInset;
   const resize = useSheetResize({
     active: mounted && visible,
-    drag,
+    slide,
     draggable: !dialog,
     expandable: expandable && !dialog,
     swipeToClose: enableSwipeToClose && !dialog,
     expandedHeight: expandedPx,
-    duration: theme.animation.duration,
     onClose,
   });
   const radius = theme.radius.sheet;
@@ -82,9 +82,9 @@ export const BottomSheet = ({
           />
         </Animated.View>
         <View style={dialog ? styles.dialogContainer : styles.container} pointerEvents="box-none">
-          {/* Two layers: the slide runs on the native driver, the height can't, and one view can't mix both */}
-          <Animated.View style={[styles.sheetFrame, { transform: [{ translateY }] }, dialog && { opacity: progress }]}>
-            <Animated.View
+          {/* Two layers: the frame slides and drags, the sheet clips its content */}
+          <Animated.View style={[styles.sheetFrame, resize.frameStyle, dialog && { opacity: progress }]}>
+            <View
               ref={resize.sheetRef}
               {...ARROW_FOCUS}
               onLayout={resize.onLayout}
@@ -92,8 +92,8 @@ export const BottomSheet = ({
                 styles.sheet,
                 {
                   backgroundColor: theme.colors.sheet,
-                  maxHeight: resize.sized ? expandedPx : windowHeight * maxHeightRatio,
-                  height: resize.sized ? resize.height : resolvedHeight,
+                  maxHeight: resize.expanded ? expandedPx : windowHeight * maxHeightRatio,
+                  height: resize.expanded ? expandedPx : resolvedHeight,
                 },
                 dialog
                   ? { borderRadius: radius, paddingBottom: theme.spacing.md }
@@ -102,24 +102,35 @@ export const BottomSheet = ({
               ]}
               accessibilityViewIsModal
             >
+              {resize.dragArea ? <SheetDragArea {...resize.dragArea} /> : null}
               {/* collapsable={false}: not flattened away, so a touch anywhere on the strip reaches the drag handlers */}
-              <View style={dialog && styles.dialogHeader}>
+              <View style={dialog && styles.dialogHeader} pointerEvents="box-none">
                 {!dialog && showHandle && (
-                  <View {...resize.panHandlers} collapsable={false} style={styles.handleArea}>
+                  <View
+                    {...resize.panHandlers}
+                    collapsable={false}
+                    pointerEvents={resize.dragArea ? 'none' : undefined}
+                    style={styles.handleArea}
+                  >
                     <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
                   </View>
                 )}
                 {(title || headerLeft || headerRight) && (
-                  <View {...(draggable && !dialog ? resize.panHandlers : null)} collapsable={false}>
+                  <View
+                    {...(draggable && !dialog ? resize.panHandlers : null)}
+                    collapsable={false}
+                    pointerEvents={draggable && resize.dragArea ? 'box-none' : undefined}
+                  >
                     <SheetHeader title={title} headerLeft={headerLeft} headerRight={headerRight} theme={theme} slots={slots} />
                   </View>
                 )}
               </View>
-              <View style={[resolvedHeight || resize.sized ? styles.flex : styles.shrink, slots?.content]}>{children}</View>
+              <View style={[resolvedHeight || resize.expanded ? styles.flex : styles.shrink, slots?.content]}>{children}</View>
               {footer ? (
                 <View style={[{ paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.md }, slots?.footer]}>{footer}</View>
               ) : null}
-            </Animated.View>
+            </View>
+            {dialog ? null : <View style={[styles.filler, { height: expandedPx, backgroundColor: theme.colors.sheet }]} />}
           </Animated.View>
         </View>
       </KeyboardAvoidingView>

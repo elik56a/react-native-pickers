@@ -8,9 +8,14 @@ import type { SheetHeaderProps } from '../sheet.types';
 export const SheetHeader = ({ title, headerLeft, headerRight, theme, slots }: SheetHeaderProps) => {
   const start = SHEET_DESIGN[theme.design].titleAlign === TITLE_ALIGN.start;
   return (
-    <View style={[styles.header, { paddingHorizontal: theme.spacing.lg }, slots?.header]}>
-      {start && !headerLeft ? null : <View style={styles.headerSide}>{headerLeft}</View>}
-      <View style={[styles.headerCenter, start && styles.headerStart]}>
+    // Touches pass through all but the header's own controls, to the sheet's drag area behind it.
+    <View style={[styles.header, { paddingHorizontal: theme.spacing.lg }, slots?.header]} pointerEvents="box-none">
+      {start && !headerLeft ? null : (
+        <View style={styles.headerSide} pointerEvents="box-none">
+          {headerLeft}
+        </View>
+      )}
+      <View style={[styles.headerCenter, start && styles.headerStart]} pointerEvents={typeof title === 'string' ? 'none' : 'box-none'}>
         {typeof title === 'string' ? (
           <Text style={[textStyle(theme, start ? 'lg' : 'md', 'bold'), slots?.title]} numberOfLines={1} accessibilityRole="header">
             {title}
@@ -19,7 +24,9 @@ export const SheetHeader = ({ title, headerLeft, headerRight, theme, slots }: Sh
           title
         )}
       </View>
-      <View style={[styles.headerSide, styles.headerRight]}>{headerRight}</View>
+      <View style={[styles.headerSide, styles.headerRight]} pointerEvents="box-none">
+        {headerRight}
+      </View>
     </View>
   );
 };

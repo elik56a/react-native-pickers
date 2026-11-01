@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
   dialogContainer: { flex: 1, justifyContent: 'center', padding: DIALOG_MARGIN },
   sheetFrame: { width: '100%', alignSelf: 'center', maxWidth: SHEET_MAX_WIDTH },
   sheet: { width: '100%', overflow: 'hidden' },
+  /** Sheet-coloured, under the sheet: what shows below it while it's dragged above its height. */
+  filler: { position: 'absolute', top: '100%', left: 0, right: 0 },
+  dragContent: { width: '100%' },
   dialogHeader: { paddingTop: 12 },
   handleArea: { alignItems: 'center', paddingTop: 8, paddingBottom: 6 },
   handle: { width: 40, height: 5, borderRadius: 3 },
