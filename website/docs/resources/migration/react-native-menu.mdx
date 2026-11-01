@@ -1,12 +1,14 @@
 ---
-title: Migrate from @react-native-menu/menu
+title: "@react-native-menu/menu alternative: migration guide"
 sidebar_label: '@react-native-menu/menu'
-description: "Switch from @react-native-menu/menu to React Native Pickers: Menu with an onPress per action instead of event ids, icons, subtitles, destructive, disabled and checked items, and a long-press context menu. Pure JavaScript: runs in Expo Go and on the web."
+description: "An alternative to @react-native-menu/menu that runs in Expo Go and on the web: Menu with an onPress per action, icons, checked items and a context menu."
 ---
 
 # Migrate from `@react-native-menu/menu`
 
 `MenuView` shows the system menu, so it needs a development build and its icons are SF Symbols and Android drawables. [`Menu`](../../components/menu) is pure JavaScript: it runs in Expo Go and on the web, looks like your other pickers, and takes any icon node. Each action has its own `onPress`, so there's no switch on the event id.
+
+## Code changes
 
 ```diff
 - import { MenuView } from '@react-native-menu/menu';
@@ -35,6 +37,8 @@ description: "Switch from @react-native-menu/menu to React Native Pickers: Menu 
 - </MenuView>
 + </Menu>
 ```
+
+## Props
 
 | @react-native-menu/menu | React Native Pickers |
 | --- | --- |

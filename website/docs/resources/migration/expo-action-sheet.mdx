@@ -1,12 +1,16 @@
 ---
-title: Migrate from @expo/react-native-action-sheet
+title: "@expo/react-native-action-sheet alternative: migration guide"
 sidebar_label: 'expo action-sheet'
-description: "Switch from @expo/react-native-action-sheet to React Native Pickers: the same useActionSheet hook, an onPress per action instead of button indexes, destructive and disabled actions, icons, and each platform's own design on iOS, Android and the web. No provider and no native code."
+description: "An alternative to @expo/react-native-action-sheet: the same useActionSheet hook, an onPress per action, each platform's design. No provider, no native code."
 ---
 
 # Migrate from `@expo/react-native-action-sheet`
 
+`@expo/react-native-action-sheet` shows the system action sheet on iOS, which its styling props can't change, and its own sheet on Android and the web. [`ActionSheet`](../../components/action-sheet) draws each platform's design itself, so your theme applies on iOS too.
+
 Keep calling a function: `useActionSheet` has the same name and returns `show`, which opens [`ActionSheet`](../../components/action-sheet). Each action carries its own `onPress`, so there are no indexes to match up. Render the returned `actionSheet` once in the component, and remove `<ActionSheetProvider>` from your app root.
+
+## Code changes
 
 ```diff
 - import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -39,6 +43,8 @@ Keep calling a function: `useActionSheet` has the same name and returns `show`, 
 ```
 
 Prefer state? `<ActionSheet visible={open} onClose={() => setOpen(false)} actions={…} />` takes the same props.
+
+## Props
 
 | @expo/react-native-action-sheet | React Native Pickers |
 | --- | --- |

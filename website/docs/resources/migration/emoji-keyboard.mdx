@@ -1,7 +1,7 @@
 ---
-title: Migrate from rn-emoji-keyboard
+title: "rn-emoji-keyboard alternative: migration guide"
 sidebar_label: 'rn-emoji-keyboard'
-description: "Switch from rn-emoji-keyboard to React Native Pickers: EmojiPickerSheet with search, recents, skin tones and a category bar that follows the platform, or an inline EmojiPicker."
+description: "An alternative to rn-emoji-keyboard that works on React Native 0.88: EmojiPickerSheet with search, recents, skin tones and a platform-style category bar."
 ---
 
 # Migrate from `rn-emoji-keyboard`
@@ -14,6 +14,8 @@ description: "Switch from rn-emoji-keyboard to React Native Pickers: EmojiPicker
 
 :::
 
+## Code changes
+
 ```diff
 - import EmojiPicker from 'rn-emoji-keyboard';
 + import { EmojiPickerSheet } from '@elik56a/react-native-pickers';
@@ -21,6 +23,8 @@ description: "Switch from rn-emoji-keyboard to React Native Pickers: EmojiPicker
 - <EmojiPicker open={open} onClose={() => setOpen(false)} onEmojiSelected={(e) => setEmoji(e.emoji)} />
 + <EmojiPickerSheet visible={open} onClose={() => setOpen(false)} onSelect={setEmoji} />
 ```
+
+## Props
 
 | rn-emoji-keyboard | React Native Pickers |
 | --- | --- |

@@ -1,10 +1,14 @@
 ---
-title: Migrate from @ptomasroos/react-native-multi-slider
+title: "@ptomasroos/react-native-multi-slider alternative: migration guide"
 sidebar_label: 'multi-slider'
-description: "Switch from @ptomasroos/react-native-multi-slider to React Native Pickers: a range Slider with two thumbs that fills its width, labelled marks, a value bubble and screen-reader support, in iOS, Material and web designs."
+description: "An alternative to @ptomasroos/react-native-multi-slider, unreleased since 2020: a range Slider with two thumbs, labelled marks and a value bubble."
 ---
 
 # Migrate from `@ptomasroos/react-native-multi-slider`
+
+`@ptomasroos/react-native-multi-slider` hasn't had a release since March 2020. [`Slider`](../../components/slider) covers a single value and a range in one component, with no native code or Reanimated, a screen-reader label on each thumb (`thumbLabels`) and arrow keys on the web.
+
+## Code changes
 
 ```diff
 - import MultiSlider from '@ptomasroos/react-native-multi-slider';
@@ -30,6 +34,8 @@ description: "Switch from @ptomasroos/react-native-multi-slider to React Native 
 + />
 ```
 
+## Props
+
 | multi-slider | React Native Pickers |
 | --- | --- |
 | `values` (`[a]` or `[a, b]`) | `value`: a number, or `[start, end]` with `range` |
@@ -46,7 +52,5 @@ description: "Switch from @ptomasroos/react-native-multi-slider to React Native 
 | `markerStyle` / `customMarker` | `styles={{ thumb }}` |
 | `enabledOne` / `enabledTwo` | `disabled` for the whole slider |
 | `vertical` | — |
-
-[`Slider`](../../components/slider) has no native code or Reanimated, gives each thumb a screen-reader label (`thumbLabels`), and moves with arrow keys on the web.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

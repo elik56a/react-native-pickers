@@ -13,7 +13,7 @@ export const NPM_DOWNLOADS_STATUS = {
 
 export const PAGE_TITLE = 'Date, Time, Select & Emoji Pickers with Zero Native Code';
 export const PAGE_DESCRIPTION =
-  'Wheel, time, duration, date, month, week, range, date-time, select, country, phone, currency, amount, time zone, emoji and color pickers, a slider, a star rating and an OTP code input for React Native, with bottom sheets, action sheets, menus and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Every picker your React Native app needs: date, time, select, country, emoji and more, plus bottom sheets. Native on iOS, Android and web, zero native code.';
 
 const SITE_URL = 'https://react-native-pickers.dev';
 

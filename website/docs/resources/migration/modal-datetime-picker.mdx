@@ -1,15 +1,21 @@
 ---
-title: Migrate from react-native-modal-datetime-picker
+title: "react-native-modal-datetime-picker alternative: migration guide"
 sidebar_label: 'modal-datetime-picker'
-description: "Switch from react-native-modal-datetime-picker to React Native Pickers: DatePickerSheet, TimePickerSheet and DateTimePickerSheet with Cancel / Done, or a field that opens them. No native module."
+description: "An alternative to react-native-modal-datetime-picker that runs on the web too: date, time and date-time sheets with Cancel / Done. No native module."
 ---
 
 # Migrate from `react-native-modal-datetime-picker`
+
+`react-native-modal-datetime-picker` puts `@react-native-community/datetimepicker` in a modal, so it inherits its limits: a native module, the operating system's own look, and no web support. The [picker sheets](../../components/picker-sheets) draw the pickers in JavaScript and run on iOS, Android and the web.
+
+## Code changes
 
 ```diff
 - <DateTimePickerModal isVisible={open} mode="date" date={date} onConfirm={setDate} onCancel={close} />
 + <DatePickerSheet visible={open} value={date} onConfirm={setDate} onClose={close} />
 ```
+
+## Props
 
 | modal-datetime-picker | React Native Pickers |
 | --- | --- |

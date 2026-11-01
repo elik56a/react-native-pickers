@@ -1,10 +1,14 @@
 ---
-title: Migrate from react-native-ratings
+title: "react-native-ratings alternative: migration guide"
 sidebar_label: 'ratings'
-description: "Switch from react-native-ratings to React Native Pickers: Rating with tap and drag, half steps, read-only fractions, your own icon instead of images, and keyboard and screen-reader support. No images or native code."
+description: "An alternative to react-native-ratings, unreleased since 2021: Rating with tap and drag, half steps, read-only fractions and your own icon. No images."
 ---
 
 # Migrate from `react-native-ratings`
+
+`react-native-ratings` hasn't had a release since May 2021, and draws its stars from bundled images. [`Rating`](../../components/rating) draws them as text, takes any icon you already use through `renderIcon`, is adjustable for screen readers and steps with arrow keys on the web.
+
+## Code changes
 
 ```diff
 - import { AirbnbRating, Rating } from 'react-native-ratings';
@@ -21,6 +25,8 @@ description: "Switch from react-native-ratings to React Native Pickers: Rating w
 + <Rating defaultValue={3} size={24} color="#f1c40f" onChange={setStars} />
 ```
 
+## Props
+
 | react-native-ratings | React Native Pickers |
 | --- | --- |
 | `count` / `ratingCount` | `max` (default `5`) |
@@ -36,7 +42,5 @@ description: "Switch from react-native-ratings to React Native Pickers: Rating w
 | `type="heart"` / `starImage` / `ratingImage` | `renderIcon={({ color, size }) => …}` |
 | `reviews` + `showRating` | render your own label from `value` |
 | `starContainerStyle` / `style` | `styles={{ container, item }}` / `style` |
-
-There are no images to bundle: stars are text, and `renderIcon` takes any icon you already use. [`Rating`](../../components/rating) is adjustable for screen readers and steps with arrow keys on the web.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

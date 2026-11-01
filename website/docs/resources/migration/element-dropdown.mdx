@@ -1,12 +1,14 @@
 ---
-title: Migrate from react-native-element-dropdown
+title: "react-native-element-dropdown alternative: migration guide"
 sidebar_label: 'react-native-element-dropdown'
-description: "Switch from react-native-element-dropdown to React Native Pickers: Dropdown and MultiSelect become one SelectPicker, with search, chips, groups and server search, in iOS, Material and web designs."
+description: "An alternative to react-native-element-dropdown: Dropdown and MultiSelect become one SelectPicker, with search, chips, groups and server search."
 ---
 
 # Migrate from `react-native-element-dropdown`
 
 `Dropdown` and `MultiSelect` are one component, `SelectPicker`, with `multiple` for the second. Options always have `label` and `value`, so `labelField` and `valueField` go away, and `onChange` gets the value with the option next to it.
+
+## Code changes
 
 ```diff
 - import { Dropdown } from 'react-native-element-dropdown';
@@ -31,6 +33,8 @@ description: "Switch from react-native-element-dropdown to React Native Pickers:
 +   onChange={setValue}
 + />
 ```
+
+## Props
 
 | react-native-element-dropdown | React Native Pickers |
 | --- | --- |

@@ -1,7 +1,7 @@
 ---
-title: Migrate from react-native-modal
+title: "react-native-modal alternative: migration guide"
 sidebar_label: 'react-native-modal'
-description: "Switch from react-native-modal to React Native Pickers: BottomSheet as a bottom sheet or a centered modal, with the backdrop, swipe to close, Back button and keyboard avoidance built in, and the sheet surface drawn for you. No native code."
+description: "An alternative to react-native-modal that works on React Native 0.88: BottomSheet as a sheet or centered modal, with swipe to close and keyboard avoidance."
 ---
 
 # Migrate from `react-native-modal`
@@ -13,6 +13,8 @@ Most `react-native-modal` code builds a bottom sheet or a dialog by hand: `style
 `react-native-modal` 14.0.0-rc.1, the latest release, calls `InteractionManager.createInteractionHandle`. React Native 0.88 no longer exports `InteractionManager`, so the modal throws `Cannot read property 'createInteractionHandle' of undefined` as soon as it opens. `BottomSheet` uses React Native core only and works on 0.88.
 
 :::
+
+## Code changes
 
 ```diff
 - import Modal from 'react-native-modal';
@@ -36,6 +38,8 @@ Most `react-native-modal` code builds a bottom sheet or a dialog by hand: `style
 ```
 
 For a centered dialog, the default `react-native-modal` look, pass `presentation="modal"`.
+
+## Props
 
 | react-native-modal | React Native Pickers |
 | --- | --- |

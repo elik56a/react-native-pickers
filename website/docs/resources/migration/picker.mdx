@@ -1,10 +1,14 @@
 ---
-title: Migrate from @react-native-picker/picker
+title: "@react-native-picker/picker alternative: migration guide"
 sidebar_label: '@react-native-picker/picker'
-description: "Switch from @react-native-picker/picker to React Native Pickers: WheelPicker with the iOS wheel on every platform, or SelectPicker for a dropdown. No native module."
+description: "An alternative to @react-native-picker/picker: WheelPicker draws the iOS wheel on iOS, Android and the web, or SelectPicker for a dropdown. No native module."
 ---
 
 # Migrate from `@react-native-picker/picker`
+
+`@react-native-picker/picker` shows each platform's native control: a wheel on iOS, a dropdown or a dialog on Android. [`WheelPicker`](../../components/wheel-picker) draws the wheel in JavaScript, the same on iOS, Android and the web, with looping, disabled rows and your theme.
+
+## Code changes
 
 ```diff
 - <Picker selectedValue={lang} onValueChange={setLang}>

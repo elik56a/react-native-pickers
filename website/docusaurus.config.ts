@@ -12,6 +12,8 @@ const BASE_URL = '/';
 const AUTHOR = 'Eliyahu Kriel';
 const LINKEDIN = 'https://www.linkedin.com/in/elikri/';
 const NPM = `https://www.npmjs.com/package/${PACKAGE}`;
+// Google Analytics 4. Search Console verifies the site through this tag.
+const GA_ID = 'G-KSGHFWV8ZW';
 
 // Simple Icons (CC0) brand marks, fetched from Iconify.
 const BRAND_ICON_PATHS = {
@@ -113,6 +115,7 @@ const config: Config = {
         blog: false,
         theme: { customCss: './src/css/custom.css' },
         sitemap: { changefreq: 'weekly', lastmod: 'date' },
+        gtag: { trackingID: GA_ID, anonymizeIP: true },
       } satisfies Preset.Options,
     ],
   ],
@@ -161,7 +164,8 @@ const config: Config = {
       'docusaurus-plugin-llms',
       {
         title: 'React Native Pickers',
-        description: `${PACKAGE}: wheel, time, date (calendar, range, multiple, wheel), date-time, select (local or server search), horizontal list (segmented control, chips) and emoji pickers, plus bottom sheets and form fields, for React Native, Expo and React Native Web, with zero native code (pure JavaScript). Native iOS, Material and web designs by default (design="auto"), or one design everywhere; fully themeable.`,
+        // The same list as the site's, so llms.txt never falls behind the components.
+        description: `${PACKAGE}: ${DESCRIPTION}`,
         excludeImports: true,
         removeDuplicateHeadings: true,
         generateMarkdownFiles: true,

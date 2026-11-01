@@ -1,10 +1,14 @@
 ---
-title: Migrate from react-native-picker-select
+title: "react-native-picker-select alternative: migration guide"
 sidebar_label: 'picker-select'
-description: "Switch from react-native-picker-select to React Native Pickers: SelectPicker with search, multi-select, chips, groups and server search, in a bottom sheet or a dropdown."
+description: "An alternative to react-native-picker-select with search and multi-select: SelectPicker with chips, groups, icons and server search. No native module."
 ---
 
 # Migrate from `react-native-picker-select`
+
+`react-native-picker-select` wraps the native `@react-native-picker/picker`: one value, a label per row, no search, and limited styling on Android. [`SelectPicker`](../../components/select-picker) is pure JavaScript and adds search, multi-select with chips, groups, icons and server search.
+
+## Code changes
 
 ```diff
 - <RNPickerSelect
@@ -20,6 +24,8 @@ description: "Switch from react-native-picker-select to React Native Pickers: Se
 +   placeholder="Select a sport…"
 + />
 ```
+
+## Props
 
 | react-native-picker-select | React Native Pickers |
 | --- | --- |

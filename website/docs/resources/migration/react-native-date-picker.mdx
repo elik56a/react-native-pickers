@@ -1,12 +1,14 @@
 ---
-title: Migrate from react-native-date-picker
+title: "react-native-date-picker alternative: migration guide"
 sidebar_label: 'react-native-date-picker'
-description: "Switch from react-native-date-picker to React Native Pickers: the same date, time and date-time wheels and modal, in pure JavaScript, so it runs in Expo Go and on the web."
+description: "An alternative to react-native-date-picker that runs in Expo Go and on the web: the same date, time and date-time wheels and modal, in pure JavaScript."
 ---
 
 # Migrate from `react-native-date-picker`
 
 `react-native-date-picker` draws native wheels, so it needs a development build and has no web support. React Native Pickers draws the same wheels in JavaScript: it runs in Expo Go, ships in OTA updates and works on the web. Each platform gets its own design by default (wheels on iOS, a calendar and clock dial in Material, a calendar and time columns on the web); add `display="wheel"` to keep wheels everywhere.
+
+## Code changes
 
 ```diff
 - import DatePicker from 'react-native-date-picker';
@@ -30,6 +32,8 @@ description: "Switch from react-native-date-picker to React Native Pickers: the 
 - />
 + <DatePickerSheet display="wheel" visible={open} value={date} onConfirm={setDate} onClose={() => setOpen(false)} />
 ```
+
+## Props
 
 | react-native-date-picker | React Native Pickers |
 | --- | --- |

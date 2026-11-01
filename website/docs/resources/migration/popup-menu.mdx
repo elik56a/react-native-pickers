@@ -1,12 +1,14 @@
 ---
-title: Migrate from react-native-popup-menu
+title: "react-native-popup-menu alternative: migration guide"
 sidebar_label: 'popup-menu'
-description: "Switch from react-native-popup-menu to React Native Pickers: one Menu with an actions array instead of MenuTrigger, MenuOptions and MenuOption, no MenuProvider, iOS, Material and web designs, and a sheet presentation."
+description: "An alternative to react-native-popup-menu: one Menu with an actions array instead of MenuTrigger and MenuOptions, no MenuProvider, and native designs."
 ---
 
 # Migrate from `react-native-popup-menu`
 
 [`Menu`](../../components/menu) takes the options as one `actions` array, and its `children` is the trigger. There's no `MenuProvider` to wrap the app in.
+
+## Code changes
 
 ```diff
 - import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
@@ -32,6 +34,8 @@ description: "Switch from react-native-popup-menu to React Native Pickers: one M
 ```
 
 Remove `<MenuProvider>` from your app root.
+
+## Props
 
 | react-native-popup-menu | React Native Pickers |
 | --- | --- |
