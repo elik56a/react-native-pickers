@@ -79,8 +79,8 @@ export const useWheelScroll = <T>({
   );
 
   const scrollToLogical = useCallback(
-    (logicalIndex: number, animated: boolean) => scrollToData(alignToLap(st.tick, logicalIndex, count, loop), animated),
-    [count, loop, scrollToData, st]
+    (logicalIndex: number, animated: boolean) => scrollToData(alignToLap(st.tick, logicalIndex, count, loop, layout.total), animated),
+    [count, layout.total, loop, scrollToData, st]
   );
 
   const settle = useCallback(() => {

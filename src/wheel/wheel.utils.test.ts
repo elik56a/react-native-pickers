@@ -86,11 +86,20 @@ describe('getLoopLayout', () => {
 });
 
 describe('alignToLap', () => {
-  it('keeps the current lap when looping', () => {
-    expect(alignToLap(243, 7, 12, true)).toBe(247);
+  it('keeps the current lap when the item is nearest there', () => {
+    expect(alignToLap(243, 7, 12, true, 600)).toBe(247);
+  });
+  it('turns the short way round across the end of a lap', () => {
+    // Row 251 is the last of 9 items (lap 243–251): the first item is the next row, not 8 rows back.
+    expect(alignToLap(251, 0, 9, true, 486)).toBe(252);
+    expect(alignToLap(243, 8, 9, true, 486)).toBe(242);
+  });
+  it('stays within the rendered rows', () => {
+    expect(alignToLap(8, 0, 9, true, 27)).toBe(9);
+    expect(alignToLap(1, 8, 9, true, 27)).toBe(8);
   });
   it('is the logical index without looping', () => {
-    expect(alignToLap(3, 7, 12, false)).toBe(7);
+    expect(alignToLap(3, 7, 12, false, 12)).toBe(7);
   });
 });
 
