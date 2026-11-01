@@ -390,6 +390,7 @@ Shared props, plus every [calendar prop](./date-picker#calendar) (`minDate`, `ma
 | `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Current committed value; copied into the draft on open. |
 | `onConfirm` | `(date: Date)` · `(range: DateRange)` · `(dates: Date[])` · `(ranges: DateRange[])` `=> void` | **required** | Called with the draft on Done. |
 | `minRangeDays` / `maxRangeDays` | `number` | — | Range and ranges modes. |
+| `allowSingleDayRange` | `boolean` | `true` | Range and ranges modes: allow `start === end`. |
 | `presets` | `DateRangePreset[]` | — | Range mode: chips that pick a whole range, such as [`getRangePresets()`](./date-range-picker#presets). |
 | `presetsProps` | `RangePresetsListProps` | — | Range mode: [`HorizontalList`](./horizontal-list#props) props for the presets row. |
 | `maxSelections` | `number` | — | Multiple mode. |

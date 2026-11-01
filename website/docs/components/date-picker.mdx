@@ -160,7 +160,7 @@ export default function Example() {
 
 - **Arrows** step one month. They're disabled at `minDate` / `maxDate`.
 - **Swipe** left / right on the days to change month (`enableSwipe`, on by default). The direction flips in RTL.
-- **Quick jump**: tap the month title to open a grid of months (the arrows step by year), tap the title again for a grid of years (the arrows step by 12 years), and tap it once more to go back to days. Picking a year opens its months, and picking a month opens its days (`enableQuickJump`, on by default). The year grid is limited to `yearRange`, which defaults to the `minDate` / `maxDate` years or 100 years either side of today.
+- **Quick jump**: tap the month title to open a grid of months (the arrows step by year), tap the title again for a grid of years (the arrows step by 12 years), and tap it once more to go back to days. Picking a year opens its months, and picking a month opens its days (`enableQuickJump`, on by default). The year grid shows `yearRange`, or 100 years either side of today, kept within the `minDate` / `maxDate` years.
 - `initialMonth` sets the first month shown. By default it's the month of the selected date (or range start, or first multiple date), else today.
 - `onMonthChange(month)` fires with the first day of the newly shown month.
 
@@ -380,7 +380,7 @@ Each day is a button whose label is the full date ("Wednesday, October 14, 2026"
 | `formatTitle` | `(month: Date, locale?: string) => string` | `"October 2026"` | Custom title text. |
 | `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Custom day cell content. |
 | `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` | — | Custom arrows. |
-| `yearRange` | `[number, number]` | min/max or ±100 years | Years available in the year grid. |
+| `yearRange` | `[number, number]` | ±100 years | Years available in the year grid, kept within `minDate` / `maxDate`. |
 | `dayHeight` | `number` | `44` | Height of a day row. |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `styles` | `SlotStyles<CalendarSlot>` | — | See [slots](#slots). |
