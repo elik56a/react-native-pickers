@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.30.0](https://github.com/elik56a/react-native-pickers/compare/v0.29.0...v0.30.0) (2026-11-01)
+
+
+### ✨ Features
+
+* **calendar:** add ExpandableCalendar, a week that opens into its month ([#103](https://github.com/elik56a/react-native-pickers/issues/103)) ([0d976c7](https://github.com/elik56a/react-native-pickers/commit/0d976c7855100418d59cad8db7ce20f6a7f415e2))
+* **currency:** add AmountField and CurrencyPicker ([#111](https://github.com/elik56a/react-native-pickers/issues/111)) ([c0711fb](https://github.com/elik56a/react-native-pickers/commit/c0711fbc8971788fca2f1cd135bc245832daee2d))
+* **language:** add LanguagePicker with flags for app language settings ([#101](https://github.com/elik56a/react-native-pickers/issues/101)) ([d5b4d64](https://github.com/elik56a/react-native-pickers/commit/d5b4d64cd66a78371917f9552479f444e9041c53))
+* **website:** redesign the home page ([#112](https://github.com/elik56a/react-native-pickers/issues/112)) ([fde7a32](https://github.com/elik56a/react-native-pickers/commit/fde7a328d216719b32efd061135d6dec61a7bf70))
+
+
+### 🐛 Bug Fixes
+
+* pointer cursor on drag controls and space in the time range row ([#110](https://github.com/elik56a/react-native-pickers/issues/110)) ([3404df0](https://github.com/elik56a/react-native-pickers/commit/3404df01b843fe564cc9d4884b6d44434a9371da))
+
 ## [0.29.0](https://github.com/elik56a/react-native-pickers/compare/v0.28.0...v0.29.0) (2026-11-01)
 
 
