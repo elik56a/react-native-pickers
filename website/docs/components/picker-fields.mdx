@@ -227,7 +227,7 @@ export default function Example() {
 
 ## Custom trigger
 
-`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled, error }`. The label (except Material's, which is drawn inside the field box) and the line under the field still render around it, and the sheet still opens from the field; use `error` to show your trigger as invalid.
+`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled, error }`. The label sits above it, in Material too, the line under the field still shows, and the sheet still opens from the field. Use `error` to show your trigger as invalid.
 
 ```tsx live
 import { useState } from 'react';

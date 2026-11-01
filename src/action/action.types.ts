@@ -114,7 +114,7 @@ export interface MenuTriggerInfo {
   visible: boolean;
 }
 
-export type MenuSlot = 'trigger' | 'menu' | 'header' | 'title' | 'message' | 'action' | 'actionLabel' | 'actionDescription' | 'check';
+export type MenuSlot = 'trigger' | 'menu' | 'header' | 'title' | 'action' | 'actionLabel' | 'actionDescription' | 'check';
 
 export interface MenuProps extends ThemableProps {
   actions: MenuAction[];

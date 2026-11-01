@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { ValueOf } from '../core/core.types';
+import type { NoInferValue, ValueOf } from '../core/core.types';
 import type { ARROW_POSITION, HORIZONTAL_LIST_VARIANT, ICON_POSITION, SCROLL_ARROW_SIDE } from './list.constants';
 
 /** What an item's icon can match: its state and its label's color. */
@@ -49,7 +49,7 @@ export interface HorizontalListRenderItemInfo<T> {
 export type HorizontalListProps<T> = ThemableProps & {
   items: ReadonlyArray<HorizontalListItem<T>>;
   value?: T | null;
-  onChange?: (value: T, item: HorizontalListItem<T>) => void;
+  onChange?: (value: NoInferValue<T>, item: HorizontalListItem<T>) => void;
   isEqual?: (a: T, b: T) => boolean;
   /** 'segmented': items on a track, the selected one on a sliding thumb. 'chips': separate pills. Default: 'segmented' */
   variant?: HorizontalListVariant;

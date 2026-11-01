@@ -338,9 +338,14 @@ describe('quick grid cells', () => {
     expect(cells.filter((c) => c.disabled).map((c) => c.value)).toEqual([2016, 2017, 2018, 2019]);
     expect(cells.find((c) => c.selected)?.value).toBe(2026);
   });
-  it('bounds years by yearRange, else min/max, else ±100 years', () => {
+  it('bounds years by yearRange, else ±100 years, within min/max', () => {
     expect(getYearBounds(day(1), [2000, 2010], day(1, 0, 1990))).toEqual([2000, 2010]);
+    expect(getYearBounds(day(1), [2000, 2010], day(1, 0, 2005))).toEqual([2005, 2010]);
     expect(getYearBounds(day(1), undefined, day(1, 0, 1990))).toEqual([1990, 2126]);
+    expect(getYearBounds(day(1), undefined, undefined, day(1, 0, 2030))).toEqual([1926, 2030]);
+  });
+  it('keeps min/max when yearRange misses them', () => {
+    expect(getYearBounds(day(1), [2000, 2010], day(1, 0, 2020))).toEqual([2020, 2020]);
   });
   it('splits cells into rows of three', () => {
     expect(chunkRows([1, 2, 3, 4, 5, 6, 7])).toEqual([[1, 2, 3], [4, 5, 6], [7]]);

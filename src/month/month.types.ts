@@ -26,7 +26,7 @@ export interface MonthPickerProps extends ThemableProps {
   minDate?: Date;
   /** Latest selectable month (pass a day in it). */
   maxDate?: Date;
-  /** Years when no min/max is given. Default: ±100 from today */
+  /** Years to offer, kept within minDate/maxDate. Default: ±100 from today */
   yearRange?: [number, number];
   /** Wheel month names: 'long' (January), 'short' (Jan) or 'numeric' (01). Default: 'long' */
   monthFormat?: MonthFormat;

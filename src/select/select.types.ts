@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { DistributiveOmit, ValueOf } from '../core/core.types';
+import type { DistributiveOmit, NoInferValue, ValueOf } from '../core/core.types';
 import type { ChevronInfo, FieldError, FieldStatusProps, PickerFieldSlot, SheetChromeProps } from '../sheet';
 import type { FieldTriggerProps } from '../sheet/sheet.types';
 import type { SELECT_PRESENTATION, SELECT_ROW_TYPE, SINGLE_INDICATOR } from './select.constants';
@@ -49,9 +49,6 @@ export interface SelectRenderOptionInfo<T> {
   disabled: boolean;
   theme: PickerTheme;
 }
-
-/** Blocks inference from `onChange`, so `onChange={setState}` doesn't infer `T` as `SetStateAction<…>`. Works before TS 5.4's built-in NoInfer. */
-type NoInferValue<T> = [T][T extends unknown ? 0 : never];
 
 export type SelectValueProps<T> =
   | { multiple?: false; value?: T | null; onChange?: (value: NoInferValue<T>, option: SelectOption<T>) => void }
@@ -135,7 +132,7 @@ type ServerSearchProp =
 /** A SelectPicker over a list built into the library, such as countries or languages. */
 export type BuiltInSelectPickerProps<T> = DistributiveOmit<SelectPickerProps<T>, ServerSearchProp>;
 
-export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'styles'> &
+export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'styles' | 'query'> &
   SelectValueProps<T> &
   FieldStatusProps & {
     placeholder?: string;

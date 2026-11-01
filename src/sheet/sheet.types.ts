@@ -367,6 +367,8 @@ export interface FieldLabelProps {
   label: string;
   invalid?: boolean;
   required?: boolean;
+  /** `renderTrigger` replaces the field, and the floating label with it, so the label goes above */
+  customTrigger?: boolean;
   theme: PickerTheme;
   style?: StyleProp<TextStyle>;
 }
@@ -404,6 +406,7 @@ export interface FloatingLabelProps {
 
 export interface FieldFrameProps extends FieldStatusProps {
   label?: string;
+  customTrigger?: boolean;
   /** The message centered under the box, for content centered in its row */
   centered?: boolean;
   theme: PickerTheme;

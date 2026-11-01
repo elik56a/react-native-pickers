@@ -7,7 +7,6 @@ import {
   getEmptyDraft,
   getLocaleDateOrder,
   getSheetDisplay,
-  getWheelYearBounds,
   isDraftReady,
 } from './date.utils';
 
@@ -35,16 +34,6 @@ describe('buildWheelDate', () => {
   });
   it('clamps to min/max', () => {
     expect(toDateKey(buildWheelDate(day(15, 5), { month: 0 }, day(1, 2)))).toBe('2026-03-01');
-  });
-});
-
-describe('getWheelYearBounds', () => {
-  const now = day(1, 0);
-  it('prefers min/max dates over yearRange', () => {
-    expect(getWheelYearBounds(now, [2000, 2010], day(1, 0, 1990))).toEqual([1990, 2010]);
-  });
-  it('defaults to 100 years either side', () => {
-    expect(getWheelYearBounds(now)).toEqual([1926, 2126]);
   });
 });
 

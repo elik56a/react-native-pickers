@@ -59,7 +59,15 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
 
   return (
     <View style={style}>
-      <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
+      <FieldFrame
+        label={label}
+        error={error}
+        helperText={helperText}
+        required={required}
+        customTrigger={!!renderTrigger}
+        theme={theme}
+        slots={slots}
+      >
         <View ref={picker.anchor.ref} collapsable={false}>
           {renderTrigger ? (
             renderTrigger({ open: picker.toggle, selected: picker.selected, disabled, error })

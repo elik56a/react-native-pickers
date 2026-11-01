@@ -37,7 +37,15 @@ export const PickerField = ({
 
   return (
     <View style={style}>
-      <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
+      <FieldFrame
+        label={label}
+        error={error}
+        helperText={helperText}
+        required={required}
+        customTrigger={!!renderTrigger}
+        theme={theme}
+        slots={slots}
+      >
         <View ref={field.anchor.ref} collapsable={false}>
           {renderTrigger ? (
             renderTrigger({ open: field.toggle, displayValue, disabled, error })

@@ -23,6 +23,9 @@ export type DeepPartial<T> = {
 /** The union of an object's values, e.g. the strings of an `as const` lookup. */
 export type ValueOf<T> = T[keyof T];
 
+/** Blocks inference from `onChange`, so `onChange={setState}` doesn't infer `T` as `SetStateAction<…>`. Works before TS 5.4's built-in NoInfer. */
+export type NoInferValue<T> = [T][T extends unknown ? 0 : never];
+
 export type PickerDisplay = ValueOf<typeof PICKER_DISPLAY>;
 
 /** `Omit` that keeps a union a union, so discriminated props (like a sheet's `mode`) still narrow. */

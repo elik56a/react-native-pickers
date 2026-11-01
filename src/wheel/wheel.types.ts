@@ -2,7 +2,7 @@ import type React from 'react';
 import type { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { ValueOf } from '../core/core.types';
+import type { NoInferValue, ValueOf } from '../core/core.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { SETTLE_KIND, WHEEL_VARIANT } from './wheel.constants';
 
@@ -34,9 +34,9 @@ export interface WheelPickerProps<T> extends ThemableProps {
   /** Initial value when uncontrolled. */
   defaultValue?: T;
   /** Fires when the wheel settles on a new value. */
-  onChange?: (value: T, index: number) => void;
+  onChange?: (value: NoInferValue<T>, index: number) => void;
   /** Fires on every item crossing while scrolling. Hook haptics here. */
-  onValueChanging?: (value: T, index: number) => void;
+  onValueChanging?: (value: NoInferValue<T>, index: number) => void;
   /** Row height. Default: 40 */
   itemHeight?: number;
   /** Visible rows (odd number). Default: 5 */
@@ -94,7 +94,7 @@ export interface MultiWheelPickerProps extends ThemableProps {
 export type WheelPickerSheetProps<T> = SheetChromeProps &
   Omit<WheelPickerProps<T>, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
     value?: T;
-    onConfirm: (value: T) => void;
+    onConfirm: (value: NoInferValue<T>) => void;
   };
 
 export type WheelPickerFieldProps<T> = WithPickerField<WheelPickerSheetProps<T>, WheelPickerSlot>;

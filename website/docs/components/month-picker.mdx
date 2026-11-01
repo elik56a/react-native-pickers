@@ -55,7 +55,7 @@ Each [design](../guides/designs) has its own default:
 
 ## Min and max
 
-`minDate` and `maxDate` limit the months: months outside them are disabled, and the arrows and year grid stop at their years. Any day of the month counts, so `minDate={new Date()}` allows the current month. Without them, the years go 100 back and 100 ahead, or set `yearRange`.
+`minDate` and `maxDate` limit the months: months outside them are disabled, and the arrows and year grid stop at their years. Any day of the month counts, so `minDate={new Date()}` allows the current month. The years go 100 back and 100 ahead, or set `yearRange`; either way they stay within `minDate` and `maxDate`.
 
 ```tsx live
 import { useState } from 'react';
@@ -108,7 +108,7 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 | `display` | `'wheel' \| 'grid'` | from the design | Wheels (iOS) or a grid of months (Material, web). |
 | `locale` | `string` | device | Month names and the wheel order. |
 | `minDate` / `maxDate` | `Date` | — | Earliest and latest selectable month: any day in it. |
-| `yearRange` | `[number, number]` | ±100 years | Years when there's no min/max. |
+| `yearRange` | `[number, number]` | ±100 years | Years to offer, kept within `minDate` / `maxDate`. |
 | `monthFormat` | `'long' \| 'short' \| 'numeric'` | `'long'` | Wheel month names. |
 | `loop` | `boolean` | `true` | Loop the month wheel. |
 | `itemHeight` / `visibleItems` / `variant` | | `40` / `5` / `'3d'` | Wheel row height, rows and style. |
