@@ -52,9 +52,17 @@ export const getLoopLayout = (count: number, loop: boolean): WheelLayout => {
 
 export const offsetToIndex = (y: number, itemHeight: number, total: number) => Math.min(total - 1, Math.max(0, Math.round(y / itemHeight)));
 
-/** Data index of logical item `logicalIndex` on the same lap as `currentDataIndex`. */
-export const alignToLap = (currentDataIndex: number, logicalIndex: number, count: number, loop: boolean) =>
-  loop ? currentDataIndex - wrapIndex(currentDataIndex, count) + logicalIndex : logicalIndex;
+/**
+ * Data index of logical item `logicalIndex` nearest `currentDataIndex`, so a loop wheel turns the short way round: from the last item
+ * to the first is one row on, not back through the list. `total` keeps it within the rows rendered.
+ */
+export const alignToLap = (currentDataIndex: number, logicalIndex: number, count: number, loop: boolean, total: number) => {
+  if (!loop) return logicalIndex;
+  const sameLap = currentDataIndex - wrapIndex(currentDataIndex, count) + logicalIndex;
+  const offset = sameLap - currentDataIndex;
+  const nearest = offset > count / 2 ? sameLap - count : offset < -count / 2 ? sameLap + count : sameLap;
+  return nearest >= 0 && nearest < total ? nearest : sameLap;
+};
 
 export const isNumericWheel = (items: ReadonlyArray<{ label: string }>) => items.length > 0 && items.every((it) => /^\d+$/.test(it.label));
 
