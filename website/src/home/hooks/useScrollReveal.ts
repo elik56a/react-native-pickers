@@ -1,6 +1,8 @@
 import type { RefObject } from 'react';
 import { useEffect } from 'react';
 
+import { REDUCED_MOTION_QUERY } from '../home.constants';
+
 /**
  * Fades `[data-reveal]` elements up as they scroll into view. The hidden state only applies once this has run, so content stays
  * visible without JavaScript, and nothing is hidden for people who prefer reduced motion.
@@ -8,7 +10,7 @@ import { useEffect } from 'react';
 export const useScrollReveal = (rootRef: RefObject<HTMLElement | null>) => {
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!root || window.matchMedia(REDUCED_MOTION_QUERY).matches) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

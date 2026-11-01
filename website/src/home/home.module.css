@@ -1,33 +1,61 @@
 .section {
-  padding: 4rem var(--ifm-spacing-horizontal);
+  padding: 5rem var(--ifm-spacing-horizontal);
 }
 
 .h2 {
+  max-width: 24ch;
+  margin: 0 0 1rem;
   font-family: var(--ifm-heading-font-family);
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
   font-weight: 800;
-}
-
-.h2Left {
-  font-family: var(--ifm-heading-font-family);
-  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
-  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 
 .lead {
   max-width: 40rem;
-  margin: 0 auto 1.25rem;
+  margin: 0 0 1.25rem;
   font-size: 1.1rem;
   line-height: 1.65;
   color: var(--ifm-color-emphasis-700);
   text-wrap: pretty;
 }
 
-/* For a lead under a left-aligned heading. */
-.leadLeft {
-  margin: 0 0 1.25rem;
+.lead:last-child {
+  margin-bottom: 0;
+}
+
+/* Every section numbered in page order by the counter, so moving one renumbers the rest. */
+.page {
+  counter-reset: section;
+}
+
+/* A hairline between sections, on the page rather than on each, so neighbours never double it. */
+.page > section + section {
+  border-top: 1px solid var(--site-border);
+}
+
+/* A section's label, in the spec-sheet type of the hero's device captions: its number, then its name, on a short rule. */
+.eyebrow {
+  display: inline-flex;
+  gap: 0.75rem;
+  min-width: 12rem;
+  margin: 0 0 1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid currentColor;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-heading-color);
+}
+
+.eyebrow::before {
+  counter-increment: section;
+  content: counter(section, decimal-leading-zero);
+  color: var(--ifm-color-primary);
 }
 
 .page[data-reveal-ready] [data-reveal]:not([data-revealed]) {
@@ -63,18 +91,75 @@
   border: 0;
 }
 
-.centered {
-  text-align: center;
-}
-
 .sectionLink {
   margin: 1.5rem 0 0;
-  text-align: center;
-  font-weight: 600;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/*
+ * On the home page the navbar waits above the screen until the page scrolls a little (useNavbarOnScroll), or until Tab reaches it, and
+ * then stays: the site's hide-on-scroll (navbar.hideOnScroll) is off here. Keyed to the page's own markup (`[data-home]`), not to
+ * JavaScript, so the navbar is hidden from the first paint instead of showing until the page hydrates. Fixed, so it takes no room from
+ * the hero; desktop only, since on phones it holds the menu button. No transform once shown, because any transform would trap the
+ * navbar's fixed children.
+ */
+@media (min-width: 997px) {
+  :global(html:has([data-home])) :global(.navbar) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    translate: 0 -100%;
+    transition: translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  :global(html[data-nav-shown]:has([data-home])) :global(.navbar),
+  :global(html:has([data-home])) :global(.navbar:focus-within) {
+    translate: none;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .page [data-revealed] {
     animation: none;
   }
+
+  :global(html:has([data-home])) :global(.navbar) {
+    transition: none;
+  }
+}
+
+/* The devices on the home page's stages, a real phone's width, so each picker lays out as it would on one (device.module.css). */
+.devices {
+  --device-phone-width: 340px;
+  --device-web-width: 470px;
+}
+
+/* A section's heading on the left, beside what it's about on the right: the FAQ, and Get started ruled like it. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 1rem 4rem;
+  align-items: start;
+}
+
+@media (max-width: 996px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The second of two buttons: an outline, so the filled one beside it reads as the main action. */
+.ghostButton {
+  --ifm-button-background-color: transparent;
+  --ifm-button-border-color: var(--ifm-color-emphasis-400);
+  --ifm-button-color: var(--ifm-heading-color);
+}
+
+.ghostButton:hover {
+  --ifm-button-border-color: var(--ifm-heading-color);
+  --ifm-button-color: var(--ifm-heading-color);
 }

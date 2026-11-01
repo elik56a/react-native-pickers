@@ -21,7 +21,7 @@ export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false, va
   const { colors, radius } = usePickerTheme();
   const { phase, progress, pop, reserve } = useReserve();
   const busy = phase === RESERVE_PHASE.reserving;
-  const text = [styles.reserveText, { color: colors.onPrimary }];
+  const text = [styles.primaryButtonText, { color: colors.onPrimary }];
   return (
     <Pressable
       accessibilityRole="button"
@@ -30,7 +30,7 @@ export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false, va
       onPress={() => {
         if (validate?.() ?? true) reserve();
       }}
-      style={[styles.reserve, { backgroundColor: colors.primary, borderRadius: radius.lg }, disabled && styles.reserveDisabled]}
+      style={[styles.primaryButton, { backgroundColor: colors.primary, borderRadius: radius.lg }, disabled && styles.reserveDisabled]}
     >
       {busy && (
         <Animated.View

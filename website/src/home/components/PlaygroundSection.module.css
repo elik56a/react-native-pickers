@@ -1,50 +1,28 @@
-/* Stacked on phones; props beside the device on tablets; props, device and code side by side on desktop. */
+/* The phone, and beside it the inspector: the props of the picker it's showing, then the code they write. Stacked on phones. */
 .stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "device"
-    "props"
-    "code";
-  gap: 2rem;
-  justify-items: center;
+  gap: 2.5rem;
   margin-top: 2.5rem;
 }
 
 .device {
-  grid-area: device;
   display: flex;
   justify-content: center;
-  width: 100%;
+  min-width: 0;
 }
 
-.props {
-  grid-area: props;
-  width: 100%;
-  max-width: 372px;
-}
-
-.code {
-  grid-area: code;
-  width: 100%;
+.inspector {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   min-width: 0;
 }
 
 @media (min-width: 997px) {
   .stage {
-    grid-template-columns: minmax(0, 420px) 290px;
-    grid-template-areas:
-      "device props"
-      "code code";
-    justify-content: center;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem;
     align-items: start;
-  }
-}
-
-@media (min-width: 1200px) {
-  .stage {
-    grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1.2fr);
-    grid-template-areas: "props device code";
-    gap: 2rem;
   }
 }

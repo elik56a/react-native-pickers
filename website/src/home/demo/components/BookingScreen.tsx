@@ -1,8 +1,7 @@
 import { View } from 'react-native';
 
 import { CountryPicker, EmojiPickerField, TimePickerField } from '@elik56a/react-native-pickers';
-import { DEFAULT_OPTIONS, DEMO_TAB } from '../../playground/playground.constants';
-import type { DemoTab } from '../../playground/playground.types';
+import { DEFAULT_OPTIONS } from '../../playground/playground.constants';
 import { BOOKING_FIELD, PREFERRED_COUNTRIES } from '../demo.constants';
 import { styles } from '../demo.styles';
 import type { BookingScreenProps } from '../demo.types';
@@ -18,19 +17,12 @@ const EMOJI_HEIGHT = 300;
 
 /**
  * A booking form whose every field opens one of the pickers: a searchable select, a priced calendar, the time, the emojis, two
- * wheels and the guest's country. In the playground, touching a field points the props panel at its picker, and the panel's props shape the fields.
+ * wheels and the guest's country.
  */
-export const BookingScreen = ({ platform, screenHeight, playground }: BookingScreenProps) => {
-  const options = playground?.options ?? DEFAULT_OPTIONS;
+export const BookingScreen = ({ platform, screenHeight }: BookingScreenProps) => {
+  const options = DEFAULT_OPTIONS;
   const booking = useBooking(options);
   const sheetProps = deviceSheetProps(platform, screenHeight);
-  // Capturing without claiming the touch: the field still opens.
-  const pointsAt = (tab: DemoTab) => ({
-    onStartShouldSetResponderCapture: () => {
-      playground?.selectTab(tab);
-      return false;
-    },
-  });
   return (
     <AppScreen
       platform={platform}
@@ -40,14 +32,10 @@ export const BookingScreen = ({ platform, screenHeight, playground }: BookingScr
         <ActionButton label={`Reserve · $${booking.total}`} busyLabel="Reserving…" doneLabel="✓ Reserved" disabled={!booking.nights} />
       }
     >
-      <View {...pointsAt(DEMO_TAB.select)}>
-        <WhereField booking={booking} options={options.select} sheetProps={sheetProps} />
-      </View>
-      <View {...pointsAt(DEMO_TAB.date)}>
-        <DatesField booking={booking} options={options.date} sheetProps={sheetProps} />
-      </View>
+      <WhereField booking={booking} sheetProps={sheetProps} />
+      <DatesField booking={booking} sheetProps={sheetProps} />
       <View style={styles.pair}>
-        <View style={styles.half} {...pointsAt(DEMO_TAB.time)}>
+        <View style={styles.half}>
           <TimePickerField
             label={BOOKING_FIELD.checkIn}
             value={booking.checkIn}
@@ -58,7 +46,7 @@ export const BookingScreen = ({ platform, screenHeight, playground }: BookingScr
             sheetProps={sheetProps}
           />
         </View>
-        <View style={styles.half} {...pointsAt(DEMO_TAB.emoji)}>
+        <View style={styles.half}>
           <EmojiPickerField
             label={BOOKING_FIELD.vibe}
             value={booking.vibe}
@@ -72,17 +60,15 @@ export const BookingScreen = ({ platform, screenHeight, playground }: BookingScr
         </View>
       </View>
       <View style={styles.pair}>
-        <View style={styles.half} {...pointsAt(DEMO_TAB.wheel)}>
+        <View style={styles.half}>
           <GuestsField value={booking.guests} onConfirm={booking.setGuests} sheetProps={sheetProps} options={options.wheel} />
         </View>
-        <View style={styles.half} {...pointsAt(DEMO_TAB.country)}>
+        <View style={styles.half}>
           <CountryPicker
             label={BOOKING_FIELD.country}
             value={booking.country}
             onChange={booking.setCountry}
-            preferred={options.country.preferred ? PREFERRED_COUNTRIES : undefined}
-            showDialCode={options.country.showDialCode}
-            locale={options.country.locale === 'auto' ? undefined : options.country.locale}
+            preferred={PREFERRED_COUNTRIES}
             sheet={{ sheetProps }}
           />
         </View>

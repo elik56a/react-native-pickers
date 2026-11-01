@@ -1,8 +1,11 @@
+/* Drafting paper: a fine grid with a heavier line every five squares, fading out toward the edges. */
 .hero {
+  --row: 48px;
+  --bleed: 0px;
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 2rem 0 3rem;
+  padding: 1.25rem 0 3.5rem;
   border-bottom: 1px solid var(--site-border);
   background: var(--ifm-background-color);
 }
@@ -12,70 +15,13 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at 1px 1px, var(--site-grid) 1px, transparent 0) 0 0 / 22px 22px;
-  mask-image: radial-gradient(70% 80% at 50% 40%, #000 30%, transparent 85%);
-}
-
-.aurora {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  filter: blur(70px);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.aurora span {
-  position: absolute;
-  border-radius: 50%;
-  animation: drift 18s ease-in-out infinite alternate;
-}
-
-.aurora span:nth-child(1) {
-  width: 520px;
-  height: 520px;
-  right: 6%;
-  top: 4%;
-  background: #ff5b14;
-  opacity: 0.35;
-}
-
-.aurora span:nth-child(2) {
-  width: 420px;
-  height: 420px;
-  right: 26%;
-  top: 38%;
-  background: #ffb547;
-  opacity: 0.3;
-  animation-duration: 22s;
-  animation-delay: -6s;
-}
-
-.aurora span:nth-child(3) {
-  width: 380px;
-  height: 380px;
-  left: -6%;
-  top: -12%;
-  background: #f0427a;
-  opacity: 0.16;
-  animation-duration: 26s;
-  animation-delay: -12s;
-}
-
-:global([data-theme="dark"]) .aurora {
-  opacity: 0.4;
-}
-
-@keyframes drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-60px, 40px) scale(1.12);
-  }
-  100% {
-    transform: translate(40px, -30px) scale(0.94);
-  }
+  background:
+    linear-gradient(var(--site-grid) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(var(--site-grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px) 0 0 / 24px 24px;
+  mask-image: radial-gradient(80% 70% at 50% 45%, #000 40%, transparent 95%);
+  opacity: 0.8;
 }
 
 .reveal {
@@ -87,119 +33,188 @@
   from {
     opacity: 0;
     transform: translateY(18px);
-    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: none;
-    filter: none;
   }
 }
 
-.shine {
-  background: linear-gradient(100deg, var(--ifm-color-primary) 0%, #ff7a2e 30%, #f0427a 50%, #ff7a2e 70%, var(--ifm-color-primary) 100%);
-  background-size: 250% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shine 7s linear infinite;
-}
-
-@keyframes shine {
-  to {
-    background-position: -250% 0;
-  }
-}
-
-.cta {
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 24px -8px rgba(200, 70, 13, 0.6);
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
-.cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px -10px rgba(200, 70, 13, 0.7);
-}
-
-.cta::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
-  transform: translateX(-120%);
-  animation: sweep 4.5s ease-in-out 1.6s infinite;
-}
-
-@keyframes sweep {
-  0%,
-  60% {
-    transform: translateX(-120%);
-  }
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-.stageWrap {
-  position: relative;
+/* The library's name, as big as a logo lockup, above the headline. */
+.brand {
   display: flex;
-  justify-content: center;
-  align-self: start;
-}
-
-.heroInner {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 3rem;
   align-items: center;
+  gap: 0.65rem;
+  margin: 0.5rem 0 0;
+  font-family: var(--ifm-heading-font-family);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ifm-heading-color);
 }
 
-.heroText {
-  min-width: 0;
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
+.version {
+  padding: 0.15rem 0.55rem;
   border: 1px solid var(--site-border);
-  background: var(--site-surface);
+  border-radius: 999px;
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   color: var(--ifm-color-emphasis-700);
 }
 
-.badge::before {
-  content: "";
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 0.5rem;
-  border-radius: 50%;
-  background: var(--brand-signal);
-  vertical-align: 1px;
+.specLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-700);
 }
 
+.specLine span + span::before {
+  content: "/";
+  margin-right: 1.25rem;
+  color: var(--ifm-color-primary);
+}
+
+/* The headline is one row of the word wheel: the words above and below spill faintly into the space around it. */
 .title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.28em;
+  margin: calc(1rem + var(--bleed) * 0.8) 0 calc(1rem + var(--bleed) * 0.6);
   font-family: var(--ifm-heading-font-family);
-  margin: 1.25rem 0 1rem;
-  font-size: clamp(2.3rem, 4.6vw, 3.5rem);
+  font-size: 40px;
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  white-space: nowrap;
+  line-height: var(--row);
+  letter-spacing: -0.04em;
+  color: var(--ifm-heading-color);
+}
+
+/* The selection band of a wheel picker, around the word and its step buttons: it says the word turns. */
+.band {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.08em;
+  height: var(--row);
+  padding: 0 0.04em 0 0.16em;
+  border: 1px solid var(--site-border);
+  border-radius: calc(var(--row) * 0.26);
+  background: var(--site-surface);
+  box-shadow: var(--site-shadow);
+}
+
+/* Above the wheel, whose faded row over the band would otherwise take the up arrow's pointer. */
+.steps {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 4px 4px 0;
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  width: calc(var(--row) * 0.5);
+  height: calc((var(--row) - 12px) / 2);
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--row) * 0.26 - 4px);
+  background: none;
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+
+.step:hover {
+  background: var(--site-border);
+  color: var(--ifm-color-primary);
+}
+
+.step:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
+}
+
+.step svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.down {
+  transform: rotate(180deg);
+}
+
+/* As wide as the widest word, from invisible copies of them all stacked in one cell, like a wheel's fixed band: "picker" never moves. */
+.wheelSlot {
+  position: relative;
+  flex: none;
+  height: var(--row);
+  cursor: ns-resize;
+  user-select: none;
+}
+
+.wheelWidth {
+  display: inline-grid;
+  visibility: hidden;
+}
+
+.wheelWidth > span {
+  grid-area: 1 / 1;
+}
+
+/*
+ * Out past the slot by the wheel row's own padding (theme spacing sm), so the word starts where the copy measuring it does, and on the
+ * right by twice that, so the widest word fits with room to spare while a row's hover tint ends under the step buttons, in the band.
+ */
+.wheel {
+  position: absolute;
+  top: calc(var(--bleed) * -1);
+  right: -16px;
+  left: -8px;
+  display: block;
+}
+
+.wheelFallback {
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--ifm-color-primary);
+}
+
+/* The headline beside what to do about it: the copy, the install line and the buttons. */
+.top {
+  display: grid;
+  grid-template-columns: auto 28rem;
+  justify-content: space-between;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
 }
 
 .subtitle {
-  max-width: 36rem;
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--ifm-color-emphasis-800);
 }
 
 .ctas {
@@ -208,21 +223,88 @@
   gap: 0.75rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .aurora span,
-  .reveal,
-  .shine,
-  .cta::after {
-    animation: none;
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Below desktop the navbar is always on screen, logo and all. */
+@media (max-width: 996px) {
+  .brand {
+    display: none;
   }
 }
 
-@media (max-width: 996px) {
+/* The hero fills the first screen exactly: the device stage (hero.module.css) takes whatever height the rest leaves. */
+@media (min-width: 1100px) {
   .hero {
-    padding: 3rem 0;
+    --row: 80px;
+    --bleed: 80px;
+    display: flex;
+    min-height: 100svh;
+    padding-bottom: 2rem;
   }
 
-  .heroInner {
+  .inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Docusaurus keeps the announcement bar's height set once it's dismissed, so only a bar on the page takes its share. */
+  :global(html:has(.theme-announcement-bar)) .hero {
+    min-height: calc(100svh - var(--docusaurus-announcement-bar-height));
+  }
+
+  .title {
+    font-size: 72px;
+  }
+}
+
+@media (max-width: 1239px) {
+  .top {
     grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .title {
+    white-space: normal;
+  }
+}
+
+/* On phones the headline can't fit one line: each word gets its own, centered, the wheel's band between the two, and what's under it centers to match. */
+@media (max-width: 640px) {
+  .title {
+    flex-direction: column;
+    gap: 0.2em;
+  }
+
+  /* The word sits centered in the band, like the words above and below it. */
+  .wheel {
+    left: 0;
+    width: 100%;
+  }
+
+  .wheelFallback {
+    right: 0;
+    text-align: center;
+  }
+
+  .aside {
+    align-items: center;
+    text-align: center;
+  }
+
+  .ctas {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
   }
 }

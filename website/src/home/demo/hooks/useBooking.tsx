@@ -16,7 +16,7 @@ import {
   DEFAULT_VIBE,
 } from '../demo.constants';
 import type { Guests } from '../demo.types';
-import { bookedNights, buildPrices, daysFromNow, daysFromNowAt, guestsLabel, nightsTotal, plural, stay } from '../demo.utils';
+import { bookedNights, buildPrices, daysFromNow, daysFromNowAt, nightsTotal, plural, stay } from '../demo.utils';
 import { useFlagOptions } from './useFlagOptions';
 
 /** The booking app's state: where, when, who, where they're from and the vibe, with the Dates field's pick kept for each calendar mode. */
@@ -56,7 +56,6 @@ export const useBooking = (options: PlaygroundOptions) => {
     setCheckIn,
     guests,
     setGuests,
-    guestsLabel: guestsLabel(guests),
     vibe,
     setVibe,
     country,

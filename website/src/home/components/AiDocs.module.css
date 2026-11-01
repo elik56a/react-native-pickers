@@ -1,0 +1,145 @@
+/* The page's one ink band: what you hand to the machine, in the type a machine reads. */
+.band {
+  padding: 5rem 0;
+  background: var(--site-code);
+  color: var(--brand-paper);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18rem;
+  grid-template-areas:
+    "title title"
+    "prompt links"
+    "note links";
+  gap: 2rem 4rem;
+  align-items: start;
+}
+
+.title {
+  grid-area: title;
+}
+
+.heading {
+  margin: 0;
+}
+
+/* Paper on the ink band, where the page's heading colour would vanish. */
+.inner .eyebrow,
+.inner .heading {
+  color: var(--brand-paper);
+}
+
+/* The prompt is the button: what you read is what gets copied. */
+.prompt {
+  grid-area: prompt;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: copy;
+}
+
+.promptText {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: clamp(1.25rem, 2.6vw, 2.1rem);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+/* A caret after the last word, as if still typed: a filled no-break space, one monospace cell, so it never wraps on its own. */
+.promptText::after {
+  content: "\00a0";
+  margin-left: 0.15em;
+  background: var(--brand-signal);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.copy {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--brand-paper) 30%, transparent);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.prompt:hover .copy,
+.prompt:focus-visible .copy {
+  border-color: var(--brand-signal);
+  background: var(--brand-signal);
+  color: var(--brand-ink);
+}
+
+.prompt:focus-visible {
+  outline: 2px solid var(--brand-signal);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+
+.links {
+  grid-area: links;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--brand-paper) 14%, transparent);
+}
+
+.links a {
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 500;
+  color: var(--brand-signal);
+}
+
+.links span {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--brand-paper) 64%, transparent);
+}
+
+.note {
+  grid-area: note;
+  color: color-mix(in srgb, var(--brand-paper) 64%, transparent);
+}
+
+@media (max-width: 996px) {
+  .band {
+    padding: 4rem 0;
+  }
+
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "title"
+      "prompt"
+      "links"
+      "note";
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promptText::after {
+    animation: none;
+  }
+}

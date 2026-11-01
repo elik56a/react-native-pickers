@@ -11,16 +11,19 @@ export interface Guests {
   children: number;
 }
 
-/** The playground's props and theme, and where to report the field the visitor touched; the hero runs without. */
-export type BookingPlayground = Pick<Playground, 'options' | 'accent' | 'selectTab'>;
+/** The playground's picker, props and theme, for the phone to show, and the step its Next button moves to. */
+export type BookingPlayground = Pick<Playground, 'tab' | 'options' | 'accent' | 'selectTab'>;
 
 export interface BookingScreenProps {
   platform: Platform;
   screenHeight?: number;
-  playground?: BookingPlayground;
 }
 
-export interface BookingAppProps extends BookingScreenProps {
+export interface PlaygroundScreenProps extends BookingScreenProps {
+  playground: BookingPlayground;
+}
+
+export interface BookingAppProps extends PlaygroundScreenProps {
   colorMode: PickersProviderProps['colorScheme'];
 }
 

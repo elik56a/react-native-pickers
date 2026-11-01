@@ -69,7 +69,7 @@ When a change affects what users see or call (a new component, prop, default, be
 - `website/docs/api/reference.mdx` for new exports, and every guide or recipe that mentions what changed (`guides/designs.mdx`, `guides/theming.mdx`, `guides/platforms.mdx`…).
 - `website/docs/resources/ai.mdx`: the cheat sheet AI assistants read. `llms.txt` and `llms-full.txt` are generated from the docs, so they follow.
 - `README.md`.
-- Home page: `website/src/home/home.constants.ts` (features, component grid, comparison table, hero chips), `website/src/home/faq.constants.tsx` and `website/src/home/components/Hero.tsx`.
+- Home page: `website/src/home/home.constants.ts` (component grid, comparison table, anatomy examples, stats), `website/src/home/hero/hero.constants.ts` (the hero's words and each word's per-platform patterns), `website/src/home/faq.constants.tsx`, and `website/src/home/playground/playground.constants.ts` if a picker the playground shows changes.
 - SEO: the `description` front matter of each page you touched, `DESCRIPTION` and the keywords in `website/docusaurus.config.ts`, `description` and `keywords` in `package.json`, and `context7.json`.
 
 Claude Code runs `.claude/hooks/docs-check.sh` before it finishes, as a reminder of this list.

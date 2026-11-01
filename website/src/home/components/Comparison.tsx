@@ -1,19 +1,31 @@
 import Link from '@docusaurus/Link';
+import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 
-import { COMPARE_COLUMNS, COMPARE_ROWS } from '../home.constants';
+import { COMPARE_COLUMNS, COMPARE_ROWS, PACKAGE_DIFF } from '../home.constants';
 import shared from '../home.module.css';
 import styles from './Comparison.module.css';
 import { SupportMark } from './SupportMark';
 
 export const Comparison = () => (
   <section className={clsx('container', shared.section)} aria-labelledby="compare-title">
-    <h2 id="compare-title" className={shared.h2} data-reveal>
-      How it compares to other React Native pickers
-    </h2>
-    <p className={clsx(shared.lead, shared.centered)} data-reveal>
-      Most apps combine a native date picker, a calendar library and a select wrapper. Here is what one package covers instead.
-    </p>
+    <div className={styles.intro}>
+      <div data-reveal>
+        <p className={shared.eyebrow}>Compare</p>
+        <h2 id="compare-title" className={shared.h2}>
+          How it compares to other React Native pickers
+        </h2>
+        <p className={shared.lead}>
+          Most apps combine a native date picker, a calendar library and a select wrapper. Here is what one package covers instead, and what
+          leaves your package.json.
+        </p>
+      </div>
+      <div className={styles.diff} data-reveal>
+        <CodeBlock language="diff" title="package.json">
+          {PACKAGE_DIFF}
+        </CodeBlock>
+      </div>
+    </div>
     <div className={styles.tableScroll} data-reveal>
       <table className={styles.compare}>
         <caption className={shared.srOnly}>
