@@ -60,5 +60,6 @@ export const useCalendarSelection = (props: CalendarSelectionProps, isDisabled: 
   return {
     selection,
     select,
+    selectRange: setRange,
   };
 };

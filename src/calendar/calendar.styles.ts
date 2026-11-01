@@ -21,5 +21,6 @@ export const styles = StyleSheet.create({
   dots: { flexDirection: 'row', gap: 2, position: 'absolute', bottom: 4 },
   dot: { width: 4, height: 4, borderRadius: 2 },
   quickGrid: { justifyContent: 'space-evenly' },
+  presets: { marginBottom: 8 },
   quickCell: { flex: 1, marginHorizontal: 6, height: 44, alignItems: 'center', justifyContent: 'center' },
 });

@@ -1,6 +1,6 @@
 ---
 title: React Native Date Range Picker
-description: React Native date range picker (check-in / check-out) with min/max nights, multiple ranges and multiple date selection, built on the calendar.
+description: React Native date range picker (check-in / check-out) with presets such as Last 7 days, min/max nights, multiple ranges and multiple date selection, built on the calendar.
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -13,7 +13,7 @@ Pick a check-in / check-out date range, several ranges, or several separate date
 | `mode` | `value` | `onChange` | Extra props |
 | --- | --- | --- | --- |
 | `'single'` (default) | `Date \| null` | `(date: Date) => void` | — |
-| `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
+| `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `presets`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 | `'multiple'` | `Date[]` | `(dates: Date[]) => void` | `maxSelections` |
 | `'ranges'` | `DateRange[]` | `(ranges: DateRange[]) => void` | `maxRanges`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 
@@ -128,6 +128,54 @@ export default function Example() {
   );
 }
 ```
+
+### Presets
+
+`presets` adds a row of chips above the days, and each one picks a whole range in one tap: the shortcuts of a report or a filter screen. `getRangePresets()` returns the usual ones, counted back from today: Today, Yesterday, Last 7 days, Last 30 days, This month and Last month. The chip that matches the range shows selected, so picking the same days by hand selects it too.
+
+`presetsProps` takes any [`HorizontalList`](./horizontal-list#props) prop for the row except `items`, `value`, `onChange` and `isEqual`, which come from the presets and the range. Here `showArrows` adds ‹ › buttons that scroll the chips, floating over the edges with `arrowPosition: 'overlay'`:
+
+```tsx live
+import { useState } from 'react';
+import { DatePicker, getRangePresets } from '@elik56a/react-native-pickers';
+import type { DateRange } from '@elik56a/react-native-pickers';
+
+const presets = getRangePresets();
+
+export default function Example() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+  return (
+    <DatePicker
+      mode="range"
+      value={range}
+      onChange={setRange}
+      presets={presets}
+      presetsProps={{
+        variant: 'chips',
+        showArrows: true,
+        arrowPosition: 'overlay',
+        accessibilityLabel: 'Quick date ranges',
+      }}
+      maxDate={new Date()}
+    />
+  );
+}
+```
+
+`variant: 'segmented'` puts a few presets on a track instead, and `renderItem` and `styles` draw your own chip.
+
+A preset the calendar wouldn't let you pick is disabled: one that ends after `maxDate`, crosses a disabled day or breaks `minRangeDays`, `maxRangeDays` or `allowSingleDayRange`. Picking one shows the month its range starts in.
+
+Write your own as `{ label, start, end }`, such as the next weekend, or to label them in another language:
+
+```tsx
+const presets = [
+  { label: 'This weekend', start: saturday, end: addDays(saturday, 1) },
+  ...getRangePresets().filter((preset) => preset.label !== 'Yesterday'),
+];
+```
+
+`DatePickerSheet` and `DatePickerField` take `presets` and `presetsProps` too.
 
 ### Range styling
 
@@ -264,6 +312,8 @@ All [calendar props](./date-picker#calendar) apply. Mode-specific props:
 
 | Prop | Mode | Type | Default | Description |
 | --- | --- | --- | --- | --- |
+| `presets` | `range` | `DateRangePreset[]` | — | Chips above the days that pick a whole range, such as `getRangePresets()`. A preset the rules wouldn't allow is disabled. |
+| `presetsProps` | `range` | `RangePresetsListProps` | — | [`HorizontalList`](./horizontal-list#props) props for the presets row, except `items`, `value`, `onChange` and `isEqual`. Default: chips. |
 | `minRangeDays` | `range`, `ranges` | `number` | — | Minimum nights (end − start in days). Shorter second taps are ignored. |
 | `maxRangeDays` | `range`, `ranges` | `number` | — | Maximum nights. Longer second taps start a new range. |
 | `allowSingleDayRange` | `range`, `ranges` | `boolean` | `true` | Allow `start === end`. |

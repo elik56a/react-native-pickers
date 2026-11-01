@@ -1,3 +1,5 @@
+import { Text } from 'react-native';
+
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import { toDateKey } from '../core/utils/date.utils';
@@ -36,6 +38,32 @@ describe('Calendar', () => {
       ['2026-10-10', null],
       ['2026-10-10', '2026-10-14'],
     ]);
+  });
+
+  it('picks a whole range from a preset, marks it selected and shows its month', async () => {
+    const onChange = jest.fn();
+    const presets = [{ label: 'Trip', start: new Date(2026, 10, 2), end: new Date(2026, 10, 6) }];
+    await render(<Calendar mode="range" initialMonth={OCTOBER} presets={presets} onChange={onChange} />);
+    await fireEvent.press(screen.getByText('Trip'));
+    expect(rangeKeys(onChange.mock.calls[0][0])).toEqual(['2026-11-02', '2026-11-06']);
+    expect(screen.getByRole('radio', { name: 'Trip' }).props.accessibilityState).toMatchObject({ checked: true });
+    expect(dayCell(2, 'November').props.accessibilityState).toMatchObject({ selected: true });
+    expect(screen.getByText('November 2026')).toBeTruthy();
+  });
+
+  it('passes presetsProps to the presets list, keeping the presets and the range its own', async () => {
+    const presets = [{ label: 'Trip', start: new Date(2026, 9, 2), end: new Date(2026, 9, 6) }];
+    await render(
+      <Calendar
+        mode="range"
+        initialMonth={OCTOBER}
+        presets={presets}
+        presetsProps={{ testID: 'presets', renderItem: ({ item, selected }) => <Text>{`${item.label}${selected ? ' ✓' : ''}`}</Text> }}
+      />
+    );
+    expect(screen.getByTestId('presets')).toBeTruthy();
+    await fireEvent.press(screen.getByText('Trip'));
+    expect(screen.getByText('Trip ✓')).toBeTruthy();
   });
 
   it('builds several ranges and removes one when tapped', async () => {
