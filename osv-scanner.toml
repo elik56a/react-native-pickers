@@ -1,0 +1,14 @@
+# Advisories with no usable fix, read by OpenSSF Scorecard's Vulnerabilities check. Keep in step with
+# `auditConfig.ignoreGhsas` in pnpm-workspace.yaml. None of these packages ships in the library.
+
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+reason = "deepmerge, through jest-config: no patched release exists, and Jest only merges its own config."
+
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+reason = "zod 3, through the example app's Expo CLI: the fix is zod 4, a major Expo hasn't moved to, and the CLI only validates its own local config."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+reason = "minimatch 3, through Jest's coverage and the docs dev server: the fix is minimatch 11, whose exports glob 7 and serve-handler can't load, and both only match the repo's own patterns."
