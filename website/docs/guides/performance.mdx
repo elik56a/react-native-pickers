@@ -101,7 +101,7 @@ iPhone 17 Pro simulator, iOS 26.2. While Quidone's wheel was on screen, taps els
 
 ### What the numbers say
 
-- **Gestures don't freeze under load.** Every drag and scroll runs on the UI thread, so blocking JavaScript for 200 ms at a time doesn't stop the gesture. Up to v0.27, the sheet drag ran in JavaScript and dropped to 7–10 fps at 200 ms. It now runs on the UI thread: on Android it beats `@gorhom/bottom-sheet` (60 fps against 56), and on iOS both hold 60 fps with shorter freezes for ours, all without Reanimated or Gesture Handler.
+- **Gestures don't freeze under load.** Every drag and scroll runs on the UI thread, so blocking JavaScript for 200 ms at a time doesn't stop the gesture. Up to v0.28, the sheet drag ran in JavaScript and dropped to 7–10 fps at 200 ms. It now runs on the UI thread: on Android it beats `@gorhom/bottom-sheet` (60 fps against 56), and on iOS both hold 60 fps with shorter freezes for ours, all without Reanimated or Gesture Handler.
 - **Wheels** match Quidone's wheel picker at 60 fps on both platforms (on iOS with shorter freezes for ours) and outpace `@react-native-picker/picker` on iOS. On Android our wheel drops one frame when the finger lifts and the row snaps.
 - **Calendars** are even. The calendar's fps is lower than the others' because the month only moves for part of the measured window. `react-native-calendars` pages its months in a native scroll view that follows the finger; ours changes month when the finger lifts, then slides the new month in on the UI thread.
 - **Emulators and simulators aren't phones.** Absolute numbers depend on the machine, and the screen recording itself costs frames. Compare rows from the same table, not across tables.
