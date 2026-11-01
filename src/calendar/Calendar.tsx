@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { Animated, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CALENDAR_DESIGN, CALENDAR_MODE, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
@@ -52,8 +51,7 @@ export const Calendar = (props: CalendarProps) => {
     design,
     testID,
   } = props;
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme, themeOverride } = useComponentTheme(themeProp, design);
   const weekdayFormat = weekdayFormatProp ?? CALENDAR_DESIGN[theme.design].weekdayFormat;
   const firstDayOfWeek = props.firstDayOfWeek ?? getFirstDayOfWeek(locale);
   const today = useMemo(() => new Date(), []);

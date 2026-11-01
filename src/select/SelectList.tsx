@@ -1,9 +1,9 @@
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
-import { textStyle, usePickerTheme } from '../core';
+import { PickerText } from '../core/components/PickerText';
 import { SearchInput } from '../core/components/SearchInput';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CreateRow } from './components/CreateRow';
 import { GroupHeader } from './components/GroupHeader';
@@ -48,8 +48,7 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
     design,
     testID,
   } = props;
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const { query, setQuery, rows, pending, atMax, isSelected, toggle, create } = useSelectList(props, filterOption, isEqual);
   const showLoader = loading || pending;
   const remote = !!(props.loadOptions || props.onSearchChange);
@@ -107,9 +106,9 @@ export const SelectList = <T,>(props: SelectListProps<T>) => {
             loader
           ) : (
             <View style={[styles.empty, { padding: theme.spacing.xl }, slots?.empty]}>
-              <Text style={[textStyle(theme, 'md'), { color: theme.colors.textSecondary }, slots?.emptyText]}>
+              <PickerText theme={theme} color="textSecondary" style={slots?.emptyText}>
                 {getEmptyMessage(remote, query, searchPrompt, emptyText)}
-              </Text>
+              </PickerText>
             </View>
           )
         }

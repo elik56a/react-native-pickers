@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { styles } from '../calendar.styles';
 import type { QuickGridProps } from '../calendar.types';
@@ -28,15 +28,14 @@ export const QuickGrid = ({ cells, height, onSelect, theme, slots }: QuickGridPr
             accessibilityRole="button"
             accessibilityState={{ selected: cell.selected, disabled: cell.disabled }}
           >
-            <Text
-              style={[
-                textStyle(theme, 'md', cell.selected ? 'bold' : 'regular'),
-                { color: cell.selected ? theme.colors.onPrimary : cell.disabled ? theme.colors.textDisabled : theme.colors.text },
-                slots?.gridCellText,
-              ]}
+            <PickerText
+              theme={theme}
+              weight={cell.selected ? 'bold' : 'regular'}
+              color={cell.selected ? 'onPrimary' : cell.disabled ? 'textDisabled' : 'text'}
+              style={slots?.gridCellText}
             >
               {cell.label}
-            </Text>
+            </PickerText>
           </Touchable>
         ))}
       </View>

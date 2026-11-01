@@ -1,8 +1,7 @@
 import { I18nManager, ScrollView, useWindowDimensions, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
 import { Touchable } from '../core/components/Touchable';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { Dropdown } from '../sheet/Dropdown';
 import { useDropdownFit } from '../sheet/hooks/useDropdownFit';
 import { ActionSheet } from './ActionSheet';
@@ -32,7 +31,7 @@ export const Menu = (props: MenuProps) => {
     design,
     testID,
   } = props;
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const look = MENU_DESIGN[theme.design];
   const windowSize = useWindowDimensions();
   const menu = useMenu(props);

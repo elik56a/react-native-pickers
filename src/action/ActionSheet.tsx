@@ -1,7 +1,6 @@
 import { ScrollView, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { BottomSheet } from '../sheet/BottomSheet';
 import { DEFAULT_CANCEL_LABEL } from '../sheet/sheet.constants';
 import { ACTION_SHEET_DESIGN } from './action.constants';
@@ -27,7 +26,7 @@ export const ActionSheet = ({
   design,
   testID,
 }: ActionSheetProps) => {
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const look = ACTION_SHEET_DESIGN[theme.design];
   const { grouped } = look;
   const { press, onClosed } = useActionPress(onClose, sheetProps?.onClosed);

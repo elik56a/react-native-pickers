@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { SHEET_DESIGN, TITLE_ALIGN } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { SheetHeaderProps } from '../sheet.types';
@@ -17,9 +17,16 @@ export const SheetHeader = ({ title, headerLeft, headerRight, theme, slots }: Sh
       )}
       <View style={[styles.headerCenter, start && styles.headerStart]} pointerEvents={typeof title === 'string' ? 'none' : 'box-none'}>
         {typeof title === 'string' ? (
-          <Text style={[textStyle(theme, start ? 'lg' : 'md', 'bold'), slots?.title]} numberOfLines={1} accessibilityRole="header">
+          <PickerText
+            theme={theme}
+            size={start ? 'lg' : 'md'}
+            weight="bold"
+            style={slots?.title}
+            numberOfLines={1}
+            accessibilityRole="header"
+          >
             {title}
-          </Text>
+          </PickerText>
         ) : (
           title
         )}

@@ -1,6 +1,6 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { styles } from '../select.styles';
 import type { LoadingStateProps } from '../select.types';
 
@@ -11,7 +11,9 @@ export const LoadingState = ({ text, renderLoading, theme, slots }: LoadingState
     ) : (
       <>
         <ActivityIndicator color={theme.colors.primary} />
-        <Text style={[textStyle(theme, 'sm'), { color: theme.colors.textSecondary }, slots?.loadingText]}>{text}</Text>
+        <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.loadingText}>
+          {text}
+        </PickerText>
       </>
     )}
   </View>

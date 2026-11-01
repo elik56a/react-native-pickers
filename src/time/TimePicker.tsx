@@ -1,5 +1,5 @@
 import { useControllableState } from '../core/hooks/useControllableState';
-import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { MultiWheelPicker } from '../wheel';
 import { ClockDial } from './components/ClockDial';
 import { TimePanel } from './components/TimePanel';
@@ -23,11 +23,10 @@ export const TimePicker = ({
   testID,
   ...options
 }: TimePickerProps) => {
-  const theme = useDesignOverride(themeProp, design);
-  const resolved = usePickerTheme(theme);
+  const { theme, themeOverride } = useComponentTheme(themeProp, design);
   const [date, setDate] = useControllableState(value, () => defaultValue ?? new Date(), onChange);
   const { columns, separator } = useTimeColumns({ ...options, date, onChange: setDate, testID });
-  const display = resolveTimeDisplay(displayProp, resolved.design, !!options.showSeconds);
+  const display = resolveTimeDisplay(displayProp, theme.design, !!options.showSeconds);
 
   if (display === TIME_DISPLAY.dial || display === TIME_DISPLAY.input) {
     return (
@@ -36,14 +35,14 @@ export const TimePicker = ({
         date={date}
         onChange={setDate}
         options={options}
-        theme={resolved}
+        theme={theme}
         style={style}
         testID={testID}
       />
     );
   }
   if (display === TIME_DISPLAY.list) {
-    return <TimePanel columns={columns} visibleRows={visibleItems} theme={resolved} style={style} testID={testID} />;
+    return <TimePanel columns={columns} visibleRows={visibleItems} theme={theme} style={style} testID={testID} />;
   }
   return (
     <MultiWheelPicker
@@ -54,7 +53,7 @@ export const TimePicker = ({
       variant={variant}
       style={style}
       styles={styles}
-      theme={theme}
+      theme={themeOverride}
       testID={testID}
     />
   );

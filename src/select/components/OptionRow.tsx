@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
 import { DISABLED_OPTION_OPACITY, SELECT_DESIGN, SINGLE_INDICATOR } from '../select.constants';
@@ -50,30 +50,24 @@ export const OptionRow = <T,>({
         <>
           {option.icon ? <View style={[styles.icon, { marginEnd: theme.spacing.md }]}>{option.icon}</View> : null}
           <View style={styles.flex}>
-            <Text
+            <PickerText
+              theme={theme}
+              weight={selected ? 'medium' : 'regular'}
               numberOfLines={1}
-              style={[
-                textStyle(theme, 'md', selected ? 'medium' : 'regular'),
-                coreStyles.startAligned,
-                slots?.optionLabel,
-                selected && slots?.selectedOptionLabel,
-              ]}
+              style={[coreStyles.startAligned, slots?.optionLabel, selected && slots?.selectedOptionLabel]}
             >
               {option.label}
-            </Text>
+            </PickerText>
             {option.description ? (
-              <Text
+              <PickerText
+                theme={theme}
+                size="sm"
+                color="textSecondary"
                 numberOfLines={2}
-                style={[
-                  textStyle(theme, 'sm'),
-                  coreStyles.startAligned,
-                  styles.description,
-                  { color: c.textSecondary },
-                  slots?.optionDescription,
-                ]}
+                style={[coreStyles.startAligned, styles.description, slots?.optionDescription]}
               >
                 {option.description}
-              </Text>
+              </PickerText>
             ) : null}
           </View>
           {showCheckmarks && (multiple || radio || selected) ? (

@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { CHECK_MARK } from '../../core/core.constants';
 import { SELECT_DESIGN } from '../select.constants';
 import { styles } from '../select.styles';
@@ -17,7 +17,11 @@ export const Check = ({ selected, multiple, radio, theme, style }: CheckProps) =
     );
   }
   if (!multiple) {
-    return <Text style={[textStyle(theme, 'md', 'bold'), { color: c.primary, marginStart: theme.spacing.md }, style]}>{CHECK_MARK}</Text>;
+    return (
+      <PickerText theme={theme} weight="bold" color="primary" style={[{ marginStart: theme.spacing.md }, style]}>
+        {CHECK_MARK}
+      </PickerText>
+    );
   }
   const { size, radius, offColor } = SELECT_DESIGN[theme.design].checkbox;
   return (

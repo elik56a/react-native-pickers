@@ -1,9 +1,9 @@
 import { TextInput, View } from 'react-native';
 
-import { textStyle, usePickerTheme } from '../core';
+import { textStyle } from '../core';
 import { coreStyles } from '../core/core.styles';
 import { useFocus } from '../core/hooks/useFocus';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { FieldFrame } from '../sheet/components/FieldFrame';
 import { FloatingLabel } from '../sheet/components/FloatingLabel';
 import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet/sheet.constants';
@@ -41,8 +41,7 @@ export const PhoneField = (props: PhoneFieldProps) => {
     design,
     testID,
   } = props;
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme, themeOverride } = useComponentTheme(themeProp, design);
   const phone = usePhoneField(props);
   const focus = useFocus();
   const country = getCountry(phone.country);

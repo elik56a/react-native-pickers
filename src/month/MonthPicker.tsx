@@ -1,5 +1,5 @@
 import { useControllableState } from '../core/hooks/useControllableState';
-import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { clampDate, startOfMonth } from '../core/utils/date.utils';
 import { DateWheelPicker } from '../date/DateWheelPicker';
 import { MonthGrid } from './components/MonthGrid';
@@ -28,14 +28,13 @@ export const MonthPicker = ({
   design,
   testID,
 }: MonthPickerProps) => {
-  const theme = useDesignOverride(themeProp, design);
-  const resolved = usePickerTheme(theme);
+  const { theme, themeOverride } = useComponentTheme(themeProp, design);
   const [month, setMonth] = useControllableState(
     value,
     () => startOfMonth(clampDate(defaultValue ?? new Date(), minDate, maxDate)),
     onChange
   );
-  const display = displayProp ?? MONTH_DISPLAY_DESIGN[resolved.design];
+  const display = displayProp ?? MONTH_DISPLAY_DESIGN[theme.design];
 
   if (display === MONTH_DISPLAY.grid) {
     return (
@@ -46,7 +45,7 @@ export const MonthPicker = ({
         minDate={minDate}
         maxDate={maxDate}
         yearRange={yearRange}
-        theme={resolved}
+        theme={theme}
         style={style}
         styles={styles}
         testID={testID}
@@ -69,7 +68,7 @@ export const MonthPicker = ({
       variant={variant}
       style={style}
       styles={styles}
-      theme={theme}
+      theme={themeOverride}
       testID={testID}
     />
   );

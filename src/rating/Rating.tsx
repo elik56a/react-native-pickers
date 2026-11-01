@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { RatingItem } from './components/RatingItem';
 import { useRating } from './hooks/useRating';
 import { DEFAULT_RATING_SIZE, RATING_COLOR } from './rating.constants';
@@ -22,7 +21,7 @@ export const Rating = (props: RatingProps) => {
     design,
     testID,
   } = props;
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const rating = useRating(props, theme);
 
   return (

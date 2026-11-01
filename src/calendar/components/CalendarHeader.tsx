@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { ARROW_DIRECTIONS, ARROW_LABELS, CALENDAR_DESIGN, CALENDAR_VIEW } from '../calendar.constants';
 import { styles } from '../calendar.styles';
@@ -29,11 +29,13 @@ export const CalendarHeader = ({
       accessibilityRole={enableQuickJump ? 'button' : 'header'}
       accessibilityLabel={accessibilityLabel}
     >
-      <Text style={[textStyle(theme, 'md', 'bold'), slots?.headerTitle]}>{label}</Text>
+      <PickerText theme={theme} weight="bold" style={slots?.headerTitle}>
+        {label}
+      </PickerText>
       {enableQuickJump && (
-        <Text style={[textStyle(theme, 'sm', 'bold'), styles.caret, { color: theme.colors.primary }]}>
+        <PickerText theme={theme} size="sm" weight="bold" color="primary" style={styles.caret}>
           {view === CALENDAR_VIEW.days ? '▾' : '▴'}
-        </Text>
+        </PickerText>
       )}
     </Touchable>
     <View style={styles.arrows}>
@@ -54,16 +56,15 @@ export const CalendarHeader = ({
             {renderArrow ? (
               renderArrow(direction, disabled)
             ) : (
-              <Text
-                style={[
-                  textStyle(theme, 'lg', 'bold'),
-                  styles.arrowText,
-                  { color: disabled ? theme.colors.textDisabled : theme.colors[CALENDAR_DESIGN[theme.design].arrowColor] },
-                  slots?.arrowText,
-                ]}
+              <PickerText
+                theme={theme}
+                size="lg"
+                weight="bold"
+                color={disabled ? 'textDisabled' : CALENDAR_DESIGN[theme.design].arrowColor}
+                style={[styles.arrowText, slots?.arrowText]}
               >
                 {getArrowGlyph(direction, rtl)}
-              </Text>
+              </PickerText>
             )}
           </Touchable>
         );

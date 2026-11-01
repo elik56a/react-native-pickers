@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { KNOB_SIZE } from '../../core/core.constants';
 import { useTrackPan } from '../../core/hooks/useTrackPan';
 import { adjustableProps } from '../../core/utils/adjustable.utils';
@@ -30,13 +30,18 @@ export const ColorSlider = ({
 }: ColorSliderProps) => {
   const pan = useTrackPan({ onMove: (x) => onChange(x), insetX: INSET });
   const { trackHeight } = COLOR_DESIGN[theme.design];
-  const caption = [textStyle(theme, 'sm'), { color: theme.colors.textSecondary }, slots?.sliderLabel];
   return (
     <View>
       {showLabel || showValue ? (
         <View style={styles.sliderHeader}>
-          <Text style={caption}>{showLabel ? label : ''}</Text>
-          {showValue ? <Text style={caption}>{valueText}</Text> : null}
+          <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.sliderLabel}>
+            {showLabel ? label : ''}
+          </PickerText>
+          {showValue ? (
+            <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.sliderLabel}>
+              {valueText}
+            </PickerText>
+          ) : null}
         </View>
       ) : null}
       <View

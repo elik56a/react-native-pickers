@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { SCROLL_ARROW_GLYPHS, SCROLL_ARROW_LABELS, SCROLL_ARROW_SIDE } from '../list.constants';
 import { styles } from '../list.styles';
@@ -26,16 +26,15 @@ export const ScrollArrow = ({ side, disabled, overlay, renderArrow, onPress, the
       {renderArrow ? (
         renderArrow(side, disabled)
       ) : (
-        <Text
-          style={[
-            textStyle(theme, 'lg', 'bold'),
-            styles.arrowText,
-            { color: disabled ? theme.colors.textDisabled : theme.colors.text },
-            slots?.arrowText,
-          ]}
+        <PickerText
+          theme={theme}
+          size="lg"
+          weight="bold"
+          color={disabled ? 'textDisabled' : 'text'}
+          style={[styles.arrowText, slots?.arrowText]}
         >
           {SCROLL_ARROW_GLYPHS[side]}
-        </Text>
+        </PickerText>
       )}
     </Touchable>
   );

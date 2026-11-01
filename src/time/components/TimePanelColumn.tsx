@@ -1,6 +1,6 @@
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { useTimePanelColumn } from '../hooks/useTimePanelColumn';
 import { TIME_CELL_HEIGHT } from '../time.constants';
@@ -15,13 +15,16 @@ export const TimePanelColumn = ({ column, visibleRows, theme }: TimePanelColumnP
   return (
     <View style={styles.panelColumn}>
       {column.suffix ? (
-        <Text
-          style={[textStyle(theme, 'sm'), styles.panelHeader, { color: c.textSecondary }]}
+        <PickerText
+          theme={theme}
+          size="sm"
+          color="textSecondary"
+          style={styles.panelHeader}
           accessibilityElementsHidden
           importantForAccessibility="no"
         >
           {column.suffix}
-        </Text>
+        </PickerText>
       ) : null}
       <FlatList
         ref={list.ref}
@@ -44,14 +47,13 @@ export const TimePanelColumn = ({ column, visibleRows, theme }: TimePanelColumnP
               accessibilityState={{ selected, disabled: item.disabled }}
               style={[styles.cell, { borderRadius: theme.radius.sm, backgroundColor: selected ? c.primary : 'transparent' }]}
             >
-              <Text
-                style={[
-                  textStyle(theme, 'md', selected ? 'bold' : 'regular'),
-                  { color: selected ? c.onPrimary : item.disabled ? c.textDisabled : c.text },
-                ]}
+              <PickerText
+                theme={theme}
+                weight={selected ? 'bold' : 'regular'}
+                color={selected ? 'onPrimary' : item.disabled ? 'textDisabled' : 'text'}
               >
                 {item.label}
-              </Text>
+              </PickerText>
             </Touchable>
           );
         }}

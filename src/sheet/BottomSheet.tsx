@@ -1,9 +1,8 @@
 import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
 import { PLATFORM } from '../core/core.constants';
 import { useReturnFocus } from '../core/hooks/useReturnFocus';
-import { useDesignOverride, usePickerPlatform } from '../core/theme/ThemeProvider';
+import { useComponentTheme, usePickerPlatform } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { SheetDragArea } from './components/SheetDragArea';
 import { SheetHeader } from './components/SheetHeader';
@@ -39,8 +38,7 @@ export const BottomSheet = ({
   onClosed,
   testID,
 }: BottomSheetProps) => {
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const platform = usePickerPlatform();
   const defaults = getSheetDefaults(platform);

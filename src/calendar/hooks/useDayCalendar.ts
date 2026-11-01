@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { usePickerTheme } from '../../core';
-import { useDesignOverride } from '../../core/theme/ThemeProvider';
+import { useComponentTheme } from '../../core/theme/ThemeProvider';
 import { getFirstDayOfWeek, getWeekdayNames } from '../../core/utils/date.utils';
 import { CALENDAR_DESIGN } from '../calendar.constants';
 import type { WeekStripProps } from '../calendar.types';
@@ -23,7 +22,7 @@ export const useDayCalendar = ({
   theme: themeProp,
   design,
 }: WeekStripProps) => {
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const weekdayFormat = weekdayFormatProp ?? CALENDAR_DESIGN[theme.design].weekdayFormat;
   const firstDayOfWeek = firstDayOfWeekProp ?? getFirstDayOfWeek(locale);
   const today = useMemo(() => new Date(), []);

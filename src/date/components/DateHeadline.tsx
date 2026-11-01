@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { coreStyles } from '../../core/core.styles';
 import { HEADLINE_FONT_SIZE } from '../date.constants';
 import { styles } from '../date.styles';
@@ -14,8 +14,8 @@ export const DateHeadline = ({ text, theme }: DateHeadlineProps) => (
       { borderBottomColor: theme.colors.border, paddingHorizontal: theme.spacing.sm, paddingBottom: theme.spacing.md },
     ]}
   >
-    <Text style={[textStyle(theme, 'xl'), coreStyles.startAligned, { fontSize: HEADLINE_FONT_SIZE }]} accessibilityRole="header">
+    <PickerText theme={theme} size="xl" style={[coreStyles.startAligned, { fontSize: HEADLINE_FONT_SIZE }]} accessibilityRole="header">
       {text}
-    </Text>
+    </PickerText>
   </View>
 );

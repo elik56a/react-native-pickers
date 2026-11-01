@@ -1,8 +1,7 @@
 import { TextInput, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
 import { coreStyles } from '../core/core.styles';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { FieldFrame } from '../sheet/components/FieldFrame';
 import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN } from '../sheet/sheet.constants';
 import { getFieldAccessibility } from '../sheet/sheet.utils';
@@ -28,7 +27,7 @@ export const OtpField = (props: OtpFieldProps) => {
     design,
     testID,
   } = props;
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const otp = useOtpField(props);
   const look = FIELD_DESIGN[theme.design];
 

@@ -1,12 +1,11 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { styles } from '../action.styles';
 import type { ActionSheetHeaderProps } from '../action.types';
 
 export const ActionSheetHeader = ({ title, message, grouped, theme, slots }: ActionSheetHeaderProps) => {
   if (!title && !message) return null;
-  const c = theme.colors;
   const align = grouped && styles.centered;
   return (
     <View
@@ -18,14 +17,22 @@ export const ActionSheetHeader = ({ title, message, grouped, theme, slots }: Act
       ]}
     >
       {title ? (
-        <Text
-          style={[textStyle(theme, grouped ? 'sm' : 'md', 'bold'), { color: grouped ? c.textSecondary : c.text }, align, slots?.title]}
+        <PickerText
+          theme={theme}
+          size={grouped ? 'sm' : 'md'}
+          weight="bold"
+          color={grouped ? 'textSecondary' : 'text'}
+          style={[align, slots?.title]}
           accessibilityRole="header"
         >
           {title}
-        </Text>
+        </PickerText>
       ) : null}
-      {message ? <Text style={[textStyle(theme, 'sm'), { color: c.textSecondary }, align, slots?.message]}>{message}</Text> : null}
+      {message ? (
+        <PickerText theme={theme} size="sm" color="textSecondary" style={[align, slots?.message]}>
+          {message}
+        </PickerText>
+      ) : null}
     </View>
   );
 };

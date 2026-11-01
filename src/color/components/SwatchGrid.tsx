@@ -1,6 +1,6 @@
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { CUSTOM_PLUS, SWATCH_CHECK } from '../color.constants';
 import { styles } from '../color.styles';
@@ -39,9 +39,13 @@ export const SwatchGrid = ({ colors, shape, size, scroll = false, selected, onSe
         ]}
       >
         {chosen ? (
-          <Text style={[textStyle(theme, size < 28 ? 'xs' : 'md', 'bold'), { color: getCheckColor(value) }]}>{SWATCH_CHECK}</Text>
+          <PickerText theme={theme} size={size < 28 ? 'xs' : 'md'} weight="bold" style={{ color: getCheckColor(value) }}>
+            {SWATCH_CHECK}
+          </PickerText>
         ) : isCustom ? (
-          <Text style={[textStyle(theme, 'lg'), { color: theme.colors.textSecondary }]}>{CUSTOM_PLUS}</Text>
+          <PickerText theme={theme} size="lg" color="textSecondary">
+            {CUSTOM_PLUS}
+          </PickerText>
         ) : null}
       </Touchable>
     );

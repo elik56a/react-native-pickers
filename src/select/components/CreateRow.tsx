@@ -1,6 +1,4 @@
-import { Text } from 'react-native';
-
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
 import { CREATE_ICON, SELECT_DESIGN } from '../select.constants';
@@ -27,19 +25,18 @@ export const CreateRow = ({ text, label, onCreate, theme, slots }: CreateRowProp
         slots?.createOption,
       ]}
     >
-      <Text style={[textStyle(theme, 'lg', 'medium'), { color: theme.colors.primary, marginEnd: theme.spacing.md }]}>{CREATE_ICON}</Text>
-      <Text
+      <PickerText theme={theme} size="lg" weight="medium" color="primary" style={{ marginEnd: theme.spacing.md }}>
+        {CREATE_ICON}
+      </PickerText>
+      <PickerText
+        theme={theme}
+        weight="medium"
+        color="primary"
         numberOfLines={1}
-        style={[
-          textStyle(theme, 'md', 'medium'),
-          coreStyles.startAligned,
-          styles.flex,
-          { color: theme.colors.primary },
-          slots?.createOptionLabel,
-        ]}
+        style={[coreStyles.startAligned, styles.flex, slots?.createOptionLabel]}
       >
         {label}
-      </Text>
+      </PickerText>
     </Touchable>
   );
 };

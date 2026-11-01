@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { DESIGN } from '../../core/theme/theme.constants';
 import { InlinePanel } from '../../sheet/components/InlinePanel';
@@ -29,9 +29,11 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
           <Fragment key={item.end}>
             {index > 0 ? <View style={[styles.rangeSeparator, { backgroundColor: c.border }]} /> : null}
             <Touchable theme={theme} {...radio(item)} style={styles.rangeRow}>
-              <Text style={[textStyle(theme, 'md'), { color: c.text }]}>{item.label}</Text>
+              <PickerText theme={theme}>{item.label}</PickerText>
               <View style={[styles.rangePill, { backgroundColor: c.surface, borderRadius: theme.radius.sm }]}>
-                <Text style={[textStyle(theme, 'md'), { color: item.end === active ? c.primary : c.text }]}>{item.time}</Text>
+                <PickerText theme={theme} color={item.end === active ? 'primary' : 'text'}>
+                  {item.time}
+                </PickerText>
               </View>
             </Touchable>
             <InlinePanel visible={item.end === active} theme={theme}>
@@ -46,7 +48,11 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
   const web = theme.design === DESIGN.web;
   const box = (item: RangeEndItem) => {
     const on = item.end === active;
-    const label = <Text style={[textStyle(theme, 'xs', 'medium'), { color: on ? c.primary : c.textSecondary }]}>{item.label}</Text>;
+    const label = (
+      <PickerText theme={theme} size="xs" weight="medium" color={on ? 'primary' : 'textSecondary'}>
+        {item.label}
+      </PickerText>
+    );
     return (
       <View style={{ gap: theme.spacing.xs }}>
         {web ? null : label}
@@ -61,7 +67,9 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
           ]}
         >
           {web ? label : null}
-          <Text style={[textStyle(theme, web ? 'md' : 'lg', 'medium'), { color: on && !web ? c.primary : c.text }]}>{item.time}</Text>
+          <PickerText theme={theme} size={web ? 'md' : 'lg'} weight="medium" color={on && !web ? 'primary' : 'text'}>
+            {item.time}
+          </PickerText>
         </Touchable>
       </View>
     );
@@ -71,8 +79,12 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
       <View accessibilityRole="radiogroup" accessibilityLabel={TIME_RANGE_ACCESSIBILITY_LABEL} style={styles.rangeBoxes} testID={testID}>
         {box(items[0])}
         <View style={styles.rangeArrow}>
-          <Text style={[textStyle(theme, 'md'), { color: c.textSecondary }]}>{TIME_RANGE_ARROW}</Text>
-          <Text style={[textStyle(theme, 'xs'), { color: c.textSecondary }]}>{duration}</Text>
+          <PickerText theme={theme} color="textSecondary">
+            {TIME_RANGE_ARROW}
+          </PickerText>
+          <PickerText theme={theme} size="xs" color="textSecondary">
+            {duration}
+          </PickerText>
         </View>
         {box(items[1])}
       </View>

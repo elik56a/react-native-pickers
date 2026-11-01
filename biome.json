@@ -44,6 +44,16 @@
   },
   "overrides": [
     {
+      "includes": ["src/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noReactNativeRawText": { "level": "on", "options": { "skip": ["PickerText"] } }
+          }
+        }
+      }
+    },
+    {
       "includes": ["website/src/css/**"],
       "linter": {
         "rules": {

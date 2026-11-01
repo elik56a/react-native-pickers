@@ -1,6 +1,6 @@
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { KEY } from '../../core/core.constants';
 import { keyboardProps } from '../../core/utils/keyboard.utils';
 import { CLOCK_MODE_LABEL, DIAL_NUMBER_SIZE, DIAL_SIZE } from '../time.constants';
@@ -40,14 +40,13 @@ export const DialFace = ({ dial, theme, testID }: ClockPartProps) => {
           pointerEvents="none"
           style={[styles.number, { left: n.x - DIAL_NUMBER_SIZE / 2, top: n.y - DIAL_NUMBER_SIZE / 2 }]}
         >
-          <Text
-            style={[
-              textStyle(theme, n.inner ? 'sm' : 'md'),
-              { color: n.value === dial.selected ? c.onPrimary : n.disabled ? c.textDisabled : c.text },
-            ]}
+          <PickerText
+            theme={theme}
+            size={n.inner ? 'sm' : 'md'}
+            color={n.value === dial.selected ? 'onPrimary' : n.disabled ? 'textDisabled' : 'text'}
           >
             {n.label}
-          </Text>
+          </PickerText>
         </View>
       ))}
     </View>

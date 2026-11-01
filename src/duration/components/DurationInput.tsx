@@ -1,6 +1,7 @@
-import { Text, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { styles as timeStyles } from '../../time/time.styles';
 import { NUMERIC_KEYBOARD_TYPE } from '../../wheel/wheel.constants';
 import { styles } from '../duration.styles';
@@ -37,7 +38,9 @@ export const DurationInput = ({ columns, theme, style, testID }: DurationInputPr
             ]}
             testID={column.testID}
           />
-          <Text style={[textStyle(theme, 'md'), { color: c.textSecondary }]}>{column.suffix}</Text>
+          <PickerText theme={theme} color="textSecondary">
+            {column.suffix}
+          </PickerText>
         </View>
       ))}
     </View>

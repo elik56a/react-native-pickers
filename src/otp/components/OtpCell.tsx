@@ -1,6 +1,6 @@
-import { Animated, Text, View } from 'react-native';
+import { Animated, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { FOCUS_RING_WIDTH } from '../../sheet/sheet.constants';
 import { CARET_HEIGHT_RATIO } from '../otp.constants';
 import { styles } from '../otp.styles';
@@ -35,7 +35,9 @@ export const OtpCell = ({ cell, caretOpacity, invalid, look, theme, slots, testI
           style={[styles.caret, { height: fontSize * CARET_HEIGHT_RATIO, backgroundColor: c.primary, opacity: caretOpacity }, slots?.caret]}
         />
       ) : (
-        <Text style={[textStyle(theme, 'xl', 'medium'), slots?.cellText]}>{cell.char}</Text>
+        <PickerText theme={theme} size="xl" weight="medium" style={slots?.cellText}>
+          {cell.char}
+        </PickerText>
       )}
     </View>
   );

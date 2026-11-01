@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { COLOR_DISPLAY, COLOR_DISPLAY_DESIGN, DEFAULT_COLORS } from './color.constants';
 import { styles } from './color.styles';
@@ -36,7 +35,7 @@ export const ColorPicker = ({
   design,
   testID,
 }: ColorPickerProps) => {
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const picker = useColorPicker({ value, defaultValue, onChange, showAlpha });
   const Layout = showCustom ? LAYOUTS[display ?? COLOR_DISPLAY_DESIGN[theme.design]] : SwatchesOnly;
   return (

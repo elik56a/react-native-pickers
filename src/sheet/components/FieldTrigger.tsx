@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
 import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet.constants';
@@ -83,18 +83,20 @@ export const FieldTrigger = ({
           (displayValue ? (
             <View style={styles.triggerRow} pointerEvents="none">
               {icon ? <View style={styles.triggerIcon}>{icon}</View> : null}
-              <Text style={[textStyle(theme, 'md'), coreStyles.startAligned, slots?.triggerText]} numberOfLines={1}>
+              <PickerText theme={theme} style={[coreStyles.startAligned, slots?.triggerText]} numberOfLines={1}>
                 {displayValue}
-              </Text>
+              </PickerText>
             </View>
           ) : (
-            <Text
+            <PickerText
+              theme={theme}
+              color="textSecondary"
               pointerEvents="none"
-              style={[textStyle(theme, 'md'), coreStyles.startAligned, { color: c.textSecondary }, slots?.placeholder]}
+              style={[coreStyles.startAligned, slots?.placeholder]}
               numberOfLines={1}
             >
               {floating && !raised ? '' : placeholder}
-            </Text>
+            </PickerText>
           ))}
       </View>
       {clearable && displayValue && !disabled ? (
@@ -106,7 +108,9 @@ export const FieldTrigger = ({
           accessibilityLabel="Clear"
           style={[styles.clearButton, { borderRadius: theme.radius.full }]}
         >
-          <Text style={[textStyle(theme, 'lg'), styles.clear, { color: c.textSecondary }, slots?.clear]}>×</Text>
+          <PickerText theme={theme} size="lg" color="textSecondary" style={[styles.clear, slots?.clear]}>
+            ×
+          </PickerText>
         </Touchable>
       ) : null}
       <Chevron open={open} renderChevron={renderChevron} theme={theme} style={slots?.chevron} />

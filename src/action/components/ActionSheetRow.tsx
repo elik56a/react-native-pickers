@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { CHECK_MARK } from '../action.constants';
 import { styles } from '../action.styles';
@@ -43,33 +43,30 @@ export const ActionSheetRow = ({
     >
       {iconAtEnd ? null : action.icon}
       <View style={grouped ? styles.groupedText : styles.text}>
-        <Text
-          style={[
-            textStyle(theme, grouped ? 'lg' : 'md', cancel && grouped ? 'bold' : 'regular'),
-            { color },
-            slots?.[cancel ? 'cancelLabel' : 'actionLabel'],
-          ]}
+        <PickerText
+          theme={theme}
+          size={grouped ? 'lg' : 'md'}
+          weight={cancel && grouped ? 'bold' : 'regular'}
+          style={[{ color }, slots?.[cancel ? 'cancelLabel' : 'actionLabel']]}
           numberOfLines={1}
         >
           {action.label}
-        </Text>
+        </PickerText>
         {action.description ? (
-          <Text style={[textStyle(theme, 'sm'), { color: c.textSecondary }, slots?.actionDescription]} numberOfLines={2}>
+          <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.actionDescription} numberOfLines={2}>
             {action.description}
-          </Text>
+          </PickerText>
         ) : null}
       </View>
       {action.selected ? (
-        <Text
-          style={[
-            textStyle(theme, 'md', 'bold'),
-            { color: c.primary },
-            grouped && [styles.groupedCheck, { end: theme.spacing.lg }],
-            slots?.check,
-          ]}
+        <PickerText
+          theme={theme}
+          weight="bold"
+          color="primary"
+          style={[grouped && [styles.groupedCheck, { end: theme.spacing.lg }], slots?.check]}
         >
           {CHECK_MARK}
-        </Text>
+        </PickerText>
       ) : null}
       {iconAtEnd ? action.icon : null}
     </Touchable>
