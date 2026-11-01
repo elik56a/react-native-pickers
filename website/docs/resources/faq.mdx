@@ -24,7 +24,7 @@ Everything. Colors, radius, spacing and fonts are theme tokens (light and dark),
 
 ## Does it need Reanimated or Gesture Handler?
 
-No. It uses only React Native core: `Animated` (native driver), `PanResponder`, `FlatList` and `Modal`.
+No. It uses only React Native core: `Animated` (native driver), `ScrollView`, `PanResponder`, `FlatList` and `Modal`. Drags and scrolls still run on the UI thread, so they keep up with Reanimated-based libraries; see the [benchmarks](../guides/performance#benchmarks).
 
 ## How do I clear a date?
 

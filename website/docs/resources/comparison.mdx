@@ -38,7 +38,7 @@ React Native apps usually combine several single-purpose packages for pickers. T
 - you need **ranges, multiple dates, marked dates or prices** in a calendar
 - you need **several kinds of pickers** and want one API, one theme and one dependency
 - you ship through **Expo Go / OTA updates** or want to avoid native modules
-- you want **sheets** without pulling in Reanimated and Gesture Handler
+- you want **sheets** without pulling in Reanimated and Gesture Handler: the drag runs on the UI thread and keeps up with `@gorhom/bottom-sheet` in the [benchmarks](../guides/performance#benchmarks)
 
 ## Choose something else when
 
