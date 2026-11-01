@@ -1,4 +1,4 @@
-import { SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
+import { BUILT_IN_LIST_SHEET_HEIGHT, SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
 import type { SelectOption, SelectPickerProps, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
@@ -93,10 +93,21 @@ export const getSelectedLabel = <T>(selected: SelectOption<T>[]) => selected.map
 type SheetOptions = SelectPickerProps<unknown>['sheet'];
 
 /** A long built-in list opens its sheet at a fixed `height`, so it doesn't jump as search narrows it; the app's own height wins. */
-export const withSheetHeight = (sheet: SheetOptions, height: number): SheetOptions => ({
+export const withSheetHeight = (sheet: SheetOptions, height = BUILT_IN_LIST_SHEET_HEIGHT): SheetOptions => ({
   ...sheet,
   sheetProps: {
     height,
     ...sheet?.sheetProps,
   },
 });
+
+/** Splits a built-in list into the `preferred` items, in that order and only those in the list, and the rest. */
+export const pinPreferred = <I, K>(pool: ReadonlyArray<I>, preferred: ReadonlyArray<K>, keyOf: (item: I) => K) => {
+  const byKey = new Map(pool.map((item) => [keyOf(item), item]));
+  const pinned = preferred.flatMap((key) => byKey.get(key) ?? []);
+  const pinnedKeys = new Set(pinned.map(keyOf));
+  return {
+    pinned,
+    rest: pool.filter((item) => !pinnedKeys.has(keyOf(item))),
+  };
+};

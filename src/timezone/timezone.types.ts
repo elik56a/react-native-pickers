@@ -1,6 +1,5 @@
 import type { Locale } from '../core';
-import type { DistributiveOmit } from '../core/core.types';
-import type { SelectPickerProps } from '../select';
+import type { BuiltInSelectPickerProps } from '../select/select.types';
 
 export interface TimeZone {
   /** IANA name, e.g. 'Europe/Lisbon' */
@@ -28,17 +27,4 @@ export interface TimeZoneListOptions {
   date?: Date;
 }
 
-/** Server search props don't apply: the zone list is built in. */
-type ServerSearchProp =
-  | 'options'
-  | 'loadOptions'
-  | 'onSearchChange'
-  | 'searchDebounce'
-  | 'onEndReached'
-  | 'loading'
-  | 'loadingText'
-  | 'searchPrompt'
-  | 'renderLoading'
-  | 'isEqual';
-
-export type TimeZonePickerProps = DistributiveOmit<SelectPickerProps<string>, ServerSearchProp> & TimeZoneListOptions;
+export type TimeZonePickerProps = BuiltInSelectPickerProps<string> & TimeZoneListOptions;

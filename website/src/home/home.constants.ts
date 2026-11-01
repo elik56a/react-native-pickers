@@ -64,6 +64,7 @@ export const COMPONENTS = [
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },
   { doc: 'components/select-list', name: 'SelectList', body: 'The searchable list, inline' },
   { doc: 'components/country-picker', name: 'CountryPicker', body: 'Flags, dialing codes, localized names' },
+  { doc: 'components/language-picker', name: 'LanguagePicker', body: 'Flags, each language in itself, for the app language' },
   { doc: 'components/phone-field', name: 'PhoneField', body: 'Country code and number, formatted as you type' },
   { doc: 'components/time-zone-picker', name: 'TimeZonePicker', body: 'Every time zone with its GMT offset' },
   { doc: 'components/horizontal-list', name: 'HorizontalList', body: 'Segmented control or scrolling chips, with icons' },

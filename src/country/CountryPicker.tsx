@@ -1,6 +1,6 @@
 import { SelectPicker } from '../select';
 import { withSheetHeight } from '../select/select.utils';
-import { COUNTRY_SHEET_HEIGHT, DEFAULT_COUNTRY_PLACEHOLDER, DEFAULT_COUNTRY_SEARCH_PLACEHOLDER } from './country.constants';
+import { DEFAULT_COUNTRY_PLACEHOLDER, DEFAULT_COUNTRY_SEARCH_PLACEHOLDER } from './country.constants';
 import type { CountryCode, CountryPickerProps } from './country.types';
 import { useCountryOptions } from './hooks/useCountryOptions';
 
@@ -32,7 +32,7 @@ export const CountryPicker = ({
       options={options}
       placeholder={placeholder}
       searchPlaceholder={searchPlaceholder}
-      sheet={withSheetHeight(sheet, COUNTRY_SHEET_HEIGHT)}
+      sheet={withSheetHeight(sheet)}
     />
   );
 };

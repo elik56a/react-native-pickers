@@ -25,6 +25,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
 | [`SelectList<T>`](../components/select-list) | Inline searchable list |
 | [`CountryPicker`](../components/country-picker) | Country field: flags, dialing codes, localized names |
+| [`LanguagePicker`](../components/language-picker) | Language field: each language in itself, its name in the user's language below |
 | [`PhoneField`](../components/phone-field) | Phone number input: country code button, formats as you type, E.164 value |
 | [`TimeZonePicker`](../components/time-zone-picker) | Time zone field: GMT offsets, sorted by offset, the device's zone on top |
 | [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
@@ -100,6 +101,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 ## Country utilities
 
 [`getCountry`](../components/country-picker#utilities) · [`getAllCountries`](../components/country-picker#utilities) · [`getCountryFlag`](../components/country-picker#utilities)
+
+## Language utilities
+
+[`getLanguage`](../components/language-picker#utilities) · [`getAllLanguages`](../components/language-picker#utilities) · [`getLanguageName`](../components/language-picker#utilities) · [`isRtlLanguage`](../components/language-picker#utilities)
 
 ## Phone utilities
 
@@ -183,6 +188,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | SelectPicker, SelectList | `createLabel` | `Add "…"` |
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
+| LanguagePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allLanguagesLabel` | `Select a language` / `Search languages` / `Suggested` / `All languages` |
 | PhoneField | `label` / `countrySheetTitle` | none (read as `Phone number`) / `Country code` |
 | TimeZonePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allTimeZonesLabel` | `Select a time zone` / `Search time zones` / `Your time zone` / `All time zones` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |

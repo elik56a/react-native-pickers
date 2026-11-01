@@ -10,6 +10,6 @@
     "On native, import from feature subpaths such as '@elik56a/react-native-pickers/date' so Metro only bundles the pickers you use.",
     "Components are controlled with value + onChange. onChange fires for user changes only, not when value is set programmatically.",
     "Pickers look native per platform by default (design 'auto': iOS on iOS, Material on Android, web on the web). For one look everywhere set <PickersProvider design=\"ios\"> (or 'material' | 'web'); a component's design prop wins over the provider's, and theme, styles and explicit props win over the design.",
-    "In forms, use the field components (DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField, SelectPicker, CountryPicker, PhoneField): they own the open state and show the confirmed value."
+    "In forms, use the field components (DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField, SelectPicker, CountryPicker, LanguagePicker, PhoneField): they own the open state and show the confirmed value."
   ]
 }

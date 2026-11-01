@@ -1,0 +1,185 @@
+---
+title: React Native Language Picker
+description: "React Native language picker for an app's language setting: 86 languages with flags, each under its own name (Español, 日本語, العربية) with its name in the user's language below, search in any language, suggested languages on top and right-to-left detection. Pure JS, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# LanguagePicker
+
+`LanguagePicker` is a React Native field for choosing a language, such as the app's language setting or the language of a post. It shows each language with a flag, under its own name, such as 🇪🇸 **Español** or 🇯🇵 **日本語**, with its name in the user's language below, so people can find their language even when the app is in one they don't read. Search matches either name and the tag.
+
+It's a [`SelectPicker`](./select-picker) with 86 languages built in, the ones the app stores and operating systems offer, so it takes the same props: a bottom sheet on phones, a dropdown on the web, multiple selection, a clear button and the [iOS, Material or web design](../guides/designs).
+
+```tsx
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+import type { LanguageCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [language, setLanguage] = useState<LanguageCode | null>('es');
+  return <LanguagePicker label="App language" value={language} onChange={setLanguage} />;
+}
+```
+
+Try searching `german`, `deutsch`, `日本` or `pt-br`. The value is a BCP 47 tag, such as `'es'`, `'pt-BR'` or `'zh-Hant'`, ready for your i18n library. Chinese and Portuguese come as their two written standards, which people choose between.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.languagePicker} />
+
+## Flags
+
+Each language shows the flag of the country it's most spoken in, such as 🇪🇸 for Español and 🇧🇷 for Português (Brasil). A language is spoken in more than one country, so change any flag with `flags`, such as 🇬🇧 for English in a British app, or hide them all with `showFlag={false}`. Flags are emoji: no images to add.
+
+```tsx live
+import { useState } from 'react';
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+import type { LanguageCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [language, setLanguage] = useState<LanguageCode | null>('en');
+  return <LanguagePicker label="App language" flags={{ en: 'GB', ar: 'AE' }} value={language} onChange={setLanguage} />;
+}
+```
+
+## The languages your app speaks
+
+`languages` limits the list to your translations, and `preferred` pins some to the top under their own header, such as the device's languages.
+
+```tsx live
+import { useState } from 'react';
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+import type { LanguageCode } from '@elik56a/react-native-pickers';
+
+const TRANSLATED: LanguageCode[] = ['en', 'es', 'fr', 'de', 'he', 'ar', 'ja', 'zh-Hans', 'pt-BR'];
+
+export default function Example() {
+  const [language, setLanguage] = useState<LanguageCode | null>('en');
+  return (
+    <LanguagePicker
+      label="App language"
+      languages={TRANSLATED}
+      preferred={['en', 'he']}
+      preferredLabel="On this device"
+      value={language}
+      onChange={setLanguage}
+    />
+  );
+}
+```
+
+Pass `languages`, `exclude` and `preferred` from a constant, not a new array on every render, so the list is built once.
+
+## Right-to-left languages
+
+`isRtlLanguage(tag)` tells whether a language is written right to left, for any BCP 47 tag, such as `'ar'`, `'he-IL'` or `'fa_IR'`. Use it to flip the layout when the user switches language:
+
+```ts
+import { I18nManager } from 'react-native';
+import { isRtlLanguage } from '@elik56a/react-native-pickers';
+
+const onChange = (language: LanguageCode) => {
+  i18n.changeLanguage(language);
+  I18nManager.forceRTL(isRtlLanguage(language)); // takes effect after a reload
+};
+```
+
+## Several languages
+
+`multiple` turns the field into chips, as with `SelectPicker`, for the languages someone speaks or a post's translations.
+
+```tsx live
+import { useState } from 'react';
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+import type { LanguageCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [spoken, setSpoken] = useState<LanguageCode[]>(['en', 'fr']);
+  return <LanguagePicker label="Languages you speak" multiple value={spoken} onChange={setSpoken} />;
+}
+```
+
+## Names in the user's language
+
+The name under each language comes from `Intl.DisplayNames` in `locale`, the device locale by default, and the list is sorted by it. Where the JavaScript engine has no `Intl.DisplayNames` (Hermes), it falls back to English. The language's own name, on top, is always there.
+
+```tsx live
+import { useState } from 'react';
+import { LanguagePicker } from '@elik56a/react-native-pickers';
+import type { LanguageCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [language, setLanguage] = useState<LanguageCode | null>('fr');
+  return (
+    <LanguagePicker
+      label="Langue"
+      placeholder="Choisir une langue"
+      searchPlaceholder="Rechercher"
+      locale="fr"
+      value={language}
+      onChange={setLanguage}
+    />
+  );
+}
+```
+
+## Utilities
+
+| Export | Description |
+| --- | --- |
+| `getLanguage(tag)` | `{ code, name, nativeName, country, rtl }` for a tag in any case, or `undefined` |
+| `getAllLanguages()` | Every `Language`, sorted by tag |
+| `getLanguageName(language, locale?)` | The language's name in `locale`, or its English name |
+| `isRtlLanguage(tag)` | Whether the language of any BCP 47 tag is written right to left |
+
+```ts
+getLanguage('he'); // { code: 'he', name: 'Hebrew', nativeName: 'עברית', country: 'IL', rtl: true }
+```
+
+## Props
+
+Every [`SelectPicker` prop](./select-picker#props) works, apart from the server search ones (`options`, `loadOptions`, `onSearchChange`, `loading` and the rest): the list is built in. `value` is a `LanguageCode`, or `LanguageCode[]` with `multiple`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `languages` | `LanguageCode[]` | all | Only these languages. |
+| `exclude` | `LanguageCode[]` | — | Leave these out. |
+| `preferred` | `LanguageCode[]` | — | Shown first, in this order, under their own header. |
+| `showFlag` | `boolean` | `true` | A flag before each language: the country it's most spoken in. |
+| `flags` | `Partial<Record<LanguageCode, CountryCode>>` | — | Other flags for some languages, such as `{ en: 'GB' }`. |
+| `preferredLabel` | `string` | `'Suggested'` | Header above `preferred`. |
+| `allLanguagesLabel` | `string` | `'All languages'` | Header above the rest when `preferred` is set. |
+| `locale` | `string` | device locale | Language of the names under each language's own name. |
+| `placeholder` | `string` | `'Select a language'` | Shown while nothing is selected. |
+| `searchPlaceholder` | `string` | `'Search languages'` | Search field placeholder. |
+| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+
+### Types
+
+```ts
+type LanguageCode = 'af' | 'am' | 'ar' | … | 'pt-BR' | 'zh-Hans' | 'zh-Hant' | 'zu'; // BCP 47
+
+interface Language {
+  code: LanguageCode;
+  name: string; // English
+  nativeName: string; // 'Español'
+  country: CountryCode; // the flag: 'ES'
+  rtl: boolean; // written right to left
+}
+```
+
+## Accessibility
+
+Each row is named by the language's own name, such as "Deutsch", as the phone's language settings read it. Flags are hidden from screen readers. The field and the list have [SelectPicker's accessibility](./select-picker#accessibility).
+
+## Related
+
+- [`CountryPicker`](./country-picker): countries with flags and dialing codes
+- [`TimeZonePicker`](./time-zone-picker): time zones by city and offset
+- [`SelectPicker`](./select-picker): any list of options

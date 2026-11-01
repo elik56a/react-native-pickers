@@ -102,6 +102,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search, new options from the search |
 | [`SelectList`](https://react-native-pickers.dev/docs/components/select-list) | The same list, inline |
 | [`CountryPicker`](https://react-native-pickers.dev/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
+| [`LanguagePicker`](https://react-native-pickers.dev/docs/components/language-picker) | 86 languages with flags, each under its own name (Español, 日本語) with its name in the user's language below, right-to-left detection |
 | [`PhoneField`](https://react-native-pickers.dev/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
 | [`TimeZonePicker`](https://react-native-pickers.dev/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
 | [`HorizontalList`](https://react-native-pickers.dev/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
@@ -419,6 +420,20 @@ A `SelectPicker` with about 250 countries built in. The value is the ISO code (`
 | `locale` | `string`: names via `Intl.DisplayNames`, English fallback | device locale |
 
 `getCountry('IL')` returns `{ code, name, nativeName, dialCode, flag, keywords }`.
+
+### LanguagePicker
+
+A `SelectPicker` with 86 languages built in, for an app's language setting. Each shows under its own name, such as `Español`, with its name in the user's language below. The value is a BCP 47 tag (`'es'`, `'pt-BR'`, `'zh-Hant'`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `LanguageCode`, or `LanguageCode[]` with `multiple` | |
+| `preferred` | `LanguageCode[]`: pinned on top | |
+| `languages` / `exclude` | `LanguageCode[]` | all |
+| `locale` | `string`: names via `Intl.DisplayNames`, English fallback | device locale |
+| `showFlag` / `flags` | `boolean` / `{ en: 'GB' }` to change some flags | `true` |
+
+`isRtlLanguage('ar-EG')` tells whether a language is written right to left, and `getLanguage('he')` returns `{ code, name, nativeName, country, rtl }`.
 
 ### PhoneField
 

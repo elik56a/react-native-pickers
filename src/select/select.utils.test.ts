@@ -9,6 +9,7 @@ import {
   getSelectedLabel,
   isAtMax,
   isOptionDisabled,
+  pinPreferred,
   shouldSearchInField,
   shouldShowSearch,
   toggleValue,
@@ -156,5 +157,13 @@ describe('withSheetHeight', () => {
   it('opens at a fixed height unless the sheet sets its own', () => {
     expect(withSheetHeight(undefined, 0.8)?.sheetProps?.height).toBe(0.8);
     expect(withSheetHeight({ sheetProps: { height: 0.5 } }, 0.8)?.sheetProps?.height).toBe(0.5);
+  });
+});
+
+describe('pinPreferred', () => {
+  it('takes the preferred items in their order, skips ones not in the list, and keeps the rest in place', () => {
+    const { pinned, rest } = pinPreferred(['a', 'b', 'c', 'd'], ['c', 'x', 'a'], (item) => item);
+    expect(pinned).toEqual(['c', 'a']);
+    expect(rest).toEqual(['b', 'd']);
   });
 });
