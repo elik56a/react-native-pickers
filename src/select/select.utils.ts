@@ -1,4 +1,4 @@
-import { BUILT_IN_LIST_SHEET_HEIGHT, SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
+import { BUILT_IN_LIST_SHEET_HEIGHT, DEFAULT_SEARCH_PLACEHOLDER, SEARCH_THRESHOLD, SELECT_ROW_TYPE } from './select.constants';
 import type { SelectOption, SelectPickerProps, SelectRow } from './select.types';
 
 /** Lowercase and strip Latin diacritics and Hebrew niqqud. */
@@ -28,6 +28,10 @@ export const getEmptyMessage = (remote: boolean, query: string, prompt: string, 
 /** A dropdown types into the field itself, unless search is off or `renderTrigger` replaced the field: then the list has its own search. */
 export const shouldSearchInField = (dropdown: boolean, searchable: boolean | undefined, customTrigger: boolean) =>
   dropdown && searchable !== false && !customTrigger;
+
+/** Typing in a single-select field, the chosen label stays as the hint, so the user sees what they're replacing. */
+export const getFieldSearchPlaceholder = <T>(multiple: boolean | undefined, selected: SelectOption<T>[], searchPlaceholder?: string) =>
+  (!multiple && selected[0]?.label) || searchPlaceholder || DEFAULT_SEARCH_PLACEHOLDER;
 
 /** For options a server already filtered. */
 export const keepAll = () => true;

@@ -1,3 +1,4 @@
+import { DEFAULT_SEARCH_PLACEHOLDER } from './select.constants';
 import type { SelectOption } from './select.types';
 import {
   buildRows,
@@ -5,6 +6,7 @@ import {
   findOptions,
   getCreateText,
   getEmptyMessage,
+  getFieldSearchPlaceholder,
   getRowKey,
   getSelectedLabel,
   isAtMax,
@@ -64,6 +66,14 @@ describe('getEmptyMessage', () => {
     expect(getEmptyMessage(true, '', 'Type to search', 'No results')).toBe('Type to search');
     expect(getEmptyMessage(true, 'lon', 'Type to search', 'No results')).toBe('No results');
     expect(getEmptyMessage(false, '', 'Type to search', 'No results')).toBe('No results');
+  });
+});
+
+describe('getFieldSearchPlaceholder', () => {
+  it("hints a single select's chosen label, then the app's placeholder, then the default", () => {
+    expect(getFieldSearchPlaceholder(false, [option('Paris')], 'Find a city')).toBe('Paris');
+    expect(getFieldSearchPlaceholder(true, [option('Paris')], 'Find a city')).toBe('Find a city');
+    expect(getFieldSearchPlaceholder(false, [])).toBe(DEFAULT_SEARCH_PLACEHOLDER);
   });
 });
 

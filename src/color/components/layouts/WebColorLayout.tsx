@@ -20,7 +20,7 @@ export const WebColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
     <View style={[styles.column, { gap: theme.spacing.md }]}>
       <SaturationPad {...shared} height={COLOR_DESIGN.web.padHeight} testID={testID ? `${testID}-pad` : undefined} />
       <View style={[styles.row, styles.center, { gap: theme.spacing.md }]}>
-        {pick ? (
+        {pick && (
           <Touchable
             theme={theme}
             onPress={pick}
@@ -30,11 +30,11 @@ export const WebColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
           >
             <EyedropperIcon color={theme.colors.text} />
           </Touchable>
-        ) : null}
+        )}
         <ColorPreview color={picker.value} shape="circle" theme={theme} />
         <View style={styles.fill}>
           <HueSlider {...shared} />
-          {showAlpha ? <AlphaSlider {...shared} /> : null}
+          {showAlpha && <AlphaSlider {...shared} />}
         </View>
       </View>
       <HexInput
@@ -49,7 +49,7 @@ export const WebColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
         slots={slots}
         testID={testID ? `${testID}-hex` : undefined}
       />
-      {colors.length ? (
+      {colors.length > 0 && (
         <SwatchGrid
           colors={colors}
           shape={COLOR_DESIGN.web.swatchShape}
@@ -59,7 +59,7 @@ export const WebColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
           theme={theme}
           slots={slots}
         />
-      ) : null}
+      )}
     </View>
   );
 };

@@ -9,7 +9,7 @@ import { SelectSearchField } from './components/SelectSearchField';
 import { SelectTrigger } from './components/SelectTrigger';
 import { useSelectPicker } from './hooks/useSelectPicker';
 import { SelectList } from './SelectList';
-import { DEFAULT_SEARCH_PLACEHOLDER, SELECT_DROPDOWN_MIN_WIDTH, SELECT_PRESENTATION } from './select.constants';
+import { SELECT_DROPDOWN_MIN_WIDTH, SELECT_PRESENTATION } from './select.constants';
 import { LIST_STYLE } from './select.styles';
 import type { SelectListBaseProps, SelectPickerProps } from './select.types';
 
@@ -61,28 +61,25 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
     <View style={style}>
       <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
         <View ref={picker.anchor.ref} collapsable={false}>
-          {renderTrigger ? (
-            renderTrigger({ open: picker.toggle, selected: picker.selected, disabled, error })
-          ) : (
-            <SelectTrigger
-              selected={picker.selected}
-              multiple={!!props.multiple}
-              chips={chips}
-              placeholder={placeholder}
-              label={label}
-              open={picker.open}
-              disabled={disabled}
-              clearable={clearable}
-              error={error}
-              required={required}
-              onOpen={picker.toggle}
-              onRemove={picker.removeOption}
-              onClear={picker.clear}
-              renderChevron={renderChevron}
-              theme={theme}
-              slots={slots}
-            />
-          )}
+          <SelectTrigger
+            selected={picker.selected}
+            multiple={!!props.multiple}
+            chips={chips}
+            placeholder={placeholder}
+            label={label}
+            open={picker.open}
+            disabled={disabled}
+            clearable={clearable}
+            error={error}
+            required={required}
+            onOpen={picker.toggle}
+            onRemove={picker.removeOption}
+            onClear={picker.clear}
+            renderTrigger={renderTrigger}
+            renderChevron={renderChevron}
+            theme={theme}
+            slots={slots}
+          />
         </View>
       </FieldFrame>
       {picker.presentation === SELECT_PRESENTATION.dropdown ? (
@@ -93,16 +90,16 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
           onClose={picker.hide}
           theme={themeOverride}
           overlay={
-            picker.searchInField ? (
+            picker.searchInField && (
               <SelectSearchField
                 query={picker.query}
                 onChangeQuery={picker.setQuery}
-                placeholder={(!props.multiple && picker.selected[0]?.label) || listProps.searchPlaceholder || DEFAULT_SEARCH_PLACEHOLDER}
+                placeholder={picker.searchPlaceholder}
                 renderChevron={renderChevron}
                 theme={theme}
                 slots={slots}
               />
-            ) : null
+            )
           }
         >
           {list}

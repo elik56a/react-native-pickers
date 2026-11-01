@@ -36,10 +36,8 @@ export const PickerSheet = ({
   const field = useFieldSheet();
   const presentation = presentationProp ?? field?.presentation;
   const fit = useDropdownFit();
-  const cancel = showCancel ? <SheetButton label={cancelLabel} onPress={onClose} theme={theme} /> : undefined;
-  const confirm = onConfirm ? (
-    <SheetButton label={confirmLabel} onPress={onConfirm} primary disabled={confirmDisabled} theme={theme} />
-  ) : undefined;
+  const cancel = showCancel && <SheetButton label={cancelLabel} onPress={onClose} theme={theme} />;
+  const confirm = onConfirm && <SheetButton label={confirmLabel} onPress={onConfirm} primary disabled={confirmDisabled} theme={theme} />;
   const inHeader = sheetDesign.actions === SHEET_ACTIONS.header;
   const actions = (
     <View style={styles.actions}>
@@ -78,7 +76,7 @@ export const PickerSheet = ({
         >
           {content}
         </ScrollView>
-        {cancel || confirm ? (
+        {(cancel || confirm) && (
           <View
             style={[styles.actions, styles.dropdownFooter, { borderTopColor: theme.colors.border, paddingHorizontal: theme.spacing.lg }]}
             onLayout={fit.onFooterLayout}
@@ -86,7 +84,7 @@ export const PickerSheet = ({
             {cancel}
             {confirm}
           </View>
-        ) : null}
+        )}
       </Dropdown>
     );
   }

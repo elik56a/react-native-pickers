@@ -41,7 +41,7 @@ export const ActionSheetRow = ({
         slots?.[cancel ? 'cancel' : 'action'],
       ]}
     >
-      {iconAtEnd ? null : action.icon}
+      {!iconAtEnd && action.icon}
       <View style={grouped ? styles.groupedText : styles.text}>
         <PickerText
           theme={theme}
@@ -58,7 +58,7 @@ export const ActionSheetRow = ({
           </PickerText>
         ) : null}
       </View>
-      {action.selected ? (
+      {action.selected && (
         <PickerText
           theme={theme}
           weight="bold"
@@ -67,8 +67,8 @@ export const ActionSheetRow = ({
         >
           {CHECK_MARK}
         </PickerText>
-      ) : null}
-      {iconAtEnd ? action.icon : null}
+      )}
+      {iconAtEnd && action.icon}
     </Touchable>
   );
 };

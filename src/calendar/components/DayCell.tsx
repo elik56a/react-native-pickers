@@ -34,7 +34,7 @@ export const DayCell = memo(({ state, hidden, hasRangeEnd, height, locale, rende
     >
       {() => (
         <>
-          {renderDay ? <TouchFeedback {...touch.feedback} /> : null}
+          {renderDay && <TouchFeedback {...touch.feedback} />}
           {showsRangeBand(state, hasRangeEnd) && (
             <View
               style={[

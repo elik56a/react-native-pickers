@@ -34,7 +34,7 @@ export const ClockHeader = ({ dial, theme, testID }: ClockPartProps) => {
         :
       </PickerText>
       <ClockField field={CLOCK_MODE.minute} dial={dial} theme={theme} testID={testID} />
-      {dial.is12 ? (
+      {dial.is12 && (
         <View
           accessibilityRole="radiogroup"
           style={[styles.period, { marginStart: theme.spacing.sm, borderColor: c.textSecondary, borderRadius: theme.radius.sm }]}
@@ -42,7 +42,7 @@ export const ClockHeader = ({ dial, theme, testID }: ClockPartProps) => {
           {period(false)}
           {period(true)}
         </View>
-      ) : null}
+      )}
     </View>
   );
 };

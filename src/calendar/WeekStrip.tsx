@@ -56,7 +56,7 @@ export const WeekStrip = (props: WeekStripProps) => {
       {...ARROW_FOCUS}
       testID={testID}
     >
-      {showHeader ? (
+      {showHeader && (
         <CalendarHeader
           label={title}
           accessibilityLabel={title}
@@ -70,7 +70,7 @@ export const WeekStrip = (props: WeekStripProps) => {
           theme={theme}
           slots={slots}
         />
-      ) : null}
+      )}
       <Animated.View style={nav.slideStyle} {...(enableSwipe ? nav.panHandlers : {})}>
         <DayGrid
           weeks={week}

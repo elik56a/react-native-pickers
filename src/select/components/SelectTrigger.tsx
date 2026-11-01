@@ -7,34 +7,47 @@ import { styles } from '../select.styles';
 import type { SelectTriggerProps } from '../select.types';
 import { getSelectedLabel } from '../select.utils';
 
-/** The shared field trigger, showing the selected label or removable chips. */
-export const SelectTrigger = <T,>({ selected, multiple, chips, onRemove, disabled, theme, slots, ...trigger }: SelectTriggerProps<T>) => (
-  <FieldTrigger
-    {...trigger}
-    displayValue={getSelectedLabel(selected)}
-    icon={multiple ? undefined : selected[0]?.icon}
-    disabled={disabled}
-    theme={theme}
-    slots={slots}
-  >
-    {multiple && chips && selected.length > 0 ? (
-      <View style={styles.chips} pointerEvents="box-none">
-        {selected.map((option) => (
-          <Touchable
-            key={option.label}
-            theme={theme}
-            onPress={() => onRemove(option)}
-            disabled={disabled}
-            accessibilityRole="button"
-            accessibilityLabel={`Remove ${option.label}`}
-            style={[styles.chip, { backgroundColor: theme.colors.primaryMuted, borderRadius: theme.radius.full }, slots?.chip]}
-          >
-            <PickerText theme={theme} size="sm" weight="medium" color="primary" style={slots?.chipText}>
-              {option.label} ×
-            </PickerText>
-          </Touchable>
-        ))}
-      </View>
-    ) : null}
-  </FieldTrigger>
-);
+/** The shared field trigger, showing the selected label or removable chips, or the app's own `renderTrigger`. */
+export const SelectTrigger = <T,>({
+  selected,
+  multiple,
+  chips,
+  onRemove,
+  renderTrigger,
+  disabled,
+  theme,
+  slots,
+  ...trigger
+}: SelectTriggerProps<T>) => {
+  if (renderTrigger) return renderTrigger({ open: trigger.onOpen, selected, disabled, error: trigger.error });
+  return (
+    <FieldTrigger
+      {...trigger}
+      displayValue={getSelectedLabel(selected)}
+      icon={multiple ? undefined : selected[0]?.icon}
+      disabled={disabled}
+      theme={theme}
+      slots={slots}
+    >
+      {multiple && chips && selected.length > 0 ? (
+        <View style={styles.chips} pointerEvents="box-none">
+          {selected.map((option) => (
+            <Touchable
+              key={option.label}
+              theme={theme}
+              onPress={() => onRemove(option)}
+              disabled={disabled}
+              accessibilityRole="button"
+              accessibilityLabel={`Remove ${option.label}`}
+              style={[styles.chip, { backgroundColor: theme.colors.primaryMuted, borderRadius: theme.radius.full }, slots?.chip]}
+            >
+              <PickerText theme={theme} size="sm" weight="medium" color="primary" style={slots?.chipText}>
+                {option.label} ×
+              </PickerText>
+            </Touchable>
+          ))}
+        </View>
+      ) : null}
+    </FieldTrigger>
+  );
+};

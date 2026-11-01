@@ -27,7 +27,7 @@ export const MaterialColorLayout = ({ picker, colors, showAlpha, copy, labels, t
         theme={theme}
         slots={slots}
       />
-      {view.customOpen ? (
+      {view.customOpen && (
         <View style={[styles.column, { gap: theme.spacing.md }]}>
           <SaturationPad {...shared} height={COLOR_DESIGN.material.padHeight} testID={testID ? `${testID}-pad` : undefined} />
           <View style={[styles.row, styles.center, { gap: theme.spacing.md }]}>
@@ -49,8 +49,8 @@ export const MaterialColorLayout = ({ picker, colors, showAlpha, copy, labels, t
             testID={testID ? `${testID}-hex` : undefined}
           />
         </View>
-      ) : null}
-      {showAlpha ? <AlphaSlider {...shared} /> : null}
+      )}
+      {showAlpha && <AlphaSlider {...shared} />}
     </View>
   );
 };

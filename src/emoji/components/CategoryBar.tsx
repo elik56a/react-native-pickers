@@ -44,7 +44,7 @@ export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, t
             ) : (
               icon
             )}
-            {underlined ? (
+            {underlined && (
               <View
                 style={[
                   styles.tabIndicator,
@@ -53,7 +53,7 @@ export const CategoryBar = ({ tabs, active, position, labels, icons, onSelect, t
                   slots?.categoryIndicator,
                 ]}
               />
-            ) : null}
+            )}
           </Touchable>
         );
       })}

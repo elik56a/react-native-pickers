@@ -27,7 +27,7 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
       <View accessibilityRole="radiogroup" accessibilityLabel={TIME_RANGE_ACCESSIBILITY_LABEL} testID={testID}>
         {items.map((item, index) => (
           <Fragment key={item.end}>
-            {index > 0 ? <View style={[styles.rangeSeparator, { backgroundColor: c.border }]} /> : null}
+            {index > 0 && <View style={[styles.rangeSeparator, { backgroundColor: c.border }]} />}
             <Touchable theme={theme} {...radio(item)} style={styles.rangeRow}>
               <PickerText theme={theme}>{item.label}</PickerText>
               <View style={[styles.rangePill, { backgroundColor: c.surface, borderRadius: theme.radius.sm }]}>
@@ -66,7 +66,7 @@ export const RangeEnds = ({ items, active, onSelect, duration, theme, renderPick
               : { backgroundColor: on ? c.primaryMuted : c.surface, borderRadius: theme.radius.sm },
           ]}
         >
-          {web ? label : null}
+          {web && label}
           <PickerText theme={theme} size={web ? 'md' : 'lg'} weight="medium" color={on && !web ? 'primary' : 'text'}>
             {item.time}
           </PickerText>
