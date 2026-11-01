@@ -1,10 +1,14 @@
 ---
-title: Migrate from react-native-star-rating-widget
+title: "react-native-star-rating-widget alternative: migration guide"
 sidebar_label: 'star-rating-widget'
-description: "Switch from react-native-star-rating-widget to React Native Pickers: Rating with tap and drag, half steps, read-only fractions, your own icon, and iOS, Material and web theming. No SVG dependency."
+description: "An alternative to react-native-star-rating-widget with no react-native-svg: Rating with tap and drag, half steps, read-only fractions and your own icon."
 ---
 
 # Migrate from `react-native-star-rating-widget`
+
+`react-native-star-rating-widget` needs `react-native-svg`. [`Rating`](../../components/rating) has no dependencies, so there's nothing else to install, and it takes any icon through `renderIcon`.
+
+## Code changes
 
 ```diff
 - import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
@@ -16,6 +20,8 @@ description: "Switch from react-native-star-rating-widget to React Native Picker
 - <StarRatingDisplay rating={4.5} />
 + <Rating readOnly value={4.5} />
 ```
+
+## Props
 
 | star-rating-widget | React Native Pickers |
 | --- | --- |
@@ -33,6 +39,6 @@ description: "Switch from react-native-star-rating-widget to React Native Picker
 | `accessibilityLabel` | `accessibilityLabel`, and `formatValue` for the value |
 | `animationConfig` | — |
 
-Mind the default step: half stars here need `step={0.5}`. [`Rating`](../../components/rating) has no SVG dependency, so there's nothing else to install.
+Mind the default step: half stars here need `step={0.5}`.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

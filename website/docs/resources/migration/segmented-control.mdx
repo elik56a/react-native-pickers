@@ -1,10 +1,14 @@
 ---
-title: Migrate from @react-native-segmented-control/segmented-control
+title: "@react-native-segmented-control/segmented-control alternative: migration guide"
 sidebar_label: 'segmented-control'
-description: "Switch from @react-native-segmented-control/segmented-control to React Native Pickers: HorizontalList, a segmented control or chips that scroll sideways, on iOS, Android and the web."
+description: "An alternative to @react-native-segmented-control/segmented-control that runs in Expo Go: a segmented control or scrolling chips on iOS, Android and web."
 ---
 
 # Migrate from `@react-native-segmented-control/segmented-control`
+
+`@react-native-segmented-control/segmented-control` uses native code on iOS, so it doesn't run in Expo Go there, and on Android and the web it imitates the iOS 13 control. [`HorizontalList`](../../components/horizontal-list) has no native code, so it runs in Expo Go and on the web, follows the iOS, Material and web designs, and scrolls sideways as chips when the options don't fit.
+
+## Code changes
 
 ```diff
 - import SegmentedControl from '@react-native-segmented-control/segmented-control';
@@ -22,6 +26,8 @@ description: "Switch from @react-native-segmented-control/segmented-control to R
 + />
 ```
 
+## Props
+
 | segmented-control | React Native Pickers |
 | --- | --- |
 | `values` (strings) | `items` (`{ label, value, disabled?, icon? }`) |
@@ -30,7 +36,5 @@ description: "Switch from @react-native-segmented-control/segmented-control to R
 | `enabled={false}` | `disabled: true` on each item |
 | `tintColor` / `backgroundColor` | `theme={{ colors: { primary, surface } }}` or `styles={{ thumb, container }}` |
 | — | scrolls sideways when the items don't fit, `variant="chips"`, `renderItem`, works on the web |
-
-[`HorizontalList`](../../components/horizontal-list) has no native code, so it runs in Expo Go and on the web.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

@@ -1,10 +1,14 @@
 ---
-title: Migrate from @react-native-community/slider
+title: "@react-native-community/slider alternative: migration guide"
 sidebar_label: 'slider'
-description: "Switch from @react-native-community/slider to React Native Pickers: Slider with no native code, a range with two thumbs, step dots, labelled marks and a value bubble, in iOS, Material and web designs. Works in Expo Go."
+description: "An alternative to @react-native-community/slider with a range and no native code: two thumbs, step dots, labelled marks and a value bubble."
 ---
 
 # Migrate from `@react-native-community/slider`
+
+`@react-native-community/slider` wraps each platform's native slider: one thumb, a different look on every platform, and a native module to update with each app build. [`Slider`](../../components/slider) has no native code, so it ships in OTA updates and draws the same on the web, and it adds a range with two thumbs, step dots, labelled marks and a value bubble.
+
+## Code changes
 
 ```diff
 - import Slider from '@react-native-community/slider';
@@ -29,6 +33,8 @@ description: "Switch from @react-native-community/slider to React Native Pickers
 + />
 ```
 
+## Props
+
 | @react-native-community/slider | React Native Pickers |
 | --- | --- |
 | `minimumValue` / `maximumValue` (default `0` / `1`) | `min` / `max` (default `0` / `100`) |
@@ -47,7 +53,5 @@ description: "Switch from @react-native-community/slider to React Native Pickers
 | — | `range` for two thumbs, `valueLabel` bubble, `snapToMarks`, `minimumIcon` / `maximumIcon`, keyboard steps on the web |
 
 Two defaults differ: `max` is `100` rather than `1`, and `step` is `1` rather than continuous. Pass `max={1} step={0}` to keep a 0–1 slider.
-
-[`Slider`](../../components/slider) has no native code, so it runs in Expo Go, ships in OTA updates and draws the same on the web.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

@@ -1,10 +1,21 @@
 ---
-title: Migrate from @react-native-community/datetimepicker
+title: "@react-native-community/datetimepicker alternative: migration guide"
 sidebar_label: 'datetimepicker'
-description: "Switch from @react-native-community/datetimepicker to React Native Pickers: DatePicker, TimePicker and DateTimePicker with the same props, a calendar or wheels on every platform, no native module."
+description: "An alternative to @react-native-community/datetimepicker that runs on the web, shows an inline calendar on Android and picks date ranges. No native module."
 ---
 
 # Migrate from `@react-native-community/datetimepicker`
+
+`@react-native-community/datetimepicker` shows the operating system's own picker: `UIDatePicker` on iOS, a dialog on Android, and nothing on the web. React Native Pickers draws its pickers in JavaScript instead, so you get:
+
+- The same pickers on iOS, Android and the web, each in its platform's design or one design everywhere.
+- An inline calendar or wheels on Android, not only a dialog.
+- Date ranges and multiple dates, which datetimepicker doesn't have.
+- Full theming at runtime. Restyling datetimepicker's Android dialogs needs a config plugin and a new native build.
+
+Most props keep their names. The diff covers the usual cases and the table maps the rest.
+
+## Code changes
 
 ```diff
 - import DateTimePicker from '@react-native-community/datetimepicker';
@@ -19,6 +30,8 @@ description: "Switch from @react-native-community/datetimepicker to React Native
 - <DateTimePicker mode="datetime" value={when} onChange={(e, d) => d && setWhen(d)} />
 + <DateTimePicker value={when} onChange={setWhen} />
 ```
+
+## Props
 
 | datetimepicker | React Native Pickers |
 | --- | --- |

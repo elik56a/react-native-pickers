@@ -1,10 +1,14 @@
 ---
-title: Migrate from react-native-calendars
+title: "react-native-calendars alternative: migration guide"
 sidebar_label: 'react-native-calendars'
-description: "Switch from react-native-calendars to React Native Pickers: the same marked dates, built-in range and multiple selection, localized names from Intl, and iOS, Material and web designs."
+description: "An alternative to react-native-calendars with built-in range and multiple selection, the same marked dates, iOS, Material and web designs, and no dependencies."
 ---
 
 # Migrate from `react-native-calendars`
+
+With `react-native-calendars`, you build a range or a multiple selection yourself by marking each day in `markedDates`, and the package pulls in `xdate`, `lodash` and `recyclerlistview`. [`DatePicker`](../../components/date-picker) selects ranges and multiple dates itself, names months and days through `Intl`, follows the iOS, Material and web designs, and has no dependencies.
+
+## Code changes
 
 ```diff
 - <Calendar
@@ -23,6 +27,8 @@ description: "Switch from react-native-calendars to React Native Pickers: the sa
 +   firstDayOfWeek={1}
 + />
 ```
+
+## Props
 
 | react-native-calendars | React Native Pickers |
 | --- | --- |

@@ -1,10 +1,10 @@
 ---
 title: React Native Picker Libraries Compared
 sidebar_label: Comparison
-description: How React Native Pickers compares to native date/time pickers, calendar, select/dropdown, emoji and bottom-sheet libraries, and when to choose each.
+description: "How React Native Pickers compares to datetimepicker, react-native-date-picker, react-native-calendars, @gorhom/bottom-sheet and others, and when to choose each."
 ---
 
-# Comparison
+# Comparison of React Native picker libraries
 
 React Native apps usually combine several single-purpose packages for pickers. This page shows how one package with zero native code compares with each category, and when another tool is the better choice.
 
@@ -31,6 +31,27 @@ React Native apps usually combine several single-purpose packages for pickers. T
 | Extra peer dependencies | **None** | — | Varies | Native picker module |
 
 ¹ e.g. `@react-native-community/datetimepicker`, `@react-native-picker/picker`. ² e.g. `react-native-calendars`. ³ e.g. `react-native-picker-select`.
+
+## By library
+
+React Native Pickers needs nothing besides React and React Native. Here is what the most common single-purpose packages need, and what replaces each:
+
+| Library | Kind | Needs besides React Native | Switch to |
+| --- | --- | --- | --- |
+| `@react-native-community/datetimepicker` | Date & time | A native module; no web | [`DatePicker`, `TimePicker`, `DateTimePicker`](./migration/datetimepicker.mdx) |
+| `react-native-modal-datetime-picker` | Date & time | `@react-native-community/datetimepicker`; no web | [Picker sheets](./migration/modal-datetime-picker.mdx) |
+| `react-native-date-picker` | Date & time | A native module and a development build; no web | [`DatePicker display="wheel"`](./migration/react-native-date-picker.mdx) |
+| `react-native-ui-datepicker` | Calendar | `dayjs`, `lodash`, `clsx`, `tailwind-merge` | [`DatePicker`](./migration/ui-datepicker.mdx) |
+| `react-native-calendars` | Calendar | `xdate`, `lodash`, `recyclerlistview` | [`DatePicker`, `ExpandableCalendar`](./migration/react-native-calendars.mdx) |
+| `@react-native-picker/picker` | Wheel or dropdown | A native module | [`WheelPicker`](./migration/picker.mdx) |
+| `react-native-picker-select` | Select | `@react-native-picker/picker` | [`SelectPicker`](./migration/picker-select.mdx) |
+| `react-native-element-dropdown` | Select | `lodash` | [`SelectPicker`](./migration/element-dropdown.mdx) |
+| `@gorhom/bottom-sheet` | Bottom sheet | Reanimated, Gesture Handler | [`BottomSheet`](./migration/gorhom-bottom-sheet.mdx) |
+| `react-native-actions-sheet` | Bottom sheet | Reanimated, Worklets, Gesture Handler, Safe Area Context | [`BottomSheet`, `ActionSheet`](./migration/actions-sheet.mdx) |
+| `@react-native-community/slider` | Slider | A native module; one thumb | [`Slider`](./migration/slider.mdx) |
+| `react-native-phone-number-input` | Phone input | `google-libphonenumber`, `react-native-country-picker-modal` | [`PhoneField`](./migration/phone-number-input.mdx) |
+| `@react-native-menu/menu`, `zeego` | Menu | Native modules and a development build | [`Menu`](./migration/react-native-menu.mdx) |
+| `react-native-star-rating-widget` | Rating | `react-native-svg` | [`Rating`](./migration/star-rating-widget.mdx) |
 
 ## Choose React Native Pickers when
 

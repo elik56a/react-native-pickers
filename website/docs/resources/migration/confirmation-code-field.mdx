@@ -1,12 +1,14 @@
 ---
-title: Migrate from react-native-confirmation-code-field
+title: "react-native-confirmation-code-field alternative: migration guide"
 sidebar_label: 'confirmation-code-field'
-description: "Switch from react-native-confirmation-code-field to React Native Pickers: OtpField draws the cells, caret and focus for you, reads the code from a text message on iOS, Android and the web, and follows iOS, Material and web designs."
+description: "An alternative to react-native-confirmation-code-field: OtpField draws the cells, caret and focus, and reads SMS codes on iOS, Android and the web."
 ---
 
 # Migrate from `react-native-confirmation-code-field`
 
 `react-native-confirmation-code-field` gives you the hidden input and leaves the cells to you. [`OtpField`](../../components/otp-field) works the same way underneath and draws the cells, the caret and the focus for you.
+
+## Code changes
 
 ```diff
 - import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
@@ -32,6 +34,8 @@ description: "Switch from react-native-confirmation-code-field to React Native P
 - />
 + <OtpField value={value} onChange={setValue} onComplete={verify} />
 ```
+
+## Props
 
 | confirmation-code-field | React Native Pickers |
 | --- | --- |

@@ -1,12 +1,16 @@
 ---
-title: Migrate from react-native-dropdown-picker
+title: "react-native-dropdown-picker alternative: migration guide"
 sidebar_label: 'react-native-dropdown-picker'
-description: "Switch from react-native-dropdown-picker to React Native Pickers: SelectPicker with no open state to manage, search, multi-select chips, groups and server search, as a dropdown or a bottom sheet."
+description: "An alternative to react-native-dropdown-picker with no open state to manage: SelectPicker with search, multi-select chips, groups and server search."
 ---
 
 # Migrate from `react-native-dropdown-picker`
 
+`react-native-dropdown-picker` hasn't had a release since March 2023.
+
 `SelectPicker` keeps its own open state, so `open`, `setOpen` and `setItems` go away, and `onChange` gets the new value rather than an updater. It opens as a dropdown on the web and a bottom sheet on phones, where a dropdown is cramped; set `presentation="dropdown"` to keep the dropdown everywhere.
+
+## Code changes
 
 ```diff
 - import DropDownPicker from 'react-native-dropdown-picker';
@@ -26,6 +30,8 @@ description: "Switch from react-native-dropdown-picker to React Native Pickers: 
 +   onChange={setValue}
 + />
 ```
+
+## Props
 
 | react-native-dropdown-picker | React Native Pickers |
 | --- | --- |

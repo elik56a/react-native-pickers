@@ -1,12 +1,14 @@
 ---
-title: Migrate from react-native-country-picker-modal
+title: "react-native-country-picker-modal alternative: migration guide"
 sidebar_label: 'react-native-country-picker-modal'
-description: "Switch from react-native-country-picker-modal to React Native Pickers: CountryPicker with emoji flags, dialing codes, search in any language, preferred countries and a phone number field."
+description: "An alternative to react-native-country-picker-modal: CountryPicker with emoji flags, dialing codes, search in any language and a phone number field."
 ---
 
 # Migrate from `react-native-country-picker-modal`
 
 `CountryPicker` is a form field like the others: it shows the chosen country and opens a searchable list, a bottom sheet on phones and a dropdown on the web. Flags are emoji, so nothing is downloaded, and names follow the device language through `Intl`. The value is the ISO code; [`getCountry`](../../components/country-picker#utilities) gives the name, flag and dialing code.
+
+## Code changes
 
 ```diff
 - import CountryPicker from 'react-native-country-picker-modal';
@@ -20,6 +22,8 @@ description: "Switch from react-native-country-picker-modal to React Native Pick
 - />
 + <CountryPicker label="Country" showDialCode value={code} onChange={setCode} />
 ```
+
+## Props
 
 | react-native-country-picker-modal | React Native Pickers |
 | --- | --- |

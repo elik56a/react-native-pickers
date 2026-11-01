@@ -1,12 +1,16 @@
 ---
-title: Migrate from react-native-phone-number-input
+title: "react-native-phone-number-input alternative: migration guide"
 sidebar_label: 'react-native-phone-number-input'
-description: "Switch from react-native-phone-number-input to React Native Pickers: PhoneField with a country code button, formatting as you type and an E.164 value in onChange, with no ref calls."
+description: "An alternative to react-native-phone-number-input, unreleased since 2021: PhoneField with a country code picker, formatting as you type and an E.164 value."
 ---
 
 # Migrate from `react-native-phone-number-input`
 
+`react-native-phone-number-input` hasn't had a release since May 2021, and it pulls in `google-libphonenumber` and `react-native-country-picker-modal`. `PhoneField` has no dependencies.
+
 `PhoneField` gives you the E.164 number in `onChange`, with the country and a length check next to it, so there's no ref to call. It formats the number as it's typed for about 50 countries and picks the country from a pasted `+44…` number. It doesn't bundle libphonenumber, so `valid` checks the length only; verify the number on your server, as with an SMS code.
+
+## Code changes
 
 ```diff
 - import PhoneInput from 'react-native-phone-number-input';
@@ -29,6 +33,8 @@ description: "Switch from react-native-phone-number-input to React Native Picker
 +   }}
 + />
 ```
+
+## Props
 
 | react-native-phone-number-input | React Native Pickers |
 | --- | --- |

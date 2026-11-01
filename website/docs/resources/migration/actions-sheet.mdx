@@ -1,12 +1,16 @@
 ---
-title: Migrate from react-native-actions-sheet
+title: "react-native-actions-sheet alternative: migration guide"
 sidebar_label: 'actions-sheet'
-description: "Switch from react-native-actions-sheet to React Native Pickers: BottomSheet for your own content with visible instead of refs and SheetManager, or ActionSheet for a list of actions. Drag to close, expand, keyboard avoidance. No native code."
+description: "An alternative to react-native-actions-sheet with no Reanimated or Gesture Handler: BottomSheet for your content, or ActionSheet for a list of actions."
 ---
 
 # Migrate from `react-native-actions-sheet`
 
+`react-native-actions-sheet` needs Reanimated, Worklets, Gesture Handler and Safe Area Context installed next to it. React Native Pickers' sheets use React Native core only, so there's nothing else to install or keep in step.
+
 Despite its name, `react-native-actions-sheet` is a bottom sheet for any content. Your own content moves to [`BottomSheet`](../../components/bottom-sheet). A sheet that only lists actions (Share, Edit, Delete) is shorter as an [`ActionSheet`](../../components/action-sheet).
+
+## Code changes
 
 ```diff
 - import ActionSheet, { type ActionSheetRef } from 'react-native-actions-sheet';
@@ -23,6 +27,8 @@ Despite its name, `react-native-actions-sheet` is a bottom sheet for any content
 - </ActionSheet>
 + </BottomSheet>
 ```
+
+## Props
 
 | react-native-actions-sheet | React Native Pickers |
 | --- | --- |

@@ -1,10 +1,14 @@
 ---
-title: Migrate from react-native-ui-datepicker
+title: "react-native-ui-datepicker alternative: migration guide"
 sidebar_label: 'ui-datepicker'
-description: "Switch from react-native-ui-datepicker to React Native Pickers: DatePicker with plain Date values instead of dayjs, single, range and multiple modes, marked dates, a bottom sheet and a form field, in iOS, Material and web designs."
+description: "An alternative to react-native-ui-datepicker with no dayjs: DatePicker with plain Dates, single, range and multiple modes, a bottom sheet and a form field."
 ---
 
 # Migrate from `react-native-ui-datepicker`
+
+`react-native-ui-datepicker` brings in `dayjs`, `lodash`, `clsx` and `tailwind-merge`. [`DatePicker`](../../components/date-picker) has no dependencies, works in plain `Date`s, and comes with a bottom sheet, a form field and the iOS, Material and web designs.
+
+## Code changes
 
 ```diff
 - import DateTimePicker from 'react-native-ui-datepicker';
@@ -29,6 +33,8 @@ description: "Switch from react-native-ui-datepicker to React Native Pickers: Da
 
 Values are plain `Date`s in local time, not dayjs objects, and the callbacks pass the value itself rather than an object to unpack.
 
+## Props
+
 | ui-datepicker | React Native Pickers |
 | --- | --- |
 | `mode="single"` + `date` + `onChange({ date })` | `value` + `onChange(date)` |
@@ -51,6 +57,6 @@ Values are plain `Date`s in local time, not dayjs objects, and the callbacks pas
 | `styles` / `classNames` / `components` | `theme`, `styles` slots, `renderDay`, `renderArrow` |
 | — | `mode="ranges"`, `markedDates` with dots and labels (prices), `DatePickerSheet` and `DatePickerField` |
 
-[`DatePicker`](../../components/date-picker) has no dependency, so dayjs isn't needed. See [ranges and multiple dates](../../components/date-range-picker) for the range rules.
+See [ranges and multiple dates](../../components/date-range-picker) for the range rules.
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

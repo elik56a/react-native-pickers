@@ -1,12 +1,14 @@
 ---
-title: Migrate from zeego
+title: "zeego alternative: migration guide"
 sidebar_label: 'zeego'
-description: "Switch from zeego's DropdownMenu and ContextMenu to React Native Pickers: one Menu with an actions array, icons, subtitles, destructive, disabled and checked items, and a long-press context menu. Pure JavaScript: runs in Expo Go."
+description: "An alternative to zeego that runs in Expo Go: one Menu with an actions array, icons, destructive, disabled and checked items, and a long-press context menu."
 ---
 
 # Migrate from `zeego`
 
 `zeego` composes a menu from parts (`Root`, `Trigger`, `Content`, `Item`, `ItemTitle`…) and shows native menus, so it needs a development build. [`Menu`](../../components/menu) takes one `actions` array and is pure JavaScript, so it runs in Expo Go too.
+
+## Code changes
 
 ```diff
 - import * as DropdownMenu from 'zeego/dropdown-menu';
@@ -35,6 +37,8 @@ description: "Switch from zeego's DropdownMenu and ContextMenu to React Native P
 +   <MoreIcon />
 + </Menu>
 ```
+
+## Props
 
 | zeego | React Native Pickers |
 | --- | --- |

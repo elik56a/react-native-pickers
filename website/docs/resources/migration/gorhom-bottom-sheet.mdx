@@ -1,12 +1,14 @@
 ---
-title: Migrate from @gorhom/bottom-sheet
+title: "@gorhom/bottom-sheet alternative: migration guide"
 sidebar_label: 'gorhom bottom-sheet'
-description: "Switch from @gorhom/bottom-sheet to React Native Pickers: a modal BottomSheet with drag to close, a second expanded height, keyboard avoidance and a centered modal on the web. No Reanimated, no Gesture Handler, no provider and no native code."
+description: "An alternative to @gorhom/bottom-sheet with no Reanimated, Gesture Handler or provider: a modal BottomSheet with drag to close and keyboard avoidance."
 ---
 
 # Migrate from `@gorhom/bottom-sheet`
 
 `@gorhom/bottom-sheet` needs Reanimated and Gesture Handler. [`BottomSheet`](../../components/bottom-sheet) uses React Native core only (`Modal`, `Animated` and a native `ScrollView` for the drag, which keeps up with Gorhom's sheet in [our benchmarks](../../guides/performance#benchmarks)), so it covers the common case, a modal sheet over a backdrop, with nothing to install or configure. Check [what it doesn't do](#what-bottomsheet-doesnt-do) first.
+
+## Code changes
 
 ```diff
 - import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
@@ -28,6 +30,8 @@ description: "Switch from @gorhom/bottom-sheet to React Native Pickers: a modal 
 ```
 
 Remove `<BottomSheetModalProvider>` and `<GestureHandlerRootView>` if nothing else needs them.
+
+## Props
 
 | @gorhom/bottom-sheet | React Native Pickers |
 | --- | --- |
