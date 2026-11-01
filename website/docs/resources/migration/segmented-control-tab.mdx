@@ -1,0 +1,46 @@
+---
+title: "react-native-segmented-control-tab alternative: migration guide"
+sidebar_label: 'segmented-control-tab'
+description: "An alternative to react-native-segmented-control-tab: HorizontalList, a segmented control or scrolling chips in iOS, Material and web designs, with icons."
+---
+
+# Migrate from `react-native-segmented-control-tab`
+
+`react-native-segmented-control-tab` hasn't had a release since August 2021, and it shows one look on every platform. [`HorizontalList`](../../components/horizontal-list) follows the iOS, Material and web designs (a sliding thumb on iOS, outlined segments in Material), takes icons, and scrolls sideways as chips when the options don't fit.
+
+## Code changes
+
+```diff
+- import SegmentedControlTab from 'react-native-segmented-control-tab';
++ import { HorizontalList } from '@elik56a/react-native-pickers';
+
+- <SegmentedControlTab
+-   values={['First', 'Second', 'Third']}
+-   selectedIndex={index}
+-   onTabPress={setIndex}
+- />
++ <HorizontalList
++   items={[{ label: 'First', value: 'first' }, { label: 'Second', value: 'second' }, { label: 'Third', value: 'third' }]}
++   value={tab}
++   onChange={setTab}
++ />
+```
+
+## Props
+
+| segmented-control-tab | React Native Pickers |
+| --- | --- |
+| `values` (strings) | `items` (`{ label, value, disabled?, icon? }`) |
+| `selectedIndex` | `value` (the item's value, not its index) |
+| `onTabPress(index)` | `onChange(value, item)` |
+| `enabled={false}` | `disabled: true` on each item |
+| `accessibilityLabels` | each item's `label`, and `accessibilityLabel` for the list |
+| `tabsContainerStyle` | `styles={{ container }}` |
+| `tabStyle` / `activeTabStyle` | `styles={{ item, selectedItem }}` |
+| `tabTextStyle` / `activeTabTextStyle` | `styles={{ itemLabel, selectedItemLabel }}` |
+| `borderRadius` | `styles={{ container, item }}` |
+| `badges` | `renderItem` |
+| `multiple` / `selectedIndices` | — |
+| — | scrolls sideways when the items don't fit, `variant="chips"`, icons, arrows |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

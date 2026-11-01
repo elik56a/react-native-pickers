@@ -1,0 +1,64 @@
+---
+title: "react-native-modal-selector alternative: migration guide"
+sidebar_label: 'modal-selector'
+description: "An alternative to react-native-modal-selector with search and multi-select: SelectPicker in a bottom sheet, modal or dropdown, with groups and icons."
+---
+
+# Migrate from `react-native-modal-selector`
+
+`react-native-modal-selector` hasn't had a release since October 2022, and it has no search: that lives in a separate fork. [`SelectPicker`](../../components/select-picker) opens the same list in a bottom sheet, a centered modal or a dropdown, and adds search, multi-select with chips, server search and the iOS, Material and web designs.
+
+## Code changes
+
+```diff
+- import ModalSelector from 'react-native-modal-selector';
++ import { SelectPicker } from '@elik56a/react-native-pickers';
+
+- <ModalSelector
+-   data={[
+-     { key: 0, section: true, label: 'Fruits' },
+-     { key: 1, label: 'Red Apples' },
+-     { key: 2, label: 'Cherries' },
+-   ]}
+-   initValue="Select something yummy!"
+-   selectedKey={fruit}
+-   onChange={(option) => setFruit(option.key)}
+- />
++ <SelectPicker
++   options={[
++     { label: 'Red Apples', value: 1, group: 'Fruits' },
++     { label: 'Cherries', value: 2, group: 'Fruits' },
++   ]}
++   placeholder="Select something yummy!"
++   value={fruit}
++   onChange={setFruit}
++   presentation="modal"
++ />
+```
+
+## Props
+
+| modal-selector | React Native Pickers |
+| --- | --- |
+| `data` (`{ key, label }`) | `options` (`{ label, value }`, plus `description`, `icon`, `disabled`, `keywords`) |
+| `{ section: true, label }` rows | `group: 'label'` on each option under it |
+| `keyExtractor` / `labelExtractor` | map your data to `options` |
+| `component` / `componentExtractor` | `renderOption` |
+| `onChange(option)` | `onChange(value, option)` |
+| `selectedKey` | `value` |
+| `initValue` | `placeholder` |
+| `cancelText` | `sheet={{ cancelLabel }}` |
+| `closeOnChange={false}` | `closeOnSelect={false}`, which adds a Done button |
+| `disabled` | `disabled` |
+| `onModalOpen` / `onModalClose` | `onOpen` / `onClose` |
+| `animationType` / `overlayStyle` | `presentation="modal"` or `"bottomSheet"`, with each design's animation and backdrop |
+| `backdropPressToClose` | on by default (`closeOnBackdropPress` in `sheet={{ sheetProps }}`) |
+| children (wrapper mode) / `customSelector` | `renderTrigger={({ open }) => …}` |
+| `open()` / `close()` refs | `renderTrigger`'s `open()`; the picker closes itself on select |
+| `header` | `sheetTitle` |
+| `onEndReached` | `onEndReached` |
+| `selectStyle` / `selectTextStyle` | `styles={{ trigger, triggerText }}` |
+| `optionStyle` / `optionTextStyle` / `sectionStyle` | [list slots](../../components/select-list#slots) in `styles` |
+| — | `searchable`, `multiple`, `loadOptions`, `clearable`, `label`, `error` |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

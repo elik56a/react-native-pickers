@@ -1,0 +1,114 @@
+---
+title: Google Places autocomplete
+description: "React Native Google Places autocomplete with SelectPicker: address suggestions as the user types from the Places API, debounced, with no extra package."
+---
+
+# Google Places autocomplete
+
+An address field that suggests places as the user types. [`SelectPicker`](../components/select-picker)'s `loadOptions` waits for a pause in typing, shows the loader and ignores late answers, so the only code you write is the request. That covers what `react-native-google-places-autocomplete` is installed for, in a field that matches the rest of your form.
+
+## The field
+
+Below, `searchPlaces` stands in for the request so the example runs without a key. Each option keeps the place ID as its `value` and the address as its `description`.
+
+```tsx live
+import { useState } from 'react';
+import { SelectPicker } from '@elik56a/react-native-pickers';
+import type { SelectOption } from '@elik56a/react-native-pickers';
+
+const PLACES = [
+  { id: 'eiffel', name: 'Eiffel Tower', address: 'Avenue Gustave Eiffel, Paris, France' },
+  { id: 'louvre', name: 'Louvre Museum', address: 'Rue de Rivoli, Paris, France' },
+  { id: 'colosseum', name: 'Colosseum', address: 'Piazza del Colosseo, Rome, Italy' },
+  { id: 'sagrada', name: 'Sagrada Família', address: 'Carrer de Mallorca, Barcelona, Spain' },
+  { id: 'big-ben', name: 'Big Ben', address: 'Westminster, London, UK' },
+  { id: 'brandenburg', name: 'Brandenburg Gate', address: 'Pariser Platz, Berlin, Germany' },
+];
+
+// Stands in for the Places API request below
+const searchPlaces = (query: string) =>
+  new Promise<SelectOption<string>[]>((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          PLACES.filter((p) => `${p.name} ${p.address}`.toLowerCase().includes(query.toLowerCase())).map((p) => ({
+            label: p.name,
+            value: p.id,
+            description: p.address,
+          }))
+        ),
+      500
+    )
+  );
+
+export default function Example() {
+  const [placeId, setPlaceId] = useState<string | null>(null);
+  return (
+    <SelectPicker
+      label="Address"
+      placeholder="Search for a place"
+      value={placeId}
+      onChange={setPlaceId}
+      loadOptions={searchPlaces}
+      searchPrompt="Type an address or a place"
+      emptyText="No places found"
+      clearable
+      onClear={() => setPlaceId(null)}
+    />
+  );
+}
+```
+
+## The request
+
+With [Autocomplete (New)](https://developers.google.com/maps/documentation/places/web-service/place-autocomplete), `searchPlaces` is one `fetch`:
+
+```tsx
+import type { SelectOption } from '@elik56a/react-native-pickers';
+
+const API_KEY = 'YOUR_API_KEY';
+
+type Suggestion = {
+  placePrediction?: {
+    placeId: string;
+    text: { text: string };
+    structuredFormat: { mainText: { text: string }; secondaryText?: { text: string } };
+  };
+};
+
+export const searchPlaces = async (input: string): Promise<SelectOption<string>[]> => {
+  const response = await fetch('https://places.googleapis.com/v1/places:autocomplete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': API_KEY },
+    body: JSON.stringify({ input, languageCode: 'en' }),
+  });
+  const { suggestions = [] }: { suggestions?: Suggestion[] } = await response.json();
+  return suggestions.flatMap(({ placePrediction: p }) =>
+    p
+      ? [{ label: p.structuredFormat.mainText.text, value: p.placeId, description: p.structuredFormat.secondaryText?.text }]
+      : []
+  );
+};
+```
+
+- **Limit the countries** with `includedRegionCodes: ['us']` in the body.
+- **Billing:** `searchDebounce` (300 ms by default) already skips a request per keystroke. To bill typing and the follow-up [Place Details](https://developers.google.com/maps/documentation/places/web-service/place-details) call as one session, send the same `sessionToken` with both, and make a new one after a pick.
+- **Coordinates:** `onChange(placeId, option)` gives you the place ID; fetch Place Details with it when you need the location.
+- **The key:** restrict it in the Google Cloud console, or call your own server and let it add the key.
+
+## Coming from `react-native-google-places-autocomplete`
+
+| react-native-google-places-autocomplete | React Native Pickers |
+| --- | --- |
+| `query={{ key, language }}` | your `fetch`, as above |
+| `onPress(data, details)` | `onChange(placeId, option)`, then Place Details if you need `details` |
+| `placeholder` | `placeholder` (and `label` above the field) |
+| `debounce` | `searchDebounce` |
+| `minLength` | return `[]` from `loadOptions` for shorter queries |
+| `fetchDetails` | a Place Details request in `onChange` |
+| `renderRow` | `renderOption` |
+| `listEmptyComponent` | `emptyText` |
+| `textInputProps` / `styles` | `styles` with the field and [list slots](../components/select-list#slots) |
+| `requestUrl` (a proxy for the web) | call your server from `loadOptions` |
+
+For more on `loadOptions`, pages of results and custom loaders, see [Search a server](./server-search).
