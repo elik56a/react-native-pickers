@@ -8,6 +8,12 @@ description: "Switch from react-native-modal to React Native Pickers: BottomShee
 
 Most `react-native-modal` code builds a bottom sheet or a dialog by hand: `style={{ justifyContent: 'flex-end', margin: 0 }}`, a white box with rounded corners, and the same close function passed to three callbacks. [`BottomSheet`](../../components/bottom-sheet) is that sheet: one `onClose` for every way of closing, and the surface, handle and padding drawn for you.
 
+:::note React Native 0.88
+
+`react-native-modal` 14.0.0-rc.1, the latest release, calls `InteractionManager.createInteractionHandle`. React Native 0.88 no longer exports `InteractionManager`, so the modal throws `Cannot read property 'createInteractionHandle' of undefined` as soon as it opens. `BottomSheet` uses React Native core only and works on 0.88.
+
+:::
+
 ```diff
 - import Modal from 'react-native-modal';
 + import { BottomSheet } from '@elik56a/react-native-pickers';

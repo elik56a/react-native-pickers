@@ -232,6 +232,7 @@ Any component also takes `theme` and `design` for a local override.
 - **Controlled or uncontrolled.** Pass `value` + `onChange`, or `defaultValue`. `SelectPicker`, `SelectList` and `HorizontalList` are controlled-only: update `value` in `onChange`.
 - **`onChange` is for user changes only.** Setting `value` in code moves the picker silently. Wheels fire `onChange` when they settle and `onValueChanging` on every row, which is the place for haptics.
 - **Sheets commit on Done.** `onConfirm` gets the value; Cancel, the backdrop and dragging down discard the draft.
+- **Fast under load.** Drags, scrolls and animations run on the UI thread, so they stay at 60 fps while JavaScript is busy. See the [benchmarks](https://react-native-pickers.dev/docs/guides/performance#benchmarks) against `@gorhom/bottom-sheet`, Quidone's wheel picker and `react-native-calendars`.
 - **Dates are local time.** Days are compared by local year, month and day. Serialize them with `toDateKey(date)` (`'YYYY-MM-DD'`), not `toISOString()`.
 - **Smaller native bundles.** Metro doesn't tree-shake, so on native, import from a feature subpath (React Native 0.79+):
 

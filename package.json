@@ -64,6 +64,7 @@
     "expo",
     "react-native-web",
     "bottom-sheet",
+    "60fps",
     "action-sheet",
     "menu",
     "context-menu",

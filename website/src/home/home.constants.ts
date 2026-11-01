@@ -48,7 +48,7 @@ export const FEATURES = [
     title: 'Accessible',
     body: 'Adjustable wheels for VoiceOver and TalkBack, fully labelled days, arrow keys on the web, and selected and disabled states everywhere.',
   },
-  { title: 'Fast', body: 'Native-driver animations, virtualized fixed-layout lists and memoized rows keep it at 60 fps.' },
+  { title: 'Fast', body: 'Drags, scrolls and animations run on the UI thread, so they stay at 60 fps even while JavaScript is busy.' },
 ];
 
 export const COMPONENTS = [
