@@ -1,0 +1,51 @@
+---
+title: "reanimated-color-picker alternative: migration guide"
+sidebar_label: 'reanimated-color-picker'
+description: "An alternative to reanimated-color-picker with no Reanimated or Gesture Handler: ColorPicker in iOS, Material and web designs, with a hex string value."
+---
+
+# Migrate from `reanimated-color-picker`
+
+`reanimated-color-picker` needs `react-native-reanimated` and `react-native-gesture-handler`, you build each picker out of its panels and sliders, and its `onChange` and `onComplete` callbacks expect worklets. [`ColorPicker`](../../components/color-picker) uses React Native core only, comes assembled in each platform's design (iOS's grid, spectrum and sliders, Google's swatch circles, or the browser's spectrum with an eyedropper), and gives you a hex string.
+
+## Code changes
+
+```diff
+- import ColorPicker, { Panel1, HueSlider, OpacitySlider, Preview, Swatches } from 'reanimated-color-picker';
++ import { ColorPicker } from '@elik56a/react-native-pickers';
+
+- <ColorPicker value={color} onCompleteJS={({ hex }) => setColor(hex)}>
+-   <Preview />
+-   <Panel1 />
+-   <HueSlider />
+-   <OpacitySlider />
+-   <Swatches colors={['#E4572E', '#29335C', '#F3A712']} />
+- </ColorPicker>
++ <ColorPicker
++   value={color}
++   onChange={setColor}
++   showAlpha
++   colors={['#E4572E', '#29335C', '#F3A712']}
++ />
+```
+
+Need it in a modal with Cancel / Done, like the library's example? Use `ColorPickerSheet`, or `ColorPickerField` for a form field.
+
+## Props
+
+| reanimated-color-picker | React Native Pickers |
+| --- | --- |
+| `value` (any CSS color) | `value` as hex: `'#RRGGBB'` or `'#RRGGBBAA'` |
+| `onChange` / `onChangeJS` | `onChange(hex)`, a plain function |
+| `onComplete` / `onCompleteJS` | `onChange`, or `ColorPickerSheet`'s `onConfirm` on Done |
+| the color object (`hex`, `rgb`, `hsl`…) | a hex string |
+| `<Panel1>` … `<Panel5>`, `<HueSlider>`, `<RedSlider>`… | `display`: `'tabs'`, `'swatches'` or `'spectrum'`, from the design by default |
+| `<OpacitySlider>` | `showAlpha` |
+| `<Swatches colors>` | `colors`, with `showCustom={false}` for swatches alone |
+| `<InputWidget>` / `<Preview>` | built in: the hex field and the preview |
+| `thumbSize` / `thumbColor` / `thumbShape` / `sliderThickness` | `styles={{ sliderThumb, slider, pad }}` |
+| `style` | `style` |
+| `enableColorAnnouncements` | each slider is adjustable for screen readers, with `labels` for their names |
+| — | `onCopy`, `ColorPickerSheet`, `ColorPickerField`, iOS, Material and web designs |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

@@ -1,0 +1,57 @@
+---
+title: "react-native-calendar-strip alternative: migration guide"
+sidebar_label: 'calendar-strip'
+description: "An alternative to react-native-calendar-strip with no moment: WeekStrip with plain Dates, marked dates, min/max, swipe and iOS, Material and web designs."
+---
+
+# Migrate from `react-native-calendar-strip`
+
+`react-native-calendar-strip` hasn't had a release since May 2022, and it pulls in `moment` and `recyclerlistview`, with Moment objects in every callback. [`WeekStrip`](../../components/week-strip) has no dependencies, works in plain `Date`s, and follows the iOS, Material and web designs. To let the week open into its whole month, use [`ExpandableCalendar`](../../components/expandable-calendar).
+
+## Code changes
+
+```diff
+- import CalendarStrip from 'react-native-calendar-strip';
+- import moment from 'moment';
++ import { WeekStrip } from '@elik56a/react-native-pickers';
+
+- <CalendarStrip
+-   selectedDate={day}
+-   onDateSelected={(date) => setDay(date.toDate())}
+-   markedDates={[{ date: '2026-11-05', dots: [{ color: 'red' }] }]}
+-   minDate={moment()}
+-   scrollable
+- />
++ <WeekStrip
++   value={day}
++   onChange={setDay}
++   markedDates={{ '2026-11-05': { dots: ['red'] } }}
++   minDate={new Date()}
++ />
+```
+
+## Props
+
+| calendar-strip | React Native Pickers |
+| --- | --- |
+| `selectedDate` | `value` (a `Date`) |
+| `onDateSelected(moment)` | `onChange(date)` |
+| `startingDate` | `initialWeek` |
+| `onWeekChanged(start, end)` | `onWeekChange(weekStart)` |
+| `minDate` / `maxDate` | `minDate` / `maxDate`: days outside are disabled and paging stops at their weeks |
+| `datesBlacklist` | `isDateDisabled(date)`, or `{ disabled: true }` in `markedDates` |
+| `datesWhitelist` | `isDateDisabled={(d) => !allowed(d)}` |
+| `markedDates` (array with `dots` / `lines`) | `markedDates` keyed by `'YYYY-MM-DD'` ([`toDateKey`](../../api/date-utils#todatekey)), with `dots`, `label` or `textColor` |
+| `scrollable` / `scrollerPaging` | swiping pages a week at a time (`enableSwipe`, on by default) |
+| `useIsoWeekday` | `firstDayOfWeek`, from `locale` by default |
+| `locale` (a Moment locale) | `locale` (a BCP 47 tag, names from `Intl`) |
+| `showMonth` / `calendarHeaderFormat` | `showHeader` / `formatTitle` |
+| `showDayName` / `upperCaseDays` | `showWeekdays` / `weekdayFormat` |
+| `leftSelector` / `rightSelector` / `iconLeft` / `iconRight` | `renderArrow(direction, disabled)` |
+| `dayComponent` | `renderDay(state, theme)` |
+| `highlightDateNumberStyle`, `dateNameStyle`… | the [calendar slots](../../components/date-picker#slots) in `styles` |
+| `calendarAnimation` / `daySelectionAnimation` | each design's own selection |
+| `getSelectedDate()` / `setSelectedDate()` | controlled `value` |
+| `numDaysInWeek` | — |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

@@ -1,0 +1,56 @@
+---
+title: "rn-range-slider alternative: migration guide"
+sidebar_label: 'rn-range-slider'
+description: "An alternative to rn-range-slider that draws its own thumbs and track: a range Slider in iOS, Material and web designs, with marks and a value bubble."
+---
+
+# Migrate from `rn-range-slider`
+
+`rn-range-slider` hasn't had a release since September 2022, and it draws nothing itself: `renderThumb`, `renderRail` and `renderRailSelected` are required, so every app builds its own slider parts. [`Slider`](../../components/slider) draws each platform's slider, iOS, Material 3 or web, with a value bubble, labelled marks, a screen-reader label on each thumb (`thumbLabels`) and arrow keys on the web.
+
+## Code changes
+
+```diff
+- import RangeSlider from 'rn-range-slider';
++ import { Slider } from '@elik56a/react-native-pickers';
+
+- <RangeSlider
+-   min={0}
+-   max={100}
+-   step={1}
+-   low={low}
+-   high={high}
+-   renderThumb={renderThumb}
+-   renderRail={renderRail}
+-   renderRailSelected={renderRailSelected}
+-   renderLabel={renderLabel}
+-   onValueChanged={(l, h) => { setLow(l); setHigh(h); }}
+- />
++ <Slider
++   range
++   min={0}
++   max={100}
++   step={1}
++   value={[low, high]}
++   onChange={([l, h]) => { setLow(l); setHigh(h); }}
++   valueLabel="drag"
++ />
+```
+
+## Props
+
+| rn-range-slider | React Native Pickers |
+| --- | --- |
+| `low` / `high` | `value={[low, high]}` with `range` |
+| `disableRange` | leave `range` out: `value` is one number |
+| `min` / `max` / `step` | `min` / `max` / `step` |
+| `onValueChanged(low, high, fromUser)` | `onValueChanging` while dragging, `onChange` when the finger lifts; neither fires when you set `value` |
+| `onSliderTouchStart` / `onSliderTouchEnd` | `onChange` fires on release |
+| `renderThumb` / `renderRail` / `renderRailSelected` | drawn by the design; restyle with `styles={{ thumb, track, activeTrack }}` |
+| `renderLabel` / `renderNotch` / `floatingLabel` | `valueLabel="drag"` or `"always"`, with `formatValue` |
+| `allowLabelOverflow` | — |
+| `minRange` | — |
+| `disabled` | `disabled` |
+| — | `marks`, `snapToMarks`, `showSteps`, `minimumIcon` / `maximumIcon` |
+
+See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.
