@@ -32,7 +32,7 @@ const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet', 'TimeRangePick
 const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet'];
 const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
-const SELECT = ['SelectPicker', 'CountryPicker'];
+const SELECT = ['SelectPicker', 'CountryPicker', 'LanguagePicker'];
 const SLIDER = ['Slider'];
 const OTP = ['OtpField'];
 const RATING = ['Rating'];
@@ -94,6 +94,7 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'categoryBarPosition', components: EMOJI, options: ['auto', 'top', 'bottom'], default: 'auto' },
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
   { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },
+  { prop: 'showFlag', components: ['LanguagePicker'], options: BOOLEAN, default: true },
   { prop: 'clearable', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false, requires: /\bonClear=/ },
   { prop: 'showSteps', components: SLIDER, options: BOOLEAN, default: false },
   { prop: 'secureTextEntry', components: OTP, options: BOOLEAN, default: false },
@@ -196,6 +197,7 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
   ColorPickerSheet: 'color',
   WeekStrip: 'calendar',
   CountryPicker: 'country',
+  LanguagePicker: 'language',
   DatePicker: 'date',
   DatePickerField: 'date',
   DatePickerSheet: 'date',

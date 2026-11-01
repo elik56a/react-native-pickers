@@ -2,7 +2,7 @@ import type React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import type { PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { ValueOf } from '../core/core.types';
+import type { DistributiveOmit, ValueOf } from '../core/core.types';
 import type { ChevronInfo, FieldError, FieldStatusProps, PickerFieldSlot, SheetChromeProps } from '../sheet';
 import type { FieldTriggerProps } from '../sheet/sheet.types';
 import type { SELECT_PRESENTATION, SELECT_ROW_TYPE, SINGLE_INDICATOR } from './select.constants';
@@ -118,6 +118,22 @@ export interface SelectTriggerInfo<T> {
   /** The field's `error`, to show your trigger as invalid */
   error?: FieldError;
 }
+
+/** Server search props don't apply: the picker's list is built in. */
+type ServerSearchProp =
+  | 'options'
+  | 'loadOptions'
+  | 'onSearchChange'
+  | 'searchDebounce'
+  | 'onEndReached'
+  | 'loading'
+  | 'loadingText'
+  | 'searchPrompt'
+  | 'renderLoading'
+  | 'isEqual';
+
+/** A SelectPicker over a list built into the library, such as countries or languages. */
+export type BuiltInSelectPickerProps<T> = DistributiveOmit<SelectPickerProps<T>, ServerSearchProp>;
 
 export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'styles'> &
   SelectValueProps<T> &

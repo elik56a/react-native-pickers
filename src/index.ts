@@ -7,6 +7,7 @@ export * from './date';
 export * from './datetime';
 export * from './duration';
 export * from './emoji';
+export * from './language';
 export * from './list';
 export * from './month';
 export * from './otp';

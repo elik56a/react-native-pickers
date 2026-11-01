@@ -1,6 +1,7 @@
 import type { Locale } from '../core';
-import { safe } from '../core/utils/intl.utils';
+import { getCompare, safe } from '../core/utils/intl.utils';
 import type { SelectOption } from '../select';
+import { pinPreferred } from '../select/select.utils';
 import { RAW_TIME_ZONE_DATA } from './data';
 import { DEFAULT_ALL_TIME_ZONES_LABEL, DEFAULT_CURRENT_TIME_ZONE_LABEL, GMT, MINUTES_PER_HOUR, MS_PER_MINUTE } from './timezone.constants';
 import type { TimeZone, TimeZoneListOptions } from './timezone.types';
@@ -118,12 +119,6 @@ export const getTimeZoneName = (id: string, locale?: Locale, date = new Date()) 
   return name && !name.startsWith(GMT) ? name : undefined;
 };
 
-const getCompare = (locale?: Locale) =>
-  safe(
-    () => new Intl.Collator(locale).compare,
-    (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
-  );
-
 /**
  * The zones as select options, sorted by offset then city: `preferred` (the device's zone by default) first under its own
  * header. Each shows its offset and name; search also matches the IANA name, region and `UTC` offsets.
@@ -137,10 +132,8 @@ export const buildTimeZoneOptions = ({
   date = new Date(),
 }: TimeZoneListOptions): SelectOption<string>[] => {
   const pool = timeZones ? timeZones.flatMap((id) => getTimeZone(id) ?? []) : getAllTimeZones();
-  const allowed = new Map(pool.map((zone) => [zone.id, zone]));
   const pinnedIds = preferred ?? [getDeviceTimeZone()].flatMap((id) => id ?? []);
-  const pinned = pinnedIds.flatMap((id) => allowed.get(normalizeTimeZone(id)) ?? []);
-  const pinnedSet = new Set(pinned.map((zone) => zone.id));
+  const { pinned, rest } = pinPreferred(pool, pinnedIds.map(normalizeTimeZone), (zone) => zone.id);
   const toOption = (zone: TimeZone, group?: string): SelectOption<string> & { offset: number } => {
     const offset = getTimeZoneOffset(zone.id, date) ?? 0;
     const gmt = formatGmtOffset(offset);
@@ -155,11 +148,10 @@ export const buildTimeZoneOptions = ({
     };
   };
   const compare = getCompare(locale);
-  const rest = pool
-    .filter((zone) => !pinnedSet.has(zone.id))
+  const others = rest
     .map((zone) => toOption(zone, pinned.length ? allTimeZonesLabel : undefined))
     .sort((a, b) => a.offset - b.offset || compare(a.label, b.label));
-  return [...pinned.map((zone) => toOption(zone, preferredLabel)), ...rest].map(({ offset: _offset, ...option }) => option);
+  return [...pinned.map((zone) => toOption(zone, preferredLabel)), ...others].map(({ offset: _offset, ...option }) => option);
 };
 
 /** The picker's props with `value` in current IANA names, so a device's 'Asia/Calcutta' finds 'Asia/Kolkata'. */

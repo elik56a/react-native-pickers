@@ -1,10 +1,11 @@
 import type { Locale } from '../core';
-import { safe } from '../core/utils/intl.utils';
+import { getCompare, getDisplayNames, safe } from '../core/utils/intl.utils';
 import type { SelectOption } from '../select';
+import { DEFAULT_PREFERRED_LABEL } from '../select/select.constants';
+import { pinPreferred } from '../select/select.utils';
 import {
   DEFAULT_ALL_COUNTRIES_LABEL,
   DEFAULT_PHONE_PATTERN,
-  DEFAULT_PREFERRED_LABEL,
   E164_MAX_DIGITS,
   KEEPS_LEADING_ZERO,
   PHONE_FORMATS,
@@ -17,7 +18,6 @@ import { RAW_COUNTRY_DATA } from './data';
 
 let cache: Country[] | null = null;
 let byCode: Map<string, Country> | null = null;
-const displayNames = new Map<string, Intl.DisplayNames | null>();
 
 /** The flag emoji for an ISO 3166-1 alpha-2 code, e.g. 'IL' → 🇮🇱. */
 export const getCountryFlag = (code: string) =>
@@ -49,26 +49,9 @@ export const getCountry = (code: string): Country | undefined => {
   return byCode.get(code.toUpperCase());
 };
 
-/** Cached per locale; null where the engine has no `Intl.DisplayNames` or doesn't know the locale. */
-const getDisplayNames = (locale?: Locale) => {
-  const key = locale ?? '';
-  if (!displayNames.has(key)) {
-    displayNames.set(
-      key,
-      safe(() => new Intl.DisplayNames(locale, { type: 'region', fallback: 'none' }), null)
-    );
-  }
-  return displayNames.get(key) ?? null;
-};
-
 /** The country's name in `locale`, or its English name. */
-export const getLocalizedName = (country: Country, locale?: Locale) => safe(() => getDisplayNames(locale)?.of(country.code), country.name);
-
-const getCompare = (locale?: Locale) =>
-  safe(
-    () => new Intl.Collator(locale).compare,
-    (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
-  );
+export const getLocalizedName = (country: Country, locale?: Locale) =>
+  safe(() => getDisplayNames('region', locale)?.of(country.code), country.name);
 
 /**
  * The countries as select options: `preferred` first under their own header, then the rest sorted by name.
@@ -85,9 +68,7 @@ export const buildCountryOptions = ({
 }: CountryListOptions): SelectOption<CountryCode>[] => {
   const excluded = new Set(exclude);
   const pool = (countries ? countries.flatMap((code) => getCountry(code) ?? []) : getAllCountries()).filter((c) => !excluded.has(c.code));
-  const allowed = new Map(pool.map((c) => [c.code, c]));
-  const pinned = (preferred ?? []).flatMap((code) => allowed.get(code) ?? []);
-  const pinnedCodes = new Set(pinned.map((c) => c.code));
+  const { pinned, rest } = pinPreferred(pool, preferred ?? [], (c) => c.code);
   const toOption = (country: Country, group?: string): SelectOption<CountryCode> => ({
     label: getLocalizedName(country, locale),
     value: country.code,
@@ -96,11 +77,8 @@ export const buildCountryOptions = ({
     keywords: [country.code, country.name, country.nativeName ?? '', country.dialCode, ...country.keywords],
   });
   const compare = getCompare(locale);
-  const rest = pool
-    .filter((c) => !pinnedCodes.has(c.code))
-    .map((c) => toOption(c, pinned.length ? allCountriesLabel : undefined))
-    .sort((a, b) => compare(a.label, b.label));
-  return [...pinned.map((c) => toOption(c, preferredLabel)), ...rest];
+  const others = rest.map((c) => toOption(c, pinned.length ? allCountriesLabel : undefined)).sort((a, b) => compare(a.label, b.label));
+  return [...pinned.map((c) => toOption(c, preferredLabel)), ...others];
 };
 
 const digitsOf = (text: string) => text.replace(/\D/g, '');

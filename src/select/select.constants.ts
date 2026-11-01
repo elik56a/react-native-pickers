@@ -5,6 +5,10 @@ import type { SelectDesign } from './select.types';
 /** Lists with more options than this get a search field unless `searchable` says otherwise. */
 export const SEARCH_THRESHOLD = 8;
 
+/** The sheet height of a long built-in list (countries, languages, time zones), as a fraction of the screen. */
+export const BUILT_IN_LIST_SHEET_HEIGHT = 0.8;
+export const DEFAULT_PREFERRED_LABEL = 'Suggested';
+
 export const SELECT_PRESENTATION = FIELD_PRESENTATION;
 
 export const SELECT_ROW_TYPE = {

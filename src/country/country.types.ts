@@ -1,8 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { DistributiveOmit } from '../core/core.types';
-import type { SelectPickerProps } from '../select';
+import type { BuiltInSelectPickerProps } from '../select/select.types';
 import type { FieldStatusProps } from '../sheet';
 import type { CountryCode } from './data';
 
@@ -44,20 +43,7 @@ export interface CountryFlagProps {
   code: CountryCode;
 }
 
-/** Server search props don't apply: the country list is built in. */
-type ServerSearchProp =
-  | 'options'
-  | 'loadOptions'
-  | 'onSearchChange'
-  | 'searchDebounce'
-  | 'onEndReached'
-  | 'loading'
-  | 'loadingText'
-  | 'searchPrompt'
-  | 'renderLoading'
-  | 'isEqual';
-
-export type CountryPickerProps = DistributiveOmit<SelectPickerProps<CountryCode>, ServerSearchProp> & CountryListOptions;
+export type CountryPickerProps = BuiltInSelectPickerProps<CountryCode> & CountryListOptions;
 
 export interface PhoneFormat {
   /** Digits as `#`, e.g. '(###) ###-####' */
