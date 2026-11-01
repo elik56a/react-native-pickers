@@ -51,6 +51,7 @@ export const SelectPicker = <T,>(props: SelectPickerProps<T>) => {
       {...(listProps as Omit<SelectListBaseProps<T>, 'isEqual' | 'theme' | 'styles'>)}
       {...picker.valueProps}
       query={picker.searchInField ? picker.query : undefined}
+      onCreate={picker.onCreate}
       isEqual={isEqual}
       theme={themeOverride}
       styles={slots}

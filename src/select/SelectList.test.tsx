@@ -38,6 +38,34 @@ describe('SelectList', () => {
     expect(onChange).toHaveBeenCalledWith('FR', countries[2]);
   });
 
+  it('offers the typed text as a new option and selects what onCreate returns', async () => {
+    const onChange = jest.fn();
+    const onCreate = jest.fn((text: string) => ({
+      label: text,
+      value: text.toLowerCase(),
+    }));
+    await render(<SelectList options={tags} searchable multiple value={['react']} onChange={onChange} onCreate={onCreate} />);
+    await fireEvent.changeText(screen.getByLabelText('Search'), ' Vue ');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add "Vue"' }));
+    expect(onCreate).toHaveBeenCalledWith('Vue');
+    expect(onChange).toHaveBeenCalledWith(['react', 'vue'], [tags[0], { label: 'Vue', value: 'vue' }]);
+    expect(screen.getByLabelText('Search').props.value).toBe('');
+  });
+
+  it('offers no new option for a label that exists, past maxSelected, or with a custom label', async () => {
+    const onCreate = jest.fn();
+    const { rerender } = await render(<SelectList options={tags} searchable onCreate={onCreate} />);
+    await fireEvent.changeText(screen.getByLabelText('Search'), 'expo');
+    expect(screen.queryByText(/^Add/)).toBeNull();
+    await rerender(<SelectList options={tags} searchable multiple value={['react']} maxSelected={1} onCreate={onCreate} />);
+    await fireEvent.changeText(screen.getByLabelText('Search'), 'Vue');
+    expect(screen.queryByText(/^Add/)).toBeNull();
+    await rerender(<SelectList options={tags} searchable onCreate={onCreate} createLabel={(text) => `New tag: ${text}`} />);
+    await fireEvent.changeText(screen.getByLabelText('Search'), 'Vue');
+    expect(screen.getByText('New tag: Vue')).toBeTruthy();
+    expect(screen.queryByText('No results')).toBeNull();
+  });
+
   it('ignores disabled options', async () => {
     const onChange = jest.fn();
     await render(<SelectList options={countries} onChange={onChange} />);

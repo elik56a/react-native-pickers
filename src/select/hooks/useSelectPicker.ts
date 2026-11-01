@@ -68,6 +68,14 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     );
   };
 
+  // Typing in the field, the search is ours, so clear it here as the list clears its own.
+  const onCreate =
+    props.onCreate &&
+    ((text: string) => {
+      setQuery('');
+      return props.onCreate?.(text);
+    });
+
   const clear = () => {
     if (props.multiple) props.onChange?.([], []);
     onClear?.();
@@ -87,5 +95,6 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     valueProps,
     removeOption,
     clear,
+    onCreate,
   };
 };

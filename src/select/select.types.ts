@@ -39,7 +39,9 @@ export type SelectSlot =
   | 'empty'
   | 'emptyText'
   | 'loading'
-  | 'loadingText';
+  | 'loadingText'
+  | 'createOption'
+  | 'createOptionLabel';
 
 export interface SelectRenderOptionInfo<T> {
   option: SelectOption<T>;
@@ -71,6 +73,14 @@ export type SelectListBaseProps<T> = ThemableProps & {
   onSearchChange?: (query: string) => void;
   /** ms to wait after the last keystroke before `loadOptions` / `onSearchChange`. Default: 300 */
   searchDebounce?: number;
+  /**
+   * Offers what the user typed as a new option, in a last row, when no option's label matches it. Return the new option to select it,
+   * and add it to `options` so it stays in the list
+   */
+  // biome-ignore lint/suspicious/noConfusingVoidType: a handler that only adds the option, without selecting it, returns nothing.
+  onCreate?: (text: string) => SelectOption<T> | void;
+  /** The create row's text. Default: (text) => `Add "${text}"` */
+  createLabel?: (text: string) => string;
   /** Called when the user scrolls near the end of the list, to load more options */
   onEndReached?: () => void;
   /** Show a loader: in place of the list while there are no options, under them otherwise */
@@ -140,7 +150,8 @@ export type SelectPickerProps<T> = Omit<SelectListBaseProps<T>, 'style' | 'style
 
 export type SelectRow<T> =
   | { type: typeof SELECT_ROW_TYPE.header; group: string }
-  | { type: typeof SELECT_ROW_TYPE.option; option: SelectOption<T> };
+  | { type: typeof SELECT_ROW_TYPE.option; option: SelectOption<T> }
+  | { type: typeof SELECT_ROW_TYPE.create; text: string };
 
 export interface GroupHeaderProps {
   group: string;
@@ -157,6 +168,14 @@ export interface OptionRowProps<T> {
   showCheckmarks: boolean;
   renderOption?: (info: SelectRenderOptionInfo<T>) => React.ReactNode;
   onToggle: (option: SelectOption<T>) => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<SelectSlot>;
+}
+
+export interface CreateRowProps {
+  text: string;
+  label: string;
+  onCreate: (text: string) => void;
   theme: PickerTheme;
   slots?: SlotStyles<SelectSlot>;
 }

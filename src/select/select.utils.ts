@@ -62,8 +62,18 @@ export const buildRows = <T>(
   ]);
 };
 
-export const getRowKey = <T>(row: SelectRow<T>, index: number) =>
-  row.type === SELECT_ROW_TYPE.header ? `h:${row.group}` : `o:${index}:${row.option.label}`;
+export const getRowKey = <T>(row: SelectRow<T>, index: number) => {
+  if (row.type === SELECT_ROW_TYPE.header) return `h:${row.group}`;
+  return row.type === SELECT_ROW_TYPE.create ? 'create' : `o:${index}:${row.option.label}`;
+};
+
+/** The typed text to offer as a new option: trimmed, and only when no option's label matches it, ignoring case and accents. */
+export const getCreateText = <T>(query: string, options: ReadonlyArray<SelectOption<T>>) => {
+  const text = query.trim();
+  if (!text) return null;
+  const folded = fold(text);
+  return options.some((o) => fold(o.label) === folded) ? null : text;
+};
 
 /** Values after toggling `value`; null when adding would pass `maxSelected`. */
 export const toggleValue = <T>(values: T[], value: T, isEqual: (a: T, b: T) => boolean, maxSelected?: number): T[] | null => {

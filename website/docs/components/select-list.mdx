@@ -213,6 +213,8 @@ export default function Example() {
 | `renderOption` | `(info: SelectRenderOptionInfo<T>) => ReactNode` | — | Custom row content. |
 | `renderGroupHeader` | `(group: string, theme: PickerTheme) => ReactNode` | — | Custom section header. |
 | `emptyText` | `string` | `'No results'` | Empty-state text. |
+| `onCreate` | `(text: string) => SelectOption<T> \| void` | — | [Offer the typed text as a new option](./select-picker#create-new-options) when no label matches. Return the option to select it. |
+| `createLabel` | `(text: string) => string` | `` (text) => `Add "${text}"` `` | The create row's text. |
 | `showCheckmarks` | `boolean` | `true` | ✓ (single) / checkbox (multiple). |
 | `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
 | `listHeight` | `number` | — | Fixed height for the scrolling list. |
@@ -239,6 +241,7 @@ export default function Example() {
 | `check` | ✓ or checkbox |
 | `empty` / `emptyText` | Empty state, and the `searchPrompt` |
 | `loading` / `loadingText` | Loader row / its text |
+| `createOption` / `createOptionLabel` | The **Add "…"** row / its text |
 
 ### Types
 

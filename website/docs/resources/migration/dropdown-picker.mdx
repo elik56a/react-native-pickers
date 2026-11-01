@@ -43,7 +43,7 @@ description: "Switch from react-native-dropdown-picker to React Native Pickers: 
 | `listMode="MODAL"` | `presentation="modal"` |
 | `listMode="FLATLIST"` / `"SCROLLVIEW"` | `presentation="dropdown"` |
 | `renderListItem` | `renderOption({ option, selected, disabled, theme })` |
-| `addCustomItem` | no equivalent; add the typed text to `options` yourself |
+| `addCustomItem` | `onCreate(text)`: add the option to `options` and return it to select it ([create new options](../../components/select-picker#create-new-options)) |
 
 See [SelectPicker](../../components/select-picker) for groups, icons and render props, and [server search](../../recipes/server-search).
 

@@ -62,6 +62,7 @@ SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,key
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected,disabled,error}) renderChevron({open,theme})
                    error (string|boolean: red field, message under it) helperText required (asterisk) — display only, set error from your form library
                    presentation 'auto'(dropdown on web, bottom sheet on native)|'bottomSheet'|'modal'|'dropdown'|'inline'(expands under the field)
+                   onCreate(text) → option|void: an 'Add "text"' row while no label matches the search; add the option to options and return it to select it  createLabel(text)
 SelectList<T>      same list inline: options value onChange multiple listHeight
                    server search: loadOptions(query) => Promise<options>  (debounced by searchDebounce=300ms, loader until results, stale answers ignored; options = shown before typing; searchPrompt='Type to search' when none, emptyText after an empty search)
                    or manual: onSearchChange(query) + loading + onEndReached; loadingText renderLoading(theme); no local filtering with either
