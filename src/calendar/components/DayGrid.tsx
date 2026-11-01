@@ -39,11 +39,13 @@ export const DayGrid = ({
         ))}
       </View>
     )}
-    {weeks.map((week) => (
-      <View key={week[0]?.date.getTime()} style={[styles.week, slots?.week]}>
-        {week.map((state) => (
+    {weeks.map((week, row) => (
+      // biome-ignore lint/suspicious/noArrayIndexKey: keyed by grid slot so a month change updates the cells instead of remounting them.
+      <View key={row} style={[styles.week, slots?.week]}>
+        {week.map((state, column) => (
           <DayCell
-            key={state.date.getTime()}
+            // biome-ignore lint/suspicious/noArrayIndexKey: as above.
+            key={column}
             state={state}
             hidden={state.outside && !showOutsideDays}
             hasRangeEnd={hasRangeEnd}
