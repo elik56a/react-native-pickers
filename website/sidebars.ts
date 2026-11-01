@@ -77,6 +77,7 @@ const sidebars: SidebarsConfig = {
         'recipes/alarm-time',
         'recipes/duration',
         'recipes/country-select',
+        'recipes/dependent-selects',
         'recipes/server-search',
         'recipes/flight-search-form',
         'recipes/tags',

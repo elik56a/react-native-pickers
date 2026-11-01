@@ -94,6 +94,8 @@ export default function Example() {
 
 Pass `countries`, `exclude` and `preferred` from a constant, not a new array on every render, so the list is built once.
 
+To pick a state and a city under the country, see the [dependent selects recipe](../recipes/dependent-selects).
+
 ## Country names in other languages
 
 Names come from `Intl.DisplayNames` in `locale`, the device locale by default. Search still matches the English and native names in every language. Where the JavaScript engine has no `Intl.DisplayNames`, names fall back to English.
