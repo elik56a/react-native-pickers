@@ -1,7 +1,8 @@
-import { Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 
+import { lightTheme } from '../core';
 import { SelectList } from './SelectList';
 import type { SelectOption } from './select.types';
 
@@ -38,32 +39,79 @@ describe('SelectList', () => {
     expect(onChange).toHaveBeenCalledWith('FR', countries[2]);
   });
 
-  it('offers the typed text as a new option and selects what onCreate returns', async () => {
-    const onChange = jest.fn();
-    const onCreate = jest.fn((text: string) => ({
+  describe('creating options', () => {
+    const toTag = (text: string) => ({
       label: text,
       value: text.toLowerCase(),
-    }));
-    await render(<SelectList options={tags} searchable multiple value={['react']} onChange={onChange} onCreate={onCreate} />);
-    await fireEvent.changeText(screen.getByLabelText('Search'), ' Vue ');
-    await fireEvent.press(screen.getByRole('button', { name: 'Add "Vue"' }));
-    expect(onCreate).toHaveBeenCalledWith('Vue');
-    expect(onChange).toHaveBeenCalledWith(['react', 'vue'], [tags[0], { label: 'Vue', value: 'vue' }]);
-    expect(screen.getByLabelText('Search').props.value).toBe('');
-  });
+    });
+    const search = async (text: string) => fireEvent.changeText(screen.getByLabelText('Search'), text);
+    const addRow = (text: string) => screen.getByRole('button', { name: `Add "${text}"` });
 
-  it('offers no new option for a label that exists, past maxSelected, or with a custom label', async () => {
-    const onCreate = jest.fn();
-    const { rerender } = await render(<SelectList options={tags} searchable onCreate={onCreate} />);
-    await fireEvent.changeText(screen.getByLabelText('Search'), 'expo');
-    expect(screen.queryByText(/^Add/)).toBeNull();
-    await rerender(<SelectList options={tags} searchable multiple value={['react']} maxSelected={1} onCreate={onCreate} />);
-    await fireEvent.changeText(screen.getByLabelText('Search'), 'Vue');
-    expect(screen.queryByText(/^Add/)).toBeNull();
-    await rerender(<SelectList options={tags} searchable onCreate={onCreate} createLabel={(text) => `New tag: ${text}`} />);
-    await fireEvent.changeText(screen.getByLabelText('Search'), 'Vue');
-    expect(screen.getByText('New tag: Vue')).toBeTruthy();
-    expect(screen.queryByText('No results')).toBeNull();
+    it('offers the typed text as a new option and selects what onCreate returns', async () => {
+      const onChange = jest.fn();
+      const onCreate = jest.fn(toTag);
+      await render(<SelectList options={tags} searchable multiple value={['react']} onChange={onChange} onCreate={onCreate} />);
+      await search(' Vue ');
+      await fireEvent.press(addRow('Vue'));
+      expect(onCreate).toHaveBeenCalledWith('Vue');
+      expect(onChange).toHaveBeenCalledWith(['react', 'vue'], [tags[0], { label: 'Vue', value: 'vue' }]);
+      expect(screen.getByLabelText('Search').props.value).toBe('');
+    });
+
+    it('shows the row last, under the matching options, with a + and its label in the primary colour', async () => {
+      await render(<SelectList options={tags} searchable onCreate={toTag} />);
+      await search('Re');
+      expect(screen.getAllByRole('button').map((row) => row.props.accessibilityLabel)).toEqual(['React', 'Add "Re"']);
+      expect(StyleSheet.flatten(screen.getByText('+').props.style).color).toBe(lightTheme.colors.primary);
+      expect(StyleSheet.flatten(screen.getByText('Add "Re"').props.style).color).toBe(lightTheme.colors.primary);
+    });
+
+    it('selects the new option in single mode', async () => {
+      const onChange = jest.fn();
+      await render(<SelectList options={tags} searchable onChange={onChange} onCreate={toTag} />);
+      await search('Vue');
+      await fireEvent.press(addRow('Vue'));
+      expect(onChange).toHaveBeenCalledWith('vue', { label: 'Vue', value: 'vue' });
+    });
+
+    it('selects nothing when onCreate returns nothing, and still clears the search', async () => {
+      const onChange = jest.fn();
+      const onCreate = jest.fn();
+      await render(<SelectList options={tags} searchable onChange={onChange} onCreate={onCreate} />);
+      await search('Vue');
+      await fireEvent.press(addRow('Vue'));
+      expect(onCreate).toHaveBeenCalledWith('Vue');
+      expect(onChange).not.toHaveBeenCalled();
+      expect(screen.getByLabelText('Search').props.value).toBe('');
+    });
+
+    it('offers no new option for a label that exists, past maxSelected, or with a custom label', async () => {
+      const onCreate = jest.fn();
+      const { rerender } = await render(<SelectList options={tags} searchable onCreate={onCreate} />);
+      await search('expo');
+      expect(screen.queryByText(/^Add/)).toBeNull();
+      await rerender(<SelectList options={tags} searchable multiple value={['react']} maxSelected={1} onCreate={onCreate} />);
+      await search('Vue');
+      expect(screen.queryByText(/^Add/)).toBeNull();
+      await rerender(<SelectList options={tags} searchable onCreate={onCreate} createLabel={(text) => `New tag: ${text}`} />);
+      await search('Vue');
+      expect(screen.getByText('New tag: Vue')).toBeTruthy();
+      expect(screen.queryByText('No results')).toBeNull();
+    });
+
+    it('styles the row with the createOption and createOptionLabel slots', async () => {
+      await render(
+        <SelectList
+          options={tags}
+          searchable
+          onCreate={toTag}
+          styles={{ createOption: { paddingVertical: 20 }, createOptionLabel: { fontStyle: 'italic' } }}
+        />
+      );
+      await search('Vue');
+      expect(StyleSheet.flatten(addRow('Vue').props.style)).toMatchObject({ paddingVertical: 20 });
+      expect(StyleSheet.flatten(screen.getByText('Add "Vue"').props.style)).toMatchObject({ fontStyle: 'italic' });
+    });
   });
 
   it('ignores disabled options', async () => {
@@ -173,6 +221,20 @@ describe('SelectList', () => {
         expect(loadOptions).toHaveBeenCalledWith('par');
         expect(screen.getByLabelText('par City')).toBeTruthy();
         expect(screen.queryByText('Loading…')).toBeNull();
+      });
+
+      it('offers a new option only once the results arrive, and only if none has that label', async () => {
+        const loadOptions = jest.fn((query: string) =>
+          Promise.resolve(query === 'paris' ? [{ label: 'Paris', value: 'paris' }] : cities(query))
+        );
+        await render(<SelectList options={tags} loadOptions={loadOptions} onCreate={jest.fn()} />);
+        await type('lyon');
+        expect(screen.queryByText(/^Add/)).toBeNull();
+        await wait(300);
+        expect(screen.getByText('Add "lyon"')).toBeTruthy();
+        await type('paris');
+        await wait(300);
+        expect(screen.queryByText(/^Add/)).toBeNull();
       });
 
       it('ignores an answer to an older query', async () => {
