@@ -1,5 +1,5 @@
-import { HERO_START, HERO_WORD, HERO_WORDS } from './hero.constants';
-import { fillHeight, formatHeroValue, getInitialHeroValues, getWordSpec, nextWord, scrollPixels, scrollStep, stepWord } from './hero.utils';
+import { HERO_SCROLL_START, HERO_START, HERO_WORD, HERO_WORDS } from './hero.constants';
+import { fillHeight, formatHeroValue, getInitialHeroValues, getWordSpec, nextWord, scrollPixels, scrollTurn, stepWord } from './hero.utils';
 
 describe('nextWord', () => {
   it('goes through every word and back to the first', () => {
@@ -69,11 +69,42 @@ describe('formatHeroValue', () => {
   });
 });
 
-describe('scrollStep', () => {
-  it('turns one word once the scroll adds up to a notch, either way', () => {
-    expect(scrollStep(10)).toBe(0);
-    expect(scrollStep(100)).toBe(1);
-    expect(scrollStep(-45)).toBe(-1);
+describe('scrollTurn', () => {
+  /** The words a run of `[delta, time]` wheel events turns, in order */
+  const turns = (events: [number, number][]) => {
+    let scroll = HERO_SCROLL_START;
+    return events.map(([delta, time]) => {
+      const next = scrollTurn(scroll, delta, time);
+      scroll = next.scroll;
+      return next.step;
+    });
+  };
+
+  it('turns one word per notch, however few pixels it reports, either way', () => {
+    expect(
+      turns([
+        [4, 0],
+        [4, 400],
+        [-100, 800],
+      ])
+    ).toEqual([1, 1, -1]);
+  });
+
+  it('turns once for the events of one notch', () => {
+    expect(
+      turns([
+        [4, 0],
+        [6, 16],
+        [8, 32],
+      ])
+    ).toEqual([1, 0, 0]);
+  });
+
+  it('keeps turning through a long scroll, at most once per step time', () => {
+    const swipe = Array.from({ length: 20 }, (_, i): [number, number] => [30, i * 16]);
+    const steps = turns(swipe);
+    expect(steps[0]).toBe(1);
+    expect(steps.filter(Boolean).length).toBe(2);
   });
 });
 
