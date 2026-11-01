@@ -8,12 +8,13 @@ import type {
   PressableProps,
   PressableStateCallbackType,
   StyleProp,
+  TextProps,
   TextStyle,
   ViewStyle,
 } from 'react-native';
 
 import type { DIRECTION, KEY, PICKER_DISPLAY, PRESS_FEEDBACK } from './core.constants';
-import type { Design, PickerTheme } from './theme/theme.types';
+import type { Design, PickerTheme, TextSize, TextWeight } from './theme/theme.types';
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
@@ -171,6 +172,16 @@ export interface DragOptions {
   onEnd?: (gesture: PanResponderGestureState) => void;
   /** The gesture is taken away, such as by a scroll view */
   onCancel?: () => void;
+}
+
+export interface PickerTextProps extends TextProps {
+  theme: PickerTheme;
+  /** Default: 'md' */
+  size?: TextSize;
+  /** Default: 'regular' */
+  weight?: TextWeight;
+  /** A theme color. Default: 'text' */
+  color?: keyof PickerTheme['colors'];
 }
 
 export interface TrackPanOptions {

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react-native';
 
-import { PickersProvider, useDesignOverride, usePickerTheme } from './ThemeProvider';
+import { PickersProvider, useComponentTheme, useDesignOverride, usePickerTheme } from './ThemeProvider';
 import type { PickersProviderProps } from './theme.types';
 
 const inProvider = (props: Omit<PickersProviderProps, 'children'>) => ({
@@ -42,5 +42,14 @@ describe('useDesignOverride', () => {
     expect(withDesign.result.current).toEqual({ radius: { sm: 2 }, design: 'material' });
     const without = await renderHook(() => useDesignOverride(theme, undefined));
     expect(without.result.current).toBe(theme);
+  });
+});
+
+describe('useComponentTheme', () => {
+  it("draws with the component's design and gives its parts the override with that design", async () => {
+    const theme = { radius: { sm: 2 } };
+    const { result } = await renderHook(() => useComponentTheme(theme, 'web'), inProvider({ design: 'material' }));
+    expect(result.current.theme).toMatchObject({ design: 'web', radius: { sm: 2 } });
+    expect(result.current.themeOverride).toEqual({ radius: { sm: 2 }, design: 'web' });
   });
 });

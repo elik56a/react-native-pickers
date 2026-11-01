@@ -3,10 +3,9 @@ import { useCallback, useMemo } from 'react';
 import type { AccessibilityActionEvent, FlatList } from 'react-native';
 import { Animated, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
 import { KEY } from '../core/core.constants';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { keyboardProps } from '../core/utils/keyboard.utils';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelRow } from './components/WheelRow';
@@ -47,8 +46,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
     accessibilityLabel,
     testID,
   } = props;
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const items = useMemo(() => rawItems.map((input) => normalizeItem<T>(input)), [rawItems]);
   const visibleItems = toOddCount(requestedVisibleItems);
   const padding = ((visibleItems - 1) / 2) * itemHeight;

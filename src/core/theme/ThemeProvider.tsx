@@ -62,3 +62,12 @@ export const usePickerTheme = (override?: DeepPartial<PickerTheme>): PickerTheme
 /** Folds a component's `design` prop into its `theme` override, so every part it passes the override to draws the same design. */
 export const useDesignOverride = (theme: DeepPartial<PickerTheme> | undefined, design: Design | undefined) =>
   useMemo(() => (design ? { ...theme, design } : theme), [theme, design]);
+
+/** A component's theme to draw with, and the override with its `design` folded in, for the parts it passes the theme to. */
+export const useComponentTheme = (theme: DeepPartial<PickerTheme> | undefined, design: Design | undefined) => {
+  const themeOverride = useDesignOverride(theme, design);
+  return {
+    theme: usePickerTheme(themeOverride),
+    themeOverride,
+  };
+};

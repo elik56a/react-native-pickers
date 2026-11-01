@@ -1,7 +1,6 @@
 import { ScrollView, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { BottomSheet } from './BottomSheet';
 import { InlinePanel } from './components/InlinePanel';
 import { SheetButton } from './components/SheetButton';
@@ -31,8 +30,7 @@ export const PickerSheet = ({
   design,
   children,
 }: PickerSheetProps) => {
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme, themeOverride } = useComponentTheme(themeProp, design);
   const sheetDesign = SHEET_DESIGN[theme.design];
   const confirmLabel = confirmLabelProp ?? sheetDesign.confirmLabel;
   const field = useFieldSheet();

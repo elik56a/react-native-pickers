@@ -1,6 +1,4 @@
-import { Text } from 'react-native';
-
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { Chevron } from '../../sheet/components/Chevron';
 import { PHONE_COUNTRY_BUTTON_LABEL } from '../country.constants';
@@ -29,7 +27,9 @@ export const CountryButton = ({ country, open, picking, disabled, theme, slots, 
       testID={testID}
     >
       <CountryFlag code={country.code} />
-      <Text style={[textStyle(theme, 'md'), { color: theme.colors.text }, slots?.dialCode]}>{callingCode}</Text>
+      <PickerText theme={theme} style={slots?.dialCode}>
+        {callingCode}
+      </PickerText>
       <Chevron open={picking} theme={theme} style={slots?.chevron} />
     </Touchable>
   );

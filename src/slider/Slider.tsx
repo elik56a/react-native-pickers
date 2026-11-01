@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { MarkLabels } from './components/MarkLabels';
 import { SliderHalo } from './components/SliderHalo';
 import { SliderThumb } from './components/SliderThumb';
@@ -14,7 +13,7 @@ import type { SliderProps } from './slider.types';
 /** A slider drawn the platform's way: iOS's white knob, Material 3's handle with its value bubble, or a browser's range input. One thumb, or two with `range`. */
 export const Slider = (props: SliderProps) => {
   const { disabled, minimumIcon, maximumIcon, style, styles: slots, theme: themeProp, design, testID } = props;
-  const theme = usePickerTheme(useDesignOverride(themeProp, design));
+  const { theme } = useComponentTheme(themeProp, design);
   const slider = useSlider(props, theme);
 
   return (

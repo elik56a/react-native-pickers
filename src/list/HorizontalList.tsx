@@ -1,7 +1,6 @@
 import { Animated, ScrollView, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { ListItem } from './components/ListItem';
 import { ScrollArrow } from './components/ScrollArrow';
@@ -31,8 +30,7 @@ export const HorizontalList = <T,>({
   design,
   testID,
 }: HorizontalListProps<T>) => {
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const list = useHorizontalList(onChange, theme.spacing.lg);
   const selectedIndex = findItemIndex(items, value, isEqual);
   const thumb = useSegmentThumb(selectedIndex, theme.animation.duration);

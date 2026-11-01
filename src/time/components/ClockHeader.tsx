@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { CLOCK_MODE } from '../time.constants';
 import { styles } from '../time.styles';
@@ -20,7 +20,9 @@ export const ClockHeader = ({ dial, theme, testID }: ClockPartProps) => {
         accessibilityState={{ checked: active }}
         style={[styles.periodHalf, { backgroundColor: active ? c.primaryMuted : 'transparent' }]}
       >
-        <Text style={[textStyle(theme, 'sm', 'medium'), { color: active ? c.primary : c.textSecondary }]}>{dial.periods[pm ? 1 : 0]}</Text>
+        <PickerText theme={theme} size="sm" weight="medium" color={active ? 'primary' : 'textSecondary'}>
+          {dial.periods[pm ? 1 : 0]}
+        </PickerText>
       </Touchable>
     );
   };
@@ -28,7 +30,9 @@ export const ClockHeader = ({ dial, theme, testID }: ClockPartProps) => {
   return (
     <View style={[styles.header, dial.typing && styles.headerTop, { gap: theme.spacing.sm }]}>
       <ClockField field={CLOCK_MODE.hour} dial={dial} theme={theme} testID={testID} />
-      <Text style={[textStyle(theme, 'xl'), styles.fieldText]}>:</Text>
+      <PickerText theme={theme} size="xl" style={styles.fieldText}>
+        :
+      </PickerText>
       <ClockField field={CLOCK_MODE.minute} dial={dial} theme={theme} testID={testID} />
       {dial.is12 ? (
         <View

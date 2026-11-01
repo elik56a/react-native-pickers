@@ -1,6 +1,7 @@
-import { Text, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { NUMERIC_KEYBOARD_TYPE } from '../../wheel/wheel.constants';
 import { CLOCK_MODE_LABEL } from '../time.constants';
@@ -36,7 +37,9 @@ export const ClockField = ({ field, dial, theme, testID }: ClockFieldProps) => {
           ]}
           testID={id}
         />
-        <Text style={[textStyle(theme, 'xs'), { color: c.textSecondary }]}>{CLOCK_MODE_LABEL[field]}</Text>
+        <PickerText theme={theme} size="xs" color="textSecondary">
+          {CLOCK_MODE_LABEL[field]}
+        </PickerText>
       </View>
     );
   }
@@ -51,7 +54,9 @@ export const ClockField = ({ field, dial, theme, testID }: ClockFieldProps) => {
       style={[styles.field, { borderRadius: theme.radius.sm, backgroundColor: active ? c.primaryMuted : c.surface }]}
       testID={id}
     >
-      <Text style={[textStyle(theme, 'xl'), styles.fieldText, { color: active ? c.primary : c.text }]}>{dial.fieldText(field)}</Text>
+      <PickerText theme={theme} size="xl" color={active ? 'primary' : 'text'} style={styles.fieldText}>
+        {dial.fieldText(field)}
+      </PickerText>
     </Touchable>
   );
 };

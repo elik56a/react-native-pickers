@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { formatDuration } from '../duration/duration.utils';
 import { RangeEnds } from './components/RangeEnds';
 import { useTimeRange } from './hooks/useTimeRange';
@@ -24,7 +24,7 @@ export const TimeRangePicker = (props: TimeRangePickerProps) => {
     testID,
     ...pickerProps
   } = props;
-  const theme = usePickerTheme(useDesignOverride(pickerProps.theme, pickerProps.design));
+  const { theme } = useComponentTheme(pickerProps.theme, pickerProps.design);
   const { range, active, setActive, move } = useTimeRange(props);
   return (
     <View style={style} testID={testID}>

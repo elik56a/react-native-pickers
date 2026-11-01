@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { FieldTrigger } from '../../sheet/components/FieldTrigger';
 import { styles } from '../select.styles';
@@ -29,7 +29,9 @@ export const SelectTrigger = <T,>({ selected, multiple, chips, onRemove, disable
             accessibilityLabel={`Remove ${option.label}`}
             style={[styles.chip, { backgroundColor: theme.colors.primaryMuted, borderRadius: theme.radius.full }, slots?.chip]}
           >
-            <Text style={[textStyle(theme, 'sm', 'medium'), { color: theme.colors.primary }, slots?.chipText]}>{option.label} ×</Text>
+            <PickerText theme={theme} size="sm" weight="medium" color="primary" style={slots?.chipText}>
+              {option.label} ×
+            </PickerText>
           </Touchable>
         ))}
       </View>

@@ -1,6 +1,7 @@
-import { Text, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
 import { HEX_MAX_LENGTH, SWATCH_CHECK } from '../color.constants';
@@ -66,7 +67,9 @@ export const HexInput = ({
             testID={testID ? `${testID}-copy` : undefined}
           >
             {clipboard.copied ? (
-              <Text style={[textStyle(theme, 'md', 'bold'), { color: c.primary }]}>{SWATCH_CHECK}</Text>
+              <PickerText theme={theme} weight="bold" color="primary">
+                {SWATCH_CHECK}
+              </PickerText>
             ) : (
               <CopyIcon color={c.textSecondary} />
             )}

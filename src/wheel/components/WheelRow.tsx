@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
-import { Animated, Pressable, Text } from 'react-native';
+import { Animated, Pressable } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { TouchFeedback } from '../../core/components/TouchFeedback';
 import { useTouchFeedback } from '../../core/hooks/useTouchFeedback';
 import { PERSPECTIVE } from '../wheel.constants';
@@ -63,18 +63,15 @@ const WheelRowImpl = <T,>({
         {renderItem ? (
           renderItem({ item, index: logicalIndex, selected, theme })
         ) : (
-          <Text
+          <PickerText
+            theme={theme}
+            size="lg"
+            weight={selected ? 'bold' : 'regular'}
             numberOfLines={1}
-            style={[
-              textStyle(theme, 'lg', selected ? 'bold' : 'regular'),
-              { textAlign, color },
-              slots?.itemText,
-              selected && slots?.selectedItemText,
-              item.disabled && slots?.disabledItemText,
-            ]}
+            style={[{ textAlign, color }, slots?.itemText, selected && slots?.selectedItemText, item.disabled && slots?.disabledItemText]}
           >
             {item.label}
-          </Text>
+          </PickerText>
         )}
       </Animated.View>
     </Pressable>

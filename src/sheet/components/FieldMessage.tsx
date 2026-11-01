@@ -1,6 +1,4 @@
-import { Text } from 'react-native';
-
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { FIELD_DESIGN, FIELD_LABEL } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FieldMessageProps } from '../sheet.types';
@@ -12,17 +10,14 @@ export const FieldMessage = ({ error, helperText, centered = false, theme, style
   if (!message) return null;
   const inset = !centered && FIELD_DESIGN[theme.design].label === FIELD_LABEL.floating;
   return (
-    <Text
+    <PickerText
+      theme={theme}
+      size="sm"
+      color={error ? 'danger' : 'textSecondary'}
       accessibilityLiveRegion="polite"
-      style={[
-        textStyle(theme, 'sm'),
-        styles.fieldMessage,
-        centered && styles.centeredMessage,
-        { color: error ? theme.colors.danger : theme.colors.textSecondary, paddingStart: inset ? theme.spacing.md : 0 },
-        style,
-      ]}
+      style={[styles.fieldMessage, centered && styles.centeredMessage, { paddingStart: inset ? theme.spacing.md : 0 }, style]}
     >
       {message}
-    </Text>
+    </PickerText>
   );
 };

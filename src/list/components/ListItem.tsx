@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { CHECK_MARK } from '../../core/core.constants';
 import { DISABLED_ITEM_OPACITY, HORIZONTAL_LIST_VARIANT, ICON_POSITION, ICON_POSITION_DIRECTION, LIST_DESIGN } from '../list.constants';
@@ -62,18 +62,22 @@ export const ListItem = <T,>({
           renderItem({ item, selected, disabled, theme })
         ) : (
           <>
-            {outlined && selected ? <Text style={[textStyle(theme, 'sm', 'bold'), { color: labelColor }]}>{CHECK_MARK}</Text> : icon}
-            <Text
+            {outlined && selected ? (
+              <PickerText theme={theme} size="sm" weight="bold" style={{ color: labelColor }}>
+                {CHECK_MARK}
+              </PickerText>
+            ) : (
+              icon
+            )}
+            <PickerText
+              theme={theme}
+              size="sm"
+              weight={selected && !segmented ? 'bold' : 'medium'}
               numberOfLines={1}
-              style={[
-                textStyle(theme, 'sm', selected && !segmented ? 'bold' : 'medium'),
-                { color: labelColor },
-                slots?.itemLabel,
-                selected && slots?.selectedItemLabel,
-              ]}
+              style={[{ color: labelColor }, slots?.itemLabel, selected && slots?.selectedItemLabel]}
             >
               {item.label}
-            </Text>
+            </PickerText>
           </>
         )}
       </Touchable>

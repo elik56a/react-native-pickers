@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { MARK_LABEL_BOX_WIDTH } from '../slider.constants';
 import { styles } from '../slider.styles';
 import type { MarkLabelsProps } from '../slider.types';
@@ -10,12 +10,9 @@ export const MarkLabels = ({ labels, theme, slots }: MarkLabelsProps) => (
   <View pointerEvents="none" style={styles.markLabels}>
     {labels.map((mark) => (
       <View key={mark.key} style={[styles.markLabelBox, { start: mark.x - MARK_LABEL_BOX_WIDTH / 2 }]}>
-        <Text
-          style={[textStyle(theme, 'sm'), { color: mark.active ? theme.colors.text : theme.colors.textSecondary }, slots?.markLabel]}
-          numberOfLines={1}
-        >
+        <PickerText theme={theme} size="sm" color={mark.active ? 'text' : 'textSecondary'} style={slots?.markLabel} numberOfLines={1}>
           {mark.label}
-        </Text>
+        </PickerText>
       </View>
     ))}
   </View>

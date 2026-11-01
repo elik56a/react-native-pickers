@@ -1,9 +1,8 @@
 import { Animated, Modal, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
 import { usePresence } from '../core/hooks/usePresence';
 import { useReturnFocus } from '../core/hooks/useReturnFocus';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { useAnchor } from './hooks/useAnchor';
 import { DROPDOWN_MAX_HEIGHT } from './sheet.constants';
@@ -27,8 +26,7 @@ export const Dropdown = ({
   design,
   testID,
 }: DropdownProps) => {
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const windowSize = useWindowDimensions();
   const { mounted, progress } = usePresence({ visible, duration: theme.animation.duration, onHidden: onClosed });
   // In an app the modal covers the window. A page that pins modals over a smaller area, like a phone preview, moves it.

@@ -1,9 +1,9 @@
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
-import { textStyle, usePickerTheme } from '../core';
 import { OwnScroll } from '../core/components/OwnScroll';
+import { PickerText } from '../core/components/PickerText';
 import { SHOWS_SCROLL_INDICATOR } from '../core/core.constants';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
 import { CategoryBar } from './components/CategoryBar';
 import { EmojiGridRow } from './components/EmojiGridRow';
@@ -57,8 +57,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     design,
     testID,
   } = props;
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
+  const { theme } = useComponentTheme(themeProp, design);
   const categoryBarPosition =
     categoryBarPositionProp === CATEGORY_BAR_POSITION.auto ? EMOJI_DESIGN[theme.design].categoryBarPosition : categoryBarPositionProp;
   const selection = useEmojiSelection(props, showRecent, maxRecent);
@@ -150,7 +149,9 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
               windowSize={7}
               ListEmptyComponent={
                 <View style={[styles.empty, { padding: theme.spacing.xl }, slots?.empty]}>
-                  <Text style={[textStyle(theme, 'md'), { color: theme.colors.textSecondary }, slots?.emptyText]}>{emptyText}</Text>
+                  <PickerText theme={theme} color="textSecondary" style={slots?.emptyText}>
+                    {emptyText}
+                  </PickerText>
                 </View>
               }
             />

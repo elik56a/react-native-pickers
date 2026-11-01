@@ -1,6 +1,6 @@
 import { PICKER_DISPLAY } from '../core/core.constants';
 import { useControllableState } from '../core/hooks/useControllableState';
-import { useDesignOverride, usePickerTheme } from '../core/theme/ThemeProvider';
+import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { clampDate } from '../core/utils/date.utils';
 import { DateTimeCalendar } from './components/DateTimeCalendar';
 import { DateTimeWheels } from './components/DateTimeWheels';
@@ -23,8 +23,8 @@ export const DateTimePicker = ({
   design,
   ...rest
 }: DateTimePickerProps) => {
-  const themeOverride = useDesignOverride(theme, design);
-  const look = DATETIME_DESIGN[usePickerTheme(themeOverride).design];
+  const { theme: resolved, themeOverride } = useComponentTheme(theme, design);
+  const look = DATETIME_DESIGN[resolved.design];
   const display = displayProp ?? look.display;
   const [date, setDate] = useControllableState(value, () => clampDate(defaultValue ?? new Date(), rest.minDate, rest.maxDate), onChange);
   const Display = display === PICKER_DISPLAY.calendar ? DateTimeCalendar : DateTimeWheels;

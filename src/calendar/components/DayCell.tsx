@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { textStyle } from '../../core';
+import { PickerText } from '../../core/components/PickerText';
 import { TouchFeedback } from '../../core/components/TouchFeedback';
 import { useTouchFeedback } from '../../core/hooks/useTouchFeedback';
 import { formatDate } from '../../core/utils/date.utils';
@@ -63,9 +63,10 @@ export const DayCell = memo(({ state, hidden, hasRangeEnd, height, locale, rende
               ]}
             >
               <TouchFeedback {...touch.feedback} borderRadius={radius} />
-              <Text
+              <PickerText
+                theme={theme}
+                weight={selected || today ? 'bold' : 'regular'}
                 style={[
-                  textStyle(theme, 'md', selected || today ? 'bold' : 'regular'),
                   { color: getDayTextColor(state, c, look.tinted), textDecorationLine: disabled && !outside ? 'line-through' : 'none' },
                   slots?.dayText,
                   outside && slots?.outsideDayText,
@@ -75,7 +76,7 @@ export const DayCell = memo(({ state, hidden, hasRangeEnd, height, locale, rende
                 ]}
               >
                 {date.getDate()}
-              </Text>
+              </PickerText>
               {marking?.label ? (
                 <Text style={[styles.dayLabel, { color: look.filled ? c.onPrimary : c.textSecondary }, slots?.dayLabel]} numberOfLines={1}>
                   {marking.label}
