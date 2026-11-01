@@ -66,11 +66,11 @@ export const HorizontalList = <T,>({
       {...ARROW_FOCUS}
       testID={testID}
     >
-      {segmented && !outlined && thumb.placed ? (
+      {segmented && !outlined && thumb.placed && (
         <Animated.View
           style={[styles.thumb, thumb.style, { backgroundColor: theme.colors.background, borderRadius: theme.radius.sm }, slots?.thumb]}
         />
-      ) : null}
+      )}
       {items.map((item, index) => (
         <ListItem
           key={item.label}
@@ -95,20 +95,21 @@ export const HorizontalList = <T,>({
   if (!showArrows) return scroller;
   // Beside the list, both arrows show while it overflows, so it doesn't change width as it scrolls. Overlaid, only where items hide.
   const overflows = list.hidden.left || list.hidden.right;
-  const [left, right] = SCROLL_ARROW_SIDES.map((side) =>
-    (overlay ? list.hidden[side] : overflows) ? (
-      <ScrollArrow
-        key={side}
-        side={side}
-        disabled={!list.hidden[side]}
-        overlay={overlay}
-        renderArrow={renderArrow}
-        onPress={() => list.scrollPage(side, overlay)}
-        theme={theme}
-        slots={slots}
-        testID={testID ? `${testID}-arrow-${side}` : undefined}
-      />
-    ) : null
+  const [left, right] = SCROLL_ARROW_SIDES.map(
+    (side) =>
+      (overlay ? list.hidden[side] : overflows) && (
+        <ScrollArrow
+          key={side}
+          side={side}
+          disabled={!list.hidden[side]}
+          overlay={overlay}
+          renderArrow={renderArrow}
+          onPress={() => list.scrollPage(side, overlay)}
+          theme={theme}
+          slots={slots}
+          testID={testID ? `${testID}-arrow-${side}` : undefined}
+        />
+      )
   );
   // The arrows need a frame around the scroll view; `style` lays out that frame.
   return overlay ? (

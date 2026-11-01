@@ -38,15 +38,16 @@ export const SwatchGrid = ({ colors, shape, size, scroll = false, selected, onSe
           slots?.swatch,
         ]}
       >
-        {chosen ? (
+        {chosen && (
           <PickerText theme={theme} size={size < 28 ? 'xs' : 'md'} weight="bold" style={{ color: getCheckColor(value) }}>
             {SWATCH_CHECK}
           </PickerText>
-        ) : isCustom ? (
+        )}
+        {isCustom && !chosen && (
           <PickerText theme={theme} size="lg" color="textSecondary">
             {CUSTOM_PLUS}
           </PickerText>
-        ) : null}
+        )}
       </Touchable>
     );
   });

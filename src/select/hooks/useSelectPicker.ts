@@ -5,7 +5,7 @@ import { useAnchor } from '../../sheet/hooks/useAnchor';
 import { resolveFieldPresentation, shouldCollapseOnPress } from '../../sheet/sheet.utils';
 import { NO_OPTIONS, SELECT_PRESENTATION } from '../select.constants';
 import type { SelectOption, SelectPickerProps, SelectValueProps } from '../select.types';
-import { findOptions, shouldSearchInField, toValueList } from '../select.utils';
+import { findOptions, getFieldSearchPlaceholder, shouldSearchInField, toValueList } from '../select.utils';
 
 /** Open state (plus the field's position for a dropdown), the selected options, and the value props the inner SelectList gets. */
 export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, b: T) => boolean) => {
@@ -85,6 +85,7 @@ export const useSelectPicker = <T>(props: SelectPickerProps<T>, isEqual: (a: T, 
     open,
     presentation,
     searchInField,
+    searchPlaceholder: getFieldSearchPlaceholder(props.multiple, selected, props.searchPlaceholder),
     query,
     setQuery,
     anchor,

@@ -12,7 +12,7 @@ export const Check = ({ selected, multiple, radio, theme, style }: CheckProps) =
   if (!multiple && radio) {
     return (
       <View style={[styles.radio, { marginStart: theme.spacing.md, borderColor: selected ? c.primary : c.textSecondary }, style]}>
-        {selected ? <View style={[styles.radioDot, { backgroundColor: c.primary }]} /> : null}
+        {selected && <View style={[styles.radioDot, { backgroundColor: c.primary }]} />}
       </View>
     );
   }
@@ -39,7 +39,7 @@ export const Check = ({ selected, multiple, radio, theme, style }: CheckProps) =
         style,
       ]}
     >
-      {selected ? <Text style={[styles.checkBoxMark, { color: c.onPrimary }]}>{CHECK_MARK}</Text> : null}
+      {selected && <Text style={[styles.checkBoxMark, { color: c.onPrimary }]}>{CHECK_MARK}</Text>}
     </View>
   );
 };

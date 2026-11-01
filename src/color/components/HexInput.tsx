@@ -30,9 +30,9 @@ export const HexInput = ({
   const c = theme.colors;
   return (
     <View style={[styles.hexRow, { gap: theme.spacing.sm }]}>
-      {showPreview ? (
+      {showPreview && (
         <View style={[styles.preview, { backgroundColor: rgb, borderRadius: theme.radius.sm, borderColor: c.border }, slots?.preview]} />
-      ) : null}
+      )}
       <View style={styles.hexField}>
         <TextInput
           value={input.text}
@@ -57,7 +57,7 @@ export const HexInput = ({
           ]}
           testID={testID}
         />
-        {clipboard.copy ? (
+        {clipboard.copy && (
           <Touchable
             theme={theme}
             onPress={() => clipboard.copy?.(value)}
@@ -74,7 +74,7 @@ export const HexInput = ({
               <CopyIcon color={c.textSecondary} />
             )}
           </Touchable>
-        ) : null}
+        )}
       </View>
     </View>
   );

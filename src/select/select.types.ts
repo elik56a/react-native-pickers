@@ -226,6 +226,7 @@ export type SelectTriggerProps<T> = Omit<FieldTriggerProps, 'displayValue' | 'ic
   multiple: boolean;
   chips: boolean;
   onRemove: (option: SelectOption<T>) => void;
+  renderTrigger?: (info: SelectTriggerInfo<T>) => React.ReactNode;
   slots?: SlotStyles<SelectSlot | SelectTriggerSlot>;
 };
 

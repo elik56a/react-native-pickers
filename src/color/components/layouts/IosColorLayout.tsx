@@ -24,11 +24,11 @@ export const IosColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
   return (
     <View style={[styles.column, { gap: theme.spacing.lg }]}>
       <HorizontalList items={tabs} value={view.tab} onChange={view.setTab} theme={theme} />
-      {view.tab === COLOR_TAB.grid ? <IosGrid selected={picker.rgb} onSelect={picker.select} theme={theme} /> : null}
-      {view.tab === COLOR_TAB.spectrum ? (
+      {view.tab === COLOR_TAB.grid && <IosGrid selected={picker.rgb} onSelect={picker.select} theme={theme} />}
+      {view.tab === COLOR_TAB.spectrum && (
         <SpectrumPad {...shared} height={COLOR_DESIGN.ios.padHeight} testID={testID ? `${testID}-spectrum` : undefined} />
-      ) : null}
-      {view.tab === COLOR_TAB.sliders ? (
+      )}
+      {view.tab === COLOR_TAB.sliders && (
         <View style={[styles.column, { gap: theme.spacing.sm }]}>
           <RgbSliders {...shared} />
           <HexInput
@@ -44,11 +44,11 @@ export const IosColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
             testID={testID ? `${testID}-hex` : undefined}
           />
         </View>
-      ) : null}
-      {showAlpha ? <AlphaSlider {...shared} captioned /> : null}
+      )}
+      {showAlpha && <AlphaSlider {...shared} captioned />}
       <View style={[styles.row, styles.centerRow, { gap: theme.spacing.md }]}>
         <ColorPreview color={picker.value} shape="large" theme={theme} />
-        {colors.length ? (
+        {colors.length > 0 && (
           <View style={styles.fill}>
             <SwatchGrid
               colors={colors}
@@ -61,7 +61,7 @@ export const IosColorLayout = ({ picker, colors, showAlpha, copy, labels, theme,
               slots={slots}
             />
           </View>
-        ) : null}
+        )}
       </View>
     </View>
   );

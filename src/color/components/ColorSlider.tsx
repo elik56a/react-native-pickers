@@ -32,18 +32,18 @@ export const ColorSlider = ({
   const { trackHeight } = COLOR_DESIGN[theme.design];
   return (
     <View>
-      {showLabel || showValue ? (
+      {(showLabel || showValue) && (
         <View style={styles.sliderHeader}>
           <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.sliderLabel}>
             {showLabel ? label : ''}
           </PickerText>
-          {showValue ? (
+          {showValue && (
             <PickerText theme={theme} size="sm" color="textSecondary" style={slots?.sliderLabel}>
               {valueText}
             </PickerText>
-          ) : null}
+          )}
         </View>
-      ) : null}
+      )}
       <View
         style={[styles.slider, slots?.slider]}
         onLayout={pan.onLayout}
@@ -59,7 +59,7 @@ export const ColorSlider = ({
       >
         <View pointerEvents="none" style={[styles.rail, { height: trackHeight, marginHorizontal: INSET }]}>
           <View style={[styles.track, { borderRadius: trackHeight / 2 }]}>
-            {checkered ? <Checkerboard /> : null}
+            {checkered && <Checkerboard />}
             {toSlices(colors).map(({ key, color }) => (
               <View key={key} style={[styles.fill, { backgroundColor: color }]} />
             ))}

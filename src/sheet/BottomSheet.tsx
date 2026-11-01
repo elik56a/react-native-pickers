@@ -67,6 +67,8 @@ export const BottomSheet = ({
 
   if (!mounted) return null;
   const resolvedHeight = resolveSheetHeight(height, windowHeight);
+  // Boolean, so an empty-string title doesn't render as raw text, which crashes native.
+  const hasHeader = Boolean(title || headerLeft || headerRight);
 
   return (
     <Modal visible transparent animationType="none" statusBarTranslucent onRequestClose={onClose} testID={testID}>
@@ -100,7 +102,7 @@ export const BottomSheet = ({
               ]}
               accessibilityViewIsModal
             >
-              {resize.dragArea ? <SheetDragArea {...resize.dragArea} /> : null}
+              {resize.dragArea && <SheetDragArea {...resize.dragArea} />}
               {/* collapsable={false}: not flattened away, so a touch anywhere on the strip reaches the drag handlers */}
               <View style={dialog && styles.dialogHeader} pointerEvents="box-none">
                 {!dialog && showHandle && (
@@ -113,7 +115,7 @@ export const BottomSheet = ({
                     <View style={[styles.handle, { backgroundColor: theme.colors.handle }, slots?.handle]} />
                   </View>
                 )}
-                {(title || headerLeft || headerRight) && (
+                {hasHeader && (
                   <View
                     {...(draggable && !dialog ? resize.panHandlers : null)}
                     collapsable={false}

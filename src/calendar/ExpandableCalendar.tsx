@@ -80,7 +80,7 @@ export const ExpandableCalendar = (props: ExpandableCalendarProps) => {
       {...ARROW_FOCUS}
       testID={testID}
     >
-      {showHeader ? (
+      {showHeader && (
         <CalendarHeader
           label={title}
           accessibilityLabel={title}
@@ -94,9 +94,9 @@ export const ExpandableCalendar = (props: ExpandableCalendarProps) => {
           theme={theme}
           slots={slots}
         />
-      ) : null}
+      )}
       <View {...(enableSwipe ? expansion.panHandlers : {})}>
-        {showWeekdays ? <WeekdayRow weekdays={weekdays} theme={theme} slots={slots} /> : null}
+        {showWeekdays && <WeekdayRow weekdays={weekdays} theme={theme} slots={slots} />}
         <Animated.View style={[styles.expandClip, expansion.clipStyle]}>
           <Animated.View style={expansion.gridStyle}>
             <Animated.View style={nav.slideStyle} {...(enableSwipe ? nav.panHandlers : {})}>

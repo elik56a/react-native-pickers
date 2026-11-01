@@ -70,9 +70,9 @@ export const OptionRow = <T,>({
               </PickerText>
             ) : null}
           </View>
-          {showCheckmarks && (multiple || radio || selected) ? (
+          {showCheckmarks && (multiple || radio || selected) && (
             <Check selected={selected} multiple={multiple} radio={radio} theme={theme} style={slots?.check} />
-          ) : null}
+          )}
         </>
       )}
     </Touchable>
