@@ -198,11 +198,11 @@ export default function Example() {
 | `value` | `T \| null` · `T[]` | — | Selection. |
 | `onChange` | `(value: T, option) => void` · `(values: T[], options) => void` | — | Single · multiple. |
 | `maxSelected` | `number` | — | Multiple only. |
-| `searchable` | `boolean` | `options.length > 8` | Show the search field. |
+| `searchable` | `boolean` | `options.length > 8`, or with `loadOptions` / `onSearchChange` | Show the search field. |
 | `query` | `string` | — | Controlled search query, for filtering from your own input. Hides the built-in search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint and its accessibility label. |
 | `filterOption` | `(option: SelectOption<T>, query: string) => boolean` | `defaultFilter`; none with `loadOptions` / `onSearchChange` | Custom filter. |
-| `loadOptions` | `(query: string) => Promise<SelectOption<T>[]>` | — | [Search a server](./select-picker#search-on-a-server): loader, debounce and stale answers handled. |
+| `loadOptions` | `(query: string) => Promise<ReadonlyArray<SelectOption<T>>>` | — | [Search a server](./select-picker#search-on-a-server): loader, debounce and stale answers handled. |
 | `onSearchChange` | `(query: string) => void` | — | Called once typing pauses, to search yourself. |
 | `searchPrompt` | `string` | `'Type to search'` | Shown before the user types, while a searched list has no options. |
 | `searchDebounce` | `number` | `300` | ms after the last keystroke before `loadOptions` / `onSearchChange`. |
@@ -215,7 +215,7 @@ export default function Example() {
 | `emptyText` | `string` | `'No results'` | Empty-state text. |
 | `onCreate` | `(text: string) => SelectOption<T> \| void` | — | [Offer the typed text as a new option](./select-picker#create-new-options) when no label matches. Return the option to select it. |
 | `createLabel` | `(text: string) => string` | `` (text) => `Add "${text}"` `` | The create row's text. |
-| `showCheckmarks` | `boolean` | `true` | ✓ (single) / checkbox (multiple). |
+| `showCheckmarks` | `boolean` | `true` | ✓ or radio (single, radio in the Material design) / checkbox (multiple). |
 | `isEqual` | `(a: T, b: T) => boolean` | `Object.is` | Value equality. |
 | `listHeight` | `number` | — | Fixed height for the scrolling list. |
 | `autoFocusSearch` | `boolean` | `false` | Focus the search on mount. |
@@ -238,7 +238,7 @@ export default function Example() {
 | `selectedOption` | Selected rows (merged after `option`) |
 | `optionLabel` / `selectedOptionLabel` | Row label |
 | `optionDescription` | Second line |
-| `check` | ✓ or checkbox |
+| `check` | ✓, radio or checkbox |
 | `empty` / `emptyText` | Empty state, and the `searchPrompt` |
 | `loading` / `loadingText` | Loader row / its text |
 | `createOption` / `createOptionLabel` | The **Add "…"** row / its text |
@@ -251,3 +251,9 @@ type SelectValueProps<T> =
   | { multiple?: false; value?: T | null; onChange?: (value: T, option: SelectOption<T>) => void }
   | { multiple: true; value?: T[]; onChange?: (value: T[], options: SelectOption<T>[]) => void; maxSelected?: number };
 ```
+
+## Related
+
+- [SelectPicker](./select-picker): the same list behind a field, in a dropdown or a sheet
+- [Search a server](../recipes/server-search): options loaded as the user types
+- [Tag & multi-select](../recipes/tags): multiple selection with search

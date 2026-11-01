@@ -115,8 +115,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`BottomSheet`](https://react-native-pickers.dev/docs/components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
 | [`Menu`](https://react-native-pickers.dev/docs/components/menu) | A dropdown or long-press context menu of actions by its trigger; pure JS, so it runs in Expo Go and on the web |
 | [`ActionSheet`](https://react-native-pickers.dev/docs/components/action-sheet) | A list of actions such as Share or Delete: iOS cards or Material rows, destructive and disabled actions |
-| [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
-| [Picker fields](https://react-native-pickers.dev/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
+| [Picker sheets](https://react-native-pickers.dev/docs/components/picker-sheets) | `DatePickerSheet`, `TimePickerSheet`, `TimeRangePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`: a picker in a sheet with Cancel / Done |
+| [Picker fields](https://react-native-pickers.dev/docs/components/picker-fields) | `DatePickerField`, `TimePickerField`, `TimeRangePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`: a form field that opens the picker |
 
 ## Inline, in a sheet, or behind a field
 
@@ -168,7 +168,7 @@ Pick one design for the whole app, or for one component:
 <TimePicker design="material" value={time} onChange={setTime} />
 ```
 
-Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://react-native-pickers.dev/docs/next/guides/designs).
+Or keep the design and change one choice with its own prop: `display="wheel"` on `TimePicker`, `timeDisplay` and `timePosition` on `DateTimePicker`, `confirmLabel` on any sheet. See the [designs guide](https://react-native-pickers.dev/docs/guides/designs).
 
 > **Upgrading from 0.10?** Android and the web now get the Material and web designs. Set `<PickersProvider design="ios">` to keep the previous look everywhere.
 >
@@ -199,7 +199,7 @@ import { PickersProvider } from '@elik56a/react-native-pickers';
 
 | Token group | Keys |
 |---|---|
-| `colors` | `background` `surface` `sheet` `text` `textSecondary` `textDisabled` `primary` `onPrimary` `primaryMuted` `border` `backdrop` `indicator` `handle` `hover` `ripple` |
+| `colors` | `background` `surface` `sheet` `text` `textSecondary` `textDisabled` `primary` `onPrimary` `primaryMuted` `border` `backdrop` `indicator` `handle` `hover` `ripple` `danger` |
 | `radius` | `sm` `md` `lg` `full` `sheet` |
 | `spacing` | `xs` `sm` `md` `lg` `xl` |
 | `typography` | `fontFamily` `fontFamilyMedium` `sizes` `weights` |
@@ -223,16 +223,18 @@ Any component also takes `theme` and `design` for a local override.
 
 | Component | Render props |
 |---|---|
-| Wheels, `HorizontalList` | `renderItem` |
+| Wheels | `renderItem`, `renderIndicator` |
+| `HorizontalList` | `renderItem`, `renderArrow` |
 | Calendar | `renderDay`, `renderArrow` |
 | `SelectPicker`, `SelectList` | `renderOption`, `renderGroupHeader`, `renderLoading`, `renderTrigger`, `renderChevron` |
 | `EmojiPicker` | `renderEmoji` |
+| `Rating` | `renderIcon` |
 | Fields | `renderTrigger`, `renderChevron` |
 
 ## Good to know
 
 - **Controlled or uncontrolled.** Pass `value` + `onChange`, or `defaultValue`. `SelectPicker`, `SelectList` and `HorizontalList` are controlled-only: update `value` in `onChange`.
-- **`onChange` is for user changes only.** Setting `value` in code moves the picker silently. Wheels fire `onChange` when they settle and `onValueChanging` on every row, which is the place for haptics.
+- **`onChange` is for user changes only.** Setting `value` in code moves the picker silently. Wheels fire `onChange` when they settle and `onValueChanging` on every row, and `Slider` on release and on every step, which is the place for haptics.
 - **Sheets commit on Done.** `onConfirm` gets the value; Cancel, the backdrop and dragging down discard the draft.
 - **Fast under load.** Drags, scrolls and animations run on the UI thread, so they stay at 60 fps while JavaScript is busy. See the [benchmarks](https://react-native-pickers.dev/docs/guides/performance#benchmarks) against `@gorhom/bottom-sheet`, Quidone's wheel picker and `react-native-calendars`.
 - **Dates are local time.** Days are compared by local year, month and day. Serialize them with `toDateKey(date)` (`'YYYY-MM-DD'`), not `toISOString()`.
@@ -242,7 +244,7 @@ Any component also takes `theme` and `design` for a local override.
   import { DatePicker } from '@elik56a/react-native-pickers/date';
   ```
 
-  Subpaths: `/wheel` `/time` `/date` `/calendar` `/datetime` `/select` `/list` `/emoji` `/sheet` `/core`.
+  Subpaths: `/wheel` `/time` `/duration` `/date` `/calendar` `/month` `/datetime` `/select` `/country` `/timezone` `/list` `/emoji` `/color` `/slider` `/rating` `/otp` `/action` `/sheet` `/core`.
 
 ## API at a glance
 
@@ -503,7 +505,10 @@ A `SelectPicker` with every IANA time zone built in, each with its city, GMT off
 
 | Area | Exports |
 |---|---|
-| Dates | `toDateKey` `addDays` `addMonths` `isSameDay` `formatDate` |
+| Dates | `toDateKey` `addDays` `addMonths` `isSameDay` `formatDate` `getRangePresets` |
+| Times | `formatTimeRange` `getTimeRangeSeconds` `formatDuration` |
+| Countries, phones, time zones | `getCountry` `parsePhone` `isValidPhone` `toE164` `getDeviceTimeZone` `formatGmtOffset` |
+| Colours | `normalizeHex` `hexToHsv` `hsvToHex` `withAlpha` |
 | Emoji | `getAllEmojis` `searchEmojis` `findEmoji` `withSkinTone` |
 | Theme | `usePickerTheme` `createTheme` `resolveDesign` |
 | Sheets | `useDraft`: draft state for your own sheets |
@@ -525,9 +530,9 @@ The complete documentation is one Markdown file, [`llms-full.txt`](https://react
 
 ## Learn more
 
-- **Guides:** [designs](https://react-native-pickers.dev/docs/next/guides/designs) · [theming](https://react-native-pickers.dev/docs/guides/theming) · [styling with slots](https://react-native-pickers.dev/docs/guides/styling) · [render props](https://react-native-pickers.dev/docs/guides/render-props) · [i18n & RTL](https://react-native-pickers.dev/docs/guides/i18n-rtl) · [accessibility](https://react-native-pickers.dev/docs/guides/accessibility) · [haptics](https://react-native-pickers.dev/docs/guides/haptics) · [forms](https://react-native-pickers.dev/docs/guides/forms) · [TypeScript](https://react-native-pickers.dev/docs/guides/typescript)
+- **Guides:** [designs](https://react-native-pickers.dev/docs/guides/designs) · [theming](https://react-native-pickers.dev/docs/guides/theming) · [styling with slots](https://react-native-pickers.dev/docs/guides/styling) · [render props](https://react-native-pickers.dev/docs/guides/render-props) · [i18n & RTL](https://react-native-pickers.dev/docs/guides/i18n-rtl) · [accessibility](https://react-native-pickers.dev/docs/guides/accessibility) · [haptics](https://react-native-pickers.dev/docs/guides/haptics) · [forms](https://react-native-pickers.dev/docs/guides/forms) · [TypeScript](https://react-native-pickers.dev/docs/guides/typescript)
 - **Recipes:** [hotel booking range](https://react-native-pickers.dev/docs/recipes/booking-range) · [birthday](https://react-native-pickers.dev/docs/recipes/birthday) · [alarm time](https://react-native-pickers.dev/docs/recipes/alarm-time) · [duration](https://react-native-pickers.dev/docs/recipes/duration) · [country and phone number](https://react-native-pickers.dev/docs/recipes/country-select) · [server search](https://react-native-pickers.dev/docs/recipes/server-search) · [flight search form](https://react-native-pickers.dev/docs/recipes/flight-search-form) · [chat emoji](https://react-native-pickers.dev/docs/recipes/chat-emoji) · [filters sheet](https://react-native-pickers.dev/docs/recipes/filters-sheet)
-- **Coming from another library?** [Migration](https://react-native-pickers.dev/docs/resources/migration/) maps the props of `@react-native-community/datetimepicker`, `react-native-date-picker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `react-native-dropdown-picker`, `react-native-element-dropdown`, `@react-native-picker/picker`, the native segmented control, `react-native-country-picker-modal`, `react-native-phone-number-input` and `rn-emoji-keyboard`. [Comparison](https://react-native-pickers.dev/docs/resources/comparison) shows when to choose something else.
+- **Coming from another library?** [Migration](https://react-native-pickers.dev/docs/resources/migration/) maps the props of `@react-native-community/datetimepicker`, `react-native-date-picker`, `react-native-modal-datetime-picker`, `react-native-calendars`, `react-native-picker-select`, `react-native-dropdown-picker`, `react-native-element-dropdown`, `@react-native-picker/picker`, the native segmented control, `react-native-ui-datepicker`, `react-native-country-picker-modal`, `react-native-phone-number-input`, `rn-emoji-keyboard`, `@react-native-community/slider`, `react-native-otp-entry`, `react-native-ratings`, `@gorhom/bottom-sheet`, `react-native-modal`, `@expo/react-native-action-sheet`, `zeego` and more. [Comparison](https://react-native-pickers.dev/docs/resources/comparison) shows when to choose something else.
 
 ## Contributing
 

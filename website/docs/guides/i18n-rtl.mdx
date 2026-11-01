@@ -13,7 +13,11 @@ Every name the pickers display comes from the JavaScript `Intl` API for the `loc
 | --- | --- |
 | `Calendar` / `DatePicker` | Month title, weekday names, first day of week, day accessibility labels |
 | `DateWheelPicker` | Month names, column order (D/M/Y vs M/D/Y vs Y/M/D) |
-| `TimePicker` | 12h vs 24h, AM/PM labels |
+| `TimePicker` / `TimeRangePicker` | 12h vs 24h, AM/PM labels |
+| `DateTimePicker` | The day labels, plus the calendar and time as above |
+| `MonthPicker` | Month names |
+| `CountryPicker` / `PhoneField` | Country names, where the engine has them |
+| `TimeZonePicker` | Time zone names, where the engine has them |
 
 ```tsx live
 import { useState } from 'react';
@@ -55,12 +59,19 @@ Hermes can't list or name countries and time zones (`Intl.DisplayNames`, `Intl.s
 | --- | --- |
 | Picker sheets | `confirmLabel` (`Done`, `OK` in Material), `cancelLabel` (`Cancel`), `title` |
 | `SelectPicker` | `placeholder` (`Select…`), `label`, `sheetTitle`, `searchPlaceholder` (`Search`), `emptyText` (`No results`) |
-| `SelectList` | `searchPlaceholder`, `emptyText` |
+| `SelectList` | `searchPlaceholder`, `emptyText`, `loadingText` (`Loading…`), `searchPrompt` (`Type to search`) |
+| `CountryPicker` | `placeholder` (`Select a country`), `searchPlaceholder` (`Search countries`), `preferredLabel` (`Suggested`), `allCountriesLabel` (`All countries`) |
+| `PhoneField` | `label`, `countrySheetTitle` (`Country code`) |
+| `TimeZonePicker` | `placeholder` (`Select a time zone`), `searchPlaceholder` (`Search time zones`), `preferredLabel` (`Your time zone`), `allTimeZonesLabel` (`All time zones`) |
 | `EmojiPicker` | `searchPlaceholder` (`Search emoji`), `emptyText` (`No emoji found`), `categoryLabels` |
-| `TimePicker` | `dayPeriodLabels` (`[am, pm]`) |
+| `TimePicker` | `dayPeriodLabels` (from the locale) |
+| `TimeRangePicker` | `startLabel` (`Start`), `endLabel` (`End`) |
 | `DurationPicker` | `labels` (`h`, `min`, `s`) |
 | `ColorPicker` | `labels`: tab, slider and button names (`Grid`, `Hue`, `Opacity`, `Copy`…) |
 | `Calendar`, `WeekStrip` | `formatTitle` |
+| `ActionSheet` | `cancelLabel` (`Cancel`) |
+| `Slider` | `thumbLabels` (`Minimum`, `Maximum`) for screen readers |
+| `OtpField`, `Rating` | `accessibilityLabel` (`Verification code`, `Rating`) |
 
 ```tsx
 const { t } = useTranslation();

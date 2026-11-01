@@ -44,7 +44,7 @@ For a centered dialog, the default `react-native-modal` look, pass `presentation
 | `swipeDirection="down"` | `enableSwipeToClose` (default `true`) |
 | `swipeDirection` `up`, `left` or `right` | — |
 | no `onBackdropPress` | `closeOnBackdropPress={false}` |
-| `style={{ justifyContent: 'flex-end', margin: 0 }}` | the default (`presentation="bottomSheet"`) |
+| `style={{ justifyContent: 'flex-end', margin: 0 }}` | the default: a bottom sheet, or a centered modal on wide web windows (`presentation="bottomSheet"` keeps the sheet) |
 | a centered modal | `presentation="modal"` |
 | `backdropColor` / `backdropOpacity` | `styles={{ backdrop: { backgroundColor } }}`, or the theme's `backdrop` colour |
 | `animationIn` / `animationOut` / `animationInTiming` | slide up, or fade and rise as a modal; `theme={{ animation: { duration } }}` |

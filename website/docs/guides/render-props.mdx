@@ -11,8 +11,8 @@ When tokens and slots aren't enough, render props let you draw a part yourself. 
 | --- | --- | --- |
 | `WheelPicker` | `renderItem` | `({ item, index, selected, theme }) => ReactNode` |
 | `WheelPicker` | `renderIndicator` | `(theme) => ReactNode` |
-| `Calendar` / `DatePicker` | `renderDay` | `(state: DayState, theme) => ReactNode` |
-| `Calendar` / `DatePicker` | `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` |
+| `Calendar` / `DatePicker` / `WeekStrip` | `renderDay` | `(state: DayState, theme) => ReactNode` |
+| `Calendar` / `DatePicker` / `WeekStrip` | `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` |
 | `Calendar` / `DatePicker` | `formatTitle` | `(month: Date, locale?: string) => string` |
 | `SelectPicker` | `renderTrigger` | `({ open, selected, disabled, error }) => ReactNode` |
 | `SelectPicker` | `renderChevron` | `({ open, theme }) => ReactNode` |
@@ -20,9 +20,12 @@ When tokens and slots aren't enough, render props let you draw a part yourself. 
 | `SelectPicker` / `SelectList` | `renderGroupHeader` | `(group: string, theme) => ReactNode` |
 | `SelectPicker` / `SelectList` | `renderLoading` | `(theme) => ReactNode` |
 | `HorizontalList` | `renderItem` | `({ item, selected, disabled, theme }) => ReactNode` |
+| `HorizontalList` | `renderArrow` | `(side: 'left' \| 'right', disabled: boolean) => ReactNode` |
 | `*PickerField` / `PickerField` | `renderTrigger` | `({ open, displayValue, disabled, error }) => ReactNode` |
 | `*PickerField` / `PickerField` | `renderChevron` | `({ open, theme }) => ReactNode` |
 | `EmojiPicker` | `renderEmoji` | `(emoji: string, data: Emoji, size: number) => ReactNode` |
+| `Rating` | `renderIcon` | `({ index, filled, color, size }) => ReactNode` |
+| `Menu` | `children` | `ReactNode \| ({ open, visible }) => ReactNode` |
 | `MultiWheelPicker` | `separator` | `ReactNode \| (leftIndex) => ReactNode` |
 | `BottomSheet` | `title`, `headerLeft`, `headerRight`, `footer` | `ReactNode` |
 
@@ -129,7 +132,7 @@ export default function Example() {
           }}
         >
           <Text style={{ fontSize: selected ? 34 : 24 }}>
-            {moods[item.value - 1].icon}
+            {moods.find((m) => m.value === item.value)?.icon}
           </Text>
           <Text
             style={{

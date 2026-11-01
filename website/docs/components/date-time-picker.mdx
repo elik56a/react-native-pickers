@@ -58,7 +58,7 @@ export default function Example() {
 }
 ```
 
-Pass Calendar options (`markedDates`, `isDateDisabled`, `firstDayOfWeek`…) through `calendarProps`. The time wheels show 3 rows here to keep the control short; change that with `visibleItems`.
+Pass Calendar options (`markedDates`, `isDateDisabled`, `firstDayOfWeek`…) through `calendarProps`. Under the calendar, time wheels show 3 rows to keep the control short (the web's time columns show 5, and 9 beside the calendar); change that with `visibleItems`.
 
 ## Min and max
 
@@ -107,7 +107,7 @@ import { DateTimePickerSheet } from '@elik56a/react-native-pickers';
 <DateTimePickerSheet visible={open} onClose={() => setOpen(false)} title="Reminder" value={date} onConfirm={setDate} minDate={new Date()} />
 ```
 
-It takes the same props as `DateTimePicker`, plus the [sheet props](./picker-sheets). The picked value is only reported when the user taps **Done**.
+It takes the same props as `DateTimePicker` except `defaultValue` and `onChange`, plus the [shared sheet props](./picker-sheets#shared-props) and `onConfirm(date)`. The picked value is only reported when the user taps **Done**, like the other [picker sheets](./picker-sheets#how-drafts-work).
 
 ## In a form field
 
@@ -125,7 +125,7 @@ All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minute
 | --- | --- | --- | --- |
 | `value` | `Date` | — | Selected date and time (controlled). |
 | `defaultValue` | `Date` | now | Initial value when uncontrolled. |
-| `onChange` | `(date: Date) => void` | — | Fires when a wheel settles or a day is tapped. Receives a **new** `Date`. |
+| `onChange` | `(date: Date) => void` | — | Fires when the user picks a day or a time (a wheel settles, a day or time is tapped, a time is typed). Receives a **new** `Date`. |
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
 | `display` | `'wheel' \| 'calendar'` | `'wheel'` on iOS, `'calendar'` in Material and on the web | One row of wheels, or a calendar with the time. |
 | `timePosition` | `'beside' \| 'below'` | `'beside'` on the web, `'below'` in iOS and Material | Calendar display: the time beside the calendar or under it. Beside moves under the calendar when there is no room for both. |
@@ -134,7 +134,7 @@ All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minute
 | `maxDate` | `Date` | — | Latest selectable moment. |
 | `locale` | `string` | device | BCP 47 locale for day labels, clock format and the calendar. |
 | `formatDay` | `(date: Date, locale?: string) => string` | `Today`, `Tue, Oct 27` | Day wheel labels (wheel display). |
-| `calendarProps` | `Partial<CalendarBaseProps>` | — | Passed to the [Calendar](./date-picker#props) (calendar display). |
+| `calendarProps` | `Omit<CalendarBaseProps, 'locale' \| 'minDate' \| 'maxDate' \| 'theme' \| 'testID'>` | — | Passed to the [Calendar](./date-picker#calendar) (calendar display). `locale`, `minDate`, `maxDate`, `theme` and `testID` come from the picker. |
 | `itemHeight` | `number` | `40` | Row height. |
 | `visibleItems` | `number` | `5` (wheel); with the calendar `3` wheels or `5` web rows under it, `9` beside it | Visible rows. |
 | `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
@@ -143,3 +143,9 @@ All [TimePicker](./time-picker#props) wheel options apply too: `format`, `minute
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
 | `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
 | `testID` | `string` | — | Test ID. The wheels get `${testID}-day`, `-hour`, `-minute`… (in the calendar display: `-calendar`, `-time-hour`…). |
+
+## Related
+
+- [DatePicker](./date-picker): the calendar on its own
+- [TimePicker](./time-picker): the time on its own
+- [Picker fields](./picker-fields): a field that opens the picker in a sheet

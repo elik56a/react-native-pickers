@@ -106,6 +106,10 @@ export default function Example() {
 
 Each box is up to 56 wide and as tall as the design's fields, sharing the row's width, so six fit on the narrowest phone. Restyle any part with `styles`.
 
+## Accessibility
+
+Screen readers see one text field, named by `accessibilityLabel`, with the code as its value and the `error` message as its hint; the boxes are hidden from them, and a new error is announced. Typing, deleting and pasting work as in any field, with a hardware keyboard too.
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -123,13 +127,9 @@ Each box is up to 56 wide and as tall as the design's fields, sharing the row's 
 | `helperText` | `string` | — | Shown under the boxes, replaced by the `error` message. |
 | `accessibilityLabel` | `string` | `'Verification code'` | What screen readers call the field. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
-| `style` | `ViewStyle` | — | The field's container. |
+| `style` | `StyleProp<ViewStyle>` | — | The field's container. |
 | `styles` | `{ container, cell, focusedCell, filledCell, cellText, caret, helperText }` | — | [Slot styles](../guides/styling). `container` is the row of boxes; `helperText` the line under them. |
 | `testID` | `string` | — | On the text input; box `i` gets `${testID}-cell-${i}`. |
-
-## Accessibility
-
-Screen readers see one text field, named by `accessibilityLabel`, with the code as its value and the `error` message as its hint; the boxes are hidden from them, and a new error is announced. Typing, deleting and pasting work as in any field, with a hardware keyboard too.
 
 ## Related
 

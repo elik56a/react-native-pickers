@@ -1,6 +1,6 @@
 ---
 title: React Native Bottom Sheet Pickers
-description: "Ready-made React Native bottom-sheet pickers with Cancel / Done: DatePickerSheet, TimePickerSheet, DateTimePickerSheet, DurationPickerSheet, MonthPickerSheet, ColorPickerSheet, WheelPickerSheet, EmojiPickerSheet, useDraft, and the fields that open them."
+description: "Ready-made React Native picker sheets with Cancel / Done, as a bottom sheet or a modal: DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, and PickerSheet with useDraft to build your own."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -8,10 +8,12 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # Picker sheets
 
-Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with **Cancel / Done**: in the header beside the title on iOS, under the content with **OK** in Material, per the [design](../guides/designs). They all share the same "chrome" props and the same draft behaviour.
+Every React Native picker in this library is also available inside a [`BottomSheet`](./bottom-sheet) with **Cancel / Done**: in the header beside the title on iOS, under the content in Material (as **OK**) and on the web, per the [design](../guides/designs). They all share the same "chrome" props and the same draft behaviour.
+
+This page covers `DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet` and the `PickerSheet` building block. The other sheets are on their picker's page: [`DateTimePickerSheet`](./date-time-picker#in-a-sheet), [`TimeRangePickerSheet`](./time-range-picker#in-a-sheet-or-a-field), [`DurationPickerSheet`](./duration-picker#in-a-sheet), [`MonthPickerSheet`](./month-picker#in-a-sheet) and [`ColorPickerSheet`](./color-picker#in-a-sheet).
 
 :::tip Opening a sheet from a form field?
-You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
+You don't need your own button and `visible` state. [Picker fields](./picker-fields) (`DatePickerField`, `TimePickerField`, `TimeRangePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`) take the same props without `visible`/`onClose`, render a field that opens the sheet, and show the confirmed value.
 :::
 
 ## Inline, bottom sheet or modal
@@ -30,7 +32,7 @@ The sheets take `presentation`: `'auto'` (default), `'bottomSheet'` or `'modal'`
 <TimePickerSheet presentation="modal" visible={open} onClose={close} value={time} onConfirm={setTime} />
 ```
 
-[`SelectPicker`](./select-picker#presentation) and the [fields](./picker-fields#dropdown-bottom-sheet-modal-or-inline) also support `'dropdown'`, which opens under the field, and `'inline'`, which expands under it. It's `SelectPicker`'s default on the web.
+[`SelectPicker`](./select-picker#presentation) and the [fields](./picker-fields#dropdown-bottom-sheet-modal-or-inline) also support `'dropdown'`, which opens under the field, and `'inline'`, which expands under it. There, `'auto'` opens a dropdown on the web.
 
 ```tsx
 import { DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, PickerSheet, useDraft } from '@elik56a/react-native-pickers';
@@ -47,30 +49,11 @@ import { DatePickerSheet, TimePickerSheet, WheelPickerSheet, EmojiPickerSheet, P
 3. **Done** calls `onConfirm(draft)` and then `onClose()`.
 4. **Cancel**, a backdrop tap, a swipe down or Android back calls only `onClose()`, and the draft is thrown away.
 
-Your state changes only when the user confirms, which is how native iOS / Android pickers behave.
-
-## Shared props
-
-All sheets accept these (`SheetChromeProps`):
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | **required** | Show / hide. |
-| `onClose` | `() => void` | **required** | Set `visible` to `false` here. |
-| `title` | `ReactNode` | — | Header title. |
-| `confirmLabel` | `string` | `'Done'` · `'OK'` Material | Confirm button text. |
-| `cancelLabel` | `string` | `'Cancel'` | Cancel button text. |
-| `showCancel` | `boolean` | `true` (`false` for emoji) | Show the Cancel button. |
-| `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. `auto`: modal on wide web windows, bottom sheet elsewhere. |
-| `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [BottomSheet](./bottom-sheet#props) (`height`, `bottomInset`, `styles`, `enableSwipeToClose`…). |
-| `theme` | `DeepPartial<PickerTheme>` | — | Theme for the sheet and the picker. |
-| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
-
----
+Your state changes only when the user confirms, which is how native iOS / Android pickers behave. The exception is a [field](./picker-fields#dropdown-bottom-sheet-modal-or-inline) set to `presentation="inline"`: it has no **Done**, so each change is confirmed right away.
 
 ## DatePickerSheet
 
-A calendar (single, range, multiple) or date wheel in a sheet.
+A calendar (single, range, multiple or ranges) or a date wheel in a sheet. Props: [DatePickerSheet props](#datepickersheet-props).
 
 ```tsx live
 import { useState } from 'react';
@@ -168,28 +151,11 @@ export default function Example() {
 - **Done is disabled** until the selection is complete: a date in single mode, both `start` and `end` in range mode, no half-picked range in ranges mode. Multiple and ranges modes can confirm an empty array.
 - **`confirmOnSelect`** (single + calendar only) hides Done and confirms as soon as a day is tapped.
 - **`display="wheel"`** shows a [DateWheelPicker](./date-wheel-picker) (single mode). The draft starts at `value` or today. `locale`, `minDate` and `maxDate` are forwarded; pass other wheel props via `wheelProps`.
-
-### Props
-
-Shared props, plus every [calendar prop](./date-picker#calendar) (`minDate`, `maxDate`, `isDateDisabled`, `markedDates`, `locale`, `firstDayOfWeek`, `styles`, `renderDay`…), plus:
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `mode` | `'single' \| 'range' \| 'multiple' \| 'ranges'` | `'single'` | Selection mode. |
-| `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Current committed value; copied into the draft on open. |
-| `onConfirm` | `(date: Date)` · `(range: DateRange)` · `(dates: Date[])` · `(ranges: DateRange[])` `=> void` | **required** | Called with the draft on Done. |
-| `minRangeDays` / `maxRangeDays` | `number` | — | Range and ranges modes. |
-| `presets` | `DateRangePreset[]` | — | Range mode: chips that pick a whole range, such as [`getRangePresets()`](./date-range-picker#presets). |
-| `presetsProps` | `RangePresetsListProps` | — | Range mode: [`HorizontalList`](./horizontal-list#props) props for the presets row. |
-| `maxSelections` | `number` | — | Multiple mode. |
-| `maxRanges` | `number` | — | Ranges mode. |
-| `display` | `'calendar' \| 'wheel'` | `'calendar'` | Wheel is single mode only. |
-| `wheelProps` | `Partial<DateWheelPickerProps>` | — | Extra props for the wheel. |
-| `confirmOnSelect` | `boolean` | `false` | Single calendar: confirm on tap, no Done button. |
-
----
+- In the Material design, the picked date or range shows in large type above the calendar.
 
 ## TimePickerSheet
+
+A [TimePicker](./time-picker) in a sheet. Props: [TimePickerSheet props](#timepickersheet-props).
 
 ```tsx live
 import { useState } from 'react';
@@ -223,16 +189,9 @@ export default function Example() {
 }
 ```
 
-Props: shared props, every [TimePicker prop](./time-picker#props) except `value`/`defaultValue`/`onChange`, plus:
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `Date` | now | Copied into the draft on open. |
-| `onConfirm` | `(date: Date) => void` | **required** | Called with the draft on Done. |
-
----
-
 ## WheelPickerSheet
+
+A [WheelPicker](./wheel-picker) in a sheet. Props: [WheelPickerSheet props](#wheelpickersheet-props).
 
 ```tsx live
 import { useState } from 'react';
@@ -273,18 +232,9 @@ export default function Example() {
 }
 ```
 
-Props: shared props, every [WheelPicker prop](./wheel-picker#props) except `value`/`defaultValue`/`onChange`, plus:
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `T` | first item | Copied into the draft on open. |
-| `onConfirm` | `(value: T) => void` | **required** | Called with the draft on Done. |
-
----
-
 ## EmojiPickerSheet
 
-No Done button: each pick calls `onSelect`, and the sheet closes unless `closeOnSelect={false}`.
+No Done button: each pick calls `onSelect`, and the sheet closes unless `closeOnSelect={false}`. Props: [EmojiPickerSheet props](#emojipickersheet-props).
 
 ```tsx live
 import { useState } from 'react';
@@ -333,19 +283,9 @@ export default function Example() {
 }
 ```
 
-Props: shared props, every [EmojiPicker prop](./emoji-picker#props), plus:
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `closeOnSelect` | `boolean` | `true` | Close after a pick. |
-| `height` | `number` | `420` | Picker height inside the sheet. |
-| `showCancel` | `boolean` | `false` | Show a Cancel button. |
-
----
-
 ## PickerSheet
 
-The building block: a `BottomSheet` with Cancel on the left and (when you pass `onConfirm`) Done on the right. Use it to build sheets for your own pickers.
+The building block: a `BottomSheet` with Cancel and, when you pass `onConfirm`, Done, placed where the design puts them. Use it to build sheets for your own pickers. Props: [PickerSheet props](#pickersheet-props).
 
 ```tsx live
 import { useState } from 'react';
@@ -407,13 +347,6 @@ export default function Example() {
 }
 ```
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `children` | `ReactNode` | **required** | Sheet content. |
-| `onConfirm` | `() => void` | — | Shows the confirm button. **You** close the sheet (call `onClose` / set `visible`). |
-| `confirmDisabled` | `boolean` | `false` | Disable the confirm button. |
-| …shared props | | | `visible`, `onClose`, `title`, `confirmLabel`, `cancelLabel`, `showCancel`, `sheetProps`, `theme`. |
-
 ## `useDraft`
 
 ```ts
@@ -427,3 +360,79 @@ function useDraft<V>(
 Returns a draft copy of `value` that **resets to `value` each time `visible` turns true** (and whenever `resetKey` changes). It's the hook the built-in sheets use; use it for your own `PickerSheet`s as shown above.
 
 Inside a [`PickerField`](./picker-fields#dropdown-bottom-sheet-modal-or-inline) set to `presentation="inline"` there's no **Done** button, so `setDraft` also calls `commit` with each change. Pass your save function there to support inline: `useDraft(prefs, visible, { commit: onSave })`.
+
+## Props
+
+### Shared props
+
+All sheets accept these (`SheetChromeProps`):
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `visible` | `boolean` | **required** | Show / hide. |
+| `onClose` | `() => void` | **required** | Set `visible` to `false` here. |
+| `title` | `ReactNode` | — | Header title. |
+| `confirmLabel` | `string` | `'Done'` · `'OK'` Material | Confirm button text. |
+| `cancelLabel` | `string` | `'Cancel'` | Cancel button text. |
+| `showCancel` | `boolean` | `true` (`false` for emoji) | Show the Cancel button. |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. `auto`: modal on wide web windows, bottom sheet elsewhere. |
+| `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [BottomSheet](./bottom-sheet#props) (`height`, `bottomInset`, `styles`, `enableSwipeToClose`…). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme for the sheet and the picker. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+
+### DatePickerSheet props
+
+Shared props, plus every [calendar prop](./date-picker#calendar) (`minDate`, `maxDate`, `isDateDisabled`, `markedDates`, `locale`, `firstDayOfWeek`, `styles`, `renderDay`…), plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `mode` | `'single' \| 'range' \| 'multiple' \| 'ranges'` | `'single'` | Selection mode. |
+| `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Current committed value; copied into the draft on open. |
+| `onConfirm` | `(date: Date)` · `(range: DateRange)` · `(dates: Date[])` · `(ranges: DateRange[])` `=> void` | **required** | Called with the draft on Done. |
+| `minRangeDays` / `maxRangeDays` | `number` | — | Range and ranges modes. |
+| `presets` | `DateRangePreset[]` | — | Range mode: chips that pick a whole range, such as [`getRangePresets()`](./date-range-picker#presets). |
+| `presetsProps` | `RangePresetsListProps` | — | Range mode: [`HorizontalList`](./horizontal-list#props) props for the presets row. |
+| `maxSelections` | `number` | — | Multiple mode. |
+| `maxRanges` | `number` | — | Ranges mode. |
+| `display` | `'calendar' \| 'wheel'` | `'calendar'` | Wheel is single mode only. |
+| `wheelProps` | `Partial<DateWheelPickerProps>` | — | Extra props for the wheel. |
+| `confirmOnSelect` | `boolean` | `false` | Single calendar: confirm on tap, no Done button. |
+
+### TimePickerSheet props
+
+Shared props, every [TimePicker prop](./time-picker#props) except `value`/`defaultValue`/`onChange`, plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `Date` | now | Copied into the draft on open. |
+| `onConfirm` | `(date: Date) => void` | **required** | Called with the draft on Done. |
+
+### WheelPickerSheet props
+
+Shared props, every [WheelPicker prop](./wheel-picker#props) except `value`/`defaultValue`/`onChange`, plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `T` | first item | Copied into the draft on open. |
+| `onConfirm` | `(value: T) => void` | **required** | Called with the draft on Done. |
+
+### EmojiPickerSheet props
+
+Shared props, every [EmojiPicker prop](./emoji-picker#props), plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `closeOnSelect` | `boolean` | `true` | Close after a pick. |
+| `height` | `number` | `420` | Picker height inside the sheet. |
+| `showCancel` | `boolean` | `false` | Show a Cancel button. |
+
+### PickerSheet props
+
+Shared props, plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | **required** | Sheet content. |
+| `onConfirm` | `() => void` | — | Shows the confirm button. **You** close the sheet (call `onClose` / set `visible`). |
+| `confirmDisabled` | `boolean` | `false` | Disable the confirm button. |
+| `presentation` | `'auto' \| 'bottomSheet' \| 'modal' \| 'dropdown' \| 'inline'` | the field's, else `'auto'` | Inside a [field](./picker-fields#your-own-sheet-pickerfield), it follows the field's presentation. |

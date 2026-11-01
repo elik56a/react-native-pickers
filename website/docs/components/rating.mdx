@@ -90,6 +90,10 @@ export default function Example() {
 
 Colour your icon with the `color` it receives: the filled stars get `color` (gold by default) and the empty ones `emptyColor` (the theme's border colour).
 
+## Accessibility
+
+The row is one adjustable control, as a slider is: swipe up or down with VoiceOver or TalkBack to change the rating by a step. On the web, arrow keys step it, and Home and End go to 0 and to `max`. With `readOnly`, it's text: the label and the score.
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -108,9 +112,11 @@ Colour your icon with the `color` it receives: the filled stars get `color` (gol
 | `formatValue` | `(value: number, max: number) => string` | `'3 of 5'` | The value as screen readers hear it. |
 | `accessibilityLabel` | `string` | `'Rating'` | What screen readers call the rating. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
-| `style` | `ViewStyle` | — | The row. It stretches with its parent like any `View`, the stars at its start; taps after the last star do nothing. Centre it with `alignSelf: 'center'`. |
+| `style` | `StyleProp<ViewStyle>` | — | The row. It stretches with its parent like any `View`, the stars at its start; taps after the last star do nothing. Centre it with `alignSelf: 'center'`. |
 | `styles` | `{ container, item, icon }` | — | [Slot styles](../guides/styling): the row, each star's box, and the ★ text. |
 | `testID` | `string` | — | On the row; star `i` gets `${testID}-star-${i}`. |
+
+### Types
 
 ```ts
 interface RatingIconInfo {
@@ -120,10 +126,6 @@ interface RatingIconInfo {
   size: number;
 }
 ```
-
-## Accessibility
-
-The row is one adjustable control, as a slider is: swipe up or down with VoiceOver or TalkBack to change the rating by a step. On the web, arrow keys step it, and Home and End go to 0 and to `max`. With `readOnly`, it's text: the label and the score.
 
 ## Related
 

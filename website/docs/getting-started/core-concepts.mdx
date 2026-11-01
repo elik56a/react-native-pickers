@@ -9,7 +9,7 @@ Every component follows the same handful of conventions. Learn them once and you
 
 ## Controlled and uncontrolled
 
-Wheels, time, date and emoji state can be used either way:
+Most pickers can be used either way:
 
 ```tsx
 // Controlled: you own the state
@@ -26,9 +26,10 @@ const [date, setDate] = useState(new Date());
 | `TimePicker` | `value` | `defaultValue` (default: now) |
 | `DatePicker` / `Calendar` | `value` | `defaultValue` |
 | `DateWheelPicker` | `value` | `defaultValue` (default: today) |
+| `TimeRangePicker`, `DateTimePicker`, `DurationPicker`, `MonthPicker`, `WeekStrip`, `ColorPicker`, `Slider`, `Rating`, `OtpField`, `PhoneField` | `value` | `defaultValue` |
 | `EmojiPicker` skin tone | `skinTone` | `defaultSkinTone` |
 | `EmojiPicker` recents | `recent` | `defaultRecent` |
-| `SelectPicker` / `SelectList` | `value` | — (always controlled) |
+| `SelectPicker` / `SelectList` / `CountryPicker` / `TimeZonePicker` | `value` | — (always controlled) |
 | `HorizontalList` | `value` | — (always controlled) |
 
 :::caution Select is controlled-only
@@ -39,12 +40,12 @@ Setting `value` from outside (for example, a "Reset" button) moves the component
 
 ## `onChange` vs `onValueChanging`
 
-Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `DateWheelPicker`) fire two callbacks:
+Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `DateWheelPicker`, `DateTimePicker`, `DurationPicker`) and `Slider` fire two callbacks:
 
 | Callback | When | Use it for |
 | --- | --- | --- |
-| `onChange` | Once, after the wheel **settles** on a new value | Updating state, saving |
-| `onValueChanging` | On **every row crossing** while scrolling | Haptics, live previews |
+| `onChange` | Once, after the wheel **settles** on a new value, or the slider is let go | Updating state, saving |
+| `onValueChanging` | On **every row crossing** while scrolling, or every step while dragging | Haptics, live previews |
 
 ```tsx
 <WheelPicker
@@ -57,7 +58,7 @@ Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `D
 
 ## Sheets and drafts
 
-`DatePickerSheet`, `TimePickerSheet` and `WheelPickerSheet` wrap a picker in a [`BottomSheet`](../components/bottom-sheet) with **Cancel** and **Done**:
+Every picker sheet (`DatePickerSheet`, `TimePickerSheet`, `WheelPickerSheet` and the others) wraps a picker in a [`BottomSheet`](../components/bottom-sheet) with **Cancel** and **Done**:
 
 - The sheet copies `value` into a **draft** each time it opens.
 - Scrolling or tapping changes only the draft.
@@ -72,7 +73,7 @@ Wheel-based pickers (`WheelPicker`, `MultiWheelPicker` columns, `TimePicker`, `D
 
 ## Fields
 
-In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields). The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field. By default it opens a bottom sheet on iOS and Android and a dropdown under the field on the web; `presentation` picks `'bottomSheet'`, `'modal'`, `'dropdown'` or `'inline'` (expanded in place under the field).
+In a form, the picker hides behind a field. `SelectPicker` is one, and every sheet has a field version that takes the same props without `visible` / `onClose`: [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField`, `EmojiPickerField`](../components/picker-fields), and `TimeRangePickerField`, `DurationPickerField`, `MonthPickerField` and `ColorPickerField`. The field owns the open state, shows the confirmed value formatted for `locale`, and looks the same as `SelectPicker`'s field. By default it opens a bottom sheet on iOS and Android and a dropdown under the field on the web; `presentation` picks `'bottomSheet'`, `'modal'`, `'dropdown'` or `'inline'` (expanded in place under the field).
 
 ```tsx
 <TimePickerField label="Alarm" value={time} onConfirm={setTime} />
@@ -130,7 +131,8 @@ When styles aren't enough, replace a part entirely:
 | `WheelPicker` | `renderItem`, `renderIndicator` |
 | `DatePicker` / `Calendar` | `renderDay`, `renderArrow`, `formatTitle` |
 | `SelectPicker` / `SelectList` | `renderTrigger`, `renderOption`, `renderGroupHeader`, `renderLoading` |
-| `HorizontalList` | `renderItem` |
+| `HorizontalList` | `renderItem`, `renderArrow` |
+| `Rating` | `renderIcon` |
 | `EmojiPicker` | `renderEmoji`, `categoryIcons` |
 | `*PickerField` / `PickerField` | `renderTrigger`, `renderChevron` |
 

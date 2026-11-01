@@ -149,7 +149,7 @@ Each [design](../guides/designs) has its own default:
 | `'wheel'` | iOS | Hour, minute and AM/PM wheels |
 | `'dial'` | Material | The time in large type above a clock dial. Tap or drag to the hour, lift, then the minutes; tap the hours or minutes above to switch. 24h dials have 1–12 outside and 00, 13–23 on an inner ring. The keyboard button under the dial switches to typing the hours and minutes |
 | `'input'` | | Material's time input: the hour and minute fields to type into, without the dial. Compact, so `DateTimePicker` uses it under a Material calendar |
-| `'list'` | web | Hours, minutes (and seconds) and AM/PM side by side in a bordered panel, each a column of cells to click, the chosen one kept at the top |
+| `'list'` | web | Hours, minutes (and seconds) and AM/PM side by side in a bordered panel, each a column of cells to click, the chosen one kept in the middle |
 
 ```tsx
 <TimePicker value={time} onChange={setTime} display="dial" minuteInterval={5} />
@@ -193,7 +193,7 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 | --- | --- | --- | --- |
 | `value` | `Date` | — | Selected time (controlled). The date part is preserved. |
 | `defaultValue` | `Date` | now | Initial time when uncontrolled. |
-| `onChange` | `(date: Date) => void` | — | Fires when any wheel settles. Receives a **new** `Date`. |
+| `onChange` | `(date: Date) => void` | — | Fires when the user changes the time. Receives a **new** `Date`. |
 | `onValueChanging` | `(date: Date) => void` | — | Fires on every tick while scrolling (haptics). |
 | `format` | `'12h' \| '24h' \| 'auto'` | `'auto'` | Clock format; `'auto'` reads it from `locale`. |
 | `locale` | `string` | device | BCP 47 locale, e.g. `'en-US'`, `'he-IL'`. |
@@ -207,12 +207,12 @@ import { TimePickerSheet } from '@elik56a/react-native-pickers';
 | `padHours` | `boolean` | `true` for 24h, `false` for 12h | Zero-pad the hour labels. |
 | `dayPeriodLabels` | `[string, string]` | from locale | `[am, pm]` labels. |
 | `dayPeriodFirst` | `boolean` | `false` | Put the AM/PM wheel before the hours. |
-| `separator` | `ReactNode` | `':'` | Shown between hours, minutes and seconds (not next to AM/PM). |
-| `itemHeight` | `number` | `40` | Row height. |
-| `visibleItems` | `number` | `5` | Visible rows. |
+| `separator` | `ReactNode` | `':'` | Shown between the hour, minute and second wheels (not next to AM/PM). |
+| `itemHeight` | `number` | `40` | Wheel row height. |
+| `visibleItems` | `number` | `5`, or `7` in the list | Visible wheel rows, or cells in each `list` column. |
 | `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
-| `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots). |
+| `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots), for the wheels. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
 | `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
 | `testID` | `string` | — | Test ID. |

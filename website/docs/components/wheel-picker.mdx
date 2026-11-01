@@ -337,6 +337,19 @@ import * as Haptics from 'expo-haptics';
 
 → [Picker fields](./picker-fields)
 
+## Behaviour notes
+
+- `onChange` fires only when the settled value **differs** from the last committed one. Scrolling away and back doesn't fire it.
+- Scrolling with momentum fires `onChange` once, after momentum ends.
+- A wheel with `loop` and very few items repeats the list enough times (at least 7 copies, and about 240 rows either side) for smooth flinging.
+- Rows are memoized; while scrolling only the two rows whose selected state changes re-render.
+
+## Accessibility
+
+The wheel is a single `adjustable` element. VoiceOver and TalkBack users swipe up / down to move one row (the `increment` / `decrement` actions), and the current label is announced as the value. Pass `accessibilityLabel` to name it ("Size").
+
+On the web, a focused wheel steps one row with the arrow keys and jumps to the first or last row with Home and End. See the [accessibility guide](../guides/accessibility).
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -385,17 +398,6 @@ type WheelItemInput<T> = WheelItem<T> | (T extends string | number ? T : never);
 type WheelPickerSlot = 'container' | 'item' | 'itemText' | 'selectedItemText' | 'disabledItemText' | 'indicator';
 interface WheelRenderItemInfo<T> { item: WheelItem<T>; index: number; selected: boolean; theme: PickerTheme }
 ```
-
-## Behaviour notes
-
-- `onChange` fires only when the settled value **differs** from the last committed one. Scrolling away and back doesn't fire it.
-- Scrolling with momentum fires `onChange` once, after momentum ends.
-- A wheel with `loop` and very few items repeats the list enough times (at least 7 copies, about 240 rows) for smooth flinging.
-- Rows are memoized; while scrolling only the two rows whose selected state changes re-render.
-
-## Accessibility
-
-The wheel is a single `adjustable` element. VoiceOver and TalkBack users swipe up / down to move one row (the `increment` / `decrement` actions), and the current label is announced as the value. Pass `accessibilityLabel` to name it ("Size").
 
 ## Related
 

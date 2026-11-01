@@ -124,15 +124,24 @@ import { PickersProvider } from '@elik56a/react-native-pickers/core';
 
 | Subpath | Exports |
 | --- | --- |
-| `/wheel` | `WheelPicker`, `MultiWheelPicker`, `WheelPickerSheet` |
-| `/time` | `TimePicker`, `TimePickerSheet` |
-| `/date` | `DatePicker`, `DateWheelPicker`, `DatePickerSheet` |
-| `/calendar` | `Calendar` |
-| `/datetime` | `DateTimePicker`, `DateTimePickerSheet` |
-| `/select` | `SelectPicker`, `SelectList` |
+| `/wheel` | `WheelPicker`, `MultiWheelPicker`, `WheelPickerSheet`, `WheelPickerField` |
+| `/time` | `TimePicker`, `TimeRangePicker`, their sheets and fields, time range utils |
+| `/duration` | `DurationPicker`, `DurationPickerSheet`, `DurationPickerField`, `formatDuration` |
+| `/date` | `DatePicker`, `DateWheelPicker`, `DatePickerSheet`, `DatePickerField` |
+| `/calendar` | `Calendar`, `WeekStrip`, `getRangePresets`, `CALENDAR_MODE` |
+| `/month` | `MonthPicker`, `MonthPickerSheet`, `MonthPickerField` |
+| `/datetime` | `DateTimePicker`, `DateTimePickerSheet`, `DateTimePickerField` |
+| `/select` | `SelectPicker`, `SelectList`, `defaultFilter` |
+| `/country` | `CountryPicker`, `PhoneField`, country and phone utils |
+| `/timezone` | `TimeZonePicker`, time zone utils |
 | `/list` | `HorizontalList` |
-| `/emoji` | `EmojiPicker`, `EmojiPickerSheet`, emoji utils |
-| `/sheet` | `BottomSheet`, `PickerSheet`, `useDraft` |
+| `/emoji` | `EmojiPicker`, `EmojiPickerSheet`, `EmojiPickerField`, emoji utils |
+| `/color` | `ColorPicker`, `ColorPickerSheet`, `ColorPickerField`, colour utils |
+| `/slider` | `Slider` |
+| `/rating` | `Rating` |
+| `/otp` | `OtpField` |
+| `/action` | `Menu`, `ActionSheet`, `useActionSheet` |
+| `/sheet` | `BottomSheet`, `PickerSheet`, `PickerField`, `useDraft` |
 | `/core` | `PickersProvider`, themes, date utils |
 
 Each subpath also exports its types. Subpaths need React Native 0.79+ (Expo SDK 53+), where Metro reads package `exports` by default. On older versions, set `resolver.unstable_enablePackageExports = true` in `metro.config.js` or keep the root import.

@@ -8,7 +8,7 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # Time ranges
 
-`TimeRangePicker` picks a start and an end time: opening hours, a shift, quiet hours. Both ends show their time as each platform does: **Starts** and **Ends** rows on iOS, as in Calendar, with the wheels opening under the row you tap; large time boxes on Material; side-by-side cards on the web, with the range's length between them. One [`TimePicker`](./time-picker) edits the end that's chosen, as wheels, a clock dial or a list, the same as `TimePicker` in each [design](../guides/designs).
+`TimeRangePicker` picks a start and an end time: opening hours, a shift, quiet hours. Both ends show their time as each platform does: **Start** and **End** rows on iOS, as in Calendar, with the wheels opening under the row you tap; large time boxes on Material and side-by-side cards on the web, with an arrow and the range's length between them. One [`TimePicker`](./time-picker) edits the end that's chosen, as wheels, a clock dial or a list, the same as `TimePicker` in each [design](../guides/designs).
 
 ```tsx
 import { TimeRangePicker, TimeRangePickerField, TimeRangePickerSheet } from '@elik56a/react-native-pickers';
@@ -100,6 +100,10 @@ export default function Example() {
 />
 ```
 
+## Accessibility
+
+The two ends are a radio group named "Start or end", and each end reads its label and time, such as "End 07:00 +1". The time picker below it has [TimePicker's accessibility](./time-picker).
+
 ## Props
 
 `TimeRangePicker` takes every [`TimePicker` prop](./time-picker#props) except `value`, `defaultValue`, `onChange` and `onValueChanging`, such as `display`, `format`, `minuteInterval` and `minTime` / `maxTime`, which apply to both ends. Plus:
@@ -107,7 +111,7 @@ export default function Example() {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `value` | `TimeRange` (`{ start: Date; end: Date }`) | — | The range (controlled). The end is on the start's day, or the next day for an overnight range. |
-| `defaultValue` | `TimeRange` | from now, for an hour | Initial range when uncontrolled. |
+| `defaultValue` | `TimeRange` | from now, for an hour | Initial range when uncontrolled. The hour is kept within `minDuration` and `maxDuration`. |
 | `onChange` | `(range: TimeRange) => void` | — | Fires when the user moves either end. |
 | `minDuration` | `number` | `0` | Shortest range, in minutes. |
 | `maxDuration` | `number` | — | Longest range, in minutes. |
@@ -115,10 +119,6 @@ export default function Example() {
 | `startLabel` / `endLabel` | `string` | `'Start'` / `'End'` | The ends' labels. |
 
 `TimeRangePickerSheet` takes the same props, with `onConfirm(range)` in place of `onChange` and without `defaultValue`, plus the [sheet props](./picker-sheets#shared-props) such as `visible` and `onClose`. `TimeRangePickerField` takes the sheet's props and the [field props](./picker-fields#props).
-
-## Accessibility
-
-The two ends are a radio group named "Start or end", and each end reads its label and time, such as "End 07:00 +1". The time picker below it has [TimePicker's accessibility](./time-picker).
 
 ## Related
 

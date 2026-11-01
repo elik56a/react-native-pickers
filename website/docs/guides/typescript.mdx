@@ -50,15 +50,20 @@ Passing a `DateRange` without `mode="range"` is a type error.
 ```ts
 import type {
   // theme
-  PickerTheme, DeepPartial, PickersProviderProps, ThemableProps, SlotStyles,
+  PickerTheme, DeepPartial, PickersProviderProps, ThemableProps, SlotStyles, Design, DesignPreference, Locale,
   // wheel
   WheelPickerProps, WheelItem, WheelItemInput, WheelPickerSlot, WheelRenderItemInfo,
   MultiWheelPickerProps, WheelColumn, MultiWheelSlot,
   // time / date
-  TimePickerProps,
+  TimePickerProps, TimeRange, TimeRangePickerProps,
   DatePickerProps, CalendarProps, CalendarBaseProps, CalendarSelectionProps, CalendarSlot,
-  DateRange, MarkedDate, DayState, DateWheelPickerProps, DatePart,
+  DateRange, DateRangePreset, RangePresetsListProps, MarkedDate, DayState, DateWheelPickerProps, DatePart,
+  DateTimePickerProps, DateTimeCalendarProps, DateTimeDisplay, TimePosition,
   WeekStripProps, DurationPickerProps, DurationLabels, MonthPickerProps, MonthPickerSlot, MonthDisplay,
+  // country, phone, time zone
+  CountryPickerProps, Country, CountryCode, CountryListOptions,
+  PhoneFieldProps, PhoneFieldSlot, ParsedPhone, PhoneDetails,
+  TimeZonePickerProps, TimeZone, TimeZoneListOptions,
   // color
   ColorPickerProps, ColorPickerSlot, ColorOption, ColorDisplay, ColorLabels,
   // slider
@@ -69,7 +74,7 @@ import type {
   OtpFieldProps, OtpFieldSlot, OtpInputMode,
   // select
   SelectPickerProps, SelectListProps, SelectListBaseProps, SelectValueProps,
-  SelectOption, SelectSlot, SelectTriggerSlot, SelectTriggerInfo, SelectRenderOptionInfo,
+  SelectOption, SelectSlot, SelectTriggerSlot, SelectTriggerInfo, SelectRenderOptionInfo, SelectChevronInfo,
   // horizontal list
   HorizontalListProps, HorizontalListItem, HorizontalListIconInfo, HorizontalListIconPosition, HorizontalListVariant,
   HorizontalListArrowPosition, HorizontalListArrowSide,
@@ -80,11 +85,12 @@ import type {
   ActionSheetProps, ActionSheetAction, ActionSheetSlot, ActionSheetOptions, ActionSheetController,
   MenuProps, MenuAction, MenuAlign, MenuPresentation, MenuSlot, MenuTriggerInfo,
   BottomSheetProps, BottomSheetSlot, SheetChromeProps, SheetPresentation, SelectPresentation, PickerSheetProps,
-  DatePickerSheetProps, TimePickerSheetProps, DateTimePickerSheetProps, WheelPickerSheetProps, EmojiPickerSheetProps,
+  DatePickerSheetProps, TimePickerSheetProps, TimeRangePickerSheetProps, DateTimePickerSheetProps, WheelPickerSheetProps, EmojiPickerSheetProps,
   DurationPickerSheetProps, MonthPickerSheetProps, ColorPickerSheetProps,
   // fields
   PickerFieldProps, PickerFieldBaseProps, PickerFieldSlot, PickerFieldTriggerInfo, ChevronInfo, WithPickerField,
-  DatePickerFieldProps, TimePickerFieldProps, DateTimePickerFieldProps, WheelPickerFieldProps, EmojiPickerFieldProps,
+  FieldPresentation, FieldError, FieldStatusProps,
+  DatePickerFieldProps, TimePickerFieldProps, TimeRangePickerFieldProps, DateTimePickerFieldProps, WheelPickerFieldProps, EmojiPickerFieldProps,
   DurationPickerFieldProps, MonthPickerFieldProps, ColorPickerFieldProps,
 } from '@elik56a/react-native-pickers';
 ```

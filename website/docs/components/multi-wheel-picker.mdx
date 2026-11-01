@@ -8,7 +8,7 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 # MultiWheelPicker
 
-`MultiWheelPicker` puts several React Native [`WheelPicker`](./wheel-picker)s side by side, sharing **one** selection band, the way iOS shows time and date wheels. `TimePicker` and `DateWheelPicker` are built on it. Use it for durations, heights, weights, currency + amount, or anything multi-column.
+`MultiWheelPicker` puts several React Native [`WheelPicker`](./wheel-picker)s side by side, sharing **one** selection band, the way iOS shows time and date wheels. The wheels of `TimePicker`, `DurationPicker` and `DateWheelPicker` are built on it. Use it for durations, heights, weights, currency + amount, or anything multi-column.
 
 ```tsx
 import { MultiWheelPicker } from '@elik56a/react-native-pickers';
@@ -217,5 +217,5 @@ type MultiWheelSlot = 'container' | 'indicator' | 'separator' | WheelPickerSlot;
 
 ## Related
 
-- [TimePicker](./time-picker) and [DateWheelPicker](./date-wheel-picker) are pre-built `MultiWheelPicker`s
+- [TimePicker](./time-picker), [DurationPicker](./duration-picker) and [DateWheelPicker](./date-wheel-picker) use `MultiWheelPicker` for their wheels
 - [Duration recipe](../recipes/duration)

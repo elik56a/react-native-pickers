@@ -79,7 +79,7 @@ Hermes, React Native's default engine, can't list time zones, so the list ships 
 | Export | Description |
 | --- | --- |
 | `getDeviceTimeZone()` | The device's zone, e.g. `'Europe/Lisbon'`, or `undefined` |
-| `getTimeZoneOffset(id, date?)` | Minutes ahead of UTC at `date` (default: now), e.g. `330` for `'Asia/Kolkata'` |
+| `getTimeZoneOffset(id, date?)` | Minutes ahead of UTC at `date` (default: now), e.g. `330` for `'Asia/Kolkata'`, or `null` where the engine can't tell |
 | `formatGmtOffset(minutes)` | `330` → `'GMT+5:30'`, `0` → `'GMT'` |
 | `getTimeZoneName(id, locale?, date?)` | `'Central European Summer Time'`, where the engine has names |
 | `normalizeTimeZone(id)` | `'Asia/Calcutta'` → `'Asia/Kolkata'` |
@@ -100,9 +100,15 @@ Every [`SelectPicker` prop](./select-picker#props) works, apart from the server 
 | `timeZones` | `string[]` | all | Only these zones. |
 | `preferred` | `string[]` | the device's zone | Shown first, in this order, under their own header. `[]` pins none. |
 | `preferredLabel` | `string` | `'Your time zone'` | Header above `preferred`. |
-| `allTimeZonesLabel` | `string` | `'All time zones'` | Header above the rest. |
+| `allTimeZonesLabel` | `string` | `'All time zones'` | Header above the rest when zones are pinned. |
 | `date` | `Date` | now | The moment offsets are worked out for. |
 | `locale` | `string` | device locale | Language of the zone names, where the engine has them. |
 | `placeholder` | `string` | `'Select a time zone'` | Shown while nothing is selected. |
 | `searchPlaceholder` | `string` | `'Search time zones'` | Search field placeholder. |
-| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+| `sheet` | `Partial<SheetChromeProps>` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+
+## Related
+
+- [SelectPicker](./select-picker): the field it's built on, with every prop
+- [DateTimePicker](./date-time-picker): the date and time to pair with the zone
+- [CountryPicker](./country-picker): the same field with countries

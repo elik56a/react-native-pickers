@@ -49,19 +49,21 @@ type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 | Component | Slots |
 | --- | --- |
 | [WheelPicker](../components/wheel-picker#slots) | `container` `item` `itemText` `selectedItemText` `disabledItemText` `indicator` |
-| [MultiWheelPicker / TimePicker / DateWheelPicker / DurationPicker](../components/multi-wheel-picker#slots) | `container` `indicator` `separator` `item` `itemText` `selectedItemText` `disabledItemText` |
+| [MultiWheelPicker / TimePicker / TimeRangePicker / DateWheelPicker / DurationPicker](../components/multi-wheel-picker#slots) | `container` `indicator` `separator` `item` `itemText` `selectedItemText` `disabledItemText` |
 | [Calendar / DatePicker](../components/date-picker#slots) | `container` `header` `headerTitle` `arrow` `arrowText` `weekdays` `weekdayText` `week` `day` `dayInner` `dayText` `selectedDay` `selectedDayText` `todayDay` `todayDayText` `disabledDayText` `outsideDayText` `rangeBand` `dot` `dayLabel` `gridCell` `gridCellText` |
 | [MonthPicker](../components/month-picker#props) | the wheel slots, or the grid's `header` `headerTitle` `arrow` `arrowText` `gridCell` `gridCellText` |
 | [WeekStrip](../components/week-strip#props) | the Calendar slots |
 | [ColorPicker](../components/color-picker#props) | `container` `swatch` `pad` `slider` `sliderThumb` `sliderLabel` `hexInput` `preview` |
 | [Slider](../components/slider#styling) | `container` `track` `activeTrack` `thumb` `mark` `markLabel` `valueLabel` `valueLabelText` |
-| [OtpField](../components/otp-field#props) | `container` `cell` `focusedCell` `filledCell` `cellText` `caret` |
+| [OtpField](../components/otp-field#props) | `container` `cell` `focusedCell` `filledCell` `cellText` `caret` `helperText` |
 | [Rating](../components/rating#props) | `container` `item` `icon` |
-| [SelectList](../components/select-list#slots) | `container` `search` `searchInput` `list` `groupHeader` `groupHeaderText` `option` `selectedOption` `optionLabel` `selectedOptionLabel` `optionDescription` `check` `empty` `emptyText` `loading` `loadingText` |
-| [SelectPicker](../components/select-picker#slots) | all SelectList slots + `trigger` `triggerText` `placeholder` `label` `chip` `chipText` `chevron` `clear` |
+| [SelectList](../components/select-list#slots) | `container` `search` `searchInput` `list` `groupHeader` `groupHeaderText` `option` `selectedOption` `optionLabel` `selectedOptionLabel` `optionDescription` `check` `empty` `emptyText` `loading` `loadingText` `createOption` `createOptionLabel` |
+| [SelectPicker](../components/select-picker#slots), CountryPicker, TimeZonePicker | all SelectList slots + `label` `trigger` `triggerText` `placeholder` `chevron` `clear` `helperText` `chip` `chipText` |
+| [Picker fields](../components/picker-fields) | `label` `trigger` `triggerText` `placeholder` `chevron` `clear` `helperText`, plus the slots of the picker they open |
+| [PhoneField](../components/phone-field#props) | `label` `field` `input` `countryButton` `dialCode` `chevron` `helperText` |
 | [HorizontalList](../components/horizontal-list#slots) | `container` `content` `item` `selectedItem` `itemLabel` `selectedItemLabel` `thumb` `arrow` `arrowText` |
 | [EmojiPicker](../components/emoji-picker#slots) | `container` `header` `searchInput` `skinToneButton` `skinToneMenu` `skinTonePopover` `categoryBar` `categoryTab` `activeCategoryTab` `categoryIndicator` `sectionHeader` `sectionHeaderText` `emojiCell` `emojiText` `empty` `emptyText` |
-| [Menu](../components/menu#props) | `trigger` `menu` `header` `title` `action` `actionLabel` `actionDescription` `check` |
+| [Menu](../components/menu#props) | `trigger` `menu` `header` `title` `message` `action` `actionLabel` `actionDescription` `check` |
 | [ActionSheet](../components/action-sheet#props) | `group` `header` `title` `message` `action` `actionLabel` `actionDescription` `check` `cancel` `cancelLabel` |
 | [BottomSheet](../components/bottom-sheet#slots) | `backdrop` `sheet` `handle` `header` `title` `content` `footer` |
 

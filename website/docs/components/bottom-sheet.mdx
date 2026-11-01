@@ -76,7 +76,7 @@ When `visible` turns `false`, the sheet animates out and then unmounts its child
 
 ## Header
 
-The header row shows when you pass `title`, `headerLeft` or `headerRight`. A string `title` is styled for you (use the `title` slot); a node is rendered as-is. The drag handle and header are both drag areas.
+The header row shows when you pass `title`, `headerLeft` or `headerRight`. A string `title` is styled for you (use the `title` slot): centered in the iOS design, at the start in Material and on the web. A node is rendered as-is. The drag handle always drags; the header does too on native (see `draggable`).
 
 ```tsx
 <BottomSheet

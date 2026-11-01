@@ -31,10 +31,12 @@ pnpm install   # also installs the git hooks
 | `pnpm typecheck` | TypeScript, including tests |
 | `pnpm build` | Compile to `lib/` (ESM + `.d.ts`) |
 | `pnpm gen:emoji` | Regenerate the emoji data from emojibase |
+| `pnpm gen:countries` | Regenerate the country data |
+| `pnpm gen:timezones` | Regenerate the time zone data |
 
 ## Project structure
 
-Each picker has its own folder under `src/`: `wheel`, `time`, `calendar`, `date`, `datetime`, `select` and `emoji`. They build on `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports only flow one way: feature → `sheet` → `core`.
+Each feature has its own folder under `src/`: `wheel`, `time`, `duration`, `calendar`, `date`, `month`, `datetime`, `select`, `country`, `timezone`, `list`, `emoji`, `color`, `slider`, `rating`, `otp` and `action`. They build on `sheet` (bottom sheets) and `core` (theme, shared hooks and utils). Imports only flow one way: feature → `sheet` → `core`.
 
 Every folder has the same layout:
 

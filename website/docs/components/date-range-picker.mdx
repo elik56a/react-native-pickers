@@ -13,7 +13,7 @@ Pick a check-in / check-out date range, several ranges, or several separate date
 | `mode` | `value` | `onChange` | Extra props |
 | --- | --- | --- | --- |
 | `'single'` (default) | `Date \| null` | `(date: Date) => void` | — |
-| `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `presets`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
+| `'range'` | `DateRange` (`{ start: Date \| null; end: Date \| null }`) | `(range: DateRange) => void` | `presets`, `presetsProps`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 | `'multiple'` | `Date[]` | `(dates: Date[]) => void` | `maxSelections` |
 | `'ranges'` | `DateRange[]` | `(ranges: DateRange[]) => void` | `maxRanges`, `minRangeDays`, `maxRangeDays`, `allowSingleDayRange` |
 
@@ -164,7 +164,7 @@ export default function Example() {
 
 `variant: 'segmented'` puts a few presets on a track instead, and `renderItem` and `styles` draw your own chip.
 
-A preset the calendar wouldn't let you pick is disabled: one that ends after `maxDate`, crosses a disabled day or breaks `minRangeDays`, `maxRangeDays` or `allowSingleDayRange`. Picking one shows the month its range starts in.
+A preset the calendar wouldn't let you pick is disabled: one outside `minDate` / `maxDate`, one that crosses a disabled day or breaks `minRangeDays`, `maxRangeDays` or `allowSingleDayRange`. Picking one shows the month its range starts in.
 
 Write your own as `{ label, start, end }`, such as the next weekend, or to label them in another language:
 
@@ -306,6 +306,18 @@ export default function Example() {
 
 → [Picker fields](./picker-fields)
 
+## Working with ranges
+
+The [date utilities](../api/date-utils) make common range checks one-liners:
+
+```ts
+import { isBetweenDays, isSameDay, compareDay } from '@elik56a/react-native-pickers';
+
+const nights = Math.round((range.end!.getTime() - range.start!.getTime()) / 86_400_000);
+const includesToday = isSameDay(range.start, new Date()) || isBetweenDays(new Date(), range.start, range.end);
+const isFuture = compareDay(range.start!, new Date()) > 0;
+```
+
 ## Props
 
 All [calendar props](./date-picker#calendar) apply. Mode-specific props:
@@ -320,14 +332,8 @@ All [calendar props](./date-picker#calendar) apply. Mode-specific props:
 | `maxSelections` | `multiple` | `number` | — | Maximum number of selected days. |
 | `maxRanges` | `ranges` | `number` | — | Maximum number of ranges. |
 
-## Working with ranges
+## Related
 
-The [date utilities](../api/date-utils) make common range checks one-liners:
-
-```ts
-import { isBetweenDays, isSameDay, compareDay, addDays } from '@elik56a/react-native-pickers';
-
-const nights = Math.round((range.end!.getTime() - range.start!.getTime()) / 86_400_000);
-const includesToday = isSameDay(range.start, new Date()) || isBetweenDays(new Date(), range.start, range.end);
-const isFuture = compareDay(range.start!, new Date()) > 0;
-```
+- [DatePicker](./date-picker): the calendar these modes build on
+- [Picker sheets](./picker-sheets#datepickersheet): a range in a sheet with Cancel / Done
+- [Hotel booking range](../recipes/booking-range): check-in and check-out with prices on the days

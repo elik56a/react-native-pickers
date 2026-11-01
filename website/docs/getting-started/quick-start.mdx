@@ -101,7 +101,7 @@ export default function Example() {
 
 ## Select
 
-Tap the field to open a searchable bottom sheet.
+Tap the field to open the list: a bottom sheet on phones, a dropdown on the web. A search box appears past 8 options.
 
 ```tsx live
 import { useState } from 'react';
@@ -152,7 +152,7 @@ export default function Example() {
 
 ## In a bottom sheet
 
-Every picker also ships as a sheet. The sheet keeps a **draft** and only calls `onConfirm` when the user taps **Done**; **Cancel**, a backdrop tap or a swipe down discards it.
+Every picker also ships as a sheet. The sheet keeps a **draft** and only calls `onConfirm` when the user taps **Done** (**OK** in Material); **Cancel**, a backdrop tap or a swipe down discards it.
 
 ```tsx live
 import { useState } from 'react';
@@ -189,7 +189,7 @@ export default function Example() {
 
 ## In a form field
 
-A field opens the sheet for you and shows the confirmed value, so there's no open state to manage. Each sheet has one: `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField` and `EmojiPickerField`.
+A field opens the sheet for you and shows the confirmed value, so there's no open state to manage. Each sheet has one, such as `DatePickerField`, `TimePickerField`, `DateTimePickerField`, `WheelPickerField` and `EmojiPickerField`.
 
 ```tsx live
 import { useState } from 'react';

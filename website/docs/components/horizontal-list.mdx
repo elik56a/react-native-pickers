@@ -30,9 +30,13 @@ export default function Example() {
 }
 ```
 
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.horizontalList} />
+
 ## Segmented controls
 
-A few items share the track's width. With more than fit, the track scrolls, and the thumb follows the selection along it.
+A few items share the track's width. With more than fit, the track scrolls, and the thumb follows the selection along it. In the Material design there's no thumb: the segments are outlined, as in Material's segmented buttons, and the chosen one is filled and shows a ✓ in place of its icon. Chips are outlined there too.
 
 ```tsx live
 import { useState } from 'react';
@@ -303,16 +307,16 @@ export default function Example() {
 }
 ```
 
-## Try the props
-
-<PropPlayground {...PLAYGROUNDS.horizontalList} />
-
 ## Behaviour
 
 - **Controlled**: pass `value` and update it in `onChange`. Tapping the selected item calls `onChange` again.
-- In `segmented`, the thumb slides to the selected item; items share the track's width while they fit, and scroll when they don't.
+- In `segmented`, the thumb slides to the selected item (in Material, the selected segment is filled instead); items share the track's width while they fit, and scroll when they don't.
 - Tapping an item whose neighbor is hidden scrolls that neighbor into view, plus a little of the one after it, so the user sees there's more.
 - With `showArrows`, the arrows need a frame around the list: `style` lays out that frame and `styles.container` styles the list itself.
+
+## Accessibility
+
+The list is a `radiogroup` named by `accessibilityLabel`; items are `radio`s with `checked` and `disabled` states. Scroll arrows are buttons labelled "Scroll left" and "Scroll right".
 
 ## Props
 
@@ -321,7 +325,7 @@ export default function Example() {
 | `items` | `ReadonlyArray<HorizontalListItem<T>>` | **required** | `{ label, value, disabled?, icon? }`. `icon` is a node, or a function of `{ selected, disabled, color }`. |
 | `value` | `T \| null` | — | Selected value. |
 | `onChange` | `(value: T, item) => void` | — | Called on tap. |
-| `variant` | `'segmented' \| 'chips'` | `'segmented'` | Track with a sliding thumb, or separate pills. |
+| `variant` | `'segmented' \| 'chips'` | `'segmented'` | Track with a sliding thumb (outlined segments in Material), or separate pills. |
 | `iconPosition` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` | Where each icon sits around its label. |
 | `showArrows` | `boolean` | `false` | Round ‹ › buttons that scroll about a page, shown while the items overflow. |
 | `arrowPosition` | `'outside' \| 'overlay'` | `'outside'` | Beside the list, the one that can't scroll further dimmed; or over its edges, each shown while items hide past it. |
@@ -333,7 +337,7 @@ export default function Example() {
 | `styles` | `SlotStyles<HorizontalListSlot>` | — | Slots below. |
 | `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
 | `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
-| `testID` | `string` | — | Test ID; items get `{testID}-item-{index}`. |
+| `testID` | `string` | — | Test ID; items get `{testID}-item-{index}`, arrows `{testID}-arrow-left` / `{testID}-arrow-right`. |
 
 ### Slots
 
@@ -343,12 +347,8 @@ export default function Example() {
 | `content` | The row inside it |
 | `item` / `selectedItem` | Each item / the selected one |
 | `itemLabel` / `selectedItemLabel` | Item label |
-| `thumb` | The sliding thumb (`segmented`) |
+| `thumb` | The sliding thumb (`segmented`, not in Material) |
 | `arrow` / `arrowText` | Each scroll arrow / its glyph (`showArrows`) |
-
-## Accessibility
-
-The list is a `radiogroup` named by `accessibilityLabel`; items are `radio`s with `checked` and `disabled` states. Scroll arrows are buttons labelled "Scroll left" and "Scroll right".
 
 ## Related
 

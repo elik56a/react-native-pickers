@@ -229,25 +229,31 @@ In an RTL layout the track fills from the right, and dragging follows.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `number`, or `[number, number]` with `range` | | Controlled value. |
+| `value` | `number`, or `[number, number]` with `range` | — | Controlled value. |
 | `defaultValue` | `number`, or `[number, number]` with `range` | `min`, or `[min, max]` | Uncontrolled starting value. |
-| `onChange` | `(value) => void` | | When the finger lifts on a new value, or on a key or screen-reader step. |
-| `onValueChanging` | `(value) => void` | | On every step while dragging. |
+| `onChange` | `(value) => void` | — | When the finger lifts on a new value, or on a key or screen-reader step. |
+| `onValueChanging` | `(value) => void` | — | On every step while dragging. |
 | `range` | `boolean` | `false` | Two thumbs; the value is `[start, end]`. |
-| `min` | `number` | `0` | |
-| `max` | `number` | `100` | |
+| `min` | `number` | `0` | The lowest value. |
+| `max` | `number` | `100` | The highest value. |
 | `step` | `number` | `1` | The value moves in steps this big; `0` for any value. |
 | `showSteps` | `boolean` | `false` | A dot on the track at each step. |
-| `marks` | `(number \| { value, label? })[]` | | Dots at these values, with labels under the track. |
+| `marks` | `(number \| { value, label? })[]` | — | Dots at these values, with labels under the track. |
 | `snapToMarks` | `boolean` | `false` | Only the marks can be picked. |
 | `valueLabel` | `'never' \| 'drag' \| 'always'` | `'drag'` in Material, else `'never'` | When a bubble shows the value over the thumb. |
 | `formatValue` | `(value: number) => string` | the number, with the step's decimals | Text for the bubble and screen readers. |
-| `minimumIcon` | `ReactNode` | | Before the track, like a quiet speaker beside a volume slider. |
-| `maximumIcon` | `ReactNode` | | After the track. |
+| `minimumIcon` | `ReactNode` | — | Before the track, like a quiet speaker beside a volume slider. |
+| `maximumIcon` | `ReactNode` | — | After the track. |
 | `disabled` | `boolean` | `false` | Dims the slider and ignores touches and keys. |
-| `accessibilityLabel` | `string` | | What screen readers call the slider. |
+| `accessibilityLabel` | `string` | — | What screen readers call the slider. |
 | `thumbLabels` | `[string, string]` | `['Minimum', 'Maximum']` | With `range`, what screen readers call each thumb. |
-| `design` | `'auto' \| 'ios' \| 'material' \| 'web'` | `'auto'` | |
-| `theme` | `DeepPartial<PickerTheme>` | | |
-| `style` / `styles` | | | Root style, and the slots above. |
-| `testID` | `string` | | On the root; the track gets `${testID}-track`, the thumbs `${testID}-thumb-0` and `-1`. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `style` / `styles` | `StyleProp<ViewStyle>` / `SlotStyles<SliderSlot>` | — | The root, and the [slots above](#styling). |
+| `testID` | `string` | — | On the root; the track gets `${testID}-track`, the thumbs `${testID}-thumb-0` and `-1`. |
+
+## Related
+
+- [Rating](./rating): a score in stars
+- [Haptics guide](../guides/haptics): a tick on each step with `onValueChanging`
+- [Accessibility guide](../guides/accessibility)

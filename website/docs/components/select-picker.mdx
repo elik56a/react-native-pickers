@@ -356,11 +356,11 @@ export default function Example() {
 
 ## Closing behaviour
 
-In single mode, the value changes as soon as an option is tapped and the sheet or dropdown closes a moment later, once the row's ripple has played (`closeOnSelect`, default `true`). With `closeOnSelect={false}` the sheet stays open and shows a **Done** button. Multiple mode always shows Done. `onOpen` and `onClose` fire when the sheet opens and closes.
+In single mode, the value changes as soon as an option is tapped and the sheet or dropdown closes (`closeOnSelect`, default `true`); the row's ripple finishes while it animates out. With `closeOnSelect={false}` a sheet or modal stays open and shows a **Done** button. In a sheet or modal, multiple mode always shows Done. A dropdown has no Done button: a tap outside closes it, and a second tap on the field folds an inline list. `onOpen` and `onClose` fire when the list opens and closes.
 
 ## Hover and ripple
 
-Rows tint while the pointer is over them and ripple from the touch point when picked; in single mode the list closes right after the ripple plays. The field tints on hover but doesn't ripple. Both colours come from the theme, so a brand tint is one prop:
+Rows tint while the pointer is over them and ripple from the touch point when picked; in single mode the ripple finishes as the list closes. The field tints on hover but doesn't ripple. Both colours come from the theme, so a brand tint is one prop:
 
 ```tsx live
 import { useState } from 'react';
@@ -658,6 +658,10 @@ export default function Example() {
 
 `expandable: false` keeps the sheet at its content height; `draggable: false` turns off dragging on native. See [BottomSheet](./bottom-sheet#expanding-to-full-screen) for all the options.
 
+## Accessibility
+
+The field is a button labelled with `label` (or the placeholder), with the current selection as its hint and an `expanded` state. With `required` its label ends in `, required`, an `error` message follows the selection in the hint, and the line under the field announces an error as it appears. Options are `button`s (single; `radio`s in the Material design) or `checkbox`es (multiple) with `selected` / `checked` / `disabled` states, and chips announce `Remove {label}`.
+
 ## Props
 
 ### Value
@@ -675,7 +679,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` | `string` | — | Label above the field; also the default sheet title. |
+| `label` | `string` | — | Label above the field (floating inside it in Material); also the default sheet title. |
 | `placeholder` | `string` | `'Select…'` | Shown when nothing is selected. |
 | `disabled` | `boolean` | `false` | Disable the field. |
 | `clearable` | `boolean` | `false` | Show a × button when something is selected. |
@@ -697,10 +701,10 @@ export default function Example() {
 | `closeOnSelect` | `boolean` | `true` | Single: close on tap. `false` shows a Done button. |
 | `sheet` | `Partial<SheetChromeProps>` | — | `confirmLabel`, `cancelLabel`, `showCancel`, `title`, `sheetProps`. |
 | `onOpen` / `onClose` | `() => void` | — | Sheet open / close. |
-| `searchable` | `boolean` | dropdown: `true` · sheet: `options.length > 8` | Dropdown: type in the field to filter, or in a search field atop the list with `renderTrigger`. Sheet: show the search field. |
+| `searchable` | `boolean` | dropdown: `true` · sheet: `options.length > 8`, or with `loadOptions` / `onSearchChange` | Dropdown: type in the field to filter, or in a search field atop the list with `renderTrigger`. Sheet: show the search field. |
 | `searchPlaceholder` | `string` | `'Search'` | Search hint. |
 | `filterOption` | `(option, query) => boolean` | `defaultFilter`; none with `loadOptions` / `onSearchChange` | Custom search. |
-| `loadOptions` | `(query: string) => Promise<SelectOption<T>[]>` | — | [Search a server](#search-on-a-server): loader, debounce and stale answers handled. An empty query shows `options`. |
+| `loadOptions` | `(query: string) => Promise<ReadonlyArray<SelectOption<T>>>` | — | [Search a server](#search-on-a-server): loader, debounce and stale answers handled. An empty query shows `options`. |
 | `onSearchChange` | `(query: string) => void` | — | Called once typing pauses, to [search yourself](#searching-yourself). |
 | `searchPrompt` | `string` | `'Type to search'` | Shown before the user types, while a searched list has no options. |
 | `searchDebounce` | `number` | `300` | ms after the last keystroke before `loadOptions` / `onSearchChange`. |
@@ -727,20 +731,16 @@ export default function Example() {
 
 | Slot | Element |
 | --- | --- |
-| `label` | Label text above the field |
+| `label` | The label: above the field, or the floating label in the Material design |
 | `trigger` | The field box |
 | `triggerText` | Selected label(s) |
 | `placeholder` | Placeholder text |
 | `chip` / `chipText` | Multi-select chips |
-| `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size) |
+| `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size); in the Material design, a triangle colored by `borderTopColor` |
 | `clear` | × button text |
 | `helperText` | The line under the field: helper text or the error message |
 
 **List**: see [SelectList slots](./select-list#slots).
-
-## Accessibility
-
-The field is a button labelled with `label` (or the placeholder), with the current selection as its hint and an `expanded` state. With `required` its label ends in `, required`, an `error` message follows the selection in the hint, and the line under the field announces an error as it appears. Options are `button`s (single) or `checkbox`es (multiple) with `selected` / `checked` / `disabled` states, and chips announce `Remove {label}`.
 
 ## Related
 
