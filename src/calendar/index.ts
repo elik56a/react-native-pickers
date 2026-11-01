@@ -6,8 +6,11 @@ export type {
   CalendarSelectionProps,
   CalendarSlot,
   DateRange,
+  DateRangePreset,
   DayState,
   MarkedDate,
+  RangePresetsListProps,
   WeekStripProps,
 } from './calendar.types';
+export { getRangePresets } from './calendar.utils';
 export { WeekStrip } from './WeekStrip';

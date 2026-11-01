@@ -36,11 +36,14 @@ const SELECT = ['SelectPicker', 'CountryPicker'];
 const SLIDER = ['Slider'];
 const OTP = ['OtpField'];
 const RATING = ['Rating'];
+const RANGE_PRESETS = ['DatePicker', 'Calendar', 'DatePickerSheet', 'DatePickerField'];
+const HAS_PRESETS_PROPS = /\bpresetsProps=\{\{/;
 
 /**
  * The side panel's props, offered for every live example that renders one of their components.
  * Only props that keep the example's value valid: `mode` and `multiple` change the value's shape, and DatePicker's `display` too.
  * A prop listed twice (e.g. `presentation`) becomes one control; the first entry an example matches sets its options.
+ * A dotted prop (`presetsProps.showArrows`) sets a key in the object the example passes as that prop.
  */
 export const LIVE_CONTROLS: readonly LiveControl[] = [
   {
@@ -73,6 +76,21 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'monthFormat', components: ['DateWheelPicker'], options: ['long', 'short', 'numeric'], default: 'long' },
   { prop: 'weekdayFormat', components: ['DatePicker', 'Calendar', 'WeekStrip'], options: ['short', 'narrow'], default: 'short' },
   { prop: 'showOutsideDays', components: ['DatePicker', 'Calendar'], options: BOOLEAN, default: true },
+  {
+    prop: 'presetsProps.variant',
+    components: RANGE_PRESETS,
+    options: ['chips', 'segmented'],
+    default: 'chips',
+    requires: HAS_PRESETS_PROPS,
+  },
+  { prop: 'presetsProps.showArrows', components: RANGE_PRESETS, options: BOOLEAN, default: false, requires: HAS_PRESETS_PROPS },
+  {
+    prop: 'presetsProps.arrowPosition',
+    components: RANGE_PRESETS,
+    options: ['outside', 'overlay'],
+    default: 'outside',
+    requires: HAS_PRESETS_PROPS,
+  },
   { prop: 'categoryBarPosition', components: EMOJI, options: ['auto', 'top', 'bottom'], default: 'auto' },
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
   { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },

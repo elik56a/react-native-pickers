@@ -2,12 +2,23 @@ import type React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
-import type { ValueOf } from '../core/core.types';
+import type { DeepPartial, ValueOf } from '../core/core.types';
+import type { HorizontalListProps } from '../list/list.types';
 import type { ARROW_DIRECTION, CALENDAR_MODE, CALENDAR_VIEW, DAY_SELECTION, TODAY_MARK, WEEKDAY_FORMAT } from './calendar.constants';
 
 export interface DateRange {
   start: Date | null;
   end: Date | null;
+}
+
+/** The presets row's HorizontalList props, without the ones the calendar sets from the presets and the range. */
+export type RangePresetsListProps = Omit<HorizontalListProps<DateRange>, 'items' | 'value' | 'onChange' | 'isEqual'>;
+
+/** A shortcut that selects a whole range at once, such as "Last 7 days". */
+export interface DateRangePreset {
+  label: string;
+  start: Date;
+  end: Date;
 }
 
 export interface MarkedDate {
@@ -113,7 +124,16 @@ export interface RangeRules {
 
 export type CalendarSelectionProps =
   | { mode?: typeof CALENDAR_MODE.single; value?: Date | null; defaultValue?: Date | null; onChange?: (date: Date) => void }
-  | ({ mode: typeof CALENDAR_MODE.range; value?: DateRange; defaultValue?: DateRange; onChange?: (range: DateRange) => void } & RangeRules)
+  | ({
+      mode: typeof CALENDAR_MODE.range;
+      value?: DateRange;
+      defaultValue?: DateRange;
+      onChange?: (range: DateRange) => void;
+      /** Chips above the days that pick a whole range in one tap, such as `getRangePresets()` */
+      presets?: DateRangePreset[];
+      /** Any HorizontalList prop for the presets row, such as `variant`, `showArrows`, `renderItem` or `styles` */
+      presetsProps?: RangePresetsListProps;
+    } & RangeRules)
   | {
       mode: typeof CALENDAR_MODE.multiple;
       value?: Date[];
@@ -215,6 +235,16 @@ export interface DayCellProps {
   onSelect: (date: Date) => void;
   theme: PickerTheme;
   slots?: SlotStyles<CalendarSlot>;
+}
+
+export interface RangePresetsProps {
+  presets: DateRangePreset[];
+  range: DateRange;
+  rules: RangeRules;
+  isDisabled: (day: Date) => boolean;
+  onSelect: (range: DateRange) => void;
+  theme?: DeepPartial<PickerTheme>;
+  listProps?: RangePresetsListProps;
 }
 
 export interface QuickGridProps {

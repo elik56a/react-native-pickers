@@ -10,7 +10,7 @@ import { canGoToMonth, shiftMonthForView } from '../calendar.utils';
 
 interface UseMonthNavigationParams {
   anchor: Date;
-  /** The single-mode selection: when it changes from outside, the calendar shows its month. */
+  /** The selected day, or a range's start: when it changes from outside or from a preset, the calendar shows its month. */
   followDate: Date | null;
   minDate?: Date;
   maxDate?: Date;

@@ -13,7 +13,9 @@ import {
   getDayTextColor,
   getHeaderLabel,
   getMonthCells,
+  getPresetItems,
   getQuickGridHeight,
+  getRangePresets,
   getWeekDays,
   getWeekMonth,
   getWeekStart,
@@ -23,6 +25,7 @@ import {
   getYearPageLabel,
   hasRangeEnd,
   isDayDisabled,
+  isSameRange,
   nextRange,
   nextRanges,
   orderWeekdays,
@@ -131,6 +134,44 @@ describe('nextRanges', () => {
     expect(nextRanges([first], day(10), { maxRanges: 1 }, none)).toBeNull();
     expect(nextRanges([first], day(5), { maxRanges: 1 }, none)).toEqual([]);
     expect(nextRanges([{ start: day(10), end: null }], day(12), { maxRanges: 1 }, none)).toEqual([{ start: day(10), end: day(12) }]);
+  });
+});
+
+describe('range presets', () => {
+  it('counts each preset back from today, including a month that spans a year', () => {
+    const presets = getRangePresets(new Date(2026, 0, 10, 15, 30));
+    expect(presets.map(({ label, start, end }) => [label, toDateKey(start), toDateKey(end)])).toEqual([
+      ['Today', '2026-01-10', '2026-01-10'],
+      ['Yesterday', '2026-01-09', '2026-01-09'],
+      ['Last 7 days', '2026-01-04', '2026-01-10'],
+      ['Last 30 days', '2025-12-12', '2026-01-10'],
+      ['This month', '2026-01-01', '2026-01-10'],
+      ['Last month', '2025-12-01', '2025-12-31'],
+    ]);
+  });
+
+  it('matches ranges by day, ignoring the time', () => {
+    expect(isSameRange({ start: day(1), end: new Date(2026, 9, 7, 18) }, { start: day(1), end: day(7) })).toBe(true);
+    expect(isSameRange({ start: day(1), end: null }, { start: day(1), end: day(7) })).toBe(false);
+  });
+
+  it('disables a preset the calendar would not let you pick', () => {
+    const presets = [
+      { label: 'Fits', start: day(1), end: day(7) },
+      { label: 'Ends after max', start: day(25), end: day(31) },
+      { label: 'Crosses a disabled day', start: day(8), end: day(12) },
+      { label: 'Too long', start: day(1), end: day(20) },
+      { label: 'One day', start: day(3), end: day(3) },
+    ];
+    const isDisabled = (d: Date) => d > day(30) || toDateKey(d) === '2026-10-10';
+    const items = getPresetItems(presets, { maxRangeDays: 10, allowSingleDayRange: false }, isDisabled);
+    expect(items.map((item) => [item.label, item.disabled])).toEqual([
+      ['Fits', false],
+      ['Ends after max', true],
+      ['Crosses a disabled day', true],
+      ['Too long', true],
+      ['One day', true],
+    ]);
   });
 });
 

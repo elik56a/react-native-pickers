@@ -338,6 +338,8 @@ export default function Example() {
 | `value` | `Date \| null` · `DateRange` · `Date[]` · `DateRange[]` | — | Selection (controlled), typed by `mode`. |
 | `defaultValue` | same as `value` | `null` · `{start:null,end:null}` · `[]` · `[]` | Initial selection when uncontrolled. |
 | `onChange` | `(date: Date) => void` · `(range: DateRange) => void` · `(dates: Date[]) => void` · `(ranges: DateRange[]) => void` | — | Fires on every tap that changes the selection. |
+| `presets` | `DateRangePreset[]` | — | `range` only: chips that pick a whole range, such as [`getRangePresets()`](./date-range-picker#presets). |
+| `presetsProps` | `RangePresetsListProps` | — | `range` only: [`HorizontalList`](./horizontal-list#props) props for the presets row. |
 | `minRangeDays` | `number` | — | `range` and `ranges`. See [range](./date-range-picker#props). |
 | `maxRangeDays` | `number` | — | `range` and `ranges`. |
 | `allowSingleDayRange` | `boolean` | `true` | `range` and `ranges`. |
