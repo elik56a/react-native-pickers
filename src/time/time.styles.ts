@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   rangeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 48, paddingHorizontal: 16 },
   rangeSeparator: { height: StyleSheet.hairlineWidth, marginStart: 16 },
   rangePill: { paddingHorizontal: 12, paddingVertical: 6 },
-  rangeBoxes: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: 16 },
+  rangeBoxes: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', gap: 8, marginBottom: 16 },
   rangeBox: { minWidth: 120, paddingHorizontal: 16, paddingVertical: 10 },
   rangeArrow: { alignItems: 'center', minWidth: 48 },
   panel: { flexDirection: 'row', alignSelf: 'center', borderWidth: 1, padding: 4, overflow: 'hidden' },
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
   keyboardKeys: { flex: 1, borderTopWidth: 2, borderStyle: 'dotted' },
   period: { width: CLOCK_PERIOD_WIDTH, height: CLOCK_FIELD.height, borderWidth: 1, overflow: 'hidden' },
   periodHalf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  dial: { width: DIAL_SIZE, height: DIAL_SIZE, borderRadius: CENTER },
+  dial: { width: DIAL_SIZE, height: DIAL_SIZE, borderRadius: CENTER, cursor: 'pointer' },
   hand: { position: 'absolute', width: DIAL_HAND_WIDTH, left: CENTER - DIAL_HAND_WIDTH / 2 },
   selector: {
     position: 'absolute',

@@ -32,7 +32,7 @@ export const ColorPad = ({
   const moveY = (by: number) => onChange(x, clamp01(y + by));
   return (
     <View
-      style={[styles.pad, { height, borderRadius: theme.radius.md }, slots?.pad]}
+      style={[styles.pad, styles.padTouch, { height, borderRadius: theme.radius.md }, slots?.pad]}
       onLayout={pan.onLayout}
       {...pan.panHandlers}
       accessible

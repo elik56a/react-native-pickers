@@ -114,7 +114,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
 
   return (
     <View
-      style={[styles.clip, { height: itemHeight * visibleItems }, style, slots?.container]}
+      style={[styles.clip, disabled && styles.noCursor, { height: itemHeight * visibleItems }, style, slots?.container]}
       onLayout={wheel.onLayout}
       accessible
       accessibilityRole="adjustable"

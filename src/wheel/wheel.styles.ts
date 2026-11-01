@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  clip: { overflow: 'hidden' },
+  clip: { overflow: 'hidden', cursor: 'pointer' },
+  noCursor: { cursor: 'auto' },
   centerOverlay: { ...StyleSheet.absoluteFill, justifyContent: 'center' },
   row: { justifyContent: 'center' },
   typingRing: { borderWidth: 2 },
