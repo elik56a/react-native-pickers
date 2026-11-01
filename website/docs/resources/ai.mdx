@@ -27,8 +27,8 @@ Looks native per platform by default (design 'auto': iOS on iOS, Material on And
   <PickersProvider design="ios"> (or 'material' | 'web'); per component: design="material". theme/styles/explicit props always win over the design.
 Every component takes: theme (DeepPartial<PickerTheme>), design ('ios'|'material'|'web'), styles (slot styles), style, testID.
 Native apps: prefer subpaths so Metro skips unused pickers (root import bundles ~130 KB of emoji data):
-  /wheel /time /duration /date /calendar /month /datetime /select /country /timezone /list /emoji /color /slider /rating /otp /action /sheet /core
-  e.g. '@elik56a/react-native-pickers/date'. PhoneField is in /country, TimeRangePicker in /time, Menu and ActionSheet in /action.
+  /wheel /time /duration /date /calendar /month /datetime /select /country /currency /timezone /list /emoji /color /slider /rating /otp /action /sheet /core
+  e.g. '@elik56a/react-native-pickers/date'. PhoneField is in /country, AmountField in /currency, TimeRangePicker in /time, Menu and ActionSheet in /action.
   PickersProvider and theme/date utils live in /core. Subpaths need RN 0.79+ (Metro package exports).
 
 Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList/HorizontalList are controlled-only.
@@ -86,6 +86,15 @@ PhoneField         phone number input: flag + calling code button (CountryPicker
                    preferred countries exclude locale preferredLabel allCountriesLabel; styles: label field input countryButton dialCode chevron helperText
                    a leading trunk 0 is dropped (not IT/SM/VA); pasting '+44…' switches country; ~50 country formats, others grouped in threes
                    utils: parsePhone(intl, current?) → {country?, nationalNumber}  formatNationalNumber(digits, code)  isValidPhone(digits, code)  toE164(digits, code)
+CurrencyPicker     a SelectPicker with 154 currencies built in: value CurrencyCode, ISO 4217 ('EUR'), or CurrencyCode[] with multiple
+                   each row: name in locale ('Euro', Intl.DisplayNames, English fallback) with 'EUR · €' below; search matches name, code, symbol
+                   currencies exclude preferred preferredLabel allCurrenciesLabel locale showFlag=true (country flag, EU for EUR, none for XOF/XAF/XCD/XPF)
+                   getCurrency(code) → {code,name,symbol,decimals,country}  getAllCurrencies()  getCurrencyName(currency, locale)
+AmountField        money input: symbol + amount grouped as typed in locale's format ('$1,234.50', '1.234,50 €', '₹12,34,567'), the currency's decimals (USD 2, JPY 0, KWD 3)
+                   value/defaultValue: number|null  onChange(value)  currency/defaultCurrency='USD'/onCurrencyChange  variant 'field'|'large' (big centered amount, currency pill under it)
+                   showCurrencyPicker=false (flag + code button opening CurrencyPicker; currencies exclude preferred showFlag presentation currencySheetTitle='Currency' sheet)
+                   locale (separators, symbol side) label placeholder(default '0.00') disabled autoFocus error helperText required; positive only, ≤15 integer digits; '12.5' shows '12.50' on blur
+                   minor units for payment APIs: Math.round(value * 10 ** getCurrency(code).decimals); styles: label field input symbol amount caret currencyButton currencyCode chevron helperText
 TimeZonePicker     a SelectPicker with all 418 IANA zones built in: value IANA name ('Europe/Lisbon') or string[] with multiple  onChange(id, option)
                    label = city, description 'GMT+1 · Central European Standard Time' (zone name where the engine has it, else region); sorted by offset
                    preferred (default: the device's zone, under 'Your time zone'; [] pins none) timeZones (only these) date (offsets for that moment, DST-aware) locale

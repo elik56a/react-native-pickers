@@ -68,7 +68,7 @@ export const OtpField = (props: OtpFieldProps) => {
         autoFocus={autoFocus}
         editable={!disabled}
         {...getFieldAccessibility({ name: accessibilityLabel, error })}
-        style={[styles.input, coreStyles.noOutline]}
+        style={[coreStyles.hiddenInput, coreStyles.noOutline]}
         testID={testID}
       />
     </View>

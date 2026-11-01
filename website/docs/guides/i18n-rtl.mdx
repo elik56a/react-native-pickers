@@ -17,6 +17,7 @@ Every name the pickers display comes from the JavaScript `Intl` API for the `loc
 | `DateTimePicker` | The day labels, plus the calendar and time as above |
 | `MonthPicker` | Month names |
 | `CountryPicker` / `PhoneField` | Country names, where the engine has them |
+| `CurrencyPicker` / `AmountField` | Currency names, where the engine has them; `AmountField`'s separators and symbol side (`$1,234.50`, `1.234,50 €`) |
 | `TimeZonePicker` | Time zone names, where the engine has them |
 
 ```tsx live
@@ -62,6 +63,8 @@ Hermes can't list or name countries and time zones (`Intl.DisplayNames`, `Intl.s
 | `SelectList` | `searchPlaceholder`, `emptyText`, `loadingText` (`Loading…`), `searchPrompt` (`Type to search`) |
 | `CountryPicker` | `placeholder` (`Select a country`), `searchPlaceholder` (`Search countries`), `preferredLabel` (`Suggested`), `allCountriesLabel` (`All countries`) |
 | `PhoneField` | `label`, `countrySheetTitle` (`Country code`) |
+| `CurrencyPicker` | `placeholder` (`Select a currency`), `searchPlaceholder` (`Search currencies`), `preferredLabel` (`Suggested`), `allCurrenciesLabel` (`All currencies`) |
+| `AmountField` | `label`, `currencySheetTitle` (`Currency`) |
 | `TimeZonePicker` | `placeholder` (`Select a time zone`), `searchPlaceholder` (`Search time zones`), `preferredLabel` (`Your time zone`), `allTimeZonesLabel` (`All time zones`) |
 | `EmojiPicker` | `searchPlaceholder` (`Search emoji`), `emptyText` (`No emoji found`), `categoryLabels` |
 | `TimePicker` | `dayPeriodLabels` (from the locale) |

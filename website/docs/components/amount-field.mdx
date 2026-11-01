@@ -1,0 +1,186 @@
+---
+title: React Native Currency Input
+description: "React Native currency and amount input: grouped as you type in the locale's format (1,234.50, 1.234,50 €, ₹12,34,567), the currency's decimal places, a number value, a currency picker button and a large amount for checkout and send-money screens. Pure JS, no masking library, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# AmountField
+
+`AmountField` is a React Native money input: the currency's symbol, then the amount, grouped as the user types, such as `$1,234.50`. It takes as many decimal places as the currency has, two for the dollar and none for the yen, and the value is a number, such as `1234.5`, or `null` when empty.
+
+It comes as a form field or as a large amount, big and centered like a send-money screen. A currency button can open a [`CurrencyPicker`](./currency-picker), and the field follows the [iOS, Material or web design](../guides/designs). No masking library and no dependency.
+
+```tsx
+import { AmountField } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { AmountField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [amount, setAmount] = useState<number | null>(null);
+  return <AmountField label="Price" value={amount} onChange={setAmount} />;
+}
+```
+
+Type `1234.5`: the field shows `1,234.5` as you type, and `1,234.50` once you leave it. Paste `$1,234.56` and the amount is read from it.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.amountField} />
+
+## The currency
+
+`currency` sets the symbol and the decimal places, and `defaultCurrency` starts with one, `'USD'` by default. `showCurrencyPicker` adds a button with the flag and code that opens the currency list, which takes the [`CurrencyPicker` props](./currency-picker#props) for which currencies it offers.
+
+```tsx live
+import { useState } from 'react';
+import { AmountField } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [amount, setAmount] = useState<number | null>(250);
+  const [currency, setCurrency] = useState<CurrencyCode>('EUR');
+  return (
+    <AmountField
+      label="Budget"
+      showCurrencyPicker
+      preferred={['USD', 'EUR', 'GBP']}
+      currency={currency}
+      onCurrencyChange={setCurrency}
+      value={amount}
+      onChange={setAmount}
+    />
+  );
+}
+```
+
+Picking a currency with fewer decimal places drops the extra digits: `12.50` in dollars becomes `12` in yen.
+
+## A large amount
+
+`variant="large"` shows the amount big and centered, with the currency as a pill under it, for checkout, tip and send-money screens. The amount shrinks as it grows so it stays on one line. Its weight follows the design: bold as in Apple Cash on iOS, regular as in Google Pay in Material.
+
+```tsx live
+import { useState } from 'react';
+import { AmountField } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [amount, setAmount] = useState<number | null>(null);
+  const [currency, setCurrency] = useState<CurrencyCode>('USD');
+  return (
+    <AmountField
+      variant="large"
+      label="Send to Maya"
+      showCurrencyPicker
+      currency={currency}
+      onCurrencyChange={setCurrency}
+      value={amount}
+      onChange={setAmount}
+      helperText="Arrives today"
+    />
+  );
+}
+```
+
+Tap the amount to type. The text input is hidden under it, so the keyboard, paste and screen readers work as in any field.
+
+## Number formats
+
+`locale` sets the separators and the symbol's side: `$1,234.50` in English, `1.234,50 €` in German and `₹12,34,567` with Indian grouping (`en-IN`). It's the device locale by default. Digits are always Latin, so what the user types reads back the same.
+
+```tsx live
+import { useState } from 'react';
+import { AmountField } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [amount, setAmount] = useState<number | null>(1234.5);
+  return <AmountField label="Betrag" locale="de-DE" defaultCurrency="EUR" value={amount} onChange={setAmount} />;
+}
+```
+
+While typing, anything but digits and the locale's decimal separator is dropped, as are digits past the currency's decimal places, so `12.345` can't be typed in dollars. Amounts are positive and up to 15 digits before the decimal point, as many as a JavaScript number holds exactly.
+
+## Errors and helper text
+
+`error` shows the field as invalid: a red border and label, and the message under the field when it's a string. `helperText` is the line under the field while there's no error message, and `required` adds an asterisk to the label. The field doesn't check the amount: set `error` from your form.
+
+```tsx live
+import { useState } from 'react';
+import { AmountField } from '@elik56a/react-native-pickers';
+
+const BALANCE = 500;
+
+export default function Example() {
+  const [amount, setAmount] = useState<number | null>(750);
+  return (
+    <AmountField
+      label="Withdraw"
+      required
+      helperText={`Balance: $${BALANCE}`}
+      error={amount !== null && amount > BALANCE && 'More than your balance'}
+      value={amount}
+      onChange={setAmount}
+    />
+  );
+}
+```
+
+## Storing the amount
+
+`onChange` gets the amount in the currency's main unit, such as `12.5` for twelve dollars fifty. Payment APIs such as Stripe take the minor unit, cents, as a whole number. Convert with the currency's `decimals`:
+
+```ts
+import { getCurrency } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+const toMinorUnits = (amount: number, currency: CurrencyCode) => Math.round(amount * 10 ** getCurrency(currency)!.decimals);
+
+toMinorUnits(12.5, 'USD'); // 1250
+toMinorUnits(1200, 'JPY'); // 1200
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number \| null` | — | The amount, `null` when empty. Leave it out to keep the amount inside. |
+| `defaultValue` | `number \| null` | `null` | Starting amount when `value` isn't set. |
+| `onChange` | `(value: number \| null) => void` | — | Called as the user types or picks a currency that drops decimal places. |
+| `currency` | `CurrencyCode` | — | The currency: its symbol, decimal places and flag. |
+| `defaultCurrency` | `CurrencyCode` | `'USD'` | Starting currency when `currency` isn't set. |
+| `onCurrencyChange` | `(currency: CurrencyCode) => void` | — | Called when the user picks a currency. |
+| `variant` | `'field' \| 'large'` | `'field'` | A form field, or a large centered amount. See [A large amount](#a-large-amount). |
+| `showCurrencyPicker` | `boolean` | `false` | A button with the currency's flag and code that opens a searchable currency list. |
+| `locale` | `string` | device locale | Separators, the symbol's side and the currency names. |
+| `label` | `string` | — | Above the field, on its border in Material, or over a large amount. Screen readers hear *Amount* without one. |
+| `placeholder` | `string` | zero in the currency's format, e.g. `0.00` | Shown while empty. |
+| `disabled` | `boolean` | `false` | |
+| `autoFocus` | `boolean` | `false` | Focus the input on mount. |
+| `error` | `string \| boolean` | — | Shows the field as invalid, with the message under it when it's a string. See [Errors and helper text](#errors-and-helper-text). |
+| `helperText` | `string` | — | Shown under the field, replaced by the `error` message. |
+| `required` | `boolean` | `false` | Adds an asterisk to the label and tells screen readers the field is required. The amount isn't checked. |
+| `currencies` / `exclude` / `preferred` | `CurrencyCode[]` | — | Which currencies the list offers, and which come first. See [CurrencyPicker](./currency-picker#the-currencies-you-accept). |
+| `showFlag` | `boolean` | `true` | Flags in the currency list. |
+| `preferredLabel` / `allCurrenciesLabel` | `string` | `'Suggested'` / `'All currencies'` | Headers of the list. |
+| `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal' \| 'inline'` | `'auto'` | Where the currency list opens: a dropdown on the web, a bottom sheet on native. |
+| `currencySheetTitle` | `string` | `'Currency'` | Title of the currency sheet. |
+| `sheet` | `Partial<SheetChromeProps>` | `sheetProps.height: 0.8` | Options for the currency sheet, as [`CurrencyPicker`](./currency-picker#props)'s. |
+| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
+| `style` | `StyleProp<ViewStyle>` | — | The field's container. |
+| `styles` | `{ label, field, input, symbol, amount, caret, currencyButton, currencyCode, chevron, helperText }` | — | [Slot styles](../guides/styling). `field` and `input` style the form field, `amount` and `caret` the large amount. |
+| `testID` | `string` | — | On the text input; the currency button gets `${testID}-currency`. |
+
+## Accessibility
+
+The input is named by the label and the currency, such as "Price, US Dollar", or "Amount" without a label. The keyboard is the number pad, with a decimal key for currencies that have decimal places. The currency button reads "Currency: " with the currency's name, with an `expanded` state while the list is open. Like every field, it reads "required" when `required` is set and the `error` message as its hint.
+
+## Related
+
+- [CurrencyPicker](./currency-picker): the currency list on its own
+- [PhoneField](./phone-field): the same kind of field for a phone number
+- [Forms guide](../guides/forms): fields in React Hook Form

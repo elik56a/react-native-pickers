@@ -1,4 +1,4 @@
-import type { CountryCode } from '@elik56a/react-native-pickers';
+import type { CountryCode, CurrencyCode } from '@elik56a/react-native-pickers';
 import { labelOptions } from '../home/demo/demo.utils';
 import type { Album, ApplicationValues, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
 
@@ -21,6 +21,8 @@ export const SHOWCASE_SCREEN = {
   albums: 'albums',
   application: 'application',
   store: 'store',
+  send: 'send',
+  exchange: 'exchange',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -78,6 +80,19 @@ export const SHOWCASE: ShowcaseItem[] = [
     blurb: 'The emoji button beside Send opens a sheet with search, recents and skin tones, and drops the emoji at the cursor.',
     components: ['EmojiPickerSheet'],
     recipe: 'chat-emoji',
+  },
+  {
+    key: SHOWCASE_SCREEN.send,
+    title: 'Send money',
+    blurb: 'The amount big and centered, bold on iOS and light in Material, with chips for quick amounts and a pill to switch currency.',
+    components: ['AmountField', 'CurrencyPicker', 'HorizontalList'],
+  },
+  {
+    key: SHOWCASE_SCREEN.exchange,
+    title: 'Send abroad',
+    blurb:
+      'Type what you send or what they get and the other side follows, in each currency’s own decimals: none for the yen, three for the dinar.',
+    components: ['AmountField', 'CurrencyPicker'],
   },
   {
     key: SHOWCASE_SCREEN.verify,
@@ -426,3 +441,39 @@ export const LAUNCH_PRESETS = [
   { label: 'First week', from: 0, to: 6 },
   { label: 'First month', from: 0, to: 29 },
 ];
+
+export const SEND = {
+  amount: 25,
+  currency: 'USD' as CurrencyCode,
+  preferred: ['USD', 'EUR', 'GBP', 'ILS'] as CurrencyCode[],
+};
+
+export const QUICK_AMOUNTS = [10, 25, 50, 100];
+
+/** Made up for the demo: units of each currency per US dollar. */
+export const RATES: Partial<Record<CurrencyCode, number>> = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.79,
+  ILS: 3.7,
+  JPY: 151,
+  INR: 83,
+  CAD: 1.36,
+  KWD: 0.31,
+};
+
+export const EXCHANGE_CURRENCIES = Object.keys(RATES) as CurrencyCode[];
+
+export const EXCHANGE_SIDE = {
+  send: 'send',
+  receive: 'receive',
+} as const;
+
+export const EXCHANGE = {
+  amount: 1000,
+  from: 'USD' as CurrencyCode,
+  to: 'EUR' as CurrencyCode,
+};
+
+/** Significant digits of the rate line: 0.92, 151, 0.002053 */
+export const RATE_PRECISION = 4;

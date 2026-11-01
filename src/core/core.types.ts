@@ -184,6 +184,13 @@ export interface PickerTextProps extends TextProps {
   color?: keyof PickerTheme['colors'];
 }
 
+export interface CaretProps {
+  fontSize: number;
+  opacity: Animated.Value;
+  theme: PickerTheme;
+  style?: StyleProp<ViewStyle>;
+}
+
 export interface TrackPanOptions {
   /** Where the drag is, 0–1 across and down */
   onMove: (x: number, y: number) => void;

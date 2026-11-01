@@ -1,10 +1,21 @@
-import { ALBUM_SORT, ALBUMS, APPLICATION_ERRORS, CLOSED_WEEKDAY, EMPTY_APPLICATION, TIMER_PRESETS } from './showcase.constants';
+import {
+  ALBUM_SORT,
+  ALBUMS,
+  APPLICATION_ERRORS,
+  CLOSED_WEEKDAY,
+  EMPTY_APPLICATION,
+  EXCHANGE_SIDE,
+  TIMER_PRESETS,
+} from './showcase.constants';
 import type { ApplicationValues } from './showcase.types';
 import {
   attentionLabel,
+  convertAmount,
   findPreset,
   formatClock,
   formatHour,
+  formatRate,
+  getExchangeAmounts,
   insertAtSelection,
   isClosedDay,
   launchPresets,
@@ -130,5 +141,32 @@ describe('launchPresets', () => {
     expect(weekend?.label).toBe('Opening weekend');
     expect(Math.round((+(weekend?.start ?? 0) - +today) / 86_400_000)).toBe(5);
     expect(Math.round((+(weekend?.end ?? 0) - +today) / 86_400_000)).toBe(6);
+  });
+});
+
+describe('convertAmount', () => {
+  it('rounds to the decimal places of the currency it converts to', () => {
+    expect(convertAmount(1000, 'USD', 'EUR')).toBe(920);
+    expect(convertAmount(12.34, 'USD', 'JPY')).toBe(1863);
+    expect(convertAmount(10, 'USD', 'KWD')).toBe(3.1);
+    expect(convertAmount(100, 'EUR', 'USD')).toBe(108.7);
+  });
+
+  it('keeps an empty amount empty', () => {
+    expect(convertAmount(null, 'USD', 'EUR')).toBeNull();
+  });
+});
+
+describe('getExchangeAmounts', () => {
+  it('converts the side the user did not type', () => {
+    expect(getExchangeAmounts({ side: EXCHANGE_SIDE.send, amount: 100 }, 'USD', 'GBP')).toEqual({ send: 100, receive: 79 });
+    expect(getExchangeAmounts({ side: EXCHANGE_SIDE.receive, amount: 79 }, 'USD', 'GBP')).toEqual({ send: 100, receive: 79 });
+  });
+});
+
+describe('formatRate', () => {
+  it('shows the rate to four significant digits', () => {
+    expect(formatRate('USD', 'JPY')).toBe('1 USD = 151 JPY');
+    expect(formatRate('JPY', 'USD')).toBe('1 JPY = 0.006623 USD');
   });
 });

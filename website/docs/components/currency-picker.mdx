@@ -1,0 +1,144 @@
+---
+title: React Native Currency Picker
+description: "React Native currency picker: 154 currencies with flags, symbols and ISO 4217 codes, names in the user's language, search by name, code or symbol, and suggested currencies on top. Pure JS, works in Expo Go."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# CurrencyPicker
+
+`CurrencyPicker` is a React Native field for choosing a currency, such as an account's currency or the one a price is in. Each currency shows under its name, such as 🇯🇵 **Japanese Yen**, with its code and symbol below (`JPY · ¥`). Search matches the name, the code or the symbol.
+
+It's a [`SelectPicker`](./select-picker) with the 154 currencies countries use today built in, so it takes the same props: a bottom sheet on phones, a dropdown on the web, multiple selection, a clear button and the [iOS, Material or web design](../guides/designs). For an amount in a currency, use [`AmountField`](./amount-field).
+
+```tsx
+import { CurrencyPicker } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { CurrencyPicker } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [currency, setCurrency] = useState<CurrencyCode | null>('EUR');
+  return <CurrencyPicker label="Currency" value={currency} onChange={setCurrency} />;
+}
+```
+
+Try searching `yen`, `chf` or `₪`. The value is an ISO 4217 code, such as `'USD'` or `'JPY'`, ready for `Intl.NumberFormat` or your payment provider.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.currencyPicker} />
+
+## The currencies you accept
+
+`currencies` limits the list to the ones your payment provider settles in, and `preferred` pins some to the top under their own header, such as the user's own currency.
+
+```tsx live
+import { useState } from 'react';
+import { CurrencyPicker } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+const ACCEPTED: CurrencyCode[] = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF', 'ILS'];
+
+export default function Example() {
+  const [currency, setCurrency] = useState<CurrencyCode | null>('USD');
+  return (
+    <CurrencyPicker
+      label="Payout currency"
+      currencies={ACCEPTED}
+      preferred={['USD', 'EUR']}
+      value={currency}
+      onChange={setCurrency}
+    />
+  );
+}
+```
+
+Pass `currencies`, `exclude` and `preferred` from a constant, not a new array on every render, so the list is built once.
+
+## Flags
+
+Each currency shows the flag of its country, and the euro shows the EU flag. Currencies shared by countries without a common flag, such as the West African CFA franc, show none. Hide them all with `showFlag={false}`. Flags are emoji: no images to add.
+
+## Names in the user's language
+
+Names come from `Intl.DisplayNames` in `locale`, the device locale by default, and the list is sorted by them. Where the JavaScript engine has no `Intl.DisplayNames` (Hermes), they're in English. The code and symbol are the same in every language, so search by code always works.
+
+```tsx live
+import { useState } from 'react';
+import { CurrencyPicker } from '@elik56a/react-native-pickers';
+import type { CurrencyCode } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [currency, setCurrency] = useState<CurrencyCode | null>('EUR');
+  return (
+    <CurrencyPicker
+      label="Währung"
+      placeholder="Währung wählen"
+      searchPlaceholder="Suchen"
+      locale="de"
+      value={currency}
+      onChange={setCurrency}
+    />
+  );
+}
+```
+
+## Utilities
+
+| Export | Description |
+| --- | --- |
+| `getCurrency(code)` | `{ code, name, symbol, decimals, country }` for a code in any case, or `undefined` |
+| `getAllCurrencies()` | Every `Currency`, sorted by code |
+| `getCurrencyName(currency, locale?)` | The currency's name in `locale`, or its English name |
+
+```ts
+getCurrency('jpy'); // { code: 'JPY', name: 'Japanese Yen', symbol: '¥', decimals: 0, country: 'JP' }
+```
+
+`decimals` is how many digits come after the decimal point: 2 for the dollar, 0 for the yen, 3 for the Kuwaiti dinar. Use it to turn an amount into the minor units payment APIs take: `Math.round(amount * 10 ** decimals)`.
+
+## Props
+
+Every [`SelectPicker` prop](./select-picker#props) works, apart from the server search ones (`options`, `loadOptions`, `onSearchChange`, `loading` and the rest): the list is built in. `value` is a `CurrencyCode`, or `CurrencyCode[]` with `multiple`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `currencies` | `CurrencyCode[]` | all | Only these currencies. |
+| `exclude` | `CurrencyCode[]` | — | Leave these out. |
+| `preferred` | `CurrencyCode[]` | — | Shown first, in this order, under their own header. |
+| `showFlag` | `boolean` | `true` | A flag before each currency: its country's, or the EU's for the euro. |
+| `preferredLabel` | `string` | `'Suggested'` | Header above `preferred`. |
+| `allCurrenciesLabel` | `string` | `'All currencies'` | Header above the rest when `preferred` is set. |
+| `locale` | `string` | device locale | Language of the currency names. |
+| `placeholder` | `string` | `'Select a currency'` | Shown while nothing is selected. |
+| `searchPlaceholder` | `string` | `'Search currencies'` | Search field placeholder. |
+| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+
+### Types
+
+```ts
+type CurrencyCode = 'AED' | 'AFN' | … | 'USD' | … | 'ZMW' | 'ZWG'; // ISO 4217
+
+interface Currency {
+  code: CurrencyCode;
+  name: string; // English
+  symbol: string; // the narrow symbol, '$', or the code where there's none, 'CHF'
+  decimals: number; // digits after the decimal point
+  country?: string; // the flag: 'US', or 'EU' for the euro
+}
+```
+
+## Accessibility
+
+Each row is named by the currency's name, such as "Japanese Yen". Flags are hidden from screen readers. The field and the list have [SelectPicker's accessibility](./select-picker#accessibility).
+
+## Related
+
+- [`AmountField`](./amount-field): an amount in a currency, with this list behind its currency button
+- [`CountryPicker`](./country-picker): countries with flags and dialing codes
+- [`SelectPicker`](./select-picker): any list of options

@@ -50,4 +50,5 @@ export const styles = StyleSheet.create({
   albumCover: { width: 44, height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
   albumText: { flex: 1 },
   more: { fontSize: 20, paddingHorizontal: 8 },
+  sendAmount: { flex: 1, justifyContent: 'center' },
 });

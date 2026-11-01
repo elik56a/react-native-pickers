@@ -28,6 +28,8 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`CountryPicker`](../components/country-picker) | Country field: flags, dialing codes, localized names |
 | [`LanguagePicker`](../components/language-picker) | Language field: each language in itself, its name in the user's language below |
 | [`PhoneField`](../components/phone-field) | Phone number input: country code button, formats as you type, E.164 value |
+| [`CurrencyPicker`](../components/currency-picker) | Currency field: flags, ISO codes and symbols, localized names |
+| [`AmountField`](../components/amount-field) | Money input: grouped as you type, the currency's decimals, a number value |
 | [`TimeZonePicker`](../components/time-zone-picker) | Time zone field: GMT offsets, sorted by offset, the device's zone on top |
 | [`HorizontalList<T>`](../components/horizontal-list) | Segmented control or chips that scroll sideways |
 | [`EmojiPicker`](../components/emoji-picker) | Emoji keyboard |
@@ -113,6 +115,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 [`parsePhone`](../components/phone-field#utilities) · [`formatNationalNumber`](../components/phone-field#utilities) · [`isValidPhone`](../components/phone-field#utilities) · [`toE164`](../components/phone-field#utilities)
 
+## Currency utilities
+
+[`getCurrency`](../components/currency-picker#utilities) · [`getAllCurrencies`](../components/currency-picker#utilities) · [`getCurrencyName`](../components/currency-picker#utilities)
+
 ## Time zone utilities
 
 [`getDeviceTimeZone`](../components/time-zone-picker#utilities) · [`getTimeZoneOffset`](../components/time-zone-picker#utilities) · [`formatGmtOffset`](../components/time-zone-picker#utilities) · [`getTimeZoneName`](../components/time-zone-picker#utilities) · [`normalizeTimeZone`](../components/time-zone-picker#utilities) · [`getTimeZone`](../components/time-zone-picker#utilities) · [`getAllTimeZones`](../components/time-zone-picker#utilities)
@@ -170,7 +176,7 @@ type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'ch
 /** A message shown under the field, or `true` to mark it invalid without one. */
 type FieldError = string | boolean;
 
-/** Validation shown on every field, SelectPicker, PhoneField and OtpField (`error` and `helperText` only). Set from your form; the field doesn't check the value. */
+/** Validation shown on every field, SelectPicker, PhoneField, AmountField and OtpField (`error` and `helperText` only). Set from your form; the field doesn't check the value. */
 interface FieldStatusProps {
   error?: FieldError;       // invalid: red border and label, the message under the field when it's a string
   helperText?: string;      // under the field, replaced by the error message
@@ -194,6 +200,8 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme>; design?: Design }
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
 | LanguagePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allLanguagesLabel` | `Select a language` / `Search languages` / `Suggested` / `All languages` |
 | PhoneField | `label` / `countrySheetTitle` | none (read as `Phone number`) / `Country code` |
+| CurrencyPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCurrenciesLabel` | `Select a currency` / `Search currencies` / `Suggested` / `All currencies` |
+| AmountField | `label` / `placeholder` / `currencySheetTitle` | none (read as `Amount`) / zero in the currency's format (`0.00`) / `Currency` |
 | TimeZonePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allTimeZonesLabel` | `Select a time zone` / `Search time zones` / `Your time zone` / `All time zones` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
@@ -235,7 +243,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme>; design?: Design }
 | `closeOnSelect` | `true` | SelectPicker, EmojiPickerSheet |
 | `chips` | `true` | SelectPicker |
 | `clearable` / `disabled` | `false` | SelectPicker, fields |
-| `required` | `false` | SelectPicker, fields, PhoneField |
+| `required` | `false` | SelectPicker, fields, PhoneField, AmountField |
 | `columns` / `height` | `8` / `380` (`420` in sheet) | EmojiPicker |
 | `maxRecent` | `24` | EmojiPicker |
 | `maxHeightRatio` | `0.9` | BottomSheet |

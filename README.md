@@ -105,6 +105,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`CountryPicker`](https://react-native-pickers.dev/docs/components/country-picker) | About 250 countries with flags and dialing codes, localized names, preferred countries on top |
 | [`LanguagePicker`](https://react-native-pickers.dev/docs/components/language-picker) | 86 languages with flags, each under its own name (Español, 日本語) with its name in the user's language below, right-to-left detection |
 | [`PhoneField`](https://react-native-pickers.dev/docs/components/phone-field) | Phone number input: a country code button, the number formatted as it's typed, an E.164 value |
+| [`CurrencyPicker`](https://react-native-pickers.dev/docs/components/currency-picker) | 154 currencies with flags, codes and symbols, names in the user's language, search by name, code or symbol |
+| [`AmountField`](https://react-native-pickers.dev/docs/components/amount-field) | Money input grouped as it's typed in the locale's format, the currency's decimal places, a currency button, a large amount for checkout screens |
 | [`TimeZonePicker`](https://react-native-pickers.dev/docs/components/time-zone-picker) | Every IANA time zone with its GMT offset, sorted by offset, the device's zone on top |
 | [`HorizontalList`](https://react-native-pickers.dev/docs/components/horizontal-list) | Segmented control or chips that scroll sideways and reveal the next item |
 | [`ColorPicker`](https://react-native-pickers.dev/docs/components/color-picker) | iOS's Grid / Spectrum / Sliders, Google's swatch circles, or the browser's spectrum; hex with opacity and a copy button |
@@ -452,6 +454,20 @@ A phone number input: a flag and calling code button that opens the country list
 | `label` / `placeholder` | `string` | an example in the country's format |
 
 `parsePhone('+44 7911 123456')` returns `{ country: 'GB', nationalNumber: '7911123456' }`.
+
+### CurrencyPicker and AmountField
+
+`CurrencyPicker` is a `SelectPicker` with 154 currencies built in, each with its flag, code and symbol; the value is an ISO 4217 code (`'EUR'`). `AmountField` is a money input: the amount grouped as it's typed in the locale's format (`$1,234.50`, `1.234,50 €`), with the currency's decimal places. The value is a number, or `null` when empty.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `number \| null` | |
+| `currency` / `defaultCurrency` / `onCurrencyChange` | `CurrencyCode` | `'USD'` |
+| `variant` | `'field'`, or `'large'`: big and centered, for checkout and send-money screens | `'field'` |
+| `showCurrencyPicker` | `boolean`: a flag and code button that opens `CurrencyPicker` | `false` |
+| `locale` | `string`: separators and the symbol's side | device locale |
+
+`getCurrency('JPY')` returns `{ code, name, symbol, decimals, country }`; `decimals` turns an amount into minor units.
 
 ### TimeZonePicker
 

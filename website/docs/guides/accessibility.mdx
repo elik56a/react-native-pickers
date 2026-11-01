@@ -46,17 +46,18 @@ Name your wheels, especially multi-column ones:
 - The search input is labelled with `searchPlaceholder`.
 - While `loading`, the loader is a `progressbar`.
 
-Every field, `SelectPicker`, `PhoneField` and `OtpField` reads "required" after its label when `required` is set, and reads the `error` message as its hint.
+Every field, `SelectPicker`, `PhoneField`, `AmountField` and `OtpField` reads "required" after its label when `required` is set, and reads the `error` message as its hint.
 
 ## Slider and rating
 
 - Each slider thumb is `adjustable`: swipe up or down to step it. It's named by `accessibilityLabel`, or `thumbLabels` on a range (default **Minimum** and **Maximum**), and its value is the formatted number.
 - An interactive `Rating` is `adjustable` too, named **Rating** by default, with a value such as "3 of 5" (`formatValue`). A `readOnly` rating is read as text.
 
-## Codes and phone numbers
+## Codes, phone numbers and amounts
 
 - `OtpField` is one text input named **Verification code** by default; the boxes are hidden from screen readers. It asks for SMS autofill (`oneTimeCode` on iOS, `sms-otp` on Android).
 - In `PhoneField`, the country button reads "Country code: " with the country and its dialing code, with an `expanded` state. The number input asks for phone autofill (`tel`).
+- `AmountField`'s input is named by its label and the currency, such as "Price, US Dollar" (**Amount** without a label), on a number pad. Its currency button reads "Currency: " with the currency's name, with an `expanded` state.
 
 ## Menu and action sheet
 

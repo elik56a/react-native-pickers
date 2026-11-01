@@ -10,6 +10,14 @@ export const PLATFORM = {
   web: 'web',
 } as const satisfies Record<string, PlatformOSType>;
 
+export const CARET_WIDTH = 2;
+/** The caret's height, as a multiple of its text's font size. */
+export const CARET_HEIGHT_RATIO = 1.2;
+/** The caret shows and hides this long each, as a text field's does. */
+export const CARET_BLINK_MS = 500;
+/** A mobile browser zooms into a focused input with smaller text, so a hidden input keeps this size. */
+export const NO_ZOOM_FONT_SIZE = 16;
+
 /** Desktop browsers can draw a permanent scrollbar track, which looks out of place in phone-style lists. */
 export const SHOWS_SCROLL_INDICATOR = Platform.select({ web: false, default: true });
 

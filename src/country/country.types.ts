@@ -40,7 +40,8 @@ export interface CountryListOptions {
 }
 
 export interface CountryFlagProps {
-  code: CountryCode;
+  /** A region code, e.g. 'US', or 'EU' for the euro */
+  code: string;
 }
 
 export type CountryPickerProps = BuiltInSelectPickerProps<CountryCode> & CountryListOptions;
