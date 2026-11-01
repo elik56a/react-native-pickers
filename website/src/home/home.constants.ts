@@ -34,7 +34,7 @@ export const FEATURES = [
   },
   {
     title: 'Ranges, built in',
-    body: 'Single, range and multiple date selection with min/max nights, disabled days, prices and dots, all with no marking logic to write.',
+    body: 'Single, range and multiple date selection with presets like Last 7 days, min/max nights, disabled days, prices and dots, all with no marking logic to write.',
   },
   {
     title: 'Search anything',
@@ -59,7 +59,7 @@ export const COMPONENTS = [
   { doc: 'components/month-picker', name: 'MonthPicker', body: 'Card expiry, reports: wheels or a month grid' },
   { doc: 'components/week-strip', name: 'WeekStrip', body: 'A week of days to swipe, with marked days' },
   { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheels, or calendar + time' },
-  { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, min/max nights, multiple' },
+  { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, presets, min/max nights, multiple' },
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },
   { doc: 'components/select-list', name: 'SelectList', body: 'The searchable list, inline' },
   { doc: 'components/country-picker', name: 'CountryPicker', body: 'Flags, dialing codes, localized names' },

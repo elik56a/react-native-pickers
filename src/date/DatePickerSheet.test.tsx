@@ -32,6 +32,18 @@ describe('DatePickerSheet', () => {
     expect(screen.queryByRole('header', { name: /Oct 15/ })).toBeNull();
   });
 
+  it('confirms a range picked from a preset', async () => {
+    const onConfirm = jest.fn();
+    const presets = [{ label: 'Week one', start: new Date(2026, 9, 1), end: new Date(2026, 9, 7) }];
+    await render(
+      <DatePickerSheet visible mode="range" onClose={jest.fn()} onConfirm={onConfirm} initialMonth={OCTOBER} presets={presets} />
+    );
+    await fireEvent.press(screen.getByRole('radio', { name: 'Week one' }));
+    await fireEvent.press(done());
+    const { start, end } = onConfirm.mock.calls[0][0];
+    expect([toDateKey(start), toDateKey(end)]).toEqual(['2026-10-01', '2026-10-07']);
+  });
+
   it('confirms on tap with confirmOnSelect', async () => {
     const onConfirm = jest.fn();
     const onClose = jest.fn();

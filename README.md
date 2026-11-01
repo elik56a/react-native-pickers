@@ -351,7 +351,7 @@ A length of time, such as a timer or a workout, rather than a time of day. The v
 | `mode` | `value` | `onChange` | Extra props |
 |---|---|---|---|
 | `'single'` (default) | `Date \| null` | `(date)` | |
-| `'range'` | `{ start, end }` | `(range)` | `minRangeDays` `maxRangeDays` `allowSingleDayRange` |
+| `'range'` | `{ start, end }` | `(range)` | `minRangeDays` `maxRangeDays` `allowSingleDayRange` `presets` |
 | `'multiple'` | `Date[]` | `(dates)` | `maxSelections` |
 | `'ranges'` | `DateRange[]` | `(ranges)` | `maxRanges` |
 

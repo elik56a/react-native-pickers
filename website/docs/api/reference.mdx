@@ -82,6 +82,8 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 [`startOfDay`](./date-utils#startofday) · [`startOfMonth`](./date-utils#startofmonth) · [`daysInMonth`](./date-utils#daysinmonth) · [`addDays`](./date-utils#adddays) · [`addMonths`](./date-utils#addmonths) · [`isSameDay`](./date-utils#issameday) · [`isSameMonth`](./date-utils#issamemonth) · [`compareDay`](./date-utils#compareday) · [`isBetweenDays`](./date-utils#isbetweendays) · [`isOutOfRange`](./date-utils#isoutofrange) · [`clampDate`](./date-utils#clampdate) · [`toDateKey`](./date-utils#todatekey) · [`buildMonthGrid`](./date-utils#buildmonthgrid) · [`getMonthNames`](./date-utils#getmonthnames) · [`getWeekdayNames`](./date-utils#getweekdaynames) · [`formatMonthYear`](./date-utils#formatmonthyear) · [`formatDate`](./date-utils#formatdate) · [`uses12HourClock`](./date-utils#uses12hourclock) · [`getFirstDayOfWeek`](./date-utils#getfirstdayofweek) · [`getDayPeriods`](./date-utils#getdayperiods)
 
+[`getRangePresets`](../components/date-range-picker#presets): Today, Yesterday, Last 7 days, Last 30 days, This month and Last month as `presets` for a range calendar.
+
 `CALENDAR_MODE`: the calendar selection modes as constants (`single`, `range`, `multiple`, `ranges`), e.g. `mode={CALENDAR_MODE.ranges}`.
 
 ## Emoji utilities
@@ -120,6 +122,10 @@ See [TypeScript](../guides/typescript#exported-types) for the full list. The mos
 
 ```ts
 interface DateRange { start: Date | null; end: Date | null }
+
+interface DateRangePreset { label: string; start: Date; end: Date }
+
+type RangePresetsListProps = Omit<HorizontalListProps<DateRange>, 'items' | 'value' | 'onChange' | 'isEqual'>
 
 interface MarkedDate { dots?: string[]; disabled?: boolean; label?: string; textColor?: string }
 
@@ -173,6 +179,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
 | ColorPicker | `labels` | `Grid`, `Spectrum`, `Sliders`, `Hue`, `Opacity`, `Red`, `Green`, `Blue`, `Hex`, `Copy`, `Copied`, `Custom colour`… |
 | DurationPicker | `labels` | `{ hours: 'h', minutes: 'min', seconds: 's' }` |
+| `getRangePresets()` | `label` | `Today`, `Yesterday`, `Last 7 days`, `Last 30 days`, `This month`, `Last month` |
 
 ## Default values at a glance
 

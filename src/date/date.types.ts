@@ -1,7 +1,15 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { CALENDAR_MODE } from '../calendar/calendar.constants';
-import type { CalendarBaseProps, CalendarMode, CalendarProps, CalendarSlot, DateRange } from '../calendar/calendar.types';
+import type {
+  CalendarBaseProps,
+  CalendarMode,
+  CalendarProps,
+  CalendarSlot,
+  DateRange,
+  DateRangePreset,
+  RangePresetsListProps,
+} from '../calendar/calendar.types';
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { PICKER_DISPLAY } from '../core/core.constants';
 import type { PickerDisplay, ValueOf } from '../core/core.types';
@@ -51,6 +59,10 @@ export type DateSheetSelection =
       onConfirm: (range: DateRange) => void;
       minRangeDays?: number;
       maxRangeDays?: number;
+      /** Chips above the days that pick a whole range in one tap, such as `getRangePresets()` */
+      presets?: DateRangePreset[];
+      /** Any HorizontalList prop for the presets row, such as `variant`, `showArrows`, `renderItem` or `styles` */
+      presetsProps?: RangePresetsListProps;
     }
   | { mode: typeof CALENDAR_MODE.multiple; value?: Date[]; onConfirm: (dates: Date[]) => void; maxSelections?: number }
   | {

@@ -21,6 +21,7 @@ import {
   EMPTY_RANGE,
   MAX_DAY_SIZE,
   QUICK_GRID_COLUMNS,
+  RANGE_PRESET_LABELS,
   TODAY_MARK,
   WEEKDAY_ROW_HEIGHT,
   YEARS_PER_PAGE,
@@ -31,6 +32,7 @@ import type {
   CalendarSelection,
   CalendarView,
   DateRange,
+  DateRangePreset,
   DayDisabledRules,
   DayState,
   MarkedDate,
@@ -72,6 +74,33 @@ export const nextRange = (range: DateRange, day: Date, rules: RangeRules, isDisa
     end: day,
   };
 };
+
+/** Today, yesterday, the last 7 and 30 days, this month so far and last month, counted back from `today`. */
+export const getRangePresets = (today = new Date()): DateRangePreset[] => {
+  const day = startOfDay(today);
+  const month = startOfMonth(day);
+  return [
+    { label: RANGE_PRESET_LABELS.today, start: day, end: day },
+    { label: RANGE_PRESET_LABELS.yesterday, start: addDays(day, -1), end: addDays(day, -1) },
+    { label: RANGE_PRESET_LABELS.last7Days, start: addDays(day, -6), end: day },
+    { label: RANGE_PRESET_LABELS.last30Days, start: addDays(day, -29), end: day },
+    { label: RANGE_PRESET_LABELS.thisMonth, start: month, end: day },
+    { label: RANGE_PRESET_LABELS.lastMonth, start: addMonths(month, -1), end: addDays(month, -1) },
+  ];
+};
+
+export const isSameRange = (a: DateRange, b: DateRange) => isSameDay(a.start, b.start) && isSameDay(a.end, b.end);
+
+/** The preset chips, each disabled unless tapping its two ends would pick it: within min/max, past no disabled day, and within the range rules. */
+export const getPresetItems = (presets: DateRangePreset[], rules: RangeRules, isDisabled: (day: Date) => boolean) =>
+  presets.map(({ label, start, end }) => ({
+    label,
+    value: {
+      start,
+      end,
+    },
+    disabled: isDisabled(start) || isDisabled(end) || !nextRange({ start, end: null }, end, rules, isDisabled)?.end,
+  }));
 
 /** Dates after toggling `day`, kept in order; null when adding would pass `maxSelections`. */
 export const toggleMultiple = (dates: Date[], day: Date, maxSelections?: number): Date[] | null => {

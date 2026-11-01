@@ -47,7 +47,7 @@ DateTimePicker     value: Date  onChange(date)  display 'wheel'(ios default)|'ca
                    timePosition 'beside'|'below'  timeDisplay 'wheel'|'dial'|'input'|'list'  minuteInterval format locale calendarProps
 DatePicker         display 'calendar'(default)|'wheel'
   mode 'single'    value: Date|null       onChange(date)
-  mode 'range'     value: {start,end}     onChange(range)   minRangeDays maxRangeDays allowSingleDayRange
+  mode 'range'     value: {start,end}     onChange(range)   minRangeDays maxRangeDays allowSingleDayRange presets (getRangePresets(): Today…Last month chips) presetsProps (HorizontalList props)
   mode 'multiple'  value: Date[]          onChange(dates)   maxSelections
   mode 'ranges'    value: DateRange[]     onChange(ranges)  maxRanges minRangeDays maxRangeDays allowSingleDayRange
   minDate maxDate isDateDisabled(date) markedDates{'YYYY-MM-DD':{dots?,label?,textColor?,disabled?}}

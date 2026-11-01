@@ -66,3 +66,33 @@ describe('writeControl', () => {
     expect(writeControl(once, presentation, 'bottomSheet')).toBe(writeControl(fields, presentation, 'bottomSheet'));
   });
 });
+
+describe('a dotted control', () => {
+  const presets = `<DatePicker
+  mode="range"
+  presets={presets}
+  presetsProps={{
+    showArrows: true,
+    accessibilityLabel: 'Quick ranges',
+  }}
+  maxDate={new Date()}
+/>`;
+
+  it('is offered only when the code passes that object', () => {
+    expect(findControls(presets).map((c) => c.prop)).toContain('presetsProps.showArrows');
+    expect(findControls('<DatePicker mode="range" presets={presets} />').map((c) => c.prop)).not.toContain('presetsProps.showArrows');
+  });
+
+  it('reads a key in the object, else the default', () => {
+    expect(readControl(presets, control(presets, 'presetsProps.showArrows'))).toBe(true);
+    expect(readControl(presets, control(presets, 'presetsProps.variant'))).toBe('chips');
+  });
+
+  it('replaces a key, or adds it as the object’s first line', () => {
+    const off = writeControl(presets, control(presets, 'presetsProps.showArrows'), false);
+    expect(off).toContain('presetsProps={{\n    showArrows: false,\n    accessibilityLabel');
+    const overlay = writeControl(off, control(off, 'presetsProps.arrowPosition'), 'overlay');
+    expect(overlay).toContain("presetsProps={{\n    arrowPosition: 'overlay',\n    showArrows: false,");
+    expect(overlay).toContain('maxDate={new Date()}');
+  });
+});

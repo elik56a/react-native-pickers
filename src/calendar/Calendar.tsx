@@ -5,7 +5,7 @@ import { usePickerTheme } from '../core';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { buildMonthGrid, formatMonthYear, getFirstDayOfWeek, getMonthNames, getWeekdayNames } from '../core/utils/date.utils';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
-import { CALENDAR_DESIGN, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
+import { CALENDAR_DESIGN, CALENDAR_MODE, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { CalendarProps } from './calendar.types';
 import {
   getAnchorMonth,
@@ -22,6 +22,7 @@ import {
 import { CalendarHeader } from './components/CalendarHeader';
 import { DayGrid } from './components/DayGrid';
 import { QuickGrid } from './components/QuickGrid';
+import { RangePresets } from './components/RangePresets';
 import { useCalendarSelection } from './hooks/useCalendarSelection';
 import { useMonthNavigation } from './hooks/useMonthNavigation';
 
@@ -61,10 +62,11 @@ export const Calendar = (props: CalendarProps) => {
     (day: Date) => isDayDisabled(day, { minDate, maxDate, isDateDisabled, markedDates }),
     [isDateDisabled, markedDates, maxDate, minDate]
   );
-  const { selection, select } = useCalendarSelection(props, isDisabled);
+  const { selection, select, selectRange } = useCalendarSelection(props, isDisabled);
+  const range = props.mode === CALENDAR_MODE.range ? props : undefined;
   const nav = useMonthNavigation({
     anchor: getAnchorMonth(initialMonth, selection),
-    followDate: selection.single,
+    followDate: selection.single ?? selection.range.start,
     minDate,
     maxDate,
     onMonthChange,
@@ -97,6 +99,17 @@ export const Calendar = (props: CalendarProps) => {
       {...ARROW_FOCUS}
       testID={testID}
     >
+      {range?.presets?.length ? (
+        <RangePresets
+          presets={range.presets}
+          range={selection.range}
+          rules={range}
+          isDisabled={isDisabled}
+          onSelect={selectRange}
+          theme={themeOverride}
+          listProps={range.presetsProps}
+        />
+      ) : null}
       <CalendarHeader
         label={getHeaderLabel(view, month, title)}
         accessibilityLabel={title}

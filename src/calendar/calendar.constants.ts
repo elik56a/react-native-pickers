@@ -91,3 +91,13 @@ export const ARROW_DIRECTION = {
 
 export const ARROW_DIRECTIONS: readonly ArrowDirection[] = [ARROW_DIRECTION.prev, ARROW_DIRECTION.next];
 export const ARROW_LABELS: Record<ArrowDirection, string> = { prev: 'Previous', next: 'Next' };
+
+export const RANGE_PRESET_LABELS = {
+  today: 'Today',
+  yesterday: 'Yesterday',
+  last7Days: 'Last 7 days',
+  last30Days: 'Last 30 days',
+  thisMonth: 'This month',
+  lastMonth: 'Last month',
+} as const;
+export const RANGE_PRESETS_ACCESSIBILITY_LABEL = 'Date ranges';

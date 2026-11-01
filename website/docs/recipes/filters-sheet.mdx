@@ -1,6 +1,6 @@
 ---
 title: Filters bottom sheet
-description: Build a React Native filters bottom sheet combining a sort segmented control, a date range, select fields and an Apply footer with draft state using BottomSheet, HorizontalList and useDraft.
+description: Build a React Native filters bottom sheet combining a sort segmented control, a date range with presets, select fields and an Apply footer with draft state using BottomSheet, HorizontalList and useDraft.
 ---
 
 # Filters bottom sheet
@@ -17,6 +17,7 @@ import {
   SelectList,
   useDraft,
   formatDate,
+  getRangePresets,
   usePickerTheme,
 } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
@@ -122,6 +123,7 @@ export default function FiltersExample() {
             mode="range"
             value={draft.dates}
             onChange={(dates) => setDraft({ ...draft, dates })}
+            presets={getRangePresets()}
             maxDate={new Date()}
             dayHeight={38}
           />
