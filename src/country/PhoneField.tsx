@@ -6,9 +6,9 @@ import { useFocus } from '../core/hooks/useFocus';
 import { useComponentTheme } from '../core/theme/ThemeProvider';
 import { FieldFrame } from '../sheet/components/FieldFrame';
 import { FloatingLabel } from '../sheet/components/FloatingLabel';
-import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet/sheet.constants';
+import { FIELD_DESIGN, FIELD_LABEL } from '../sheet/sheet.constants';
 import { styles as sheetStyles } from '../sheet/sheet.styles';
-import { getFieldAccessibility } from '../sheet/sheet.utils';
+import { getFieldAccessibility, getFieldBorderWidth, getFieldBoxStyle } from '../sheet/sheet.utils';
 import { CountryPicker } from './CountryPicker';
 import { CountryButton } from './components/CountryButton';
 import { DEFAULT_PHONE_LABEL, PHONE_COUNTRY_BUTTON_LABEL } from './country.constants';
@@ -45,32 +45,15 @@ export const PhoneField = (props: PhoneFieldProps) => {
   const phone = usePhoneField(props);
   const focus = useFocus();
   const country = getCountry(phone.country);
-  const look = FIELD_DESIGN[theme.design];
   const active = focus.focused || phone.picking;
-  const borderWidth = active ? look.openBorderWidth : 1;
   const invalid = !!error;
   const c = theme.colors;
 
   return (
     <View style={style}>
       <FieldFrame label={label} error={error} helperText={helperText} required={required} theme={theme} slots={slots}>
-        <View
-          style={[
-            sheetStyles.trigger,
-            {
-              minHeight: look.minHeight,
-              backgroundColor: c.background,
-              borderWidth,
-              borderColor: invalid ? c.danger : active ? c.primary : c[look.outline],
-              borderRadius: theme.radius.md,
-              paddingHorizontal: theme.spacing.md - (borderWidth - 1),
-              opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1,
-            },
-            active && look.focusRing && { boxShadow: `0px 0px 0px ${FOCUS_RING_WIDTH}px ${c.primaryMuted}` },
-            slots?.field,
-          ]}
-        >
-          {label && look.label === FIELD_LABEL.floating ? (
+        <View style={[sheetStyles.trigger, getFieldBoxStyle(theme, { open: active, invalid, disabled }), slots?.field]}>
+          {label && FIELD_DESIGN[theme.design].label === FIELD_LABEL.floating ? (
             // Raised for good: the calling code sits where a resting label would.
             <FloatingLabel
               label={label}
@@ -78,9 +61,9 @@ export const PhoneField = (props: PhoneFieldProps) => {
               open={active}
               invalid={invalid}
               required={required}
-              borderWidth={borderWidth}
+              borderWidth={getFieldBorderWidth(theme, active)}
               theme={theme}
-              style={[{ marginStart: theme.spacing.md - FLOATING_LABEL_PADDING - (borderWidth - 1) }, slots?.label]}
+              style={slots?.label}
             />
           ) : null}
           <View style={styles.phoneRow}>

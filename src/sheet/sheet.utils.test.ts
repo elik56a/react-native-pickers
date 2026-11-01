@@ -1,3 +1,6 @@
+import type { ViewStyle } from 'react-native';
+
+import { createTheme } from '../core/theme/theme.utils';
 import { DRAG_REACH } from './sheet.constants';
 import type { ScrollNode } from './sheet.types';
 import {
@@ -6,6 +9,8 @@ import {
   getDragStops,
   getDropdownFrame,
   getFieldAccessibility,
+  getFieldBorderWidth,
+  getFieldBoxStyle,
   getFieldMessage,
   getFloatingLabelShift,
   getReleaseTarget,
@@ -323,5 +328,31 @@ describe('getFieldAccessibility', () => {
     expect(getFieldAccessibility({ name: 'Date', value: 'Oct 31' }).accessibilityHint).toBe('Oct 31');
     expect(getFieldAccessibility({ name: 'Date', value: 'Oct 31', error: 'Too late' }).accessibilityHint).toBe('Oct 31. Too late');
     expect(getFieldAccessibility({ name: 'Date', error: true }).accessibilityHint).toBe('Invalid');
+  });
+});
+
+describe('getFieldBoxStyle', () => {
+  const box = (design: 'ios' | 'material' | 'web', state: { open?: boolean; invalid?: boolean; disabled?: boolean }) =>
+    getFieldBoxStyle(createTheme({ design }), { open: false, invalid: false, disabled: false, ...state }) as [ViewStyle, ViewStyle | false];
+
+  it('thickens the open border where the design does, and insets the padding to match', () => {
+    expect(getFieldBorderWidth(createTheme({ design: 'material' }), true)).toBe(2);
+    expect(getFieldBorderWidth(createTheme({ design: 'ios' }), true)).toBe(1);
+    const [open] = box('material', { open: true });
+    const [closed] = box('material', {});
+    expect(open.borderWidth).toBe(2);
+    expect(Number(closed.paddingHorizontal) - Number(open.paddingHorizontal)).toBe(1);
+  });
+
+  it('colors the border red when invalid, even open, and the primary color while open', () => {
+    const theme = createTheme({ design: 'web' });
+    expect(box('web', { open: true, invalid: true })[0].borderColor).toBe(theme.colors.danger);
+    expect(box('web', { open: true })[0].borderColor).toBe(theme.colors.primary);
+  });
+
+  it('rings an open field only on the web, and dims a disabled one', () => {
+    expect(box('web', { open: true })[1]).toHaveProperty('boxShadow');
+    expect(box('ios', { open: true })[1]).toBe(false);
+    expect(box('ios', { disabled: true })[0].opacity).toBeLessThan(1);
   });
 });

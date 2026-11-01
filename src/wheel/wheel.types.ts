@@ -117,6 +117,19 @@ export interface WheelRowProps<T> {
   onSelect?: (dataIndex: number) => void;
 }
 
+export interface WheelControlsOptions {
+  wheel: {
+    active: number;
+    move: (step: number) => void;
+    scrollToData: (dataIndex: number, animated: boolean) => void;
+    scrollToLogical: (logicalIndex: number, animated: boolean) => void;
+  };
+  toggleTyping: () => void;
+  keyboardInput: boolean;
+  disabled: boolean;
+  count: number;
+}
+
 /** A looping wheel repeats the items `copies` times; `middle` is where the centre copy starts. */
 export interface WheelLayout {
   copies: number;

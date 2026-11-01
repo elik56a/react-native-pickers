@@ -3,10 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
-import { DISABLED_TRIGGER_OPACITY, FIELD_DESIGN, FIELD_LABEL, FLOATING_LABEL_PADDING, FOCUS_RING_WIDTH } from '../sheet.constants';
+import { FIELD_DESIGN, FIELD_LABEL } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FieldTriggerProps } from '../sheet.types';
-import { getFieldAccessibility } from '../sheet.utils';
+import { getFieldAccessibility, getFieldBorderWidth, getFieldBoxStyle } from '../sheet.utils';
 import { Chevron } from './Chevron';
 import { FloatingLabel } from './FloatingLabel';
 
@@ -29,32 +29,12 @@ export const FieldTrigger = ({
   slots,
   testID,
 }: FieldTriggerProps) => {
-  const c = theme.colors;
-  const look = FIELD_DESIGN[theme.design];
-  const borderWidth = open ? look.openBorderWidth : 1;
-  const floating = look.label === FIELD_LABEL.floating && !!label;
+  const floating = FIELD_DESIGN[theme.design].label === FIELD_LABEL.floating && !!label;
   const raised = open || !!displayValue || children != null;
   const invalid = !!error;
 
   return (
-    <View
-      testID={testID}
-      style={[
-        styles.trigger,
-        {
-          minHeight: look.minHeight,
-          backgroundColor: c.background,
-          borderWidth,
-          borderColor: invalid ? c.danger : open ? c.primary : c[look.outline],
-          borderRadius: theme.radius.md,
-          // A thicker open border grows inward, so the content doesn't shift.
-          paddingHorizontal: theme.spacing.md - (borderWidth - 1),
-          opacity: disabled ? DISABLED_TRIGGER_OPACITY : 1,
-        },
-        open && look.focusRing && { boxShadow: `0px 0px 0px ${FOCUS_RING_WIDTH}px ${c.primaryMuted}` },
-        slots?.trigger,
-      ]}
-    >
+    <View testID={testID} style={[styles.trigger, getFieldBoxStyle(theme, { open, invalid, disabled }), slots?.trigger]}>
       {floating ? (
         <FloatingLabel
           label={label}
@@ -62,9 +42,9 @@ export const FieldTrigger = ({
           open={open}
           invalid={invalid}
           required={required}
-          borderWidth={borderWidth}
+          borderWidth={getFieldBorderWidth(theme, open)}
           theme={theme}
-          style={[{ marginStart: theme.spacing.md - FLOATING_LABEL_PADDING - (borderWidth - 1) }, slots?.label]}
+          style={slots?.label}
         />
       ) : null}
       {/* Full-size press target behind the content, so chips and clear stay sibling buttons */}

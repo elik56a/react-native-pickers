@@ -1,23 +1,20 @@
 import type React from 'react';
 import { useCallback, useMemo } from 'react';
-import type { AccessibilityActionEvent, FlatList } from 'react-native';
+import type { FlatList } from 'react-native';
 import { Animated, View } from 'react-native';
 
 import { OwnScroll } from '../core/components/OwnScroll';
-import { KEY } from '../core/core.constants';
 import { useComponentTheme } from '../core/theme/ThemeProvider';
-import { keyboardProps } from '../core/utils/keyboard.utils';
 import { WheelIndicator } from './components/WheelIndicator';
 import { WheelRow } from './components/WheelRow';
 import { WheelTypingInput } from './components/WheelTypingInput';
 import { useTypeToSelect } from './hooks/useTypeToSelect';
+import { useWheelControls } from './hooks/useWheelControls';
 import { useWheelScroll } from './hooks/useWheelScroll';
 import { DEFAULT_FADE_TO, DEFAULT_ITEM_HEIGHT, DEFAULT_ROTATION_DEG, DEFAULT_VISIBLE_ITEMS, WHEEL_VARIANT } from './wheel.constants';
 import { styles } from './wheel.styles';
 import type { WheelPickerProps } from './wheel.types';
 import { normalizeItem, toOddCount } from './wheel.utils';
-
-const A11Y_ACTIONS = [{ name: 'increment' }, { name: 'decrement' }];
 
 export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
   const {
@@ -63,24 +60,14 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
     onValueChanging,
     onDragStart: typeToSelect.stopTyping,
   });
-  const { active, move, scrollToData, scrollToLogical, toLogical, scrollY } = wheel;
-  const { toggleTyping } = typeToSelect;
-
-  const onRowPress = useCallback(
-    (dataIndex: number) => {
-      if (keyboardInput && dataIndex === active) toggleTyping();
-      else scrollToData(dataIndex, true);
-    },
-    [active, keyboardInput, scrollToData, toggleTyping]
-  );
-
-  const onAccessibilityAction = useCallback(
-    (e: AccessibilityActionEvent) => {
-      if (e.nativeEvent.actionName === 'increment') move(1);
-      if (e.nativeEvent.actionName === 'decrement') move(-1);
-    },
-    [move]
-  );
+  const { active, toLogical, scrollY } = wheel;
+  const { onRowPress, controlProps } = useWheelControls({
+    wheel,
+    toggleTyping: typeToSelect.toggleTyping,
+    keyboardInput,
+    disabled,
+    count: items.length,
+  });
 
   const renderRow = useCallback(
     ({ item: dataIndex }: { item: number }) => {
@@ -103,13 +90,12 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
           textAlign={textAlign}
           slots={slots}
           renderItem={renderItem}
-          onSelect={disabled ? undefined : onRowPress}
+          onSelect={onRowPress}
         />
       );
     },
     [
       active,
-      disabled,
       fadeTo,
       itemHeight,
       items,
@@ -134,16 +120,7 @@ export const WheelPicker = <T,>(props: WheelPickerProps<T>) => {
       accessibilityRole="adjustable"
       accessibilityLabel={accessibilityLabel}
       accessibilityValue={{ text: wheel.activeItem?.label }}
-      accessibilityActions={A11Y_ACTIONS}
-      onAccessibilityAction={onAccessibilityAction}
-      {...(disabled
-        ? null
-        : keyboardProps({
-            [KEY.up]: () => move(-1),
-            [KEY.down]: () => move(1),
-            [KEY.home]: () => scrollToLogical(0, true),
-            [KEY.end]: () => scrollToLogical(items.length - 1, true),
-          }))}
+      {...controlProps}
       testID={testID}
     >
       {showIndicator && <WheelIndicator itemHeight={itemHeight} theme={theme} style={slots?.indicator} renderIndicator={renderIndicator} />}
