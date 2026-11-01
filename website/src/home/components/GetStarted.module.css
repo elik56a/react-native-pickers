@@ -1,0 +1,10 @@
+.actions {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-heading-color);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

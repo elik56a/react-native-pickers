@@ -1,3 +1,4 @@
+import { BOOKING_FIELD } from '../demo/demo.constants';
 import type { Accent, DemoTab, PlaygroundOptions, TabOptions } from './playground.types';
 
 export const DEMO_TAB = {
@@ -6,32 +7,36 @@ export const DEMO_TAB = {
   wheel: 'wheel',
   select: 'select',
   emoji: 'emoji',
-  country: 'country',
 } as const;
 
-/** Shown in the props panel and the live code until the visitor touches a field on the phone. */
-export const PICK_A_FIELD = 'Tap a field on the phone to try its picker’s props.';
-export const PICK_A_FIELD_CODE = 'Tap a field on the phone to see its code.';
+/** The parts of the booking, in order, each with the picker the phone opens for it, for the panel's field chips. */
+export const FIELD_TABS = [
+  { tab: DEMO_TAB.select, label: BOOKING_FIELD.where },
+  { tab: DEMO_TAB.date, label: BOOKING_FIELD.dates },
+  { tab: DEMO_TAB.time, label: BOOKING_FIELD.checkIn },
+  { tab: DEMO_TAB.wheel, label: BOOKING_FIELD.guests },
+  { tab: DEMO_TAB.emoji, label: BOOKING_FIELD.vibe },
+];
+
+export const FIELD_LABELS = FIELD_TABS.map((field) => field.label);
 
 export const TAB_COMPONENTS: Record<DemoTab, string> = {
-  date: 'DatePickerField',
-  time: 'TimePickerField',
+  date: 'DatePicker',
+  time: 'TimePicker',
   wheel: 'MultiWheelPicker',
-  select: 'SelectPicker',
-  emoji: 'EmojiPickerField',
-  country: 'CountryPicker',
+  select: 'SelectList',
+  emoji: 'EmojiPicker',
 };
 
 export const TAB_DOCS: Record<DemoTab, string> = {
   date: 'components/date-picker',
   time: 'components/time-picker',
   wheel: 'components/multi-wheel-picker',
-  select: 'components/select-picker',
+  select: 'components/select-list',
   emoji: 'components/emoji-picker',
-  country: 'components/country-picker',
 };
 
-/** Each control maps to one real prop, except `prices`, `groups` and `preferred`, which switch the data passed in. */
+/** Each control maps to one real prop, except `prices` and `groups`, which switch the data passed in. */
 export const CONTROLS = {
   date: [
     { key: 'mode', values: ['single', 'range', 'multiple', 'ranges'] },
@@ -57,12 +62,7 @@ export const CONTROLS = {
   emoji: [
     { key: 'columns', values: [6, 7, 8] },
     { key: 'showSkinTones', values: [true, false] },
-    { key: 'categoryBarPosition', values: ['top', 'bottom'] },
-  ],
-  country: [
-    { key: 'preferred', values: [true, false] },
-    { key: 'showDialCode', values: [false, true] },
-    { key: 'locale', values: ['auto', 'de', 'ja'] },
+    { key: 'categoryBarPosition', values: ['auto', 'top', 'bottom'] },
   ],
 } as const;
 
@@ -71,8 +71,7 @@ export const DEFAULT_OPTIONS: PlaygroundOptions = {
   time: { format: 'auto', minuteInterval: 15, showSeconds: false },
   wheel: { variant: '3d', loop: false, visibleItems: 5 },
   select: { multiple: false, searchable: true, groups: true, loading: false },
-  emoji: { columns: 7, showSkinTones: true, categoryBarPosition: 'top' },
-  country: { preferred: true, showDialCode: false, locale: 'auto' },
+  emoji: { columns: 7, showSkinTones: true, categoryBarPosition: 'auto' },
 };
 
 export const ACCENTS: Accent[] = [

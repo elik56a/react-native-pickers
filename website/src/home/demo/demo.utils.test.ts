@@ -1,11 +1,14 @@
 import { toDateKey } from '@elik56a/react-native-pickers';
 import { PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
 import {
+  ADULT_ITEMS,
   bookedNights,
   buildPrices,
+  CHILD_ITEMS,
   daysFromNow,
   daysFromNowAt,
   deviceSheetProps,
+  guestColumns,
   guestsLabel,
   labelOptions,
   nightlyPrice,
@@ -68,6 +71,28 @@ describe('guestsLabel', () => {
     expect(guestsLabel({ adults: 1, children: 0 })).toBe('1 adult');
     expect(guestsLabel({ adults: 2, children: 1 })).toBe('2 adults, 1 child');
     expect(guestsLabel({ adults: 2, children: 3 })).toBe('2 adults, 3 children');
+  });
+});
+
+describe('guest wheel items', () => {
+  it('labels every count', () => {
+    expect(ADULT_ITEMS[0]).toEqual({ label: '1 adult', value: 1 });
+    expect(CHILD_ITEMS.slice(0, 2)).toEqual([
+      { label: '0 children', value: 0 },
+      { label: '1 child', value: 1 },
+    ]);
+  });
+});
+
+describe('guestColumns', () => {
+  it('changes one count and keeps the other', () => {
+    const onChange = jest.fn();
+    const [adults, children] = guestColumns({ adults: 2, children: 1 }, onChange, true);
+    expect([adults.value, children.value, adults.loop]).toEqual([2, 1, true]);
+    adults.onChange?.(3, 2);
+    expect(onChange).toHaveBeenLastCalledWith({ adults: 3, children: 1 });
+    children.onChange?.(0, 0);
+    expect(onChange).toHaveBeenLastCalledWith({ adults: 2, children: 0 });
   });
 });
 

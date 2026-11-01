@@ -7,10 +7,18 @@ import { revealAt } from '../home.utils';
 import styles from './Faq.module.css';
 
 export const Faq = () => (
-  <section className={clsx('container', shared.section)} aria-labelledby="faq-title">
-    <h2 id="faq-title" className={shared.h2} data-reveal>
-      React Native picker FAQ
-    </h2>
+  <section className={clsx('container', shared.section, shared.split)} aria-labelledby="faq-title">
+    <div className={styles.side}>
+      <p className={shared.eyebrow} data-reveal>
+        FAQ
+      </p>
+      <h2 id="faq-title" className={shared.h2} data-reveal>
+        React Native picker FAQ
+      </h2>
+      <p className={shared.sectionLink}>
+        <Link to="/docs/resources/faq">All questions →</Link>
+      </p>
+    </div>
     <div className={styles.faq}>
       {FAQS.map((item, i) => (
         <details key={item.question} className={styles.faqItem} data-reveal style={revealAt(i)}>
@@ -22,8 +30,5 @@ export const Faq = () => (
         </details>
       ))}
     </div>
-    <p className={shared.sectionLink}>
-      <Link to="/docs/resources/faq">All questions →</Link>
-    </p>
   </section>
 );

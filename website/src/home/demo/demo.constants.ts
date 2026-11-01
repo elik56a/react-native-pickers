@@ -7,7 +7,10 @@ export const PRICE_DAYS = 120;
 export const WEEKDAY_PRICE = 89;
 export const WEEKEND_PRICE = 149;
 export const SELECT_LIST_HEIGHT = 240;
-export const MAX_CITIES = 4;
+export const DAY_HEIGHT = 46;
+/** Everything on the playground's screen around the emoji grid or the select's list: title, button, padding and search */
+export const PLAYGROUND_EMOJI_CHROME = 234;
+export const PLAYGROUND_LIST_CHROME = 266;
 export const DEFAULT_VIBE = '🌴';
 
 export const CITIES = [

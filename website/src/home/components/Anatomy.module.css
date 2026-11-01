@@ -1,0 +1,339 @@
+/* On the hero's drafting paper: this section is the drawing that explains the part. */
+.anatomy {
+  position: relative;
+  isolation: isolate;
+  padding: 5rem 0;
+}
+
+.anatomy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(var(--site-grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px) 0 0 / 24px 24px;
+  mask-image: radial-gradient(60% 70% at 50% 60%, #000 30%, transparent 90%);
+}
+
+/* The middle column is the device's own width, and widens for the browser window when the web design is picked. */
+.drawing {
+  --device-column: var(--device-phone-width);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--device-column) minmax(0, 1fr);
+  transition: grid-template-columns 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+  margin-top: 3.5rem;
+}
+
+.drawing[data-platform="web"] {
+  --device-column: var(--device-web-width);
+}
+
+.device {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+/* One screen's callouts: keyed by the screen, so they fade in fresh each time it changes. */
+.set {
+  display: contents;
+}
+
+/* Every screen side by side in the phone, sliding across to the current one like a swipe between screens. */
+.track {
+  display: flex;
+  height: 100%;
+  transform: translateX(calc(var(--position) * -100%));
+  transition: transform var(--slide) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.track[data-instant] {
+  transition: none;
+}
+
+.slide {
+  display: flex;
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.slide > * {
+  flex: 1;
+}
+
+/* The screens, by component, above the device so they're seen before it: the current one fills its underline while it's on. */
+.tabs {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  position: relative;
+  overflow: hidden;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--site-border);
+  border-radius: 999px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-700);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--ifm-color-primary);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.tab[aria-pressed="true"] {
+  border-color: var(--ifm-heading-color);
+  color: var(--ifm-heading-color);
+}
+
+.tab[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--ifm-color-primary);
+}
+
+.group {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.divider {
+  width: 1px;
+  margin: 0.25rem 0.5rem;
+  background: var(--site-border);
+}
+
+/* Linear: it's a progress bar, timed to the screen. */
+.tabs[data-running] .screenTab[aria-pressed="true"]::after {
+  transform-origin: left;
+  animation: progress var(--cycle) linear both;
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Above the device, so the leader lines reach onto its frame from both sides. */
+.callouts {
+  position: relative;
+  z-index: 1;
+  grid-row: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.left {
+  grid-column: 1;
+}
+
+.right {
+  grid-column: 3;
+}
+
+/*
+ * A note at its height on the device, with a leader line running to a dot on the screen. Each screen's notes draw themselves once its
+ * slide lands: the line runs out to the screen, the dot lands, then the note fades up, one after another.
+ */
+.callout {
+  --enter: calc(0.55s + var(--i) * 0.12s);
+  position: absolute;
+  top: var(--y);
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: -0.75em 0 0;
+}
+
+.right .callout {
+  flex-direction: row-reverse;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: min(15rem, 70%);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ifm-color-emphasis-700);
+  animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--enter) + 0.15s) both;
+}
+
+.left .text {
+  text-align: right;
+}
+
+.text strong {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+}
+
+/* Runs to the device, where the dot pins the part's height on its frame: on the screen it would cover the very part it marks. */
+.line {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  height: 1px;
+  margin-top: 0.75em;
+  background: var(--ifm-heading-color);
+  pointer-events: none;
+  animation: draw 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) var(--enter) both;
+}
+
+.left .line {
+  margin-right: -0.4rem;
+  transform-origin: left;
+}
+
+.right .line {
+  margin-left: -0.4rem;
+  transform-origin: right;
+}
+
+.line::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: 50%;
+  background: var(--ifm-background-color);
+  animation: land 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--enter) + 0.35s) both;
+}
+
+.left .line::after {
+  right: -4px;
+}
+
+.right .line::after {
+  left: -4px;
+}
+
+.callout:hover strong {
+  color: var(--ifm-color-primary);
+}
+
+.callout:hover .line {
+  background: var(--ifm-color-primary);
+}
+
+/* The notes wait, undrawn, until the device is on screen, so the lines run out while someone is looking. */
+.drawing:not([data-visible]) .text,
+.drawing:not([data-visible]) .line,
+.drawing:not([data-visible]) .line::after {
+  animation-play-state: paused;
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes land {
+  from {
+    transform: scale(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (max-width: 1099px) {
+  .anatomy {
+    padding: 4rem 0;
+  }
+
+  .drawing {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+  }
+
+  .device,
+  .left,
+  .right,
+  .tabs {
+    grid-row: auto;
+    grid-column: 1;
+  }
+
+  /* The tabs, then the device, then the notes. */
+  .tabs {
+    order: -2;
+  }
+
+  .device {
+    order: -1;
+  }
+
+  .callouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: 1.5rem 2rem;
+  }
+
+  .callout {
+    position: static;
+    margin: 0;
+  }
+
+  .text,
+  .left .text {
+    width: auto;
+    text-align: left;
+  }
+
+  .line {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawing,
+  .track {
+    transition: none;
+  }
+
+  .line,
+  .line::after,
+  .text,
+  .tabs[data-running] .screenTab[aria-pressed="true"]::after {
+    animation: none;
+  }
+}

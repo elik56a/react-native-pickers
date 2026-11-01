@@ -27,7 +27,12 @@ export const AppScreen = ({ platform, title, subtitle, action, scroll = false, c
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
       </View>
       {scroll ? (
-        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollBody} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollBody}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           {children}
         </ScrollView>
       ) : (

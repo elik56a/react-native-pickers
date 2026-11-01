@@ -1,5 +1,5 @@
-import { ACCENTS, CONTROLS, DEFAULT_OPTIONS } from './playground.constants';
-import { buildSnippet, jsxProp, valueLabel } from './playground.utils';
+import { ACCENTS, CONTROLS, DEFAULT_OPTIONS, DEMO_TAB } from './playground.constants';
+import { buildSnippet, jsxProp, nextField, valueLabel } from './playground.utils';
 
 describe('jsxProp', () => {
   it('writes true as a bare name, strings quoted and other values in braces', () => {
@@ -13,17 +13,16 @@ describe('jsxProp', () => {
 describe('buildSnippet', () => {
   it('names the state after the date mode and leaves default props out', () => {
     expect(buildSnippet('date', { mode: 'single', prices: false, firstDayOfWeek: 0 })).toBe(
-      `import { DatePickerField } from '@elik56a/react-native-pickers';
+      `import { DatePicker } from '@elik56a/react-native-pickers';
 
-<DatePickerField
-  label="Dates"
+<DatePicker
   value={date}
-  onConfirm={setDate}
+  onChange={setDate}
   minDate={new Date()}
 />`
     );
     expect(buildSnippet('date', { mode: 'ranges', prices: true, firstDayOfWeek: 1 })).toContain(
-      'mode="ranges"\n  value={ranges}\n  onConfirm={setRanges}\n  minDate={new Date()}\n  markedDates={prices}\n  firstDayOfWeek={1}'
+      'mode="ranges"\n  value={ranges}\n  onChange={setRanges}\n  minDate={new Date()}\n  markedDates={prices}\n  firstDayOfWeek={1}'
     );
   });
 
@@ -32,18 +31,10 @@ describe('buildSnippet', () => {
     expect(buildSnippet('time', { format: '24h', minuteInterval: 15, showSeconds: true })).toContain(
       'format="24h"\n  minuteInterval={15}\n  showSeconds'
     );
-    expect(buildSnippet('emoji', { columns: 8, showSkinTones: true, categoryBarPosition: 'top' })).toContain(
-      '<EmojiPickerField\n  label="Vibe"\n  value={vibe}\n  onSelect={setVibe}\n/>'
+    expect(buildSnippet('emoji', { columns: 8, showSkinTones: true, categoryBarPosition: 'auto' })).toContain(
+      '<EmojiPicker\n  onSelect={setVibe}\n/>'
     );
-  });
-
-  it('writes the country props a visitor turned on, and no locale for the device one', () => {
-    expect(buildSnippet('country', { preferred: false, showDialCode: false, locale: 'auto' })).toContain(
-      '<CountryPicker\n  label="Country"\n  value={country}\n  onChange={setCountry}\n/>'
-    );
-    expect(buildSnippet('country', { preferred: true, showDialCode: true, locale: 'de' })).toContain(
-      "preferred={['US', 'GB', 'DE']}\n  showDialCode\n  locale=\"de\""
-    );
+    expect(buildSnippet('emoji', { columns: 8, showSkinTones: true, categoryBarPosition: 'top' })).toContain('categoryBarPosition="top"');
   });
 
   it('switches select state and data with the multiple and groups toggles', () => {
@@ -75,5 +66,13 @@ describe('valueLabel', () => {
   it('uses the control labels when it has them and the value otherwise', () => {
     expect(valueLabel(CONTROLS.date[2], 1)).toBe('Mon');
     expect(valueLabel(CONTROLS.time[1], 15)).toBe('15');
+  });
+});
+
+describe('nextField', () => {
+  it('steps through the booking in order and stops after the last field', () => {
+    expect(nextField(DEMO_TAB.select)?.tab).toBe(DEMO_TAB.date);
+    expect(nextField(DEMO_TAB.wheel)?.tab).toBe(DEMO_TAB.emoji);
+    expect(nextField(DEMO_TAB.emoji)).toBeUndefined();
   });
 });

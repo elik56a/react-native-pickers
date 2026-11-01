@@ -1,8 +1,8 @@
-import type { DateRange, MarkedDate } from '@elik56a/react-native-pickers';
+import type { DateRange, MarkedDate, WheelColumn } from '@elik56a/react-native-pickers';
 import { toDateKey } from '@elik56a/react-native-pickers';
 import { PLATFORM } from '../device/device.constants';
 import type { Platform } from '../device/device.types';
-import { DAY_MS, PHONE_STATUS_BAR, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
+import { ADULTS, CHILDREN, DAY_MS, PHONE_STATUS_BAR, PRICE_DAYS, WEEKDAY_PRICE, WEEKEND_PRICE } from './demo.constants';
 import type { BookedDates, Guests } from './demo.types';
 
 export const startOfToday = () => {
@@ -62,6 +62,35 @@ export const childrenLabel = (n: number) => plural(n, 'child', 'children');
 
 export const guestsLabel = ({ adults, children }: Guests) =>
   children ? `${adultsLabel(adults)}, ${childrenLabel(children)}` : adultsLabel(adults);
+
+/** The guests' two wheels, adults and children */
+export const ADULT_ITEMS = ADULTS.map((n) => ({
+  label: adultsLabel(n),
+  value: n,
+}));
+export const CHILD_ITEMS = CHILDREN.map((n) => ({
+  label: childrenLabel(n),
+  value: n,
+}));
+
+export const guestColumns = (guests: Guests, onChange: (guests: Guests) => void, loop: boolean): WheelColumn<number>[] => [
+  {
+    key: 'adults',
+    items: ADULT_ITEMS,
+    value: guests.adults,
+    onChange: (adults) => onChange({ ...guests, adults }),
+    loop,
+    accessibilityLabel: 'Adults',
+  },
+  {
+    key: 'children',
+    items: CHILD_ITEMS,
+    value: guests.children,
+    onChange: (children) => onChange({ ...guests, children }),
+    loop,
+    accessibilityLabel: 'Children',
+  },
+];
 
 /**
  * Sheets inside the mock phone stop under its status bar and clear its home indicator. A sheet caps its height against the browser

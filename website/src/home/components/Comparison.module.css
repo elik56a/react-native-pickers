@@ -1,10 +1,26 @@
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem 4rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.diff :global(.theme-code-block) {
+  margin: 0;
+}
+
+/* A ruled table, like the rest of the page's rules: a heavy line on top, hairlines between rows, no box. */
 .tableScroll {
   position: relative;
   overflow-x: auto;
-  border: 1px solid var(--site-border);
-  border-radius: 18px;
-  background: var(--ifm-background-color);
-  box-shadow: var(--site-shadow);
+  border-top: 2px solid var(--ifm-heading-color);
+}
+
+@media (max-width: 996px) {
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .compare {

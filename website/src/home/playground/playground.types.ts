@@ -27,8 +27,8 @@ export interface Accent {
 }
 
 export interface Playground {
-  /** The picker the props panel edits; null until the visitor touches a field */
-  tab: DemoTab | null;
+  /** The picker the phone shows open and the props panel edits */
+  tab: DemoTab;
   options: PlaygroundOptions;
   accent: Accent;
   selectTab: (tab: DemoTab) => void;

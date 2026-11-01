@@ -1,8 +1,18 @@
+/* The heading stays beside the questions while they open. */
+.side {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 2rem);
+}
+
 .faq {
   interpolate-size: allow-keywords;
-  max-width: 48rem;
-  margin: 0 auto;
-  border-top: 1px solid var(--site-border);
+  border-top: 1px solid var(--ifm-heading-color);
+}
+
+@media (max-width: 996px) {
+  .side {
+    position: static;
+  }
 }
 
 .faqItem {

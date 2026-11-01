@@ -1,10 +1,9 @@
 import Link from '@docusaurus/Link';
-import clsx from 'clsx';
 
 import { needsSelect } from '../../../catalog/catalog.utils';
 import { Choices } from '../../../components/Choices';
 import { PropSelect } from '../../../components/PropPlayground';
-import { CONTROLS, PICK_A_FIELD, TAB_COMPONENTS } from '../playground.constants';
+import { CONTROLS, FIELD_LABELS, FIELD_TABS, TAB_COMPONENTS } from '../playground.constants';
 import styles from '../playground.module.css';
 import type { Control, ControlValue, DemoTab, Playground } from '../playground.types';
 import { controlValues, valueLabel } from '../playground.utils';
@@ -51,32 +50,39 @@ const Controls = ({ tab, playground: { options, setOption } }: ControlsProps) =>
   });
 };
 
-/** The props of the picker behind the booking field last touched, or a hint to touch one; the theme applies to the whole app. */
+/** The booking fields to pick from, then the props of the picker behind the one picked; the theme applies to the whole app. */
 export const PropsPanel = ({ playground, docsHref }: { playground: Playground; docsHref?: string }) => {
-  const { tab, accent, setAccent } = playground;
-  const component = tab && TAB_COMPONENTS[tab];
+  const { tab, accent, setAccent, selectTab } = playground;
+  const component = TAB_COMPONENTS[tab];
   return (
-    <aside className={styles.panel} aria-label={component ? `${component} props` : 'Props'}>
-      {/* Keyed by picker, so its props fade in when another field is touched. */}
-      <div key={tab ?? 'none'} className={clsx(styles.swap, styles.fadeIn)}>
+    <aside className={styles.panel} aria-label={`${component} props`}>
+      <div className={styles.fields}>
+        <span className={styles.eyebrow}>Field</span>
+        <Choices
+          label="Booking field"
+          labels={FIELD_LABELS}
+          selected={FIELD_TABS.findIndex((field) => field.tab === tab)}
+          onChoose={(i) => selectTab(FIELD_TABS[i].tab)}
+        />
+      </div>
+      {/* Keyed by picker, so its props fade in when another field is picked. */}
+      <div key={tab} className={styles.fadeIn}>
         <div className={styles.panelHeader}>
-          <span className={styles.eyebrow}>Props</span>
-          {component ? <code className={styles.component}>{`<${component} />`}</code> : <p className={styles.hint}>{PICK_A_FIELD}</p>}
+          <span className={styles.eyebrow}>Component</span>
+          <code className={styles.component}>{`<${component} />`}</code>
+          {docsHref && (
+            <Link className={styles.docsLink} to={docsHref}>
+              All props →
+            </Link>
+          )}
         </div>
-        <div className={styles.controls}>
-          {tab ? <Controls tab={tab} playground={playground} /> : null}
-          <div className={styles.control}>
-            <span id={THEME_LABEL_ID} className={styles.controlName}>
-              theme
-            </span>
-            <AccentSwatches value={accent} labelId={THEME_LABEL_ID} onChange={setAccent} />
-          </div>
+        <Controls tab={tab} playground={playground} />
+        <div className={styles.control}>
+          <span id={THEME_LABEL_ID} className={styles.controlName}>
+            theme
+          </span>
+          <AccentSwatches value={accent} labelId={THEME_LABEL_ID} onChange={setAccent} />
         </div>
-        {component && docsHref && (
-          <Link className={styles.docsLink} to={docsHref}>
-            All {component} props →
-          </Link>
-        )}
       </div>
     </aside>
   );
