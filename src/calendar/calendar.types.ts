@@ -106,7 +106,7 @@ export interface CalendarBaseProps extends ThemableProps {
   renderDay?: (state: DayState, theme: PickerTheme) => React.ReactNode;
   /** Custom arrows */
   renderArrow?: (direction: ArrowDirection, disabled: boolean) => React.ReactNode;
-  /** Range of years in the year grid. Default: minDate/maxDate or ±100 years */
+  /** Years in the year grid, kept within minDate/maxDate. Default: ±100 from today */
   yearRange?: [number, number];
   /** Day cell height. Default: 44 */
   dayHeight?: number;

@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 
+import { getYearBounds } from '../calendar/calendar.utils';
 import { useControllableState } from '../core/hooks/useControllableState';
 import { useDesignOverride } from '../core/theme/ThemeProvider';
 import { clampDate } from '../core/utils/date.utils';
 import { MultiWheelPicker } from '../wheel';
 import { MONTH_FORMAT } from './date.constants';
 import type { DateWheelPickerProps } from './date.types';
-import { buildWheelDate, getDateColumnSpecs, getLocaleDateOrder, getWheelYearBounds } from './date.utils';
+import { buildWheelDate, getDateColumnSpecs, getLocaleDateOrder } from './date.utils';
 
 export const DateWheelPicker = ({
   value,
@@ -39,7 +40,7 @@ export const DateWheelPicker = ({
       monthFormat,
       minDate,
       maxDate,
-      years: getWheelYearBounds(new Date(), yearRange, minDate, maxDate),
+      years: getYearBounds(new Date(), yearRange, minDate, maxDate),
       loop,
     });
     const dateWith = (part: keyof typeof specs, v: number) => buildWheelDate(date, { [part]: v }, minDate, maxDate);

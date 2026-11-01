@@ -102,4 +102,13 @@ describe('PickerField', () => {
     );
     expect(screen.getByText('invalid')).toBeTruthy();
   });
+
+  it('keeps the label above a custom trigger in the Material design', async () => {
+    await render(
+      <PickerField design="material" label="Mood" renderTrigger={({ open }) => <Text onPress={open}>🙂</Text>}>
+        {renderSheet}
+      </PickerField>
+    );
+    expect(screen.getByText('Mood')).toBeTruthy();
+  });
 });

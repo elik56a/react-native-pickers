@@ -9,6 +9,7 @@ import type {
   DateRange,
   DateRangePreset,
   RangePresetsListProps,
+  RangeRules,
 } from '../calendar/calendar.types';
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { PICKER_DISPLAY } from '../core/core.constants';
@@ -33,7 +34,7 @@ export interface DateWheelPickerProps extends ThemableProps {
   order?: DatePart[];
   /** 'long' (January), 'short' (Jan) or 'numeric' (01). Default: 'long' */
   monthFormat?: MonthFormat;
-  /** Years when no min/max is given. Default: ±100 from today */
+  /** Years to offer, kept within minDate/maxDate. Default: ±100 from today */
   yearRange?: [number, number];
   /** Loop the day and month wheels. Default: true */
   loop?: boolean;
@@ -53,26 +54,22 @@ export type DateSheetMode = CalendarMode;
 
 export type DateSheetSelection =
   | { mode?: typeof CALENDAR_MODE.single; value?: Date | null; onConfirm: (date: Date) => void }
-  | {
+  | ({
       mode: typeof CALENDAR_MODE.range;
       value?: DateRange;
       onConfirm: (range: DateRange) => void;
-      minRangeDays?: number;
-      maxRangeDays?: number;
       /** Chips above the days that pick a whole range in one tap, such as `getRangePresets()` */
       presets?: DateRangePreset[];
       /** Any HorizontalList prop for the presets row, such as `variant`, `showArrows`, `renderItem` or `styles` */
       presetsProps?: RangePresetsListProps;
-    }
+    } & RangeRules)
   | { mode: typeof CALENDAR_MODE.multiple; value?: Date[]; onConfirm: (dates: Date[]) => void; maxSelections?: number }
-  | {
+  | ({
       mode: typeof CALENDAR_MODE.ranges;
       value?: DateRange[];
       onConfirm: (ranges: DateRange[]) => void;
-      minRangeDays?: number;
-      maxRangeDays?: number;
       maxRanges?: number;
-    };
+    } & RangeRules);
 
 /** What a date sheet holds while open: one date, a range or a list, depending on the mode. */
 export type DateDraft = Date | DateRange | Date[] | DateRange[] | null;

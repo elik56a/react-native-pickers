@@ -255,11 +255,12 @@ export const getMonthCells = (month: Date, monthNames: string[], minDate?: Date,
     };
   });
 
-export const getYearBounds = (today: Date, yearRange?: [number, number], minDate?: Date, maxDate?: Date): [number, number] =>
-  yearRange ?? [
-    minDate?.getFullYear() ?? today.getFullYear() - DEFAULT_YEAR_SPAN,
-    maxDate?.getFullYear() ?? today.getFullYear() + DEFAULT_YEAR_SPAN,
-  ];
+/** `yearRange`, else ±100 years, kept within min/max dates: a year past them could never be picked. */
+export const getYearBounds = (today: Date, yearRange?: [number, number], minDate?: Date, maxDate?: Date): [number, number] => {
+  const [from, to] = yearRange ?? [today.getFullYear() - DEFAULT_YEAR_SPAN, today.getFullYear() + DEFAULT_YEAR_SPAN];
+  const first = Math.max(from, minDate?.getFullYear() ?? from);
+  return [first, Math.max(first, Math.min(to, maxDate?.getFullYear() ?? to))];
+};
 
 export const getYearCells = (month: Date, [minYear, maxYear]: [number, number]): QuickCell[] => {
   const start = getYearPageStart(month.getFullYear());

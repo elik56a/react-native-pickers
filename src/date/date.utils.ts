@@ -7,7 +7,6 @@ import { clampDate, daysInMonth, formatDate, getMonthNames, isOutOfRange } from 
 import {
   COLUMN_FLEX,
   DATE_PART,
-  DEFAULT_WHEEL_YEAR_SPAN,
   FALLBACK_DATE_ORDER,
   HEADLINE_FORMAT,
   HEADLINE_PLACEHOLDER,
@@ -44,12 +43,6 @@ export const buildWheelDate = (date: Date, patch: Partial<Record<DatePart, numbe
   next.setFullYear(year, month, day);
   return clampDate(next, minDate, maxDate);
 };
-
-/** min/max dates win over `yearRange`, which wins over ±100 years. */
-export const getWheelYearBounds = (now: Date, yearRange?: [number, number], minDate?: Date, maxDate?: Date): [number, number] => [
-  minDate?.getFullYear() ?? yearRange?.[0] ?? now.getFullYear() - DEFAULT_WHEEL_YEAR_SPAN,
-  maxDate?.getFullYear() ?? yearRange?.[1] ?? now.getFullYear() + DEFAULT_WHEEL_YEAR_SPAN,
-];
 
 export const getDateColumnSpecs = (params: {
   date: Date;
