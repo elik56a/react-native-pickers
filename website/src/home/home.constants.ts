@@ -59,6 +59,7 @@ export const COMPONENTS = [
   { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
   { doc: 'components/month-picker', name: 'MonthPicker', body: 'Card expiry, reports: wheels or a month grid' },
   { doc: 'components/week-strip', name: 'WeekStrip', body: 'A week of days to swipe, with marked days' },
+  { doc: 'components/expandable-calendar', name: 'ExpandableCalendar', body: 'A week that opens into its month' },
   { doc: 'components/date-time-picker', name: 'DateTimePicker', body: 'Day + time wheels, or calendar + time' },
   { doc: 'components/date-range-picker', name: 'Date range', body: 'Check-in/out, presets, min/max nights, multiple' },
   { doc: 'components/select-picker', name: 'SelectPicker', body: 'Search, server search, groups, multi-select' },

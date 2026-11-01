@@ -80,6 +80,15 @@ export const MAX_MARKING_DOTS = 3;
 
 export const YEARS_PER_PAGE = 12;
 export const DAYS_PER_WEEK = 7;
+
+/** How far a drag has to open or fold the month, as a fraction of the way, to carry on when let go. */
+export const EXPAND_DRAG_COMMIT = 0.15;
+
+/** The expand handle, read by screen readers. */
+export const EXPAND_LABEL = {
+  expand: 'Show month',
+  collapse: 'Show week',
+} as const;
 export const QUICK_GRID_COLUMNS = 3;
 /** Year grid bounds when neither yearRange nor min/max dates are given. */
 export const DEFAULT_YEAR_SPAN = 100;

@@ -74,7 +74,12 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'loop', components: ['WheelPicker'], options: BOOLEAN, default: false },
   { prop: 'loop', components: ['DateWheelPicker'], options: BOOLEAN, default: true },
   { prop: 'monthFormat', components: ['DateWheelPicker'], options: ['long', 'short', 'numeric'], default: 'long' },
-  { prop: 'weekdayFormat', components: ['DatePicker', 'Calendar', 'WeekStrip'], options: ['short', 'narrow'], default: 'short' },
+  {
+    prop: 'weekdayFormat',
+    components: ['DatePicker', 'Calendar', 'WeekStrip', 'ExpandableCalendar'],
+    options: ['short', 'narrow'],
+    default: 'short',
+  },
   { prop: 'showOutsideDays', components: ['DatePicker', 'Calendar'], options: BOOLEAN, default: true },
   {
     prop: 'presetsProps.variant',
@@ -196,6 +201,7 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
   ColorPickerField: 'color',
   ColorPickerSheet: 'color',
   WeekStrip: 'calendar',
+  ExpandableCalendar: 'calendar',
   CountryPicker: 'country',
   LanguagePicker: 'language',
   DatePicker: 'date',

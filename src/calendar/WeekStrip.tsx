@@ -1,58 +1,39 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Animated, View } from 'react-native';
 
-import { usePickerTheme } from '../core';
-import { useDesignOverride } from '../core/theme/ThemeProvider';
-import { formatMonthYear, getFirstDayOfWeek, getWeekdayNames } from '../core/utils/date.utils';
+import { formatMonthYear } from '../core/utils/date.utils';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
-import { CALENDAR_DESIGN, CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
+import { CALENDAR_VIEW, DEFAULT_DAY_HEIGHT } from './calendar.constants';
 import type { WeekStripProps } from './calendar.types';
-import { getDayState, getWeekDays, getWeekMonth, isDayDisabled, orderWeekdays } from './calendar.utils';
+import { getStripWeek, getWeekMonth } from './calendar.utils';
 import { CalendarHeader } from './components/CalendarHeader';
 import { DayGrid } from './components/DayGrid';
-import { useCalendarSelection } from './hooks/useCalendarSelection';
+import { useDayCalendar } from './hooks/useDayCalendar';
 import { useWeekNavigation } from './hooks/useWeekNavigation';
 
 const noop = () => {};
 
 /** One week of days to pick from, under its month, with arrows and a swipe to the next or previous week. */
-export const WeekStrip = ({
-  value,
-  defaultValue,
-  onChange,
-  locale,
-  minDate,
-  maxDate,
-  isDateDisabled,
-  firstDayOfWeek: firstDayOfWeekProp,
-  markedDates,
-  initialWeek,
-  onWeekChange,
-  showHeader = true,
-  enableSwipe = true,
-  weekdayFormat: weekdayFormatProp,
-  showWeekdays = true,
-  formatTitle,
-  renderDay,
-  renderArrow,
-  dayHeight = DEFAULT_DAY_HEIGHT,
-  style,
-  styles: slots,
-  theme: themeProp,
-  design,
-  testID,
-}: WeekStripProps) => {
-  const themeOverride = useDesignOverride(themeProp, design);
-  const theme = usePickerTheme(themeOverride);
-  const weekdayFormat = weekdayFormatProp ?? CALENDAR_DESIGN[theme.design].weekdayFormat;
-  const firstDayOfWeek = firstDayOfWeekProp ?? getFirstDayOfWeek(locale);
-  const today = useMemo(() => new Date(), []);
-
-  const isDisabled = useCallback(
-    (day: Date) => isDayDisabled(day, { minDate, maxDate, isDateDisabled, markedDates }),
-    [isDateDisabled, markedDates, maxDate, minDate]
-  );
-  const { selection, select } = useCalendarSelection({ value, defaultValue, onChange }, isDisabled);
+export const WeekStrip = (props: WeekStripProps) => {
+  const {
+    locale,
+    minDate,
+    maxDate,
+    markedDates,
+    initialWeek,
+    onWeekChange,
+    showHeader = true,
+    enableSwipe = true,
+    showWeekdays = true,
+    formatTitle,
+    renderDay,
+    renderArrow,
+    dayHeight = DEFAULT_DAY_HEIGHT,
+    style,
+    styles: slots,
+    testID,
+  } = props;
+  const { theme, firstDayOfWeek, today, isDisabled, selection, select, weekdays } = useDayCalendar(props);
   const nav = useWeekNavigation({
     anchor: initialWeek ?? selection.single ?? today,
     firstDayOfWeek,
@@ -63,14 +44,9 @@ export const WeekStrip = ({
     animationDuration: theme.animation.duration,
   });
 
-  // Each day is its own month, so none is dimmed as outside it.
   const week = useMemo(
-    () => [getWeekDays(nav.weekStart).map((date) => getDayState({ date, month: date, today, selection, isDisabled, markedDates }))],
+    () => [getStripWeek(nav.weekStart, { today, selection, isDisabled, markedDates })],
     [isDisabled, markedDates, nav.weekStart, selection, today]
-  );
-  const weekdays = useMemo(
-    () => orderWeekdays(getWeekdayNames(locale, weekdayFormat), firstDayOfWeek),
-    [firstDayOfWeek, locale, weekdayFormat]
   );
   const title = formatTitle ? formatTitle(nav.weekStart, locale) : formatMonthYear(getWeekMonth(nav.weekStart), locale);
 

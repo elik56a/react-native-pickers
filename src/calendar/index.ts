@@ -8,9 +8,11 @@ export type {
   DateRange,
   DateRangePreset,
   DayState,
+  ExpandableCalendarProps,
   MarkedDate,
   RangePresetsListProps,
   WeekStripProps,
 } from './calendar.types';
 export { getRangePresets } from './calendar.utils';
+export { ExpandableCalendar } from './ExpandableCalendar';
 export { WeekStrip } from './WeekStrip';

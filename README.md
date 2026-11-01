@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![downloads](https://img.shields.io/npm/dw/@elik56a/react-native-pickers)](https://www.npmjs.com/package/@elik56a/react-native-pickers) [![bundle size](https://img.shields.io/bundlephobia/minzip/@elik56a/react-native-pickers)](https://bundlephobia.com/package/@elik56a/react-native-pickers) [![CI](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml/badge.svg)](https://github.com/elik56a/react-native-pickers/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/@elik56a/react-native-pickers)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/elik56a/react-native-pickers/badge)](https://scorecard.dev/viewer/?uri=github.com/elik56a/react-native-pickers)
 
-**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, a slider, a star rating and an OTP code input, plus bottom sheets, action sheets, menus and the form fields to put pickers in. Native on iOS, Android and the web, and every detail is yours to customize.
+**Every picker a React Native app needs, in one package with zero native code.** Wheel, time, duration, date, month, week strip, expandable calendar, date range, date & time, select, country, phone number, time zone, segmented control, emoji and color pickers, a slider, a star rating and an OTP code input, plus bottom sheets, action sheets, menus and the form fields to put pickers in. Native on iOS, Android and the web, and every detail is yours to customize.
 
 <p align="center">
   <img alt="React Native Pickers on an iPhone and an Android phone side by side: a date range picker with prices, wheel and clock-dial time pickers, a searchable select, an emoji picker, a phone number field, a color picker, a duration picker, and light and dark mode" src="https://raw.githubusercontent.com/elik56a/react-native-pickers/master/website/static/img/demo.gif" width="900">
@@ -97,6 +97,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`DatePicker`](https://react-native-pickers.dev/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
 | [`MonthPicker`](https://react-native-pickers.dev/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
 | [`WeekStrip`](https://react-native-pickers.dev/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
+| [`ExpandableCalendar`](https://react-native-pickers.dev/docs/components/expandable-calendar) | A week that opens into its month with a drag down or its handle, for schedule screens |
 | [`DurationPicker`](https://react-native-pickers.dev/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
 | [`DateTimePicker`](https://react-native-pickers.dev/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
 | [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search, new options from the search |
@@ -277,11 +278,13 @@ The [full API reference](https://react-native-pickers.dev/docs/api/reference) li
 | `minTime` / `maxTime` | `Date` (time of day) | |
 | `locale` | `string` | device |
 
-### MonthPicker and WeekStrip
+### MonthPicker, WeekStrip and ExpandableCalendar
 
 `MonthPicker` picks a month and year; the value is a `Date` on the first of the month. Wheels on iOS, a grid of months under the year in Material and on the web (`display`), with `minDate` / `maxDate`, `yearRange`, `monthFormat` and `locale`. `MonthPickerField` shows `October 2026`.
 
 `WeekStrip` is one week of days in a row: `value`, `onChange(date)`, swipe or arrows to page, `onWeekChange(weekStart)`, and the calendar's `markedDates`, `minDate` / `maxDate`, `isDateDisabled`, `firstDayOfWeek` and `renderDay`.
+
+`ExpandableCalendar` is a `WeekStrip` that opens into its month with a drag down or the handle under it, and folds back into the week of the day picked: the same props, plus `expanded` / `defaultExpanded` / `onExpandedChange` and `onMonthChange`.
 
 ### ColorPicker
 

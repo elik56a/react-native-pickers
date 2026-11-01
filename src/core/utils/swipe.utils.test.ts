@@ -1,10 +1,14 @@
-import { getSwipeDelta, isHorizontalSwipe } from './swipe.utils';
+import { getSwipeDelta, isHorizontalSwipe, isVerticalSwipe } from './swipe.utils';
 
 describe('swipe', () => {
   it('claims clearly horizontal moves only', () => {
     expect(isHorizontalSwipe(20, 5)).toBe(true);
     expect(isHorizontalSwipe(20, 15)).toBe(false);
     expect(isHorizontalSwipe(10, 0)).toBe(false);
+  });
+  it('claims clearly vertical moves only', () => {
+    expect(isVerticalSwipe(5, 20)).toBe(true);
+    expect(isVerticalSwipe(20, 5)).toBe(false);
   });
   it('turns a long or fast swipe into a page step, mirrored in RTL', () => {
     expect(getSwipeDelta(-60, 0, false)).toBe(1);

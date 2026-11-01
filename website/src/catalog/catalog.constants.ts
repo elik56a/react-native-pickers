@@ -11,6 +11,7 @@ export const PLAYGROUND = {
   monthPicker: 'monthPicker',
   monthPickerField: 'monthPickerField',
   weekStrip: 'weekStrip',
+  expandableCalendar: 'expandableCalendar',
   timePicker: 'timePicker',
   timePickerField: 'timePickerField',
   timeRange: 'timeRange',
@@ -71,6 +72,7 @@ export const CATALOG: readonly CatalogEntry[] = [
       },
       { doc: 'components/month-picker', label: 'MonthPicker', playgrounds: [PLAYGROUND.monthPicker, PLAYGROUND.monthPickerField] },
       { doc: 'components/week-strip', label: 'WeekStrip', playgrounds: [PLAYGROUND.weekStrip] },
+      { doc: 'components/expandable-calendar', label: 'ExpandableCalendar', playgrounds: [PLAYGROUND.expandableCalendar] },
       {
         doc: 'components/time-picker',
         label: 'TimePicker',

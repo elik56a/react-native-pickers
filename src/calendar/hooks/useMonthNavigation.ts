@@ -90,6 +90,8 @@ export const useMonthNavigation = ({
 
   return {
     month,
+    /** Shows `date`'s month, without the slide or `onMonthChange`: for a week opening into it. */
+    showMonth: (date: Date) => setMonth(startOfMonth(date)),
     view,
     rtl,
     slideStyle: slide.style,

@@ -1,0 +1,128 @@
+---
+title: React Native Expandable Calendar
+description: "React Native expandable calendar: a week strip that opens into the whole month with a drag down or its handle, and folds back into the week of the day picked. Marked dates, min/max and disabled days, for schedule, booking and habit screens. iOS, Material and web designs, zero native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# ExpandableCalendar
+
+`ExpandableCalendar` is the date picker at the top of schedule, booking and habit screens: one week of days that opens into the whole month as you drag it down, following your finger, or when you tap the handle under it, and folds back into a week as you drag it up. The week you open from stays in place as the rest of the month slides out around it, and the month folds into the week of the day you pick.
+
+It's a [`WeekStrip`](./week-strip) and the [`Calendar`](./date-picker)'s month in one, so it takes the same `markedDates`, `minDate`, `maxDate`, `isDateDisabled`, `renderDay` and styles, and follows the [design](../guides/designs): a grabber under the days on iOS, as a sheet has, and a chevron in Material and on the web.
+
+It picks a day; it doesn't draw events. Show the picked day's events under it, as in the [schedule](#a-schedule-screen) below.
+
+```tsx
+import { ExpandableCalendar } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { ExpandableCalendar } from '@elik56a/react-native-pickers';
+
+export default function Example() {
+  const [day, setDay] = useState(new Date());
+  return <ExpandableCalendar value={day} onChange={setDay} />;
+}
+```
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.expandableCalendar} />
+
+## A schedule screen
+
+Pass the days that have something on them as `markedDates`, and list the picked day's items under the calendar. `onWeekChange` and `onMonthChange` tell you which days are shown, to load them.
+
+```tsx live
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+import { ExpandableCalendar, addDays, toDateKey } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const CLASSES: Record<string, string[]> = {
+  [toDateKey(today)]: ['07:00 Yoga', '18:30 Spin'],
+  [toDateKey(addDays(today, 1))]: ['12:00 Pilates'],
+  [toDateKey(addDays(today, 3))]: ['07:00 Yoga', '19:00 Boxing'],
+  [toDateKey(addDays(today, 9))]: ['10:00 Swim'],
+};
+const MARKS = Object.fromEntries(Object.keys(CLASSES).map((key) => [key, { dots: ['#E4572E'] }]));
+
+export default function Schedule() {
+  const [day, setDay] = useState(today);
+  const classes = CLASSES[toDateKey(day)] ?? [];
+  return (
+    <View>
+      <ExpandableCalendar value={day} onChange={setDay} markedDates={MARKS} />
+      <View style={{ padding: 16, gap: 8 }}>
+        {classes.length ? classes.map((item) => <Text key={item}>{item}</Text>) : <Text>Nothing booked</Text>}
+      </View>
+    </View>
+  );
+}
+```
+
+To add an event, open a form with a [`DateTimePickerField`](./date-time-picker) or a [`TimeRangePickerField`](./time-range-picker).
+
+## Open and folded
+
+The calendar starts as a week, or as the month with `defaultExpanded`. To open or fold it from your own button, control it with `expanded` and `onExpandedChange`:
+
+```tsx
+const [expanded, setExpanded] = useState(false);
+
+<ExpandableCalendar value={day} onChange={setDay} expanded={expanded} onExpandedChange={setExpanded} />
+<Button title={expanded ? 'Week' : 'Month'} onPress={() => setExpanded(!expanded)} />
+```
+
+- **Opening** shows the month of the selected day when it's in the week shown, else the month most of the week falls in.
+- **Folding** shows the week of the selected day when it's in the month shown, else today's week, else the month's first week.
+- The arrows and a swipe left or right page by month while open and by week while folded.
+
+- **Dragging** moves the month with your finger. Let go past a short way, or with a flick, and it carries on; otherwise it springs back.
+
+`enableSwipe={false}` turns off the drag and the swipes, leaving the arrows and the handle.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `Date \| null` | — | Selected day (controlled). |
+| `defaultValue` | `Date \| null` | — | Initial day when uncontrolled. |
+| `onChange` | `(date: Date) => void` | — | Fires when a day is tapped. |
+| `expanded` | `boolean` | — | Showing the whole month (controlled). |
+| `defaultExpanded` | `boolean` | `false` | Initial state when uncontrolled. |
+| `onExpandedChange` | `(expanded: boolean) => void` | — | Fires when the user opens or folds the month. |
+| `initialDate` | `Date` | the selected day or today | A day in the week and month shown first. |
+| `onWeekChange` | `(weekStart: Date) => void` | — | Fires with the first day of the week after paging while folded. |
+| `onMonthChange` | `(month: Date) => void` | — | Fires with the first of the month after paging while open. |
+| `firstDayOfWeek` | `0`–`6` | from `locale`, else `0` | `0` = Sunday. |
+| `locale` | `string` | device | Weekday and month names. |
+| `minDate` / `maxDate` | `Date` | — | Days outside are disabled, and paging stops at them. |
+| `isDateDisabled` | `(date: Date) => boolean` | — | Disable a day. |
+| `markedDates` | `Record<string, MarkedDate>` | — | Dots, labels or disabled days, keyed by `YYYY-MM-DD`. |
+| `showHeader` | `boolean` | `true` | Show the month title and the arrows. |
+| `formatTitle` | `(month: Date, locale?: string) => string` | the month shown | Title text. |
+| `showWeekdays` | `boolean` | `true` | Show the weekday names. |
+| `weekdayFormat` | `'short' \| 'narrow'` | from the design | Weekday names: `Mon` or `M`. |
+| `enableSwipe` | `boolean` | `true` | Swipe left or right to page, and drag down to open and up to fold. |
+| `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Fully custom day cell, as on the [calendar](./date-picker#custom-days-and-arrows). |
+| `renderArrow` | `(direction, disabled) => ReactNode` | — | Custom arrows. |
+| `dayHeight` | `number` | `44` | Day cell height. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. |
+| `styles` | `SlotStyles<CalendarSlot>` | — | The [calendar slots](./date-picker#slots), plus `expandHandle`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. |
+
+## Accessibility
+
+The handle is a button named "Show month" or "Show week", with its expanded state. Days read as on the [calendar](./date-picker), such as "Wednesday, October 14, 2026", and the arrows as "Previous" and "Next".
+
+## Related
+
+- [WeekStrip](./week-strip): one week, without the month
+- [DatePicker](./date-picker): a whole month, ranges and multiple days
+- [Migrating from react-native-calendars](../resources/migration/react-native-calendars): its `ExpandableCalendar` and `CalendarProvider`
