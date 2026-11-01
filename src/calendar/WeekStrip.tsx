@@ -11,8 +11,6 @@ import { DayGrid } from './components/DayGrid';
 import { useDayCalendar } from './hooks/useDayCalendar';
 import { useWeekNavigation } from './hooks/useWeekNavigation';
 
-const noop = () => {};
-
 /** One week of days to pick from, under its month, with arrows and a swipe to the next or previous week. */
 export const WeekStrip = (props: WeekStripProps) => {
   const {
@@ -63,7 +61,6 @@ export const WeekStrip = (props: WeekStripProps) => {
           view={CALENDAR_VIEW.days}
           enableQuickJump={false}
           isArrowDisabled={nav.isArrowDisabled}
-          onTitlePress={noop}
           onArrowPress={nav.onArrowPress}
           renderArrow={renderArrow}
           rtl={nav.rtl}

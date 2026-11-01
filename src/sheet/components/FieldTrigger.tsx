@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { PickerText } from '../../core/components/PickerText';
 import { Touchable } from '../../core/components/Touchable';
 import { coreStyles } from '../../core/core.styles';
-import { FIELD_DESIGN, FIELD_LABEL } from '../sheet.constants';
+import { CLEAR_LABEL, FIELD_DESIGN, FIELD_LABEL } from '../sheet.constants';
 import { styles } from '../sheet.styles';
 import type { FieldTriggerProps } from '../sheet.types';
 import { getFieldAccessibility, getFieldBorderWidth, getFieldBoxStyle } from '../sheet.utils';
@@ -85,7 +85,7 @@ export const FieldTrigger = ({
           hitSlop={10}
           onPress={onClear}
           accessibilityRole="button"
-          accessibilityLabel="Clear"
+          accessibilityLabel={CLEAR_LABEL}
           style={[styles.clearButton, { borderRadius: theme.radius.full }]}
         >
           <PickerText theme={theme} size="lg" color="textSecondary" style={[styles.clear, slots?.clear]}>

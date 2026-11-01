@@ -1,6 +1,6 @@
 import { Animated, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import { PLATFORM } from '../core/core.constants';
+import { CLOSE_LABEL, PLATFORM } from '../core/core.constants';
 import { useReturnFocus } from '../core/hooks/useReturnFocus';
 import { useComponentTheme, usePickerPlatform } from '../core/theme/ThemeProvider';
 import { ARROW_FOCUS } from '../core/utils/keyboard.utils';
@@ -78,7 +78,7 @@ export const BottomSheet = ({
             style={StyleSheet.absoluteFill}
             onPress={closeOnBackdropPress ? onClose : undefined}
             accessibilityRole="button"
-            accessibilityLabel="Close"
+            accessibilityLabel={CLOSE_LABEL}
           />
         </Animated.View>
         <View style={dialog ? styles.dialogContainer : styles.container} pointerEvents="box-none">

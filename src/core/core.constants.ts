@@ -103,6 +103,9 @@ export const KEY = {
 } as const;
 
 /** The screen-reader actions of an adjustable control, a slider or a wheel. */
+/** What a screen reader reads for a backdrop or button that closes a sheet or popover. */
+export const CLOSE_LABEL = 'Close';
+
 export const A11Y_ACTION = {
   increment: 'increment',
   decrement: 'decrement',

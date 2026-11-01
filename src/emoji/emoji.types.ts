@@ -152,6 +152,14 @@ export interface EmojiGridOptions {
   columns: number;
 }
 
+export interface EmojiGlyphProps {
+  emoji: Emoji;
+  char: string;
+  fontSize: number;
+  renderEmoji?: EmojiRenderer;
+  slots?: SlotStyles<EmojiPickerSlot>;
+}
+
 export interface EmojiCellProps {
   emoji: Emoji;
   char: string;

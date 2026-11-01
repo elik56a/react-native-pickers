@@ -52,6 +52,15 @@ Every feature folder has the same layout:
 - Dates are local time. Compare and serialize calendar days with `toDateKey`, never `toISOString()`.
 - `onChange` fires for user changes only. Changing `value` programmatically must not call it.
 
+## Components
+
+- Resolve the theme with `const { theme, themeOverride } = useComponentTheme(theme, design)`. Draw with `theme`, and pass `themeOverride` to child pickers and sheets.
+- Draw text with `PickerText` (`size`, `weight` and a theme `color`), not `<Text style={textStyle(...)}>`. Only TextInputs and animated text call `textStyle` directly.
+- Before writing a style, setup or handler, look for one that already exists: `useDayCalendar` sets up a calendar, `getFieldBoxStyle` draws a field's box, and `adjustableProps` handles a stepper's keys and screen-reader actions. If two components need the same code, move it into a util or hook.
+- In JSX, `cond && <X/>` only when `cond` is a boolean. A `''` or `0` renders as raw text, which crashes native, so keep the ternary for strings and numbers. Also keep it when the receiving component checks the value with `??` or `!= null`, as `FieldTrigger` does with `children`.
+- A `renderX` prop goes inside the default component as an early return (`if (renderX) return renderX(info)`), not as a ternary at the call site.
+- Change code for readability only if the result reads easier. If the cleaner version needs a new abstraction, props passed through extra layers, or a file the reader has to jump to, keep the original.
+
 ## Docs stay in sync
 
 When a change affects what users see or call (a new component, prop, default, behavior or design), update in the same PR:

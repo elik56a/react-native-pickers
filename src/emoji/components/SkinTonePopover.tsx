@@ -1,10 +1,12 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Touchable } from '../../core/components/Touchable';
+import { CLOSE_LABEL } from '../../core/core.constants';
 import { SKIN_TONES, TONE_POPOVER_PADDING } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { SkinTonePopoverProps } from '../emoji.types';
 import { withSkinTone } from '../emoji.utils';
+import { EmojiGlyph } from './EmojiGlyph';
 
 /** One emoji in every skin tone, over the emoji that was long-pressed; a tap outside closes it. */
 export const SkinTonePopover = ({
@@ -20,7 +22,7 @@ export const SkinTonePopover = ({
   slots,
 }: SkinTonePopoverProps) => (
   <>
-    <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
+    <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel={CLOSE_LABEL} />
     <View
       style={[
         styles.tonePopover,
@@ -47,13 +49,7 @@ export const SkinTonePopover = ({
             accessibilityLabel={`${emoji.name}, skin tone ${tone}`}
             style={[styles.cell, { width: size, height: size, borderRadius: theme.radius.sm }]}
           >
-            {renderEmoji ? (
-              renderEmoji(char, emoji, fontSize)
-            ) : (
-              <Text selectable={false} style={[{ fontSize, lineHeight: fontSize * 1.2 }, slots?.emojiText]}>
-                {char}
-              </Text>
-            )}
+            <EmojiGlyph emoji={emoji} char={char} fontSize={fontSize} renderEmoji={renderEmoji} slots={slots} />
           </Touchable>
         );
       })}
