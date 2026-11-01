@@ -11,7 +11,7 @@ A booking form like the ones on airline and travel sites. The airports come from
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import {
   DatePickerField,
   HorizontalList,
@@ -21,6 +21,7 @@ import {
   usePickerTheme,
 } from '@elik56a/react-native-pickers';
 import type { DateRange, SelectOption } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 type Airport = { code: string; city: string; name: string; flag: string };
 
@@ -30,8 +31,6 @@ const styles = StyleSheet.create({
   flag: { fontSize: 20 },
   label: { fontSize: 13, fontWeight: '500', marginBottom: 6 },
   error: { marginTop: 4, fontSize: 12 },
-  button: { paddingVertical: 14, alignItems: 'center' },
-  buttonText: { fontWeight: '600', fontSize: 16 },
   summary: { textAlign: 'center' },
 });
 
@@ -87,7 +86,7 @@ const FieldError = ({ message }: { message: string | false }) => {
 };
 
 export default function FlightSearch() {
-  const { colors, radius } = usePickerTheme();
+  const { colors } = usePickerTheme();
   const [from, setFrom] = useState<string | null>(null);
   const [to, setTo] = useState<string | null>(null);
   const [trip, setTrip] = useState('round');
@@ -168,13 +167,7 @@ export default function FlightSearch() {
         <HorizontalList items={CABINS} value={cabin} onChange={setCabin} accessibilityLabel="Cabin" />
       </View>
 
-      <Pressable
-        onPress={submit}
-        style={[styles.button, { borderRadius: radius.md, backgroundColor: colors.primary }]}
-        accessibilityRole="button"
-      >
-        <Text style={[styles.buttonText, { color: colors.onPrimary }]}>Search flights</Text>
-      </Pressable>
+      <DemoButton title="Search flights" onPress={submit} />
       {summary ? <Text style={[styles.summary, { color: colors.text }]}>✈️ {summary}</Text> : null}
     </View>
   );
@@ -188,7 +181,7 @@ export default function FlightSearch() {
 - **Search by anything.** The server matches city, code and airport name, so `tlv`, `heathrow` and `new york` all work. The list shows what it returns without filtering again.
 - **The picked airport keeps its label** after a later search no longer returns it.
 - **Trip type** is a segmented [`HorizontalList`](../components/horizontal-list); it swaps the dates field between a range and a single date. **Cabin** is another, with four options that scroll if the screen is narrow.
-- **Theme colours.** The labels, errors and **Search flights** read `usePickerTheme()`, so the form matches the pickers in dark mode and in each [design](../guides/designs); Material's fields float their labels, the others show them above.
+- **Theme colours.** The labels and errors read `usePickerTheme()`, so the form matches the pickers in dark mode and in each [design](../guides/designs); Material's fields float their labels, the others show them above.
 - **Validation** runs on submit and shows a message under each field, including **From** and **To** being the same airport.
 
 ## With your API

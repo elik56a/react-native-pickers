@@ -5,11 +5,11 @@ description: Build a React Native filters bottom sheet combining a sort segmente
 
 # Filters bottom sheet
 
-A "Filters" sheet with a sort order, a status select, a date range and Reset / Apply, all applied at once. The buttons take their colours and corners from `usePickerTheme()`, so they match the pickers in light and dark mode and in each [design](../guides/designs). It uses `BottomSheet` for the layout, [`HorizontalList`](../components/horizontal-list) for the sort order, and `useDraft` so nothing changes until **Apply**.
+A "Filters" sheet with a sort order, a status select, a date range and Reset / Apply, all applied at once. It uses `BottomSheet` for the layout, [`HorizontalList`](../components/horizontal-list) for the sort order, and `useDraft` so nothing changes until **Apply**.
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import {
   BottomSheet,
   DatePicker,
@@ -21,6 +21,7 @@ import {
   usePickerTheme,
 } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 type Sort = 'newest' | 'oldest' | 'priority';
 type Filters = { sort: Sort; status: string[]; dates: DateRange };
@@ -39,31 +40,6 @@ const STATUSES = ['Open', 'In progress', 'Blocked', 'Done'].map((s) => ({
   value: s,
 }));
 
-function Button({
-  title,
-  onPress,
-  primary,
-}: {
-  title: string;
-  onPress: () => void;
-  primary?: boolean;
-}) {
-  const { colors, radius } = usePickerTheme();
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.btn,
-        { borderRadius: radius.md, backgroundColor: primary ? colors.primary : colors.surface },
-      ]}
-    >
-      <Text style={[styles.btnText, { color: primary ? colors.onPrimary : colors.text }]}>
-        {title}
-      </Text>
-    </Pressable>
-  );
-}
-
 export default function FiltersExample() {
   const { colors } = usePickerTheme();
   const [open, setOpen] = useState(false);
@@ -73,7 +49,8 @@ export default function FiltersExample() {
 
   return (
     <>
-      <Button
+      <DemoButton
+        variant="secondary"
         title={`Filters${count ? ` · ${count}` : ''}`}
         onPress={() => setOpen(true)}
       />
@@ -90,10 +67,9 @@ export default function FiltersExample() {
         onClose={() => setOpen(false)}
         title="Filters"
         height={0.85}
-        headerRight={<Button title="Reset" onPress={() => setDraft(EMPTY)} />}
+        headerRight={<DemoButton variant="text" title="Reset" onPress={() => setDraft(EMPTY)} />}
         footer={
-          <Button
-            primary
+          <DemoButton
             title="Apply"
             onPress={() => {
               setFilters(draft);
@@ -145,8 +121,6 @@ const styles = StyleSheet.create({
   },
   sort: { marginHorizontal: 12 },
   summary: { marginTop: 8, textAlign: 'center' },
-  btn: { paddingVertical: 12, paddingHorizontal: 16, alignItems: 'center' },
-  btnText: { fontWeight: '600' },
 });
 ```
 

@@ -187,8 +187,9 @@ When `displayValue` is empty and there's no value, the field shows `placeholder`
 
 ```tsx live
 import { useState } from 'react';
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
 import { DatePickerField, SelectPicker } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 const rooms = ['Standard', 'Deluxe', 'Suite'].map((r) => ({ label: r, value: r }));
 
@@ -215,7 +216,7 @@ export default function Example() {
         value={room}
         onChange={setRoom}
       />
-      <Button title="Book" onPress={() => setSubmitted(true)} />
+      <DemoButton title="Book" onPress={() => setSubmitted(true)} />
     </View>
   );
 }

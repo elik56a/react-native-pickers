@@ -137,7 +137,12 @@ const config: Config = {
   plugins: [
     (_context, _options) => ({
       name: 'react-native-web',
-      configureWebpack(_config, _isServer, utils) {
+      configureWebpack(config, _isServer, utils) {
+        // `?raw` imports a file's text, for the sandboxes to ship it: the TypeScript loaders skip those, and `asset/source` below returns the text.
+        for (const rule of config.module?.rules ?? []) {
+          if (rule && typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('file.tsx'))
+            rule.resourceQuery = { not: [/raw/] };
+        }
         return {
           resolve: {
             alias: {
@@ -147,6 +152,7 @@ const config: Config = {
               [`${PACKAGE}$`]: path.resolve(__dirname, '../src/index.ts'),
             },
           },
+          module: { rules: [{ resourceQuery: /raw/, type: 'asset/source' }] },
           plugins: [new utils.currentBundler.instance.DefinePlugin({ __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production') })],
         };
       },

@@ -12,10 +12,12 @@ interface ActionButtonProps {
   /** Pops in once it's done, then the button goes back to `label` */
   doneLabel: string;
   disabled?: boolean;
+  /** Runs on press; the request only starts when it returns true, such as a form with no errors */
+  validate?: () => boolean;
 }
 
 /** A primary button that acts out a request when pressed: busy with a spinner and a filling bar, then done, then ready again. */
-export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false }: ActionButtonProps) => {
+export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false, validate }: ActionButtonProps) => {
   const { colors, radius } = usePickerTheme();
   const { phase, progress, pop, reserve } = useReserve();
   const busy = phase === RESERVE_PHASE.reserving;
@@ -25,7 +27,9 @@ export const ActionButton = ({ label, busyLabel, doneLabel, disabled = false }: 
       accessibilityRole="button"
       accessibilityState={{ disabled, busy }}
       disabled={disabled || phase !== RESERVE_PHASE.idle}
-      onPress={reserve}
+      onPress={() => {
+        if (validate?.() ?? true) reserve();
+      }}
       style={[styles.reserve, { backgroundColor: colors.primary, borderRadius: radius.lg }, disabled && styles.reserveDisabled]}
     >
       {busy && (

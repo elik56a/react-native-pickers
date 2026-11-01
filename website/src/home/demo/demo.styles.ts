@@ -8,6 +8,8 @@ export const styles = StyleSheet.create({
   flag: { fontSize: 18 },
   browserRoot: { paddingTop: 20 },
   body: { flex: 1, gap: 12, paddingTop: 8 },
+  scroll: { flex: 1, marginBottom: 12 },
+  scrollBody: { gap: 12, paddingTop: 8, paddingBottom: 8 },
   pair: { flexDirection: 'row', gap: 10 },
   half: { flex: 1 },
   reserve: { height: 50, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },

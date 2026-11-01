@@ -150,6 +150,13 @@ export const PEN_IMPORTS = `import * as ReactNative from 'react-native';
 import * as Pickers from '${PACKAGE}';
 `;
 
+/** The pen's namespace for each package an inlined module imports from. */
+export const PEN_NAMESPACES: Record<string, string> = {
+  react: 'React',
+  'react-native': 'ReactNative',
+  [PACKAGE]: 'Pickers',
+};
+
 /** The pen's version of the sandbox App: the example, with the library's HorizontalList in a corner to switch the platform. */
 export const toPenPreview = (example: string) => `function Preview() {
   const [platform, setPlatform] = React.useState(ReactNative.Platform.OS);

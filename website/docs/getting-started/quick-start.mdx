@@ -156,27 +156,23 @@ Every picker also ships as a sheet. The sheet keeps a **draft** and only calls `
 
 ```tsx live
 import { useState } from 'react';
-import { Pressable, Text } from 'react-native';
 import { DatePickerSheet, formatDate } from '@elik56a/react-native-pickers';
 import type { DateRange } from '@elik56a/react-native-pickers';
+import { DemoButton } from './DemoButton';
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   return (
     <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#C8460D', padding: 14, borderRadius: 12 }}
-      >
-        <Text
-          style={{ color: 'white', fontWeight: '600', textAlign: 'center' }}
-        >
-          {range.start && range.end
+      <DemoButton
+        title={
+          range.start && range.end
             ? `${formatDate(range.start)} → ${formatDate(range.end)}`
-            : 'Pick dates'}
-        </Text>
-      </Pressable>
+            : 'Pick dates'
+        }
+        onPress={() => setOpen(true)}
+      />
       <DatePickerSheet
         visible={open}
         onClose={() => setOpen(false)}

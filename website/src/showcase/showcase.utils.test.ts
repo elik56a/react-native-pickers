@@ -1,5 +1,7 @@
-import { ALBUM_SORT, ALBUMS, CLOSED_WEEKDAY, TIMER_PRESETS } from './showcase.constants';
+import { ALBUM_SORT, ALBUMS, APPLICATION_ERRORS, CLOSED_WEEKDAY, EMPTY_APPLICATION, TIMER_PRESETS } from './showcase.constants';
+import type { ApplicationValues } from './showcase.types';
 import {
+  attentionLabel,
   findPreset,
   formatClock,
   formatHour,
@@ -8,6 +10,7 @@ import {
   previewOpacity,
   sortAlbums,
   textSizeLabel,
+  validateApplication,
 } from './showcase.utils';
 
 describe('formatClock', () => {
@@ -77,5 +80,43 @@ describe('sortAlbums', () => {
     expect(sortAlbums(ALBUMS, ALBUM_SORT.name)[0].name).toBe('Hiking the Alps');
     expect(sortAlbums(ALBUMS, ALBUM_SORT.photos)[0].photos).toBe(214);
     expect(sortAlbums(ALBUMS, ALBUM_SORT.recent)).toBe(ALBUMS);
+  });
+});
+
+describe('validateApplication', () => {
+  const complete: ApplicationValues = {
+    role: 'Mobile engineer',
+    country: 'PT',
+    phone: '+351912345678',
+    phoneValid: true,
+    startDate: new Date(2026, 11, 7),
+    interview: new Date(2026, 11, 2, 10, 30),
+    skills: ['React Native', 'TypeScript'],
+  };
+
+  it('has an error for every empty field, and none once all are filled', () => {
+    expect(Object.keys(validateApplication(EMPTY_APPLICATION))).toEqual(['role', 'country', 'phone', 'startDate', 'interview', 'skills']);
+    expect(validateApplication(complete)).toEqual({});
+  });
+
+  it('asks for the full number when the phone is too short', () => {
+    expect(validateApplication({ ...complete, phoneValid: false }).phone).toBe(APPLICATION_ERRORS.phoneIncomplete);
+  });
+
+  it('needs the interview before the first day, comparing calendar days', () => {
+    const sameDay = new Date(2026, 11, 7, 9, 0);
+    expect(validateApplication({ ...complete, interview: sameDay }).interview).toBe(APPLICATION_ERRORS.interviewAfterStart);
+    expect(validateApplication({ ...complete, startDate: null }).interview).toBeUndefined();
+  });
+
+  it('needs the minimum number of skills', () => {
+    expect(validateApplication({ ...complete, skills: ['Testing'] }).skills).toBe(APPLICATION_ERRORS.skills);
+  });
+});
+
+describe('attentionLabel', () => {
+  it('agrees with the count', () => {
+    expect(attentionLabel(1)).toBe('1 field needs attention');
+    expect(attentionLabel(3)).toBe('3 fields need attention');
   });
 });
