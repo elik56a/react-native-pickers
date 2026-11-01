@@ -58,6 +58,9 @@ DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFor
 MonthPicker        a month without a day: value: Date (first of the month)  onChange(month)  display 'wheel'(ios: month+year wheels) | 'grid'(material/web: months under the year, tap the year for years)
                    minDate maxDate (any day in the month)  yearRange  monthFormat 'long'|'short'|'numeric' (wheels)  locale
 WeekStrip          one week of days in a row: value: Date|null  onChange(date)  swipe/arrows page weeks  onWeekChange(weekStart)  initialWeek
+ExpandableCalendar a WeekStrip that opens into its month (drag down, the month follows the finger, or the handle: iOS grabber, chevron in Material/web) and folds back (drag up)
+                   value onChange  expanded/defaultExpanded=false/onExpandedChange  initialDate  onWeekChange (folded) onMonthChange (open)
+                   opens into the selected day's month; folds into the selected day's week, else today's, else the 1st; picks a day only, list events yourself
                    minDate maxDate isDateDisabled markedDates firstDayOfWeek locale showHeader formatTitle(weekStart) weekdayFormat renderDay (calendar's day cells and slots)
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips

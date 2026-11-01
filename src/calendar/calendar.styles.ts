@@ -22,5 +22,8 @@ export const styles = StyleSheet.create({
   dot: { width: 4, height: 4, borderRadius: 2 },
   quickGrid: { justifyContent: 'space-evenly' },
   presets: { marginBottom: 8 },
+  expandClip: { overflow: 'hidden' },
+  expandHandle: { alignItems: 'center', justifyContent: 'center', height: 28 },
+  grabber: { width: 36, height: 5, borderRadius: 3 },
   quickCell: { flex: 1, marginHorizontal: 6, height: 44, alignItems: 'center', justifyContent: 'center' },
 });

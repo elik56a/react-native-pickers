@@ -57,6 +57,8 @@ export const useWeekNavigation = ({
 
   return {
     weekStart,
+    /** Shows the week holding `date`, without the slide or `onWeekChange`: for a calendar folding into it. */
+    showWeek: (date: Date) => setWeekStart(getWeekStart(date, firstDayOfWeek)),
     rtl: !!I18nManager.isRTL,
     slideStyle: slide.style,
     panHandlers,

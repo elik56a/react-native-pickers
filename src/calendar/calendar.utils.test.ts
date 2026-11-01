@@ -8,16 +8,21 @@ import {
   chunkRows,
   getAnchorMonth,
   getArrowGlyph,
+  getCollapseDate,
   getDayLook,
   getDayState,
   getDayTextColor,
+  getDragProgress,
+  getExpandMonth,
   getHeaderLabel,
   getMonthCells,
   getPresetItems,
   getQuickGridHeight,
   getRangePresets,
+  getStripWeek,
   getWeekDays,
   getWeekMonth,
+  getWeekRow,
   getWeekStart,
   getWeekStates,
   getYearBounds,
@@ -32,6 +37,7 @@ import {
   rangeContains,
   rangeCrossesDisabled,
   shiftMonthForView,
+  shouldExpand,
   showsRangeBand,
   toggleMultiple,
 } from './calendar.utils';
@@ -365,5 +371,45 @@ describe('weeks', () => {
 
   it("titles a week by its middle day's month", () => {
     expect(getWeekMonth(new Date(2026, 8, 29)).getMonth()).toBe(9);
+  });
+});
+
+describe('expanding and collapsing', () => {
+  it("opens a week into the selected day's month, else the month most of the week falls in", () => {
+    const weekStart = day(27);
+    expect(getExpandMonth(weekStart, day(1, 10))).toEqual(day(1, 10));
+    expect(getExpandMonth(weekStart, null)).toEqual(day(1));
+    expect(getExpandMonth(day(29), null)).toEqual(day(1, 10));
+  });
+
+  it('folds a month into the selected day, else today, else the 1st', () => {
+    expect(getCollapseDate(day(1), day(14), day(20))).toEqual(day(14));
+    expect(getCollapseDate(day(1), day(14, 8), day(20))).toEqual(day(20));
+    expect(getCollapseDate(day(1), null, day(3, 11))).toEqual(day(1));
+  });
+
+  it('finds the week row of a month grid', () => {
+    const grid = buildMonthGrid(2026, 9, 0);
+    expect(getWeekRow(grid, day(18))).toBe(3);
+    expect(getWeekRow(grid, day(1, 5))).toBe(0);
+  });
+
+  it('builds a strip week where no day is outside', () => {
+    const week = getStripWeek(day(27, 8), { today: day(1), selection: selection({}), isDisabled: () => false });
+    expect(week).toHaveLength(7);
+    expect(week.some((d) => d.outside)).toBe(false);
+    expect(week[4]?.today).toBe(true);
+  });
+
+  it('follows a drag between folded and open, and lands where it was flung or once dragged past the commit point', () => {
+    expect(getDragProgress(0, 66, 132)).toBe(0.5);
+    expect(getDragProgress(1, -500, 132)).toBe(0);
+    expect(getDragProgress(0, 500, 132)).toBe(1);
+    expect(shouldExpand(0.1, 1.2, 0)).toBe(true);
+    expect(shouldExpand(0.9, -1.2, 1)).toBe(false);
+    expect(shouldExpand(0.2, 0, 0)).toBe(true);
+    expect(shouldExpand(0.1, 0.1, 0)).toBe(false);
+    expect(shouldExpand(0.8, 0, 1)).toBe(false);
+    expect(shouldExpand(0.9, 0, 1)).toBe(true);
   });
 });

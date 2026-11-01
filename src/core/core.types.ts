@@ -4,6 +4,7 @@ import type {
   Animated,
   GestureResponderEvent,
   HostInstance,
+  PanResponderGestureState,
   PressableProps,
   PressableStateCallbackType,
   StyleProp,
@@ -158,6 +159,18 @@ export interface AdjustableOptions {
   onPage?: (direction: 1 | -1) => void;
   onMin?: () => void;
   onMax?: () => void;
+}
+
+export interface DragOptions {
+  /** Claim drags that are clearly up or down, rather than sideways. Default: false */
+  vertical?: boolean;
+  /** The drag is claimed */
+  onStart?: () => void;
+  onMove?: (gesture: PanResponderGestureState) => void;
+  /** The finger lifts */
+  onEnd?: (gesture: PanResponderGestureState) => void;
+  /** The gesture is taken away, such as by a scroll view */
+  onCancel?: () => void;
 }
 
 export interface TrackPanOptions {

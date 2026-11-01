@@ -43,4 +43,26 @@ description: "Switch from react-native-calendars to React Native Pickers: the sa
 | `theme={{ selectedDayBackgroundColor, todayTextColor, … }}` | `theme={{ colors: { primary, … } }}` + `styles` slots |
 | `LocaleConfig` | `locale="fr-FR"` (names from `Intl`) |
 
+## ExpandableCalendar
+
+Its `ExpandableCalendar` needs a `CalendarProvider` around it and an `AgendaList` for the day's items. Here the calendar holds the date itself, and you list the day's items under it with a plain `FlatList` or `View`:
+
+```diff
+- <CalendarProvider date={selected} onDateChanged={setSelected}>
+-   <ExpandableCalendar firstDay={1} markedDates={marked} />
+-   <AgendaList sections={sections} renderItem={renderItem} />
+- </CalendarProvider>
++ <ExpandableCalendar value={selected} onChange={setSelected} firstDayOfWeek={1} markedDates={marks} />
++ <FlatList data={itemsFor(selected)} renderItem={renderItem} />
+```
+
+| react-native-calendars | React Native Pickers |
+| --- | --- |
+| `CalendarProvider date` / `onDateChanged` | `value` / `onChange` on [`ExpandableCalendar`](../../components/expandable-calendar) |
+| `initialPosition="open"` | `defaultExpanded` |
+| `onCalendarToggled(open)` | `onExpandedChange(expanded)` |
+| `disablePan` | `enableSwipe={false}` |
+| `WeekCalendar` | [`WeekStrip`](../../components/week-strip) |
+| `AgendaList`, `Timeline` | your own list: this package picks dates, it doesn't lay out events |
+
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { Animated, GestureResponderHandlers, StyleProp, ViewStyle } from 'react-native';
 
 import type { Locale, PickerTheme, SlotStyles, ThemableProps } from '../core';
 import type { DeepPartial, ValueOf } from '../core/core.types';
@@ -52,7 +52,8 @@ export type CalendarSlot =
   | 'dot'
   | 'dayLabel'
   | 'gridCell'
-  | 'gridCellText';
+  | 'gridCellText'
+  | 'expandHandle';
 
 export interface DayState {
   date: Date;
@@ -168,6 +169,40 @@ export type WeekStripProps = Omit<
   formatTitle?: (weekStart: Date, locale?: Locale) => string;
 };
 
+export type ExpandableCalendarProps = Omit<WeekStripProps, 'initialWeek' | 'formatTitle'> & {
+  /** Showing the whole month rather than one week (controlled) */
+  expanded?: boolean;
+  /** Initial state when uncontrolled. Default: false */
+  defaultExpanded?: boolean;
+  /** Fires when the user opens or folds the month: the handle, or a drag down or up */
+  onExpandedChange?: (expanded: boolean) => void;
+  /** A day in the week and month shown first. Default: the selected day or today */
+  initialDate?: Date;
+  /** Fires with the first of the month shown after an arrow or a swipe while open */
+  onMonthChange?: (month: Date) => void;
+  /** Override the title text. Default: the month and year shown */
+  formatTitle?: (month: Date, locale?: Locale) => string;
+};
+
+export interface CalendarExpansion {
+  /** The month grid is drawn: open, or animating */
+  showsMonth: boolean;
+  grid: Date[][];
+  /** Dragging down or up opens or folds the month, which follows the finger */
+  panHandlers: GestureResponderHandlers;
+  /** Clips the grid to one row folded and all of them open */
+  clipStyle: { height: Animated.AnimatedInterpolation<number> };
+  /** Shifts the month up so the week it opens from or folds into stays in place; none while folded */
+  gridStyle?: { transform: { translateY: Animated.AnimatedInterpolation<number> }[] };
+}
+
+export interface ExpandHandleProps {
+  expanded: boolean;
+  onPress: () => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<CalendarSlot>;
+}
+
 export type CalendarMode = NonNullable<CalendarSelectionProps['mode']>;
 
 export type CalendarView = ValueOf<typeof CALENDAR_VIEW>;
@@ -221,6 +256,12 @@ export interface DayGridProps {
   locale?: Locale;
   renderDay?: CalendarBaseProps['renderDay'];
   onDayPress: (date: Date) => void;
+  theme: PickerTheme;
+  slots?: SlotStyles<CalendarSlot>;
+}
+
+export interface WeekdayRowProps {
+  weekdays: Weekday[];
   theme: PickerTheme;
   slots?: SlotStyles<CalendarSlot>;
 }

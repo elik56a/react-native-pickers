@@ -3,6 +3,8 @@ import { SWIPE } from '../core.constants';
 export const isHorizontalSwipe = (dx: number, dy: number) =>
   Math.abs(dx) > SWIPE.activateDistance && Math.abs(dx) > Math.abs(dy) * SWIPE.directionRatio;
 
+export const isVerticalSwipe = (dx: number, dy: number) => isHorizontalSwipe(dy, dx);
+
 /** Page delta for a released swipe: swiping left goes forward, mirrored in RTL; 0 when too short and slow. */
 export const getSwipeDelta = (dx: number, vx: number, rtl: boolean) => {
   if (Math.abs(dx) <= SWIPE.minDistance && Math.abs(vx) <= SWIPE.minVelocity) return 0;

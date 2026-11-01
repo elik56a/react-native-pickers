@@ -1,4 +1,5 @@
 import type { PickerTheme } from '../core';
+import { SWIPE } from '../core/core.constants';
 import {
   addDays,
   addMonths,
@@ -6,6 +7,7 @@ import {
   isBetweenDays,
   isOutOfRange,
   isSameDay,
+  isSameMonth,
   startOfDay,
   startOfMonth,
   toDateKey,
@@ -19,6 +21,7 @@ import {
   DAYS_PER_WEEK,
   DEFAULT_YEAR_SPAN,
   EMPTY_RANGE,
+  EXPAND_DRAG_COMMIT,
   MAX_DAY_SIZE,
   QUICK_GRID_COLUMNS,
   RANGE_PRESET_LABELS,
@@ -306,3 +309,33 @@ export const canGoToWeek = (weekStart: Date, delta: number, minDate?: Date, maxD
 
 /** The month most of a week falls in, which is its middle day's: a week from Sep 29 to Oct 5 is October's. */
 export const getWeekMonth = (weekStart: Date) => addDays(weekStart, Math.floor(DAYS_PER_WEEK / 2));
+
+/** One week's days for a strip: each day is its own month, so none is dimmed as outside it. */
+export const getStripWeek = (weekStart: Date, params: Omit<Parameters<typeof getDayState>[0], 'date' | 'month'>) =>
+  getWeekDays(weekStart).map((date) => getDayState({ ...params, date, month: date }));
+
+/** The month a week opens into: the selected day's when it's in the week, else the month most of the week falls in. */
+export const getExpandMonth = (weekStart: Date, selected: Date | null) =>
+  startOfMonth(selected && getWeekDays(weekStart).some((day) => isSameDay(day, selected)) ? selected : getWeekMonth(weekStart));
+
+/** The day whose week a month folds into: the selected day, else today, when in the month, else the 1st. */
+export const getCollapseDate = (month: Date, selected: Date | null, today: Date) => {
+  if (selected && isSameMonth(selected, month)) return selected;
+  return isSameMonth(today, month) ? today : startOfMonth(month);
+};
+
+/** The row of a month grid that starts on `weekStart`, or the first. */
+export const getWeekRow = (grid: Date[][], weekStart: Date) =>
+  Math.max(
+    0,
+    grid.findIndex((week) => isSameDay(week[0] ?? null, weekStart))
+  );
+
+/** How open a month is while dragged: where the drag started, moved by `dy` over the height it opens by. */
+export const getDragProgress = (from: number, dy: number, travel: number) => Math.min(1, Math.max(0, from + (travel ? dy / travel : 0)));
+
+/** Where a drag lands: the way it was flung, else the other end once dragged past `EXPAND_DRAG_COMMIT` of the way from `from`. */
+export const shouldExpand = (progress: number, vy: number, from: number) => {
+  if (Math.abs(vy) > SWIPE.minVelocity) return vy > 0;
+  return from < 0.5 ? progress > EXPAND_DRAG_COMMIT : progress > 1 - EXPAND_DRAG_COMMIT;
+};
