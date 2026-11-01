@@ -97,7 +97,7 @@ When the month or year changes to one with fewer days, the day is clamped automa
 
 ## Min, max and year range
 
-`minDate` and `maxDate` limit the selection; days and months outside the range are disabled and the value is clamped into the range. The year wheel spans `minDate`'s year to `maxDate`'s year. Without them it uses `yearRange` (default: 100 years before and after today).
+`minDate` and `maxDate` limit the selection: days and months outside the range are disabled, and a changed date is clamped into the range. The year wheel starts at `minDate`'s year and ends at `maxDate`'s year. An end without a date comes from `yearRange`, else 100 years before or after today.
 
 ```tsx live noplatforms
 import { useState } from 'react';
@@ -147,7 +147,7 @@ The day and month wheels loop by default (`loop`); the year wheel never loops.
 | `maxDate` | `Date` | — | Latest selectable date. |
 | `order` | `('day' \| 'month' \| 'year')[]` | from locale | Columns and their order. |
 | `monthFormat` | `'long' \| 'short' \| 'numeric'` | `'long'` | Month labels. |
-| `yearRange` | `[number, number]` | today ±100 | Years when no min/max is set. |
+| `yearRange` | `[number, number]` | today ±100 | First and last year, for an end without `minDate` / `maxDate`. |
 | `loop` | `boolean` | `true` | Loop day and month wheels. |
 | `itemHeight` | `number` | `40` | Row height. |
 | `visibleItems` | `number` | `5` | Visible rows. |

@@ -122,7 +122,7 @@ export default function Example() {
 
 ## Utilities
 
-The country data is exported for your own UIs, such as a flag next to a username or a dialing code in a form.
+The country data comes from [countries-list](https://github.com/annexare/Countries) (MIT) and is exported for your own UIs, such as a flag next to a username or a dialing code in a form.
 
 | Export | Description |
 | --- | --- |
@@ -149,7 +149,7 @@ Every [`SelectPicker` prop](./select-picker#props) works, apart from the server 
 | `locale` | `string` | device locale | Language of the country names. |
 | `placeholder` | `string` | `'Select a country'` | Shown while nothing is selected. |
 | `searchPlaceholder` | `string` | `'Search countries'` | Search field placeholder. |
-| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
+| `sheet` | `Partial<SheetChromeProps>` | `sheetProps.height: 0.8` | Sheet options. The sheet opens at 80% of the screen so it doesn't jump as search narrows the list. |
 
 ### Types
 
@@ -166,4 +166,9 @@ interface Country {
 }
 ```
 
-Country data comes from [countries-list](https://github.com/annexare/Countries) (MIT).
+## Related
+
+- [PhoneField](./phone-field): this country list behind a phone number field
+- [SelectPicker](./select-picker): the field it's built on, with every prop
+- [Country and phone number recipe](../recipes/country-select)
+- [Dependent selects recipe](../recipes/dependent-selects): a state and a city under the country

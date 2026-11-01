@@ -27,12 +27,13 @@ Looks native per platform by default (design 'auto': iOS on iOS, Material on And
   <PickersProvider design="ios"> (or 'material' | 'web'); per component: design="material". theme/styles/explicit props always win over the design.
 Every component takes: theme (DeepPartial<PickerTheme>), design ('ios'|'material'|'web'), styles (slot styles), style, testID.
 Native apps: prefer subpaths so Metro skips unused pickers (root import bundles ~130 KB of emoji data):
-  /wheel /time /date /calendar /datetime /select /list /emoji /sheet /core   e.g. '@elik56a/react-native-pickers/date'
+  /wheel /time /duration /date /calendar /month /datetime /select /country /timezone /list /emoji /color /slider /rating /otp /action /sheet /core
+  e.g. '@elik56a/react-native-pickers/date'. PhoneField is in /country, TimeRangePicker in /time, Menu and ActionSheet in /action.
   PickersProvider and theme/date utils live in /core. Subpaths need RN 0.79+ (Metro package exports).
 
 Controlled: value + onChange. Uncontrolled: defaultValue. SelectPicker/SelectList/HorizontalList are controlled-only.
 onChange fires on user changes only (not when value is set programmatically). Wheels fire onChange when they settle;
-onValueChanging fires on every row crossing (use for haptics).
+onValueChanging fires on every row crossing, or every Slider step while dragging (use for haptics).
 
 WheelPicker<T>     items: (T | {label, value, disabled?})[]  value  onChange(value, index)  loop  itemHeight=40  visibleItems=5
                    variant '3d'|'flat'  keyboardInput=true  isEqual  renderItem({item,index,selected,theme})  styles
@@ -54,7 +55,7 @@ DatePicker         display 'calendar'(default)|'wheel'
   mode 'ranges'    value: DateRange[]     onChange(ranges)  maxRanges minRangeDays maxRangeDays allowSingleDayRange
   minDate maxDate isDateDisabled(date) markedDates{'YYYY-MM-DD':{dots?,label?,textColor?,disabled?}}
   locale firstDayOfWeek(0=Sun) initialMonth onMonthChange renderDay(state,theme) dayHeight=44
-DateWheelPicker    value: Date  onChange  order ['day','month','year']  monthFormat 'long'|'short'|'numeric'  min/maxDate
+DateWheelPicker    value: Date  onChange  order e.g. ['day','month','year'] (default from locale)  monthFormat 'long'|'short'|'numeric'  min/maxDate
 MonthPicker        a month without a day: value: Date (first of the month)  onChange(month)  display 'wheel'(ios: month+year wheels) | 'grid'(material/web: months under the year, tap the year for years)
                    minDate maxDate (any day in the month)  yearRange  monthFormat 'long'|'short'|'numeric' (wheels)  locale
 WeekStrip          one week of days in a row: value: Date|null  onChange(date)  swipe/arrows page weeks  onWeekChange(weekStart)  initialWeek
@@ -133,7 +134,7 @@ Fields (a SelectPicker-style field that opens the sheet and shows the confirmed 
                    EmojiPickerField also takes value: string (the emoji shown). Sheet title defaults to label.
   PickerField      same field props, children: ({visible, onClose}) => <AnySheet .../>
 Theme: <PickersProvider colorScheme='auto'|'light'|'dark' theme={...} darkTheme={...} platform?='ios'|'android'|'web' design='auto'|'ios'|'material'|'web'>; per-component `theme` and `design` props. `platform` makes pickers behave as on that OS (preview native in a browser). `design` is the look: 'auto' = ios on iOS, web on web, material elsewhere; sheet actions in the header (ios: Cancel/Done) or footer (material: Cancel/OK), radios for single select and outlined floating-label fields in material, a date headline above Material calendars, TimePicker display: 'wheel' (ios) | 'dial' (material clock dial with a keyboard-entry toggle) | 'input' (typed hour/minute fields) | 'list' (web: hour/minute/AM-PM columns to click); dial and input fall back to wheels with showSeconds. DateTimePicker display defaults: 'wheel' on ios, 'calendar' in material (time input under it) and web (time columns beside it); timePosition 'beside'|'below' overrides where the time goes (beside moves below when both don't fit), timeDisplay 'wheel'|'dial'|'input'|'list' how it's picked. Calendar: ios tints the chosen day, material fills it and rings today with narrow S M T weekdays, web uses filled rounded squares, ripple in material and a dim while pressed on ios/web.
-  tokens: colors{background,surface,sheet,text,textSecondary,textDisabled,primary,onPrimary,primaryMuted,border,backdrop,indicator,handle}
+  tokens: colors{background,surface,sheet,text,textSecondary,textDisabled,primary,onPrimary,primaryMuted,border,backdrop,indicator,handle,hover,ripple,danger}
           radius{sm,md,lg,full,sheet} spacing{xs..xl} typography{fontFamily,fontFamilyMedium,sizes,weights} animation{duration}
 Keyboard (web, built in): arrows move focus through calendars, lists and grids by position (RTL-aware) and step wheels, sliders and the dial; Home/End; Esc closes sheets; focus returns to the field.
 Slots: every component takes `styles={{ slotName: style }}`.

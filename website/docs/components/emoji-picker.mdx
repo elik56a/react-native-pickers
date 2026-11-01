@@ -247,6 +247,10 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 
 → [Picker fields](./picker-fields#custom-trigger)
 
+## Data and utilities
+
+The emoji data comes from [emojibase](https://emojibase.dev) (MIT) and is parsed lazily on first use. The helpers are exported for your own UIs (reactions bars, `:shortcode` autocomplete): `getAllEmojis`, `searchEmojis`, `findEmoji`, `withSkinTone`, `EMOJI_CATEGORIES`, `DEFAULT_CATEGORY_LABELS`, `DEFAULT_CATEGORY_ICONS`. → [Emoji utilities](../api/emoji-utils)
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -297,10 +301,6 @@ The sheet closes after each pick by default (`closeOnSelect={false}` to keep it 
 | `sectionHeader` / `sectionHeaderText` | Section titles |
 | `emojiCell` / `emojiText` | Grid cells |
 | `empty` / `emptyText` | No search results |
-
-## Data and utilities
-
-The emoji data comes from [emojibase](https://emojibase.dev) (MIT) and is parsed lazily on first use. The helpers are exported for your own UIs (reactions bars, `:shortcode` autocomplete): `getAllEmojis`, `searchEmojis`, `findEmoji`, `withSkinTone`, `EMOJI_CATEGORIES`, `DEFAULT_CATEGORY_LABELS`, `DEFAULT_CATEGORY_ICONS`. → [Emoji utilities](../api/emoji-utils)
 
 ## Related
 

@@ -39,45 +39,11 @@ export const SHOWCASE: ShowcaseItem[] = [
     recipe: 'flight-search-form',
   },
   {
-    key: SHOWCASE_SCREEN.table,
-    title: 'Book a table',
-    blurb: 'Party size and time slots as chips around a week strip to swipe, which greys out the days the place is closed.',
-    components: ['HorizontalList', 'WeekStrip'],
-    recipe: 'category-chips',
-  },
-  {
     key: SHOWCASE_SCREEN.alarm,
     title: 'Alarm',
     blurb: 'Wheels on iOS, a clock dial in Material and columns of hours on the web, from the same TimePicker.',
     components: ['TimePicker', 'HorizontalList'],
     recipe: 'alarm-time',
-  },
-  {
-    key: SHOWCASE_SCREEN.meeting,
-    title: 'Meeting invite',
-    blurb: 'A date and time in one field, a duration, a time zone and attendees picked as chips.',
-    components: ['DateTimePickerField', 'HorizontalList', 'SelectPicker'],
-  },
-  {
-    key: SHOWCASE_SCREEN.timer,
-    title: 'Interval timer',
-    blurb: 'Hours, minutes and seconds on wheels, number boxes or columns, with presets that set them.',
-    components: ['DurationPicker', 'HorizontalList'],
-    recipe: 'duration',
-  },
-  {
-    key: SHOWCASE_SCREEN.chat,
-    title: 'Chat',
-    blurb: 'The emoji button beside Send opens a sheet with search, recents and skin tones, and drops the emoji at the cursor.',
-    components: ['EmojiPickerSheet'],
-    recipe: 'chat-emoji',
-  },
-  {
-    key: SHOWCASE_SCREEN.signUp,
-    title: 'Sign up',
-    blurb: 'A birthday on date wheels, a country with flags, interests as chips and the app language.',
-    components: ['DatePickerField', 'CountryPicker', 'SelectPicker', 'HorizontalList'],
-    recipe: 'birthday',
   },
   {
     key: SHOWCASE_SCREEN.application,
@@ -87,18 +53,17 @@ export const SHOWCASE: ShowcaseItem[] = [
     components: ['SelectPicker', 'CountryPicker', 'PhoneField', 'DatePickerField', 'DateTimePickerField'],
   },
   {
-    key: SHOWCASE_SCREEN.store,
-    title: 'New store',
-    blurb:
-      'Country, state and city that reset each other, opening hours as a time range, a launch sale with its own presets and tags you add from the search.',
-    components: ['CountryPicker', 'SelectPicker', 'TimeRangePickerField', 'DatePickerField'],
+    key: SHOWCASE_SCREEN.display,
+    title: 'Display & text',
+    blurb: 'Brightness and text size preview live as you drag; the text size snaps to its marks, and focus hours are a range.',
+    components: ['Slider'],
   },
   {
-    key: SHOWCASE_SCREEN.delivery,
-    title: 'Delivery details',
-    blurb:
-      'Where to ship, a phone number for the courier that takes the shipping country’s code until you type one, the day and a time window.',
-    components: ['CountryPicker', 'PhoneField', 'DatePickerField', 'HorizontalList'],
+    key: SHOWCASE_SCREEN.signUp,
+    title: 'Sign up',
+    blurb: 'A birthday on date wheels, a country with flags, interests as chips and the app language.',
+    components: ['DatePickerField', 'CountryPicker', 'SelectPicker', 'HorizontalList'],
+    recipe: 'birthday',
   },
   {
     key: SHOWCASE_SCREEN.shop,
@@ -108,16 +73,11 @@ export const SHOWCASE: ShowcaseItem[] = [
     recipe: 'filters-sheet',
   },
   {
-    key: SHOWCASE_SCREEN.habit,
-    title: 'Habit streak',
-    blurb: 'Tap the days you ran on a multi-select calendar, set a daily reminder, and pick the colour that marks your runs.',
-    components: ['DatePicker', 'TimePickerField', 'ColorPickerField'],
-  },
-  {
-    key: SHOWCASE_SCREEN.display,
-    title: 'Display & text',
-    blurb: 'Brightness and text size preview live as you drag; the text size snaps to its marks, and focus hours are a range.',
-    components: ['Slider'],
+    key: SHOWCASE_SCREEN.chat,
+    title: 'Chat',
+    blurb: 'The emoji button beside Send opens a sheet with search, recents and skin tones, and drops the emoji at the cursor.',
+    components: ['EmojiPickerSheet'],
+    recipe: 'chat-emoji',
   },
   {
     key: SHOWCASE_SCREEN.verify,
@@ -126,22 +86,62 @@ export const SHOWCASE: ShowcaseItem[] = [
     components: ['PhoneField', 'OtpField'],
   },
   {
-    key: SHOWCASE_SCREEN.review,
-    title: 'Rate your stay',
-    blurb: 'Half stars for the stay, a row of stars per category, and the place’s average shown read-only.',
-    components: ['Rating'],
-  },
-  {
     key: SHOWCASE_SCREEN.albums,
     title: 'Photo albums',
     blurb: 'Sort the albums from a menu that ticks the current order, and open each album’s ⋯ sheet to share, rename or delete it.',
     components: ['Menu', 'ActionSheet', 'useActionSheet'],
   },
   {
+    key: SHOWCASE_SCREEN.meeting,
+    title: 'Meeting invite',
+    blurb: 'A date and time in one field, a duration, a time zone and attendees picked as chips.',
+    components: ['DateTimePickerField', 'HorizontalList', 'SelectPicker'],
+  },
+  {
+    key: SHOWCASE_SCREEN.delivery,
+    title: 'Delivery details',
+    blurb:
+      'Where to ship, a phone number for the courier that takes the shipping country’s code until you type one, the day and a time window.',
+    components: ['CountryPicker', 'PhoneField', 'DatePickerField', 'HorizontalList'],
+  },
+  {
+    key: SHOWCASE_SCREEN.store,
+    title: 'New store',
+    blurb:
+      'Country, state and city that reset each other, opening hours as a time range, a launch sale with its own presets and tags you add from the search.',
+    components: ['CountryPicker', 'SelectPicker', 'TimeRangePickerField', 'DatePickerField'],
+  },
+  {
     key: SHOWCASE_SCREEN.trips,
     title: 'Trip planner',
     blurb: 'Several stays on one calendar, and the cities to visit.',
     components: ['DatePicker', 'SelectPicker'],
+  },
+  {
+    key: SHOWCASE_SCREEN.habit,
+    title: 'Habit streak',
+    blurb: 'Tap the days you ran on a multi-select calendar, set a daily reminder, and pick the colour that marks your runs.',
+    components: ['DatePicker', 'TimePickerField', 'ColorPickerField'],
+  },
+  {
+    key: SHOWCASE_SCREEN.review,
+    title: 'Rate your stay',
+    blurb: 'Half stars for the stay, a row of stars per category, and the place’s average shown read-only.',
+    components: ['Rating'],
+  },
+  {
+    key: SHOWCASE_SCREEN.timer,
+    title: 'Interval timer',
+    blurb: 'Hours, minutes and seconds on wheels, number boxes or columns, with presets that set them.',
+    components: ['DurationPicker', 'HorizontalList'],
+    recipe: 'duration',
+  },
+  {
+    key: SHOWCASE_SCREEN.table,
+    title: 'Book a table',
+    blurb: 'Party size and time slots as chips around a week strip to swipe, which greys out the days the place is closed.',
+    components: ['HorizontalList', 'WeekStrip'],
+    recipe: 'category-chips',
   },
 ];
 

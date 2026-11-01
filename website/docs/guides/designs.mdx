@@ -66,6 +66,7 @@ export default function Example() {
 | Date sheet | calendar | the picked date in large type above the calendar | calendar |
 | Time | wheels | a clock dial | columns of hours and minutes to click |
 | Date & time | one row of wheels | calendar with time fields to type into under it | calendar with the time columns beside it |
+| Time range | **Start** and **End** rows, the wheels opening under the one you tap | two large time boxes with an arrow and the length, a clock dial for the chosen end | two cards side by side with an arrow and the length, columns for the chosen end |
 | Duration | wheels with units | number boxes to type into | columns to click |
 | Month | month and year wheels | a grid of months under the year | a grid of months under the year |
 | WeekStrip | chosen day tinted, SUN MON | chosen day filled, S M T | chosen day a filled square, Sun Mon |
@@ -79,6 +80,8 @@ export default function Example() {
 | Search fields | a short gray search bar | a tall pill | an outlined input with a focus ring |
 | EmojiPicker | categories at the bottom, the current one on a gray fill, UPPERCASE titles | categories at the bottom, the current one in a tinted pill | categories on top, underlined |
 | Press | dims while held | ripple | dims while held |
+
+`CountryPicker` and `TimeZonePicker` are `SelectPicker`s and `PhoneField` is a field, so they follow the Fields, Single select and Option rows lines.
 
 `design="auto"` (the default) picks `ios` on iOS, `web` on the web, and `material` everywhere else (Android, Windows, macOS).
 

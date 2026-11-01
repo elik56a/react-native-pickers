@@ -68,7 +68,7 @@ import { Text } from 'react-native';
 import { ActionSheet } from '@elik56a/react-native-pickers';
 import { DemoButton } from './DemoButton';
 
-const icon = (emoji) => <Text style={{ fontSize: 20 }}>{emoji}</Text>;
+const icon = (emoji: string) => <Text style={{ fontSize: 20 }}>{emoji}</Text>;
 
 export default function Example() {
   const [open, setOpen] = useState(false);
@@ -167,7 +167,7 @@ const FILES = ['Invoice.pdf', 'Photo.jpg', 'Notes.txt'];
 export default function Example() {
   const { show, actionSheet } = useActionSheet();
   const [last, setLast] = useState('Nothing yet');
-  const openMenu = (file) =>
+  const openMenu = (file: string) =>
     show({
       title: file,
       actions: [
@@ -197,7 +197,11 @@ The iOS design ends with a Cancel button in its own card, as iOS does. Material 
 
 ## Bottom sheet or modal
 
-`presentation` is the same as on [`BottomSheet`](./bottom-sheet#bottom-sheet-or-modal): `'auto'` (default) is a centered modal on wide web windows and a bottom sheet everywhere else. Anything else the sheet takes, such as `bottomInset` or `onClosed`, goes in `sheetProps`.
+`presentation` is the same as on [`BottomSheet`](./bottom-sheet#bottom-sheet-or-modal): `'auto'` (default) is a centered modal on wide web windows and a bottom sheet everywhere else. Anything else the sheet takes, such as `bottomInset` or `onClosed`, goes in `sheetProps`. An action sheet doesn't expand to full screen (`expandable: false`), and only the Material and web designs show the grab handle; `sheetProps` can turn either back on.
+
+## Accessibility
+
+Each action is a button named by its label and description, marked disabled or selected, and the title is a header. On the web, arrow keys move between actions and Escape closes the sheet.
 
 ## Props
 
@@ -211,9 +215,10 @@ The iOS design ends with a Cancel button in its own card, as iOS does. Material 
 | `showCancel` | `boolean` | `true` iOS / `false` Material and web | A Cancel button after the actions. |
 | `cancelLabel` | `string` | `'Cancel'` | |
 | `presentation` | `'auto' \| 'bottomSheet' \| 'modal'` | `'auto'` | Bottom sheet or centered modal. |
-| `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [`BottomSheet`](./bottom-sheet#props). |
-| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
-| `styles` | `{ group, header, title, message, action, actionLabel, actionDescription, check, cancel, cancelLabel }` | — | [Slot styles](../guides/styling): the iOS cards, the title block, each action row, its label, description and ✓, and Cancel. |
+| `sheetProps` | `Partial<BottomSheetProps>` | — | Passed to the [`BottomSheet`](./bottom-sheet#props), except `visible`, `onClose` and `children`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. See [Theming](../guides/theming). |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `styles` | `SlotStyles<ActionSheetSlot>` | — | [Slot styles](../guides/styling): `group` (the iOS cards), `header` / `title` / `message` (the title block), `action` / `actionLabel` / `actionDescription` / `check` (each row, its label, description and ✓), `cancel` / `cancelLabel`. |
 | `testID` | `string` | — | On the sheet; Cancel gets `${testID}-cancel`. |
 
 ```ts
@@ -231,10 +236,6 @@ interface ActionSheetAction {
 const { show, hide, actionSheet } = useActionSheet();
 show(options: Omit<ActionSheetProps, 'visible' | 'onClose'> & { onClose?: () => void });
 ```
-
-## Accessibility
-
-Each action is a button named by its label and description, marked disabled or selected, and the title is a header. On the web, arrow keys move between actions and Escape closes the sheet.
 
 ## Related
 

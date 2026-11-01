@@ -2,12 +2,12 @@
 title: React Native Pickers, zero native code
 sidebar_label: Introduction
 slug: /intro
-description: "React Native Pickers: wheel, time, duration, date, month, week, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider, a star rating and an OTP code input, with bottom sheets, action sheets, menus and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable."
+description: "React Native Pickers: wheel, time, time range, duration, date, month, week, range, date-time, select, country, phone, time zone, emoji and color pickers, a slider, a star rating and an OTP code input, with bottom sheets, action sheets, menus and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable."
 ---
 
 # React Native Pickers
 
-**One dependency-free package for every picker a React Native app needs** — wheel, time, duration, date (calendar, range, multiple, wheel), month, week strip, date & time, select / dropdown, segmented control and chips, emoji, color, the bottom sheets to put them in, and the form fields that open them. Each one looks native on iOS, Android and the web, and every detail is yours to customize.
+**One dependency-free package for every picker a React Native app needs** — wheel, time, time range, duration, date (calendar, range, multiple, wheel), month, week strip, date & time, select / dropdown, country, phone number, time zone, segmented control and chips, emoji, color, a slider, a star rating and an OTP code input, the bottom sheets, menus and action sheets to put them in, and the form fields that open them. Each one looks native on iOS, Android and the web, and every detail is yours to customize.
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
@@ -78,7 +78,8 @@ Edit the code and the result updates instantly. Each example is a complete file 
 | [`WheelPicker`](./components/wheel-picker) | 3D scrolling wheel with infinite loop, disabled items, tap-to-type, custom rows |
 | [`MultiWheelPicker`](./components/multi-wheel-picker) | Several wheels sharing one selection band (durations, units, anything multi-column) |
 | [`TimePicker`](./components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, minute & second steps, min / max time |
-| [`DatePicker`](./components/date-picker) | Calendar with **single**, **range** and **multiple** selection, or a day/month/year **wheel** |
+| [`TimeRangePicker`](./components/time-range-picker) | A start and an end time: opening hours, shifts, overnight ranges, with a minimum and maximum length |
+| [`DatePicker`](./components/date-picker) | Calendar with **single**, **range**, **multiple** and **several ranges** selection, or a day/month/year **wheel** |
 | [`MonthPicker`](./components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
 | [`WeekStrip`](./components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
 | [`DurationPicker`](./components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
@@ -97,8 +98,8 @@ Edit the code and the result updates instantly. Each example is a complete file 
 | [`BottomSheet`](./components/bottom-sheet) | Animated sheet with drag-to-dismiss, for your own content |
 | [`Menu`](./components/menu) | A dropdown or context menu of actions by a button, pure JS for Expo Go and the web |
 | [`ActionSheet`](./components/action-sheet) | A list of actions such as Share or Delete, iOS cards or Material rows |
-| [`DatePickerSheet`, `TimePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`](./components/picker-sheets) | Ready-made pickers in a sheet with Cancel / Done and draft state |
-| [`DatePickerField`, `TimePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`](./components/picker-fields) | Form fields that open a picker sheet and show the picked value, styled like `SelectPicker` |
+| [`DatePickerSheet`, `TimePickerSheet`, `TimeRangePickerSheet`, `DateTimePickerSheet`, `DurationPickerSheet`, `MonthPickerSheet`, `ColorPickerSheet`, `WheelPickerSheet`, `EmojiPickerSheet`](./components/picker-sheets) | Ready-made pickers in a sheet with Cancel / Done and draft state |
+| [`DatePickerField`, `TimePickerField`, `TimeRangePickerField`, `DateTimePickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `WheelPickerField`, `EmojiPickerField`, `PickerField`](./components/picker-fields) | Form fields that open a picker sheet and show the picked value, styled like `SelectPicker` |
 
 ## Why this library
 

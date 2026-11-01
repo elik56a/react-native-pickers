@@ -164,7 +164,7 @@ export default function Example() {
 - `initialMonth` sets the first month shown. By default it's the month of the selected date (or range start, or first multiple date), else today.
 - `onMonthChange(month)` fires with the first day of the newly shown month.
 
-In single mode, when `value` changes from outside to a date in another month, the calendar follows it.
+In single and range mode, when the selected date (or the range start) changes from outside to another month, the calendar follows it.
 
 ## Layout
 
@@ -258,6 +258,7 @@ interface DayState {
   rangeStart: boolean;
   rangeEnd: boolean;
   inRange: boolean;    // strictly between start and end
+  ranged: boolean;     // range or ranges mode: a chosen day is a range end
   today: boolean;
   disabled: boolean;
   outside: boolean;    // belongs to the previous / next month
@@ -325,6 +326,18 @@ export default function Example() {
 | `dayLabel` | Marked-date label text |
 | `gridCell` / `gridCellText` | Month and year grid cells (quick jump) |
 
+## In a form field
+
+`DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
+
+<PropPlayground {...PLAYGROUNDS.datePickerField} />
+
+→ [Picker fields](./picker-fields)
+
+## Accessibility
+
+Each day is a button whose label is the full date ("Wednesday, October 14, 2026") with `selected` / `disabled` state. The arrows are labelled "Previous" / "Next", and the title is a button when quick jump is on.
+
 ## Props
 
 `DatePicker` accepts everything below plus `display`. With `display="wheel"`, see [DateWheelPicker](./date-wheel-picker) instead.
@@ -383,18 +396,6 @@ interface MarkedDate { dots?: string[]; disabled?: boolean; label?: string; text
 type CalendarProps = CalendarBaseProps & CalendarSelectionProps;
 type DatePickerProps = ({ display?: 'calendar' } & CalendarProps) | ({ display: 'wheel' } & DateWheelPickerProps);
 ```
-
-## Accessibility
-
-Each day is a button whose label is the full date ("Wednesday, October 14, 2026") with `selected` / `disabled` state. The arrows are labelled "Previous" / "Next", and the title is a button when quick jump is on.
-
-## In a form field
-
-`DatePickerField` is a field that opens a [`DatePickerSheet`](./picker-sheets#datepickersheet) and shows the confirmed date. Switch `presentation` in the panel: `auto` opens a dropdown under the field on the web and a bottom sheet on iOS and Android.
-
-<PropPlayground {...PLAYGROUNDS.datePickerField} />
-
-→ [Picker fields](./picker-fields)
 
 ## Related
 

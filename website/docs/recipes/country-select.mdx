@@ -66,3 +66,4 @@ Try searching `deutschland`, `+44`, `usa` or `日本`.
 - Send `getCountry(phoneCountry).dialCode + phone` to your server, with spaces removed: `'+1 809'` is a North American area code written as `+1 809`.
 - `preferred` puts the countries most of your users pick at the top. Define it outside the component so the list is built once.
 - Need your own grouping, such as by region? Build options from [`getAllCountries()`](../components/country-picker#utilities) and pass them to a [`SelectPicker`](../components/select-picker) with a `group` on each option.
+- For a single phone input that formats the number as it's typed and gives you an E.164 value, use [`PhoneField`](../components/phone-field).

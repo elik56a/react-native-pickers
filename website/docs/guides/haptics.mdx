@@ -5,7 +5,7 @@ description: Add iOS-style selection haptics to React Native wheel, time and dat
 
 # Haptics
 
-Native wheels tick under your finger. Get the same feel with `onValueChanging`, which fires on **every row crossing** while scrolling. The library has no haptics dependency, so bring the one you already use.
+Native wheels tick under your finger. Get the same feel with `onValueChanging`, which fires on **every row crossing** while scrolling, and on every step while dragging a slider. The library has no haptics dependency, so bring the one you already use.
 
 ## expo-haptics
 
@@ -55,6 +55,9 @@ For a stronger buzz when a value is confirmed, use `onChange` or a sheet's `onCo
 | `MultiWheelPicker` columns | `(value, index)` per column |
 | `TimePicker` / `TimePickerSheet` | `(date)` |
 | `DateWheelPicker` / `DatePicker display="wheel"` | `(date)` |
+| `DateTimePicker display="wheel"` / `DateTimePickerSheet` | `(date)` |
+| `DurationPicker` / `DurationPickerSheet` | `(seconds)` |
 | `WheelPickerSheet` | `(value, index)` |
+| `Slider` | `(value)`, or `[start, end]` when `range` is set |
 
-Disabled rows don't trigger `onValueChanging`.
+In the time, date and duration pickers it fires from the wheels only: a dial, number boxes or clickable columns don't call it. Disabled rows don't trigger it either.

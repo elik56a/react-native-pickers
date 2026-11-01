@@ -138,9 +138,9 @@ const shown = country ? formatNationalNumber(nationalNumber, country) : user.pho
 | `locale` | `string` | device locale | Language of the country names. |
 | `presentation` | `'auto' \| 'dropdown' \| 'bottomSheet' \| 'modal' \| 'inline'` | `'auto'` | Where the country list opens: a dropdown on the web, a bottom sheet on native. |
 | `countrySheetTitle` | `string` | `'Country code'` | Title of the country sheet. |
-| `sheet` | `SheetChromeProps` | `sheetProps.height: 0.8` | Options for the country sheet, as [`CountryPicker`](./country-picker#props)'s. |
+| `sheet` | `Partial<SheetChromeProps>` | `sheetProps.height: 0.8` | Options for the country sheet, as [`CountryPicker`](./country-picker#props)'s. |
 | `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
-| `style` | `ViewStyle` | — | The field's container. |
+| `style` | `StyleProp<ViewStyle>` | — | The field's container. |
 | `styles` | `{ label, field, input, countryButton, dialCode, chevron, helperText }` | — | [Slot styles](../guides/styling). |
 | `testID` | `string` | — | On the text input; the country button gets `${testID}-country`. |
 
@@ -153,3 +153,10 @@ interface PhoneDetails {
   valid: boolean; // has as many digits as the country's numbers do
 }
 ```
+
+## Related
+
+- [OtpField](./otp-field): the code you text to the number
+- [CountryPicker](./country-picker): the country list on its own
+- [Forms guide](../guides/forms#phone-numbers): a phone number in React Hook Form
+- [Country and phone number recipe](../recipes/country-select)

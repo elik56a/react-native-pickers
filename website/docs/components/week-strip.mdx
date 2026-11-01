@@ -67,7 +67,7 @@ export default function Schedule() {
 
 ## Weeks
 
-The first day of the week comes from `locale` (Sunday in the US, Monday in most of Europe), or set `firstDayOfWeek`: `0` for Sunday to `6` for Saturday. The strip opens on the week of `value`, or of today, or of `initialWeek`, and moves to a new `value`'s week when you set one from outside.
+The first day of the week comes from `locale` (Sunday in the US, Monday in most of Europe), or set `firstDayOfWeek`: `0` for Sunday to `6` for Saturday. The strip opens on the week of `initialWeek`, else of `value`, else of today, and moves to a new `value`'s week when you set one from outside.
 
 `onWeekChange` fires with the first day of the week after an arrow or a swipe, to load that week's data:
 
@@ -86,7 +86,7 @@ The first day of the week comes from `locale` (Sunday in the US, Monday in most 
 | `onChange` | `(date: Date) => void` | — | Fires when a day is tapped. |
 | `initialWeek` | `Date` | the selected day or today | A day in the week shown first. |
 | `onWeekChange` | `(weekStart: Date) => void` | — | Fires with the first day of the week after paging. |
-| `firstDayOfWeek` | `0`–`6` | from `locale`, else `0` | `0` = Sunday. |
+| `firstDayOfWeek` | `number` (0–6) | from `locale`, else `0` | 0 = Sunday … 6 = Saturday. |
 | `locale` | `string` | device | Weekday and month names. |
 | `minDate` / `maxDate` | `Date` | — | Days outside are disabled, and paging stops at their weeks. |
 | `isDateDisabled` | `(date: Date) => boolean` | — | Disable a day. |
@@ -94,10 +94,10 @@ The first day of the week comes from `locale` (Sunday in the US, Monday in most 
 | `showHeader` | `boolean` | `true` | Show the month title and the week arrows. |
 | `formatTitle` | `(weekStart: Date, locale?: string) => string` | the month of the week's middle day | Title text. |
 | `showWeekdays` | `boolean` | `true` | Show the weekday names. |
-| `weekdayFormat` | `'short' \| 'narrow'` | from the design | Weekday names: `Mon` or `M`. |
+| `weekdayFormat` | `'short' \| 'narrow'` | from the design: `'narrow'` in Material, else `'short'` | Weekday names: `Mon` or `M`. |
 | `enableSwipe` | `boolean` | `true` | Swipe left or right to change weeks. |
 | `renderDay` | `(state: DayState, theme: PickerTheme) => ReactNode` | — | Fully custom day cell, as on the [calendar](./date-picker#custom-days-and-arrows). |
-| `renderArrow` | `(direction, disabled) => ReactNode` | — | Custom arrows. |
+| `renderArrow` | `(direction: 'prev' \| 'next', disabled: boolean) => ReactNode` | — | Custom arrows. |
 | `dayHeight` | `number` | `44` | Day cell height. |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `styles` | `SlotStyles<CalendarSlot>` | — | The [calendar slots](./date-picker#slots). |

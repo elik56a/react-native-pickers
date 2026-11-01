@@ -99,6 +99,8 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 [`normalizeHex`](../components/color-picker#utilities) · [`hexToHsv`](../components/color-picker#utilities) · [`hsvToHex`](../components/color-picker#utilities) · [`withAlpha`](../components/color-picker#utilities) · [`DEFAULT_COLORS`](../components/color-picker#utilities)
 
+`COLOR_DISPLAY`: the ColorPicker layouts as constants (`tabs`, `swatches`, `spectrum`), e.g. `display={COLOR_DISPLAY.swatches}`.
+
 ## Country utilities
 
 [`getCountry`](../components/country-picker#utilities) · [`getAllCountries`](../components/country-picker#utilities) · [`getCountryFlag`](../components/country-picker#utilities)
@@ -165,10 +167,10 @@ type SelectPresentation = FieldPresentation;
 /** The field slots every `*PickerField` and `PickerField` takes in `styles`. */
 type PickerFieldSlot = 'label' | 'trigger' | 'triggerText' | 'placeholder' | 'chevron' | 'clear' | 'helperText';
 
-/** Validation shown on every field, SelectPicker and PhoneField. Set from your form; the field doesn't check the value. */
 /** A message shown under the field, or `true` to mark it invalid without one. */
 type FieldError = string | boolean;
 
+/** Validation shown on every field, SelectPicker, PhoneField and OtpField (`error` and `helperText` only). Set from your form; the field doesn't check the value. */
 interface FieldStatusProps {
   error?: FieldError;       // invalid: red border and label, the message under the field when it's a string
   helperText?: string;      // under the field, replaced by the error message
@@ -177,7 +179,7 @@ interface FieldStatusProps {
 
 type SlotStyles<K extends string> = Partial<Record<K, StyleProp<TextStyle>>>;
 
-interface ThemableProps { theme?: DeepPartial<PickerTheme> }
+interface ThemableProps { theme?: DeepPartial<PickerTheme>; design?: Design }
 ```
 
 ## Default strings
@@ -188,6 +190,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | SelectPicker, fields | `placeholder` | `Select…` |
 | SelectList | `searchPlaceholder` / `emptyText` / `loadingText` / `searchPrompt` | `Search` / `No results` / `Loading…` / `Type to search` |
 | SelectPicker, SelectList | `createLabel` | `Add "…"` |
+| ActionSheet | `cancelLabel` | `Cancel` |
 | CountryPicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allCountriesLabel` | `Select a country` / `Search countries` / `Suggested` / `All countries` |
 | LanguagePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allLanguagesLabel` | `Select a language` / `Search languages` / `Suggested` / `All languages` |
 | PhoneField | `label` / `countrySheetTitle` | none (read as `Phone number`) / `Country code` |
@@ -195,6 +198,8 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
 | TimeRangePicker | `startLabel` / `endLabel` | `Start` / `End` |
+| OtpField | `accessibilityLabel` | `Verification code` |
+| Rating | `accessibilityLabel` / `formatValue` | `Rating` / `3 of 5` |
 | ColorPicker | `labels` | `Grid`, `Spectrum`, `Sliders`, `Hue`, `Opacity`, `Red`, `Green`, `Blue`, `Hex`, `Copy`, `Copied`, `Custom colour`… |
 | DurationPicker | `labels` | `{ hours: 'h', minutes: 'min', seconds: 's' }` |
 | `getRangePresets()` | `label` | `Today`, `Yesterday`, `Last 7 days`, `Last 30 days`, `This month`, `Last month` |

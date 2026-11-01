@@ -22,7 +22,7 @@ import { Text, View } from 'react-native';
 import { Menu } from '@elik56a/react-native-pickers';
 import { DemoButton } from './DemoButton';
 
-const icon = (emoji) => <Text style={{ fontSize: 16 }}>{emoji}</Text>;
+const icon = (emoji: string) => <Text style={{ fontSize: 16 }}>{emoji}</Text>;
 
 export default function Example() {
   const [pinned, setPinned] = useState(false);
@@ -142,6 +142,10 @@ The menu opens under the trigger, or above it when there's more room there. `ali
 
 `presentation="sheet"` opens the same actions as an [`ActionSheet`](./action-sheet) instead, from the bottom of the screen.
 
+## Accessibility
+
+The trigger is a button that reports whether the menu is expanded. Each action is a button named by its label and description, marked disabled or selected. A tap outside, Android's Back and Escape on the web close the menu, and on the web arrow keys move between actions.
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -156,14 +160,11 @@ The menu opens under the trigger, or above it when there's more room there. `ali
 | `disabled` | `boolean` | `false` | The trigger doesn't open the menu. |
 | `onOpen` / `onClose` | `() => void` | — | When it opens; when it closes for any reason, before an action runs. |
 | `accessibilityLabel` | `string` | — | What screen readers call the trigger, such as 'More options'. |
-| `theme` / `design` | | | See [Theming](../guides/theming) and [Designs](../guides/designs). |
-| `style` | `ViewStyle` | — | The box around the trigger. |
-| `styles` | `{ trigger, menu, header, title, action, actionLabel, actionDescription, check }` | — | [Slot styles](../guides/styling). |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. See [Theming](../guides/theming). |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `style` | `StyleProp<ViewStyle>` | — | The box around the trigger. |
+| `styles` | `SlotStyles<MenuSlot>` | — | [Slot styles](../guides/styling): `trigger` (the pressable around a node trigger), `menu`, `header`, `title`, `action`, `actionLabel`, `actionDescription`, `check`. |
 | `testID` | `string` | — | On the trigger; the menu gets `${testID}-menu`. |
-
-## Accessibility
-
-The trigger is a button that reports whether the menu is expanded. Each action is a button named by its label and description, marked disabled or selected. A tap outside, Android's Back and Escape on the web close the menu, and on the web arrow keys move between actions.
 
 ## Related
 

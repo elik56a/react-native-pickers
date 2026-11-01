@@ -58,7 +58,7 @@ Each [design](../guides/designs) has its own default:
 
 ## Hours, minutes and seconds
 
-Hours and minutes show by default. `showSeconds` adds a seconds wheel, and `showHours={false}` drops the hours, so the minutes count past 59 (up to 90 for a 90-minute run):
+Hours and minutes show by default. `showSeconds` adds a seconds wheel, and `showHours={false}` drops the hours, so the minutes can count past 59 up to `max` (`max={90 * 60}` for a 90-minute run):
 
 ```tsx live
 import { useState } from 'react';
@@ -139,10 +139,10 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 | --- | --- | --- | --- |
 | `value` | `number` | — | Selected duration in seconds (controlled). |
 | `defaultValue` | `number` | `0` | Initial duration when uncontrolled. |
-| `onChange` | `(seconds: number) => void` | — | Fires when any wheel settles. |
+| `onChange` | `(seconds: number) => void` | — | Fires when the user changes the duration. |
 | `onValueChanging` | `(seconds: number) => void` | — | Fires on every tick while scrolling (haptics). |
 | `display` | `'wheel' \| 'input' \| 'list'` | from the design | Wheels (iOS), boxes to type into (Material), or columns to click (web). |
-| `showHours` | `boolean` | `true` | Show the hours wheel. Without it, minutes count past 59. |
+| `showHours` | `boolean` | `true` | Show the hours wheel. Without it, minutes count past 59, up to `max`. |
 | `showSeconds` | `boolean` | `false` | Add a seconds wheel. |
 | `min` | `number` | `0` | Shortest selectable duration, in seconds. |
 | `max` | `number` | 23 h 59 min 59 s, or 59 min 59 s without hours | Longest selectable duration, in seconds. |
@@ -151,7 +151,7 @@ It takes the [shared sheet props](./picker-sheets#shared-props) and the picker's
 | `labels` | `{ hours?, minutes?, seconds? }` | `{ hours: 'h', minutes: 'min', seconds: 's' }` | Units beside the wheels and in the field. |
 | `loop` | `boolean` | `true` | Loop the minute and second wheels. Hours never loop. |
 | `itemHeight` | `number` | `40` | Wheel row height. |
-| `visibleItems` | `number` | `5` | Visible wheel rows, or cells in a column. |
+| `visibleItems` | `number` | `5`, or `7` in the list | Visible wheel rows, or cells in each `list` column. |
 | `variant` | `'3d' \| 'flat'` | `'3d'` | Wheel style. |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `styles` | `SlotStyles<MultiWheelSlot>` | — | [MultiWheelPicker slots](./multi-wheel-picker#slots), for the wheels. The `separator` slot styles their unit labels. |

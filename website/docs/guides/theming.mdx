@@ -5,7 +5,7 @@ description: "Theme every React Native picker with PickersProvider: colours, rad
 
 # Theming
 
-Pickers ship with a polished light and dark theme that follow the OS appearance automatically. Change any token for the whole app with `PickersProvider`, or for one component with its `theme` prop.
+Pickers ship with a light and a dark theme that follow the OS appearance automatically. Change any token for the whole app with `PickersProvider`, or for one component with its `theme` prop.
 
 ## PickersProvider
 
@@ -125,7 +125,7 @@ interface PickerTheme {
     handle: string;        // sheet grab handle
     hover: string;         // tint while the pointer is over anything pressable
     ripple: string;        // ripple that spreads from the touch point on press
-    danger: string;        // destructive actions, such as Delete in an action sheet
+    danger: string;        // destructive actions and field errors
   };
   radius: { sm: number; md: number; lg: number; full: number; sheet: number };
   spacing: { xs: number; sm: number; md: number; lg: number; xl: number };
@@ -158,6 +158,7 @@ interface PickerTheme {
 | `colors.handle` | `#D8D3C9` | `#3D3930` |
 | `colors.hover` | `rgba(23,21,15,0.05)` | `rgba(255,255,255,0.06)` |
 | `colors.ripple` | `rgba(23,21,15,0.18)` | `rgba(255,255,255,0.2)` |
+| `colors.danger` | `#D92D20` | `#FF6B5F` |
 
 | Token | Value (both) |
 | --- | --- |
@@ -166,6 +167,8 @@ interface PickerTheme {
 | `typography.sizes` | `xs 11 · sm 13 · md 16 · lg 19 · xl 22` |
 | `typography.weights` | `regular '400' · medium '500' · bold '600'` |
 | `animation.duration` | `240` |
+
+These are the iOS design's values. The Material and web designs change `radius` on top of them: Material uses `md 4 · sheet 28`, web uses `sm 6 · md 8 · lg 12 · sheet 12`. See [designs](./designs).
 
 ### Where each colour is used
 
@@ -179,6 +182,7 @@ interface PickerTheme {
 | `ripple` | The same elements on press, on every platform, except the select field and wheel rows |
 | `textSecondary` | Unselected wheel rows, weekday names, placeholders, descriptions, Cancel |
 | `textDisabled` | Disabled days / rows, outside-month days |
+| `danger` | Destructive actions in ActionSheet and Menu, a field's error border, label and message |
 
 ## Hover and ripple
 
@@ -280,6 +284,7 @@ const tweaked = mergeTheme(lightTheme, { radius: { md: 4 } });
 `usePickerTheme()` returns the active, resolved theme, so your buttons and fields can match the pickers:
 
 ```tsx
+import { Pressable, Text } from 'react-native';
 import { usePickerTheme, textStyle } from '@elik56a/react-native-pickers';
 
 function DoneButton({ onPress }: { onPress: () => void }) {

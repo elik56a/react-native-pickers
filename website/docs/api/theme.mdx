@@ -80,8 +80,9 @@ function textStyle(
 ## Types
 
 ```ts
-type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? (T[K] extends Function ? T[K] : DeepPartial<T[K]>) : T[K] };
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K] };
 interface ThemableProps { theme?: DeepPartial<PickerTheme>; design?: Design }
 type DesignPreference = 'auto' | 'ios' | 'material' | 'web';
 type Design = 'ios' | 'material' | 'web';
+type Locale = string; // a BCP 47 tag passed to Intl, e.g. 'en-US' or 'he'. Default: the device locale
 ```

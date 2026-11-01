@@ -1,6 +1,6 @@
 ---
 title: React Native Date, Time & Wheel Picker Fields
-description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal, or expand it inline under the field, and show the picked value, with error and helper text for forms: DatePickerField, TimePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
+description: "Form fields for React Native that open a picker in a dropdown, bottom sheet or modal, or expand it inline under the field, and show the picked value, with error and helper text for forms: DatePickerField, TimePickerField, TimeRangePickerField, DateTimePickerField, DurationPickerField, MonthPickerField, ColorPickerField, WheelPickerField, EmojiPickerField and PickerField."
 ---
 
 import PropPlayground from '@site/src/components/PropPlayground';
@@ -14,6 +14,7 @@ In a form, a picker usually isn't on screen. The user taps a field, picks in a b
 | --- | --- | --- |
 | `DatePickerField` | [`DatePickerSheet`](./picker-sheets#datepickersheet) | `Oct 5, 2026`, a range `Oct 5, 2026 – Oct 9, 2026` or a list of dates |
 | `TimePickerField` | [`TimePickerSheet`](./picker-sheets#timepickersheet) | `9:30 AM` or `09:30`, following `format` and `locale` |
+| `TimeRangePickerField` | [`TimeRangePickerSheet`](./time-range-picker#in-a-sheet-or-a-field) | `9:00 AM – 5:00 PM`, with ` +1` when it ends the next day |
 | `DateTimePickerField` | [`DateTimePickerSheet`](./date-time-picker#in-a-sheet) | `Oct 26, 2026, 9:30 AM` |
 | `DurationPickerField` | [`DurationPickerSheet`](./duration-picker#in-a-sheet) | `1 h 30 min` |
 | `MonthPickerField` | [`MonthPickerSheet`](./month-picker#in-a-sheet) | `October 2026` |
@@ -150,7 +151,7 @@ export default function Example() {
 
 ## What the field shows
 
-Dates and times are formatted with `Intl` for the field's `locale` (the device locale by default). `TimePickerField` and `DateTimePickerField` follow `format` (`'12h'`, `'24h'` or `'auto'`) and `showSeconds`.
+Dates and times are formatted with `Intl` for the field's `locale` (the device locale by default). `TimePickerField`, `TimeRangePickerField` and `DateTimePickerField` follow `format` (`'12h'`, `'24h'` or `'auto'`) and `showSeconds`.
 
 For your own wording, pass `displayValue`:
 
@@ -163,11 +164,11 @@ For your own wording, pass `displayValue`:
 />
 ```
 
-When `displayValue` is empty and there's no value, the field shows `placeholder` (default `'Select…'`).
+When `displayValue` is empty and there's no value, the field shows `placeholder` (default `'Select…'`). In the Material design, a field with a `label` shows the label there instead, and the placeholder only while it's open.
 
 ## Label and sheet title
 
-`label` is drawn above the field, used as its accessibility label and, unless you set `title`, as the sheet's title (a bottom sheet or modal; the dropdown has no title).
+`label` is drawn above the field (in the Material design, inside it until there's a value, then on its top border), used as its accessibility label and, unless you set `title`, as the sheet's title (a bottom sheet or modal; the dropdown has no title).
 
 ```tsx
 <TimePickerField label="Alarm" title="Wake me up at" value={alarm} onConfirm={setAlarm} />
@@ -226,7 +227,7 @@ export default function Example() {
 
 ## Custom trigger
 
-`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled, error }`. The label and the line under the field still render around it, and the sheet still opens from the field; use `error` to show your trigger as invalid.
+`renderTrigger` replaces the field box, and gets `{ open, displayValue, disabled, error }`. The label (except Material's, which is drawn inside the field box) and the line under the field still render around it, and the sheet still opens from the field; use `error` to show your trigger as invalid.
 
 ```tsx live
 import { useState } from 'react';
@@ -361,15 +362,19 @@ export default function Example() {
 
 | Slot | Element |
 | --- | --- |
-| `label` | Label text above the field |
+| `label` | The label: above the field, or the floating label in the Material design |
 | `trigger` | The field box |
 | `triggerText` | The value |
 | `placeholder` | Placeholder text |
-| `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size) |
+| `chevron` | The drawn chevron (a bordered `View`: `borderColor` sets its color, `width` / `height` its size); in the Material design, a triangle colored by `borderTopColor` |
 | `clear` | × button text |
 | `helperText` | The line under the field: helper text or the error message |
 
 The theme (`theme` prop or [`PickersProvider`](../guides/theming)) applies to the field and the sheet.
+
+## Accessibility
+
+The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the picker is open. With `required`, the label ends in `, required`; with `error`, the message follows the value in the hint (`Invalid` for `error={true}`), and the line under the field is a live region, so screen readers announce an error as it appears. The dropdown closes on a tap outside it and on the Android back button. The × button is labelled `Clear`.
 
 ## Props
 
@@ -377,7 +382,7 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` | `string` | — | Label above the field. Also its accessibility label, and the sheet title unless `title` is set. |
+| `label` | `string` | — | Label above the field (floating inside it in Material). Also its accessibility label, and the sheet title unless `title` is set. |
 | `placeholder` | `string` | `'Select…'` | Shown while there's no value. |
 | `displayValue` | `string` | the value, formatted for `locale` | Text shown in the field. |
 | `disabled` | `boolean` | `false` | The field doesn't open. |
@@ -404,7 +409,11 @@ Every field takes these, plus its sheet's props without `visible`: `value`, `onC
 import type {
   DatePickerFieldProps,
   TimePickerFieldProps,
+  TimeRangePickerFieldProps,
   DateTimePickerFieldProps,
+  DurationPickerFieldProps,
+  MonthPickerFieldProps,
+  ColorPickerFieldProps,
   WheelPickerFieldProps,
   EmojiPickerFieldProps,
   PickerFieldProps,
@@ -419,10 +428,6 @@ import type {
 ```
 
 `WithPickerField<SheetProps, Slot>` turns a sheet's props into a field's, for wrapping your own sheet the same way. `FieldStatusProps` is `{ error, helperText, required }`, for your own fields.
-
-## Accessibility
-
-The field is a button labelled with `label` (or the placeholder), with the current value as its hint and an `expanded` state while the picker is open. With `required`, the label ends in `, required`; with `error`, the message follows the value in the hint (`Invalid` for `error={true}`), and the line under the field is a live region, so screen readers announce an error as it appears. The dropdown closes on a tap outside it and on the Android back button. The × button is labelled `Clear`.
 
 ## Related
 
