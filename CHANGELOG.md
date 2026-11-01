@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.1](https://github.com/elik56a/react-native-pickers/compare/v0.30.0...v0.30.1) (2026-11-01)
+
+
+### 🐛 Bug Fixes
+
+* **wheel:** turn a looping wheel the short way when its value changes ([#113](https://github.com/elik56a/react-native-pickers/issues/113)) ([2e66e64](https://github.com/elik56a/react-native-pickers/commit/2e66e6438bcf82aad0416e1794fb6c221bfbb6c2))
+
 ## [0.30.0](https://github.com/elik56a/react-native-pickers/compare/v0.29.0...v0.30.0) (2026-11-01)
 
 
