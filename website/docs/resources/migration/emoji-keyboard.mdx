@@ -8,6 +8,12 @@ description: "Switch from rn-emoji-keyboard to React Native Pickers: EmojiPicker
 
 `EmojiPickerSheet` takes `visible` and `onClose` like the other sheets, and `onSelect` gets the emoji string first. Search and recently used are on by default. Skin tones are built in, and the category bar sits where the platform's own emoji keyboard has it. For a picker inside your own layout, use [`EmojiPicker`](../../components/emoji-picker).
 
+:::note React Native 0.88
+
+`rn-emoji-keyboard` 1.7.0, the latest release, calls `InteractionManager.runAfterInteractions`. React Native 0.88 no longer exports `InteractionManager`, so the keyboard throws `Cannot read property 'runAfterInteractions' of undefined` when it renders. `EmojiPicker` uses React Native core only and works on 0.88.
+
+:::
+
 ```diff
 - import EmojiPicker from 'rn-emoji-keyboard';
 + import { EmojiPickerSheet } from '@elik56a/react-native-pickers';

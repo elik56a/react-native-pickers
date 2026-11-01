@@ -32,8 +32,8 @@ export const FAQS: FaqEntry[] = [
     question: 'Does it need Reanimated or Gesture Handler?',
     answer: (
       <>
-        No. It uses only React Native core: <code>Animated</code> with the native driver, <code>PanResponder</code>, <code>FlatList</code>{' '}
-        and <code>Modal</code>. Nothing to install next to it.
+        No. It uses only React Native core: <code>Animated</code> with the native driver, <code>ScrollView</code>, <code>PanResponder</code>
+        , <code>FlatList</code> and <code>Modal</code>. Nothing to install next to it, and drags and scrolls still run on the UI thread.
       </>
     ),
   },
