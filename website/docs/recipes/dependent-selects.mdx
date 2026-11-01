@@ -1,0 +1,127 @@
+---
+title: Dependent selects (country, state, city)
+description: React Native dependent dropdowns, also called cascading or chained selects. Country, then state, then city, where each list depends on the one before, using CountryPicker and SelectPicker.
+---
+
+# Dependent selects: country, state, city
+
+Three pickers where each one's options depend on the one before it: pick a country to get its states, then a state to get its cities. Each field waits, disabled, until the one above it has a value, and changing an earlier choice clears the ones after it.
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { CountryPicker, SelectPicker } from '@elik56a/react-native-pickers';
+import type { CountryCode } from '@elik56a/react-native-pickers';
+
+const PLACES: Record<string, Record<string, string[]>> = {
+  US: {
+    California: ['Los Angeles', 'San Diego', 'San Francisco'],
+    'New York': ['Albany', 'Buffalo', 'New York City'],
+    Texas: ['Austin', 'Dallas', 'Houston'],
+  },
+  CA: {
+    'British Columbia': ['Vancouver', 'Victoria'],
+    Ontario: ['Ottawa', 'Toronto'],
+    Quebec: ['Montréal', 'Québec City'],
+  },
+  AU: {
+    'New South Wales': ['Newcastle', 'Sydney'],
+    Victoria: ['Geelong', 'Melbourne'],
+  },
+};
+
+const COUNTRIES: CountryCode[] = ['US', 'CA', 'AU'];
+
+const toOptions = (labels: string[]) => labels.map((label) => ({ label, value: label }));
+
+export default function Address() {
+  const [country, setCountry] = useState<CountryCode | null>(null);
+  const [state, setState] = useState<string | null>(null);
+  const [city, setCity] = useState<string | null>(null);
+
+  const states = country ? Object.keys(PLACES[country]) : [];
+  const cities = country && state ? PLACES[country][state] : [];
+
+  return (
+    <View style={{ gap: 14 }}>
+      <CountryPicker
+        label="Country"
+        countries={COUNTRIES}
+        value={country}
+        onChange={(code) => {
+          setCountry(code);
+          setState(null);
+          setCity(null);
+        }}
+      />
+      <SelectPicker
+        label="State or province"
+        placeholder={country ? 'Select…' : 'Choose a country first'}
+        disabled={!country}
+        options={toOptions(states)}
+        value={state}
+        onChange={(next) => {
+          setState(next);
+          setCity(null);
+        }}
+      />
+      <SelectPicker
+        label="City"
+        placeholder={state ? 'Select…' : 'Choose a state first'}
+        disabled={!state}
+        options={toOptions(cities)}
+        value={city}
+        onChange={setCity}
+      />
+    </View>
+  );
+}
+```
+
+## How it works
+
+- **The options come from the value above.** `states` and `cities` are worked out on each render from `country` and `state`, so there's nothing to keep in sync.
+- **A new choice clears what's below it.** Changing the country resets the state and city, and changing the state resets the city, so a city never belongs to another country.
+- **A field waits for the one above.** `disabled` greys it out until there's something to pick, and the placeholder says what to choose first.
+- **`countries`** limits [`CountryPicker`](../components/country-picker) to the countries you ship to, with their flags and names in any language.
+
+## With a server
+
+When the lists come from an API, load each one when its parent changes. With [`loadOptions`](../components/select-picker#search-on-a-server), the parent's value goes into the request, and a `key` starts the list over when it changes:
+
+```tsx
+<SelectPicker
+  key={country ?? 'none'}
+  label="City"
+  disabled={!country}
+  loadOptions={(query) => api.cities({ country, query })}
+  value={city}
+  onChange={setCity}
+/>
+```
+
+For a short list that doesn't need search, fetch it in an effect when the parent changes and pass it as `options`, with `loading` while it's on its way.
+
+## In a form
+
+With [React Hook Form](../guides/forms), watch the parent and clear the children with `setValue`:
+
+```tsx
+const country = watch('country');
+
+<Controller
+  name="country"
+  control={control}
+  render={({ field }) => (
+    <CountryPicker
+      label="Country"
+      value={field.value}
+      onChange={(code) => {
+        field.onChange(code);
+        setValue('state', null);
+        setValue('city', null);
+      }}
+    />
+  )}
+/>
+```
