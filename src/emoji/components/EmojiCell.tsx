@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { Text } from 'react-native';
 
 import { Touchable } from '../../core/components/Touchable';
 import { styles } from '../emoji.styles';
 import type { EmojiCellProps } from '../emoji.types';
+import { EmojiGlyph } from './EmojiGlyph';
 
 export const EmojiCell = memo(({ emoji, char, size, fontSize, renderEmoji, onSelect, onLongPress, theme, slots }: EmojiCellProps) => (
   <Touchable
@@ -19,12 +19,6 @@ export const EmojiCell = memo(({ emoji, char, size, fontSize, renderEmoji, onSel
       slots?.emojiCell,
     ]}
   >
-    {renderEmoji ? (
-      renderEmoji(char, emoji, fontSize)
-    ) : (
-      <Text selectable={false} style={[{ fontSize, lineHeight: fontSize * 1.2 }, slots?.emojiText]}>
-        {char}
-      </Text>
-    )}
+    <EmojiGlyph emoji={emoji} char={char} fontSize={fontSize} renderEmoji={renderEmoji} slots={slots} />
   </Touchable>
 ));

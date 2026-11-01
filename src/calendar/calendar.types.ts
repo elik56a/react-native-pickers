@@ -245,7 +245,7 @@ export interface CalendarHeaderProps {
   view: CalendarView;
   enableQuickJump: boolean;
   isArrowDisabled: (direction: ArrowDirection) => boolean;
-  onTitlePress: () => void;
+  onTitlePress?: () => void;
   onArrowPress: (direction: ArrowDirection) => void;
   renderArrow?: CalendarBaseProps['renderArrow'];
   rtl: boolean;

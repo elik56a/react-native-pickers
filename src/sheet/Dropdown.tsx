@@ -1,5 +1,6 @@
 import { Animated, Modal, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
+import { CLOSE_LABEL } from '../core/core.constants';
 import { usePresence } from '../core/hooks/usePresence';
 import { useReturnFocus } from '../core/hooks/useReturnFocus';
 import { useComponentTheme } from '../core/theme/ThemeProvider';
@@ -45,7 +46,7 @@ export const Dropdown = ({
           onPress={onClose}
           disabled={!visible}
           accessibilityRole="button"
-          accessibilityLabel="Close"
+          accessibilityLabel={CLOSE_LABEL}
         />
         {overlay ? (
           <Animated.View

@@ -103,6 +103,9 @@ export const GROUP_TO_CATEGORY: Record<string, EmojiCategory> = {
 };
 
 /** Index = skin tone. */
+export const SKIN_TONE_LABEL = 'Skin tone';
+/** An emoji's line height, as a share of its font size, so tall glyphs aren't clipped. */
+export const EMOJI_LINE_HEIGHT = 1.2;
 export const TONE_SWATCHES = ['✋', '✋🏻', '✋🏼', '✋🏽', '✋🏾', '✋🏿'];
 
 export const SKIN_TONES: SkinTone[] = [0, 1, 2, 3, 4, 5];

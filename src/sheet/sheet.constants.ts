@@ -135,6 +135,7 @@ export const DEFAULT_PLACEHOLDER = 'Select…';
 export const DISABLED_TRIGGER_OPACITY = 0.5;
 export const REQUIRED_MARK = ' *';
 export const REQUIRED_ACCESSIBILITY_LABEL = 'required';
+export const CLEAR_LABEL = 'Clear';
 /** Read for an `error` set to `true`, which has no message of its own. */
 export const INVALID_ACCESSIBILITY_HINT = 'Invalid';
 

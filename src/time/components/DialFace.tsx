@@ -1,7 +1,7 @@
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { PickerText } from '../../core/components/PickerText';
-import { KEY } from '../../core/core.constants';
+import { A11Y_ACTION, ADJUSTABLE_ACTIONS, KEY } from '../../core/core.constants';
 import { keyboardProps } from '../../core/utils/keyboard.utils';
 import { CLOCK_MODE_LABEL, DIAL_NUMBER_SIZE, DIAL_SIZE } from '../time.constants';
 import { styles } from '../time.styles';
@@ -18,8 +18,8 @@ export const DialFace = ({ dial, theme, testID }: ClockPartProps) => {
       accessibilityRole="adjustable"
       accessibilityLabel={CLOCK_MODE_LABEL[dial.mode]}
       accessibilityValue={{ text: dial.valueText }}
-      accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-      onAccessibilityAction={(e) => dial.step(e.nativeEvent.actionName === 'increment' ? 1 : -1)}
+      accessibilityActions={ADJUSTABLE_ACTIONS}
+      onAccessibilityAction={(e) => dial.step(e.nativeEvent.actionName === A11Y_ACTION.increment ? 1 : -1)}
       {...keyboardProps({
         [KEY.up]: () => dial.step(1),
         [KEY.right]: () => dial.step(1),

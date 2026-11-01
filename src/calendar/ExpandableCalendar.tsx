@@ -17,8 +17,6 @@ import { useDayCalendar } from './hooks/useDayCalendar';
 import { useMonthNavigation } from './hooks/useMonthNavigation';
 import { useWeekNavigation } from './hooks/useWeekNavigation';
 
-const noop = () => {};
-
 /** A week of days that opens into its month, by the handle under it or a drag down that it follows, and folds back into a week. */
 export const ExpandableCalendar = (props: ExpandableCalendarProps) => {
   const {
@@ -87,7 +85,6 @@ export const ExpandableCalendar = (props: ExpandableCalendarProps) => {
           view={CALENDAR_VIEW.days}
           enableQuickJump={false}
           isArrowDisabled={nav.isArrowDisabled}
-          onTitlePress={noop}
           onArrowPress={nav.onArrowPress}
           renderArrow={renderArrow}
           rtl={nav.rtl}

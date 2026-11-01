@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { SearchInput } from '../../core/components/SearchInput';
 import { Touchable } from '../../core/components/Touchable';
 import { SEARCH_DESIGN } from '../../core/core.constants';
-import { TONE_SWATCHES } from '../emoji.constants';
+import { SKIN_TONE_LABEL, TONE_SWATCHES } from '../emoji.constants';
 import { styles } from '../emoji.styles';
 import type { EmojiHeaderProps } from '../emoji.types';
 
@@ -40,7 +40,7 @@ export const EmojiHeader = ({
           theme={theme}
           onPress={onToneButtonPress}
           accessibilityRole="button"
-          accessibilityLabel="Skin tone"
+          accessibilityLabel={SKIN_TONE_LABEL}
           style={[
             styles.toneButton,
             {
