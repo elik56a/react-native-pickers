@@ -3,7 +3,7 @@ import { Animated } from 'react-native';
 
 import { useAnimatedValue } from '../../core/hooks/useAnimatedValue';
 import { timing } from '../../core/utils/animation.utils';
-import { CARET_BLINK_MS } from '../otp.constants';
+import { CARET_BLINK_MS } from '../core.constants';
 
 /** The caret's opacity: blinking while `visible`, and shown solid again each time it moves to `position`. */
 export const useCaretBlink = (visible: boolean, position: number): Animated.Value => {

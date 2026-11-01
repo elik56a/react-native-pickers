@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 
-import { SEARCH_ICON_SIZE } from './core.constants';
+import { CARET_WIDTH, NO_ZOOM_FONT_SIZE, SEARCH_ICON_SIZE } from './core.constants';
 
 export const coreStyles = StyleSheet.create({
   /**
@@ -15,4 +15,7 @@ export const coreStyles = StyleSheet.create({
   searchLens: { width: 11, height: 11, borderRadius: 6, borderWidth: 1.6 },
   searchHandle: { position: 'absolute', left: 10.4, top: 8.7, width: 1.6, height: 5, borderRadius: 1, transform: [{ rotate: '-45deg' }] },
   ripple: { position: 'absolute' },
+  caret: { width: CARET_WIDTH },
+  /** Over text the component draws itself, so a tap focuses the input and a long press offers to paste. */
+  hiddenInput: { ...StyleSheet.absoluteFill, opacity: 0, fontSize: NO_ZOOM_FONT_SIZE },
 });

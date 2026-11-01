@@ -1,9 +1,9 @@
+import { useCaretBlink } from '../../core/hooks/useCaretBlink';
 import { useControllableState } from '../../core/hooks/useControllableState';
 import { useFocus } from '../../core/hooks/useFocus';
 import { DEFAULT_OTP_LENGTH, OTP_INPUT_MODE } from '../otp.constants';
 import type { OtpFieldProps, OtpFieldState } from '../otp.types';
 import { getCells, sanitizeCode } from '../otp.utils';
-import { useCaretBlink } from './useCaretBlink';
 
 /** The code the cells show, and the handler that turns typing and pasting into it. `onComplete` fires when the user fills the last cell. */
 export const useOtpField = ({

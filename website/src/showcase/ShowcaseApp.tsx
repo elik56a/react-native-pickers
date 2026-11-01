@@ -9,10 +9,12 @@ import { ApplicationScreen } from './components/ApplicationScreen';
 import { ChatScreen } from './components/ChatScreen';
 import { DeliveryScreen } from './components/DeliveryScreen';
 import { DisplayScreen } from './components/DisplayScreen';
+import { ExchangeScreen } from './components/ExchangeScreen';
 import { FlightsScreen } from './components/FlightsScreen';
 import { HabitScreen } from './components/HabitScreen';
 import { MeetingScreen } from './components/MeetingScreen';
 import { ReviewScreen } from './components/ReviewScreen';
+import { SendScreen } from './components/SendScreen';
 import { ShopScreen } from './components/ShopScreen';
 import { SignUpScreen } from './components/SignUpScreen';
 import { StoreScreen } from './components/StoreScreen';
@@ -41,6 +43,8 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   albums: AlbumsScreen,
   application: ApplicationScreen,
   store: StoreScreen,
+  send: SendScreen,
+  exchange: ExchangeScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {

@@ -3,6 +3,7 @@ export * from './calendar';
 export * from './color';
 export * from './core';
 export * from './country';
+export * from './currency';
 export * from './date';
 export * from './datetime';
 export * from './duration';

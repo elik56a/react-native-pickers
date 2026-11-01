@@ -1,18 +1,22 @@
-import type { DateRangePreset } from '@elik56a/react-native-pickers';
-import { toDateKey } from '@elik56a/react-native-pickers';
+import type { CurrencyCode, DateRangePreset } from '@elik56a/react-native-pickers';
+import { getCurrency, toDateKey } from '@elik56a/react-native-pickers';
 import { daysFromNow } from '../home/demo/demo.utils';
 import {
   ALBUM_SORT,
   APPLICATION,
   APPLICATION_ERRORS,
   CLOSED_WEEKDAY,
+  EXCHANGE_SIDE,
   HOURS_IN_DAY,
   LAUNCH_PRESETS,
   MIN_PREVIEW_OPACITY,
+  QUICK_AMOUNTS,
+  RATE_PRECISION,
+  RATES,
   TEXT_SIZES,
   TIMER_PRESETS,
 } from './showcase.constants';
-import type { Album, AlbumSort, ApplicationErrors, ApplicationValues, TextSelection } from './showcase.types';
+import type { Album, AlbumSort, ApplicationErrors, ApplicationValues, ExchangeAmounts, TextSelection, TypedAmount } from './showcase.types';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -92,4 +96,46 @@ export const launchPresets = (): DateRangePreset[] =>
     label,
     start: daysFromNow(from),
     end: daysFromNow(to),
+  }));
+
+/** The demo only offers the currencies it has rates for. */
+const rateOf = (code: CurrencyCode) => RATES[code] ?? 1;
+
+/** `amount` in `from` as `to`, rounded to `to`'s decimal places: none for the yen. */
+export const convertAmount = (amount: number | null, from: CurrencyCode, to: CurrencyCode) => {
+  if (amount === null) return null;
+  const factor = 10 ** (getCurrency(to)?.decimals ?? 2);
+  return Math.round(((amount * rateOf(to)) / rateOf(from)) * factor) / factor;
+};
+
+/** Both sides of a transfer: the one the user typed, and the other converted from it. */
+export const getExchangeAmounts = ({ side, amount }: TypedAmount, from: CurrencyCode, to: CurrencyCode): ExchangeAmounts => {
+  if (side === EXCHANGE_SIDE.send) {
+    return {
+      send: amount,
+      receive: convertAmount(amount, from, to),
+    };
+  }
+  return {
+    send: convertAmount(amount, to, from),
+    receive: amount,
+  };
+};
+
+export const formatRate = (from: CurrencyCode, to: CurrencyCode) =>
+  `1 ${from} = ${Number((rateOf(to) / rateOf(from)).toPrecision(RATE_PRECISION))} ${to}`;
+
+/** In the device locale, with the currency's decimal places unless `fractionDigits` says otherwise: $25.00, or $25 with 0. */
+export const formatMoney = (amount: number, currency: CurrencyCode, fractionDigits?: number) =>
+  new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(amount);
+
+export const quickAmountItems = (currency: CurrencyCode) =>
+  QUICK_AMOUNTS.map((amount) => ({
+    label: formatMoney(amount, currency, 0),
+    value: amount,
   }));

@@ -1,7 +1,7 @@
 {
   "name": "@elik56a/react-native-pickers",
   "version": "0.29.0",
-  "description": "Fully customizable React Native pickers with zero native code: wheel, time, duration, date (calendar, range, wheel), month, week strip, expandable calendar, date-time, select (with server search), country (flags and dialing codes), language, phone number, time zone, segmented control, emoji and color, a slider (single or range), a star rating, an OTP code input, plus bottom sheets, action sheets, menus and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
+  "description": "Fully customizable React Native pickers with zero native code: wheel, time, duration, date (calendar, range, wheel), month, week strip, expandable calendar, date-time, select (with server search), country (flags and dialing codes), language, phone number, currency, amount input, time zone, segmented control, emoji and color, a slider (single or range), a star rating, an OTP code input, plus bottom sheets, action sheets, menus and form fields. Native iOS, Material and web designs. No native code, works with Expo and React Native Web.",
   "license": "MIT",
   "author": "Eliyahu Kriel <elik56a@gmail.com>",
   "homepage": "https://react-native-pickers.dev/",
@@ -58,6 +58,10 @@
     "country-code-picker",
     "language-picker",
     "phone-code",
+    "currency-picker",
+    "currency-input",
+    "amount-input",
+    "money-input",
     "phone-input",
     "phone-number-input",
     "timezone-picker",
@@ -128,6 +132,7 @@
     "build:llms": "pnpm docs:build && cp website/build/llms-full.txt llms-full.txt",
     "gen:emoji": "node scripts/build-emoji-data.js",
     "gen:countries": "node scripts/build-country-data.js",
+    "gen:currencies": "node scripts/build-currency-data.js",
     "gen:timezones": "node scripts/build-timezone-data.js",
     "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm build:llms"
   },

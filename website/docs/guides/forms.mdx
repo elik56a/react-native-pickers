@@ -7,7 +7,7 @@ description: Use React Native date, time and select pickers in React Hook Form a
 
 Every picker is a controlled component, so it plugs into any form library. In a form you usually want a field that opens the picker: [`SelectPicker`](../components/select-picker) and the [picker fields](../components/picker-fields) (`DatePickerField`, `TimePickerField`, `TimeRangePickerField`, `DateTimePickerField`, `WheelPickerField`, `DurationPickerField`, `MonthPickerField`, `ColorPickerField`, `EmojiPickerField`) render one, and report the value through `onChange` (select) or `onConfirm` (fields). Their `onClose` is the natural place for `onBlur`.
 
-Every field, plus `SelectPicker`, `CountryPicker`, `TimeZonePicker` and `PhoneField`, shows your form's errors: pass the message as `error` and the field turns red with the message under it. `helperText` is the line under the field while there's no error, and `required` adds an asterisk to the label. The fields don't validate anything themselves; your form library decides what's invalid and when to show it.
+Every field, plus `SelectPicker`, `CountryPicker`, `TimeZonePicker`, `PhoneField` and `AmountField`, shows your form's errors: pass the message as `error` and the field turns red with the message under it. `helperText` is the line under the field while there's no error, and `required` adds an asterisk to the label. The fields don't validate anything themselves; your form library decides what's invalid and when to show it.
 
 ## React Hook Form
 

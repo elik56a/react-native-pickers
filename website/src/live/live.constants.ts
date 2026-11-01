@@ -32,7 +32,8 @@ const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet', 'TimeRangePick
 const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet'];
 const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];
-const SELECT = ['SelectPicker', 'CountryPicker', 'LanguagePicker'];
+const SELECT = ['SelectPicker', 'CountryPicker', 'LanguagePicker', 'CurrencyPicker'];
+const AMOUNT = ['AmountField'];
 const SLIDER = ['Slider'];
 const OTP = ['OtpField'];
 const RATING = ['Rating'];
@@ -99,12 +100,14 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   { prop: 'categoryBarPosition', components: EMOJI, options: ['auto', 'top', 'bottom'], default: 'auto' },
   { prop: 'showSkinTones', components: EMOJI, options: BOOLEAN, default: true },
   { prop: 'showDialCode', components: ['CountryPicker'], options: BOOLEAN, default: false },
-  { prop: 'showFlag', components: ['LanguagePicker'], options: BOOLEAN, default: true },
+  { prop: 'showFlag', components: ['LanguagePicker', 'CurrencyPicker'], options: BOOLEAN, default: true },
+  { prop: 'variant', components: AMOUNT, options: ['field', 'large'], default: 'field' },
+  { prop: 'showCurrencyPicker', components: AMOUNT, options: BOOLEAN, default: false },
   { prop: 'clearable', components: [...FIELDS, ...SELECT], options: BOOLEAN, default: false, requires: /\bonClear=/ },
   { prop: 'showSteps', components: SLIDER, options: BOOLEAN, default: false },
   { prop: 'secureTextEntry', components: OTP, options: BOOLEAN, default: false },
   { prop: 'readOnly', components: RATING, options: BOOLEAN, default: false },
-  { prop: 'disabled', components: [...FIELDS, ...SELECT, ...SLIDER, ...OTP, ...RATING], options: BOOLEAN, default: false },
+  { prop: 'disabled', components: [...FIELDS, ...SELECT, ...AMOUNT, ...SLIDER, ...OTP, ...RATING], options: BOOLEAN, default: false },
 ];
 
 export const SNACK_URL = 'https://snack.expo.dev/';
@@ -204,6 +207,8 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
   ExpandableCalendar: 'calendar',
   CountryPicker: 'country',
   LanguagePicker: 'language',
+  CurrencyPicker: 'currency',
+  AmountField: 'currency',
   DatePicker: 'date',
   DatePickerField: 'date',
   DatePickerSheet: 'date',
