@@ -1,10 +1,13 @@
+import type { DateRangePreset } from '@elik56a/react-native-pickers';
 import { toDateKey } from '@elik56a/react-native-pickers';
+import { daysFromNow } from '../home/demo/demo.utils';
 import {
   ALBUM_SORT,
   APPLICATION,
   APPLICATION_ERRORS,
   CLOSED_WEEKDAY,
   HOURS_IN_DAY,
+  LAUNCH_PRESETS,
   MIN_PREVIEW_OPACITY,
   TEXT_SIZES,
   TIMER_PRESETS,
@@ -82,3 +85,11 @@ export const validateApplication = (values: ApplicationValues): ApplicationError
 };
 
 export const attentionLabel = (count: number) => `${count} ${count === 1 ? 'field needs' : 'fields need'} attention`;
+
+/** The launch sale's presets as ranges of days from today. */
+export const launchPresets = (): DateRangePreset[] =>
+  LAUNCH_PRESETS.map(({ label, from, to }) => ({
+    label,
+    start: daysFromNow(from),
+    end: daysFromNow(to),
+  }));

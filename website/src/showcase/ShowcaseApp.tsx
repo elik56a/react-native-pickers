@@ -15,6 +15,7 @@ import { MeetingScreen } from './components/MeetingScreen';
 import { ReviewScreen } from './components/ReviewScreen';
 import { ShopScreen } from './components/ShopScreen';
 import { SignUpScreen } from './components/SignUpScreen';
+import { StoreScreen } from './components/StoreScreen';
 import { TableScreen } from './components/TableScreen';
 import { TimerScreen } from './components/TimerScreen';
 import { TripsScreen } from './components/TripsScreen';
@@ -39,6 +40,7 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   review: ReviewScreen,
   albums: AlbumsScreen,
   application: ApplicationScreen,
+  store: StoreScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {

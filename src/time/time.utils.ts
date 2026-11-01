@@ -5,6 +5,7 @@ import { formatDate, uses12HourClock } from '../core/utils/date.utils';
 import type { WheelItem } from '../wheel/wheel.types';
 import {
   CLOCK_MODE,
+  DEFAULT_RANGE_MINUTES,
   DEGREES_PER_HOUR,
   DEGREES_PER_MINUTE,
   DIAL_INNER_RADIUS,
@@ -12,7 +13,9 @@ import {
   DIAL_OUTER_RADIUS,
   DIAL_SIZE,
   LAST_SECOND_OF_DAY,
+  NEXT_DAY_MARK,
   NOON_SECONDS,
+  SECONDS_PER_DAY,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
   TIME_COLUMN,
@@ -20,6 +23,8 @@ import {
   TIME_DISPLAY,
   TIME_DISPLAY_DESIGN,
   TIME_FORMAT,
+  TIME_RANGE_END,
+  TIME_RANGE_SEPARATOR,
 } from './time.constants';
 import type {
   ClockMode,
@@ -32,6 +37,9 @@ import type {
   TimeOptions,
   TimePanelColumn,
   TimeParts,
+  TimeRange,
+  TimeRangeEnd,
+  TimeRangeRules,
 } from './time.types';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -309,3 +317,68 @@ export const getPanelCellLabel = ({ key, accessibilityLabel }: Pick<TimePanelCol
   const name = accessibilityLabel ?? TIME_COLUMN_LABEL[key];
   return name ? `${name} ${label}` : label;
 };
+
+/** Seconds from the start to the end, into the next day when the end's time of day comes first. */
+export const getTimeRangeSeconds = ({ start, end }: TimeRange) => {
+  const seconds = secondsOfDay(end) - secondsOfDay(start);
+  return seconds < 0 ? seconds + SECONDS_PER_DAY : seconds;
+};
+
+export const isOvernight = ({ start, end }: TimeRange) => secondsOfDay(end) < secondsOfDay(start);
+
+/** `seconds` after `start`, counted in local time so a daylight-saving change doesn't shift it. */
+const addSeconds = (start: Date, seconds: number) =>
+  new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes(), start.getSeconds() + seconds);
+
+/** The length within minDuration–maxDuration, and short of midnight unless the range may run overnight. */
+const clampLength = (start: Date, seconds: number, rules: TimeRangeRules) => {
+  const untilMidnight = rules.allowOvernight === false ? LAST_SECOND_OF_DAY - secondsOfDay(start) : Number.POSITIVE_INFINITY;
+  const longest = Math.min((rules.maxDuration ?? Number.POSITIVE_INFINITY) * SECONDS_PER_MINUTE, untilMidnight);
+  return Math.min(Math.max(seconds, (rules.minDuration ?? 0) * SECONDS_PER_MINUTE), longest);
+};
+
+/**
+ * The range after the user moves one end to `time`. Moving the start carries the end along, keeping the length, as calendar apps do;
+ * moving the end keeps the length within the rules. The end lands on the start's day, or the next day.
+ */
+export const fitTimeRange = (range: TimeRange, moved: TimeRangeEnd, time: Date, rules: TimeRangeRules): TimeRange => {
+  if (moved === TIME_RANGE_END.start) {
+    return {
+      start: time,
+      end: addSeconds(time, clampLength(time, getTimeRangeSeconds(range), rules)),
+    };
+  }
+  const seconds = secondsOfDay(time) - secondsOfDay(range.start);
+  const length = seconds < 0 && rules.allowOvernight !== false ? seconds + SECONDS_PER_DAY : seconds;
+  return {
+    start: range.start,
+    end: addSeconds(range.start, clampLength(range.start, length, rules)),
+  };
+};
+
+/** From `now`, for an hour or the shortest range allowed. */
+export const getDefaultTimeRange = (now: Date, rules: TimeRangeRules): TimeRange => ({
+  start: now,
+  end: addSeconds(now, clampLength(now, DEFAULT_RANGE_MINUTES * SECONDS_PER_MINUTE, rules)),
+});
+
+type TimeFormatOptions = Pick<TimeOptions, 'format' | 'locale' | 'showSeconds'>;
+
+/** "9:00 AM – 5:00 PM", with " +1" after an end on the next day. */
+export const formatTimeRange = (range: TimeRange, options: TimeFormatOptions = {}) =>
+  `${formatTimeValue(range.start, options)}${TIME_RANGE_SEPARATOR}${formatTimeValue(range.end, options)}${isOvernight(range) ? NEXT_DAY_MARK : ''}`;
+
+/** The Start and End ends: each one's label and time, with " +1" after an end on the next day. */
+export const getTimeRangeEndItems = (range: TimeRange, labels: { start: string; end: string }, options: TimeFormatOptions) =>
+  [
+    {
+      end: TIME_RANGE_END.start,
+      label: labels.start,
+      time: formatTimeValue(range.start, options),
+    },
+    {
+      end: TIME_RANGE_END.end,
+      label: labels.end,
+      time: `${formatTimeValue(range.end, options)}${isOvernight(range) ? NEXT_DAY_MARK : ''}`,
+    },
+  ] as const;

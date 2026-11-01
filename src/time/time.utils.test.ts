@@ -1,7 +1,10 @@
 import {
   buildTime,
   clampTimeOfDay,
+  fitTimeRange,
+  formatTimeRange,
   formatTimeValue,
+  getDefaultTimeRange,
   getDialAngle,
   getDialHand,
   getDialNumbers,
@@ -15,8 +18,11 @@ import {
   getTimeBounds,
   getTimeColumnSpecs,
   getTimeParts,
+  getTimeRangeEndItems,
+  getTimeRangeSeconds,
   getTimeSeparator,
   is12HourFormat,
+  isOvernight,
   pad2,
   parseTypedTime,
   pickDialHour,
@@ -285,5 +291,57 @@ describe('getPanelCellLabel', () => {
     expect(getPanelCellLabel({ key: 'minute' }, '09')).toBe('Minute 09');
     expect(getPanelCellLabel({ key: 'period' }, 'PM')).toBe('PM');
     expect(getPanelCellLabel({ key: 'hours', accessibilityLabel: 'Hours' }, '5')).toBe('Hours 5');
+  });
+});
+
+describe('time ranges', () => {
+  const range = (start: Date, end: Date) => ({
+    start,
+    end,
+  });
+  const day = (d: Date) => d.getDate();
+  const hhmm = (d: Date) => `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  const span = (r: { start: Date; end: Date }) => [hhmm(r.start), hhmm(r.end), day(r.end)];
+
+  it('measures a range, into the next day when the end comes first', () => {
+    expect(getTimeRangeSeconds(range(at(9), at(17, 30)))).toBe(8.5 * 3600);
+    expect(getTimeRangeSeconds(range(at(22), at(7)))).toBe(9 * 3600);
+    expect(isOvernight(range(at(22), at(7)))).toBe(true);
+    expect(isOvernight(range(at(9), at(9)))).toBe(false);
+  });
+
+  it('carries the end along when the start moves, keeping the length', () => {
+    expect(span(fitTimeRange(range(at(9), at(17)), 'start', at(10, 30), {}))).toEqual(['10:30', '18:30', 25]);
+    expect(span(fitTimeRange(range(at(9), at(17)), 'start', at(20), {}))).toEqual(['20:00', '04:00', 26]);
+  });
+
+  it('puts an earlier end on the next day, unless the range may not run overnight', () => {
+    expect(span(fitTimeRange(range(at(22), at(23)), 'end', at(7), {}))).toEqual(['22:00', '07:00', 26]);
+    expect(span(fitTimeRange(range(at(9), at(17)), 'end', at(7), { allowOvernight: false, minDuration: 30 }))).toEqual([
+      '09:00',
+      '09:30',
+      25,
+    ]);
+    expect(span(fitTimeRange(range(at(9), at(17)), 'start', at(20), { allowOvernight: false }))).toEqual(['20:00', '23:59', 25]);
+  });
+
+  it('keeps the length within minDuration and maxDuration', () => {
+    const rules = { minDuration: 60, maxDuration: 8 * 60 };
+    expect(span(fitTimeRange(range(at(9), at(17)), 'end', at(9, 15), rules))).toEqual(['09:00', '10:00', 25]);
+    expect(span(fitTimeRange(range(at(9), at(17)), 'end', at(19), rules))).toEqual(['09:00', '17:00', 25]);
+  });
+
+  it('starts a new range now, for an hour or the shortest allowed', () => {
+    expect(span(getDefaultTimeRange(at(9), {}))).toEqual(['09:00', '10:00', 25]);
+    expect(span(getDefaultTimeRange(at(9), { minDuration: 90 }))).toEqual(['09:00', '10:30', 25]);
+  });
+
+  it('formats a range, marking an end on the next day, and labels the Start and End switch', () => {
+    expect(formatTimeRange(range(at(9), at(17)), { format: '24h', locale: 'en-GB' })).toBe('9:00 – 17:00');
+    expect(formatTimeRange(range(at(22), at(7)), { format: '24h', locale: 'en-GB' })).toBe('22:00 – 7:00 +1');
+    expect(getTimeRangeEndItems(range(at(22), at(7)), { start: 'From', end: 'To' }, { format: '24h', locale: 'en-GB' })).toEqual([
+      { end: 'start', label: 'From', time: '22:00' },
+      { end: 'end', label: 'To', time: '7:00 +1' },
+    ]);
   });
 });

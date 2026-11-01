@@ -28,7 +28,7 @@ const SHEETS = [
   'PickerSheet',
   'BottomSheet',
 ];
-const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet'];
+const TIME = ['TimePicker', 'TimePickerField', 'TimePickerSheet', 'TimeRangePicker', 'TimeRangePickerField', 'TimeRangePickerSheet'];
 const DATE_TIME = ['DateTimePicker', 'DateTimePickerField', 'DateTimePickerSheet'];
 const DURATION = ['DurationPicker', 'DurationPickerField', 'DurationPickerSheet'];
 const EMOJI = ['EmojiPicker', 'EmojiPickerField', 'EmojiPickerSheet'];

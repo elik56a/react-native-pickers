@@ -47,6 +47,7 @@
     "wheel-picker",
     "date-picker",
     "time-picker",
+    "time-range-picker",
     "calendar",
     "range-picker",
     "select",

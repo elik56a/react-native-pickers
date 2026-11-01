@@ -5,6 +5,7 @@ export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
 export const NOON_SECONDS = 12 * SECONDS_PER_HOUR;
 export const LAST_SECOND_OF_DAY = 24 * SECONDS_PER_HOUR - 1;
+export const SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
 
 export const DEFAULT_TIME_SEPARATOR = ':';
 
@@ -42,6 +43,21 @@ export const TIME_DISPLAY_DESIGN: Record<Design, TimeDisplay> = {
   material: TIME_DISPLAY.dial,
   web: TIME_DISPLAY.list,
 };
+
+export const TIME_RANGE_END = {
+  start: 'start',
+  end: 'end',
+} as const;
+
+export const DEFAULT_START_LABEL = 'Start';
+export const DEFAULT_END_LABEL = 'End';
+export const TIME_RANGE_ACCESSIBILITY_LABEL = 'Start or end';
+export const TIME_RANGE_SEPARATOR = ' – ';
+export const TIME_RANGE_ARROW = '→';
+/** After the end of a range that runs into the next day. */
+export const NEXT_DAY_MARK = ' +1';
+/** A new range without a `defaultValue` starts now and lasts this long. */
+export const DEFAULT_RANGE_MINUTES = 60;
 
 export const CLOCK_MODE = {
   hour: 'hour',

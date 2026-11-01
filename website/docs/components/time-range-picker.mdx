@@ -1,0 +1,127 @@
+---
+title: React Native Time Range Picker
+description: "React Native time range picker for opening hours, shifts and do-not-disturb: a start and an end time with a minimum and maximum length and overnight ranges (22:00 – 07:00). iOS wheels, a Material dial or a web list."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# Time ranges
+
+`TimeRangePicker` picks a start and an end time: opening hours, a shift, quiet hours. Both ends show their time as each platform does: **Starts** and **Ends** rows on iOS, as in Calendar, with the wheels opening under the row you tap; large time boxes on Material; side-by-side cards on the web, with the range's length between them. One [`TimePicker`](./time-picker) edits the end that's chosen, as wheels, a clock dial or a list, the same as `TimePicker` in each [design](../guides/designs).
+
+```tsx
+import { TimeRangePicker, TimeRangePickerField, TimeRangePickerSheet } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { TimeRangePicker, formatTimeRange } from '@elik56a/react-native-pickers';
+import type { TimeRange } from '@elik56a/react-native-pickers';
+
+const today = (hours: number) => {
+  const date = new Date();
+  date.setHours(hours, 0, 0, 0);
+  return date;
+};
+
+export default function Example() {
+  const [hours, setHours] = useState<TimeRange>({ start: today(9), end: today(17) });
+  return (
+    <>
+      <TimeRangePicker value={hours} onChange={setHours} minuteInterval={15} />
+      <Text style={{ textAlign: 'center', marginTop: 8 }}>{formatTimeRange(hours)}</Text>
+    </>
+  );
+}
+```
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.timeRange} />
+
+## How the ends move
+
+- **Moving the start carries the end along**, keeping the length, as calendar apps do: a 9:00 – 17:00 shift moved to 10:00 becomes 10:00 – 18:00.
+- **Moving the end changes the length**, within `minDuration` and `maxDuration` (in minutes). An end past either is pulled back to it.
+- **An end before the start runs into the next day**, as in 22:00 – 07:00. The `end` is then a `Date` on the following day, so `end - start` is the length, and the picker and the field show it with **+1**.
+- **`allowOvernight={false}`** keeps the range within the start's day: an end before the start is moved to `minDuration` after it, and a start moved late in the day shortens the range to end by midnight.
+
+```tsx live
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { TimeRangePicker, formatTimeRange, getTimeRangeSeconds } from '@elik56a/react-native-pickers';
+import type { TimeRange } from '@elik56a/react-native-pickers';
+
+const at = (hours: number) => {
+  const date = new Date();
+  date.setHours(hours, 0, 0, 0);
+  return date;
+};
+
+export default function Example() {
+  const [quiet, setQuiet] = useState<TimeRange>({ start: at(22), end: at(7) });
+  const hours = getTimeRangeSeconds(quiet) / 3600;
+  return (
+    <>
+      <TimeRangePicker
+        value={quiet}
+        onChange={setQuiet}
+        minuteInterval={30}
+        minDuration={60}
+        maxDuration={12 * 60}
+        startLabel="From"
+        endLabel="Until"
+      />
+      <Text style={{ textAlign: 'center', marginTop: 8 }}>
+        Do not disturb {formatTimeRange(quiet)} · {hours} h
+      </Text>
+    </>
+  );
+}
+```
+
+`getTimeRangeSeconds(range)` gives the length, into the next day for an overnight range, and `formatTimeRange(range, { format, locale })` the text, such as `9:00 AM – 5:00 PM` or `22:00 – 07:00 +1`.
+
+## In a sheet or a field
+
+`TimeRangePickerSheet` keeps a draft and calls `onConfirm` with the range on **Done**. `TimeRangePickerField` is the form field: it shows the confirmed range and opens the sheet, a dropdown on the web, as the other [picker fields](./picker-fields) do, with `error`, `helperText`, `required` and `clearable`.
+
+<PropPlayground {...PLAYGROUNDS.timeRangeField} />
+
+```tsx
+<TimeRangePickerField
+  label="Opening hours"
+  placeholder="Set hours"
+  minuteInterval={15}
+  value={hours}
+  onConfirm={setHours}
+/>
+```
+
+## Props
+
+`TimeRangePicker` takes every [`TimePicker` prop](./time-picker#props) except `value`, `defaultValue`, `onChange` and `onValueChanging`, such as `display`, `format`, `minuteInterval` and `minTime` / `maxTime`, which apply to both ends. Plus:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `TimeRange` (`{ start: Date; end: Date }`) | — | The range (controlled). The end is on the start's day, or the next day for an overnight range. |
+| `defaultValue` | `TimeRange` | from now, for an hour | Initial range when uncontrolled. |
+| `onChange` | `(range: TimeRange) => void` | — | Fires when the user moves either end. |
+| `minDuration` | `number` | `0` | Shortest range, in minutes. |
+| `maxDuration` | `number` | — | Longest range, in minutes. |
+| `allowOvernight` | `boolean` | `true` | Let the end run into the next day. |
+| `startLabel` / `endLabel` | `string` | `'Start'` / `'End'` | The ends' labels. |
+
+`TimeRangePickerSheet` takes the same props, with `onConfirm(range)` in place of `onChange` and without `defaultValue`, plus the [sheet props](./picker-sheets#shared-props) such as `visible` and `onClose`. `TimeRangePickerField` takes the sheet's props and the [field props](./picker-fields#props).
+
+## Accessibility
+
+The two ends are a radio group named "Start or end", and each end reads its label and time, such as "End 07:00 +1". The time picker below it has [TimePicker's accessibility](./time-picker).
+
+## Related
+
+- [`TimePicker`](./time-picker): one time of day
+- [Date ranges](./date-range-picker): a range of days on a calendar
+- [`DurationPicker`](./duration-picker): a length of time, such as a timer

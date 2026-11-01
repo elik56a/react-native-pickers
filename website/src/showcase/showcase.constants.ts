@@ -20,6 +20,7 @@ export const SHOWCASE_SCREEN = {
   review: 'review',
   albums: 'albums',
   application: 'application',
+  store: 'store',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -84,6 +85,13 @@ export const SHOWCASE: ShowcaseItem[] = [
     blurb:
       'Send it empty to see every field’s error, then watch each clear as you fix it. The interview has to fall before the first day, a rule the form checks across two fields.',
     components: ['SelectPicker', 'CountryPicker', 'PhoneField', 'DatePickerField', 'DateTimePickerField'],
+  },
+  {
+    key: SHOWCASE_SCREEN.store,
+    title: 'New store',
+    blurb:
+      'Country, state and city that reset each other, opening hours as a time range, a launch sale with its own presets and tags you add from the search.',
+    components: ['CountryPicker', 'SelectPicker', 'TimeRangePickerField', 'DatePickerField'],
   },
   {
     key: SHOWCASE_SCREEN.delivery,
@@ -379,3 +387,42 @@ export const APPLICATION_ERRORS = {
   interviewAfterStart: 'Pick an interview before your first day',
   skills: `Pick at least ${APPLICATION.minSkills} skills`,
 } as const;
+
+export const STORE_COUNTRIES: CountryCode[] = ['US', 'CA', 'AU'];
+
+export const STORE_STATES: Partial<Record<CountryCode, string[]>> = {
+  US: ['California', 'New York', 'Texas'],
+  CA: ['Ontario', 'Quebec', 'British Columbia'],
+  AU: ['New South Wales', 'Victoria', 'Queensland'],
+};
+
+export const STORE_CITIES: Record<string, string[]> = {
+  California: ['Los Angeles', 'San Francisco', 'San Diego'],
+  'New York': ['New York City', 'Buffalo', 'Albany'],
+  Texas: ['Austin', 'Houston', 'Dallas'],
+  Ontario: ['Toronto', 'Ottawa', 'Hamilton'],
+  Quebec: ['Montreal', 'Quebec City', 'Laval'],
+  'British Columbia': ['Vancouver', 'Victoria', 'Kelowna'],
+  'New South Wales': ['Sydney', 'Newcastle', 'Wollongong'],
+  Victoria: ['Melbourne', 'Geelong', 'Ballarat'],
+  Queensland: ['Brisbane', 'Gold Coast', 'Cairns'],
+};
+
+export const STORE = {
+  country: 'US' as CountryCode,
+  opens: 9,
+  closes: 18,
+  minuteInterval: 30,
+  /** Shortest opening, in minutes */
+  minDuration: 60,
+  tags: ['Coffee', 'Pastries'],
+};
+
+export const STORE_TAGS = ['Coffee', 'Pastries', 'Vegan', 'Wi-Fi', 'Outdoor seating', 'Pet friendly'];
+
+/** The launch sale's presets, in days from today */
+export const LAUNCH_PRESETS = [
+  { label: 'Opening weekend', from: 5, to: 6 },
+  { label: 'First week', from: 0, to: 6 },
+  { label: 'First month', from: 0, to: 29 },
+];

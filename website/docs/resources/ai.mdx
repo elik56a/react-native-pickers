@@ -38,6 +38,8 @@ WheelPicker<T>     items: (T | {label, value, disabled?})[]  value  onChange(val
                    variant '3d'|'flat'  keyboardInput=true  isEqual  renderItem({item,index,selected,theme})  styles
 MultiWheelPicker   columns: [{ key, items, value, onChange, flex?, width?, loop?, suffix? }]  separator: node | (leftIndex)=>node  (suffix = unit text after a column)
 TimePicker         value: Date  onChange(date)  format '12h'|'24h'|'auto'  minuteInterval  showSeconds  minTime/maxTime  locale
+TimeRangePicker    value: {start: Date, end: Date}  onChange(range)  minDuration maxDuration (minutes)  allowOvernight=true (end before start → next day)  startLabel endLabel
+                   + every TimePicker prop; moving the start keeps the length; TimeRangePickerSheet/Field onConfirm(range); formatTimeRange(range) getTimeRangeSeconds(range)
                    display 'wheel'(ios) | 'dial'(material clock) | 'input'(typed fields) | 'list'(web columns); default from the design
 DurationPicker     a length of time, not a time of day: value: number (seconds)  onChange(seconds)  showHours=true  showSeconds=false
                    display 'wheel'(ios) | 'input'(material number boxes) | 'list'(web columns); default from the design
@@ -104,6 +106,7 @@ useActionSheet()    → { show(options), hide(), actionSheet }: render actionShe
 Sheets (draft; commit on Done):
   DatePickerSheet  visible onClose value onConfirm + all calendar props + mode + display + confirmOnSelect
   TimePickerSheet  visible onClose value onConfirm + TimePicker props
+  TimeRangePickerSheet visible onClose value onConfirm(range) + TimeRangePicker props
   WheelPickerSheet visible onClose items value onConfirm
   EmojiPickerSheet visible onClose onSelect closeOnSelect=true
   ColorPickerSheet visible onClose value onConfirm(color) + ColorPicker props
@@ -112,7 +115,7 @@ Sheets (draft; commit on Done):
   MonthPickerSheet visible onClose value onConfirm(month) + MonthPicker props
   PickerSheet      visible onClose onConfirm children  +  useDraft(value, visible, { resetKey?, commit? }) (commit: each change in an inline field)
 Fields (a SelectPicker-style field that opens the sheet and shows the confirmed value; field owns open state):
-  DatePickerField / TimePickerField / DateTimePickerField / DurationPickerField / MonthPickerField / ColorPickerField / WheelPickerField / EmojiPickerField
+  DatePickerField / TimePickerField / TimeRangePickerField / DateTimePickerField / DurationPickerField / MonthPickerField / ColorPickerField / WheelPickerField / EmojiPickerField
                    = the matching *Sheet props WITHOUT visible (value, onConfirm | onSelect, mode, locale, title...)
                    + label placeholder='Select…' displayValue(default: value formatted for locale) clearable+onClear(reset value there)
                      error (string|boolean: red field, message under it) helperText required (asterisk); display only, set error from the form
