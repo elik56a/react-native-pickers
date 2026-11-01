@@ -1,6 +1,6 @@
 import type { CurrencyCode, LanguageCode } from '@elik56a/react-native-pickers';
 import { PLATFORM } from '../device/device.constants';
-import type { HeroWordSpec } from './hero.types';
+import type { HeroScroll, HeroWordSpec } from './hero.types';
 
 export const HERO_WORD = {
   time: 'time',
@@ -107,9 +107,19 @@ export const HERO_SWAP_DELAY_MS = 520;
 /** The devices change one after another, left to right, rather than all mounting in one frame. */
 export const HERO_STAGGER_MS = 90;
 
-/** A mouse-wheel notch turns the headline wheel one word: this much scroll is a notch, and the next one waits for the turn to land. */
-export const HERO_SCROLL_STEP_DELTA = 30;
-export const HERO_SCROLL_STEP_MS = 280;
+/**
+ * Mouse-wheel turns of the headline wheel. Events further apart than the gap start a new scroll, which turns one word at once: a
+ * notch, however few pixels the browser reports for it (a few on a Mac). Within a scroll, every this many pixels turns one more,
+ * at most once per step time, so a trackpad's momentum doesn't race through the list.
+ */
+export const HERO_SCROLL_GAP_MS = 100;
+export const HERO_SCROLL_STEP_DELTA = 40;
+export const HERO_SCROLL_STEP_MS = 150;
+export const HERO_SCROLL_START: HeroScroll = {
+  scrolled: 0,
+  lastEventAt: Number.NEGATIVE_INFINITY,
+  lastStepAt: Number.NEGATIVE_INFINITY,
+};
 /** Pixels per line, for a wheel event that scrolls by lines (Firefox's mouse wheel) */
 export const HERO_SCROLL_LINE_HEIGHT = 16;
 

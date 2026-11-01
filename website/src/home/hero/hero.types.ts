@@ -63,3 +63,10 @@ export interface SpecStageProps extends HeroPickerProps {
   spec: HeroWordSpec;
   wide: boolean;
 }
+
+/** Where a mouse-wheel scroll of the headline wheel is: pixels since its last turn, and when it last moved and turned */
+export interface HeroScroll {
+  scrolled: number;
+  lastEventAt: number;
+  lastStepAt: number;
+}

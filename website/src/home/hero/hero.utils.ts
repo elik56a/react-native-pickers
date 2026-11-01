@@ -1,5 +1,13 @@
-import { HERO_SCROLL_LINE_HEIGHT, HERO_SCROLL_STEP_DELTA, HERO_START, HERO_WORD, HERO_WORDS } from './hero.constants';
-import type { HeroValues, HeroWord, HeroWordSpec } from './hero.types';
+import {
+  HERO_SCROLL_GAP_MS,
+  HERO_SCROLL_LINE_HEIGHT,
+  HERO_SCROLL_STEP_DELTA,
+  HERO_SCROLL_STEP_MS,
+  HERO_START,
+  HERO_WORD,
+  HERO_WORDS,
+} from './hero.constants';
+import type { HeroScroll, HeroValues, HeroWord, HeroWordSpec } from './hero.types';
 
 export const getWordSpec = (word: HeroWord): HeroWordSpec => HERO_WORDS.find((spec) => spec.word === word) ?? HERO_WORDS[0];
 
@@ -74,8 +82,30 @@ export const formatHeroValue = (word: HeroWord, values: HeroValues): string => {
 /** A picker's height that fills the screen around its `chrome`, never shorter than `min`. */
 export const fillHeight = (screenHeight: number | undefined, chrome: number, min: number) => Math.max(min, (screenHeight ?? 0) - chrome);
 
-/** The word a scroll of `delta` pixels turns to: none until it adds up to a notch, then one, whichever way it went. */
-export const scrollStep = (delta: number) => (Math.abs(delta) < HERO_SCROLL_STEP_DELTA ? 0 : Math.sign(delta));
+/** How a wheel event `delta` pixels long at `time` turns the headline wheel: -1, 0 or 1 word, and the scroll's next state. */
+export const scrollTurn = (scroll: HeroScroll, delta: number, time: number) => {
+  if (time - scroll.lastEventAt > HERO_SCROLL_GAP_MS) {
+    const step = Math.sign(delta);
+    return {
+      step,
+      scroll: {
+        scrolled: 0,
+        lastEventAt: time,
+        lastStepAt: step ? time : scroll.lastStepAt,
+      },
+    };
+  }
+  const scrolled = Math.max(-HERO_SCROLL_STEP_DELTA, Math.min(HERO_SCROLL_STEP_DELTA, scroll.scrolled + delta));
+  const step = Math.abs(scrolled) >= HERO_SCROLL_STEP_DELTA && time - scroll.lastStepAt >= HERO_SCROLL_STEP_MS ? Math.sign(scrolled) : 0;
+  return {
+    step,
+    scroll: {
+      scrolled: step ? 0 : scrolled,
+      lastEventAt: time,
+      lastStepAt: step ? time : scroll.lastStepAt,
+    },
+  };
+};
 
 /** A wheel event's vertical scroll in pixels, whether it scrolls by pixels or by lines. */
 export const scrollPixels = ({ deltaY, deltaMode }: Pick<WheelEvent, 'deltaY' | 'deltaMode'>) =>

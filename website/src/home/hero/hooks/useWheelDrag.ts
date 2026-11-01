@@ -1,8 +1,8 @@
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 
-import { HERO_SCROLL_STEP_MS } from '../hero.constants';
-import { scrollPixels, scrollStep } from '../hero.utils';
+import { HERO_SCROLL_START } from '../hero.constants';
+import { scrollPixels, scrollTurn } from '../hero.utils';
 
 /**
  * Turns the wheel a row for every row the mouse drags, and one row a mouse-wheel notch. Touch scrolls the wheel's list natively, but
@@ -18,8 +18,7 @@ export const useWheelDrag = (ref: RefObject<HTMLElement | null>, rowHeight: numb
     let startY = 0;
     let applied = 0;
     let dragged = false;
-    let scrolled = 0;
-    let lastStep = Number.NEGATIVE_INFINITY;
+    let scroll = HERO_SCROLL_START;
 
     const onMove = (event: PointerEvent) => {
       const rows = Math.trunc((startY - event.clientY) / rowHeight);
@@ -49,16 +48,12 @@ export const useWheelDrag = (ref: RefObject<HTMLElement | null>, rowHeight: numb
       dragged = false;
     };
 
-    // Before the list scrolls natively; a trackpad's run of small scrolls adds up, and its momentum waits for each turn to land.
+    // Before the list scrolls natively, which would move it a fraction of a row and snap back.
     const onWheel = (event: WheelEvent) => {
       event.preventDefault();
-      if (event.timeStamp - lastStep < HERO_SCROLL_STEP_MS) return;
-      scrolled += scrollPixels(event);
-      const step = scrollStep(scrolled);
-      if (!step) return;
-      stepRef.current(step);
-      scrolled = 0;
-      lastStep = event.timeStamp;
+      const turn = scrollTurn(scroll, scrollPixels(event), event.timeStamp);
+      scroll = turn.scroll;
+      if (turn.step) stepRef.current(turn.step);
     };
 
     el.addEventListener('pointerdown', onDown);
