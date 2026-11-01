@@ -7,6 +7,7 @@ import {
   formatHour,
   insertAtSelection,
   isClosedDay,
+  launchPresets,
   previewOpacity,
   sortAlbums,
   textSizeLabel,
@@ -118,5 +119,16 @@ describe('attentionLabel', () => {
   it('agrees with the count', () => {
     expect(attentionLabel(1)).toBe('1 field needs attention');
     expect(attentionLabel(3)).toBe('3 fields need attention');
+  });
+});
+
+describe('launchPresets', () => {
+  it('counts each preset in days from today', () => {
+    const [weekend] = launchPresets();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    expect(weekend?.label).toBe('Opening weekend');
+    expect(Math.round((+(weekend?.start ?? 0) - +today) / 86_400_000)).toBe(5);
+    expect(Math.round((+(weekend?.end ?? 0) - +today) / 86_400_000)).toBe(6);
   });
 });

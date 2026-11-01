@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { CountryCode } from '@elik56a/react-native-pickers';
+import type { CountryCode, DateRange, TimeRange } from '@elik56a/react-native-pickers';
 import type { BookingScreenProps } from '../home/demo/demo.types';
 import type { ValueOf } from '../home/home.types';
 import type { ALBUM_SORT, SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
@@ -66,4 +66,13 @@ export interface TimerPreset {
   label: string;
   /** Seconds */
   value: number;
+}
+
+export interface StoreValues {
+  country: CountryCode | null;
+  state: string | null;
+  city: string | null;
+  hours: TimeRange;
+  sale: DateRange | undefined;
+  tags: string[];
 }

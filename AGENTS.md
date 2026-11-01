@@ -12,6 +12,10 @@ pnpm workspace:
 - `example/`: Expo app that renders the library source
 - `website/`: Docusaurus docs with live examples that run the library source
 
+## Concept: per-platform, design-driven
+
+Every component looks native in each design (`'ios'`, `'material'`, `'web'`), which follows the platform unless the `design` prop or `PickersProvider` picks one. Before building or restyling a component, look at how that platform's own apps do it (iOS Calendar and Clock, Google Calendar and Material 3 specs, the web's Google Calendar and native inputs) and give each design that platform's pattern, not one generic look for all three. A design-neutral control is the exception, used only when no platform has its own pattern.
+
 ## Commands
 
 | Command | Use |

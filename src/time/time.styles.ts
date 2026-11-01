@@ -16,6 +16,12 @@ import {
 const CENTER = DIAL_SIZE / 2;
 
 export const styles = StyleSheet.create({
+  rangeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 48, paddingHorizontal: 16 },
+  rangeSeparator: { height: StyleSheet.hairlineWidth, marginStart: 16 },
+  rangePill: { paddingHorizontal: 12, paddingVertical: 6 },
+  rangeBoxes: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: 16 },
+  rangeBox: { minWidth: 120, paddingHorizontal: 16, paddingVertical: 10 },
+  rangeArrow: { alignItems: 'center', minWidth: 48 },
   panel: { flexDirection: 'row', alignSelf: 'center', borderWidth: 1, padding: 4, overflow: 'hidden' },
   panelColumn: { width: TIME_COLUMN_WIDTH },
   panelHeader: { textAlign: 'center', paddingVertical: 4 },

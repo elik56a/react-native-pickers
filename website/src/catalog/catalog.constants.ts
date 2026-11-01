@@ -13,6 +13,8 @@ export const PLAYGROUND = {
   weekStrip: 'weekStrip',
   timePicker: 'timePicker',
   timePickerField: 'timePickerField',
+  timeRange: 'timeRange',
+  timeRangeField: 'timeRangeField',
   durationPicker: 'durationPicker',
   durationPickerField: 'durationPickerField',
   dateTimePicker: 'dateTimePicker',
@@ -68,7 +70,18 @@ export const CATALOG: readonly CatalogEntry[] = [
       },
       { doc: 'components/month-picker', label: 'MonthPicker', playgrounds: [PLAYGROUND.monthPicker, PLAYGROUND.monthPickerField] },
       { doc: 'components/week-strip', label: 'WeekStrip', playgrounds: [PLAYGROUND.weekStrip] },
-      { doc: 'components/time-picker', label: 'TimePicker', playgrounds: [PLAYGROUND.timePicker, PLAYGROUND.timePickerField] },
+      {
+        doc: 'components/time-picker',
+        label: 'TimePicker',
+        playgrounds: [PLAYGROUND.timePicker, PLAYGROUND.timePickerField],
+        pages: [
+          {
+            doc: 'components/time-range-picker',
+            label: 'Time ranges',
+            playgrounds: [PLAYGROUND.timeRange, PLAYGROUND.timeRangeField],
+          },
+        ],
+      },
       {
         doc: 'components/duration-picker',
         label: 'DurationPicker',

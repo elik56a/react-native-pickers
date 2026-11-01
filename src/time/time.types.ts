@@ -7,7 +7,8 @@ import type { PickerTheme } from '../core/theme/theme.types';
 import type { SheetChromeProps, WithPickerField } from '../sheet';
 import type { MultiWheelSlot, WheelColumn, WheelVariant } from '../wheel/wheel.types';
 import type { useClockDial } from './hooks/useClockDial';
-import type { CLOCK_MODE, TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT } from './time.constants';
+import type { CLOCK_MODE, TIME_COLUMN, TIME_DISPLAY, TIME_FORMAT, TIME_RANGE_END } from './time.constants';
+import type { getTimeRangeEndItems } from './time.utils';
 
 export type TimeFormat = ValueOf<typeof TIME_FORMAT>;
 export type TimeDisplay = ValueOf<typeof TIME_DISPLAY>;
@@ -69,6 +70,43 @@ export type TimePickerSheetProps = SheetChromeProps &
   };
 
 export type TimePickerFieldProps = WithPickerField<TimePickerSheetProps, MultiWheelSlot>;
+
+/** A start and an end time. The end is on the start's day, or the next day when it's earlier, as in 22:00 – 07:00. */
+export interface TimeRange {
+  start: Date;
+  end: Date;
+}
+
+export type TimeRangeEnd = ValueOf<typeof TIME_RANGE_END>;
+
+export interface TimeRangeRules {
+  /** Shortest range, in minutes. Default: 0 */
+  minDuration?: number;
+  /** Longest range, in minutes */
+  maxDuration?: number;
+  /** Let the end run into the next day, as in 22:00 – 07:00. Default: true */
+  allowOvernight?: boolean;
+}
+
+export type TimeRangePickerProps = Omit<TimePickerProps, 'value' | 'defaultValue' | 'onChange' | 'onValueChanging'> &
+  TimeRangeRules & {
+    value?: TimeRange;
+    /** Default: from now, for an hour */
+    defaultValue?: TimeRange;
+    onChange?: (range: TimeRange) => void;
+    /** Default: 'Start' */
+    startLabel?: string;
+    /** Default: 'End' */
+    endLabel?: string;
+  };
+
+export type TimeRangePickerSheetProps = SheetChromeProps &
+  Omit<TimeRangePickerProps, 'value' | 'defaultValue' | 'onChange' | 'theme'> & {
+    value?: TimeRange;
+    onConfirm: (range: TimeRange) => void;
+  };
+
+export type TimeRangePickerFieldProps = WithPickerField<TimeRangePickerSheetProps, MultiWheelSlot>;
 
 export interface TimeParts {
   hours: number;
@@ -140,5 +178,17 @@ export interface ClockFieldProps extends ClockPartProps {
 export interface ClockPartProps {
   dial: ClockDialState;
   theme: PickerTheme;
+  testID?: string;
+}
+
+export interface RangeEndsProps {
+  items: ReturnType<typeof getTimeRangeEndItems>;
+  active: TimeRangeEnd;
+  onSelect: (end: TimeRangeEnd) => void;
+  /** The range's length, such as "8 h", between the ends in the designs that show it */
+  duration: string;
+  theme: PickerTheme;
+  /** The picker for an end: under each row on iOS, folding open for the active one, and under both ends elsewhere */
+  renderPicker: (end: TimeRangeEnd) => React.ReactNode;
   testID?: string;
 }

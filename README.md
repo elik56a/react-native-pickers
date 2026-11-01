@@ -93,6 +93,7 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`WheelPicker`](https://react-native-pickers.dev/docs/components/wheel-picker) | 3D scrolling wheel: infinite loop, disabled items, tap-to-type |
 | [`MultiWheelPicker`](https://react-native-pickers.dev/docs/components/multi-wheel-picker) | Several wheels sharing one selection band: durations, units, compound values |
 | [`TimePicker`](https://react-native-pickers.dev/docs/components/time-picker) | Wheels, a Material clock dial or columns to click; 12h / 24h from locale, intervals, min / max |
+| [`TimeRangePicker`](https://react-native-pickers.dev/docs/components/time-range-picker) | A start and an end time: opening hours, shifts, overnight ranges, min / max length |
 | [`DatePicker`](https://react-native-pickers.dev/docs/components/date-picker) | Calendar (single, range, multiple, several ranges) or day / month / year wheels |
 | [`MonthPicker`](https://react-native-pickers.dev/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
 | [`WeekStrip`](https://react-native-pickers.dev/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |

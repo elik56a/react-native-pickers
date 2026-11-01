@@ -54,6 +54,7 @@ export const FEATURES = [
 export const COMPONENTS = [
   { doc: 'components/wheel-picker', name: 'WheelPicker', body: '3D wheel, loop, disabled rows, tap-to-type' },
   { doc: 'components/time-picker', name: 'TimePicker', body: 'Wheels, clock dial or columns, 12/24h' },
+  { doc: 'components/time-range-picker', name: 'Time range', body: 'Opening hours, shifts, overnight' },
   { doc: 'components/duration-picker', name: 'DurationPicker', body: 'Timers and workouts: hours, minutes, seconds' },
   { doc: 'components/date-picker', name: 'DatePicker', body: 'Calendar or wheel, marked dates, i18n' },
   { doc: 'components/month-picker', name: 'MonthPicker', body: 'Card expiry, reports: wheels or a month grid' },

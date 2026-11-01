@@ -14,6 +14,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`WheelPicker<T>`](../components/wheel-picker) | Single scrolling wheel |
 | [`MultiWheelPicker`](../components/multi-wheel-picker) | Several wheels in one band |
 | [`TimePicker`](../components/time-picker) | Hour / minute / second / AM-PM wheels |
+| [`TimeRangePicker`](../components/time-range-picker) | A start and an end time: opening hours, shifts, overnight ranges |
 | [`DurationPicker`](../components/duration-picker) | A length of time in seconds: wheels, number boxes or columns |
 | [`DatePicker`](../components/date-picker) | Calendar (`display="calendar"`) or wheel (`display="wheel"`) |
 | [`Calendar`](../components/date-picker) | Month calendar: single / range / multiple / ranges |
@@ -43,6 +44,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`PickerSheet`](../components/picker-sheets#pickersheet) | BottomSheet with Cancel / Done |
 | [`DatePickerSheet`](../components/picker-sheets#datepickersheet) | Calendar or date wheel in a sheet |
 | [`TimePickerSheet`](../components/picker-sheets#timepickersheet) | TimePicker in a sheet |
+| [`TimeRangePickerSheet`](../components/time-range-picker#in-a-sheet-or-a-field) | TimeRangePicker in a sheet |
 | [`DateTimePickerSheet`](../components/date-time-picker#in-a-sheet) | DateTimePicker in a sheet |
 | [`DurationPickerSheet`](../components/duration-picker#in-a-sheet) | DurationPicker in a sheet |
 | [`MonthPickerSheet`](../components/month-picker#in-a-sheet) | MonthPicker in a sheet |
@@ -59,6 +61,7 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`PickerField`](../components/picker-fields#your-own-sheet-pickerfield) | Labelled field that opens the sheet its child renders |
 | [`DatePickerField`](../components/picker-fields) | Field + DatePickerSheet; shows the date, range or dates |
 | [`TimePickerField`](../components/picker-fields) | Field + TimePickerSheet; shows the time |
+| [`TimeRangePickerField`](../components/time-range-picker#in-a-sheet-or-a-field) | Field + TimeRangePickerSheet; shows the range, such as `9:00 AM – 5:00 PM` |
 | [`DateTimePickerField`](../components/picker-fields) | Field + DateTimePickerSheet; shows the date and time |
 | [`DurationPickerField`](../components/duration-picker#in-a-form-field) | Field + DurationPickerSheet; shows `1 h 30 min` |
 | [`MonthPickerField`](../components/month-picker#in-a-form-field) | Field + MonthPickerSheet; shows `October 2026` |
@@ -106,6 +109,10 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 
 [`getDeviceTimeZone`](../components/time-zone-picker#utilities) · [`getTimeZoneOffset`](../components/time-zone-picker#utilities) · [`formatGmtOffset`](../components/time-zone-picker#utilities) · [`getTimeZoneName`](../components/time-zone-picker#utilities) · [`normalizeTimeZone`](../components/time-zone-picker#utilities) · [`getTimeZone`](../components/time-zone-picker#utilities) · [`getAllTimeZones`](../components/time-zone-picker#utilities)
 
+## Time range utilities
+
+[`formatTimeRange(range, { format?, locale?, showSeconds? })`](../components/time-range-picker#how-the-ends-move): `'9:00 AM – 5:00 PM'`, or `'22:00 – 07:00 +1'` overnight · [`getTimeRangeSeconds(range)`](../components/time-range-picker#how-the-ends-move): the length, into the next day for an overnight range
+
 ## Duration utilities
 
 [`formatDuration(seconds, { showHours?, labels? })`](../components/duration-picker#formatduration): `5400` → `'1 h 30 min'`
@@ -124,6 +131,8 @@ See [TypeScript](../guides/typescript#exported-types) for the full list. The mos
 interface DateRange { start: Date | null; end: Date | null }
 
 interface DateRangePreset { label: string; start: Date; end: Date }
+
+interface TimeRange { start: Date; end: Date } // the end on the start's day, or the next day overnight
 
 type RangePresetsListProps = Omit<HorizontalListProps<DateRange>, 'items' | 'value' | 'onChange' | 'isEqual'>
 
@@ -178,6 +187,7 @@ interface ThemableProps { theme?: DeepPartial<PickerTheme> }
 | TimeZonePicker | `placeholder` / `searchPlaceholder` / `preferredLabel` / `allTimeZonesLabel` | `Select a time zone` / `Search time zones` / `Your time zone` / `All time zones` |
 | EmojiPicker | `searchPlaceholder` / `emptyText` | `Search emoji` / `No emoji found` |
 | TimePicker | `dayPeriodLabels` | from locale (`AM` / `PM`) |
+| TimeRangePicker | `startLabel` / `endLabel` | `Start` / `End` |
 | ColorPicker | `labels` | `Grid`, `Spectrum`, `Sliders`, `Hue`, `Opacity`, `Red`, `Green`, `Blue`, `Hex`, `Copy`, `Copied`, `Custom colour`… |
 | DurationPicker | `labels` | `{ hours: 'h', minutes: 'min', seconds: 's' }` |
 | `getRangePresets()` | `label` | `Today`, `Yesterday`, `Last 7 days`, `Last 30 days`, `This month`, `Last month` |
