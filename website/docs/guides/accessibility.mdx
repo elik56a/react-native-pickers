@@ -38,6 +38,12 @@ Name your wheels, especially multi-column ones:
 - The month title is a button (quick jump) or a `header`.
 - Quick-jump grid cells expose `selected` / `disabled`.
 
+## Timeline and agenda
+
+- Each event is a `button` labelled with its title and time ("Standup, 9:00 AM – 9:30 AM"), or "All day".
+- Dates over a timeline's days and beside an agenda's events are `header`s with the full date, or buttons with a timeline's `onDayPress`.
+- The timeline's hour labels are hidden from screen readers, which read the times on the events. A tap on the empty grid needs a place on screen, so offer an Add button too.
+
 ## Select
 
 - The field is a `button` labelled with `label` (or the placeholder). Its hint lists the selected options, and it has an `expanded` state.

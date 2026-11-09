@@ -131,6 +131,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'resources/faq',
+        'resources/versioning',
         'resources/troubleshooting',
         'resources/ai',
         'resources/contributing',

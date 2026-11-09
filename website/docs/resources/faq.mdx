@@ -22,6 +22,14 @@ Yes. `<PickersProvider design="ios">` uses the iOS design on every platform; `"m
 
 Everything. Colors, radius, spacing and fonts are theme tokens (light and dark), every visual part takes a style through `styles`, and render props replace rows, days, triggers and chevrons. Your settings always win over the design. See [Theming](../guides/theming) and [Styling with slots](../guides/styling).
 
+## Is it stable?
+
+Yes. Since 1.0 it follows semantic versioning: minor releases add and patches fix, and anything that would break your code, such as removing a prop or changing a default, waits for a major release and is deprecated first. See [Versioning and stability](./versioning).
+
+## Can it show events, like a calendar app?
+
+Yes. [`Timeline`](../components/timeline) draws a day or up to a week of events by the hour, and [`Agenda`](../components/agenda) lists them day by day. Put an [`ExpandableCalendar`](../components/expandable-calendar) over either to pick the day.
+
 ## Does it need Reanimated or Gesture Handler?
 
 No. It uses only React Native core: `Animated` (native driver), `ScrollView`, `PanResponder`, `FlatList` and `Modal`. Drags and scrolls still run on the UI thread, so they keep up with Reanimated-based libraries; see the [benchmarks](../guides/performance#benchmarks).

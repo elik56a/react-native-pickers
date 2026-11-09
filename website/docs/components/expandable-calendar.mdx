@@ -12,7 +12,7 @@ import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
 
 It's a [`WeekStrip`](./week-strip) and the [`Calendar`](./date-picker)'s month in one, so it takes the same `markedDates`, `minDate`, `maxDate`, `isDateDisabled`, `renderDay` and styles, and follows the [design](../guides/designs): a grabber under the days on iOS, as a sheet has, and a chevron in Material and on the web.
 
-It picks a day; it doesn't draw events. Show the picked day's events under it, as in the [schedule](#a-schedule-screen) below.
+It picks a day; it doesn't draw events. Put an [`Agenda`](./agenda) or a [`Timeline`](./timeline) under it for the events, or list the picked day's items yourself, as in the [schedule](#a-schedule-screen) below.
 
 ```tsx
 import { ExpandableCalendar } from '@elik56a/react-native-pickers';
@@ -124,5 +124,6 @@ The handle is a button named "Show month" or "Show week", with its expanded stat
 ## Related
 
 - [WeekStrip](./week-strip): one week, without the month
+- [Agenda](./agenda) and [Timeline](./timeline): the events under it, as a list or by the hour
 - [DatePicker](./date-picker): a whole month, ranges and multiple days
 - [Migrating from react-native-calendars](../resources/migration/react-native-calendars): its `ExpandableCalendar` and `CalendarProvider`

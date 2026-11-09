@@ -24,6 +24,8 @@ When tokens and slots aren't enough, render props let you draw a part yourself. 
 | `*PickerField` / `PickerField` | `renderTrigger` | `({ open, displayValue, disabled, error }) => ReactNode` |
 | `*PickerField` / `PickerField` | `renderChevron` | `({ open, theme }) => ReactNode` |
 | `EmojiPicker` | `renderEmoji` | `(emoji: string, data: Emoji, size: number) => ReactNode` |
+| `Timeline` / `Agenda` | `renderEvent` | `({ event, start, end, allDay, timeText, colors, theme }) => ReactNode` |
+| `Timeline` / `Agenda` | `renderDayHeader` | `({ date, today, theme }) => ReactNode` |
 | `Rating` | `renderIcon` | `({ index, filled, color, size }) => ReactNode` |
 | `Menu` | `children` | `ReactNode \| ({ open, visible }) => ReactNode` |
 | `MultiWheelPicker` | `separator` | `ReactNode \| (leftIndex) => ReactNode` |

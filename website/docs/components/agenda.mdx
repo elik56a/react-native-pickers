@@ -1,0 +1,140 @@
+---
+title: React Native Agenda (schedule list)
+description: "React Native agenda: events as a list day by day, scrolled to a day and in step with a calendar above it. iOS sticky day bands, Google Calendar's schedule in Material and web, no native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# Agenda
+
+`Agenda` lists events day by day, the schedule view of a calendar app. It opens at today, or at `selectedDate`, and scrolls there when that changes; as the user scrolls, `onVisibleDateChange` tells you the day at the top, so a calendar above it can follow. Put an [`ExpandableCalendar`](./expandable-calendar) or a [`WeekStrip`](./week-strip) over it and the two stay in step.
+
+It follows the [design](../guides/designs) of each platform's own calendar:
+
+- **iOS**, like Calendar's list: a band for each day that sticks to the top while its events scroll under it, and rows with the start over the end, a colored bar and the title.
+- **Material**, like Google Calendar's schedule on Android: the weekday over the date beside each day's events, and a card per event filled with its color.
+- **Web**, like Google Calendar's schedule in a browser: the date and "NOV, MON" beside each day, and a compact row per event with a dot, the time and the title.
+
+```tsx
+import { Agenda } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { Agenda } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const on = (days, hour, minute = 0) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + days, hour, minute);
+
+const EVENTS = [
+  { id: '1', title: 'Standup', start: on(0, 9), end: on(0, 9, 30), color: '#1E88E5' },
+  { id: '2', title: 'Lunch with Maya', subtitle: 'Café Nero', start: on(0, 12, 30), end: on(0, 13, 30), color: '#43A047' },
+  { id: '3', title: 'Team offsite', start: on(1, 0), end: on(2, 0), allDay: true, color: '#00897B' },
+  { id: '4', title: 'Sprint demo', subtitle: 'Zoom', start: on(2, 11), end: on(2, 12), color: '#8E24AA' },
+  { id: '5', title: 'Dinner', start: on(4, 19, 30), end: on(4, 21), color: '#F4511E' },
+];
+
+export default function Example() {
+  return <Agenda events={EVENTS} style={{ height: 420 }} />;
+}
+```
+
+Give it a height, or `flex: 1` in a screen: the list scrolls inside it.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.agenda} />
+
+## With a calendar
+
+Keep the day in your state. The calendar sets it when a day is tapped, and the agenda scrolls there; the agenda sets it as the user scrolls, and the calendar follows. Neither scroll calls back the other: changing `selectedDate` yourself never fires `onVisibleDateChange`.
+
+```tsx live
+import { useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { Agenda, ExpandableCalendar, toDateKey } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const on = (days, hour, minute = 0) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + days, hour, minute);
+
+const EVENTS = [
+  { id: '1', title: 'Yoga', start: on(0, 7), end: on(0, 8), color: '#43A047' },
+  { id: '2', title: 'Spin', start: on(0, 18, 30), end: on(0, 19, 30), color: '#F4511E' },
+  { id: '3', title: 'Pilates', start: on(1, 12), end: on(1, 13), color: '#8E24AA' },
+  { id: '4', title: 'Boxing', start: on(3, 19), end: on(3, 20), color: '#1E88E5' },
+  { id: '5', title: 'Swim', start: on(6, 10), end: on(6, 11), color: '#00897B' },
+  { id: '6', title: 'Yoga', start: on(8, 7), end: on(8, 8), color: '#43A047' },
+];
+
+export default function Schedule() {
+  const [day, setDay] = useState(today);
+  const marks = useMemo(() => Object.fromEntries(EVENTS.map((e) => [toDateKey(e.start), { dots: [e.color] }])), []);
+  return (
+    <View style={{ height: 560 }}>
+      <ExpandableCalendar value={day} onChange={setDay} markedDates={marks} />
+      <Agenda events={EVENTS} selectedDate={day} onVisibleDateChange={setDay} style={{ flex: 1 }} />
+    </View>
+  );
+}
+```
+
+A day with nothing on scrolls to the next day that has events. To list every day instead, `showEmptyDays` fills the days between the first and the last event with "No events".
+
+## Events
+
+Events are the same objects a [`Timeline`](./timeline#events) draws: an `id`, a `title`, a `start` and an `end`, plus an optional `color`, `subtitle` and `allDay`, extended with your own fields as you like.
+
+- **All-day events** come first in their day, as "All day". A timed event that fills the whole day counts as all day too.
+- **Over midnight**, an event is listed on each day it's on, with that day's part of its times; one that ends at midnight stays on its own day.
+- **Loading more**: `onEndReached` fires as the end comes into view, and `onRefresh` with `refreshing` adds pull to refresh. `ListHeaderComponent` and `ListFooterComponent` go above and below the days.
+
+## Custom rows
+
+`renderEvent` draws an event's row from the same info as the timeline's: the `event`, its `start` and `end` on that day, `allDay`, the `timeText`, its `colors` and the `theme`. The row keeps its press and screen-reader label. `renderDayHeader` draws the day's band on iOS, or the date beside its events in Material and on the web, from `{ date, today, theme }`.
+
+```tsx
+<Agenda
+  events={events}
+  renderEvent={({ event, timeText }) => (
+    <View style={{ padding: 12 }}>
+      <Text style={{ fontWeight: '600' }}>{event.title}</Text>
+      <Text>{timeText}</Text>
+    </View>
+  )}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `events` | `T extends ScheduleEvent[]` | — | The events to list. |
+| `selectedDate` | `Date` | today | The day scrolled to the top. Changing it scrolls there, to the next day with events if it has none. |
+| `onVisibleDateChange` | `(date: Date) => void` | — | Fires with the day at the top as the user scrolls. |
+| `showEmptyDays` | `boolean` | `false` | List the days between the first and the last event that have nothing on. |
+| `format` | `'auto' \| '12h' \| '24h'` | `'auto'` | The clock the times are written on. |
+| `locale` | `string` | device | Dates and times. |
+| `onEventPress` | `(event: T) => void` | — | An event was tapped. |
+| `onEventLongPress` | `(event: T) => void` | — | An event was held. |
+| `renderEvent` | `(info: ScheduleEventInfo<T>) => ReactNode` | — | Fully custom event row. |
+| `renderDayHeader` | `(info: ScheduleDayInfo) => ReactNode` | — | Fully custom date: the band on iOS, the date beside the events elsewhere. |
+| `onEndReached` | `() => void` | — | Load more as the end comes into view. |
+| `onRefresh` | `() => void` | — | Pull to refresh. |
+| `refreshing` | `boolean` | `false` | Shows the refresh spinner. |
+| `ListHeaderComponent` / `ListFooterComponent` | `ReactElement` | — | Above and below the days. |
+| `labels` | `Partial<{ allDay: string; noEvents: string }>` | English | The words shown, for other languages. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. Give it a height or `flex: 1`. |
+| `styles` | `SlotStyles<AgendaSlot>` | — | `container`, `dayHeader`, `dayHeaderText`, `date`, `event`, `eventTitle`, `eventText`, `emptyText`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. |
+
+## Accessibility
+
+Each day's band or date is a header, such as "Monday, November 9" (the date beside the events in Material and on the web also reads the year). Each event is a button read as its title and time, such as "Lunch with Maya, 12:30 PM – 1:30 PM".
+
+## Related
+
+- [Timeline](./timeline): the same events on a grid of hours
+- [ExpandableCalendar](./expandable-calendar) and [WeekStrip](./week-strip): the calendar to put over it
+- [Migrating from react-native-calendars](../resources/migration/react-native-calendars): its `Agenda` and `AgendaList`

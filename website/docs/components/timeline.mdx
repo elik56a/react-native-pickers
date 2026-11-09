@@ -1,0 +1,169 @@
+---
+title: React Native Timeline (day and week view)
+description: "React Native calendar timeline: a day or week view with events by the hour, overlaps side by side, all-day events, a now line and tap to add. iOS, Material and web designs, no native code."
+---
+
+import PropPlayground from '@site/src/components/PropPlayground';
+import { PLAYGROUNDS } from '@site/src/catalog/playgrounds';
+
+# Timeline
+
+`Timeline` is a calendar's day view, or up to a week of days side by side: a grid of hours with each event placed by its time. Events that overlap share the width, side by side, and one widens into the columns free beside it. All-day events sit in a row over the grid, a line marks the current time across today, and a tap on an empty part of the grid hands you the hour-long slot it points at, to add an event there.
+
+It follows the [design](../guides/designs) of each platform's own calendar:
+
+- **iOS**, like Calendar: events tinted with their color and a bar down their leading edge, the current time in a red pill beside the hours, and the weekday and date on one line.
+- **Material**, like Google Calendar on Android: events filled with their color and text that reads on it, a dot where the now line starts, and the weekday over the date.
+- **Web**, like Google Calendar in a browser: filled events, the dot, and the weekday in capitals over the date.
+
+```tsx
+import { Timeline } from '@elik56a/react-native-pickers';
+```
+
+```tsx live
+import { Timeline } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const at = (hour, minute = 0) => new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minute);
+
+const EVENTS = [
+  { id: '1', title: 'Standup', start: at(9), end: at(9, 30), color: '#1E88E5' },
+  { id: '2', title: 'Design review', subtitle: 'Room 4', start: at(9, 15), end: at(10, 30), color: '#8E24AA' },
+  { id: '3', title: 'Lunch with Maya', start: at(12, 30), end: at(13, 30), color: '#43A047' },
+  { id: '4', title: 'Focus time', start: at(14), end: at(16), color: '#F4511E' },
+];
+
+export default function Example() {
+  return <Timeline events={EVENTS} style={{ height: 480 }} />;
+}
+```
+
+Give it a height, or `flex: 1` in a screen: the hours scroll inside it.
+
+## Try the props
+
+<PropPlayground {...PLAYGROUNDS.timeline} />
+
+## Events
+
+An event is a plain object with an `id`, a `title`, a `start` and an `end`, plus an optional `color`, `subtitle` and `allDay`. Extend it with your own fields; `onEventPress`, `renderEvent` and the other callbacks give your type back.
+
+```tsx
+import type { ScheduleEvent } from '@elik56a/react-native-pickers';
+
+interface Booking extends ScheduleEvent {
+  customer: string;
+}
+
+<Timeline<Booking> events={bookings} onEventPress={(booking) => openBooking(booking.customer)} />;
+```
+
+- **Overlaps** are laid out as calendar apps do: each event takes the first column free when it starts, events that overlap share the width, and an event widens into the columns to its right that nothing it overlaps sits in.
+- **Short events** still draw tall enough for their title, and count as overlapping what that height covers.
+- **Over midnight**, an event shows on each day it's on, cut at midnight.
+- **All-day events** (`allDay: true`) cover every day from `start` to `end`, both included, in the row over the grid.
+- **Colors** are hex, such as `'#2E7D32'`; the default is the theme's `primary`. iOS tints the color and Material and the web fill with it, with dark or light text, whichever reads.
+
+## Days, weeks and paging
+
+`numberOfDays` shows 1 to 7 days side by side, from `date`. A swipe sideways moves by that many days and calls `onDateChange`; setting `date` yourself moves it without calling it. With more than one day, the dates sit over the columns; `onDayPress` makes each a button, to open that day on its own.
+
+Pair it with a [`WeekStrip`](./week-strip) or an [`ExpandableCalendar`](./expandable-calendar) for a full day view, the strip picking the day and the timeline following it:
+
+```tsx live
+import { useState } from 'react';
+import { View } from 'react-native';
+import { Timeline, WeekStrip, toDateKey } from '@elik56a/react-native-pickers';
+
+const today = new Date();
+const on = (days, hour, minute = 0) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + days, hour, minute);
+
+const EVENTS = [
+  { id: '1', title: 'Standup', start: on(0, 9), end: on(0, 9, 30), color: '#1E88E5' },
+  { id: '2', title: 'Dentist', start: on(1, 11), end: on(1, 12), color: '#F4511E' },
+  { id: '3', title: 'Team offsite', start: on(2, 0), end: on(2, 0), allDay: true, color: '#00897B' },
+  { id: '4', title: 'Gym', start: on(2, 18), end: on(2, 19), color: '#43A047' },
+];
+const MARKS = Object.fromEntries(EVENTS.map((e) => [toDateKey(e.start), { dots: [e.color] }]));
+
+export default function DayView() {
+  const [day, setDay] = useState(today);
+  return (
+    <View style={{ height: 560 }}>
+      <WeekStrip value={day} onChange={setDay} markedDates={MARKS} />
+      <Timeline events={EVENTS} date={day} onDateChange={setDay} style={{ flex: 1 }} />
+    </View>
+  );
+}
+```
+
+## Hours
+
+`startHour` and `endHour` draw part of the day, such as a clinic's 7 to 20; events outside are cut to it. `hourHeight` sets how tall an hour is, 60 by default. The grid opens scrolled an hour before now when today is shown, else to the first event, else to 8 in the morning; `initialScrollHour` picks the hour yourself. `format` writes the hours on a `'12h'` or a `'24h'` clock, or from the locale with `'auto'`.
+
+## Adding events
+
+`onSlotPress` fires when an empty part of the grid is tapped, with an hour-long `{ start, end }` starting where it was tapped, snapped down to `snapMinutes` (30 by default). Open your form with it, such as a [`TimeRangePickerField`](./time-range-picker) to adjust the times:
+
+```tsx
+<Timeline events={events} onSlotPress={({ start, end }) => openNewEvent({ start, end })} />
+```
+
+## Custom events
+
+`renderEvent` draws the inside of each block. It gets the `event`, its `start` and `end` on that day, `allDay`, the `timeText` ("9:00 AM – 10:00 AM"), its `colors` and the `theme`; the block keeps its place, its press and its screen-reader label.
+
+```tsx
+<Timeline
+  events={events}
+  renderEvent={({ event, colors }) => (
+    <View style={{ flex: 1, padding: 4, borderRadius: 6, backgroundColor: colors.background }}>
+      <Text style={{ color: colors.text, fontWeight: '600' }}>{event.title}</Text>
+    </View>
+  )}
+/>
+```
+
+`renderDayHeader` draws each date over the columns the same way, from `{ date, today, theme }`.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `events` | `T extends ScheduleEvent[]` | — | The events to draw. |
+| `date` | `Date` | — | The first day shown (controlled). |
+| `defaultDate` | `Date` | today | The first day shown at first, when uncontrolled. |
+| `onDateChange` | `(date: Date) => void` | — | Fires with the new first day when the user swipes. |
+| `numberOfDays` | `1`–`7` | `1` | Days side by side. |
+| `startHour` | `0`–`23` | `0` | The first hour drawn. |
+| `endHour` | `1`–`24` | `24` | The hour the grid ends at. |
+| `hourHeight` | `number` | `60` | Height of one hour. |
+| `initialScrollHour` | `number` | an hour before now, else the first event, else `8` | The hour scrolled to the top at first. |
+| `format` | `'auto' \| '12h' \| '24h'` | `'auto'` | The clock the hours and times are written on. |
+| `locale` | `string` | device | Weekday names and times. |
+| `showNowIndicator` | `boolean` | `true` | A line at the current time across today. |
+| `showDayHeader` | `boolean` | `true` with more than one day | The weekday and date over each day. |
+| `enableSwipe` | `boolean` | `true` | Swipe sideways to the next or previous days. |
+| `onEventPress` | `(event: T) => void` | — | An event was tapped. |
+| `onEventLongPress` | `(event: T) => void` | — | An event was held. |
+| `onSlotPress` | `(slot: { start: Date; end: Date }) => void` | — | An empty part of the grid was tapped. |
+| `snapMinutes` | `number` | `30` | What a tapped slot's start snaps down to. |
+| `onDayPress` | `(date: Date) => void` | — | A date in the header was tapped. |
+| `renderEvent` | `(info: ScheduleEventInfo<T>) => ReactNode` | — | Fully custom event block. |
+| `renderDayHeader` | `(info: ScheduleDayInfo) => ReactNode` | — | Fully custom date over a day. |
+| `labels` | `Partial<{ allDay: string; noEvents: string }>` | English | The words shown, for other languages. |
+| `style` | `StyleProp<ViewStyle>` | — | Container style. Give it a height or `flex: 1`. |
+| `styles` | `SlotStyles<TimelineSlot>` | — | `container`, `dayHeader`, `dayHeaderText`, `allDayRow`, `hourLabel`, `hourLine`, `dayColumn`, `event`, `eventTitle`, `eventText`, `nowLine`. |
+| `theme` | `DeepPartial<PickerTheme>` | — | Theme override. |
+| `design` | `'ios' \| 'material' \| 'web'` | from `PickersProvider` | The look to follow, over the provider's: [iOS, Material or web](../guides/designs). |
+| `testID` | `string` | — | Test ID. Each day's column gets `testID.YYYY-MM-DD`. |
+
+## Accessibility
+
+Each event is a button read as its title and time, such as "Standup, 9:00 AM – 9:30 AM". The dates in the header read in full, such as "Wednesday, November 11, 2026", as headers, or as buttons with `onDayPress`. The hour labels are hidden from screen readers, which read the times on the events instead. Tapping the grid to add needs a place on screen, so give screen-reader users an Add button too.
+
+## Related
+
+- [Agenda](./agenda): the same events as a list, day by day
+- [WeekStrip](./week-strip) and [ExpandableCalendar](./expandable-calendar): the day picker to put over it
+- [Migrating from react-native-calendars](../resources/migration/react-native-calendars): its `Timeline`

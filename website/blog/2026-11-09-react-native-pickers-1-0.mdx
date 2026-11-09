@@ -1,0 +1,61 @@
+---
+slug: react-native-pickers-1-0
+title: "React Native Pickers 1.0: a stable API, and calendars that show your events"
+description: "React Native Pickers reaches 1.0: a stable, semver-guarded API for 30+ pure-JS pickers, plus a new Timeline (day and week view) and Agenda for React Native, Expo and the web."
+authors: [eliyahu]
+tags: [release]
+---
+
+React Native Pickers is 1.0. The API you've been building on is now stable: from here on, anything that would break your code waits for a major version, announced with a migration guide. And 1.0 brings the piece the library was missing: calendars that show your events, with a new [`Timeline`](/docs/components/timeline) and [`Agenda`](/docs/components/agenda).
+
+```bash
+npm install @elik56a/react-native-pickers@^1
+```
+
+{/* truncate */}
+
+## Where it stands
+
+Thirty releases in, the library covers what an app asks people to pick, with one dependency-free package: wheels, times and time ranges, durations, dates and date ranges, months, week strips and expandable calendars, date-times, searchable selects, countries and phone numbers, languages, currencies and amounts, time zones, emoji, colors, a slider, star ratings and one-time codes, plus the bottom sheets, action sheets, menus and form fields around them.
+
+Every one of them follows its platform: the iOS design on iPhone, Material 3 on Android, and a design of its own in the browser, all from the same props. None of it is native code, so it runs in Expo Go, bare React Native and React Native Web without a rebuild, and drags and scrolls still run on the UI thread through `Animated`'s native driver.
+
+## New: Timeline
+
+[`Timeline`](/docs/components/timeline) is a calendar's day view, or up to a week of days side by side: a grid of hours with each event placed by its time.
+
+- Events that overlap share the width, side by side, and widen into the columns free beside them, as calendar apps lay them out.
+- All-day events sit in a row over the grid, and a line marks the current time across today.
+- A swipe moves to the next days, and a tap on an empty part of the grid hands you the slot it points at, to add an event there.
+- On iOS, events are tinted with their color and the current time sits in a red pill, as in Calendar. In Material and on the web they're filled with their color, and a dot starts the now line, as in Google Calendar.
+
+```tsx
+<Timeline events={events} numberOfDays={3} onEventPress={openEvent} onSlotPress={({ start, end }) => addEvent(start, end)} />
+```
+
+## New: Agenda
+
+[`Agenda`](/docs/components/agenda) lists the same events day by day. On iOS each day gets a band that sticks to the top while its events scroll under it; in Material and on the web, the date sits beside each day's events, as in Google Calendar's schedule. It scrolls to the day you give it and tells you the day at the top as the user scrolls, so it stays in step with an [`ExpandableCalendar`](/docs/components/expandable-calendar) above it:
+
+```tsx
+const [day, setDay] = useState(new Date());
+
+<ExpandableCalendar value={day} onChange={setDay} />
+<Agenda events={events} selectedDate={day} onVisibleDateChange={setDay} />
+```
+
+Both take one flat array of plain objects, `{ id, title, start, end }` with an optional `color`, `subtitle` and `allDay`, and give your own event type back in every callback. Coming from `react-native-calendars`? The [migration guide](/docs/resources/migration/react-native-calendars#agenda-agendalist-and-timeline) maps its `AgendaList` and `Timeline` props.
+
+## What 1.0 promises
+
+- **Semantic versioning, for real.** A minor release adds; a patch fixes. Removing or renaming a component, prop or export, changing a default or the shape of a value, or raising the lowest supported React Native version is a major release.
+- **Deprecation before removal.** What's going away is marked `@deprecated` in a minor release, with the replacement in the docs, and removed no sooner than the next major.
+- **Looks follow the platforms.** Matching a platform's own design more closely, such as a new iOS or Material look, ships in minor releases. Pin a version, or set `theme` and `styles`, to freeze a look.
+
+The whole policy is on the [versioning and stability](/docs/resources/versioning) page.
+
+## Upgrading from 0.30
+
+There's nothing to change: 1.0 is 0.30.1 plus `Timeline` and `Agenda`. Bump the version and you're done.
+
+Thank you to everyone who filed an issue, sent a pull request or asked for a picker that wasn't there yet. Tell us what to build next on [GitHub](https://github.com/elik56a/react-native-pickers/issues).

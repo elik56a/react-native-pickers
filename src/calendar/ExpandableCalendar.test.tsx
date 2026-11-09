@@ -6,6 +6,8 @@ const day = (d: number, m = 9) => new Date(2026, m, d);
 const props = { locale: 'en-US', firstDayOfWeek: 0 } as const;
 
 describe('ExpandableCalendar', () => {
+  afterEach(() => jest.useRealTimers());
+
   it('starts as the week of the selected day, and picks a day', async () => {
     const onChange = jest.fn();
     await render(<ExpandableCalendar {...props} value={day(14)} onChange={onChange} />);
@@ -29,6 +31,8 @@ describe('ExpandableCalendar', () => {
   });
 
   it('pages by month while open and by week while folded', async () => {
+    // Folding into a month without the selection shows today's week when today is in it, so today stays out of November.
+    jest.useFakeTimers({ now: day(14) });
     const onMonthChange = jest.fn();
     const onWeekChange = jest.fn();
     await render(

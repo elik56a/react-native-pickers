@@ -53,6 +53,24 @@ export const FAQS: FaqEntry[] = [
     ),
   },
   {
+    question: 'Can it show my events, like a calendar app?',
+    answer: (
+      <>
+        Yes. <Link to="/docs/components/timeline">Timeline</Link> draws a day or a week of events by the hour, side by side where they
+        overlap, and <Link to="/docs/components/agenda">Agenda</Link> lists them day by day, in step with a calendar above it.
+      </>
+    ),
+  },
+  {
+    question: 'Is it stable?',
+    answer: (
+      <>
+        Yes. Since 1.0 it follows semantic versioning: minor releases only add, and anything that would break your code waits for a major
+        release, deprecated first. See <Link to="/docs/resources/versioning">Versioning and stability</Link>.
+      </>
+    ),
+  },
+  {
     question: 'Does it work with React Hook Form, Formik or Zod?',
     answer: (
       <>
