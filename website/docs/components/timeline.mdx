@@ -60,6 +60,7 @@ interface Booking extends ScheduleEvent {
 
 - **Overlaps** are laid out as calendar apps do: each event takes the first column free when it starts, events that overlap share the width, and an event widens into the columns to its right that nothing it overlaps sits in.
 - **Short events** still draw tall enough for their title, and count as overlapping what that height covers.
+- **Narrow events**, under a third of the grid's width (several overlapping in a three-day view), show their title on one line, without the time.
 - **Over midnight**, an event shows on each day it's on, cut at midnight.
 - **All-day events** (`allDay: true`) cover every day from `start` to `end`, both included, in the row over the grid.
 - **Colors** are hex, such as `'#2E7D32'`; the default is the theme's `primary`. iOS tints the color and Material and the web fill with it, with dark or light text, whichever reads.
