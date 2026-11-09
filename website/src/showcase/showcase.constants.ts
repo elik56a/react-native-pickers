@@ -1,6 +1,6 @@
 import type { CountryCode, CurrencyCode } from '@elik56a/react-native-pickers';
 import { labelOptions } from '../home/demo/demo.utils';
-import type { Album, ApplicationValues, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
+import type { Album, ApplicationValues, CalendarSeed, ChatMessage, ShowcaseItem, TimerPreset } from './showcase.types';
 
 export const SHOWCASE_SCREEN = {
   booking: 'booking',
@@ -23,6 +23,7 @@ export const SHOWCASE_SCREEN = {
   store: 'store',
   send: 'send',
   exchange: 'exchange',
+  calendar: 'calendar',
 } as const;
 
 export const SHOWCASE: ShowcaseItem[] = [
@@ -105,6 +106,13 @@ export const SHOWCASE: ShowcaseItem[] = [
     title: 'Photo albums',
     blurb: 'Sort the albums from a menu that ticks the current order, and open each album’s ⋯ sheet to share, rename or delete it.',
     components: ['Menu', 'ActionSheet', 'useActionSheet'],
+  },
+  {
+    key: SHOWCASE_SCREEN.calendar,
+    title: 'Calendar',
+    blurb:
+      'A week that opens into its month over your events: by the hour for a day or three, side by side where they overlap, or as a list that keeps the calendar in step. Tap an empty hour to add one.',
+    components: ['ExpandableCalendar', 'Timeline', 'Agenda', 'HorizontalList'],
   },
   {
     key: SHOWCASE_SCREEN.meeting,
@@ -289,6 +297,36 @@ export const SHOP_CATEGORIES = labelOptions(['All', 'Sneakers', 'Jackets', 'Bags
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export const BRANDS = labelOptions(['Arc', 'Fjord', 'Kōen', 'Mesa', 'Nord', 'Tide', 'Verde']);
+
+export const CALENDAR_VIEW = {
+  day: 'day',
+  threeDays: 'threeDays',
+  list: 'list',
+} as const;
+
+export const CALENDAR_VIEWS = [
+  { label: 'Day', value: CALENDAR_VIEW.day },
+  { label: '3 days', value: CALENDAR_VIEW.threeDays },
+  { label: 'List', value: CALENDAR_VIEW.list },
+];
+
+/** A week of a work calendar, each event by its day from today, its start and its length in minutes. */
+export const CALENDAR_EVENTS: readonly CalendarSeed[] = [
+  { day: 0, hours: 9, minutes: 0, length: 30, title: 'Standup', color: '#1E88E5' },
+  { day: 0, hours: 9, minutes: 15, length: 75, title: 'Design review', color: '#8E24AA', subtitle: 'Room 4' },
+  { day: 0, hours: 12, minutes: 30, length: 60, title: 'Lunch with Maya', color: '#43A047', subtitle: 'Café Nero' },
+  { day: 0, hours: 14, minutes: 0, length: 120, title: 'Focus time', color: '#F4511E' },
+  { day: 0, hours: 17, minutes: 30, length: 45, title: '1:1 with Noam', color: '#1E88E5' },
+  { day: 1, hours: 0, minutes: 0, length: 0, title: 'Team offsite', color: '#00897B', allDay: true },
+  { day: 1, hours: 18, minutes: 0, length: 60, title: 'Gym', color: '#43A047' },
+  { day: 2, hours: 10, minutes: 0, length: 60, title: 'Sprint demo', color: '#8E24AA', subtitle: 'Zoom' },
+  { day: 2, hours: 10, minutes: 30, length: 30, title: 'Dentist', color: '#F4511E' },
+  { day: 4, hours: 19, minutes: 30, length: 90, title: 'Dinner', color: '#F4511E', subtitle: 'Taizu' },
+  { day: 6, hours: 11, minutes: 0, length: 120, title: 'Bike ride', color: '#43A047' },
+];
+
+/** The color and title of an event added by tapping the grid. */
+export const NEW_EVENT = { title: 'New event', color: '#546E7A' };
 
 export const HABIT = {
   ranDaysAgo: [1, 2, 4, 5, 7, 9, 10, 12],

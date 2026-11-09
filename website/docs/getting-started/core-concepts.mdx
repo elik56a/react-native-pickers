@@ -31,6 +31,8 @@ const [date, setDate] = useState(new Date());
 | `EmojiPicker` recents | `recent` | `defaultRecent` |
 | `SelectPicker` / `SelectList` / `CountryPicker` / `TimeZonePicker` | `value` | — (always controlled) |
 | `HorizontalList` | `value` | — (always controlled) |
+| `Timeline` day shown | `date` | `defaultDate` (default: today) |
+| `Agenda` day scrolled to | `selectedDate` | — (opens at today) |
 
 :::caution Select is controlled-only
 `SelectPicker` and `SelectList` don't keep their own selection. Always pass `value` and update it in `onChange`.

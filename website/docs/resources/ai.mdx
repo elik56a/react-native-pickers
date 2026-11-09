@@ -61,8 +61,16 @@ MonthPicker        a month without a day: value: Date (first of the month)  onCh
 WeekStrip          one week of days in a row: value: Date|null  onChange(date)  swipe/arrows page weeks  onWeekChange(weekStart)  initialWeek
 ExpandableCalendar a WeekStrip that opens into its month (drag down, the month follows the finger, or the handle: iOS grabber, chevron in Material/web) and folds back (drag up)
                    value onChange  expanded/defaultExpanded=false/onExpandedChange  initialDate  onWeekChange (folded) onMonthChange (open)
-                   opens into the selected day's month; folds into the selected day's week, else today's, else the 1st; picks a day only, list events yourself
+                   opens into the selected day's month; folds into the selected day's week, else today's, else the 1st; picks a day only, list events with Agenda
                    minDate maxDate isDateDisabled markedDates firstDayOfWeek locale showHeader formatTitle(weekStart) weekdayFormat renderDay (calendar's day cells and slots)
+Timeline<T>        day/week view of events on a grid of hours: events: ScheduleEvent[] {id,title,start: Date,end: Date,allDay?,color?(hex),subtitle?}
+                   date/defaultDate/onDateChange (swipe pages by numberOfDays)  numberOfDays 1–7 (default 1)  startHour=0 endHour=24 hourHeight=60 initialScrollHour
+                   overlaps side by side; all-day row; now line (iOS red pill, dot in Material/web) showNowIndicator=true; format locale
+                   onEventPress(event) onEventLongPress  onSlotPress({start,end}) (tap empty grid: an hour, start snapped to snapMinutes=30)  onDayPress(date) showDayHeader
+                   renderEvent({event,start,end,allDay,timeText,colors,theme}) renderDayHeader({date,today,theme})  labels {allDay,noEvents}; give it a height or flex: 1
+Agenda<T>          events as a list day by day: events  selectedDate (scrolls there; default today)  onVisibleDateChange(date) (user scroll only; pair with ExpandableCalendar value)
+                   showEmptyDays=false  iOS: sticky day bands; Material: date beside filled cards; web: date beside dot rows
+                   onEventPress renderEvent renderDayHeader onEndReached onRefresh refreshing ListHeaderComponent ListFooterComponent format locale labels; give it a height or flex: 1
 SelectPicker<T>    options: {label,value,description?,icon?,group?,disabled?,keywords?}[]  value  onChange(value, option)
                    multiple → value T[], onChange(values, options), maxSelected, chips
                    label placeholder searchable(dropdown: type in field, default on; sheet: >8 auto) clearable+onClear (single: reset value in onClear) renderTrigger({open,selected,disabled,error}) renderChevron({open,theme})

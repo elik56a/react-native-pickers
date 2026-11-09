@@ -1,0 +1,40 @@
+---
+title: Versioning and stability
+description: "How React Native Pickers versions its releases from 1.0: semver, what counts as a breaking change, deprecations before removal, and the React Native versions supported."
+---
+
+# Versioning and stability
+
+From 1.0, React Native Pickers follows [semantic versioning](https://semver.org). Install it with a caret range, `^1.0.0`, and every update you get is safe to take.
+
+## What each release can change
+
+| Release | Can | Example |
+| --- | --- | --- |
+| **Patch** (1.0.x) | Fix bugs, without changing what's documented | A wheel that stopped one row short |
+| **Minor** (1.x.0) | Add components, props, exports and options; deprecate; follow a platform's design more closely | A new picker, a new prop, a closer match to iOS's calendar |
+| **Major** (x.0.0) | Anything else | Removing a prop, changing a default |
+
+## What counts as breaking
+
+Any of these waits for a major release:
+
+- Removing or renaming a component, prop, export, slot or subpath, such as `@elik56a/react-native-pickers/date`.
+- Changing a prop's default, or the type or shape of a value or callback argument.
+- Firing a callback at different times, such as `onChange` for a change you made yourself.
+- Raising the lowest supported React Native, React or Expo SDK version.
+
+These aren't breaking, and can come in any minor release:
+
+- **Looks.** Each design follows its platform's own apps, so spacing, colors and animations change as iOS, Material and the web change. To freeze a look, set it with `theme` and `styles`, which always win over the design.
+- **Defaults of `'auto'`.** An `'auto'` value, such as `design` or `presentation`, means "what fits the platform", which can change with the platform.
+- **What a screen reader says**, when it reads better.
+- **Anything undocumented**, such as a file under `src/` that isn't exported from a subpath.
+
+## Deprecations
+
+What's going away is first marked `@deprecated` in a minor release, so your editor strikes it through, with its replacement in the docs and the changelog. It's removed no sooner than the next major release, with a migration guide in the release notes.
+
+## Supported versions
+
+1.x supports React 18 and later and React Native 0.72 and later, as its `peerDependencies` say, with Expo and React Native Web on those versions; raising them waits for 2.0. Feature subpaths need React Native 0.79 or later, or the setting in [Installation](../getting-started/installation). Only the latest major release gets fixes. The [changelog](pathname:///changelog) lists every release, and the docs for the version you use are in the version menu at the top of each page.

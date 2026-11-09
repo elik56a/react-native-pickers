@@ -98,6 +98,8 @@ Each field opens its picker in a bottom sheet on iOS and Android and in a dropdo
 | [`MonthPicker`](https://react-native-pickers.dev/docs/components/month-picker) | A month and year, like a card's expiry: wheels on iOS, a grid of months in Material and on the web |
 | [`WeekStrip`](https://react-native-pickers.dev/docs/components/week-strip) | One week of days in a row, with marked days; swipe or arrows to change weeks |
 | [`ExpandableCalendar`](https://react-native-pickers.dev/docs/components/expandable-calendar) | A week that opens into its month with a drag down or its handle, for schedule screens |
+| [`Timeline`](https://react-native-pickers.dev/docs/components/timeline) | A day or week view: events by the hour, overlaps side by side, all-day events, a now line and tap to add |
+| [`Agenda`](https://react-native-pickers.dev/docs/components/agenda) | Events as a list day by day: iOS sticky day bands or Google Calendar's schedule, in step with a calendar |
 | [`DurationPicker`](https://react-native-pickers.dev/docs/components/duration-picker) | A length of time, like a timer or a workout: wheels, Material number boxes or columns to click, the value in seconds |
 | [`DateTimePicker`](https://react-native-pickers.dev/docs/components/date-time-picker) | Day and time together: one row of wheels, or a calendar with the time under or beside it |
 | [`SelectPicker`](https://react-native-pickers.dev/docs/components/select-picker) | Field that opens a searchable list: single or multi-select, chips, groups, icons, server search, new options from the search |
@@ -289,6 +291,23 @@ The [full API reference](https://react-native-pickers.dev/docs/api/reference) li
 `WeekStrip` is one week of days in a row: `value`, `onChange(date)`, swipe or arrows to page, `onWeekChange(weekStart)`, and the calendar's `markedDates`, `minDate` / `maxDate`, `isDateDisabled`, `firstDayOfWeek` and `renderDay`.
 
 `ExpandableCalendar` is a `WeekStrip` that opens into its month with a drag down or the handle under it, and folds back into the week of the day picked: the same props, plus `expanded` / `defaultExpanded` / `onExpandedChange` and `onMonthChange`.
+
+### Timeline and Agenda
+
+Both take one flat array of events, `{ id, title, start: Date, end: Date, allDay?, color?, subtitle? }`, extended with your own fields as you like.
+
+`Timeline` is a calendar's day view, or up to a week side by side (`numberOfDays`): events placed by the hour, side by side where they overlap, all-day events over the grid and a line at the current time. A swipe pages by days (`date` / `onDateChange`), `onEventPress` opens an event and `onSlotPress({ start, end })` adds one where the grid was tapped. `startHour`, `endHour`, `hourHeight`, `format` and `renderEvent` shape it.
+
+`Agenda` lists the same events day by day: a sticky band per day on iOS, the date beside each day's events in Material and on the web. It scrolls to `selectedDate` and reports the day at the top with `onVisibleDateChange`, so it stays in step with an `ExpandableCalendar` above it.
+
+```tsx
+const [day, setDay] = useState(new Date());
+
+<ExpandableCalendar value={day} onChange={setDay} />
+<Agenda events={events} selectedDate={day} onVisibleDateChange={setDay} style={{ flex: 1 }} />
+// or a day view
+<Timeline events={events} date={day} onDateChange={setDay} onSlotPress={addEvent} style={{ flex: 1 }} />
+```
 
 ### ColorPicker
 

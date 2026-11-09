@@ -22,6 +22,8 @@ Every export from `@elik56a/react-native-pickers`, grouped. Each name links to i
 | [`MonthPicker`](../components/month-picker) | Month and year: wheels (iOS) or a grid of months (Material, web) |
 | [`WeekStrip`](../components/week-strip) | One week of days in a row, swipe or arrows to page |
 | [`ExpandableCalendar`](../components/expandable-calendar) | A week that opens into its month with a drag down or its handle |
+| [`Timeline<T>`](../components/timeline) | Day or week view: events by the hour, overlaps side by side, all-day row, now line, tap to add |
+| [`Agenda<T>`](../components/agenda) | Events as a list day by day, scrolled to a day and in step with a calendar above it |
 | [`DateTimePicker`](../components/date-time-picker) | Day + time wheels (`display="wheel"`) or calendar + time (`display="calendar"`) |
 | [`SelectPicker<T>`](../components/select-picker) | Field + searchable sheet |
 | [`SelectList<T>`](../components/select-list) | Inline searchable list |
@@ -151,6 +153,20 @@ interface TimeRange { start: Date; end: Date } // the end on the start's day, or
 type RangePresetsListProps = Omit<HorizontalListProps<DateRange>, 'items' | 'value' | 'onChange' | 'isEqual'>
 
 interface MarkedDate { dots?: string[]; disabled?: boolean; label?: string; textColor?: string }
+
+/** What Timeline and Agenda draw. Extend it with your own fields; callbacks give your type back. */
+interface ScheduleEvent { id: string; title: string; start: Date; end: Date; allDay?: boolean; color?: string; subtitle?: string }
+
+/** The slot a tap on an empty part of a Timeline suggests: an hour from where it was tapped. */
+interface TimeSlot { start: Date; end: Date }
+
+/** What `renderEvent` gets, in a Timeline and an Agenda. */
+interface ScheduleEventInfo<T> {
+  event: T; start: Date; end: Date; allDay: boolean; // start and end: the event's part on this day
+  timeText: string;                                   // "9:00 AM – 10:00 AM", or labels.allDay
+  colors: { background: string; text: string; bar: string | null };
+  theme: PickerTheme;
+}
 
 interface SelectOption<T> {
   label: string; value: T; description?: string; disabled?: boolean;

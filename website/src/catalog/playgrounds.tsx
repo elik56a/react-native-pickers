@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import {
   ActionSheet,
+  Agenda,
   AmountField,
   BottomSheet,
   ColorPicker,
@@ -28,9 +29,11 @@ import {
   OtpField,
   PhoneField,
   Rating,
+  type ScheduleEvent,
   SelectList,
   SelectPicker,
   Slider,
+  Timeline,
   TimePicker,
   TimePickerField,
   TimeRangePicker,
@@ -59,6 +62,21 @@ const twoDigits = (length: number) =>
     label: String(i).padStart(2, '0'),
     value: i,
   }));
+
+const today = new Date();
+const onDay = (offset: number, hour: number, minute = 0) =>
+  new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset, hour, minute);
+/** A few days of a work calendar around today, for the timeline and the agenda. */
+const SAMPLE_EVENTS: ScheduleEvent[] = [
+  { id: 'standup', title: 'Standup', start: onDay(0, 9), end: onDay(0, 9, 30), color: '#1E88E5' },
+  { id: 'review', title: 'Design review', subtitle: 'Room 4', start: onDay(0, 9, 15), end: onDay(0, 10, 30), color: '#8E24AA' },
+  { id: 'lunch', title: 'Lunch with Maya', start: onDay(0, 12, 30), end: onDay(0, 13, 30), color: '#43A047' },
+  { id: 'focus', title: 'Focus time', start: onDay(0, 14), end: onDay(0, 16), color: '#F4511E' },
+  { id: 'offsite', title: 'Team offsite', start: onDay(1, 0), end: onDay(2, 0), allDay: true, color: '#00897B' },
+  { id: 'gym', title: 'Gym', start: onDay(1, 18), end: onDay(1, 19), color: '#43A047' },
+  { id: 'demo', title: 'Sprint demo', subtitle: 'Zoom', start: onDay(2, 11), end: onDay(2, 12), color: '#1E88E5' },
+  { id: 'dinner', title: 'Dinner', start: onDay(3, 19, 30), end: onDay(3, 21), color: '#F4511E' },
+];
 
 const dateValue = ({ mode }: PlaygroundSelection) =>
   mode === 'range' ? { start: null, end: null } : mode === 'multiple' || mode === 'ranges' ? [] : null;
@@ -196,6 +214,30 @@ export const PLAYGROUNDS: Record<PlaygroundKey, PlaygroundConfig> = {
       { prop: 'weekdayFormat', options: ['short', 'narrow'], default: null },
       { prop: 'showHeader', options: [true, false] },
       { prop: 'enableSwipe', options: [true, false] },
+    ],
+  },
+  timeline: {
+    name: 'Timeline',
+    component: Timeline,
+    props: { events: SAMPLE_EVENTS, style: { height: 480 } },
+    code: 'events={events}',
+    controls: [
+      { prop: 'numberOfDays', options: [1, 3, 7], default: 1 },
+      { prop: 'format', options: ['auto', '12h', '24h'] },
+      { prop: 'hourHeight', options: [60, 48, 80], default: 60 },
+      { prop: 'startHour', options: [0, 7], default: 0 },
+      { prop: 'showNowIndicator', options: [true, false] },
+      { prop: 'enableSwipe', options: [true, false] },
+    ],
+  },
+  agenda: {
+    name: 'Agenda',
+    component: Agenda,
+    props: { events: SAMPLE_EVENTS, style: { height: 480 } },
+    code: 'events={events}',
+    controls: [
+      { prop: 'showEmptyDays', options: [false, true] },
+      { prop: 'format', options: ['auto', '12h', '24h'] },
     ],
   },
   timePicker: {

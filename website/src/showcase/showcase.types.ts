@@ -3,13 +3,28 @@ import type { ReactNode } from 'react';
 import type { CountryCode, CurrencyCode, DateRange, TimeRange } from '@elik56a/react-native-pickers';
 import type { BookingScreenProps } from '../home/demo/demo.types';
 import type { ValueOf } from '../home/home.types';
-import type { ALBUM_SORT, EXCHANGE_SIDE, SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
+import type { ALBUM_SORT, CALENDAR_VIEW, EXCHANGE_SIDE, SHOWCASE_SCREEN, TRIP_TYPE } from './showcase.constants';
 
 export type ShowcaseScreenKey = ValueOf<typeof SHOWCASE_SCREEN>;
 
 export type TripType = ValueOf<typeof TRIP_TYPE>;
 
 export type AlbumSort = ValueOf<typeof ALBUM_SORT>;
+
+export type CalendarView = ValueOf<typeof CALENDAR_VIEW>;
+
+/** A showcase event, by days from today, turned into a ScheduleEvent when the screen opens. */
+export interface CalendarSeed {
+  day: number;
+  hours: number;
+  minutes: number;
+  /** Minutes */
+  length: number;
+  title: string;
+  color: string;
+  subtitle?: string;
+  allDay?: boolean;
+}
 
 export interface Album {
   name: string;

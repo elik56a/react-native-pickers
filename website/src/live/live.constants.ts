@@ -37,6 +37,7 @@ const AMOUNT = ['AmountField'];
 const SLIDER = ['Slider'];
 const OTP = ['OtpField'];
 const RATING = ['Rating'];
+const SCHEDULE = ['Timeline', 'Agenda'];
 const RANGE_PRESETS = ['DatePicker', 'Calendar', 'DatePickerSheet', 'DatePickerField'];
 const HAS_PRESETS_PROPS = /\bpresetsProps=\{\{/;
 
@@ -55,7 +56,9 @@ export const LIVE_CONTROLS: readonly LiveControl[] = [
   },
   { prop: 'presentation', components: SHEETS, options: ['auto', 'bottomSheet', 'modal'], default: 'auto' },
   { prop: 'display', components: DATE_TIME, options: ['wheel', 'calendar'], default: 'wheel' },
-  { prop: 'format', components: [...TIME, ...DATE_TIME], options: ['auto', '12h', '24h'], default: 'auto' },
+  { prop: 'format', components: [...TIME, ...DATE_TIME, ...SCHEDULE], options: ['auto', '12h', '24h'], default: 'auto' },
+  { prop: 'showNowIndicator', components: ['Timeline'], options: BOOLEAN, default: true },
+  { prop: 'showEmptyDays', components: ['Agenda'], options: BOOLEAN, default: false },
   { prop: 'showSeconds', components: [...TIME, ...DURATION], options: BOOLEAN, default: false },
   {
     prop: 'variant',
@@ -205,6 +208,8 @@ export const COMPONENT_FOLDERS: Record<string, string> = {
   ColorPickerSheet: 'color',
   WeekStrip: 'calendar',
   ExpandableCalendar: 'calendar',
+  Timeline: 'schedule',
+  Agenda: 'schedule',
   CountryPicker: 'country',
   LanguagePicker: 'language',
   CurrencyPicker: 'currency',

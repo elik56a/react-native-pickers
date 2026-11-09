@@ -1,7 +1,7 @@
 ---
 title: "react-native-calendars alternative: migration guide"
 sidebar_label: 'react-native-calendars'
-description: "An alternative to react-native-calendars with built-in range and multiple selection, the same marked dates, iOS, Material and web designs, and no dependencies."
+description: "An alternative to react-native-calendars with built-in range and multiple selection, an Agenda and a Timeline, the same marked dates, iOS, Material and web designs, and no dependencies."
 ---
 
 # Migrate from `react-native-calendars`
@@ -51,7 +51,7 @@ With `react-native-calendars`, you build a range or a multiple selection yoursel
 
 ## ExpandableCalendar
 
-Its `ExpandableCalendar` needs a `CalendarProvider` around it and an `AgendaList` for the day's items. Here the calendar holds the date itself, and you list the day's items under it with a plain `FlatList` or `View`:
+Its `ExpandableCalendar` needs a `CalendarProvider` around it to share the date with an `AgendaList`. Here the date is plain state: the calendar sets it, the [`Agenda`](../../components/agenda) scrolls to it, and the agenda sets it back as the user scrolls.
 
 ```diff
 - <CalendarProvider date={selected} onDateChanged={setSelected}>
@@ -59,7 +59,7 @@ Its `ExpandableCalendar` needs a `CalendarProvider` around it and an `AgendaList
 -   <AgendaList sections={sections} renderItem={renderItem} />
 - </CalendarProvider>
 + <ExpandableCalendar value={selected} onChange={setSelected} firstDayOfWeek={1} markedDates={marks} />
-+ <FlatList data={itemsFor(selected)} renderItem={renderItem} />
++ <Agenda events={events} selectedDate={selected} onVisibleDateChange={setSelected} />
 ```
 
 | react-native-calendars | React Native Pickers |
@@ -69,6 +69,37 @@ Its `ExpandableCalendar` needs a `CalendarProvider` around it and an `AgendaList
 | `onCalendarToggled(open)` | `onExpandedChange(expanded)` |
 | `disablePan` | `enableSwipe={false}` |
 | `WeekCalendar` | [`WeekStrip`](../../components/week-strip) |
-| `AgendaList`, `Timeline` | your own list: this package picks dates, it doesn't lay out events |
+
+## Agenda, AgendaList and Timeline
+
+Its `AgendaList` takes `sections` you group by day yourself, and its `Timeline` takes events keyed by date string. [`Agenda`](../../components/agenda) and [`Timeline`](../../components/timeline) take one flat array of events with `Date`s, group and lay them out themselves, and follow the iOS, Material and web designs.
+
+```diff
+- <Timeline
+-   events={eventsByDate[date]}
+-   date={date}
+-   onEventPress={openEvent}
+-   onBackgroundLongPress={(timeString, time) => addEvent(time)}
+-   start={7}
+-   end={20}
+- />
++ <Timeline events={events} date={day} onEventPress={openEvent} onSlotPress={({ start, end }) => addEvent(start, end)} startHour={7} endHour={20} />
+```
+
+| react-native-calendars | React Native Pickers |
+| --- | --- |
+| `AgendaList sections` | `Agenda events` (grouped by day for you) |
+| `Agenda items` + `renderItem` | `Agenda events` + `renderEvent` |
+| `renderEmptyDate` | `showEmptyDays` + `labels.noEvents` |
+| `onDayChange` | `onVisibleDateChange(date)` |
+| event `{ start: 'YYYY-MM-DD HH:mm', end, title, summary, color }` | `{ id, start: Date, end: Date, title, subtitle, color, allDay }` |
+| `Timeline start` / `end` | `startHour` / `endHour` |
+| `onBackgroundLongPress` | `onSlotPress({ start, end })` (a tap) |
+| `scrollToFirst` / `initialTime` | `initialScrollHour` (opens at now, else the first event) |
+| `showNowIndicator` | `showNowIndicator` (on by default) |
+| `format24h` | `format="24h"` |
+| `numberOfDays` | `numberOfDays` (1 to 7) |
+| `renderEvent` | `renderEvent(info)` |
+| `TimelineList` | `Timeline` with `date` / `onDateChange` (swipe pages by days) |
 
 See [all migration guides](./index.mdx) for other libraries, and [Comparison](../comparison.mdx) for when another library is the better choice.

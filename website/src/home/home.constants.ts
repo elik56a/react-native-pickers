@@ -143,6 +143,8 @@ export const COMPONENT_GROUPS = [
       { doc: 'components/month-picker', name: 'MonthPicker', body: 'Card expiry, reports: wheels or a month grid' },
       { doc: 'components/week-strip', name: 'WeekStrip', body: 'A week of days to swipe, with marked days' },
       { doc: 'components/expandable-calendar', name: 'ExpandableCalendar', body: 'A week that opens into its month' },
+      { doc: 'components/timeline', name: 'Timeline', body: 'Day and week views: events by the hour, overlaps, now' },
+      { doc: 'components/agenda', name: 'Agenda', body: 'Events day by day, in step with a calendar' },
     ],
   },
   {

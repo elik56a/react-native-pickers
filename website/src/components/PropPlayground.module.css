@@ -33,6 +33,11 @@
   max-width: 380px;
 }
 
+/* React Native Web draws a view with accessibilityRole="header" as an <h1>, which the Markdown's heading margins (`.markdown h1:first-child`) would space out: inside an example it's part of a component, not a page heading. */
+.preview .stage [role="heading"] {
+  margin: 0;
+}
+
 /* An example marked wide, on the Web tab: the desktop width a picker like DateTimePicker spreads out to. */
 .preview[data-wide] .stage {
   max-width: 560px;

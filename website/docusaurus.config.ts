@@ -40,7 +40,7 @@ const FOOTER_BRAND = `
   ${socialLink('LinkedIn', LINKEDIN, `${AUTHOR} on LinkedIn`)}
 </div>`;
 const DESCRIPTION =
-  'Wheel, time, duration, date, calendar, month, week strip, expandable calendar, range, date-time, select, country, language, phone, currency, amount, time zone, emoji and color pickers, a slider, a star rating and an OTP code input for React Native, with bottom sheets, action sheets, menus and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
+  'Wheel, time, duration, date, calendar, month, week strip, expandable calendar, range, date-time, agenda and timeline (day and week view), select, country, language, phone, currency, amount, time zone, emoji and color pickers, a slider, a star rating and an OTP code input for React Native, with bottom sheets, action sheets, menus and form fields. Looks native on iOS, Android and the web, with zero native code. Fully themeable; works in Expo Go, bare RN and React Native Web.';
 const local = (pkg: string) => path.dirname(require.resolve(`${pkg}/package.json`));
 const { version } = require('../package.json');
 
@@ -68,7 +68,7 @@ const structuredData = {
       version,
       author: { '@type': 'Person', name: AUTHOR, url: 'https://github.com/elik56a', sameAs: [LINKEDIN] },
       keywords:
-        'react native date picker, time picker, duration picker, month picker, week strip, expandable calendar, date time picker, wheel picker, calendar, date range picker, select, dropdown, inline picker, multi-select, autocomplete, segmented control, country picker, language picker, phone code picker, phone number input, currency picker, currency input, amount input, time zone picker, emoji picker, color picker, slider, range slider, otp input, verification code input, star rating, bottom sheet, bottom sheet without reanimated, 60 fps, action sheet, dropdown menu, context menu, material design, ios picker, expo, react native web, keyboard accessible',
+        'react native date picker, time picker, duration picker, month picker, week strip, expandable calendar, agenda, timeline, day view, week view, event calendar, date time picker, wheel picker, calendar, date range picker, select, dropdown, inline picker, multi-select, autocomplete, segmented control, country picker, language picker, phone code picker, phone number input, currency picker, currency input, amount input, time zone picker, emoji picker, color picker, slider, range slider, otp input, verification code input, star rating, bottom sheet, bottom sheet without reanimated, 60 fps, action sheet, dropdown menu, context menu, material design, ios picker, expo, react native web, keyboard accessible',
     },
   ],
 };
@@ -93,7 +93,7 @@ const config: Config = {
       attributes: {
         name: 'keywords',
         content:
-          'react native picker, react native date picker, react hook form date picker, react native time picker, react native duration picker, countdown timer picker, react native month picker, month year picker, credit card expiry picker, react native week calendar strip, react native expandable calendar, week to month calendar, react native date time picker, react native wheel picker, react native calendar, date range picker, time range picker, opening hours picker, date range presets, react native select, react native dropdown, dependent dropdown, cascading select, multi-select, autocomplete, creatable select, tags input, segmented control, chips, react native country picker, country code picker, react native language picker, app language selector, react native currency picker, react native currency input, money input, amount input, emoji picker, react native color picker, hex color picker, react native slider, range slider, react native otp input, otp verification code input, sms code autofill, react native star rating, rating stars, bottom sheet, react native bottom sheet, react native modal, react native action sheet, react native menu, react native context menu, popup menu, material design date picker, material time picker clock, ios style picker, expo, react native web',
+          'react native picker, react native date picker, react hook form date picker, react native time picker, react native duration picker, countdown timer picker, react native month picker, month year picker, credit card expiry picker, react native week calendar strip, react native expandable calendar, week to month calendar, react native agenda, react native timeline, react native schedule view, calendar day view, calendar week view, react native event calendar, google calendar style schedule, react native date time picker, react native wheel picker, react native calendar, date range picker, time range picker, opening hours picker, date range presets, react native select, react native dropdown, dependent dropdown, cascading select, multi-select, autocomplete, creatable select, tags input, segmented control, chips, react native country picker, country code picker, react native language picker, app language selector, react native currency picker, react native currency input, money input, amount input, emoji picker, react native color picker, hex color picker, react native slider, range slider, react native otp input, otp verification code input, sms code autofill, react native star rating, rating stars, bottom sheet, react native bottom sheet, react native modal, react native action sheet, react native menu, react native context menu, popup menu, material design date picker, material time picker clock, ios style picker, expo, react native web',
       },
     },
     { tagName: 'link', attributes: { rel: 'alternate', type: 'text/plain', title: 'LLM docs', href: `${BASE_URL}llms.txt` } },
@@ -112,7 +112,14 @@ const config: Config = {
           versions: { current: { label: 'Next 🚧', noIndex: releasedLines.length > 0 }, ...versionOptions },
           showLastUpdateTime: true,
         },
-        blog: false,
+        blog: {
+          routeBasePath: 'blog',
+          blogTitle: 'React Native Pickers blog',
+          blogDescription: 'Releases and news from React Native Pickers.',
+          showReadingTime: true,
+          onInlineAuthors: 'throw',
+          onUntruncatedBlogPosts: 'throw',
+        },
         theme: { customCss: './src/css/custom.css' },
         sitemap: { changefreq: 'weekly', lastmod: 'date' },
         gtag: { trackingID: GA_ID, anonymizeIP: true },
@@ -197,8 +204,8 @@ const config: Config = {
       },
     ],
     announcementBar: {
-      id: 'llms',
-      content: `Using an AI assistant? Point it at <a href="${BASE_URL}llms-full.txt">llms-full.txt</a>: the whole API in one file.`,
+      id: 'v1',
+      content: `React Native Pickers 1.0 is here, with a stable API and a new Timeline and Agenda. <a href="${BASE_URL}blog/react-native-pickers-1-0">Read the announcement</a>`,
       isCloseable: true,
     },
     navbar: {
@@ -211,6 +218,7 @@ const config: Config = {
         { to: '/docs/api/reference', label: 'API', position: 'left' },
         { to: '/docs/recipes/booking-range', label: 'Recipes', position: 'left' },
         { to: '/showcase', label: 'Showcase', position: 'left' },
+        { to: '/blog', label: 'Blog', position: 'left' },
         {
           type: 'docsVersionDropdown',
           position: 'right',
@@ -253,6 +261,7 @@ const config: Config = {
           title: 'More',
           items: [
             { label: 'Changelog', to: '/changelog' },
+            { label: 'Blog', to: '/blog' },
             { label: 'GitHub', href: REPO },
             { label: 'npm', href: NPM },
             { label: 'Issues', href: `${REPO}/issues` },

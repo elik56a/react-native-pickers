@@ -6,6 +6,7 @@ import { BookingScreen } from '../home/demo/components/BookingScreen';
 import { AlarmScreen } from './components/AlarmScreen';
 import { AlbumsScreen } from './components/AlbumsScreen';
 import { ApplicationScreen } from './components/ApplicationScreen';
+import { CalendarScreen } from './components/CalendarScreen';
 import { ChatScreen } from './components/ChatScreen';
 import { DeliveryScreen } from './components/DeliveryScreen';
 import { DisplayScreen } from './components/DisplayScreen';
@@ -45,6 +46,7 @@ const SCREENS: Record<ShowcaseScreenKey, ComponentType<ScreenProps>> = {
   store: StoreScreen,
   send: SendScreen,
   exchange: ExchangeScreen,
+  calendar: CalendarScreen,
 };
 
 interface ShowcaseAppProps extends ScreenProps {
