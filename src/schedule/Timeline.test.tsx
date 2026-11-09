@@ -41,11 +41,28 @@ describe('Timeline', () => {
     expect(onDayPress).toHaveBeenCalledWith(at(11, 0));
   });
 
+  it('shows only the title of an event too narrow for more, and the time where there is room', async () => {
+    const tall: ScheduleEvent[] = [
+      { id: 'review', title: 'Design review', start: at(9, 9, 15), end: at(9, 11) },
+      { id: 'standup', title: 'Standup', start: at(9, 9), end: at(9, 11) },
+    ];
+    const { rerender } = await render(<Timeline events={tall} defaultDate={at(9, 0)} locale="en-US" format="12h" />);
+    expect(screen.getByText('9:15 AM – 11:00 AM')).toBeTruthy();
+    await rerender(<Timeline events={tall} defaultDate={at(9, 0)} numberOfDays={3} locale="en-US" format="12h" />);
+    expect(screen.queryByText('9:15 AM – 11:00 AM')).toBeNull();
+    expect(screen.getByText('Design review')).toBeTruthy();
+  });
+
   it('suggests an hour-long slot where the empty grid is tapped', async () => {
     const onSlotPress = jest.fn();
     await render(<Timeline events={[]} defaultDate={at(9, 0)} startHour={8} hourHeight={60} onSlotPress={onSlotPress} testID="timeline" />);
     await fireEvent.press(screen.getByTestId('timeline.2026-11-09'), { nativeEvent: { locationY: 150 } });
     expect(onSlotPress).toHaveBeenCalledWith({ start: at(9, 10, 30), end: at(9, 11, 30) });
+    // On the web a press is a DOM click, with offsetY instead of locationY.
+    await fireEvent.press(screen.getByTestId('timeline.2026-11-09'), { nativeEvent: { locationY: undefined, offsetY: 30 } });
+    expect(onSlotPress).toHaveBeenLastCalledWith({ start: at(9, 8, 30), end: at(9, 9, 30) });
+    await fireEvent.press(screen.getByTestId('timeline.2026-11-09'), { nativeEvent: { locationY: undefined } });
+    expect(onSlotPress).toHaveBeenCalledTimes(2);
   });
 
   it('labels hours on the clock the format asks for', async () => {

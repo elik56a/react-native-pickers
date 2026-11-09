@@ -1,6 +1,6 @@
-import type { CurrencyCode, DateRangePreset } from '@elik56a/react-native-pickers';
+import type { CurrencyCode, DateRangePreset, MarkedDate, ScheduleEvent } from '@elik56a/react-native-pickers';
 import { getCurrency, toDateKey } from '@elik56a/react-native-pickers';
-import { daysFromNow } from '../home/demo/demo.utils';
+import { daysFromNow, daysFromNowAt } from '../home/demo/demo.utils';
 import {
   ALBUM_SORT,
   APPLICATION,
@@ -16,7 +16,38 @@ import {
   TEXT_SIZES,
   TIMER_PRESETS,
 } from './showcase.constants';
-import type { Album, AlbumSort, ApplicationErrors, ApplicationValues, ExchangeAmounts, TextSelection, TypedAmount } from './showcase.types';
+import type {
+  Album,
+  AlbumSort,
+  ApplicationErrors,
+  ApplicationValues,
+  CalendarSeed,
+  ExchangeAmounts,
+  TextSelection,
+  TypedAmount,
+} from './showcase.types';
+
+/** The showcase's events, placed around today. */
+export const buildCalendarEvents = (seeds: readonly CalendarSeed[]): ScheduleEvent[] =>
+  seeds.map(({ day, hours, minutes, length, ...rest }, i) => {
+    const start = rest.allDay ? daysFromNow(day) : daysFromNowAt(day, hours, minutes);
+    return {
+      id: `seed-${i}`,
+      ...rest,
+      start,
+      end: rest.allDay ? start : new Date(+start + length * 60_000),
+    };
+  });
+
+/** A dot under each day that has something on, in its first event's color. */
+export const calendarMarks = (events: readonly ScheduleEvent[]) => {
+  const marks: Record<string, MarkedDate> = {};
+  for (const event of events) {
+    const key = toDateKey(event.start);
+    if (!marks[key]) marks[key] = { dots: [event.color ?? ''] };
+  }
+  return marks;
+};
 
 const pad = (n: number) => String(n).padStart(2, '0');
 

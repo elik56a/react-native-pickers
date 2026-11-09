@@ -1,3 +1,5 @@
+import { toDateKey } from '@elik56a/react-native-pickers';
+import { daysFromNow, daysFromNowAt } from '../home/demo/demo.utils';
 import {
   ALBUM_SORT,
   ALBUMS,
@@ -10,6 +12,8 @@ import {
 import type { ApplicationValues } from './showcase.types';
 import {
   attentionLabel,
+  buildCalendarEvents,
+  calendarMarks,
   convertAmount,
   findPreset,
   formatClock,
@@ -168,5 +172,26 @@ describe('formatRate', () => {
   it('shows the rate to four significant digits', () => {
     expect(formatRate('USD', 'JPY')).toBe('1 USD = 151 JPY');
     expect(formatRate('JPY', 'USD')).toBe('1 JPY = 0.006623 USD');
+  });
+});
+
+describe('the calendar', () => {
+  const seeds = [
+    { day: 0, hours: 9, minutes: 30, length: 45, title: 'Standup', color: '#1E88E5' },
+    { day: 0, hours: 12, minutes: 0, length: 60, title: 'Lunch', color: '#43A047' },
+    { day: 1, hours: 0, minutes: 0, length: 0, title: 'Offsite', color: '#00897B', allDay: true },
+  ];
+
+  it('places the events around today, an all-day one on its day', () => {
+    const [standup, , offsite] = buildCalendarEvents(seeds);
+    expect(standup).toMatchObject({ id: 'seed-0', title: 'Standup', start: daysFromNowAt(0, 9, 30), end: daysFromNowAt(0, 10, 15) });
+    expect(offsite).toMatchObject({ allDay: true, start: daysFromNow(1), end: daysFromNow(1) });
+  });
+
+  it("marks each day with its first event's color", () => {
+    expect(calendarMarks(buildCalendarEvents(seeds))).toEqual({
+      [toDateKey(daysFromNow(0))]: { dots: ['#1E88E5'] },
+      [toDateKey(daysFromNow(1))]: { dots: ['#00897B'] },
+    });
   });
 });

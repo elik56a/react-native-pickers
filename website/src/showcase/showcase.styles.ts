@@ -51,4 +51,6 @@ export const styles = StyleSheet.create({
   albumText: { flex: 1 },
   more: { fontSize: 20, paddingHorizontal: 8 },
   sendAmount: { flex: 1, justifyContent: 'center' },
+  calendarViews: { paddingHorizontal: 12, paddingVertical: 8 },
+  calendarBody: { flex: 1 },
 });

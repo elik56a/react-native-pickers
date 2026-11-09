@@ -7,6 +7,7 @@ import { EventContent } from './EventContent';
 export const TimelineEvent = <T extends ScheduleEvent>({
   info,
   height,
+  compact,
   renderEvent,
   onPress,
   onLongPress,
@@ -28,7 +29,7 @@ export const TimelineEvent = <T extends ScheduleEvent>({
       accessibilityRole="button"
       accessibilityLabel={`${event.title}, ${timeText}`}
     >
-      <EventContent info={info} height={height} renderEvent={renderEvent} slots={slots} />
+      <EventContent info={info} height={height} compact={compact} renderEvent={renderEvent} slots={slots} />
     </Touchable>
   );
 };

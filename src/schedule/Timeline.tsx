@@ -89,6 +89,7 @@ export const Timeline = <T extends ScheduleEvent>(props: TimelineProps<T>) => {
                 key={key}
                 day={day}
                 segments={segments}
+                days={columns.length}
                 first={i === 0}
                 startHour={startHour}
                 hourHeight={hourHeight}

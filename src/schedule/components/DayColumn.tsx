@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { MIN_EVENT_HEIGHT } from '../schedule.constants';
+import { COMPACT_EVENT_WIDTH, MIN_EVENT_HEIGHT } from '../schedule.constants';
 import { styles } from '../schedule.styles';
 import type { DayColumnProps, ScheduleEvent } from '../schedule.types';
 import { getSegmentFrame } from '../schedule.utils';
@@ -10,6 +10,7 @@ import { TimelineEvent } from './TimelineEvent';
 export const DayColumn = <T extends ScheduleEvent>({
   day,
   segments,
+  days,
   first,
   startHour,
   hourHeight,
@@ -48,6 +49,7 @@ export const DayColumn = <T extends ScheduleEvent>({
           <TimelineEvent
             info={infoFor(segment, false)}
             height={height}
+            compact={segment.span / segment.columns / days < COMPACT_EVENT_WIDTH}
             renderEvent={renderEvent}
             onPress={onEventPress}
             onLongPress={onEventLongPress}

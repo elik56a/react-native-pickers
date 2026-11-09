@@ -6,10 +6,10 @@ import { styles } from '../schedule.styles';
 import type { EventContentProps, ScheduleEvent } from '../schedule.types';
 
 /** What's inside an event's block on the grid: its title, then its time and subtitle where the block is tall enough. */
-export const EventContent = <T extends ScheduleEvent>({ info, height, renderEvent, slots }: EventContentProps<T>) => {
+export const EventContent = <T extends ScheduleEvent>({ info, height, compact, renderEvent, slots }: EventContentProps<T>) => {
   if (renderEvent) return renderEvent(info);
   const { event, colors, timeText, theme } = info;
-  const lines = Math.max(1, Math.floor((height - 4) / EVENT_LINE_HEIGHT));
+  const lines = compact ? 1 : Math.max(1, Math.floor((height - 4) / EVENT_LINE_HEIGHT));
   const textStyle = [{ color: colors.text, opacity: 0.85 }, slots?.eventText];
   return (
     <>

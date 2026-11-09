@@ -226,6 +226,8 @@ interface EventPressProps<T extends ScheduleEvent> {
 export interface EventContentProps<T extends ScheduleEvent> {
   info: ScheduleEventInfo<T>;
   height: number;
+  /** Too narrow for more than one line of title */
+  compact?: boolean;
   renderEvent?: (info: ScheduleEventInfo<T>) => React.ReactNode;
   slots?: SlotStyles<TimelineSlot>;
 }
@@ -248,6 +250,8 @@ export interface AllDayRowProps<T extends ScheduleEvent> {
 export interface DayColumnProps<T extends ScheduleEvent> extends Omit<AllDayRowProps<T>, 'columns' | 'label'> {
   day: Date;
   segments: PositionedSegment<T>[];
+  /** How many days share the grid's width */
+  days: number;
   /** The leftmost column, which has no line before it */
   first: boolean;
   startHour: number;

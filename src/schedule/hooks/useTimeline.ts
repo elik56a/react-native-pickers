@@ -17,6 +17,7 @@ import {
   getInitialScrollHour,
   getNowOffset,
   getSlotAt,
+  getTapOffset,
   getTimelineDays,
   layoutSegments,
   resolveHours,
@@ -111,8 +112,10 @@ export const useTimeline = <T extends ScheduleEvent>(props: TimelineProps<T>) =>
   );
 
   const pressSlot = useCallback(
-    (day: Date, e: GestureResponderEvent) =>
-      onSlotPress?.(getSlotAt(day, e.nativeEvent.locationY, { startHour, endHour, hourHeight, snapMinutes })),
+    (day: Date, e: GestureResponderEvent) => {
+      const y = getTapOffset(e.nativeEvent);
+      if (y !== null) onSlotPress?.(getSlotAt(day, y, { startHour, endHour, hourHeight, snapMinutes }));
+    },
     [endHour, hourHeight, onSlotPress, snapMinutes, startHour]
   );
 

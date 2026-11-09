@@ -153,6 +153,16 @@ export const getSlotAt = (
   };
 };
 
+/**
+ * How far down a tapped column the tap was: React Native's `locationY`, or on the web, where a press comes from a DOM
+ * click without it, the click's `offsetY`. Null when neither is a number.
+ */
+export const getTapOffset = (nativeEvent: { locationY?: number; offsetY?: number }) => {
+  const { locationY, offsetY } = nativeEvent;
+  if (typeof locationY === 'number' && Number.isFinite(locationY)) return locationY;
+  return typeof offsetY === 'number' && Number.isFinite(offsetY) ? offsetY : null;
+};
+
 /** Pixels from the top of the grid to `now`, or null when it's outside the hours drawn. */
 export const getNowOffset = (now: Date, startHour: number, endHour: number, hourHeight: number) => {
   const minutes = minutesFromTop(now, startHour);

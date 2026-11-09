@@ -16,6 +16,7 @@ import {
   getNowOffset,
   getSegmentFrame,
   getSlotAt,
+  getTapOffset,
   getTimelineDays,
   layoutSegments,
   resolveHours,
@@ -163,6 +164,15 @@ describe('getSlotAt', () => {
   it('keeps the slot inside the hours drawn', () => {
     expect(getSlotAt(at(9, 0), -40, options).start).toEqual(at(9, 8));
     expect(getSlotAt(at(9, 0), 5000, options).start).toEqual(at(9, 19, 30));
+  });
+});
+
+describe('getTapOffset', () => {
+  it("reads React Native's locationY, else the web click's offsetY", () => {
+    expect(getTapOffset({ locationY: 120 })).toBe(120);
+    expect(getTapOffset({ offsetY: 80 })).toBe(80);
+    expect(getTapOffset({ locationY: Number.NaN, offsetY: 80 })).toBe(80);
+    expect(getTapOffset({})).toBeNull();
   });
 });
 

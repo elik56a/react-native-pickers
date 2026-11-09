@@ -26,6 +26,8 @@ export const GUTTER_WIDTH = 56;
 export const EVENT_GAP = 2;
 /** The text lines an event needs before its time and subtitle show under the title. */
 export const EVENT_LINE_HEIGHT = 16;
+/** An event narrower than this share of the grid shows its title on one line and nothing else, rather than breaking words. */
+export const COMPACT_EVENT_WIDTH = 0.3;
 export const ALL_DAY_CHIP_HEIGHT = 22;
 export const NOW_DOT_SIZE = 10;
 export const DAY_HEADER_NUMBER_SIZE = 28;
