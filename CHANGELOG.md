@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/elik56a/react-native-pickers/compare/v0.30.1...v1.0.0) (2026-11-09)
+
+
+### ✨ Features
+
+* **schedule:** add Timeline and Agenda, and announce 1.0 ([#120](https://github.com/elik56a/react-native-pickers/issues/120)) ([644e6ba](https://github.com/elik56a/react-native-pickers/commit/644e6ba91c9f1c4a3df6f41bba74fb6034422531))
+
 ## [0.30.1](https://github.com/elik56a/react-native-pickers/compare/v0.30.0...v0.30.1) (2026-11-01)
 
 
